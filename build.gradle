@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:1.0.0.RC3"
-    compile "com.google:bitcoinj:0.11"
+    compile "com.google:bitcoinj:0.12-SNAPSHOT"
     testCompile("junit:junit:4.11")
 }
 
