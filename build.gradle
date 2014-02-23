@@ -1,3 +1,8 @@
+def springVersion = "4.0.2.RELEASE"
+def springSecurityVersion = "3.2.0.RELEASE"
+def springBootVersion = "1.0.0.RC3"
+def tomcatVersion = "8.0.0-RC5"
+
 buildscript {
     repositories {
         maven { url 'http://dl.bintray.com/msgilligan/maven' }
@@ -5,7 +10,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.0.RC3")
+        def sbBuildScriptVersion = "1.0.0.RC3"
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${sbBuildScriptVersion}")
         classpath 'org.gradle.api.plugins:gradle-cloudbees-plugin:0.1.1'
     }
 }
@@ -27,7 +33,25 @@ repositories {
 }
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web:1.0.0.RC3"
+    compile "org.springframework:spring-websocket:${springVersion}"
+    compile ("org.springframework:spring-messaging:${springVersion}") {
+        dependencies {
+            ext.reactorVersion = '1.0.0.RELEASE'
+            compile "org.projectreactor:reactor-tcp:$reactorVersion"
+        }
+    }
+
+    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-websocket:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
+
+    compile "org.springframework.security:spring-security-core:${springSecurityVersion}"
+    compile "org.springframework.security:spring-security-config:${springSecurityVersion}"
+    compile "org.springframework.security:spring-security-web:${springSecurityVersion}"
+
+    compile "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
+    compile "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
+
     compile "com.google:bitcoinj:0.12-SNAPSHOT"
     testCompile("junit:junit:4.11")
 }

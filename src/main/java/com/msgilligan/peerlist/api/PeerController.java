@@ -7,8 +7,11 @@ package com.msgilligan.peerlist.api;
  */
 import com.msgilligan.peerlist.service.PeerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.security.Principal;
 
 
 @RestController
@@ -25,5 +28,11 @@ public class PeerController {
     public String index() {
         return "Greetings from PeerList! We're running on: " + peerService.getNetworkParameters().getId() + ".";
     }
+
+    @MessageMapping("/listPeers")
+    public void listUsers(Principal principal) {
+        peerService.listPeers(principal);
+    }
+
 
 }

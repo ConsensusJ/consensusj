@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html ng-app="peers">
+<head>
+    <title>PEERS</title>
+</head>
+<body>
+
+<div ng-controller="PeerCtrl">
+    <div>
+        <ul>
+            <li ng-repeat="peer in peers">{{peer}}</li>
+        </ul>
+    </div>
+</div>
+
+<script src="/lib/sockjs/sockjs.js"></script>
+<script src="/lib/stomp/dist/stomp.js"></script>
+<script src="lib/angular/angular.js"></script>
+<script src="/js/peerlist.js"></script>
+
+</body>
+</html>

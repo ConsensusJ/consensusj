@@ -18,12 +18,18 @@ package com.msgilligan.peerlist.service;
 import com.google.bitcoin.kits.WalletAppKit;
 import com.google.bitcoin.net.discovery.DnsDiscovery;
 import com.google.bitcoin.net.discovery.PeerDiscovery;
+import com.msgilligan.peerlist.model.PeerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import com.google.bitcoin.core.*;
 
 import javax.annotation.PostConstruct;
+import java.net.InetSocketAddress;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A Service for maintaining Bitcoin peers
@@ -34,11 +40,15 @@ public class PeerService {
     private static final String appVersion = "0.1";
     private NetworkParameters netParams;
     private PeerGroup peerGroup;
+    private final SimpMessageSendingOperations messagingTemplate;
 
     @Autowired
-    public PeerService(NetworkParameters params, PeerDiscovery peerDiscovery) {
+    public PeerService(NetworkParameters params,
+                       PeerDiscovery peerDiscovery,
+                       SimpMessageSendingOperations messagingTemplate) {
         this.netParams = params;
         this.peerGroup = new PeerGroup(params);
+        this.messagingTemplate = messagingTemplate;
         peerGroup.setUserAgent(userAgentName, appVersion);
         peerGroup.addPeerDiscovery(peerDiscovery);
     }
@@ -51,4 +61,18 @@ public class PeerService {
     public NetworkParameters getNetworkParameters() {
         return this.netParams;
     }
+
+    public void listPeers(Principal principal) {
+        List<PeerInfo> peerInfos = new ArrayList<PeerInfo>();
+        List<Peer> peers = peerGroup.getConnectedPeers();
+
+        for (Peer peer : peers) {
+            InetSocketAddress addr = peer.getAddress().toSocketAddress();
+            PeerInfo info = new PeerInfo();
+            info.setSocketAddress(addr);
+            peerInfos.add(info);
+        }
+        this.messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/peers", peerInfos);
+    }
+
 }

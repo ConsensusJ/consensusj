@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Sign in &middot; Demo Sign in</title>
+    <link href="/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="/lib/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="/style/login.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <div class="alert alert-danger">
+        Invalid username/password.
+    </div>
+    <form class="form-signin" method="post" action="/login.html">
+        <h3 class="text-muted form-signin-heading">Please sign in</h3>
+        <input type="text" class="input-block-level" placeholder="User name" name="username">
+        <input type="password" class="input-block-level" placeholder="Password" name="password">
+        <button class="btn btn-primary" type="submit">Sign in</button>
+        <hr>
+        <p class="text-info"><small>
+            Log in as <strong>sean/sean</strong>, <strong>taariq/taariq</strong>, or <strong>kevin/kevin</strong><br>
+    </form>
+</div><!-- /container -->
+
+</body>
+</html>
