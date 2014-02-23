@@ -3,6 +3,7 @@ angular.module('peers', []);
 function PeerCtrl($scope) {
     // initialization
     $scope.peers = [];
+    $scope.transactions = [];
 
     var socket = new SockJS('/stomp');
     var stompClient = Stomp.over(socket);
@@ -19,6 +20,13 @@ function PeerCtrl($scope) {
                 $scope.peers = angular.fromJson(message.body);
             });
 
+        });
+
+        stompClient.subscribe("/topic/tx", function(message) {
+            console.log("got tx")
+            $scope.$apply(function() {
+                $scope.transactions.push(angular.fromJson(message.body));
+            });
         });
 
         stompClient.send("/app/listPeers", {});

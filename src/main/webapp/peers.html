@@ -11,6 +11,12 @@
             <li ng-repeat="peer in peers">{{peer}}</li>
         </ul>
     </div>
+
+    <div>
+        <ul>
+            <li ng-repeat="tx in transactions">{{tx.hash}}</li>
+        </ul>
+    </div>
 </div>
 
 <script src="/lib/sockjs/sockjs.js"></script>

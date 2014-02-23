@@ -19,6 +19,7 @@ import com.google.bitcoin.kits.WalletAppKit;
 import com.google.bitcoin.net.discovery.DnsDiscovery;
 import com.google.bitcoin.net.discovery.PeerDiscovery;
 import com.msgilligan.peerlist.model.PeerInfo;
+import com.msgilligan.peerlist.model.TransactionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,7 @@ public class PeerService {
     @PostConstruct
     public void start() {
         peerGroup.startAndWait();
+        peerGroup.addEventListener(new MyPeerEventListener() );
     }
 
     public NetworkParameters getNetworkParameters() {
@@ -74,5 +76,20 @@ public class PeerService {
         }
         this.messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/peers", peerInfos);
     }
+
+    void onPGTransaction(Peer peer, Transaction t) {
+        TransactionInfo tx = new TransactionInfo();
+        tx.setHash(t.getHashAsString());
+        this.messagingTemplate.convertAndSend("/topic/tx", tx);
+    }
+
+    private class MyPeerEventListener extends AbstractPeerEventListener {
+        @Override
+        public void onTransaction(Peer peer, Transaction t) {
+            System.out.println("Got transaction: " + t.getHashAsString());
+            onPGTransaction(peer, t);
+        }
+    }
+
 
 }
