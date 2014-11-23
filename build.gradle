@@ -12,14 +12,12 @@ buildscript {
     dependencies {
         def sbBuildScriptVersion = "1.0.0.RC3"
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${sbBuildScriptVersion}")
-        classpath 'org.gradle.api.plugins:gradle-cloudbees-plugin:0.1.1'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'spring-boot'
-apply plugin: 'cloudbees'
 
 archivesBaseName = 'peerlist'
 version =  '0.1'
@@ -62,22 +60,3 @@ springBoot {
 }
 
 def springBootWarLauncherClassName = "org.springframework.boot.loader.WarLauncher"
-
-// Make the deploy target easier to find/type
-task deploy(dependsOn: cloudBeesAppDeployArchive)
-
-cloudBees {
-    apiKey = cloudbeesApiKey
-    apiSecret = cloudbeesApiSecret
-    appId = 'cmt/peerlist'
-    archiveType = 'jar'
-    archiveFile = war.archivePath
-    deltaDeploy = true
-    parameters = [containerType: "java", 'runtime.class': springBootWarLauncherClassName]
-}
-
-cloudBeesAppDeployArchive.dependsOn assemble
-cloudBeesAppDeployArchive.message = project.version
-
-
-
