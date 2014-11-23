@@ -15,16 +15,16 @@
  */
 package com.msgilligan.peerlist.service;
 
-import com.google.bitcoin.kits.WalletAppKit;
-import com.google.bitcoin.net.discovery.DnsDiscovery;
-import com.google.bitcoin.net.discovery.PeerDiscovery;
+import org.bitcoinj.kits.WalletAppKit;
+import org.bitcoinj.net.discovery.DnsDiscovery;
+import org.bitcoinj.net.discovery.PeerDiscovery;
 import com.msgilligan.peerlist.model.PeerInfo;
 import com.msgilligan.peerlist.model.TransactionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
-import com.google.bitcoin.core.*;
+import org.bitcoinj.core.*;
 
 import javax.annotation.PostConstruct;
 import java.net.InetSocketAddress;

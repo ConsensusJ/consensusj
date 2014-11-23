@@ -1,10 +1,10 @@
 package com.msgilligan.peerlist.config;
 
-import com.google.bitcoin.core.NetworkParameters;
-import com.google.bitcoin.net.discovery.DnsDiscovery;
-import com.google.bitcoin.net.discovery.PeerDiscovery;
-import com.google.bitcoin.net.discovery.SeedPeers;
-import com.google.bitcoin.params.MainNetParams;
+import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.net.discovery.DnsDiscovery;
+import org.bitcoinj.net.discovery.PeerDiscovery;
+import org.bitcoinj.net.discovery.SeedPeers;
+import org.bitcoinj.params.MainNetParams;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

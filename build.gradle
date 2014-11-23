@@ -52,7 +52,7 @@ dependencies {
     compile "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
     compile "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
 
-    compile "com.google:bitcoinj:0.12-SNAPSHOT"
+    compile "org.bitcoinj:bitcoinj-core:0.12.1"
     testCompile("junit:junit:4.11")
 }
 
