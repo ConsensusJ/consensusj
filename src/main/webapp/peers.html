@@ -7,12 +7,14 @@
 
 <div ng-controller="PeerCtrl">
     <div>
+        <h2>Peers</h2>
         <ul>
             <li ng-repeat="peer in peers">{{peer}}</li>
         </ul>
     </div>
 
     <div>
+        <h2>Transactions</h2>
         <ul>
             <li ng-repeat="tx in transactions">{{tx.hash}}</li>
         </ul>
