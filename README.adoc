@@ -1,0 +1,7 @@
+= PeerList 
+
+== Build and Run Locally
+
+. Build and Run with Gradle Wrapper
+    
+    `.\gradlew bootRun`
