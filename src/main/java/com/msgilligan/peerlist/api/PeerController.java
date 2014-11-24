@@ -30,7 +30,7 @@ public class PeerController {
     }
 
     @MessageMapping("/listPeers")
-    public void listUsers(Principal principal) {
+    public void listPeers(Principal principal) {
         peerService.listPeers(principal);
     }
 
