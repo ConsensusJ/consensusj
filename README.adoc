@@ -1,7 +1,16 @@
 = PeerList 
 
-== Build and Run Locally
+== Build and Run Locally (run from Gradle)
 
 . Build and Run with Gradle Wrapper
     
-    `.\gradlew bootRun`
+    .\gradlew bootRun
+
+== Build and exectuable WAR for deployment
+
+    .\gradlew assemble
+
+The war will be built at `build/libs/peerlist-0.1.war`.
+
+Note:: Shouldn't the `war` target work? It currently doesn't.
+
