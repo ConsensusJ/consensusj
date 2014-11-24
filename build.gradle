@@ -1,17 +1,17 @@
-def springVersion = "4.0.2.RELEASE"
-def springSecurityVersion = "3.2.0.RELEASE"
-def springBootVersion = "1.0.0.RC3"
-def tomcatVersion = "8.0.0-RC5"
+def springVersion = "4.1.0.RC2"
+def springSecurityVersion = "3.2.5.RELEASE"
 
 buildscript {
+    ext {
+        springBootVersion = '1.1.4.RELEASE'
+    }
     repositories {
-        maven { url 'http://dl.bintray.com/msgilligan/maven' }
-        maven { url 'http://jcenter.bintray.com' }
-        mavenCentral()
+        maven { url 'https://dl.bintray.com/msgilligan/maven' }
+        maven { url 'https://jcenter.bintray.com' }
+        jcenter()
     }
     dependencies {
-        def sbBuildScriptVersion = "1.0.0.RC3"
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${sbBuildScriptVersion}")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
 
@@ -23,11 +23,10 @@ archivesBaseName = 'peerlist'
 version =  '0.1'
 
 repositories {
-    mavenCentral()
     maven {
-        url 'http://repo.spring.io/milestone'
+        url 'https://repo.spring.io/milestone'
     }
-    mavenLocal()
+    jcenter()
 }
 
 dependencies {
@@ -46,9 +45,6 @@ dependencies {
     compile "org.springframework.security:spring-security-core:${springSecurityVersion}"
     compile "org.springframework.security:spring-security-config:${springSecurityVersion}"
     compile "org.springframework.security:spring-security-web:${springSecurityVersion}"
-
-    compile "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}"
-    compile "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
 
     compile "org.bitcoinj:bitcoinj-core:0.12.1"
     testCompile("junit:junit:4.11")
