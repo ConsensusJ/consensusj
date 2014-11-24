@@ -42,8 +42,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .inMemoryAuthentication()
-                .withUser("sean").password("sean").roles("ADMIN","USER").and()
-                .withUser("taariq").password("taariq").roles("USER").and()
-                .withUser("kevin").password("kevin").roles("USER");
+                .withUser("sean").password("sean").roles("ADMIN","USER");
     }
 }
