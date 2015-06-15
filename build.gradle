@@ -22,13 +22,6 @@ repositories {
 }
 
 dependencies {
-    compile ("org.springframework:spring-messaging") {
-        dependencies {
-            ext.reactorVersion = '1.0.0.RELEASE'
-            compile "org.projectreactor:reactor-tcp:$reactorVersion"
-        }
-    }
-
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-websocket"
     compile "org.springframework.boot:spring-boot-starter-security"
