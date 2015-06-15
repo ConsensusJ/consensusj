@@ -54,7 +54,7 @@ public class PeerService {
 
     @PostConstruct
     public void start() {
-        peerGroup.startAndWait();
+        peerGroup.startAsync();
         peerGroup.addEventListener(new MyPeerEventListener() );
     }
 
