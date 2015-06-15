@@ -10,8 +10,13 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
+plugins {
+    id 'java'
+    id 'idea'
+}
 apply plugin: 'spring-boot'
+
+sourceCompatibility = 1.8
 
 archivesBaseName = 'peerlist'
 version =  '0.1'
@@ -32,4 +37,11 @@ dependencies {
 
 springBoot {
     backupSource = true
+}
+
+idea {
+    project {
+        jdkName = '1.8'
+        languageLevel = '1.8'
+    }
 }

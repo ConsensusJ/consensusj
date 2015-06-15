@@ -15,8 +15,6 @@
  */
 package com.msgilligan.peerlist.service;
 
-import org.bitcoinj.kits.WalletAppKit;
-import org.bitcoinj.net.discovery.DnsDiscovery;
 import org.bitcoinj.net.discovery.PeerDiscovery;
 import com.msgilligan.peerlist.model.PeerInfo;
 import com.msgilligan.peerlist.model.TransactionInfo;
@@ -27,10 +25,10 @@ import org.springframework.stereotype.Service;
 import org.bitcoinj.core.*;
 
 import javax.annotation.PostConstruct;
-import java.net.InetSocketAddress;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * A Service for maintaining Bitcoin peers
@@ -65,15 +63,8 @@ public class PeerService {
     }
 
     public void listPeers(Principal principal) {
-        List<PeerInfo> peerInfos = new ArrayList<PeerInfo>();
         List<Peer> peers = peerGroup.getConnectedPeers();
-
-        for (Peer peer : peers) {
-            InetSocketAddress addr = peer.getAddress().toSocketAddress();
-            PeerInfo info = new PeerInfo();
-            info.setSocketAddress(addr);
-            peerInfos.add(info);
-        }
+        List<PeerInfo> peerInfos = peers.stream().map(PeerInfo::new).collect(toList());
         this.messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/peers", peerInfos);
     }
 

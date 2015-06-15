@@ -1,14 +1,20 @@
 package com.msgilligan.peerlist.model;
 
+import org.bitcoinj.core.Peer;
+
 import java.net.InetSocketAddress;
 
 /**
- * User: sean
- * Date: 2/23/14
- * Time: 12:18 AM
+ * PeerInfo
+ * <p>
+ * Simple Bean Constructed from Peer class for serialization over STOMP
  */
 public class PeerInfo {
     private InetSocketAddress socketAddress;
+
+    public PeerInfo(Peer peer) {
+        this.socketAddress = peer.getAddress().toSocketAddress();
+    }
 
     public InetSocketAddress getSocketAddress() {
         return socketAddress;
