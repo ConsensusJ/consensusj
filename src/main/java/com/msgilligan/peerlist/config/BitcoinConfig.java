@@ -25,8 +25,8 @@ public class BitcoinConfig {
     @Bean
     public PeerDiscovery peerDiscovery(NetworkParameters params) throws FileNotFoundException {
         PeerDiscovery pd;
-//        pd = new DnsDiscovery(params);
-        pd = new SeedPeers(params);
+        pd = new DnsDiscovery(params);
+//        pd = new SeedPeers(params);
         return pd;
     }
 }
