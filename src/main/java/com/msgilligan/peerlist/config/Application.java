@@ -18,13 +18,4 @@ public class Application {
         app.setShowBanner(false);
         ApplicationContext ctx = app.run();
     }
-
-    @Bean
-    public ServerProperties myServerProperties() {
-        ServerProperties p = new ServerProperties();
-        String portStr = System.getProperty("app.port");  // CloudBees Environment Variable for local port
-        int port = (portStr != null) ? Integer.parseInt(portStr) : 8080;
-        p.setPort(port);
-        return p;
-    }
 }
