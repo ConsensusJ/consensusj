@@ -6,8 +6,6 @@ buildscript {
         springBootVersion = '1.1.4.RELEASE'
     }
     repositories {
-        maven { url 'https://dl.bintray.com/msgilligan/maven' }
-        maven { url 'https://jcenter.bintray.com' }
         jcenter()
     }
     dependencies {
@@ -23,9 +21,6 @@ archivesBaseName = 'peerlist'
 version =  '0.1'
 
 repositories {
-    maven {
-        url 'https://repo.spring.io/milestone'
-    }
     jcenter()
 }
 
