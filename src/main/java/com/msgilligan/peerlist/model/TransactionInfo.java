@@ -1,12 +1,18 @@
 package com.msgilligan.peerlist.model;
 
+import org.bitcoinj.core.Transaction;
+
 /**
- * User: sean
- * Date: 2/23/14
- * Time: 1:16 AM
+ * TransactionInfo
+ * <p>
+ * Simple Bean Constructed from Peer class for serialization over STOMP
  */
 public class TransactionInfo {
     private String hash;
+
+    public TransactionInfo(Transaction tx) {
+        this.hash = tx.getHashAsString();
+    }
 
     public String getHash() {
         return hash;

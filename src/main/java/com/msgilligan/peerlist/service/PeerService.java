@@ -69,8 +69,7 @@ public class PeerService {
     }
 
     void onPGTransaction(Peer peer, Transaction t) {
-        TransactionInfo tx = new TransactionInfo();
-        tx.setHash(t.getHashAsString());
+        TransactionInfo tx = new TransactionInfo(t);
         this.messagingTemplate.convertAndSend("/topic/tx", tx);
     }
 
