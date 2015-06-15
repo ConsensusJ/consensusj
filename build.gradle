@@ -41,7 +41,7 @@ dependencies {
     compile "org.springframework.security:spring-security-config:${springSecurityVersion}"
     compile "org.springframework.security:spring-security-web:${springSecurityVersion}"
 
-    compile "org.bitcoinj:bitcoinj-core:0.12.1"
+    compile "org.bitcoinj:bitcoinj-core:0.12.3"
     testCompile("junit:junit:4.11")
 }
 
