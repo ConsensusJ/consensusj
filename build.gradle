@@ -32,6 +32,9 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-security"
 
     compile "org.bitcoinj:bitcoinj-core:0.12.3"
+
+    compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:1.1"
+
     testCompile("junit:junit:4.11")
 }
 

@@ -60,6 +60,10 @@ public class PeerService {
         return this.netParams;
     }
 
+    public Integer getBlockCount() {
+        return peerGroup.getMostCommonChainHeight();
+    }
+
     public List<Peer> getPeers() {
         List<Peer> peers = peerGroup.getConnectedPeers();
         return peers;
