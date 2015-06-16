@@ -6,12 +6,15 @@ package com.msgilligan.peerlist.api;
  * Time: 6:40 PM
  */
 import com.msgilligan.peerlist.service.PeerService;
+import org.bitcoinj.core.Peer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.List;
 
 
 @RestController
@@ -34,5 +37,9 @@ public class PeerController {
         peerService.listPeers(principal);
     }
 
-
+    @RequestMapping("/listPeers")
+    @ResponseBody
+    public List<Peer> listPeersREST() {
+        return peerService.getPeers();
+    }
 }

@@ -1,5 +1,6 @@
 package com.msgilligan.peerlist.config;
 
+import com.msgilligan.bitcoinj.jackson.SerializerModule;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.net.discovery.DnsDiscovery;
 import org.bitcoinj.net.discovery.PeerDiscovery;
@@ -7,13 +8,11 @@ import org.bitcoinj.net.discovery.SeedPeers;
 import org.bitcoinj.params.MainNetParams;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.fasterxml.jackson.databind.Module;
 
 import java.io.FileNotFoundException;
 
 /**
- * User: sean
- * Date: 2/22/14
- * Time: 7:56 PM
  */
 @Configuration
 public class BitcoinConfig {
@@ -28,5 +27,10 @@ public class BitcoinConfig {
         pd = new DnsDiscovery(params);
 //        pd = new SeedPeers(params);
         return pd;
+    }
+
+    @Bean
+    public Module bitcoinJMapper() {
+        return new SerializerModule();
     }
 }

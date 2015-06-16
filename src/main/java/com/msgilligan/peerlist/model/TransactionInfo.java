@@ -7,6 +7,7 @@ import org.bitcoinj.core.Transaction;
  * <p>
  * Simple Bean Constructed from Peer class for serialization over STOMP
  */
+@Deprecated
 public class TransactionInfo {
     private String hash;
 

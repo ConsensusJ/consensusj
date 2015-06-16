@@ -9,6 +9,7 @@ import java.net.InetSocketAddress;
  * <p>
  * Simple Bean Constructed from Peer class for serialization over STOMP
  */
+@Deprecated
 public class PeerInfo {
     private InetSocketAddress socketAddress;
 

@@ -16,8 +16,6 @@
 package com.msgilligan.peerlist.service;
 
 import org.bitcoinj.net.discovery.PeerDiscovery;
-import com.msgilligan.peerlist.model.PeerInfo;
-import com.msgilligan.peerlist.model.TransactionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
@@ -62,22 +60,25 @@ public class PeerService {
         return this.netParams;
     }
 
-    public void listPeers(Principal principal) {
+    public List<Peer> getPeers() {
         List<Peer> peers = peerGroup.getConnectedPeers();
-        List<PeerInfo> peerInfos = peers.stream().map(PeerInfo::new).collect(toList());
-        this.messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/peers", peerInfos);
+        return peers;
     }
 
-    void onPGTransaction(Peer peer, Transaction t) {
-        TransactionInfo tx = new TransactionInfo(t);
+    public void listPeers(Principal principal) {
+        List<Peer> peers = peerGroup.getConnectedPeers();
+        this.messagingTemplate.convertAndSendToUser(principal.getName(), "/queue/peers", peers);
+    }
+
+    void onPGTransaction(Peer peer, Transaction tx) {
         this.messagingTemplate.convertAndSend("/topic/tx", tx);
     }
 
     private class MyPeerEventListener extends AbstractPeerEventListener {
         @Override
-        public void onTransaction(Peer peer, Transaction t) {
-            System.out.println("Got transaction: " + t.getHashAsString());
-            onPGTransaction(peer, t);
+        public void onTransaction(Peer peer, Transaction tx) {
+            System.out.println("Got transaction: " + tx.getHashAsString());
+            onPGTransaction(peer, tx);
         }
     }
 

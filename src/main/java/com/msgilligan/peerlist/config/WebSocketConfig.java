@@ -1,12 +1,17 @@
 package com.msgilligan.peerlist.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.converter.DefaultContentTypeResolver;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
 import org.springframework.messaging.handler.invocation.HandlerMethodReturnValueHandler;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -23,6 +28,7 @@ import java.util.List;
 @EnableWebSocketMessageBroker
 @ComponentScan(basePackages="com.msgilligan.peerlist")
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+    @Autowired ObjectMapper objectMapper;   // Seems to get injected with objectMapper with our added Module
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -55,7 +61,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
-        return true;
+        // Workaround for issue 2445: https://github.com/spring-projects/spring-boot/issues/2445
+        DefaultContentTypeResolver resolver = new DefaultContentTypeResolver();
+        resolver.setDefaultMimeType(MimeTypeUtils.APPLICATION_JSON);
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setObjectMapper(objectMapper);
+        converter.setContentTypeResolver(resolver);
+        messageConverters.add(converter);
+        return false;
     }
 
     @Override
