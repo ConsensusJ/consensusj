@@ -49,7 +49,7 @@ public class BitcoinConfig {
         return new BitcoinJsonRpcImpl(peerService);
     }
 
-    @Bean(name="/bitcoin-rpc")
+    @Bean(name="/bitcoinrpc")
     public JsonServiceExporter bitcoinServiceExporter(BitcoinJsonRpc bitcoinJsonRPCService) {
         JsonServiceExporter exporter = new JsonServiceExporter();
         exporter.setService(bitcoinJsonRPCService);
