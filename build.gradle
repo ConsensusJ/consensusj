@@ -31,6 +31,8 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-websocket"
     compile "org.springframework.boot:spring-boot-starter-security"
 
+    compile "javax.inject:javax.inject:1"
+
     compile "org.bitcoinj:bitcoinj-core:0.12.3"
 
     compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:1.1"

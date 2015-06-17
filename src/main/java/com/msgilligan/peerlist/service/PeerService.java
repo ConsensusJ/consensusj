@@ -16,20 +16,20 @@
 package com.msgilligan.peerlist.service;
 
 import org.bitcoinj.net.discovery.PeerDiscovery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.stereotype.Service;
 
 import org.bitcoinj.core.*;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.security.Principal;
 import java.util.List;
 
 /**
  * A Service for maintaining Bitcoin peers
  */
-@Service
+@Named
 public class PeerService {
     private static final String userAgentName = "PeerList";
     private static final String appVersion = "0.1";
@@ -37,7 +37,7 @@ public class PeerService {
     private PeerGroup peerGroup;
     private final SimpMessageSendingOperations messagingTemplate;
 
-    @Autowired
+    @Inject
     public PeerService(NetworkParameters params,
                        PeerDiscovery peerDiscovery,
                        SimpMessageSendingOperations messagingTemplate) {
