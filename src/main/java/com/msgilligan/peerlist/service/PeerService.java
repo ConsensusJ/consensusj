@@ -26,8 +26,6 @@ import javax.annotation.PostConstruct;
 import java.security.Principal;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 /**
  * A Service for maintaining Bitcoin peers
  */
@@ -62,6 +60,10 @@ public class PeerService {
 
     public Integer getBlockCount() {
         return peerGroup.getMostCommonChainHeight();
+    }
+
+    public Integer getConnectionCount() {
+        return peerGroup.numConnectedPeers();
     }
 
     public List<Peer> getPeers() {

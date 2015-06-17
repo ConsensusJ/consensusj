@@ -12,7 +12,13 @@ public class BitcoinJsonRpcImpl implements BitcoinJsonRpc {
         this.peerService = peerService;
     }
 
+    @Override
     public Integer getblockcount() {
         return peerService.getBlockCount();
+    }
+
+    @Override
+    public Integer getconnectioncount() {
+        return peerService.getConnectionCount();
     }
 }

@@ -8,4 +8,5 @@ import com.googlecode.jsonrpc4j.JsonRpcService;
 //@JsonRpcService("BitcoinRPC")
 public interface BitcoinJsonRpc {
     public Integer getblockcount();
+    public Integer getconnectioncount();
 }
