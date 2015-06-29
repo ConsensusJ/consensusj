@@ -6,11 +6,14 @@
     
     .\gradlew bootRun
 
-== Build and exectuable WAR for deployment
+== Build an exectuable JAR 
 
     .\gradlew assemble
 
-The war will be built at `build/libs/peerlist-0.1.war`.
+The JAR will be built at `build/libs/peerlist-0.1.jar` and can be run with:
 
-Note:: Shouldn't the `war` target work? It currently doesn't.
+    java -jar build/libs/peerlist-0.1.jar
+
+
+
 
