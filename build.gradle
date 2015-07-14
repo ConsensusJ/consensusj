@@ -24,7 +24,7 @@ mainClassName = "com.msgilligan.peerlist.config.Application"
 
 repositories {
     jcenter()
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/'}  // bitcoinj snapshots
+//  maven { url 'https://oss.sonatype.org/content/repositories/snapshots/'}  // bitcoinj snapshots
 }
 
 dependencies {
@@ -34,7 +34,7 @@ dependencies {
 
     compile "javax.inject:javax.inject:1"
 
-    compile "org.bitcoinj:bitcoinj-core:0.13"
+    compile "org.bitcoinj:bitcoinj-core:0.13.1"
 
     compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:1.1"
 
