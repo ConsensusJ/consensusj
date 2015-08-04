@@ -1,4 +1,21 @@
-= PeerList 
+= bitcoinj Add-ons 
+
+This repository is work-in-progress on some add-on modules for https://bitcoinj.github.io[bitcoinj]. Currently all code is in a single submodule, but that will change soon.
+
+WARNING: The API is far from final and will change without warning.
+
+Currently the only module is a http://projects.spring.io/spring-boot/[Spring Boot] application called *PeerServer*, but there are packages within this application that are designed to work without Spring.  This is one of the reasons the code will be split into multiple modules and JARs.
+
+== PeerServer
+
+PeerServer is a bitcoinj-powered Spring Boot server that provides two major functions:
+
+. It implements a very https://github.com/msgilligan/bitcoinj-addons/blob/master/src/main/java/com/msgilligan/bitcoinj/rpc/BitcoinJsonRpc.java[small subset] of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
+. It provides a https://stomp.github.io[STOMP protocol] WebSocket service that live-streams pending Bitcoin transactions from the P2P network.
+
+No bitcoind is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/0.13.1/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for that reason.
+
+The JAR is entirely self-contained and can be run on any system with a recent Java JDK with a simple `java -jar peerserver-0.1.jar` command.
 
 == Build and Run Locally (run from Gradle)
 
@@ -10,9 +27,11 @@
 
     .\gradlew assemble
 
-The JAR will be built at `build/libs/peerlist-0.1.jar` and can be run with:
+The JAR will be built at `build/libs/peerserver-0.1.jar` and can be run with:
 
-    java -jar build/libs/peerlist-0.1.jar
+    java -jar build/libs/peerserver-0.1.jar
+
+
 
 
 
