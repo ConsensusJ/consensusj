@@ -1,6 +1,6 @@
-package com.msgilligan.bitcoinj.boot;
+package com.msgilligan.bitcoinj.rpc;
 
-import com.msgilligan.peerlist.service.PeerService;
+import com.msgilligan.bitcoinj.spring.service.PeerService;
 
 /**
  *

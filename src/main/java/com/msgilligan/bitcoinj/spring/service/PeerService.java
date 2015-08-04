@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.msgilligan.peerlist.service;
+package com.msgilligan.bitcoinj.spring.service;
 
 import org.bitcoinj.net.discovery.PeerDiscovery;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;

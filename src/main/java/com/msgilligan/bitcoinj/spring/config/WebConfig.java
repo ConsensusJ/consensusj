@@ -1,4 +1,4 @@
-package com.msgilligan.peerlist.config;
+package com.msgilligan.bitcoinj.spring.config;
 
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Configuration;

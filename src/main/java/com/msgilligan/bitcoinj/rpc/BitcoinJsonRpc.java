@@ -1,6 +1,4 @@
-package com.msgilligan.bitcoinj.boot;
-
-import com.googlecode.jsonrpc4j.JsonRpcService;
+package com.msgilligan.bitcoinj.rpc;
 
 /**
  * Standard Bitcoin JSON-RPC service

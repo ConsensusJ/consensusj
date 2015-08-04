@@ -1,15 +1,13 @@
-package com.msgilligan.peerlist.config;
+package com.msgilligan.bitcoinj.spring.config;
 
-import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceExporter;
 import com.googlecode.jsonrpc4j.spring.JsonServiceExporter;
-import com.msgilligan.bitcoinj.boot.BitcoinJsonRpc;
-import com.msgilligan.bitcoinj.boot.BitcoinJsonRpcImpl;
+import com.msgilligan.bitcoinj.rpc.BitcoinJsonRpc;
+import com.msgilligan.bitcoinj.rpc.BitcoinJsonRpcImpl;
 import com.msgilligan.bitcoinj.jackson.SerializerModule;
-import com.msgilligan.peerlist.service.PeerService;
+import com.msgilligan.bitcoinj.spring.service.PeerService;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.net.discovery.DnsDiscovery;
 import org.bitcoinj.net.discovery.PeerDiscovery;
-import org.bitcoinj.net.discovery.SeedPeers;
 import org.bitcoinj.params.MainNetParams;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

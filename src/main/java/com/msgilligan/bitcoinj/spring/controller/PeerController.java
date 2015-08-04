@@ -1,11 +1,11 @@
-package com.msgilligan.peerlist.api;
+package com.msgilligan.bitcoinj.spring.controller;
 
 /**
  * User: sean
  * Date: 2/22/14
  * Time: 6:40 PM
  */
-import com.msgilligan.peerlist.service.PeerService;
+import com.msgilligan.bitcoinj.spring.service.PeerService;
 import org.bitcoinj.core.Peer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;

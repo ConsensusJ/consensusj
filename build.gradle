@@ -20,11 +20,10 @@ sourceCompatibility = 1.8
 
 archivesBaseName = 'peerlist'
 version =  '0.1'
-mainClassName = "com.msgilligan.peerlist.config.Application"
+mainClassName = "com.msgilligan.bitcoinj.peerserver.Application"
 
 repositories {
     jcenter()
-//  maven { url 'https://oss.sonatype.org/content/repositories/snapshots/'}  // bitcoinj snapshots
 }
 
 dependencies {

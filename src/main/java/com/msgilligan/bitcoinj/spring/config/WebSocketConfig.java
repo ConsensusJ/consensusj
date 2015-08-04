@@ -1,4 +1,4 @@
-package com.msgilligan.peerlist.config;
+package com.msgilligan.bitcoinj.spring.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
