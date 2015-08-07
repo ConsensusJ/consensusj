@@ -11,7 +11,7 @@ Currently the only module is a http://projects.spring.io/spring-boot/[Spring Boo
 * Most components require JDK 8 or later.
 * Some modules may use JDK 7 (subset) for Android compatibility (TBD)
 
-== Bitcoin JSON-RPC client using bitcoinj types.
+== Bitcoin JSON-RPC client using bitcoinj types
 
 The JSON-RPC client currently lives in the https://github.com/OmniLayer/OmniJ[OmniJ] project, but will be migrating over here soon.
 
@@ -23,7 +23,7 @@ NOTE: Currently this code is in the same module as *PeerServer* but it will be e
 
 == PeerServer
 
-PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring Boot] server that provides two major functions:
+PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring Boot] application that provides the following functions:
 
 . A *Bitcoin JSON-RPC service* at `http://[host]:[port]/bitcoinrpc`
 .. This is hard to connect to using `bitcoin-cli` as it expects the RPCs to be accessible at the root path ('/'), but you can use the Java or Groovy RPC client (currently in OmniJ) to talk to it.
