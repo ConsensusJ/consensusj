@@ -33,7 +33,7 @@ dependencies {
 
     compile "javax.inject:javax.inject:1"
 
-    compile "org.bitcoinj:bitcoinj-core:0.13.1"
+    compile "org.bitcoinj:bitcoinj-core:0.13.2"
 
     compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:1.1"
 
