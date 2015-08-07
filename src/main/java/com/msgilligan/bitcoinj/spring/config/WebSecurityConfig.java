@@ -22,7 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/style/**").permitAll()
                 .antMatchers("/lib/**").permitAll()
-                .antMatchers("/bitcoin-rpc").permitAll()
+                .antMatchers("/bitcoinrpc").permitAll()
 
 //                .antMatchers("/stomp/**").permitAll()
                 .anyRequest().authenticated()
