@@ -6,26 +6,57 @@ WARNING: The API is far from final and will change without warning.
 
 Currently the only module is a http://projects.spring.io/spring-boot/[Spring Boot] application called *PeerServer*, but there are packages within this application that are designed to work without Spring.  This is one of the reasons the code will be split into multiple modules and JARs.
 
+== Requirements
+
+* Most components require JDK 8 or later.
+* Some modules may use JDK 7 (subset) for Android compatibility (TBD)
+
+== Bitcoin JSON-RPC client using bitcoinj types.
+
+The JSON-RPC client currently lives in the https://github.com/OmniLayer/OmniJ[OmniJ] project, but will be migrating over here soon.
+
+== Bitcoin JSON-RPC API Server using bitcoinj
+
+A proof-of-concept Java implementation of a very https://github.com/msgilligan/bitcoinj-addons/blob/master/src/main/java/com/msgilligan/bitcoinj/rpc/BitcoinJsonRpc.java[small subset] of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].) 
+
+NOTE: Currently this code is in the same module as *PeerServer* but it will be extracted to a library soon.
+
 == PeerServer
 
-PeerServer is a bitcoinj-powered Spring Boot server that provides two major functions:
+PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring Boot] server that provides two major functions:
 
-. It implements a very https://github.com/msgilligan/bitcoinj-addons/blob/master/src/main/java/com/msgilligan/bitcoinj/rpc/BitcoinJsonRpc.java[small subset] of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
-. It provides a https://stomp.github.io[STOMP protocol] WebSocket service that live-streams pending Bitcoin transactions from the P2P network.
+. A *Bitcoin JSON-RPC service* at `http://[host]:[port]/bitcoinrpc`
+.. This is hard to connect to using `bitcoin-cli` as it expects the RPCs to be accessible at the root path ('/'), but you can use the Java or Groovy RPC client (currently in OmniJ) to talk to it.
+.. There may be issues with the security configuration on this URL. We're currently investigating.
 
-No bitcoind is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/0.13.1/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for that reason.
+. A https://stomp.github.io[STOMP protocol] *WebSocket* service that live-streams pending Bitcoin transactions from the P2P network.
+.. The page at `/peers.html` lists connected peers and streams Transactions from the P2P network.
+.. You must login using username: `admin`, password: `admin` to view this page.
+.. The `peers.html' page is currently unstyled HTML.
 
-The JAR is entirely self-contained and can be run on any system with a recent Java JDK with a simple `java -jar peerserver-0.1.jar` command.
+No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/0.13.2/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-0.1.jar` command.
 
-== Build and Run Locally (run from Gradle)
+== Building and Running
+
+Before running `./gradlew` wrapper script you must have JDK 8 installed and your `JAVA_HOME` set correctly. For example:
+
+    export JAVA_HOME=`/usr/libexec/java_home -v1.8`
+
+NOTE: The first time you run the build all dependency JARS will be downloaded.
+
+NOTE: Running this server will attempt to connect you to the Bitcoin P2P network and receive incoming transactions.
+
+=== Build and Run Locally Using Gradle
 
 . Build and Run with Gradle Wrapper
     
-    .\gradlew bootRun
+    ./gradlew bootRun
 
-== Build an exectuable JAR 
+This will connect to the Bitcoin P2P network  
 
-    .\gradlew assemble
+=== Build an Exectuable JAR 
+
+    ./gradlew assemble
 
 The JAR will be built at `build/libs/peerserver-0.1.jar` and can be run with:
 
