@@ -1,11 +1,22 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
+    }
+}
+
+
 apply from: 'gradle/idea.gradle'
+//apply from: 'gradle/bintray.gradle'
 
 allprojects {
     apply plugin: 'java'
 
     sourceCompatibility = 1.8
 
-    version =  '0.1-SNAPSHOT'
+    version =  '0.0.1'
     group = 'com.msgilligan'
 
     repositories {
