@@ -1,0 +1,34 @@
+buildscript {
+    ext {
+        springBootVersion = '1.3.0.M2'
+    }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'spring-boot'
+
+archivesBaseName = 'peerserver'
+mainClassName = "com.msgilligan.bitcoinj.peerserver.Application"
+
+dependencies {
+    compile project(':bitcoinj-json')
+
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-websocket"
+    compile "org.springframework.boot:spring-boot-starter-security"
+
+//    compile "javax.inject:javax.inject:1"
+
+    compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:1.1"
+
+    testCompile("junit:junit:4.11")
+}
+
+springBoot {
+    backupSource = true
+}

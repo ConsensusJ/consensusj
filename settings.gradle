@@ -1,0 +1,3 @@
+include 'bitcoinj-json'
+include 'bitcoinj-peerserver'
+

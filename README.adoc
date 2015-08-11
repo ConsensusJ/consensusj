@@ -50,17 +50,17 @@ NOTE: Running this server will attempt to connect you to the Bitcoin P2P network
 
 . Build and Run with Gradle Wrapper
     
-    ./gradlew bootRun
+    ./gradlew :bitcoinj-peerserver:bootRun
 
 This will connect to the Bitcoin P2P network  
 
 === Build an Exectuable JAR 
 
-    ./gradlew assemble
+    ./gradlew :bitcoinj-peerserver:assemble
 
 The JAR will be built at `build/libs/peerserver-0.1.jar` and can be run with:
 
-    java -jar build/libs/peerserver-0.1.jar
+    java -jar bitcoinj-peerserver/build/libs/peerserver-0.1-SNAPSHOT.jar
 
 
 
