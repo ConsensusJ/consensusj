@@ -5,7 +5,7 @@ subprojects {
 
     ext {
         dry = false // dryRun flag for bintray (and anything else?)
-        myBintray = [ apiKey: binTrayAPIKey ?: '' ]   // Set 'binTrayAPIKey' in ~/.gradle/gradle.properties
+        myBintray = [ apiKey: binTrayAPIKey ]   // Set 'binTrayAPIKey' in ~/.gradle/gradle.properties
     }
 
     publishing {
