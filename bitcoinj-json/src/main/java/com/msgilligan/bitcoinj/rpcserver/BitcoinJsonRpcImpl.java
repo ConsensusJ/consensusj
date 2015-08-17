@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.rpc;
+package com.msgilligan.bitcoinj.rpcserver;
 
 import com.msgilligan.bitcoinj.spring.service.PeerService;
 

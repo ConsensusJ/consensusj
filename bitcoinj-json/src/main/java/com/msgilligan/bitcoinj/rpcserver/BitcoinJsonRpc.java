@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.rpc;
+package com.msgilligan.bitcoinj.rpcserver;
 
 /**
  * Standard Bitcoin JSON-RPC service
