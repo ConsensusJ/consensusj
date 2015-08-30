@@ -6,7 +6,7 @@ import spock.util.mop.Use
 
 
 /**
- * Spec to test BigDecimalCoinCategory coercion
+ * Spec to test NumberCategory coercion & conversion
  */
 @Use(NumberCategory)
 class NumberCategorySpec extends Specification {
