@@ -1,5 +1,7 @@
 = bitcoinj Add-ons 
 
+image::https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"]
+
 This repository is work-in-progress on some add-on modules for https://bitcoinj.github.io[bitcoinj]. Currently all code is in a single submodule, but that will change soon.
 
 WARNING: The API is far from final and will change without warning.
