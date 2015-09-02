@@ -79,6 +79,9 @@ class NumberCategorySpec extends Specification {
         50f.btc == Coin.FIFTY_COINS
     }
 
+    /**
+     * This is expected, though undesirable behavior
+     */
     def ".btc convenience method rounds floats without throwing exception"() {
         expect:
         (-0.00000001f).btc == Coin.ZERO
