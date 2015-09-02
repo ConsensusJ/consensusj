@@ -1,2 +1,2 @@
-include 'bitcoinj-json', 'bitcoinj-peerserver', 'bitcoinj-groovy', 'bitcoinj-spock'
+include 'bitcoinj-json', 'bitcoinj-peerserver', 'bitcoinj-daemon', 'bitcoinj-groovy', 'bitcoinj-spock'
 

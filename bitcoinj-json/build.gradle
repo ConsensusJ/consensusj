@@ -9,3 +9,4 @@ dependencies {
     testCompile("junit:junit:4.11")
 }
 
+sourceCompatibility = 1.7

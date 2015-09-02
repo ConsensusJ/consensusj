@@ -27,44 +27,28 @@ import java.security.Principal;
 import java.util.List;
 
 /**
- * A Service for maintaining Bitcoin peers
+ * Extend PeerGroupService with additional HTTP and WebSocket/STOMP services
+ * for Peers and Transactions
  */
 @Named
-public class PeerService {
-    private static final String userAgentName = "PeerList";
-    private static final String appVersion = "0.1";
-    private NetworkParameters netParams;
-    private PeerGroup peerGroup;
+public class PeerService extends PeerGroupService {
     private final SimpMessageSendingOperations messagingTemplate;
 
     @Inject
     public PeerService(NetworkParameters params,
                        PeerDiscovery peerDiscovery,
                        SimpMessageSendingOperations messagingTemplate) {
-        this.netParams = params;
-        this.peerGroup = new PeerGroup(params);
+        super(params, peerDiscovery);
         this.messagingTemplate = messagingTemplate;
-        peerGroup.setUserAgent(userAgentName, appVersion);
-        peerGroup.addPeerDiscovery(peerDiscovery);
     }
 
     @PostConstruct
+    @Override
     public void start() {
-        peerGroup.startAsync();
+        super.start();
         peerGroup.addEventListener(new MyPeerEventListener() );
     }
 
-    public NetworkParameters getNetworkParameters() {
-        return this.netParams;
-    }
-
-    public Integer getBlockCount() {
-        return peerGroup.getMostCommonChainHeight();
-    }
-
-    public Integer getConnectionCount() {
-        return peerGroup.numConnectedPeers();
-    }
 
     public List<Peer> getPeers() {
         List<Peer> peers = peerGroup.getConnectedPeers();
@@ -87,6 +71,4 @@ public class PeerService {
             onPGTransaction(peer, tx);
         }
     }
-
-
 }

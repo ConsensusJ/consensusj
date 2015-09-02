@@ -13,8 +13,6 @@ apply from: 'gradle/bintray.gradle'
 allprojects {
     apply plugin: 'java'
 
-    sourceCompatibility = 1.7
-
     version = bitcoinjAddonsVersion     // set in gradle.properties
     group = 'com.msgilligan'
 

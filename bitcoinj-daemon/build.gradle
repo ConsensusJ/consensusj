@@ -12,16 +12,18 @@ buildscript {
 
 apply plugin: 'spring-boot'
 
-archivesBaseName = 'bitcoinj-peerserver'
+archivesBaseName = 'bicoinj-daemon'
 
 sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+}
 
 dependencies {
     compile project(':bitcoinj-json')
 
     compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-websocket"
-    compile "org.springframework.boot:spring-boot-starter-security"
 
 //    compile "javax.inject:javax.inject:1"
 
@@ -31,7 +33,7 @@ dependencies {
 }
 
 springBoot {
-    mainClass = "com.msgilligan.bitcoinj.peerserver.Application"
+    mainClass = "com.msgilligan.bitcoinj.daemon.Application"
     backupSource = true
 }
 

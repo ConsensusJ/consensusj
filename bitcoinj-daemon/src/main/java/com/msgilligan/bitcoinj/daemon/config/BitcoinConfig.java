@@ -1,9 +1,9 @@
-package com.msgilligan.bitcoinj.spring.config;
+package com.msgilligan.bitcoinj.daemon.config;
 
 import com.googlecode.jsonrpc4j.spring.JsonServiceExporter;
 import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;
 import com.msgilligan.bitcoinj.jackson.SerializerModule;
-import com.msgilligan.bitcoinj.spring.service.PeerService;
+import com.msgilligan.bitcoinj.spring.service.PeerGroupService;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.net.discovery.DnsDiscovery;
 import org.bitcoinj.net.discovery.PeerDiscovery;
@@ -36,17 +36,17 @@ public class BitcoinConfig {
         return new SerializerModule();
     }
 
-//    @Bean
-//    public AutoJsonRpcServiceExporter jsonRpcServiceExporter() {
-//        return new AutoJsonRpcServiceExporter();
-//    }
+    @Bean
+    public PeerGroupService peerGroupService(NetworkParameters params, PeerDiscovery peerDiscovery) {
+        return new PeerGroupService(params, peerDiscovery);
+    }
 
-
-    @Bean(name="/bitcoinrpc")
-    public JsonServiceExporter bitcoinServiceExporter(PeerService peerService) {
+    @Bean(name="/")
+    public JsonServiceExporter bitcoinServiceExporter(PeerGroupService peerGroupService) {
         JsonServiceExporter exporter = new JsonServiceExporter();
-        exporter.setService(peerService);
+        exporter.setService(peerGroupService);
         exporter.setServiceInterface(BitcoinJsonRpc.class);
+        exporter.setBackwardsComaptible(true);
         return exporter;
     }
 }
