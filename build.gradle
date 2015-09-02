@@ -7,7 +7,6 @@ buildscript {
     }
 }
 
-
 apply from: 'gradle/idea.gradle'
 apply from: 'gradle/bintray.gradle'
 
@@ -16,7 +15,7 @@ allprojects {
 
     sourceCompatibility = 1.7
 
-    version =  '0.0.1'
+    version = bitcoinjAddonsVersion     // set in gradle.properties
     group = 'com.msgilligan'
 
     repositories {

@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.3.0.M3'
+        springBootVersion = '1.3.0.M4'
     }
     repositories {
         jcenter()
@@ -33,4 +33,29 @@ dependencies {
 springBoot {
     mainClass = "com.msgilligan.bitcoinj.peerserver.Application"
     backupSource = true
+}
+
+bintrayUpload.dependsOn bootRepackage
+
+// See: http://docs.spring.io/spring-boot/docs/1.3.0.M4/reference/htmlsingle/#build-tool-plugins-gradle-publishing-artifacts-to-a-maven-repository-import
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom {
+                project {
+                    dependencyManagement {
+                        dependencies {
+                            dependency {
+                                groupId "org.springframework.boot"
+                                artifactId "spring-boot-dependencies"
+                                version springBootVersion
+                                type "pom"
+                                scope "import"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

@@ -3,11 +3,6 @@ subprojects {
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
 
-    ext {
-        dry = false // dryRun flag for bintray (and anything else?)
-        myBintray = [ apiKey: binTrayAPIKey ]   // Set 'binTrayAPIKey' in ~/.gradle/gradle.properties
-    }
-
     publishing {
         publications {
             jar(MavenPublication) {
@@ -17,13 +12,12 @@ subprojects {
     }
 
     bintray {
-        user = 'msgilligan'
-        key = myBintray.apiKey
-        dryRun = dry // whether to run this as dry-run, without deploying
+        user = project.hasProperty("binTrayAPIUser") ? binTrayAPIUser : 'please set binTrayAPIUser'
+        key = project.hasProperty("binTrayAPIKey") ? binTrayAPIKey : 'please set binTrayAPIKey'
+        dryRun = false // whether to run this as dry-run, without deploying
         publications = ['jar'] // When uploading Maven-based publication files
         pkg {
             repo = 'maven'
-//        userOrg = 'myorg' // an optional organization name when the repo belongs to one of the user's orgs
             name = 'bitcoinj-addons'
             desc = 'Add-On functionality for bitcoinj'
             websiteUrl = 'https://github.com/msgilligan/bitcoinj-addons'
@@ -32,10 +26,10 @@ subprojects {
             licenses = ['Apache-2.0']
             labels = ['bitcoin', 'bitcoinj', 'json-rpc', 'server', 'peergroup', 'stomp']
             version {
-                name = '0.0.1'
+                name = bitcoinjAddonsVersion
                 desc = 'Dangerously preliminary release.'
                 released  = new Date()
-                vcsTag = 'none-beware'
+                vcsTag = 'none'
             }
         }
     }
