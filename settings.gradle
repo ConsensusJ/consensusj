@@ -1,4 +1,4 @@
 include 'bitcoinj-cli', 'bitcoinj-rpcclient',                      // Client
-        'bitcoinj-json', 'bitcoinj-peerserver', 'bitcoinj-daemon', // Server
+        'bitcoinj-json', 'bitcoinj-daemon', 'bitcoinj-peerserver', // Server
         'bitcoinj-groovy', 'bitcoinj-spock'                        // DSL/Testing
 
