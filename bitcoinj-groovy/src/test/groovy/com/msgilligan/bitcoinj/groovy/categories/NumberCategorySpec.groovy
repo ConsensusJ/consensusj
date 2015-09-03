@@ -103,9 +103,10 @@ class NumberCategorySpec extends Specification {
         5_000_000_000G.satoshi == Coin.FIFTY_COINS
     }
 
-    def "we can compare BTC and satoshi"() {
+    def "we can compare btc, satoshi, and Coin"() {
         expect:
         1.btc == 100_000_000.satoshi
+        100.satoshi == Coin.MICROCOIN
     }
 
 }
