@@ -25,6 +25,8 @@ dependencies {
 mainClassName = "com.msgilligan.bitcoinj.cli.BitcoinJCli"
 def roboExeName = "bitcoinj-cli"
 
+bintrayUpload.dependsOn shadowJar
+
 jar {
     manifest {
         attributes 'Implementation-Title': 'bitcoinj CLI client', 'Implementation-Version': version, 'Consensus-Class': mainClassName
