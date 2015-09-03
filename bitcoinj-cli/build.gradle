@@ -14,6 +14,8 @@ configurations {
 dependencies {
     compile project(':bitcoinj-rpcclient')
 
+    compile 'commons-cli:commons-cli:1.2'
+
     robovm  "org.codehaus.groovy:groovy:${groovyVersion}:grooid"
 }
 
