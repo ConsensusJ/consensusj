@@ -1,4 +1,7 @@
-// Work-in-progress support for building CLI tools with ShadowJar and RoboVM
+// JVM-based CLI tools 
+// bitcoinj-cli tool is packaged to a single jar with ShadowJar
+// RoboVM build needs to be updated, but offers possibility of a native executable
+//
 plugins {
     id 'application'
     id 'com.github.johnrengelman.shadow' version '1.2.1'
@@ -9,7 +12,7 @@ configurations {
 }
 
 dependencies {
-    compile project(':bitcoin-rpc')
+    compile project(':bitcoinj-rpcclient')
 
     robovm  "org.codehaus.groovy:groovy:${groovyVersion}:grooid"
 }

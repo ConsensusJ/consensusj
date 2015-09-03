@@ -10,6 +10,8 @@ buildscript {
 apply from: 'gradle/idea.gradle'
 apply from: 'gradle/bintray.gradle'
 
+ext.groovyVersion = '2.4.4'
+
 allprojects {
     apply plugin: 'java'
 
