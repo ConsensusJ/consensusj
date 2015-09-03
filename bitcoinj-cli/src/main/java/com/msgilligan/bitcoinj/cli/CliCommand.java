@@ -187,6 +187,10 @@ public abstract class CliCommand {
         if (line.hasOption("regtest") || line.hasOption("testnet")) {
             port = 18332;
         }
+        if (line.hasOption("rpcport")) {
+            String portString = line.getOptionValue("rpcport");
+            port = Integer.valueOf(portString);
+        }
         URI rpcServerURI = null;
         try {
             rpcServerURI = new URI(proto, null, host, port, file, null, null);
