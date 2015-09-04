@@ -30,7 +30,9 @@ dependencies {
 mainClassName = "com.msgilligan.bitcoinj.cli.BitcoinJCli"
 def roboExeName = "bitcoinj-cli"
 
-bintrayUpload.dependsOn shadowJar
+// Since other projects use this module as a dependency we don't want to publish the shadowjar
+// We need to change the build so that we build the executable jar with a new name
+//bintrayUpload.dependsOn shadowJar
 
 jar {
     manifest {
