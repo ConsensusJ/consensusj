@@ -23,7 +23,7 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |Name |JDK |Grooviness |Description
 
 |<<bitcoinj-cli,bitcoinj-cli>>
-|8
+|7
 |Tests only
 |Command line RPC tool and CLI support/utility classes
 
