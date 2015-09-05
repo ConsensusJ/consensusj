@@ -1,18 +1,19 @@
 allprojects {
     apply plugin: 'idea'
 
-    idea {
-        module {
-            jdkName = '1.8'
-//            languageLevel = '1.8'
-        }
-    }
+// How best to assign some modules as 1.7 and others as 1.8?
+//    idea {
+//        module {
+//            jdkName = '1.7'
+//            languageLevel = '1.7'
+//        }
+//    }
 }
 
 idea {
     project {
-        jdkName = '1.8'
-        languageLevel = '1.8'
+        jdkName = '1.7'
+        languageLevel = '1.7'
     }
 }
 
