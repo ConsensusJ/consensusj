@@ -264,7 +264,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Return the private key from the server.
-     * <p/>
+     * <p>
      * Note: must be in wallet mode with unlocked or unencrypted wallet.
      *
      * @param address Address corresponding to the private key to return
@@ -303,7 +303,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Creates a raw transaction spending the given inputs to the given destinations.
-     * <p/>
+     * <p>
      * Note: the transaction inputs are not signed, and the transaction is not stored in the wallet or transmitted to
      * the network.
      *
@@ -565,7 +565,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Returns a human readable list of available commands.
-     * <p/>
+     * <p>
      * Bitcoin Core 0.9 returns an alphabetical list of commands, and Bitcoin Core 0.10 returns a categorized list of
      * commands.
      *
@@ -589,7 +589,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Returns a list of available commands.
-     * <p/>
+     * <p>
      * Commands which are unavailable will not be listed, such as wallet RPCs, if wallet support is disabled.
      *
      * @return The list of commands
@@ -607,7 +607,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Checks whether a command exists.
-     * <p/>
+     * <p>
      * This is done indirectly, by using {help(String) help} to get information about the command, and if information
      * about the command is available, then the command exists. The absence of information does not necessarily imply
      * the non-existence of a command.
@@ -632,7 +632,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Removes invalidity status of a block and its descendants, reconsider them for activation.
-     * <p/>
+     * <p>
      * This can be used to undo the effects of {link invalidateBlock(Sha256Hash) invalidateBlock}.
      *
      * @param hash The hash of the block to reconsider
@@ -656,7 +656,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Clears the memory pool and returns a list of the removed transactions.
-     * <p/>
+     * <p>
      * Note: this is a customized command, which is currently not part of Bitcoin Core.
      *
      * @return A list of transaction hashes of the removed transactions

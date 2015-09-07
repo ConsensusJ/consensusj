@@ -18,8 +18,8 @@ public class BTC  {
 
     /**
      * Convert from BigDecimal BTC value to Satoshis <code>BigInteger</code>.
-     * @param btc
-     * @return
+     * @param btc An amount of bitcoin in the BTC unit
+     * @return The equivalent amount in satoshis
      * @deprecated Use {@link BTC#btcToCoin(BigDecimal)}.
      */
     @Deprecated

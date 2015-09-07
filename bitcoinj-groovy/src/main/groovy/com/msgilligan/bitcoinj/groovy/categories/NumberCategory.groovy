@@ -16,7 +16,7 @@ class NumberCategory {
 
     /**
      * Coerce from Number to the specified type
-     * <p/>
+     * <p>
      * This treats Number as an amount in the satoshi unit.
      * If you want to convert from BTC use the <code>.btc</code> property.
      *
