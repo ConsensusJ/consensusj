@@ -6,7 +6,8 @@
 //    }
 //}
 
-subprojects {
+
+allprojects {
 
     configurations {
         asciidoclet
@@ -27,4 +28,11 @@ subprojects {
                         "title-link=http://example.com[${project.name} ${project.version}]"
         options.links('http://docs.oracle.com/javase/7/docs/api/', 'https://bitcoinj.github.io/javadoc/0.13.2/')
     }
+
+}
+
+task javadocAll(type: Javadoc) {
+    source subprojects.collect {project -> project.sourceSets.main.allJava }
+    classpath = files(subprojects.collect {project -> project.sourceSets.main.compileClasspath})
+    destinationDir = new File(buildDir, 'alljavadoc')
 }
