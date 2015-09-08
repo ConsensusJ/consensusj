@@ -200,7 +200,6 @@ public class BitcoinClient extends RPCClient {
      *                        if no blocks were generated
      *                        Bitcoin 0.9.x: null
      *
-     * @throws IOException
      */
     public Object setGenerate(Boolean generate, Long genproclimit) throws JsonRPCException, IOException {
         List<Object> params = createParamList(generate, genproclimit);

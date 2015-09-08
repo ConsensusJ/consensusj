@@ -53,8 +53,8 @@ public class RPCClient {
     /**
      *
      * @param server server URI should not contain username/password
-     * @param rpcuser
-     * @param rpcpassword
+     * @param rpcuser username for the RPC HTTP connection
+     * @param rpcpassword password for the RPC HTTP connection
      */
     public RPCClient(URI server, final String rpcuser, final String rpcpassword) {
         serverURI = server;
@@ -141,9 +141,8 @@ public class RPCClient {
      *
      * @param method JSON RPC method call to send
      * @param params JSON RPC params
+     * @param <T> Expected return type -- will match type of variable method result is assigned to
      * @return the 'result' field of the JSON RPC response
-     * @throws IOException
-     * @throws JsonRPCStatusException
      */
     protected <T> T send(String method, List<Object> params) throws IOException, JsonRPCStatusException {
         Map<String, Object> request = new HashMap<String, Object>();
@@ -181,8 +180,6 @@ public class RPCClient {
      * @param method Allows RPC method to be passed as a stream
      * @param params variable number of untyped objects
      * @return The 'result' element from the returned JSON RPC response
-     * @throws IOException
-     * @throws JsonRPCException
      */
     public Object cliSend(String method, Object... params) throws IOException, JsonRPCException {
         return send(method, createParamList(params));
@@ -243,6 +240,8 @@ public class RPCClient {
 
     /**
      * Create a mutable param list (so send() can remove null parameters)
+     * @param parameters  A variable number of parameters as varargs or array
+     * @return A mutable list of the same parameters
      */
     protected List<Object> createParamList(Object... parameters) {
         return new ArrayList<Object>(Arrays.asList(parameters));
