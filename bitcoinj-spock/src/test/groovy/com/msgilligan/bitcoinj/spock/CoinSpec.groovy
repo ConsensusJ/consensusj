@@ -59,6 +59,11 @@ class CoinSpec extends Specification {
         Coin.FIFTY_COINS.divide(Coin.COIN)          == 50L
     }
 
+    def "is less than"() {
+        expect:
+        Coin.ZERO < Coin.COIN
+    }
+
     // This is the only arithmetic method of Coin that happens
     // to match Groovy operator overloading. Use CoinCategory if
     // you need operator overloading for other operations.

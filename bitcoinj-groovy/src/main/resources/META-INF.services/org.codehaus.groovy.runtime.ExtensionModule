@@ -1,0 +1,3 @@
+moduleName=bitcoinj groovy extensions
+moduleVersion=0.0.5-dev
+extensionClasses=com.msgilligan.bitcoinj.groovy.categories.CoinCategory,com.msgilligan.bitcoinj.groovy.categories.NumberCategory
