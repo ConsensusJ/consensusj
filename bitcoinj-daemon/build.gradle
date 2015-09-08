@@ -22,10 +22,6 @@ idea {
     }
 }
 
-repositories {
-    mavenLocal()
-}
-
 dependencies {
     compile project(':bitcoinj-json')
 
