@@ -1,0 +1,30 @@
+//if (JavaVersion.current().isJava8Compatible()) {
+//    tasks.withType(Javadoc) {
+//        // disable the crazy super-strict doclint tool in Java 8
+//        //noinspection SpellCheckingInspection
+//        options.addStringOption('Xdoclint:none', '-quiet')
+//    }
+//}
+
+subprojects {
+
+    configurations {
+        asciidoclet
+    }
+
+    dependencies {
+        asciidoclet 'org.asciidoctor:asciidoclet:1.+'
+    }
+
+    javadoc {
+        options.docletpath = configurations.asciidoclet.files.asType(List)
+        options.doclet = 'org.asciidoctor.Asciidoclet'
+//        options.overview = "src/main/java/overview.adoc"
+        options.addStringOption "-base-dir", "${projectDir}"
+        options.addStringOption "-attribute",
+                "name=${project.name}," +
+                        "version=${project.version}," +
+                        "title-link=http://example.com[${project.name} ${project.version}]"
+        options.links('http://docs.oracle.com/javase/7/docs/api/', 'https://bitcoinj.github.io/javadoc/0.13.2/')
+    }
+}

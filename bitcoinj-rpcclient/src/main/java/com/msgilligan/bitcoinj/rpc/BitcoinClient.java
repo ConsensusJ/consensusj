@@ -657,9 +657,9 @@ public class BitcoinClient extends RPCClient {
      * Clears the memory pool and returns a list of the removed transactions.
      * <p>
      * Note: this is a customized command, which is currently not part of Bitcoin Core.
+     * See https://github.com/OmniLayer/OmniJ/pull/72[Pull Request #72] on GitHub
      *
      * @return A list of transaction hashes of the removed transactions
-     * @see <a href="https://github.com/OmniLayer/OmniJ/pull/72">Additional information on GitHub</a>
      */
     public List<Sha256Hash> clearMemPool() throws JsonRPCException, IOException {
         List<String> hashesStr = send("clearmempool", null);

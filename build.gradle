@@ -7,9 +7,6 @@ buildscript {
     }
 }
 
-apply from: 'gradle/idea.gradle'
-apply from: 'gradle/bintray.gradle'
-
 ext.groovyVersion = '2.4.4'
 
 allprojects {
@@ -22,6 +19,10 @@ allprojects {
         jcenter()
     }
 }
+
+apply from: 'gradle/idea.gradle'
+apply from: 'gradle/bintray.gradle'
+apply from: 'gradle/javadoc.gradle'
 
 subprojects {
     dependencies {
