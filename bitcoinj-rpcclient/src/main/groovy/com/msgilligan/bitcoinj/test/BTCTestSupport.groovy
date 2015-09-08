@@ -1,6 +1,5 @@
 package com.msgilligan.bitcoinj.test
 
-import com.msgilligan.bitcoinj.BTC
 import com.msgilligan.bitcoinj.rpc.BitcoinClientDelegate
 import com.msgilligan.bitcoinj.rpc.Outpoint
 import com.msgilligan.bitcoinj.rpc.UnspentOutput
@@ -20,10 +19,16 @@ import org.bitcoinj.params.RegTestParams
 trait BTCTestSupport implements BitcoinClientDelegate {
     // TODO: set, or get and verify default values of the client
     private final NetworkParameters netParams = RegTestParams.get()
-    final BigDecimal stdTxFee = new BigDecimal('0.00010000')
-    final BigDecimal stdRelayTxFee = new BigDecimal('0.00001000')
+    private static final BigDecimal satoshisPerBTCDecimal = new BigDecimal(Coin.COIN.value);
+    final BigDecimal stdTxFee = 0.00010000
+    final BigDecimal stdRelayTxFee = 0.00001000
     final Integer defaultMaxConf = 9999999
-    final long stdTxFeeSatoshis = BTC.btcToCoin(stdTxFee).longValue()
+    final long stdTxFeeSatoshis = btcToSatoshis(stdTxFee)
+
+    @Deprecated
+    Sha256Hash requestBitcoin(Address toAddress, BigDecimal requestedBTC) {
+        return requestBitcoin(toAddress,btcToCoin(requestedBTC))
+    }
 
     /**
      * Generate blocks and fund an address with requested amount of BTC
@@ -34,8 +39,9 @@ trait BTCTestSupport implements BitcoinClientDelegate {
      * @param requestedBTC Amount of BTC to "mine" and send
      * @return
      */
-    Sha256Hash requestBitcoin(Address toAddress, BigDecimal requestedBTC) {
-        def amountGatheredSoFar = 0.0
+    Sha256Hash requestBitcoin(Address toAddress, Coin requestedAmount) {
+        long requestedSatoshi = requestedAmount.longValue()
+        long amountGatheredSoFar = 0
         def inputs = new ArrayList<Outpoint>()
 
         // Newly mined coins need to mature to be spendable
@@ -45,7 +51,7 @@ trait BTCTestSupport implements BitcoinClientDelegate {
             generateBlocks(minCoinAge - blockCount)
         }
 
-        while (amountGatheredSoFar < requestedBTC) {
+        while (amountGatheredSoFar < requestedSatoshi) {
             generateBlock()
             def blockIndex = blockCount - minCoinAge
             def block = client.getBlock(blockIndex)
@@ -55,15 +61,16 @@ trait BTCTestSupport implements BitcoinClientDelegate {
 
             // txout is empty, if output was already spent
             if (txout && txout.containsKey("value")) {
-                def amountBTCd = txout.value as Double
-                amountGatheredSoFar += BigDecimal.valueOf(amountBTCd)
+                def amountBTCbd = BigDecimal.valueOf(txout.value as Double)
+                long amountSatoshi = btcToSatoshis(amountBTCbd)
+                amountGatheredSoFar += amountSatoshi
                 inputs << new Outpoint(coinbaseTx, 0)
             }
         }
 
         // Don't care about change, we mine it anyway
         def outputs = new HashMap<Address, BigDecimal>()
-        outputs.put(toAddress, requestedBTC)
+        outputs.put(toAddress, BigDecimal.valueOf(requestedSatoshi * Coin.COIN.longValue()))
 
         def unsignedTxHex = client.createRawTransaction(inputs, outputs)
         def signingResult = client.signRawTransaction(unsignedTxHex)
@@ -95,8 +102,8 @@ trait BTCTestSupport implements BitcoinClientDelegate {
         def inputs = unspentOutputs.collect { new Outpoint(it.txid, it.vout) }
 
         // Calculate change
-        BigDecimal amountIn     = unspentOutputs.sum { it.amount }
-        BigDecimal amountOut    = outputs.values().sum()
+        BigDecimal amountIn     = (BigDecimal) unspentOutputs.sum { it.amount }
+        BigDecimal amountOut    = (BigDecimal) outputs.values().sum()
         BigDecimal amountChange = amountIn - amountOut - stdTxFee
         if (amountIn < (amountOut + stdTxFee)) {
             println "Insufficient funds: ${amountIn} < ${amountOut + stdTxFee}"
@@ -213,7 +220,8 @@ trait BTCTestSupport implements BitcoinClientDelegate {
      * to a new address, as fee, to sweep dust and to minimize the number of unspent outputs, to avoid creating too
      * large transactions. No new block is generated afterwards.
      *
-     * @see foundation.omni.BaseRegTestSpec#cleanupSpec()
+     * Can be used in cleanupSpec() methods of integration tests.
+     *
      * @see <a href="https://github.com/OmniLayer/OmniJ/issues/50">Issue #50 on GitHub</a>
      *
      * @return True, if enough outputs with a value of at least {@code stdRelayTxFee} were spent
@@ -261,8 +269,8 @@ trait BTCTestSupport implements BitcoinClientDelegate {
         }
 
         // Calculate change (units are satoshis)
-        long amountIn     = unspentOutputs.sum { TransactionOutput it -> it.value.longValue() }
-        long amountOut    = outputs.sum { TransactionOutput it -> it.value.longValue() }
+        long amountIn     = (long) unspentOutputs.sum { TransactionOutput it -> it.value.longValue() }
+        long amountOut    = (long) outputs.sum { TransactionOutput it -> it.value.longValue() }
         long amountChange = amountIn - amountOut - stdTxFeeSatoshis
         if (amountChange < 0) {
             // TODO: Throw Exception
@@ -307,4 +315,24 @@ trait BTCTestSupport implements BitcoinClientDelegate {
         return unspentOutPoints
     }
 
+    /**
+     * Convert from BigDecimal BTC value to <code>Long</code>.
+     *
+     * @param btc Bitcoin amount in BTC units
+     * @return Long with units of satoshis
+     */
+    Long btcToSatoshis(final BigDecimal btc) {
+        BigDecimal satoshisDecimal = btc.multiply(satoshisPerBTCDecimal);
+        return satoshisDecimal.longValueExact();
+    }
+
+    /**
+     * Convert from BigDecimal BTC value to <code>Coin</code> type.
+     *
+     * @param btc Bitcoin amount in BTC units
+     * @return bitcoinj <code>Coin</code> type (uses Satoshis internally)
+     */
+    Coin btcToCoin(final BigDecimal btc) {
+        return Coin.valueOf(btcToSatoshis(btc));
+    }
 }

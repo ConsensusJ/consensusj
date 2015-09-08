@@ -11,7 +11,6 @@ import org.bitcoinj.core.Wallet
 import org.bitcoinj.params.RegTestParams
 import org.bitcoinj.store.MemoryBlockStore
 import org.bitcoinj.utils.BriefLogFormatter
-import com.msgilligan.bitcoinj.BTC
 import com.msgilligan.bitcoinj.BaseRegTestSpec
 import org.bitcoinj.wallet.AllowUnconfirmedCoinSelector
 import spock.lang.Ignore
@@ -70,7 +69,7 @@ class WalletSendSpec extends BaseRegTestSpec {
 
         then: "the coins arrive"
         client.getReceivedByAddress(walletAddr) == amount
-        wallet.getBalance() == BTC.btcToCoin(amount)
+        wallet.getBalance() == btcToCoin(amount)
     }
 
     def "Send from BitcoinJ wallet to the Bitcoin Core wallet"() {
@@ -79,7 +78,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         BigDecimal amount = 1.0
         Address rpcAddress = getNewAddress()
         // Send it with BitcoinJ
-        Wallet.SendResult sendResult = wallet.sendCoins(peerGroup,rpcAddress,BTC.btcToCoin(amount))
+        Wallet.SendResult sendResult = wallet.sendCoins(peerGroup,rpcAddress,btcToCoin(amount))
         // Wait for broadcast complete
         Transaction sentTx = sendResult.broadcastComplete.get()
         // Wait for it to show up on server as unconfirmed
@@ -91,7 +90,7 @@ class WalletSendSpec extends BaseRegTestSpec {
 
         then: "the new address has a balance of amount"
         getReceivedByAddress(rpcAddress) == amount
-        wallet.getBalance() == BTC.btcToCoin(startAmount) - BTC.btcToCoin(amount) - Transaction.REFERENCE_DEFAULT_MIN_TX_FEE
+        wallet.getBalance() == btcToCoin(startAmount) - btcToCoin(amount) - Transaction.REFERENCE_DEFAULT_MIN_TX_FEE
     }
 
     def "create and send a transaction from BitcoinJ using wallet.completeTx"() {
@@ -99,7 +98,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         BigDecimal amount = 1.0
         def rpcAddress = getNewAddress()
         Transaction tx = new Transaction(params)
-        tx.addOutput(BTC.btcToCoin(amount), rpcAddress)
+        tx.addOutput(btcToCoin(amount), rpcAddress)
         Wallet.SendRequest request = Wallet.SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
         wallet.commitTx(request.tx)
@@ -117,7 +116,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         BigDecimal amount = 1.0
         def rpcAddress = getNewAddress()
         Transaction tx = new Transaction(params)
-        tx.addOutput(BTC.btcToCoin(amount), rpcAddress)
+        tx.addOutput(btcToCoin(amount), rpcAddress)
         Wallet.SendRequest request = Wallet.SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
         wallet.commitTx(request.tx)

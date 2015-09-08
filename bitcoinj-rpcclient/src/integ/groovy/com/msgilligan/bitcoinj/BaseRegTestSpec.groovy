@@ -35,6 +35,9 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
         }
     }
 
+    /**
+     * Clean up after all tests in spec have run.
+     */
     void cleanupSpec() {
         // Spend almost all coins as fee, to sweep dust
         consolidateCoins()

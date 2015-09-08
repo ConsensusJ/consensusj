@@ -95,7 +95,7 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
 
         then: "the sending address should be empty"
         def balanceSource = getBitcoinBalance(destinationAddress)
-        balanceSource == 0
+        balanceSource == 0.0
 
         and: "the new adress should have the amount sent to"
         def balance = getBitcoinBalance(newAddress)

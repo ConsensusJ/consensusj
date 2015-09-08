@@ -1,6 +1,5 @@
 package com.msgilligan.bitcoinj.rpc
 
-import com.msgilligan.bitcoinj.BTC
 import com.msgilligan.bitcoinj.BaseRegTestSpec
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.Transaction
@@ -66,7 +65,7 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
         def key = dumpPrivKey(fundingAddress)
 
         and: "we create an signed bitcoinj transaction, spending from fundingAddress to destinationAddress"
-        tx = createSignedTransaction(key, destinationAddress, BTC.btcToCoin(sendingAmount))
+        tx = createSignedTransaction(key, destinationAddress, btcToCoin(sendingAmount))
 
         then: "there should be a valid signed transaction"
         tx != null
@@ -113,7 +112,4 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
         def balanceDestination = getBitcoinBalance(destinationAddress)
         balanceDestination == sendingAmount
     }
-
-
-
 }
