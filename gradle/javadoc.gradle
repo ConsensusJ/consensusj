@@ -7,6 +7,18 @@
 //}
 
 
+def javadocSpec = {
+    options.docletpath = configurations.asciidoclet.files.asType(List)
+    options.doclet = 'org.asciidoctor.Asciidoclet'
+//        options.overview = "src/main/java/overview.adoc"
+    options.addStringOption "-base-dir", "${projectDir}"
+    options.addStringOption "-attribute",
+            "name=${project.name}," +
+                    "version=${project.version}," +
+                    "title-link=http://example.com[${project.name} ${project.version}]"
+    options.links('http://docs.oracle.com/javase/7/docs/api/', 'https://bitcoinj.github.io/javadoc/0.13.2/')
+}
+
 allprojects {
 
     configurations {
@@ -17,22 +29,14 @@ allprojects {
         asciidoclet 'org.asciidoctor:asciidoclet:1.+'
     }
 
-    javadoc {
-        options.docletpath = configurations.asciidoclet.files.asType(List)
-        options.doclet = 'org.asciidoctor.Asciidoclet'
-//        options.overview = "src/main/java/overview.adoc"
-        options.addStringOption "-base-dir", "${projectDir}"
-        options.addStringOption "-attribute",
-                "name=${project.name}," +
-                        "version=${project.version}," +
-                        "title-link=http://example.com[${project.name} ${project.version}]"
-        options.links('http://docs.oracle.com/javase/7/docs/api/', 'https://bitcoinj.github.io/javadoc/0.13.2/')
-    }
+    javadoc javadocSpec
 
 }
+
 
 task javadocAll(type: Javadoc) {
     source subprojects.collect {project -> project.sourceSets.main.allJava }
     classpath = files(subprojects.collect {project -> project.sourceSets.main.compileClasspath})
     destinationDir = new File(buildDir, 'alljavadoc')
 }
+javadocAll javadocSpec
