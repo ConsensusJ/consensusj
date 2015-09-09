@@ -11,49 +11,6 @@ import spock.util.mop.Use
 @Use(NumberCategory)
 class NumberCategorySpec extends Specification {
 
-    def "coercion operator works for integers"() {
-        expect:
-        (-1G as Coin).value == -1G * Coin.SATOSHI.value
-        0G as Coin == Coin.ZERO
-        1 as Coin == Coin.SATOSHI
-        100 as Coin == Coin.MICROCOIN
-        100_000_000G as Coin == Coin.COIN
-        5_000_000_000G as Coin == Coin.FIFTY_COINS
-    }
-
-    def "coercion operator works for decimals"() {
-        expect:
-        0.0 as Coin == Coin.ZERO
-        1.0 as Coin == Coin.SATOSHI
-        100.0 as Coin == Coin.MICROCOIN
-        5_000_000_000.0G as Coin == Coin.FIFTY_COINS
-    }
-
-    def "rounding errors are caught when converting BigDecimal" () {
-        when:
-        number as Coin
-
-        then:
-        ArithmeticException e = thrown()
-
-        where:
-        number << [ -0.1, 0.1, -0.00000001, 0.00000001, -0.000000000000001, 0.000000000000001]
-    }
-
-    /**
-     * This is expected, though undesirable behavior
-     */
-    def "rounding errors are NOT caught when converting float" () {
-        when:
-        def coin = number as Coin
-
-        then:
-        coin == Coin.ZERO
-
-        where:
-        number << [ -0.1f, 0.1f, -0.00000001f, 0.00000001f, -0.000000000000001f, 0.000000000000001f]
-    }
-
     def "basic test of .btc convenience method"() {
         expect:
         (-0.00000001).btc == Coin.NEGATIVE_SATOSHI
@@ -107,6 +64,11 @@ class NumberCategorySpec extends Specification {
         expect:
         1.btc == 100_000_000.satoshi
         100.satoshi == Coin.MICROCOIN
+    }
+
+    def "doesn't break groovy SDK"() {
+        expect:
+        0 as Byte == 0.byteValue()
     }
 
 }

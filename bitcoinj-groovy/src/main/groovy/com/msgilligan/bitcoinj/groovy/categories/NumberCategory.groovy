@@ -15,21 +15,6 @@ class NumberCategory {
     private static final BigInteger satoshiPerBTCBigInt = BigInteger.valueOf(Coin.COIN.value)
 
     /**
-     * Coerce from Number to the specified type
-     * <p>
-     * This treats Number as an amount in the satoshi unit.
-     * If you want to convert from BTC use the <code>.btc</code> property.
-     *
-     * @param target The type we're coercing to
-     * @return An object of the specified type (Coin)
-     */
-    def asType(Class target) {
-        if (target==Coin) {
-            return satoshiAsCoin(this)
-        }
-    }
-
-    /**
      * Treat number as an amount in Satoshi and return a Coin
      *
      * @return a Coin object
