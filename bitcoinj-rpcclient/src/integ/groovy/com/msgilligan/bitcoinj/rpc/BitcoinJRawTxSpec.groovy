@@ -2,6 +2,7 @@ package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.BaseRegTestSpec
 import org.bitcoinj.core.Address
+import org.bitcoinj.core.Coin
 import org.bitcoinj.core.Transaction
 import spock.lang.Shared
 import spock.lang.Stepwise
@@ -16,8 +17,8 @@ import spock.lang.Stepwise
  */
 @Stepwise
 class BitcoinJRawTxSpec extends BaseRegTestSpec {
-    final static BigDecimal fundingAmount = 10.0
-    final static BigDecimal sendingAmount = 1.0
+    final static Coin fundingAmount = 10.btc
+    final static Coin sendingAmount = 1.btc
 
     @Shared
     Address fundingAddress
@@ -47,14 +48,14 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
         fundingAddress = getNewAddress()
 
         and: "coins are sent to the new address from a random source"
-        sendToAddress(fundingAddress, fundingAmount)
+        sendToAddress(fundingAddress, fundingAmount.getDecimalBtc())
 
         and: "a new block is mined"
         generateBlock()
 
         then: "the address should have that balance"
         def balance = getBitcoinBalance(fundingAddress)
-        balance == fundingAmount
+        balance.btc == fundingAmount
     }
 
     def "Create Signed raw transaction"() {
@@ -65,7 +66,7 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
         def key = dumpPrivKey(fundingAddress)
 
         and: "we create an signed bitcoinj transaction, spending from fundingAddress to destinationAddress"
-        tx = createSignedTransaction(key, destinationAddress, btcToCoin(sendingAmount))
+        tx = createSignedTransaction(key, destinationAddress, sendingAmount)
 
         then: "there should be a valid signed transaction"
         tx != null
@@ -106,10 +107,10 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
 
         and: "#fundingAddress has a remainder of coins minus transaction fees"
         def balanceRemaining = getBitcoinBalance(fundingAddress)
-        balanceRemaining == fundingAmount - sendingAmount - stdTxFee
+        balanceRemaining.btc == fundingAmount - sendingAmount - stdTxFee.btc
 
         and: "#destinationAddress has a balance matching the spent amount"
         def balanceDestination = getBitcoinBalance(destinationAddress)
-        balanceDestination == sendingAmount
+        balanceDestination.btc == sendingAmount
     }
 }

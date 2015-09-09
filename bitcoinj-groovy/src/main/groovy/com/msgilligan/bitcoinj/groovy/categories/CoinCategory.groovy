@@ -15,7 +15,7 @@ class CoinCategory {
      *
      * @return a BigDecimal object
      */
-    public BigDecimal asBTC() {
+    public BigDecimal getDecimalBtc() {
         BigDecimal satoshi = new BigDecimal(value)
         //TODO: Add rounding mode?
         return satoshi.divide(bdSatoshiPerCoin)

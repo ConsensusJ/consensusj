@@ -2,6 +2,7 @@ package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.BaseRegTestSpec
 import org.bitcoinj.core.Address
+import org.bitcoinj.core.Coin
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -10,8 +11,8 @@ import spock.lang.Stepwise
  */
 @Stepwise
 class BitcoinRawTransactionSpec extends BaseRegTestSpec {
-    final static BigDecimal fundingAmount = 10.0
-    final static BigDecimal sendingAmount = 1.0
+    final static Coin fundingAmount = 10.btc
+    final static Coin sendingAmount = 1.btc
 
     @Shared
     Address fundingAddress
@@ -27,14 +28,14 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
         fundingAddress = getNewAddress()
 
         and: "coins are sent to the new address from a random source"
-        sendToAddress(fundingAddress, fundingAmount)
+        sendToAddress(fundingAddress, fundingAmount.decimalBtc)
 
         and: "a new block is mined"
         generateBlock()
 
         then: "the address should have that balance"
         def balance = getBitcoinBalance(fundingAddress)
-        balance == fundingAmount
+        balance.btc == fundingAmount
     }
 
     def "Create unsigned raw transaction"() {
@@ -42,7 +43,7 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
         destinationAddress = getNewAddress("destinationAddress")
 
         when: "we create a transaction, spending from #fundingAddress to #destinationAddress"
-        rawTransactionHex = createRawTransaction(fundingAddress, destinationAddress, sendingAmount)
+        rawTransactionHex = createRawTransaction(fundingAddress, destinationAddress, sendingAmount.decimalBtc)
 
         then: "there should be a raw transaction"
         rawTransactionHex != null
@@ -75,11 +76,11 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
 
         and: "#fundingAddress has a remainder of coins minus transaction fees"
         def balanceRemaining = getBitcoinBalance(fundingAddress)
-        balanceRemaining == fundingAmount - sendingAmount - stdTxFee
+        balanceRemaining.btc == fundingAmount - sendingAmount - stdTxFee.btc
 
         and: "#destinationAddress has a balance matching the spent amount"
         def balanceDestination = getBitcoinBalance(destinationAddress)
-        balanceDestination == sendingAmount
+        balanceDestination.btc == sendingAmount
     }
 
     def "Send Bitcoin"() {
@@ -87,8 +88,8 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
         def newAddress = getNewAddress()
 
         and: "coins are sent to the new address from #destinationAddress"
-        def amount = sendingAmount - stdTxFee
-        sendBitcoin(destinationAddress, newAddress, amount)
+        Coin amount = sendingAmount - stdTxFee.btc
+        sendBitcoin(destinationAddress, newAddress, amount.decimalBtc)
 
         and: "a new block is mined"
         generateBlock()
@@ -99,6 +100,6 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
 
         and: "the new adress should have the amount sent to"
         def balance = getBitcoinBalance(newAddress)
-        balance == amount
+        balance.btc == amount
     }
 }

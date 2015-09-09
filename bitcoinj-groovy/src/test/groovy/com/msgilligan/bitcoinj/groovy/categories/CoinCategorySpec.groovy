@@ -13,14 +13,14 @@ import static org.bitcoinj.core.NetworkParameters.MAX_MONEY
 class CoinCategorySpec extends Specification {
     def "can convert to BTC (BigDecimal)"() {
         expect:
-        Coin.NEGATIVE_SATOSHI.asBTC()   == -0.00000001
-        Coin.SATOSHI.asBTC()            == 0.00000001
-        Coin.MICROCOIN.asBTC()          == 0.000001
-        Coin.MILLICOIN.asBTC()          == 0.001
-        Coin.CENT.asBTC()               == 0.01
-        Coin.COIN.asBTC()               == 1.0
-        Coin.FIFTY_COINS.asBTC()        == 50.0
-        MAX_MONEY.asBTC()               == 21_000_000.0
+        Coin.NEGATIVE_SATOSHI.decimalBtc   == -0.00000001
+        Coin.SATOSHI.decimalBtc            == 0.00000001
+        Coin.MICROCOIN.decimalBtc          == 0.000001
+        Coin.MILLICOIN.decimalBtc          == 0.001
+        Coin.CENT.decimalBtc               == 0.01
+        Coin.COIN.decimalBtc               == 1.0
+        Coin.FIFTY_COINS.decimalBtc        == 50.0
+        MAX_MONEY.decimalBtc               == 21_000_000.0
     }
 
     // TODO: Many more tests!

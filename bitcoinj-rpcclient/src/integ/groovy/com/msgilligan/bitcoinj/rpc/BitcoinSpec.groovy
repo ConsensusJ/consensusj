@@ -1,10 +1,11 @@
 package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.BaseRegTestSpec
+import org.bitcoinj.core.Coin
 import org.bitcoinj.params.RegTestParams
 
 class BitcoinSpec extends BaseRegTestSpec {
-    static final BigDecimal testAmount = 2.0
+    static final Coin testAmount = 2.btc
 
     def "return basic info" () {
         when: "we request info"
@@ -43,13 +44,13 @@ class BitcoinSpec extends BaseRegTestSpec {
         def destinationAddress = getNewAddress()
 
         when: "we send it testAmount (from coins mined in RegTest mode)"
-        sendToAddress(destinationAddress, testAmount, "comment", "comment-to")
+        sendToAddress(destinationAddress, testAmount.getDecimalBtc(), "comment", "comment-to")
 
         and: "we generate 1 new block"
         generateBlock()
 
         then: "the new address has a balance of testAmount"
-        testAmount == getReceivedByAddress(destinationAddress)
+        testAmount == getReceivedByAddress(destinationAddress).btc
         // TODO: check balance of source address/wallet
     }
 
@@ -64,7 +65,7 @@ class BitcoinSpec extends BaseRegTestSpec {
     def "Get a filtered list of unconfirmed transaction outputs"() {
         when: "we create a new address and send #testAmount to it"
         def destinationAddress = getNewAddress()
-        sendToAddress(destinationAddress, testAmount, "comment", "comment-to")
+        sendToAddress(destinationAddress, testAmount.decimalBtc, "comment", "comment-to")
 
         and: "we request unconfirmed unspent outputs for #destinationAddress"
         def unspent = listUnspent(0, 0, [destinationAddress])
