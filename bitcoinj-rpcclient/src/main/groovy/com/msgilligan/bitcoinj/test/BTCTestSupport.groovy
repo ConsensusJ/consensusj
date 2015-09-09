@@ -1,8 +1,10 @@
 package com.msgilligan.bitcoinj.test
 
 import com.msgilligan.bitcoinj.rpc.BitcoinClientDelegate
+import com.msgilligan.bitcoinj.rpc.Loggable
 import com.msgilligan.bitcoinj.rpc.Outpoint
 import com.msgilligan.bitcoinj.rpc.UnspentOutput
+import com.msgilligan.bitcoinj.rpc.conversion.BitcoinMath
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.Coin
 import org.bitcoinj.core.ECKey
@@ -16,14 +18,15 @@ import org.bitcoinj.params.RegTestParams
 /**
  * Test support functions intended to be mixed-in to Spock test specs
  */
-trait BTCTestSupport implements BitcoinClientDelegate {
+trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
     // TODO: set, or get and verify default values of the client
     private final NetworkParameters netParams = RegTestParams.get()
     private static final BigDecimal satoshisPerBTCDecimal = new BigDecimal(Coin.COIN.value);
+    private static final BigDecimal bdSatoshiPerCoin = new BigDecimal(Coin.COIN.longValue());
     final BigDecimal stdTxFee = 0.00010000
     final BigDecimal stdRelayTxFee = 0.00001000
     final Integer defaultMaxConf = 9999999
-    final long stdTxFeeSatoshis = btcToSatoshis(stdTxFee)
+    final long stdTxFeeSatoshis = btcToSatoshi(stdTxFee)
 
     @Deprecated
     Sha256Hash requestBitcoin(Address toAddress, BigDecimal requestedBTC) {
@@ -41,6 +44,7 @@ trait BTCTestSupport implements BitcoinClientDelegate {
      */
     Sha256Hash requestBitcoin(Address toAddress, Coin requestedAmount) {
         long requestedSatoshi = requestedAmount.longValue()
+        log.info "requestBitcoin requesting {} satoshi ({} BTC)", requestedSatoshi, satoshiToBtc(requestedSatoshi)
         long amountGatheredSoFar = 0
         def inputs = new ArrayList<Outpoint>()
 
@@ -61,16 +65,18 @@ trait BTCTestSupport implements BitcoinClientDelegate {
 
             // txout is empty, if output was already spent
             if (txout && txout.containsKey("value")) {
-                def amountBTCbd = BigDecimal.valueOf(txout.value as Double)
-                long amountSatoshi = btcToSatoshis(amountBTCbd)
+                log.debug "txout = {}", txout
+                def amountBTCbd = BigDecimal.valueOf(txout.value)
+                long amountSatoshi = btcToSatoshi(amountBTCbd)
                 amountGatheredSoFar += amountSatoshi
                 inputs << new Outpoint(coinbaseTx, 0)
             }
+            log.debug "amountGatheredSoFar = {}", satoshiToBtc(amountGatheredSoFar)
         }
 
         // Don't care about change, we mine it anyway
         def outputs = new HashMap<Address, BigDecimal>()
-        outputs.put(toAddress, BigDecimal.valueOf(requestedSatoshi * Coin.COIN.longValue()))
+        outputs.put(toAddress, satoshiToBtc(requestedSatoshi))
 
         def unsignedTxHex = client.createRawTransaction(inputs, outputs)
         def signingResult = client.signRawTransaction(unsignedTxHex)
@@ -315,24 +321,15 @@ trait BTCTestSupport implements BitcoinClientDelegate {
         return unspentOutPoints
     }
 
-    /**
-     * Convert from BigDecimal BTC value to <code>Long</code>.
-     *
-     * @param btc Bitcoin amount in BTC units
-     * @return Long with units of satoshis
-     */
-    Long btcToSatoshis(final BigDecimal btc) {
-        BigDecimal satoshisDecimal = btc.multiply(satoshisPerBTCDecimal);
-        return satoshisDecimal.longValueExact();
+    long btcToSatoshi(final BigDecimal btc) {
+        return BitcoinMath.btcToSatoshi(btc)
     }
 
-    /**
-     * Convert from BigDecimal BTC value to <code>Coin</code> type.
-     *
-     * @param btc Bitcoin amount in BTC units
-     * @return bitcoinj <code>Coin</code> type (uses Satoshis internally)
-     */
     Coin btcToCoin(final BigDecimal btc) {
-        return Coin.valueOf(btcToSatoshis(btc));
+        return BitcoinMath.btcToCoin(btc)
+    }
+
+    BigDecimal satoshiToBtc(final long satoshi) {
+        return BitcoinMath.satoshiToBtc(satoshi)
     }
 }
