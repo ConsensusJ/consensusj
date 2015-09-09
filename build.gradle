@@ -27,6 +27,7 @@ apply from: 'gradle/javadoc.gradle'
 subprojects {
     dependencies {
         compile "org.bitcoinj:bitcoinj-core:0.13.2"
+        compile 'org.slf4j:slf4j-api:1.7.7'
     }
 }
 
