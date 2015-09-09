@@ -21,4 +21,8 @@ public class Outpoint {
     public int getVout() {
         return vout;
     }
+
+    public String toString() {
+        return "{ " + txid + ", " + vout + " }";
+    }
 }
