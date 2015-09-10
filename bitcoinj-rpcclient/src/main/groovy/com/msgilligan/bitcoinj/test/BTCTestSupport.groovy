@@ -17,6 +17,7 @@ import org.bitcoinj.params.RegTestParams
 
 /**
  * Test support functions intended to be mixed-in to Spock test specs
+ * TODO: Factor out some methods to Java reusable class.
  */
 trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
     // TODO: set, or get and verify default values of the client
@@ -44,7 +45,7 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
      */
     Sha256Hash requestBitcoin(Address toAddress, Coin requestedAmount) {
         long requestedSatoshi = requestedAmount.longValue()
-        log.info "requestBitcoin requesting {} satoshi ({} BTC)", requestedSatoshi, satoshiToBtc(requestedSatoshi)
+        log.debug "requestBitcoin requesting {} satoshi ({} BTC)", requestedSatoshi, satoshiToBtc(requestedSatoshi)
         long amountGatheredSoFar = 0
         def inputs = new ArrayList<Outpoint>()
 
