@@ -48,14 +48,14 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
         fundingAddress = getNewAddress()
 
         and: "coins are sent to the new address from a random source"
-        sendToAddress(fundingAddress, fundingAmount.getDecimalBtc())
+        sendToAddress(fundingAddress, fundingAmount)
 
         and: "a new block is mined"
         generateBlock()
 
         then: "the address should have that balance"
         def balance = getBitcoinBalance(fundingAddress)
-        balance.btc == fundingAmount
+        balance == fundingAmount
     }
 
     def "Create Signed raw transaction"() {
@@ -107,10 +107,10 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
 
         and: "#fundingAddress has a remainder of coins minus transaction fees"
         def balanceRemaining = getBitcoinBalance(fundingAddress)
-        balanceRemaining.btc == fundingAmount - sendingAmount - stdTxFee.btc
+        balanceRemaining == fundingAmount - sendingAmount - stdTxFee
 
         and: "#destinationAddress has a balance matching the spent amount"
         def balanceDestination = getBitcoinBalance(destinationAddress)
-        balanceDestination.btc == sendingAmount
+        balanceDestination == sendingAmount
     }
 }

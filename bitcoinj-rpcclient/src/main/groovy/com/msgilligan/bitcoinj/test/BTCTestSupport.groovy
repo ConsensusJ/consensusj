@@ -24,10 +24,10 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
     private final NetworkParameters netParams = RegTestParams.get()
     private static final BigDecimal satoshisPerBTCDecimal = new BigDecimal(Coin.COIN.value);
     private static final BigDecimal bdSatoshiPerCoin = new BigDecimal(Coin.COIN.longValue());
-    final BigDecimal stdTxFee = 0.00010000
-    final BigDecimal stdRelayTxFee = 0.00001000
+    final Coin stdTxFee = 0.00010000.btc
+    final Coin stdRelayTxFee = 0.00001000.btc
     final Integer defaultMaxConf = 9999999
-    final long stdTxFeeSatoshis = btcToSatoshi(stdTxFee)
+    final long stdTxFeeSatoshis = stdTxFee.value
 
     @Deprecated
     Sha256Hash requestBitcoin(Address toAddress, BigDecimal requestedBTC) {
@@ -44,8 +44,10 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
      * @return
      */
     Sha256Hash requestBitcoin(Address toAddress, Coin requestedAmount) {
-        long requestedSatoshi = requestedAmount.longValue()
-        log.debug "requestBitcoin requesting {} satoshi ({} BTC)", requestedSatoshi, satoshiToBtc(requestedSatoshi)
+        log.debug "requestBitcoin requesting {}", requestedAmount
+        if (requestedAmount.value > NetworkParameters.MAX_MONEY.value) {
+            throw new IllegalArgumentException("request exceeds MAX_MONEY")
+        }
         long amountGatheredSoFar = 0
         def inputs = new ArrayList<Outpoint>()
 
@@ -56,7 +58,7 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
             generateBlocks(minCoinAge - blockCount)
         }
 
-        while (amountGatheredSoFar < requestedSatoshi) {
+        while (amountGatheredSoFar < requestedAmount.value) {
             generateBlock()
             def blockIndex = blockCount - minCoinAge
             def block = client.getBlock(blockIndex)
@@ -76,8 +78,8 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
         }
 
         // Don't care about change, we mine it anyway
-        def outputs = new HashMap<Address, BigDecimal>()
-        outputs.put(toAddress, satoshiToBtc(requestedSatoshi))
+        def outputs = new HashMap<Address, Coin>()
+        outputs.put(toAddress, requestedAmount)
 
         def unsignedTxHex = client.createRawTransaction(inputs, outputs)
         def signingResult = client.signRawTransaction(unsignedTxHex)
@@ -101,7 +103,7 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
      * @param outputs The destinations and amounts to transfer
      * @return The hex-encoded raw transaction
      */
-    String createRawTransaction(Address fromAddress, Map<Address, BigDecimal> outputs) {
+    String createRawTransaction(Address fromAddress, Map<Address, Coin> outputs) {
         // Get unspent outputs via RPC
         def unspentOutputs = listUnspent(0, defaultMaxConf, [fromAddress])
 
@@ -109,13 +111,13 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
         def inputs = unspentOutputs.collect { new Outpoint(it.txid, it.vout) }
 
         // Calculate change
-        BigDecimal amountIn     = (BigDecimal) unspentOutputs.sum { it.amount }
-        BigDecimal amountOut    = (BigDecimal) outputs.values().sum()
-        BigDecimal amountChange = amountIn - amountOut - stdTxFee
+        Coin amountIn     = Coin.valueOf((long) unspentOutputs.sum { it.amount.value })
+        Coin amountOut    = Coin.valueOf((long) outputs.values().sum { it.value } )
+        Coin amountChange = amountIn - amountOut - stdTxFee
         if (amountIn < (amountOut + stdTxFee)) {
             println "Insufficient funds: ${amountIn} < ${amountOut + stdTxFee}"
         }
-        if (amountChange > 0) {
+        if (amountChange.value > 0) {
             outputs[fromAddress] = amountChange
         }
 
@@ -134,8 +136,8 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
      * @param amount The amount
      * @return The hex-encoded raw transaction
      */
-    String createRawTransaction(Address fromAddress, Address toAddress, BigDecimal amount) {
-        def outputs = new HashMap<Address, BigDecimal>()
+    String createRawTransaction(Address fromAddress, Address toAddress, Coin amount) {
+        def outputs = new HashMap<Address, Coin>()
         outputs[toAddress] = amount
         return createRawTransaction(fromAddress, outputs)
     }
@@ -148,7 +150,7 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
      * @param address The address
      * @return The balance
      */
-    BigDecimal getBitcoinBalance(Address address) {
+    Coin getBitcoinBalance(Address address) {
         // NOTE: because null is currently removed from the argument lists passed via RPC, using it here for default
         // values would result in the RPC call "listunspent" with arguments [["address"]], which is invalid, similar
         // to a call with arguments [null, null, ["address"]], as expected arguments are either [], [int], [int, int]
@@ -163,7 +165,7 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
      * @param minConf Minimum amount of confirmations
      * @return The balance
      */
-    BigDecimal getBitcoinBalance(Address address, Integer minConf) {
+    Coin getBitcoinBalance(Address address, Integer minConf) {
         return getBitcoinBalance(address, minConf, defaultMaxConf)
     }
 
@@ -176,15 +178,15 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
      * @param maxConf Maximum amount of confirmations
      * @return The balance
      */
-    BigDecimal getBitcoinBalance(Address address, Integer minConf, Integer maxConf) {
-        def btcBalance = new BigDecimal(0)
+    Coin getBitcoinBalance(Address address, Integer minConf, Integer maxConf) {
+        Coin btcBalance = Coin.ZERO
         def unspentOutputs = listUnspent(minConf, maxConf, [address])
 
         for (unspentOutput in unspentOutputs) {
             btcBalance += unspentOutput.amount
         }
 
-        return btcBalance
+        return btcBalance;
     }
 
     /**
@@ -196,7 +198,7 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
      * @param amount      The amount to transfer
      * @return The transaction hash
      */
-    Sha256Hash sendBitcoin(Address fromAddress, Address toAddress, BigDecimal amount) {
+    Sha256Hash sendBitcoin(Address fromAddress, Address toAddress, Coin amount) {
         def outputs = new HashMap<Address, BigDecimal>()
         outputs[toAddress] = amount
         return sendBitcoin(fromAddress, outputs)
@@ -210,7 +212,7 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
      * @param outputs     The destinations and amounts to transfer
      * @return The transaction hash
      */
-    Sha256Hash sendBitcoin(Address fromAddress, Map<Address, BigDecimal> outputs) {
+    Sha256Hash sendBitcoin(Address fromAddress, Map<Address, Coin> outputs) {
         def unsignedTxHex = createRawTransaction(fromAddress, outputs)
         def signingResult = signRawTransaction(unsignedTxHex)
 
@@ -234,7 +236,7 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
      * @return True, if enough outputs with a value of at least {@code stdRelayTxFee} were spent
      */
     Boolean consolidateCoins() {
-        def amountIn = new BigDecimal(0)
+        Coin amountIn = 0.btc
         def inputs = new ArrayList<Outpoint>()
         def unspentOutputs = listUnspent(1, defaultMaxConf)
 
@@ -250,7 +252,7 @@ trait BTCTestSupport implements BitcoinClientDelegate, Loggable {
         }
 
         // No receiver, just spend most of it as fee (!)
-        def outputs = new HashMap<Address, BigDecimal>()
+        def outputs = new HashMap<Address, Coin>()
         outputs[newAddress] = stdRelayTxFee
 
         def unsignedTxHex = client.createRawTransaction(inputs, outputs)

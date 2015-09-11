@@ -30,7 +30,7 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
         assert available
 
         // Make sure we have enough test coins
-        while (getBalance().btc < minBTCForTests) {
+        while (getBalance() < minBTCForTests) {
             // Mine blocks until we have some coins to spend
             client.generateBlocks(1)
         }

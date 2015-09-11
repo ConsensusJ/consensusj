@@ -1,8 +1,10 @@
 package com.msgilligan.bitcoinj.rpc;
 
 
+import com.msgilligan.bitcoinj.rpc.conversion.BitcoinMath;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.AddressFormatException;
+import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.DumpedPrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
@@ -140,7 +142,7 @@ public class BitcoinClient extends RPCClient {
             }
         }
 
-        log.error("Timeout waiting for block " + blockHeight );
+        log.error("Timeout waiting for block " + blockHeight);
         return false;
     }
 
@@ -282,6 +284,11 @@ public class BitcoinClient extends RPCClient {
         return key;
     }
 
+    @Deprecated
+    public Boolean moveFunds(Address fromaccount, Address toaccount, BigDecimal amount, Integer minconf, String comment) throws JsonRPCException, IOException {
+        return moveFunds(fromaccount, toaccount, BitcoinMath.btcToCoin(amount), minconf, comment);
+    }
+
     /**
      * Move a specified amount from one account in your wallet to another.
      *
@@ -292,10 +299,10 @@ public class BitcoinClient extends RPCClient {
      * @param comment     An optional comment, stored in the wallet only
      * @return True, if successful, and false otherwise
      */
-    public Boolean moveFunds(Address fromaccount, Address toaccount, BigDecimal amount, Integer minconf, String comment)
+    public Boolean moveFunds(Address fromaccount, Address toaccount, Coin amount, Integer minconf, String comment)
             throws JsonRPCException,
             IOException {
-        List<Object> params = createParamList(fromaccount, toaccount, amount, minconf, comment);
+        List<Object> params = createParamList(fromaccount, toaccount,  BitcoinMath.coinToBTC(amount), minconf, comment);
         Boolean result = (Boolean) send("move", params);
         return result;
     }
@@ -310,7 +317,7 @@ public class BitcoinClient extends RPCClient {
      * @param outputs The destinations and amounts to transfer
      * @return The hex-encoded raw transaction
      */
-    public String createRawTransaction(List<Outpoint> inputs, Map<Address, BigDecimal> outputs)
+    public String createRawTransaction(List<Outpoint> inputs, Map<Address, Coin> outputs)
             throws JsonRPCException, IOException {
         // Convert inputs from typed list to list-of-maps for conversion to JSON
         List<Map<String, Object>> inputsJson = new ArrayList<Map<String, Object>>();
@@ -320,7 +327,11 @@ public class BitcoinClient extends RPCClient {
             outMap.put("vout", outpoint.getVout());
             inputsJson.add(outMap);
         }
-        List<Object> params = Arrays.asList(inputsJson, outputs);
+        Map<Address,BigDecimal> outputsBd = new HashMap<Address,BigDecimal>();
+        for (Map.Entry<Address, Coin> entry : outputs.entrySet()) {
+            outputsBd.put(entry.getKey(), BitcoinMath.coinToBTC(entry.getValue()));
+        }
+        List<Object> params = Arrays.asList(inputsJson, outputsBd);
         String transactionHex = send("createrawtransaction", params);
         return transactionHex;
     }
@@ -390,14 +401,23 @@ public class BitcoinClient extends RPCClient {
         return hash;
     }
 
-    public BigDecimal getReceivedByAddress(Address address) throws JsonRPCException, IOException {
+    public Coin getReceivedByAddress(Address address) throws JsonRPCException, IOException {
         return getReceivedByAddress(address, 1);   // Default to 1 or more confirmations
     }
 
-    public BigDecimal getReceivedByAddress(Address address, Integer minConf) throws JsonRPCException, IOException {
+    /**
+     * get total amount recieved by an address.
+     *
+     * @param address Address to query
+     * @param minConf minimum number of confirmations
+     * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`
+     * @throws JsonRPCException
+     * @throws IOException
+     */
+    public Coin getReceivedByAddress(Address address, Integer minConf) throws JsonRPCException, IOException {
         List<Object> params = createParamList(address.toString(), minConf);
         BigDecimal balance = BigDecimal.valueOf((Double) send("getreceivedbyaddress", params));
-        return balance;
+        return BitcoinMath.btcToCoin(balance);
     }
 
     public List<Object> listReceivedByAddress(Integer minConf, Boolean includeEmpty)
@@ -496,35 +516,61 @@ public class BitcoinClient extends RPCClient {
         return json;
     }
 
-    public BigDecimal getBalance() throws JsonRPCException, IOException {
+    public Coin getBalance() throws JsonRPCException, IOException {
         return getBalance(null, null);
     }
 
-    public BigDecimal getBalance(String account) throws JsonRPCException, IOException {
+    public Coin getBalance(String account) throws JsonRPCException, IOException {
         return getBalance(account, null);
     }
 
-    public BigDecimal getBalance(String account, Integer minConf) throws JsonRPCException, IOException {
+    /**
+     * Get the balance for a Bitcoin "account"
+     *
+     * @param account A Bitcoin "account". (Be wary of using this feature.)
+     * @param minConf minimum number of confirmations
+     * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`
+     * @throws JsonRPCException
+     * @throws IOException
+     */
+    public Coin getBalance(String account, Integer minConf) throws JsonRPCException, IOException {
         List<Object> params = createParamList(account, minConf);
         Double balanceBTCd = send("getbalance", params);
         // Beware of the new BigDecimal(double d) constructor, it results in unexpected/undesired values.
         BigDecimal balanceBTC = BigDecimal.valueOf(balanceBTCd);
-        return balanceBTC;
+        return BitcoinMath.btcToCoin(balanceBTC);
     }
 
+    @Deprecated
     public Sha256Hash sendToAddress(Address address, BigDecimal amount) throws JsonRPCException, IOException {
+        return sendToAddress(address, BitcoinMath.btcToCoin(amount), null, null);
+    }
+
+    public Sha256Hash sendToAddress(Address address, Coin amount) throws JsonRPCException, IOException {
         return sendToAddress(address, amount, null, null);
     }
 
+    @Deprecated
     public Sha256Hash sendToAddress(Address address, BigDecimal amount, String comment, String commentTo)
             throws JsonRPCException, IOException {
-        List<Object> params = createParamList(address.toString(), amount, comment, commentTo);
+        return sendToAddress(address, BitcoinMath.btcToCoin(amount), comment, commentTo);
+    }
+
+    public Sha256Hash sendToAddress(Address address, Coin amount, String comment, String commentTo)
+            throws JsonRPCException, IOException {
+        List<Object> params = createParamList(address.toString(), BitcoinMath.coinToBTC(amount), comment, commentTo);
         String txid = send("sendtoaddress", params);
         Sha256Hash hash = Sha256Hash.wrap(txid);
         return hash;
     }
 
+    @Deprecated
     public Sha256Hash sendFrom(String account, Address address, BigDecimal amount)
+            throws JsonRPCException, IOException {
+        return sendFrom(account, address, BitcoinMath.btcToCoin(amount));
+    }
+
+    public Sha256Hash sendFrom(String account, Address address, Coin amount)
             throws JsonRPCException, IOException {
         List<Object> params = createParamList(account, address.toString(), amount);
         String txid = send("sendfrom", params);
@@ -532,7 +578,27 @@ public class BitcoinClient extends RPCClient {
         return hash;
     }
 
-    public Sha256Hash sendMany(String account, Map<Address, BigDecimal> amounts) throws JsonRPCException, IOException {
+    /**
+     * Because of type erasure I had to name this `sendManyBd`.
+     *
+     * So it's deprecated *and* unused. But if you're lazy you can rename your broken function to it temporarily.
+     *
+     * @param account
+     * @param bdAmounts
+     * @return
+     * @throws JsonRPCException
+     * @throws IOException
+     */
+    @Deprecated
+    public Sha256Hash sendManyBd(String account, Map<Address, BigDecimal> bdAmounts) throws JsonRPCException, IOException {
+        Map<Address, Coin> coinAmounts = new HashMap<Address, Coin>();
+        for (Map.Entry<Address, BigDecimal> entry : bdAmounts.entrySet()) {
+            coinAmounts.put(entry.getKey(), BitcoinMath.btcToCoin(entry.getValue()));
+        }
+        return sendMany(account, coinAmounts);
+    }
+
+    public Sha256Hash sendMany(String account, Map<Address, Coin> amounts) throws JsonRPCException, IOException {
         List<Object> params = Arrays.asList(account, amounts);
         String txid = send("sendmany", params);
         Sha256Hash hash = Sha256Hash.wrap(txid);
@@ -545,8 +611,19 @@ public class BitcoinClient extends RPCClient {
      * @param amount The transaction fee in BTC/kB rounded to the nearest 0.00000001.
      * @return True if successful
      */
+    @Deprecated
     public Boolean setTxFee(BigDecimal amount) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(amount);
+        return setTxFee(BitcoinMath.btcToCoin(amount));
+    }
+
+    /**
+     * Set the transaction fee per kB.
+     *
+     * @param amount The transaction fee in BTC/kB rounded to the nearest 0.00000001.
+     * @return True if successful
+     */
+    public Boolean setTxFee(Coin amount) throws JsonRPCException, IOException {
+        List<Object> params = createParamList(BitcoinMath.coinToBTC(amount));
         Boolean result = send("settxfee", params);
         return result;
     }

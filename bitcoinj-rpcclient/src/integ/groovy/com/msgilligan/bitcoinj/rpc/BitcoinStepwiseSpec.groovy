@@ -19,38 +19,38 @@ class BitcoinStepwiseSpec extends BaseRegTestSpec {
     def "Send some funds to an address (that may also get block reward)"() {
         when: "we send some BTC to a newly created address"
         def throwAwayAddress = getNewAddress()
-        sendToAddress(throwAwayAddress, 25.0)
+        sendToAddress(throwAwayAddress, 25.btc)
         generateBlock()
 
         then: "we have the correct amount of BTC there, or possibly more due to block reward"
-        getBitcoinBalance(throwAwayAddress) >= 25.0
+        getBitcoinBalance(throwAwayAddress) >= 25.btc
     }
 
     def "Be able to fund wealthy account from mining profits"() {
         when: "we send some BTC to an address"
         wealthyAddress = getNewAddress(testAccount1Name)
-        sendToAddress(wealthyAddress, (sendAmount*2 + extraAmount).decimalBtc)
+        sendToAddress(wealthyAddress, sendAmount*2 + extraAmount)
         generateBlock()
 
         then: "we have the correct amount of BTC there"
-        getBitcoinBalance(wealthyAddress).btc == sendAmount*2 + extraAmount
+        getBitcoinBalance(wealthyAddress) == sendAmount*2 + extraAmount
     }
 
     def "Send an amount to a newly created address"() {
         setup: "initial balance"
-        Coin wealthyStartBalance = getBitcoinBalance(wealthyAddress).btc
+        Coin wealthyStartBalance = getBitcoinBalance(wealthyAddress)
         Coin testAmount = 1.btc
 
         when: "we create a new address and send testAmount to it"
         Address destinationAddress = getNewAddress(testAccount2Name)
-        sendBitcoin(wealthyAddress, destinationAddress, testAmount.decimalBtc)
+        sendBitcoin(wealthyAddress, destinationAddress, testAmount)
         generateBlock()
 
         then: "the new address has a balance of testAmount"
-        getBitcoinBalance(destinationAddress).btc == testAmount
+        getBitcoinBalance(destinationAddress) == testAmount
 
         and: "the source address is poorer by the correct amount"
-        getBitcoinBalance(wealthyAddress).btc == wealthyStartBalance - testAmount - stdTxFee.btc
+        getBitcoinBalance(wealthyAddress) == wealthyStartBalance - testAmount - stdTxFee
     }
 
 }

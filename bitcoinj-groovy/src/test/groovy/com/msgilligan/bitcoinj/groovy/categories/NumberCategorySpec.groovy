@@ -70,5 +70,4 @@ class NumberCategorySpec extends Specification {
         expect:
         0 as Byte == 0.byteValue()
     }
-
 }

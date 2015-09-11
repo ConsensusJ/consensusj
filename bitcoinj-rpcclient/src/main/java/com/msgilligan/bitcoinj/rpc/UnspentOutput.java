@@ -1,6 +1,8 @@
 package com.msgilligan.bitcoinj.rpc;
 
+import com.msgilligan.bitcoinj.rpc.conversion.BitcoinMath;
 import org.bitcoinj.core.Address;
+import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Sha256Hash;
 
 import java.math.BigDecimal;
@@ -14,10 +16,15 @@ public class UnspentOutput {
     private final Address     address;
     private final String      account;
     private final String      scriptPubKey;
-    private final BigDecimal  amount;
+    private final Coin        amount;
     private final int         confirmations;
 
+    @Deprecated
     public UnspentOutput(Sha256Hash txid, int vout, Address address, String account, String scriptPubKey, BigDecimal amount, int confirmations) {
+        this(txid, vout, address, account, scriptPubKey, BitcoinMath.btcToCoin(amount), confirmations);
+    }
+
+    public UnspentOutput(Sha256Hash txid, int vout, Address address, String account, String scriptPubKey, Coin amount, int confirmations) {
         this.txid = txid;
         this.vout = vout;
         this.address = address;
@@ -47,7 +54,7 @@ public class UnspentOutput {
         return scriptPubKey;
     }
 
-    public BigDecimal getAmount() {
+    public Coin getAmount() {
         return amount;
     }
 
