@@ -43,7 +43,7 @@ class NumberCategory {
     private static long btcToSatoshi(Number self) {
         switch(self) {
             case BigDecimal:    return ((BigDecimal) self).multiply(satoshiPerBTCDecimal).longValueExact()
-            case BigInteger:    return ((BigInteger) self).multiply(satoshiPerBTCBigInt).longValueExact()
+            case BigInteger:    return ((BigInteger) self).multiply(satoshiPerBTCBigInt).longValue()
             default:            return self.longValue() *  Coin.COIN.value
         }
     }
@@ -51,7 +51,7 @@ class NumberCategory {
     private static long asSatoshi(Number self) {
         switch(self) {
             case BigDecimal:    return ((BigDecimal) self).longValueExact()
-            case BigInteger:    return ((BigInteger) self).longValueExact()
+            case BigInteger:    return ((BigInteger) self).longValue()
             default:            return self.longValue()
         }
     }
