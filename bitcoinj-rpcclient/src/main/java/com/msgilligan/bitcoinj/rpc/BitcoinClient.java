@@ -28,14 +28,18 @@ import java.util.Map;
  * = JSON-RPC Client for *Bitcoin Core*
  *
  * A strongly-typed wrapper for the Bitcoin JSON-RPC API. *bitcoinj* types are used where appropriate.
- * For example, a block hash can be retrieved as follows:
+ * For example, requesting a block hash will return a {@link org.bitcoinj.core.Sha256Hash}:
  *
  * [source,java]
  * --
  * Sha256Hash hash = client.getBlockHash(342650);
  * --
  *
- * `Sha256Hash` is defined in *bitcoinj*.
+ * Requesting a Bitcoin balance will return the amount as a {@link org.bitcoinj.core.Coin}:
+ * [source,java]
+ * --
+ * Coin balance = client.getBalance();
+ * --
  *
  * NOTE: This is still a work-in-progress and the API will change. High on the priority list is making
  * better use of https://github.com/FasterXML/jackson[Jackson] to replace some of the current `Map`-based types.
@@ -48,20 +52,31 @@ public class BitcoinClient extends RPCClient {
     private static final int RETRY_SECONDS = 1;
     private static final int MESSAGE_SECONDS = 10;
 
+    /**
+     * Construct a BitcoinClient from URI, user name, and password.
+     * @param server URI of the Bitcoin RPC server
+     * @param rpcuser Username (if required)
+     * @param rpcpassword Password (if required)
+     */
     public BitcoinClient(URI server, String rpcuser, String rpcpassword) {
         super(server, rpcuser, rpcpassword);
     }
 
+    /**
+     * Construct a BitcoinClient from an RPCConfig data object.
+     * @param config Contains URI, user name, and password
+     * @throws IOException
+     */
     public BitcoinClient(RPCConfig config) throws IOException {
         this(config.getURI(), config.getUsername(), config.getPassword());
     }
 
     /**
      * Wait until the server is available.
-     * <p>
+     *
      * Keep trying, ignoring (and logging) a known list of exception conditions that may occur while waiting for
-     * a <code>bitcoind</code> server to start up. This is similar to the behavior enabled by the <code>-rpcwait</code>
-     * option to the <code>bitcoin-cli</code> command-line tool.
+     * a `bitcoind` server to start up. This is similar to the behavior enabled by the `-rpcwait`
+     * option to the `bitcoin-cli` command-line tool.
      *
      * @param timeout Timeout in seconds
      * @return True if ready, false if timeout
@@ -208,6 +223,7 @@ public class BitcoinClient extends RPCClient {
     }
 
     /**
+     * Turn generation on/off or, if in RegTest mode, generate blocks
      *
      * @param generate        turn generation on or off
      * @param genproclimit    Generation is limited to [genproclimit] processors, -1 is unlimited
@@ -223,10 +239,20 @@ public class BitcoinClient extends RPCClient {
         return result;
     }
 
+    /**
+     * Convenience method for generating a single block when in RegTest mode
+     * @see BitcoinClient#generateBlocks(Long blocks)
+     */
     public Object generateBlock() throws JsonRPCException, IOException {
         return generateBlocks(1L);
     }
 
+    /**
+     * Convenience method for generating blocks when in RegTest mode
+     *
+     * @param blocks number of blocks to generate
+     * @see BitcoinClient#setGenerate(Boolean, Long)
+     */
     public Object generateBlocks(Long blocks) throws JsonRPCException, IOException {
         return setGenerate(true, blocks);
     }
@@ -279,7 +305,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Return the private key from the server.
-     * <p>
+     *
      * Note: must be in wallet mode with unlocked or unencrypted wallet.
      *
      * @param address Address corresponding to the private key to return
@@ -323,7 +349,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Creates a raw transaction spending the given inputs to the given destinations.
-     * <p>
+     *
      * Note: the transaction inputs are not signed, and the transaction is not stored in the wallet or transmitted to
      * the network.
      *
@@ -420,7 +446,7 @@ public class BitcoinClient extends RPCClient {
     }
 
     /**
-     * get total amount recieved by an address.
+     * get total amount received by an address.
      *
      * @param address Address to query
      * @param minConf minimum number of confirmations
@@ -530,10 +556,21 @@ public class BitcoinClient extends RPCClient {
         return json;
     }
 
+    /**
+     * Get the balance for a the default Bitcoin "account"
+     *
+     * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`
+     */
     public Coin getBalance() throws JsonRPCException, IOException {
         return getBalance(null, null);
     }
 
+    /**
+     * Get the balance for a Bitcoin "account"
+     *
+     * @param account A Bitcoin "account". (Be wary of using this feature.)
+     * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`
+     */
     public Coin getBalance(String account) throws JsonRPCException, IOException {
         return getBalance(account, null);
     }
@@ -544,8 +581,6 @@ public class BitcoinClient extends RPCClient {
      * @param account A Bitcoin "account". (Be wary of using this feature.)
      * @param minConf minimum number of confirmations
      * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`
-     * @throws JsonRPCException
-     * @throws IOException
      */
     public Coin getBalance(String account, Integer minConf) throws JsonRPCException, IOException {
         List<Object> params = createParamList(account, minConf);
@@ -668,7 +703,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Returns a list of available commands.
-     * <p>
+     *
      * Commands which are unavailable will not be listed, such as wallet RPCs, if wallet support is disabled.
      *
      * @return The list of commands
@@ -686,7 +721,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Checks whether a command exists.
-     * <p>
+     *
      * This is done indirectly, by using {help(String) help} to get information about the command, and if information
      * about the command is available, then the command exists. The absence of information does not necessarily imply
      * the non-existence of a command.
@@ -735,7 +770,7 @@ public class BitcoinClient extends RPCClient {
 
     /**
      * Clears the memory pool and returns a list of the removed transactions.
-     * <p>
+     *
      * Note: this is a customized command, which is currently not part of Bitcoin Core.
      * See https://github.com/OmniLayer/OmniJ/pull/72[Pull Request #72] on GitHub
      *
