@@ -25,7 +25,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * JSON-RPC Client for bitcoind
+ * = JSON-RPC Client for *Bitcoin Core*
+ *
+ * A strongly-typed wrapper for the Bitcoin JSON-RPC API. *bitcoinj* types are used where appropriate.
+ * For example, a block hash can be retrieved as follows:
+ *
+ * [source,java]
+ * --
+ * Sha256Hash hash = client.getBlockHash(342650);
+ * --
+ *
+ * `Sha256Hash` is defined in *bitcoinj*.
+ *
+ * NOTE: This is still a work-in-progress and the API will change. High on the priority list is making
+ * better use of https://github.com/FasterXML/jackson[Jackson] to replace some of the current `Map`-based types.
+ *
  */
 public class BitcoinClient extends RPCClient {
     private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);
@@ -578,17 +592,6 @@ public class BitcoinClient extends RPCClient {
         return hash;
     }
 
-    /**
-     * Because of type erasure I had to name this `sendManyBd`.
-     *
-     * So it's deprecated *and* unused. But if you're lazy you can rename your broken function to it temporarily.
-     *
-     * @param account
-     * @param bdAmounts
-     * @return
-     * @throws JsonRPCException
-     * @throws IOException
-     */
     @Deprecated
     public Sha256Hash sendManyBd(String account, Map<Address, BigDecimal> bdAmounts) throws JsonRPCException, IOException {
         Map<Address, Coin> coinAmounts = new HashMap<Address, Coin>();
