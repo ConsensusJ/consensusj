@@ -1,0 +1,27 @@
+apply plugin: 'org.ajoberstar.github-pages'
+
+def siteDir = "$buildDir/site"
+def apiDocDir = "$buildDir/alljavadoc"
+
+githubPages {
+    repoUri = 'https://github.com/msgilligan/bitcoinj-addons.git'
+    // targetBranch defaults to 'gh-pages'
+
+    pages {
+        from(file("$siteDir")) {
+            into '.'
+        }
+//        from(file("$apiDocDir")) {
+//            into 'apidoc'
+//        }
+    }
+    credentials {
+        username = 'msgilligan'
+        password = ''
+    }
+}
+
+publishGhPages.dependsOn javadocAll, asciidoctor
+
+task publishToGhProject(dependsOn: publishGhPages, group: 'render',
+        description: "Publishes buildDir to Github Pages on 'master' branch")

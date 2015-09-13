@@ -1,0 +1,17 @@
+= bitcoinj-addons Github Pages
+Sean Gilligan
+v0.1, September 12, 2015: First draft
+
+Welcome to the Github Project Pages for *bitcoinj-addons*.
+
+== Project Documentation
+
+The starting point for documentation on *bitcoinj-addons* is the https://github.com/msgilligan/bitcoinj-addons/blob/master/README.adoc[README] file. It contains links to all other documentation.
+
+The main purpose of the Github Project Pages is to host the link:apidoc/index.html[API Documentation].
+
+There is also the beginnings of a link:addons-user-guide.html[User's Guide].
+
+
+
+
