@@ -27,6 +27,11 @@ public class BitcoinJCli extends CliCommand {
         // TODO: Make this better and complete
         @SuppressWarnings("unchecked")
         List<Object> args = (List<Object>) line.getArgList();
+        if (args.size() == 0) {
+            printError("rpc method required");
+            printHelp();
+            return(1);
+        }
         String method = (String) args.get(0);
         args.remove(0); // remove method from list
         if (args.size() > 0 && args.get(0) != null) {
