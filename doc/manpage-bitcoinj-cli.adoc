@@ -1,0 +1,102 @@
+= bitcoinj-cli(1)
+Sean Gilligan
+:doctype: manpage
+:man manual: bitcoinj-addons Manual
+:man source: bitcoinj-addons 0.0.8
+:page-layout: base
+
+== NAME
+
+bitcoinj-cli - A Bitcoin API command-line client
+
+== SYNOPSIS
+
+java -jar *bitcoinj-cli*-_version_.jar [_OPTION_]... _command_...  [_ARGUMENT_]...
+
+== DESCRIPTION
+
+bitcoinj-cli(1) sends _command_... [_ARGUMENT_]... to the Bitcoin RPC server specified via [_OPTION_]... or the default server at `http://localhost:8332`.   
+
+== OPTIONS
+
+=== Connection Settings
+
+*-regtest*::
+  Server is in *RegTest* mode, connect to the the RegTest port (18332).
+
+*-testnet*::
+  Server is running on TestNet, connect to the the TestNet port (18332).
+
+*--rpcconnect*=_HOST_::
+  Hostname or IP of server to connect to.
+  Defaults to _localhost_.
+
+*--rpcport*=_HOST_::
+  TCP port for connection.
+  Defaults to _8332_.
+
+*--rpcuser*=_HOST_::
+  Username for connection.
+  Defaults to "".
+
+*--rpcpassword*=_HOST_::
+  Password for connection.
+  Defaults to "".
+
+*--rpcssl*::
+  Use HTTPS / SSL for the connection.
+
+WARNING: SSL cert validation temporarily disabled to support self-signed certificates.
+
+*--rpcwait*::
+  Wait for `bitcoind` to start up.
+
+=== Program Information
+
+*-?::
+  Show the help message.
+
+== EXIT STATUS
+
+*0*::
+  Success.
+
+*1*::
+  Failure (syntax or usage error; configuration error; unexpected error).
+
+== EXAMPLES
+
+* getblockcount to default server:
++
+------------
+$ java -jar bitcoinj-cli-0.0.7.jar getblockcount
+------------
+
+* getconnectioncount to `bitcoinj-daemon` running on its default port:
++
+------------
+$ java -jar bitcoinj-cli-0.0.7.jar -rpcport=8080 getconnectioncount
+------------
+
+
+
+== BUGS
+
+Refer to the *bitcoinj-addons* issue tracker at https://github.com/msgilligan/bitcoinj-addons/issues?q=is%3Aopen.
+
+== AUTHORS
+
+*bitcoinj-cli* was written by Sean Gilligan.
+
+*bitcoinj-addons* was written by Sean Gilligan and DexX7.
+
+*bitcoinj* was written by the bitcoinj project team.
+
+== RESOURCES
+
+*Git source repository on GitHub:* https://github.com/msgilligan/bitcoinj-addons
+
+== COPYING
+
+Copyright \(C) 2014-2015 Sean Gilligan.
+Free use of this software is granted under the terms of the Apache Software License v2.
