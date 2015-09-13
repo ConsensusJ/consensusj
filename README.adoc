@@ -1,5 +1,6 @@
 = bitcoinj Add-ons 
 
+image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"] image:https://ci.omni.foundation/buildStatus/icon?job=bitcoinj-addons[link="https://ci.omni.foundation/job/bitcoinj-addons/"]
 
 Add-on modules for https://bitcoinj.github.io[bitcoinj], including:
 
@@ -19,19 +20,19 @@ We're hoping that one or more modules will be accepted into the bitcoinj project
 
 == Overview
 
-=== Binaries
+=== Binaries image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"]
 
 Although the API is changing rapidly, binary releases are available on https://bintray.com/msgilligan/maven/bitcoinj-addons/view[Bintray]. You can dowload JARs or use the provided Maven coordinates to link to them directly from your `pom.xml` or `build.gradle`.
 
-image::https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"]
 
-=== API Documentation.
+=== API Documentation
 
 We jave published http://msgilligan.github.io/bitcoinj-addons/apidoc/index.html[preliminary JavaDoc] to our Github pages site.
 
-=== Continuous Integration.
+=== Continuous Integration image:https://ci.omni.foundation/buildStatus/icon?job=bitcoinj-addons[link="https://ci.omni.foundation/job/bitcoinj-addons/"]
 
 bitcoinj-addons is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] and is tested by the https://ci.omni.foundation/[Omni Foundation Continuous Integration Server] (self-signed SSL certificate). You can check the https://ci.omni.foundation/job/bitcoinj-addons/[bitcoinj-addons job] for build status.
+
 
 === Requirements
 
