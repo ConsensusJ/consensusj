@@ -1,17 +1,44 @@
 = bitcoinj Add-ons 
 
-image::https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"]
 
-This repository is work-in-progress on some add-on modules for https://bitcoinj.github.io[bitcoinj]. We're hoping that one or more will be accepted into the bitcoinj project.
+Add-on modules for https://bitcoinj.github.io[bitcoinj], including:
+
+* A *JSON-RPC Java client* for the Bitcoin API
+* *bitcoinj-cli* - a command line tool and supporting libraries for accessing the JSON-RPC API.
+* Bitcoin server libraries for *server-side JSON-RPC*.
+* A Groovy-language *Domain Specific Language* for scripting and testing with *bitcoinj*
+* **bitcoinj-daemon** - A framework for a Java-based implementation of bitcoind.
+* **bitcoinj-peerserver** - A web application that connects to the P2P network and streams events to a browser using the STOMP protocol over *WebSocket*.
+* Functional tests of bitcoind (and bitcoinj-daemon) JSON-RPC services, that run in https://bitcoinj.github.io/testing#regression-test-mode[regression test mode].
+
+WARNING: Do not use this software with your Bitcoin private keys without doing a rigorous audit of the code. (Feedback welcome.)
 
 WARNING: The API is not final and will change without warning.
 
-== Requirements
+We're hoping that one or more modules will be accepted into the bitcoinj project. Most of these components are fairly new, but all are useful and ready for pull requests.
 
-* Most components require JDK 8 or later
-* Some modules may use JDK 7 (subset) for Android compatibility (see table, below)
+== Overview
 
-== Modules
+=== Binaries
+
+Although the API is changing rapidly, binary releases are available on https://bintray.com/msgilligan/maven/bitcoinj-addons/view[Bintray]. You can dowload JARs or use the provided Maven coordinates to link to them directly from your `pom.xml` or `build.gradle`.
+
+image::https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"]
+
+=== API Documentation.
+
+We jave published http://msgilligan.github.io/bitcoinj-addons/apidoc/index.html[preliminary JavaDoc] to our Github pages site.
+
+=== Continuous Integration.
+
+bitcoinj-addons is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] and is tested by the https://ci.omni.foundation/[Omni Foundation Continuous Integration Server] (self-signed SSL certificate). You can check the https://ci.omni.foundation/job/bitcoinj-addons/[bitcoinj-addons job] for build status.
+
+=== Requirements
+
+* Most modules may use JDK 7 (subset) for Android compatibility (see table, below)
+* Server modules (Spring Boot Apps) require JDK 8 or later
+
+=== Modules
 
 See the table below for an overview of the modules.
 The *JDK* column indicates the version of Java required.
@@ -59,7 +86,7 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |===
 
 [#bitcoinj-cli]
-=== bitcoinj-cli: An Bitcoin RPC command-line client
+==== bitcoinj-cli: An Bitcoin RPC command-line client
 
 An alternative implementation of `bitcion-cli` in Java. Built as a fat jar executable with `java -jar`. The command:
 
@@ -73,18 +100,20 @@ will output:
 NOTE: Only a few RPCs are currently supported. Pull requests welcome.
 
 [#bitcoinj-rpcclient]
-=== bitcoinj-rpcclient: A Bitcoin JSON-RPC client using bitcoinj types
+==== bitcoinj-rpcclient: A Bitcoin JSON-RPC client using bitcoinj types
 
-It the RPC takes a Bitcoin address as parameter, the Java method will take an `org.bitcionj.core.Address`.
-If it returns a transaction it returns an `org.bitcionj.core.Transaction`.
+If the RPC procedure takes a Bitcoin address as parameter, then the Java method will take an `org.bitcoinj.core.Address`.
+If the RPC returns a transaction, the Java method will return an `org.bitcionj.core.Transaction`.
+
+See the JavaDoc for http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
 
 [#bitcoinj-json]
-=== bitcoin-json
+==== bitcoin-json
 
 Server-side JSON components and services that power the Daemon and PeerServer.
 
 [#bitcoinj-daemon]
-=== bitcoinj-daemon
+==== bitcoinj-daemon
 
 A starting point for building a complete `bitcoind` equivalent using **bitcoinj**. Currently serves a very https://github.com/msgilligan/bitcoinj-addons/blob/master/src/main/java/com/msgilligan/bitcoinj/rpc/BitcoinJsonRpc.java[small subset] of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
 
@@ -93,7 +122,7 @@ Uses a `PeerGroup` to power the limited RPCs. Will use a `BlockStore`. (Pull req
 Built as a fat, executable jar, so it can be run with `java -jar`.
 
 [#bitcoinj-peerserver]
-=== bitcoinj-peerserver
+==== bitcoinj-peerserver
 
 PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring Boot] application that provides the following functions:
 
@@ -109,7 +138,7 @@ PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring B
 No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/0.13.2/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-0.0.1.jar` command.
 
 [#bitcoinj-groovy]
-=== bitcoinj-groovy
+==== bitcoinj-groovy
 
 Groovy DSL support to write things like:
 
