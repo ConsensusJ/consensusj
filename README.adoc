@@ -1,6 +1,6 @@
 = bitcoinj Add-ons 
 
-image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"] image:https://ci.omni.foundation/buildStatus/icon?job=bitcoinj-addons[link="https://ci.omni.foundation/job/bitcoinj-addons/"]
+image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"] 
 
 Add-on modules for https://bitcoinj.github.io[bitcoinj], including:
 
@@ -29,10 +29,12 @@ Although the API is changing rapidly, binary releases are available on https://b
 
 We jave published http://msgilligan.github.io/bitcoinj-addons/apidoc/index.html[preliminary JavaDoc] to our Github pages site.
 
-=== Continuous Integration image:https://ci.omni.foundation/buildStatus/icon?job=bitcoinj-addons[link="https://ci.omni.foundation/job/bitcoinj-addons/"]
+=== Continuous Integration 
 
 bitcoinj-addons is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] and is tested by the https://ci.omni.foundation/[Omni Foundation Continuous Integration Server] (self-signed SSL certificate). You can check the https://ci.omni.foundation/job/bitcoinj-addons/[bitcoinj-addons job] for build status.
 
+// Jenkins Widget doesn't display correctly because of ci.omni.foundation self-signed SSL
+// image:https://ci.omni.foundation/buildStatus/icon?job=bitcoinj-addons[link="https://ci.omni.foundation/job/bitcoinj-addons/"]
 
 === Requirements
 
