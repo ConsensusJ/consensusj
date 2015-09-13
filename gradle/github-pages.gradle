@@ -11,12 +11,12 @@ githubPages {
         from(file("$siteDir")) {
             into '.'
         }
-//        from(file("$apiDocDir")) {
-//            into 'apidoc'
-//        }
+        from(file("$apiDocDir")) {
+            into 'apidoc'
+        }
     }
     credentials {
-        username = 'msgilligan'
+        username = ''
         password = ''
     }
 }
