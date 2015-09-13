@@ -91,7 +91,7 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 [#bitcoinj-cli]
 ==== bitcoinj-cli: An Bitcoin RPC command-line client
 
-An alternative implementation of `bitcion-cli` in Java. Built as a fat jar executable with `java -jar`. The command:
+An alternative implementation of `bitcoin-cli` in Java. Built as a fat jar executable with `java -jar`. The command:
 
     java -jar bitcoinj-cli-0.0.3.jar -rpcport=8080 getblockcount
 
@@ -102,11 +102,17 @@ will output:
 
 NOTE: Only a few RPCs are currently supported. Pull requests welcome.
 
+For help type:
+
+    java -jar bitcoinj-cli-0.0.3.jar -?
+
+or read the http://msgilligan.github.io/bitcoinj-addons/manpage-bitcoinj-cli.html[manual page].
+
 [#bitcoinj-rpcclient]
 ==== bitcoinj-rpcclient: A Bitcoin JSON-RPC client using bitcoinj types
 
 If the RPC procedure takes a Bitcoin address as parameter, then the Java method will take an `org.bitcoinj.core.Address`.
-If the RPC returns a transaction, the Java method will return an `org.bitcionj.core.Transaction`.
+If the RPC returns a transaction, the Java method will return an `org.bitcoinj.core.Transaction`.
 
 See the JavaDoc for http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
 

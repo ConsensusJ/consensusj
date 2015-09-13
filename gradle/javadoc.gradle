@@ -6,13 +6,12 @@
 //    }
 //}
 
-
 def javadocSpec = {
     options.docletpath = configurations.asciidoclet.files.asType(List)
     options.doclet = 'org.asciidoctor.Asciidoclet'
 //        options.overview = "src/main/java/overview.adoc"
-    options.addStringOption "-base-dir", "${projectDir}"
-    options.addStringOption "-attribute",
+    options.addStringOption '-base-dir', "${projectDir}"
+    options.addStringOption '-attribute',
             "name=${project.name}," +
                     "version=${project.version}," +
                     "title-link=http://example.com[${project.name} ${project.version}]"
@@ -32,7 +31,6 @@ allprojects {
     javadoc javadocSpec
 
 }
-
 
 task javadocAll(type: Javadoc) {
     source subprojects.collect {project -> project.sourceSets.main.allJava }
