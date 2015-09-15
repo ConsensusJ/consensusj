@@ -22,6 +22,8 @@ class DynamicRPCClient extends RPCClient {
      *
      * See http://groovy-lang.org/metaprogramming.html#_methodmissing
      *
+     * TODO: This method could actually be moved to a trait, should it be?
+     *
      * @param name The JSON-RPC method name
      * @param args JSON-RPC arguments
      * @return an object containing the JSON-RPC response.result
