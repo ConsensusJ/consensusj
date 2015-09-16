@@ -43,14 +43,11 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
 //        signer = new LocalTransactionSigner()
 //    }
 
-    def "Fund address as intermediate"() {
-        when: "a new address is created"
-        fundingAddress = getNewAddress()
+    def "Fund address"() {
+        when: "a new address is created and a funding transaction is sent"
+        fundingAddress = createFundedAddress(fundingAmount)
 
-        and: "coins are sent to the new address from a random source"
-        sendToAddress(fundingAddress, fundingAmount)
-
-        and: "a new block is mined"
+        and: "a block is recorded"
         generateBlock()
 
         then: "the address should have that balance"

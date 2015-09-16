@@ -1,9 +1,10 @@
 package com.msgilligan.bitcoinj
 
-import com.msgilligan.bitcoinj.rpc.BitcoinClient
+import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient
 import com.msgilligan.bitcoinj.rpc.Loggable
 import com.msgilligan.bitcoinj.rpc.RPCURI
 import com.msgilligan.bitcoinj.test.BTCTestSupport
+import com.msgilligan.bitcoinj.test.RegTestFundingSource
 import org.bitcoinj.core.Coin
 import spock.lang.Specification
 import com.msgilligan.bitcoinj.rpc.test.TestServers
@@ -18,8 +19,10 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     static final protected String rpcTestUser = testServers.rpcTestUser
     static final protected String rpcTestPassword = testServers.rpcTestPassword;
 
+    // Initializer to set up trait properties, Since Spock doesn't allow constructors
     {
-        client = new BitcoinClient(RPCURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
+        client = new BitcoinExtendedClient(RPCURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
+        fundingSource = new RegTestFundingSource(client)
     }
 
     void setupSpec() {

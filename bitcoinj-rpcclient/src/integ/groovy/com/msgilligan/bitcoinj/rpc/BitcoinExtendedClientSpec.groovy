@@ -1,0 +1,57 @@
+package com.msgilligan.bitcoinj.rpc
+
+import com.msgilligan.bitcoinj.test.RegTestEnvironment
+import com.msgilligan.bitcoinj.test.RegTestFundingSource
+import spock.lang.Specification
+
+
+/**
+ * Basic tests of Extended Client
+ */
+class BitcoinExtendedClientSpec extends Specification {
+    def "test it"() {
+        given: "a client, a source of funds, and a blockchain environment"
+        def client = new BitcoinExtendedClient(RPCURI.defaultRegTestURI, "bitcoinrpc", "pass")
+        def funder = new RegTestFundingSource(client)
+        RegTestEnvironment chainEnv = new RegTestEnvironment(client)
+        // Mine some blocks and setup a source of funds for testing
+        def myAddress = funder.createFundedAddress(1.btc)
+        def destAddress = client.getNewAddress()
+
+        when: "we send coins"
+        def txid = client.sendBitcoin(myAddress, destAddress, 0.5.btc)
+
+        and: "a block is recorded"
+        chainEnv.waitForBlocks(1)
+
+        and: "we query the transaction"
+        def tx = client.getTransaction(txid)
+
+        and: "we check the balances"
+        def sourceBalance = client.getBitcoinBalance(myAddress)
+        def destBalance = client.getBitcoinBalance(destAddress)
+
+        then:
+        tx != null
+        sourceBalance == 0.5.btc - client.stdTxFee
+        destBalance == 0.5.btc
+    }
+
+    def "a test"() {
+        given:
+        def client = new BitcoinExtendedClient(RPCURI.defaultRegTestURI, "bitcoinrpc", "pass")
+        def funder = new RegTestFundingSource(client)
+        //def fundingAddress = client.getNewAddress()
+        def fundingAddress = funder.createFundedAddress(10.btc)
+        def key = client.dumpPrivKey(fundingAddress)
+        def destinationAddress = client.getNewAddress("destinationAddress")
+
+        when: "we create an signed bitcoinj transaction, spending from fundingAddress to destinationAddress"
+        def tx = client.createSignedTransaction(key, destinationAddress, 1.0.btc)
+
+        then: "there should be a valid signed transaction"
+        tx != null
+        tx.outputs.size() > 0
+        tx.inputs.size() > 0
+    }
+}

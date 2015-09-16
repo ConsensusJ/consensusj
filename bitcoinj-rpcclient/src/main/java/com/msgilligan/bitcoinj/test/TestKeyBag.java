@@ -8,6 +8,9 @@ import java.util.HashMap;
 
 /**
  * Brain-dead simple KeyBag for testing
+ *
+ * NOTE: I can't remember what I was doing when I created this or if it even works. Should I delete it?
+ *
  */
 public class TestKeyBag implements KeyBag {
     private HashMap<byte[], ECKey> keys = new HashMap<byte[], ECKey>();
