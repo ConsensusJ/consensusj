@@ -116,6 +116,39 @@ If the RPC returns a transaction, the Java method will return an `org.bitcoinj.c
 
 See the JavaDoc for http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
 
+===== Sample Spock Integration Tests
+
+These sample Spock "feature tests" show the RPC client in action and are from the file https://github.com/msgilligan/bitcoinj-addons/blob/master/bitcoinj-rpcclient/src/integ/groovy/com/msgilligan/bitcoinj/rpc/BitcoinSpec.groovy#L31-L55[BitcoinSpec.groovy].
+
+[source,groovy]
+----
+    def "Use RegTest mode to generate a block upon request"() {
+        given: "a certain starting height"
+        def startHeight = blockCount
+
+        when: "we generate 1 new block"
+        generateBlock()
+
+        then: "the block height is 1 higher"
+        blockCount == startHeight + 1
+    }
+
+    def "When we send an amount to a newly created address, it arrives"() {
+        given: "A new, empty Bitcoin address"
+        def destinationAddress = getNewAddress()
+
+        when: "we send it testAmount (from coins mined in RegTest mode)"
+        sendToAddress(destinationAddress, testAmount, "comment", "comment-to")
+
+        and: "we generate 1 new block"
+        generateBlock()
+ 
+        then: "the new address has a balance of testAmount"
+        testAmount == getReceivedByAddress(destinationAddress)
+    }
+----
+
+
 [#bitcoinj-json]
 ==== bitcoin-json
 
