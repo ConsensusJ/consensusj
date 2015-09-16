@@ -25,7 +25,7 @@ allprojects {
 
 subprojects {
     dependencies {
-        compile "org.bitcoinj:bitcoinj-core:0.13.2"
+        compile 'org.bitcoinj:bitcoinj-core:0.13.2'
         compile 'org.slf4j:slf4j-api:1.7.7'
     }
 }
@@ -42,4 +42,4 @@ task testReport(type: TestReport) {
     reportOn subprojects*.test
 }
 
-task jenkinsBuild(dependsOn: [build, testReport, javadocAll])
+task jenkinsBuild(dependsOn: [build, testReport, javadocAll, asciidoctor])
