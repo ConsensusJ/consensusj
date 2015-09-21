@@ -1,7 +1,11 @@
 package com.msgilligan.bitcoinj.rpc;
 
 
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.msgilligan.bitcoinj.rpc.conversion.BitcoinMath;
+import com.msgilligan.bitcoinj.rpc.conversion.CoinDeserializer;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.Coin;
@@ -61,7 +65,15 @@ public class BitcoinClient extends RPCClient {
      * @param rpcpassword Password (if required)
      */
     public BitcoinClient(URI server, String rpcuser, String rpcpassword) {
-        super(server, rpcuser, rpcpassword);
+        super(server, rpcuser, rpcpassword, createMapper());
+    }
+
+    static protected ObjectMapper createMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule testModule = new SimpleModule("BitcoinJDeSerializing", new Version(1, 0, 0, null, null, null))
+                .addDeserializer(Coin.class, new CoinDeserializer());
+        mapper.registerModule(testModule);
+        return mapper;
     }
 
     /**
@@ -340,7 +352,7 @@ public class BitcoinClient extends RPCClient {
             throws JsonRPCException,
             IOException {
         List<Object> params = createParamList(fromaccount, toaccount,  BitcoinMath.coinToBTC(amount), minconf, comment);
-        Boolean result = (Boolean) send("move", params);
+        Boolean result = send("move", params);
         return result;
     }
 
@@ -453,8 +465,8 @@ public class BitcoinClient extends RPCClient {
      */
     public Coin getReceivedByAddress(Address address, Integer minConf) throws JsonRPCException, IOException {
         List<Object> params = createParamList(address.toString(), minConf);
-        BigDecimal balance = BigDecimal.valueOf((Double) send("getreceivedbyaddress", params));
-        return BitcoinMath.btcToCoin(balance);
+        Coin balance = send("getreceivedbyaddress", params, Coin.class);
+        return balance;
     }
 
     public List<Object> listReceivedByAddress(Integer minConf, Boolean includeEmpty)
@@ -581,10 +593,8 @@ public class BitcoinClient extends RPCClient {
      */
     public Coin getBalance(String account, Integer minConf) throws JsonRPCException, IOException {
         List<Object> params = createParamList(account, minConf);
-        Double balanceBTCd = send("getbalance", params);
-        // Beware of the new BigDecimal(double d) constructor, it results in unexpected/undesired values.
-        BigDecimal balanceBTC = BigDecimal.valueOf(balanceBTCd);
-        return BitcoinMath.btcToCoin(balanceBTC);
+        Coin balance = send("getbalance", params, Coin.class);
+        return balance;
     }
 
     public Sha256Hash sendToAddress(Address address, Coin amount) throws JsonRPCException, IOException {

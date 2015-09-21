@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.rpc;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,6 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -43,8 +43,17 @@ public class RPCClient {
         }
     }
 
+    public RPCClient(RPCConfig config, ObjectMapper mapper) {
+        this(config.getURI(), config.getUsername(), config.getPassword(), mapper);
+    }
+
     public RPCClient(RPCConfig config) {
-        this(config.getURI(), config.getUsername(), config.getPassword());
+        this(config.getURI(), config.getUsername(), config.getPassword(), null);
+    }
+
+    public RPCClient(URI server, final String rpcuser, final String rpcpassword) {
+        this(server, rpcuser, rpcpassword, null);
+
     }
 
     /**
@@ -52,12 +61,13 @@ public class RPCClient {
      * @param server server URI should not contain username/password
      * @param rpcuser username for the RPC HTTP connection
      * @param rpcpassword password for the RPC HTTP connection
+     * @param mapper Jackson object Mapper or null to use default mapper
      */
-    public RPCClient(URI server, final String rpcuser, final String rpcpassword) {
-        serverURI = server;
-        username = rpcuser;
-        password = rpcpassword;
-        mapper = new ObjectMapper();
+    public RPCClient(URI server, final String rpcuser, final String rpcpassword, ObjectMapper mapper) {
+        this.serverURI = server;
+        this.username = rpcuser;
+        this.password = rpcpassword;
+        this.mapper = (mapper == null) ? new ObjectMapper() : mapper;
     }
 
     public URI getServerURI() {
@@ -68,11 +78,12 @@ public class RPCClient {
      * Send a JSON-RPC request to the server and return a JSON-RPC response.
      *
      * @param request JSON-RPC request
+     * @param responseType Response type to deserialize to
      * @return JSON-RPC response
      * @throws IOException when thrown by the underlying HttpURLConnection
      * @throws JsonRPCStatusException when the HTTP response code is other than 200
      */
-    private JsonRpcResponse send(JsonRpcRequest request) throws IOException, JsonRPCStatusException {
+    private <R> JsonRpcResponse<R> send(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRPCStatusException {
         HttpURLConnection connection = openConnection();
 
         // TODO: Make sure HTTP keep-alive will work
@@ -95,7 +106,7 @@ public class RPCClient {
             handleBadResponseCode(responseCode, connection);
         }
 
-        JsonRpcResponse responseJson = mapper.readValue(connection.getInputStream(), JsonRpcResponse.class);
+        JsonRpcResponse<R> responseJson = mapper.readValue(connection.getInputStream(), responseType);
         log.debug("Resp json: {}", responseJson);
         connection.disconnect();
         return responseJson;
@@ -134,19 +145,25 @@ public class RPCClient {
      * @param <R> Expected return type -- will match type of variable method result is assigned to
      * @return the 'result' field of the JSON RPC response
      */
-    protected <R> R send(String method, List<Object> params) throws IOException, JsonRPCStatusException {
+    protected <R> R send(String method, List<Object> params, Class<R> resultType) throws IOException, JsonRPCStatusException {
         JsonRpcRequest request = new JsonRpcRequest(method, params);
-        JsonRpcResponse<R> response =  send(request);
+        // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
+        // (We can't use R because of type erasure)
+        JavaType responseType = mapper.getTypeFactory().
+                constructParametrizedType(JsonRpcResponse.class, JsonRpcResponse.class, resultType);
+        JsonRpcResponse<R> response =  send(request, responseType);
 
 //        assert response != null;
-//        assert response.get("jsonrpc") != null;
-//        assert response.get("jsonrpc").equals("2.0");
-//        assert response.get("id") != null;
-//        assert response.get("id").equals(Long.toString(requestId++));
+//        assert response.getJsonrpc() != null;
+//        assert response.getJsonrpc().equals("2.0");
+//        assert response.getId() != null;
+//        assert response.getId().equals(request.getId());
 
-        @SuppressWarnings("unchecked")
-        R result = (R) response.getResult();
-        return result;
+        return response.getResult();
+    }
+
+    protected <R> R send(String method, List<Object> params) throws IOException, JsonRPCStatusException {
+        return (R) send(method, params, (Class<R>) Object.class);
     }
 
     /**

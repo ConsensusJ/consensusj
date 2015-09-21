@@ -40,4 +40,6 @@ public class JsonRpcResponse<R> {
     public void setId(String id) {
         this.id = id;
     }
+
+    // TODO: Add .toString() method for logging
 }
