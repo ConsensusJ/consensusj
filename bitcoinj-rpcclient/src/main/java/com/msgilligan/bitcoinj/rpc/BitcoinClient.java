@@ -4,9 +4,13 @@ package com.msgilligan.bitcoinj.rpc;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.msgilligan.bitcoinj.rpc.conversion.AddressSerializer;
 import com.msgilligan.bitcoinj.rpc.conversion.BitcoinMath;
 import com.msgilligan.bitcoinj.rpc.conversion.CoinDeserializer;
 import com.msgilligan.bitcoinj.rpc.conversion.CoinSerializer;
+import com.msgilligan.bitcoinj.rpc.conversion.Sha256HashDeserializer;
+import com.msgilligan.bitcoinj.rpc.conversion.Sha256HashSerializer;
+import com.msgilligan.bitcoinj.rpc.conversion.TransactionSerializer;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.Coin;
@@ -24,7 +28,6 @@ import java.net.SocketException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +76,11 @@ public class BitcoinClient extends RPCClient {
         ObjectMapper mapper = new ObjectMapper();
         SimpleModule testModule = new SimpleModule("BitcoinJMappingClient", new Version(1, 0, 0, null, null, null))
                 .addDeserializer(Coin.class, new CoinDeserializer())
-                .addSerializer(Coin.class, new CoinSerializer());
+                .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())
+                .addSerializer(Address.class, new AddressSerializer())
+                .addSerializer(Coin.class, new CoinSerializer())
+                .addSerializer(Sha256Hash.class, new Sha256HashSerializer())
+                .addSerializer(Transaction.class, new TransactionSerializer());
         mapper.registerModule(testModule);
         return mapper;
     }
@@ -209,8 +216,7 @@ public class BitcoinClient extends RPCClient {
      */
     public Sha256Hash getBlockHash(Integer index) throws JsonRPCException, IOException {
         List<Object> params = createParamList(index);
-        String hashStr = send("getblockhash", params);
-        Sha256Hash hash = Sha256Hash.wrap(hashStr);
+        Sha256Hash hash = send("getblockhash", params, Sha256Hash.class);
         return hash;
     }
 
@@ -222,7 +228,7 @@ public class BitcoinClient extends RPCClient {
      */
     public Map<String, Object> getBlock(Sha256Hash hash) throws JsonRPCException, IOException {
         // Use "verbose = true"
-        List<Object> params = createParamList(hash.toString(), true);
+        List<Object> params = createParamList(hash, true);
         Map<String, Object> json = send("getblock", params);
         return json;
     }
@@ -328,7 +334,7 @@ public class BitcoinClient extends RPCClient {
      * @return The private key
      */
     public ECKey dumpPrivKey(Address address) throws IOException, JsonRPCStatusException {
-        List<Object> params = createParamList(address.toString());
+        List<Object> params = createParamList(address);
         String base58Key = send("dumpprivkey", params);
         ECKey key;
         try {
@@ -374,7 +380,7 @@ public class BitcoinClient extends RPCClient {
         List<Map<String, Object>> inputsJson = new ArrayList<Map<String, Object>>();
         for (Outpoint outpoint : inputs) {
             Map<String, Object> outMap = new HashMap<String, Object>();
-            outMap.put("txid", outpoint.getTxid().toString());
+            outMap.put("txid", outpoint.getTxid());
             outMap.put("vout", outpoint.getVout());
             inputsJson.add(outMap);
         }
@@ -415,7 +421,7 @@ public class BitcoinClient extends RPCClient {
     }
 
     public byte[] getRawTransactionBytes(Sha256Hash txid) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(txid.toString());
+        List<Object> params = createParamList(txid);
         String hexEncoded = send("getrawtransaction", params);
         byte[] raw = BitcoinClient.hexStringToByteArray(hexEncoded);
         return raw;
@@ -423,7 +429,7 @@ public class BitcoinClient extends RPCClient {
 
     /* TODO: Return a stronger type than an a Map? */
     public Map<String, Object> getRawTransactionMap(Sha256Hash txid) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(txid.toString(), 1);
+        List<Object> params = createParamList(txid, 1);
         Map<String, Object> json = send("getrawtransaction", params);
         return json;
     }
@@ -437,14 +443,14 @@ public class BitcoinClient extends RPCClient {
     }
 
     public Sha256Hash sendRawTransaction(Transaction tx, Boolean allowHighFees) throws JsonRPCException, IOException {
-        String hexTx = transactionToHex(tx);
-        return sendRawTransaction(hexTx, allowHighFees);
+        List<Object> params = createParamList(tx, allowHighFees);
+        Sha256Hash hash = send("sendrawtransaction", params, Sha256Hash.class);
+        return hash;
     }
 
     public Sha256Hash sendRawTransaction(String hexTx, Boolean allowHighFees) throws JsonRPCException, IOException {
         List<Object> params = createParamList(hexTx, allowHighFees);
-        String txid = send("sendrawtransaction", params);
-        Sha256Hash hash = Sha256Hash.wrap(txid);
+        Sha256Hash hash = send("sendrawtransaction", params, Sha256Hash.class);
         return hash;
     }
 
@@ -462,7 +468,7 @@ public class BitcoinClient extends RPCClient {
      * @throws IOException
      */
     public Coin getReceivedByAddress(Address address, Integer minConf) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(address.toString(), minConf);
+        List<Object> params = createParamList(address, minConf);
         Coin balance = send("getreceivedbyaddress", params, Coin.class);
         return balance;
     }
@@ -507,12 +513,7 @@ public class BitcoinClient extends RPCClient {
      */
     public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, Iterable<Address> filter)
             throws JsonRPCException, IOException {
-        List<String> addressFilter = null;
-        if (filter != null) {
-            addressFilter = applyToString(filter);
-        }
-
-        List<Object> params = createParamList(minConf, maxConf, addressFilter);
+        List<Object> params = createParamList(minConf, maxConf, filter);
         List<Map<String, Object>> unspentMaps = send("listunspent", params);
         List<UnspentOutput> unspent = new ArrayList<UnspentOutput>();
         for (Map<String, Object> uoMap : unspentMaps) {
@@ -558,7 +559,7 @@ public class BitcoinClient extends RPCClient {
      */
     public Map<String, Object> getTxOut(Sha256Hash txid, Integer vout, Boolean includeMemoryPool)
             throws JsonRPCException, IOException {
-        List<Object> params = createParamList(txid.toString(), vout, includeMemoryPool);
+        List<Object> params = createParamList(txid, vout, includeMemoryPool);
         Map<String, Object> json = send("gettxout", params);
         return json;
     }
@@ -601,24 +602,21 @@ public class BitcoinClient extends RPCClient {
 
     public Sha256Hash sendToAddress(Address address, Coin amount, String comment, String commentTo)
             throws JsonRPCException, IOException {
-        List<Object> params = createParamList(address.toString(), amount, comment, commentTo);
-        String txid = send("sendtoaddress", params);
-        Sha256Hash hash = Sha256Hash.wrap(txid);
+        List<Object> params = createParamList(address, amount, comment, commentTo);
+        Sha256Hash hash = send("sendtoaddress", params, Sha256Hash.class);
         return hash;
     }
 
     public Sha256Hash sendFrom(String account, Address address, Coin amount)
             throws JsonRPCException, IOException {
-        List<Object> params = createParamList(account, address.toString(), amount);
-        String txid = send("sendfrom", params);
-        Sha256Hash hash = Sha256Hash.wrap(txid);
+        List<Object> params = createParamList(account, address, amount);
+        Sha256Hash hash = send("sendfrom", params, Sha256Hash.class);
         return hash;
     }
 
     public Sha256Hash sendMany(String account, Map<Address, Coin> amounts) throws JsonRPCException, IOException {
         List<Object> params = Arrays.asList(account, amounts);
-        String txid = send("sendmany", params);
-        Sha256Hash hash = Sha256Hash.wrap(txid);
+        Sha256Hash hash = send("sendmany", params, Sha256Hash.class);
         return hash;
     }
 
@@ -635,7 +633,7 @@ public class BitcoinClient extends RPCClient {
     }
 
     public Map<String, Object> getTransaction(Sha256Hash txid) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(txid.toString());
+        List<Object> params = createParamList(txid);
         Map<String, Object> transaction = send("gettransaction", params);
         return transaction;
     }
@@ -708,7 +706,7 @@ public class BitcoinClient extends RPCClient {
      * @since Bitcoin Core 0.10
      */
     public void invalidateBlock(Sha256Hash hash) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(hash.toString());
+        List<Object> params = createParamList(hash);
         send("invalidateblock", params);
     }
 
@@ -721,7 +719,7 @@ public class BitcoinClient extends RPCClient {
      * @since Bitcoin Core 0.10
      */
     public void reconsiderBlock(Sha256Hash hash) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(hash.toString());
+        List<Object> params = createParamList(hash);
         send("reconsiderblock", params);
     }
 
@@ -769,38 +767,4 @@ public class BitcoinClient extends RPCClient {
         }
         return data;
     }
-
-    /**
-     * Converts a transaction into a hex-encoded string.
-     *
-     * @param tx A transaction object
-     * @return The hex-encoded string
-     */
-    private String transactionToHex(Transaction tx) {
-        // From: http://bitcoin.stackexchange.com/questions/8475/how-to-get-hex-string-from-transaction-in-bitcoinj
-        final StringBuilder sb = new StringBuilder();
-        Formatter formatter = new Formatter(sb);
-        byte[] bytes = tx.bitcoinSerialize();
-        for (byte b : bytes) {
-            formatter.format("%02x", b);
-        }
-        formatter.close();
-        return sb.toString();
-    }
-
-    /**
-     * Applies toString() to every element of {@code elements} and returns a list of the results.
-     *
-     * @param elements The elements
-     * @return The list of strings
-     */
-    private <T> List<String> applyToString(Iterable<T> elements) {
-        List<String> stringList = new ArrayList<String>();
-        for (T element : elements) {
-            String elementAsString = element.toString();
-            stringList.add(elementAsString);
-        }
-        return stringList;
-    }
-
 }
