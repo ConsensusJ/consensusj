@@ -3,9 +3,9 @@ package com.msgilligan.bitcoinj.rpc;
 /**
  * JSON-RPC Response POJO
  */
-public class JsonRpcResponse {
+public class JsonRpcResponse<R> {
     private String          jsonrpc;   // version
-    private Object          result;
+    private R               result;
     private JsonRpcError    error;
     private String          id;
 
@@ -17,11 +17,11 @@ public class JsonRpcResponse {
         this.jsonrpc = jsonrpc;
     }
 
-    public Object getResult() {
+    public R getResult() {
         return result;
     }
 
-    public void setResult(Object result) {
+    public void setResult(R result) {
         this.result = result;
     }
 
@@ -40,5 +40,4 @@ public class JsonRpcResponse {
     public void setId(String id) {
         this.id = id;
     }
-
 }

@@ -131,12 +131,12 @@ public class RPCClient {
      *
      * @param method JSON RPC method call to send
      * @param params JSON RPC params
-     * @param <T> Expected return type -- will match type of variable method result is assigned to
+     * @param <R> Expected return type -- will match type of variable method result is assigned to
      * @return the 'result' field of the JSON RPC response
      */
-    protected <T> T send(String method, List<Object> params) throws IOException, JsonRPCStatusException {
+    protected <R> R send(String method, List<Object> params) throws IOException, JsonRPCStatusException {
         JsonRpcRequest request = new JsonRpcRequest(method, params);
-        JsonRpcResponse response =  send(request);
+        JsonRpcResponse<R> response =  send(request);
 
 //        assert response != null;
 //        assert response.get("jsonrpc") != null;
@@ -145,7 +145,7 @@ public class RPCClient {
 //        assert response.get("id").equals(Long.toString(requestId++));
 
         @SuppressWarnings("unchecked")
-        T result = (T) response.getResult();
+        R result = (R) response.getResult();
         return result;
     }
 
