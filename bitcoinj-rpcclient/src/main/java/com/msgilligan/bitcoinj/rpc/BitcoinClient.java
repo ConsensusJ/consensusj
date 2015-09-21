@@ -532,7 +532,7 @@ public class BitcoinClient extends RPCClient {
             Double amountDb = (Double) uoMap.get("amount");
             BigDecimal amount = BigDecimal.valueOf(amountDb);
             int confirmations = (Integer) uoMap.get("confirmations");
-            UnspentOutput uo = new UnspentOutput(txid, vout, addr, account, scriptPubKey, amount, confirmations);
+            UnspentOutput uo = new UnspentOutput(txid, vout, addr, account, scriptPubKey, BitcoinMath.btcToCoin(amount), confirmations);
             unspent.add(uo);
         }
         return unspent;
