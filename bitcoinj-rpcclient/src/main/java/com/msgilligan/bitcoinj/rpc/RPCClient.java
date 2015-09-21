@@ -91,40 +91,39 @@ public class RPCClient {
         int responseCode = connection.getResponseCode();
         log.debug("Response code: {}", responseCode);
 
-        JsonRpcResponse responseJson;
-        if (responseCode == 200) {
-            // Read JSON and return responseJson
-            responseJson = mapper.readValue(connection.getInputStream(), JsonRpcResponse.class);
-        } else {
-            // Prepare and throw JsonRPCStatusException with all relevant info
-            String responseMessage = connection.getResponseMessage();
-            String exceptionMessage = responseMessage;
-            int jsonRPCCode = 0;
-            JsonRpcResponse bodyJson = null;    // Body as JSON if available
-            String bodyString = null;               // Body as String if not JSON
-            if (connection.getContentType().equals("application/json")) {
-                // We got a JSON error response, parse it
-                bodyJson = mapper.readValue(connection.getErrorStream(), JsonRpcResponse.class);
-                JsonRpcError error = bodyJson.getError();
-                if (error != null) {
-                    // If there's a more specific message in the JSON use it instead.
-                    exceptionMessage = error.getMessage();
-                    jsonRPCCode = error.getCode();
-                }
-            } else {
-                // No JSON, read response body as string
-                InputStream errorStream = connection.getErrorStream();
-                bodyString = new Scanner(errorStream,"UTF-8").useDelimiter("\\A").next();
-                errorStream.close();
-            }
-            throw new JsonRPCStatusException(exceptionMessage, responseCode, responseMessage, jsonRPCCode, bodyString, bodyJson);
+        if (responseCode != 200) {
+            handleBadResponseCode(responseCode, connection);
         }
 
+        JsonRpcResponse responseJson = mapper.readValue(connection.getInputStream(), JsonRpcResponse.class);
         log.debug("Resp json: {}", responseJson);
-
         connection.disconnect();
-
         return responseJson;
+    }
+
+    // Prepare and throw JsonRPCStatusException with all relevant info
+    private void handleBadResponseCode(int responseCode, HttpURLConnection connection) throws IOException, JsonRPCStatusException {
+        String responseMessage = connection.getResponseMessage();
+        String exceptionMessage = responseMessage;
+        int jsonRPCCode = 0;
+        JsonRpcResponse bodyJson = null;    // Body as JSON if available
+        String bodyString = null;               // Body as String if not JSON
+        if (connection.getContentType().equals("application/json")) {
+            // We got a JSON error response, parse it
+            bodyJson = mapper.readValue(connection.getErrorStream(), JsonRpcResponse.class);
+            JsonRpcError error = bodyJson.getError();
+            if (error != null) {
+                // If there's a more specific message in the JSON use it instead.
+                exceptionMessage = error.getMessage();
+                jsonRPCCode = error.getCode();
+            }
+        } else {
+            // No JSON, read response body as string
+            InputStream errorStream = connection.getErrorStream();
+            bodyString = new Scanner(errorStream,"UTF-8").useDelimiter("\\A").next();
+            errorStream.close();
+        }
+        throw new JsonRPCStatusException(exceptionMessage, responseCode, responseMessage, jsonRPCCode, bodyString, bodyJson);
     }
 
     /**
