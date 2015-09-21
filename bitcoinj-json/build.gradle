@@ -4,7 +4,7 @@ dependencies {
 
     // Temporary - JSON module shouldn't have dependency on Spring, but for now we need it
     // for the PeerService
-    compile "org.springframework.boot:spring-boot-starter-websocket:1.3.0.M2"
+    compile "org.springframework.boot:spring-boot-starter-websocket:1.3.0.M5"
 
     testCompile("junit:junit:4.11")
 }

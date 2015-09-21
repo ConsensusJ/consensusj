@@ -6,8 +6,8 @@ plugins {
 sourceCompatibility = 1.7
 
 dependencies {
-    compile 'com.fasterxml.jackson.core:jackson-core:2.3.2'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.6.1'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
 
     compile "org.codehaus.groovy:groovy:${groovyVersion}"
     compile "org.codehaus.groovy:groovy-json:${groovyVersion}"
