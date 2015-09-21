@@ -20,8 +20,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -35,7 +33,6 @@ public class RPCClient {
     private String username;
     private String password;
     private ObjectMapper mapper;
-    private long requestId;
     private static final boolean disableSslVerification = true;
 
     static {
@@ -60,7 +57,6 @@ public class RPCClient {
         serverURI = server;
         username = rpcuser;
         password = rpcpassword;
-        requestId = 0;
         mapper = new ObjectMapper();
     }
 
@@ -71,12 +67,12 @@ public class RPCClient {
     /**
      * Send a JSON-RPC request to the server and return a JSON-RPC response.
      *
-     * @param request JSON-RPC request in Map format
+     * @param request JSON-RPC request
      * @return JSON-RPC response
      * @throws IOException when thrown by the underlying HttpURLConnection
      * @throws JsonRPCStatusException when the HTTP response code is other than 200
      */
-    private Map<String, Object> send(Map<String, Object> request) throws IOException, JsonRPCStatusException {
+    private JsonRpcResponse send(JsonRpcRequest request) throws IOException, JsonRPCStatusException {
         HttpURLConnection connection = openConnection();
 
         // TODO: Make sure HTTP keep-alive will work
@@ -95,30 +91,25 @@ public class RPCClient {
         int responseCode = connection.getResponseCode();
         log.debug("Response code: {}", responseCode);
 
-        Map<String, Object> responseJson;
+        JsonRpcResponse responseJson;
         if (responseCode == 200) {
             // Read JSON and return responseJson
-            @SuppressWarnings("unchecked")
-            Map<String,Object> response = mapper.readValue(connection.getInputStream(), Map.class);
-            responseJson = response;
+            responseJson = mapper.readValue(connection.getInputStream(), JsonRpcResponse.class);
         } else {
             // Prepare and throw JsonRPCStatusException with all relevant info
             String responseMessage = connection.getResponseMessage();
             String exceptionMessage = responseMessage;
-            Integer jsonRPCCode = 0;
-            Map<String,Object> bodyJson = null;    // Body as JSON if available
+            int jsonRPCCode = 0;
+            JsonRpcResponse bodyJson = null;    // Body as JSON if available
             String bodyString = null;               // Body as String if not JSON
             if (connection.getContentType().equals("application/json")) {
                 // We got a JSON error response, parse it
-                @SuppressWarnings("unchecked")
-                Map<String, Object>  body = mapper.readValue(connection.getErrorStream(), Map.class);
-                bodyJson = body;
-                @SuppressWarnings("unchecked")
-                Map <String, Object> error = (Map <String, Object>) bodyJson.get("error");
+                bodyJson = mapper.readValue(connection.getErrorStream(), JsonRpcResponse.class);
+                JsonRpcError error = bodyJson.getError();
                 if (error != null) {
                     // If there's a more specific message in the JSON use it instead.
-                    exceptionMessage = (String) error.get("message");
-                    jsonRPCCode = (Integer) error.get("code");
+                    exceptionMessage = error.getMessage();
+                    jsonRPCCode = error.getCode();
                 }
             } else {
                 // No JSON, read response body as string
@@ -145,18 +136,8 @@ public class RPCClient {
      * @return the 'result' field of the JSON RPC response
      */
     protected <T> T send(String method, List<Object> params) throws IOException, JsonRPCStatusException {
-        Map<String, Object> request = new HashMap<String, Object>();
-        request.put("jsonrpc", "1.0");
-        request.put("method", method);
-        request.put("id", Long.toString(requestId));
-
-        if (params != null) {
-            // TODO: Should only remove nulls from the end
-            params.removeAll(Collections.singleton(null));  // Remove null entries (should only be at end)
-        }
-        request.put("params", params);
-
-        Map<String, Object> response = send(request);
+        JsonRpcRequest request = new JsonRpcRequest(method, params);
+        JsonRpcResponse response =  send(request);
 
 //        assert response != null;
 //        assert response.get("jsonrpc") != null;
@@ -164,9 +145,8 @@ public class RPCClient {
 //        assert response.get("id") != null;
 //        assert response.get("id").equals(Long.toString(requestId++));
 
-        requestId++;
         @SuppressWarnings("unchecked")
-        T result = (T) response.get("result");
+        T result = (T) response.getResult();
         return result;
     }
 

@@ -11,7 +11,7 @@ public class JsonRPCStatusException extends JsonRPCException {
     public final int httpCode;
     public final int jsonRPCCode;
     public final String response;
-    public final Map<String, Object> responseJson;
+    public final JsonRpcResponse responseJson;
 
     /**
      * Default Constructor
@@ -23,7 +23,7 @@ public class JsonRPCStatusException extends JsonRPCException {
      * @param responseBody responseBody body as string
      * @param responseBodyJson responseBody body as Json Map
      */
-    public JsonRPCStatusException(String message, int httpCode, String httpMessage, int jsonRPCCode, String responseBody, Map<String, Object> responseBodyJson ) {
+    public JsonRPCStatusException(String message, int httpCode, String httpMessage, int jsonRPCCode, String responseBody, JsonRpcResponse responseBodyJson ) {
         super(message);
         this.httpCode = httpCode;
         this.httpMessage = httpMessage;
