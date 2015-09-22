@@ -1,14 +1,14 @@
 package com.msgilligan.bitcoinj.rpc;
 
-import com.msgilligan.bitcoinj.rpc.conversion.BitcoinMath;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Sha256Hash;
 
-import java.math.BigDecimal;
-
 /**
  * Data class for UnspentOutput as returned by listUnspent RPC
+ * Because the class is immutable we have to give Jackson some hints via annotations.
  */
 public class UnspentOutput {
     private final Sha256Hash  txid;
@@ -18,13 +18,17 @@ public class UnspentOutput {
     private final String      scriptPubKey;
     private final Coin        amount;
     private final int         confirmations;
+    private final boolean     spendable;
 
-    @Deprecated
-    public UnspentOutput(Sha256Hash txid, int vout, Address address, String account, String scriptPubKey, BigDecimal amount, int confirmations) {
-        this(txid, vout, address, account, scriptPubKey, BitcoinMath.btcToCoin(amount), confirmations);
-    }
-
-    public UnspentOutput(Sha256Hash txid, int vout, Address address, String account, String scriptPubKey, Coin amount, int confirmations) {
+    @JsonCreator
+    public UnspentOutput(@JsonProperty("txid")          Sha256Hash  txid,
+                         @JsonProperty("vout")          int         vout,
+                         @JsonProperty("address")       Address     address,
+                         @JsonProperty("account")       String      account,
+                         @JsonProperty("scriptPubKey")  String      scriptPubKey,
+                         @JsonProperty("amount")        Coin        amount,
+                         @JsonProperty("confirmations") int         confirmations,
+                         @JsonProperty("spendable")     boolean     spendable) {
         this.txid = txid;
         this.vout = vout;
         this.address = address;
@@ -32,6 +36,7 @@ public class UnspentOutput {
         this.scriptPubKey = scriptPubKey;
         this.amount = amount;
         this.confirmations = confirmations;
+        this.spendable = spendable;
     }
 
     public Sha256Hash getTxid() {
@@ -61,4 +66,6 @@ public class UnspentOutput {
     public int getConfirmations() {
         return confirmations;
     }
+
+    public boolean getSpendable() { return spendable; }
 }

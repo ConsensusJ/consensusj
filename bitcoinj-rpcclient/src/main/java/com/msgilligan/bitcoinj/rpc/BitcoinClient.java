@@ -466,27 +466,7 @@ public class BitcoinClient extends RPCClient {
     public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, Iterable<Address> filter)
             throws JsonRPCException, IOException {
         List<Object> params = createParamList(minConf, maxConf, filter);
-        List<Map<String, Object>> unspentMaps = send("listunspent", params);
-        List<UnspentOutput> unspent = new ArrayList<UnspentOutput>();
-        for (Map<String, Object> uoMap : unspentMaps) {
-            String txstr = (String) uoMap.get("txid");
-            Sha256Hash txid = Sha256Hash.wrap(txstr);
-            int vout = (Integer) uoMap.get("vout");
-            String addrStr = (String) uoMap.get("address");
-            Address addr = null;
-            try {
-                addr = new Address(null, addrStr);
-            } catch (AddressFormatException e) {
-                e.printStackTrace();
-            }
-            String account = (String) uoMap.get("account");
-            String scriptPubKey = (String) uoMap.get("scriptPubKey");
-            Double amountDb = (Double) uoMap.get("amount");
-            BigDecimal amount = BigDecimal.valueOf(amountDb);
-            int confirmations = (Integer) uoMap.get("confirmations");
-            UnspentOutput uo = new UnspentOutput(txid, vout, addr, account, scriptPubKey, BitcoinMath.btcToCoin(amount), confirmations);
-            unspent.add(uo);
-        }
+        List<UnspentOutput> unspent = send("listunspent", params, mapper.getTypeFactory().constructCollectionType(List.class, UnspentOutput.class));
         return unspent;
     }
 

@@ -32,7 +32,7 @@ public class RPCClient {
     private URI serverURI;
     private String username;
     private String password;
-    private ObjectMapper mapper;
+    protected ObjectMapper mapper;
     private static final boolean disableSslVerification = true;
 
     static {
@@ -158,6 +158,17 @@ public class RPCClient {
 //        assert response.getJsonrpc().equals("2.0");
 //        assert response.getId() != null;
 //        assert response.getId().equals(request.getId());
+
+        return response.getResult();
+    }
+
+    protected <R> R send(String method, List<Object> params, JavaType resultType) throws IOException, JsonRPCStatusException {
+        JsonRpcRequest request = new JsonRpcRequest(method, params);
+        // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
+        // (We can't use R because of type erasure)
+        JavaType responseType = mapper.getTypeFactory().
+                constructParametrizedType(JsonRpcResponse.class, JsonRpcResponse.class, resultType);
+        JsonRpcResponse<R> response =  send(request, responseType);
 
         return response.getResult();
     }
