@@ -666,12 +666,7 @@ public class BitcoinClient extends RPCClient {
      * @return A list of transaction hashes of the removed transactions
      */
     public List<Sha256Hash> clearMemPool() throws JsonRPCException, IOException {
-        List<String> hashesStr = send("clearmempool", null);
-        List<Sha256Hash> hashes = new ArrayList<Sha256Hash>();
-        for (String s : hashesStr) {
-            Sha256Hash hash = Sha256Hash.wrap(s);
-            hashes.add(hash);
-        }
+        List<Sha256Hash> hashes = send("clearmempool", null, mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class));
         return hashes;
     }
 
