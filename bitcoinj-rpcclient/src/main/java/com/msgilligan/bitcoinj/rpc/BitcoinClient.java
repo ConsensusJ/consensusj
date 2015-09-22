@@ -359,28 +359,25 @@ public class BitcoinClient extends RPCClient {
         if (verbose) {
             result = getRawTransactionMap(txid);    // Verbose means JSON
         } else {
-            result = getRawTransactionBytes(txid);  // Not-verbose is Binary
+            result = getRawTransaction(txid);  // Not-verbose is bitcoinj Transaction
         }
         return result;
     }
 
-    /* Return a BitcoinJ Transaction type */
+    /**
+     *  Return a BitcoinJ Transaction type
+     */
     public Transaction getRawTransaction(Sha256Hash txid) throws JsonRPCException, IOException {
-        byte[] raw = getRawTransactionBytes(txid);
+        List<Object> params = createParamList(txid);
+        String hexEncoded = send("getrawtransaction", params);
+        byte[] raw = BitcoinClient.hexStringToByteArray(hexEncoded);
         // Hard-code RegTest for now
-        // TODO: All RPC client connections should have a BitcoinJ params object?
+        // TODO: All RPC client connections should have a BitcoinJ NetworkParameters object?
         Transaction tx = new Transaction(RegTestParams.get(), raw);
         return tx;
     }
 
-    public byte[] getRawTransactionBytes(Sha256Hash txid) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(txid);
-        String hexEncoded = send("getrawtransaction", params);
-        byte[] raw = BitcoinClient.hexStringToByteArray(hexEncoded);
-        return raw;
-    }
-
-    /* TODO: Return a stronger type than an a Map? */
+    /* TODO: Return a stronger type than an a Map? Or maybe we always/only return bitcoinj Transaction? */
     public Map<String, Object> getRawTransactionMap(Sha256Hash txid) throws JsonRPCException, IOException {
         List<Object> params = createParamList(txid, 1);
         Map<String, Object> json = send("getrawtransaction", params);
