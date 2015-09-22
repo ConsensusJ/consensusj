@@ -22,7 +22,7 @@ public class Sha256HashDeserializer  extends JsonDeserializer<Sha256Hash> {
             case VALUE_STRING:
                 return Sha256Hash.wrap(p.getValueAsString());
             default:
-                throw ctxt.mappingException(Object.class, token);
+                throw ctxt.mappingException(Sha256Hash.class, token);
         }
     }
 }

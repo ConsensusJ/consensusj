@@ -7,7 +7,7 @@ import org.bitcoinj.core.Sha256Hash;
  */
 public class Outpoint {
     private final Sha256Hash txid;
-    private final int         vout;
+    private final int        vout;
 
     public Outpoint(Sha256Hash txid, int vout) {
         this.txid = txid;
