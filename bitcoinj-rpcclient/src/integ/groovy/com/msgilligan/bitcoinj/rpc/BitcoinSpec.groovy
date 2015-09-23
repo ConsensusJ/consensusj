@@ -2,6 +2,7 @@ package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.BaseRegTestSpec
 import org.bitcoinj.core.Coin
+import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.params.RegTestParams
 
 class BitcoinSpec extends BaseRegTestSpec {
@@ -31,12 +32,16 @@ class BitcoinSpec extends BaseRegTestSpec {
     def "Use RegTest mode to generate a block upon request"() {
         given: "a certain starting height"
         def startHeight = blockCount
+        def version10 = getInfo().version > 100000
 
         when: "we generate 1 new block"
-        generateBlock()
+        def result = generateBlock()
 
         then: "the block height is 1 higher"
         blockCount == startHeight + 1
+
+        and: "We have a txid if version > 10"
+        !version10 || version10 && result.size() == 1 && result[0] instanceof Sha256Hash
     }
 
     def "When we send an amount to a newly created address, it arrives"() {
