@@ -1,10 +1,9 @@
 package com.msgilligan.bitcoinj.cli;
 
 import com.msgilligan.bitcoinj.rpc.JsonRPCException;
-import com.msgilligan.bitcoinj.rpc.ServerInfo;
+import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * A command-line client that prints some basic information retrieved via RPC

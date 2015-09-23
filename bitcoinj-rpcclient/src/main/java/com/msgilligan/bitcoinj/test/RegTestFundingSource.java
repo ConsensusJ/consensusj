@@ -1,12 +1,11 @@
 package com.msgilligan.bitcoinj.test;
 
-import com.msgilligan.bitcoinj.rpc.BitcoinClient;
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
 import com.msgilligan.bitcoinj.rpc.JsonRPCException;
-import com.msgilligan.bitcoinj.rpc.Outpoint;
-import com.msgilligan.bitcoinj.rpc.SignedRawTransaction;
-import com.msgilligan.bitcoinj.rpc.TxOutInfo;
-import com.msgilligan.bitcoinj.rpc.UnspentOutput;
+import com.msgilligan.bitcoinj.json.pojo.Outpoint;
+import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
+import com.msgilligan.bitcoinj.json.pojo.TxOutInfo;
+import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
 import com.msgilligan.bitcoinj.rpc.conversion.BitcoinMath;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Block;
@@ -18,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

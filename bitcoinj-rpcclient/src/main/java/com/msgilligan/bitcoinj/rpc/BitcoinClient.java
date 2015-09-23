@@ -1,6 +1,13 @@
 package com.msgilligan.bitcoinj.rpc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.msgilligan.bitcoinj.json.pojo.ChainTip;
+import com.msgilligan.bitcoinj.json.pojo.Outpoint;
+import com.msgilligan.bitcoinj.json.pojo.ReceivedByAddressInfo;
+import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
+import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
+import com.msgilligan.bitcoinj.json.pojo.TxOutInfo;
+import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
 import com.msgilligan.bitcoinj.rpc.conversion.RpcClientModule;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Block;

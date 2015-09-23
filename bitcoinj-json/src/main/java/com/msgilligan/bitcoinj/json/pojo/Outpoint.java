@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.rpc;
+package com.msgilligan.bitcoinj.json.pojo;
 
 import org.bitcoinj.core.Sha256Hash;
 

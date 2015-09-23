@@ -13,8 +13,8 @@ buildscript {
 apply plugin: 'spring-boot'
 
 archivesBaseName = 'bicoinj-daemon'
-
 sourceCompatibility = 1.8
+
 idea {
     module {
         jdkName = '1.8'
@@ -23,7 +23,7 @@ idea {
 }
 
 dependencies {
-    compile project(':bitcoinj-json')
+    compile project(':bitcoinj-server')
 
     compile "org.springframework.boot:spring-boot-starter-web"
 

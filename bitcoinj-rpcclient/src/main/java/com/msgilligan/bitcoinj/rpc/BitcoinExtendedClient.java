@@ -1,5 +1,8 @@
 package com.msgilligan.bitcoinj.rpc;
 
+import com.msgilligan.bitcoinj.json.pojo.Outpoint;
+import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
+import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.ECKey;
@@ -168,7 +171,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      */
     public Sha256Hash sendBitcoin(Address fromAddress, Map<Address, Coin> outputs) throws JsonRPCException, IOException {
         String unsignedTxHex = createRawTransaction(fromAddress, outputs);
-        SignedRawTransaction  signingResult = signRawTransaction(unsignedTxHex);
+        SignedRawTransaction signingResult = signRawTransaction(unsignedTxHex);
 
         Boolean complete = signingResult.isComplete();
         assert complete;

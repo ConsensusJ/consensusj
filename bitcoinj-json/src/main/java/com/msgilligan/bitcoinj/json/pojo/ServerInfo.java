@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.rpc;
+package com.msgilligan.bitcoinj.json.pojo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
