@@ -669,8 +669,9 @@ public class BitcoinClient extends RPCClient {
      * @return A list of chain tip information
      * @since Bitcoin Core 0.10
      */
-    public List<Map<String, Object>> getChainTips() throws JsonRPCException, IOException {
-        List<Map<String, Object>> tips = send("getchaintips", null);
+    public List<ChainTip> getChainTips() throws JsonRPCException, IOException {
+        List<ChainTip> tips = send("getchaintips", null,
+                mapper.getTypeFactory().constructCollectionType(List.class, ChainTip.class));
         return tips;
     }
 
@@ -683,7 +684,8 @@ public class BitcoinClient extends RPCClient {
      * @return A list of transaction hashes of the removed transactions
      */
     public List<Sha256Hash> clearMemPool() throws JsonRPCException, IOException {
-        List<Sha256Hash> hashes = send("clearmempool", null, mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class));
+        List<Sha256Hash> hashes = send("clearmempool", null,
+                mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class));
         return hashes;
     }
 

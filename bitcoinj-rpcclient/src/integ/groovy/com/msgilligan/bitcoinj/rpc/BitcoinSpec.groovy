@@ -94,4 +94,17 @@ class BitcoinSpec extends BaseRegTestSpec {
         then: "when we convert the dumped key to an address we get the same address"
         key.toAddress(netParams) == address
     }
+
+    def "We can get information about chain tips"() {
+        when:
+        def tips = getChainTips()
+
+        then:
+        tips != null
+        tips.size() == 1
+        tips[0].branchlen == 0
+        tips[0].hash instanceof Sha256Hash
+        tips[0].height > 0
+        tips[0].status == "active"
+    }
 }
