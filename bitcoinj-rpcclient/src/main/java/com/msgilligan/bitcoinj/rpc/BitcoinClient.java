@@ -240,22 +240,30 @@ public class BitcoinClient extends RPCClient {
      * @param generate        turn generation on or off
      * @param genproclimit    Generation is limited to [genproclimit] processors, -1 is unlimited
      *                        in regtest mode genproclimit is number of blocks to generate immediately
-     * @return Object         Bitcoin 0.10.0+: An array containing the block header hashes of the generated blocks or null
+     * @return List<Sha256Hash>  Bitcoin 0.10.0+: list containing  block header hashes of the generated blocks or empty list
      *                        if no blocks were generated
-     *                        Bitcoin 0.9.x: null
+     *                        Bitcoin 0.9.x: Empty list
      *
      */
-    public Object setGenerate(Boolean generate, Long genproclimit) throws JsonRPCException, IOException {
+    public List<Sha256Hash> setGenerate(Boolean generate, Long genproclimit) throws JsonRPCException, IOException {
         List<Object> params = createParamList(generate, genproclimit);
+        // TODO: When we drop support for Bitcoin 0.9.x we can use automatic Jackson mapping here
+        List<Sha256Hash> hashes = new ArrayList<Sha256Hash>();
         Object result = send("setgenerate", params);
-        return result;
+        if (result != null) {
+            List<String> stringList = (List<String>) result;
+            for (String hashString : stringList) {
+                hashes.add(Sha256Hash.wrap(hashString));
+            }
+        }
+        return hashes;
     }
 
     /**
      * Convenience method for generating a single block when in RegTest mode
      * @see BitcoinClient#generateBlocks(Long blocks)
      */
-    public Object generateBlock() throws JsonRPCException, IOException {
+    public List<Sha256Hash> generateBlock() throws JsonRPCException, IOException {
         return generateBlocks(1L);
     }
 
@@ -265,7 +273,7 @@ public class BitcoinClient extends RPCClient {
      * @param blocks number of blocks to generate
      * @see BitcoinClient#setGenerate(Boolean, Long)
      */
-    public Object generateBlocks(Long blocks) throws JsonRPCException, IOException {
+    public List<Sha256Hash> generateBlocks(Long blocks) throws JsonRPCException, IOException {
         return setGenerate(true, blocks);
     }
 
