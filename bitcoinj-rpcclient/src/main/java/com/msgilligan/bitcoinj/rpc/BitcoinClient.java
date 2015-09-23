@@ -1,6 +1,5 @@
 package com.msgilligan.bitcoinj.rpc;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.msgilligan.bitcoinj.rpc.conversion.RpcClientModule;
 import org.bitcoinj.core.Address;
@@ -438,10 +437,11 @@ public class BitcoinClient extends RPCClient {
         return send("getreceivedbyaddress", params, Coin.class);
     }
 
-    public List<Object> listReceivedByAddress(Integer minConf, Boolean includeEmpty)
+    public List<ReceivedByAddressInfo> listReceivedByAddress(Integer minConf, Boolean includeEmpty)
             throws JsonRPCException, IOException {
         List<Object> params = createParamList(minConf, includeEmpty);
-        List<Object> addresses = send("listreceivedbyaddress", params);
+        List<ReceivedByAddressInfo> addresses = send("listreceivedbyaddress", params,
+                mapper.getTypeFactory().constructCollectionType(List.class, ReceivedByAddressInfo.class));
         return addresses;
     }
 
@@ -479,7 +479,8 @@ public class BitcoinClient extends RPCClient {
     public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, Iterable<Address> filter)
             throws JsonRPCException, IOException {
         List<Object> params = createParamList(minConf, maxConf, filter);
-        List<UnspentOutput> unspent = send("listunspent", params, mapper.getTypeFactory().constructCollectionType(List.class, UnspentOutput.class));
+        List<UnspentOutput> unspent = send("listunspent", params,
+                mapper.getTypeFactory().constructCollectionType(List.class, UnspentOutput.class));
         return unspent;
     }
 

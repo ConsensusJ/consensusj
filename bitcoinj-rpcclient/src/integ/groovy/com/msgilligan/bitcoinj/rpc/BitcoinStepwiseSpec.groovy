@@ -53,4 +53,15 @@ class BitcoinStepwiseSpec extends BaseRegTestSpec {
         getBitcoinBalance(wealthyAddress) == wealthyStartBalance - testAmount - stdTxFee
     }
 
+    def "wealthyAddress shows up in listreceivedbyaddress"() {
+        when:
+        def result = listReceivedByAddress(1, false)
+        def found = result.find { it.address == wealthyAddress }
+
+        then:
+        found != null
+        found.account == testAccount1Name
+        found.address == wealthyAddress
+    }
+
 }
