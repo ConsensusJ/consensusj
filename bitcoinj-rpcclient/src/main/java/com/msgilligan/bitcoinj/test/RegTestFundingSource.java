@@ -4,12 +4,16 @@ import com.msgilligan.bitcoinj.rpc.BitcoinClient;
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
 import com.msgilligan.bitcoinj.rpc.JsonRPCException;
 import com.msgilligan.bitcoinj.rpc.Outpoint;
+import com.msgilligan.bitcoinj.rpc.SignedRawTransaction;
+import com.msgilligan.bitcoinj.rpc.TxOutInfo;
 import com.msgilligan.bitcoinj.rpc.UnspentOutput;
 import com.msgilligan.bitcoinj.rpc.conversion.BitcoinMath;
 import org.bitcoinj.core.Address;
+import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.core.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +30,7 @@ import java.util.Map;
 public class RegTestFundingSource implements FundingSource {
     final Integer defaultMaxConf = 9999999;
     private static final Logger log = LoggerFactory.getLogger(RegTestFundingSource.class);
-    private BitcoinExtendedClient client;
+    protected BitcoinExtendedClient client;
 
     public RegTestFundingSource(BitcoinExtendedClient client) {
         this.client = client;
@@ -61,33 +65,31 @@ public class RegTestFundingSource implements FundingSource {
         while (amountGatheredSoFar < requestedAmount.value) {
             client.generateBlock();
             int blockIndex = client.getBlockCount() - minCoinAge;
-            Map<String, Object> block = client.getBlock(blockIndex);
-            List<String> blockTxs = (List<String>) block.get("tx");
-            Sha256Hash coinbaseTx = Sha256Hash.wrap(blockTxs.get(0));
-            Map<String, Object>  txout = client.getTxOut(coinbaseTx, 0);
+            Block block = client.getBlock(blockIndex);
+            List<Transaction> blockTxs = block.getTransactions();
+            Sha256Hash coinbaseTx = blockTxs.get(0).getHash();
+            TxOutInfo txout = client.getTxOut(coinbaseTx, 0);
 
             // txout is empty, if output was already spent
-            if (txout != null && txout.containsKey("value")) {
-                log.debug("txout = {}", txout);
-                BigDecimal amountBTCbd = BigDecimal.valueOf((Double) txout.get("value"));
+            if (txout != null && txout.getValue().value > 0) {
+                log.debug("txout = {}, value = {}", txout, txout.getValue().value);
 
-                long amountSatoshi = BitcoinMath.btcToSatoshi(amountBTCbd);
-                amountGatheredSoFar += amountSatoshi;
+                amountGatheredSoFar += txout.getValue().value;
                 inputs.add(new Outpoint(coinbaseTx, 0));
             }
             log.debug("amountGatheredSoFar = {}", BitcoinMath.satoshiToBtc(amountGatheredSoFar));
         }
 
         // Don't care about change, we mine it anyway
-        HashMap<Address, Coin> outputs = new HashMap<Address, Coin>();
+        Map<Address, Coin> outputs = new HashMap<Address, Coin>();
         outputs.put(toAddress, requestedAmount);
 
         String unsignedTxHex = client.createRawTransaction(inputs, outputs);
-        Map<String, Object> signingResult = client.signRawTransaction(unsignedTxHex);
+        SignedRawTransaction signingResult = client.signRawTransaction(unsignedTxHex);
 
-        assert ((Boolean) signingResult.get("complete"));
+        assert signingResult.isComplete();
 
-        String signedTxHex = (String) signingResult.get("hex");
+        String signedTxHex = signingResult.getHex();
         Sha256Hash txid = client.sendRawTransaction(signedTxHex, true);
 
         return txid;
@@ -145,12 +147,12 @@ public class RegTestFundingSource implements FundingSource {
         outputs.put(client.getNewAddress(), client.stdRelayTxFee);
 
         String unsignedTxHex = client.createRawTransaction(inputs, outputs);
-        Map<String, Object> signingResult = client.signRawTransaction(unsignedTxHex);
+        SignedRawTransaction signingResult = client.signRawTransaction(unsignedTxHex);
 
-        Boolean complete = (Boolean) signingResult.get("complete");
+        Boolean complete = signingResult.isComplete();
         assert complete;
 
-        String signedTxHex = (String) signingResult.get("hex");
+        String signedTxHex = signingResult.getHex();
         Object txid = client.sendRawTransaction(signedTxHex, true);
 
         return true;

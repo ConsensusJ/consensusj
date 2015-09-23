@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.cli;
 
 import com.msgilligan.bitcoinj.rpc.JsonRPCException;
+import com.msgilligan.bitcoinj.rpc.ServerInfo;
 
 import java.io.IOException;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class Status extends CliCommand {
 
     @Override
     public Integer runImpl() throws IOException {
-        Map<String, Object> info = null;
+        ServerInfo info = null;
         try {
             info = client.getInfo();
         } catch (JsonRPCException e) {
@@ -31,8 +32,8 @@ public class Status extends CliCommand {
             return 1;
         }
 
-        Integer bitcoinVersion = (Integer) info.get("version");
-        Integer blocks = (Integer) info.get("blocks");
+        Integer bitcoinVersion = info.getVersion();
+        Integer blocks = info.getBlocks();
 
         pwout.println("Bitcoin Core Version: " + bitcoinVersion);
         pwout.println("Block count: " + blocks);

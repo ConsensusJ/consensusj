@@ -168,12 +168,12 @@ public class BitcoinExtendedClient extends BitcoinClient {
      */
     public Sha256Hash sendBitcoin(Address fromAddress, Map<Address, Coin> outputs) throws JsonRPCException, IOException {
         String unsignedTxHex = createRawTransaction(fromAddress, outputs);
-        Map<String, Object>  signingResult = signRawTransaction(unsignedTxHex);
+        SignedRawTransaction  signingResult = signRawTransaction(unsignedTxHex);
 
-        Boolean complete = (Boolean) signingResult.get("complete");
-        assert complete == true;
+        Boolean complete = signingResult.isComplete();
+        assert complete;
 
-        String signedTxHex = (String) signingResult.get("hex");
+        String signedTxHex = signingResult.getHex();
         Sha256Hash txid = sendRawTransaction(signedTxHex);
 
         return txid;

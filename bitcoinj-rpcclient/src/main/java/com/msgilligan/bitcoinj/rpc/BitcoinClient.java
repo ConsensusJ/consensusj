@@ -2,12 +2,13 @@ package com.msgilligan.bitcoinj.rpc;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.msgilligan.bitcoinj.rpc.conversion.BitcoinMath;
 import com.msgilligan.bitcoinj.rpc.conversion.RpcClientModule;
 import org.bitcoinj.core.Address;
-import org.bitcoinj.core.AddressFormatException;
+import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;
+import org.bitcoinj.core.Context;
 import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.RegTestParams;
@@ -15,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.SocketException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -53,6 +53,8 @@ public class BitcoinClient extends RPCClient {
     private static final int RETRY_SECONDS = 1;
     private static final int MESSAGE_SECONDS = 10;
 
+    private final Context context;
+
     /**
      * Construct a BitcoinClient from URI, user name, and password.
      * @param server URI of the Bitcoin RPC server
@@ -60,13 +62,12 @@ public class BitcoinClient extends RPCClient {
      * @param rpcpassword Password (if required)
      */
     public BitcoinClient(URI server, String rpcuser, String rpcpassword) {
-        super(server, rpcuser, rpcpassword, createMapper());
+        super(server, rpcuser, rpcpassword, createMapper(RegTestParams.get()));
+        this.context = new Context(RegTestParams.get());
     }
 
-    static protected ObjectMapper createMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new RpcClientModule());
-        return mapper;
+    static protected ObjectMapper createMapper(NetworkParameters netParams) {
+        return new ObjectMapper().registerModule(new RpcClientModule(netParams));
     }
 
     /**
@@ -215,15 +216,22 @@ public class BitcoinClient extends RPCClient {
         return json;
     }
 
+    public Block getRawBlock(Sha256Hash hash) throws JsonRPCException, IOException {
+        // Use "verbose = false"
+        List<Object> params = createParamList(hash, false);
+        Block block = send("getblock", params, Block.class);
+        return block;
+    }
+
     /**
      * Returns information about a block at index provided.
      *
      * @param index The block index
      * @return The information about the block
      */
-    public Map<String, Object> getBlock(Integer index) throws JsonRPCException, IOException {
+    public Block getBlock(Integer index) throws JsonRPCException, IOException {
         Sha256Hash blockHash = getBlockHash(index);
-        return getBlock(blockHash);
+        return getRawBlock(blockHash);
     }
 
     /**
@@ -348,9 +356,9 @@ public class BitcoinClient extends RPCClient {
      * @param unsignedTransaction The hex-encoded raw transaction
      * @return The signed transaction and information whether it has a complete set of signature
      */
-    public Map<String, Object> signRawTransaction(String unsignedTransaction) throws IOException, JsonRPCException {
+    public SignedRawTransaction signRawTransaction(String unsignedTransaction) throws IOException, JsonRPCException {
         List<Object> params = createParamList(unsignedTransaction);
-        Map<String, Object> signedTransaction = send("signrawtransaction", params);
+        SignedRawTransaction signedTransaction = send("signrawtransaction", params, SignedRawTransaction.class);
         return signedTransaction;
     }
 
@@ -474,7 +482,7 @@ public class BitcoinClient extends RPCClient {
      * @param vout The transaction output index
      * @return Details about an unspent output or nothing, if the output was already spent
      */
-    public Map<String, Object> getTxOut(Sha256Hash txid, Integer vout) throws JsonRPCException, IOException {
+    public TxOutInfo getTxOut(Sha256Hash txid, Integer vout) throws JsonRPCException, IOException {
         return getTxOut(txid, vout, null);
     }
 
@@ -486,11 +494,11 @@ public class BitcoinClient extends RPCClient {
      * @param includeMemoryPool Whether to included the memory pool
      * @return Details about an unspent output or nothing, if the output was already spent
      */
-    public Map<String, Object> getTxOut(Sha256Hash txid, Integer vout, Boolean includeMemoryPool)
+    public TxOutInfo getTxOut(Sha256Hash txid, Integer vout, Boolean includeMemoryPool)
             throws JsonRPCException, IOException {
         List<Object> params = createParamList(txid, vout, includeMemoryPool);
-        Map<String, Object> json = send("gettxout", params);
-        return json;
+        TxOutInfo txout = send("gettxout", params, TxOutInfo.class);
+        return txout;
     }
 
     /**
@@ -562,8 +570,8 @@ public class BitcoinClient extends RPCClient {
         return transaction;
     }
 
-    public Map<String, Object> getInfo() throws JsonRPCException, IOException {
-        Map<String, Object> result = send("getinfo", null);
+    public ServerInfo getInfo() throws JsonRPCException, IOException {
+        ServerInfo result = send("getinfo", null, ServerInfo.class);
         return result;
     }
 
