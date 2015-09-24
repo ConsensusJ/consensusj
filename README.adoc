@@ -1,4 +1,8 @@
 = bitcoinj Add-ons 
+Sean Gilligan <https://github.com/msgilligan>
+v0.0.8
+:description: bitcoinj-addons README document.
+:addons-version: 0.0.8
 
 image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"] 
 
@@ -39,7 +43,7 @@ bitcoinj-addons is used by https://github.com/OmniLayer/OmniJ#omnij-project[Omni
 === Requirements
 
 * Most modules may use JDK 7 (subset) for Android compatibility (see table, below)
-* Server modules (Spring Boot Apps) require JDK 8 or later
+* Server modules and Spring Boot Apps require JDK 8 or later
 
 === Modules
 
@@ -65,7 +69,12 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |<<bitcoinj-json,bitcoinj-json>>
 |7
 |Tests only (TBD)
-|Server-side JSON-RPC & Spring support
+|Jackson serializers, deserializers & POJOs for Bitcoin JSON-RPC
+
+|<<bitcoinj-server,bitcoinj-server>>
+|8
+|Tests only (TBD)
+|Service objects used by the server apps 
 
 |<<bitcoinj-daemon,bitcoinj-daemon>>
 |8
@@ -93,7 +102,8 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 
 An alternative implementation of `bitcoin-cli` in Java. Built as a fat jar executable with `java -jar`. The command:
 
-    java -jar bitcoinj-cli-0.0.3.jar -rpcport=8080 getblockcount
+[subs="attributes"]
+    java -jar bitcoinj-cli-{addons-version}.jar -rpcport=8080 getblockcount
 
 will output:
 
@@ -104,7 +114,8 @@ NOTE: Only a few RPCs are currently supported. Pull requests welcome.
 
 For help type:
 
-    java -jar bitcoinj-cli-0.0.3.jar -?
+[subs="attributes"]
+    java -jar bitcoinj-cli-{addons-version}.jar -?
 
 or read the http://msgilligan.github.io/bitcoinj-addons/manpage-bitcoinj-cli.html[manual page].
 
@@ -152,12 +163,17 @@ These sample Spock "feature tests" show the RPC client in action and are from th
 [#bitcoinj-json]
 ==== bitcoin-json
 
-Server-side JSON components and services that power the Daemon and PeerServer.
+http://wiki.fasterxml.com/JacksonHome[Jackson] serializers, deserializers & POJOs used to create and parse JSON by both client and server implementations of Bitcoin JSON-RPC.
+
+[#bitcoinj-server]
+==== bitcoin-server
+
+Service objects that power the Daemon and PeerServer. Some objects, such as http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/spring/service/PeerGroupService.html[PeerGroupService], rely solely on http://docs.oracle.com/javase/7/docs/api/javax/annotation/package-summary.html[javax.annotation] and https://docs.oracle.com/javaee/6/api/javax/inject/package-summary.html[javax.inject] for configuration and can be wired with either Spring or (in theory)  https://github.com/google/guice[Guice]. The current focus is on http://projects.spring.io/spring-boot/[Spring Boot], but we're hoping to build a http://ratpack.io[Ratpack] server in the future.
 
 [#bitcoinj-daemon]
 ==== bitcoinj-daemon
 
-A starting point for building a complete `bitcoind` equivalent using **bitcoinj**. Currently serves a very https://github.com/msgilligan/bitcoinj-addons/blob/master/src/main/java/com/msgilligan/bitcoinj/rpc/BitcoinJsonRpc.java[small subset] of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
+A starting point for building a complete `bitcoind` equivalent using **bitcoinj**. Currently serves a very https://github.com/msgilligan/bitcoinj-addons/blob/master/bitcoinj-json/src/main/java/com/msgilligan/bitcoinj/rpcserver/BitcoinJsonRpc.java[small subset] of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
 
 Uses a `PeerGroup` to power the limited RPCs. Will use a `BlockStore`. (Pull requests welcome.)
 
@@ -177,7 +193,7 @@ PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring B
 .. You must login using username: `admin`, password: `admin` to view this page.
 .. The `peers.html' page is currently unstyled HTML.
 
-No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/0.13.2/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-0.0.1.jar` command.
+No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/0.13.2/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-{addons-version}.jar` command.
 
 [#bitcoinj-groovy]
 ==== bitcoinj-groovy
@@ -216,7 +232,8 @@ To build the CLI executable jar:
 
 To run it and display a list of command line options:
 
-    java -jar bitcoinj-cli/build/libs/bitcoinj-cli-0.0.3-SNAPSHOT.jar -?
+[subs="attributes"]
+    java -jar bitcoinj-cli/build/libs/bitcoinj-cli-{addons-version}.jar -?
 
 === Build and Run PeerServer Locally Using Gradle
 
@@ -226,13 +243,14 @@ To run it and display a list of command line options:
 
 NOTE: This will connect to the Bitcoin P2P network
 
-=== Build an Exectuable JAR 
+=== Build an Executable JAR
 
     ./gradlew :bitcoinj-peerserver:assemble
 
-The JAR will be built at `build/libs/peerserver-0.0.3-SNAPSHOT.jar` and can be run with:
+The JAR will be built at `build/libs/peerserver-{addons-version}.jar` and can be run with:
 
-    java -jar bitcoinj-peerserver/build/libs/peerserver-0.0.3-SNAPSHOT.jar
+[subs="attributes"]
+    java -jar bitcoinj-peerserver/build/libs/peerserver-{addons-version}.jar
 
 
 
