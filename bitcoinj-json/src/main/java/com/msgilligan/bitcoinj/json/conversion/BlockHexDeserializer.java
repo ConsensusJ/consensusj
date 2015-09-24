@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.rpc.conversion;
+package com.msgilligan.bitcoinj.json.conversion;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -6,8 +6,6 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.msgilligan.bitcoinj.json.conversion.HexUtil;
-import com.msgilligan.bitcoinj.rpc.BitcoinClient;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;

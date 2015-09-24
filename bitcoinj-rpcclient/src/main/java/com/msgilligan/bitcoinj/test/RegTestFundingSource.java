@@ -6,7 +6,7 @@ import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.TxOutInfo;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
-import com.msgilligan.bitcoinj.rpc.conversion.BitcoinMath;
+import com.msgilligan.bitcoinj.json.conversion.BitcoinMath;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;

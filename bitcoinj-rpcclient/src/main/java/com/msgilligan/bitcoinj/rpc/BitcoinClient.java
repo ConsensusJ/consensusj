@@ -9,7 +9,7 @@ import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.TxOutInfo;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
-import com.msgilligan.bitcoinj.rpc.conversion.RpcClientModule;
+import com.msgilligan.bitcoinj.json.conversion.RpcClientModule;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;

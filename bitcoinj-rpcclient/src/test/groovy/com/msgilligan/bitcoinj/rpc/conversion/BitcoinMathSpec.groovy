@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.rpc.conversion
 
+import com.msgilligan.bitcoinj.json.conversion.BitcoinMath
 import org.bitcoinj.core.Coin
 import org.bitcoinj.core.NetworkParameters
 import spock.lang.Specification

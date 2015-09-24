@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.rpc.conversion;
+package com.msgilligan.bitcoinj.json.conversion;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleModule;

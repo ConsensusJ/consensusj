@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.rpc.conversion;
+package com.msgilligan.bitcoinj.json.conversion;
 
 import org.bitcoinj.core.Coin;
 

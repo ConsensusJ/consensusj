@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.rpc.conversion;
+package com.msgilligan.bitcoinj.json.conversion;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
