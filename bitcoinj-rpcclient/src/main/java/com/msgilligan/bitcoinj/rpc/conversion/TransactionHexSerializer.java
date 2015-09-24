@@ -12,7 +12,7 @@ import java.util.Formatter;
 /**
  *
  */
-public class TransactionSerializer extends JsonSerializer<Transaction> {
+public class TransactionHexSerializer extends JsonSerializer<Transaction> {
     @Override
     public void serialize(Transaction value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
         // From: http://bitcoin.stackexchange.com/questions/8475/how-to-get-hex-string-from-transaction-in-bitcoinj

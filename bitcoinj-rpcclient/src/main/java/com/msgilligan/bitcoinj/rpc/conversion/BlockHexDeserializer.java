@@ -17,10 +17,10 @@ import java.io.IOException;
 /**
  *
  */
-public class BlockDeserializer  extends JsonDeserializer<Block> {
+public class BlockHexDeserializer extends JsonDeserializer<Block> {
     private final Context context;
 
-    public BlockDeserializer(NetworkParameters netParams) {
+    public BlockHexDeserializer(NetworkParameters netParams) {
         this.context = new Context(netParams);
     }
 
