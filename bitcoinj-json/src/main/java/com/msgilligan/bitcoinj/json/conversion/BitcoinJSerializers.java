@@ -11,6 +11,7 @@ import org.bitcoinj.core.Transaction;
 /**
  *
  */
+@Deprecated
 public class BitcoinJSerializers extends Serializers.Base {
     @Override
     public JsonSerializer<?> findSerializer(SerializationConfig config, JavaType type, BeanDescription beanDesc) {
