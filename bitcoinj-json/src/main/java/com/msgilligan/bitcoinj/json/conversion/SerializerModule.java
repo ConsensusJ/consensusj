@@ -1,8 +1,7 @@
-package com.msgilligan.bitcoinj.jackson;
+package com.msgilligan.bitcoinj.json.conversion;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ser.Serializers;
 
 /**
  *

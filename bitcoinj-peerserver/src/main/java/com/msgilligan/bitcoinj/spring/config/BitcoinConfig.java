@@ -2,7 +2,7 @@ package com.msgilligan.bitcoinj.spring.config;
 
 import com.googlecode.jsonrpc4j.spring.JsonServiceExporter;
 import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;
-import com.msgilligan.bitcoinj.jackson.SerializerModule;
+import com.msgilligan.bitcoinj.json.conversion.SerializerModule;
 import com.msgilligan.bitcoinj.spring.service.PeerService;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.net.discovery.DnsDiscovery;
