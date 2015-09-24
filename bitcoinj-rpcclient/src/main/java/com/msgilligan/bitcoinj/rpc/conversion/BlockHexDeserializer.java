@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.msgilligan.bitcoinj.json.conversion.HexUtil;
 import com.msgilligan.bitcoinj.rpc.BitcoinClient;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Context;
@@ -30,7 +31,7 @@ public class BlockHexDeserializer extends JsonDeserializer<Block> {
         switch (token) {
             case VALUE_STRING:
                 try {
-                    byte[] payload = BitcoinClient.hexStringToByteArray(p.getValueAsString()); // convert  to hex
+                    byte[] payload = HexUtil.hexStringToByteArray(p.getValueAsString()); // convert  to hex
                     return new Block(context.getParams(), payload, true, false, payload.length);
                 } catch (ProtocolException e) {
                     throw new InvalidFormatException("Invalid Block", p.getValueAsString(), Block.class);

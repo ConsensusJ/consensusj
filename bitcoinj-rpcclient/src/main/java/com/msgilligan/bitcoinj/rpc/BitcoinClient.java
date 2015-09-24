@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.rpc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.msgilligan.bitcoinj.json.conversion.HexUtil;
 import com.msgilligan.bitcoinj.json.pojo.ChainTip;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.ReceivedByAddressInfo;
@@ -392,7 +393,7 @@ public class BitcoinClient extends RPCClient {
     public Transaction getRawTransaction(Sha256Hash txid) throws JsonRPCException, IOException {
         List<Object> params = createParamList(txid);
         String hexEncoded = send("getrawtransaction", params);
-        byte[] raw = BitcoinClient.hexStringToByteArray(hexEncoded);
+        byte[] raw = HexUtil.hexStringToByteArray(hexEncoded);
         // Hard-code RegTest for now
         // TODO: All RPC client connections should have a BitcoinJ NetworkParameters object?
         Transaction tx = new Transaction(RegTestParams.get(), raw);
@@ -694,21 +695,5 @@ public class BitcoinClient extends RPCClient {
         List<Sha256Hash> hashes = send("clearmempool", null,
                 mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class));
         return hashes;
-    }
-
-    /**
-     * Converts a hex-encoded string into a byte array.
-     *
-     * @param s A string to convert
-     * @return The byte array
-     */
-    public static byte[] hexStringToByteArray(String s) {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i + 1), 16));
-        }
-        return data;
     }
 }
