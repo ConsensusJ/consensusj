@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.Module;
 /**
  *
  */
-public class SerializerModule extends Module {
+public class RpcServerModule extends Module {
     @Override
     public String getModuleName() {
         return "BitcoinJModule";
