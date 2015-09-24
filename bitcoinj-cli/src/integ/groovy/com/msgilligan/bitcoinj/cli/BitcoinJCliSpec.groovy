@@ -43,6 +43,16 @@ class BitcoinJCliSpec extends Specification implements CLITestSupport {
         result.error.length() == 0
     }
 
+    def "get server info"() {
+        when:
+        def result = command "-regtest -rpcuser=${rpcUser} -rpcpassword=${rpcPassword} -rpcwait getinfo"
+
+        then:
+        result.status == 0
+        result.output.length() > 0  // Should be a JSON serialized string here, validate?
+        result.error.length() == 0
+    }
+
     /**
      * Helper method to create and run a command
      *
