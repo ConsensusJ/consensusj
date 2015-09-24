@@ -58,7 +58,7 @@ public class PeerGroupService implements BitcoinJsonRpc {
     }
 
     @Override
-    public Object getinfo() {
+    public ServerInfo getinfo() {
         // Dummy up a response for now.
         // Since ServerInfo is immutable, we have to build it entirely with the constructor.
         Coin balance = Coin.valueOf(0);
