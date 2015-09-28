@@ -12,11 +12,12 @@ import java.math.RoundingMode
 @CompileStatic
 @Category(Coin)
 class CoinCategory {
-    // Note: this duplicates code in rpc.conversion.BitcoinMath, but we don't want to depend on rpcclient
-    // Maybe that code needs to go to a standalong package or become part of `bitcoinj-core`.
+    // Note: this duplicates code in json.conversion.BitcoinMath, but we don't want to depend on any other modules
+    // Maybe basic conversion code needs to go to a standalone package or become part of `bitcoinj-core`.
     //
     private static final int DEFAULT_SCALE = Coin.SMALLEST_UNIT_EXPONENT;
-    private static final BigDecimal bdSatoshiPerCoin = new BigDecimal(Coin.COIN.longValue());
+    private static final BigDecimal bdSatoshiPerCoin = new BigDecimal(Coin.COIN.value);
+
     /**
      * Convert to BTC in BigDecimal format
      *
