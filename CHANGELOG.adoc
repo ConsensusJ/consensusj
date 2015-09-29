@@ -1,0 +1,29 @@
+= bitcoinj-addons Changes
+:homepage: https://github.com/msgilligan/bitcoinj-addons
+
+A high-level view of the changes in each bitcoinj-addons binary release.
+
+== v0.0.9
+
+This is the first release with a CHANGELOG.
+
+=== Potentially Breaking
+
+* RPC client API, http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] is now using bitcoinj types for almost all JSON-RPC parameters and return types. See https://github.com/msgilligan/bitcoinj-addons/issues/9[Issue #9] to track progress.
+* RPC client API, `setGenerate()` (also `generateBlock()`, `generateBlocks()`) when talking to `bitcoind` 0.9.x or earlier will return an empty list rather than `null`. If server is `0.10.x` or later, will return a list of `Sha256Hash`.
+
+=== Features/Changes
+
+* JSON-RPC client and server are now sharing https://github.com/FasterXML/jackson[Jackson JSON] serializer, deserializers, and POJOs in the `bitcoinj-json` module.
+* JSON-RPC server now has a skeleton implementation of `getinfo`.
+* Miscelleneous documentation improvements.
+
+=== Bug fixes
+
+* https://github.com/msgilligan/bitcoinj-addons/issues/10[Issue #10] Broken links in `doc/index.adoc` fixed 
+
+== REL-0.0.1 - v0.0.8
+
+Very early releases. See commit history for details.
+
+
