@@ -2,10 +2,10 @@ com.msgilligan.bitcoinj
 com.msgilligan.bitcoinj.cli
 com.msgilligan.bitcoinj.daemon
 com.msgilligan.bitcoinj.daemon.config
-com.msgilligan.bitcoinj.jackson
+com.msgilligan.bitcoinj.json.conversion
+com.msgilligan.bitcoinj.json.pojo
 com.msgilligan.bitcoinj.peerserver
 com.msgilligan.bitcoinj.rpc
-com.msgilligan.bitcoinj.rpc.conversion
 com.msgilligan.bitcoinj.rpc.test
 com.msgilligan.bitcoinj.rpcserver
 com.msgilligan.bitcoinj.spring.config
