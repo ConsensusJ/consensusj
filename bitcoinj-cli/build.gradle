@@ -4,7 +4,6 @@
 //
 plugins {
     id 'application'
-    id 'groovy'
     id 'com.github.johnrengelman.shadow' version '1.2.1'
 }
 
@@ -20,10 +19,6 @@ dependencies {
     compile 'commons-cli:commons-cli:1.2'
 
     robovm  "org.codehaus.groovy:groovy:${groovyVersion}:grooid"
-
-    testCompile("org.spockframework:spock-core:1.0-groovy-2.4") {
-        exclude module: "groovy-all"
-    }
 }
 
 

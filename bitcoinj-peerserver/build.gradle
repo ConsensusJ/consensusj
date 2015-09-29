@@ -28,12 +28,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-websocket"
     compile "org.springframework.boot:spring-boot-starter-security"
-
-//    compile "javax.inject:javax.inject:1"
-
-    compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:1.1"
-
-    testCompile("junit:junit:4.11")
 }
 
 springBoot {

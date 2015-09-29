@@ -14,6 +14,7 @@ ext.groovyVersion = '2.4.4'
 
 allprojects {
     apply plugin: 'java'
+    apply plugin: 'groovy'
 
     version = bitcoinjAddonsVersion     // set in gradle.properties
     group = 'com.msgilligan'
@@ -27,6 +28,11 @@ subprojects {
     dependencies {
         compile 'org.bitcoinj:bitcoinj-core:0.13.2'
         compile 'org.slf4j:slf4j-api:1.7.7'
+
+        testCompile "org.codehaus.groovy:groovy:2.4.4"
+        testCompile("org.spockframework:spock-core:1.0-groovy-2.4") {
+            exclude module: "groovy-all"
+        }
     }
 }
 
