@@ -63,11 +63,7 @@ public abstract class CliCommand {
     public BitcoinClient getClient() {
         if (client == null) {
             System.out.println("Connecting to: " + getRPCConfig().getURI());
-            try {
-                client = new BitcoinClient(getRPCConfig());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            client = new BitcoinClient(getRPCConfig());
         }
         return client;
     }
