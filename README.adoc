@@ -31,7 +31,7 @@ Although the API is changing rapidly, binary releases are available on https://b
 
 === API Documentation
 
-We jave published http://msgilligan.github.io/bitcoinj-addons/apidoc/index.html[preliminary JavaDoc] to our Github pages site.
+We have published http://msgilligan.github.io/bitcoinj-addons/apidoc/index.html[preliminary JavaDoc] to our Github pages site.
 
 === Continuous Integration 
 
