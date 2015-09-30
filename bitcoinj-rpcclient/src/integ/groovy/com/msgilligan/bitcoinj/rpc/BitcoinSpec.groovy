@@ -101,7 +101,7 @@ class BitcoinSpec extends BaseRegTestSpec {
 
         then:
         tips != null
-        tips.size() == 1
+        tips.size() >= 1
         tips[0].branchlen == 0
         tips[0].hash instanceof Sha256Hash
         tips[0].height > 0
