@@ -11,6 +11,13 @@ import java.util.List;
  */
 public interface BlockChainEnvironment {
     /**
+     * Wait for (and possible *hasten*) the creation of a single block
+     *
+     * @return A list with a single block hash
+     */
+    List<Sha256Hash> waitForBlock() throws Exception;
+
+    /**
      * Wait for (and possible *hasten*) the creation of blocks
      *
      * @param numBlocks the number of blocks to wait for
