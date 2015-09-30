@@ -43,10 +43,6 @@ public class RPCClient {
         }
     }
 
-    public RPCClient(RPCConfig config, ObjectMapper mapper) {
-        this(config.getURI(), config.getUsername(), config.getPassword(), mapper);
-    }
-
     public RPCClient(RPCConfig config) {
         this(config.getURI(), config.getUsername(), config.getPassword(), null);
     }

@@ -35,10 +35,9 @@ public class BitcoinExtendedClient extends BitcoinClient {
         super(server, rpcuser, rpcpassword);
     }
 
-    public BitcoinExtendedClient(RPCConfig config) throws IOException {
+    public BitcoinExtendedClient(RPCConfig config) {
         super(config);
     }
-
 
     /**
      * Creates a raw transaction, spending from a single address, whereby no new change address is created, and

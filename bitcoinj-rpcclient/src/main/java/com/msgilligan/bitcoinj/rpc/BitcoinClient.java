@@ -60,7 +60,7 @@ public class BitcoinClient extends RPCClient {
     private static final int RETRY_SECONDS = 1;
     private static final int MESSAGE_SECONDS = 10;
 
-    private final Context context;
+    protected final Context context;
 
     /**
      * Construct a BitcoinClient from URI, user name, and password.
@@ -69,20 +69,16 @@ public class BitcoinClient extends RPCClient {
      * @param rpcpassword Password (if required)
      */
     public BitcoinClient(URI server, String rpcuser, String rpcpassword) {
-        super(server, rpcuser, rpcpassword, createMapper(RegTestParams.get()));
+        super(server, rpcuser, rpcpassword);
         this.context = new Context(RegTestParams.get());
-    }
-
-    static protected ObjectMapper createMapper(NetworkParameters netParams) {
-        return new ObjectMapper().registerModule(new RpcClientModule(netParams));
+        mapper.registerModule(new RpcClientModule(context.getParams()));
     }
 
     /**
      * Construct a BitcoinClient from an RPCConfig data object.
      * @param config Contains URI, user name, and password
-     * @throws IOException
      */
-    public BitcoinClient(RPCConfig config) throws IOException {
+    public BitcoinClient(RPCConfig config) {
         this(config.getURI(), config.getUsername(), config.getPassword());
     }
 
