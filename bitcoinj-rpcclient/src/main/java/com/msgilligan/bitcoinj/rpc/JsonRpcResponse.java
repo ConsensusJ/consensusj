@@ -1,7 +1,10 @@
 package com.msgilligan.bitcoinj.rpc;
 
 /**
- * JSON-RPC Response POJO
+ * = JSON-RPC Response POJO
+ *
+ * Note that `result` is a parameterized type and can be used to directly map JSON-RPC results
+ * to the correct type for each method.
  */
 public class JsonRpcResponse<R> {
     private String          jsonrpc;   // version

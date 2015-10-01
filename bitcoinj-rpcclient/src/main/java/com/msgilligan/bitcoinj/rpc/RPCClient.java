@@ -25,7 +25,18 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * JSON-RPC Client
+ * = JSON-RPC Client
+ *
+ * This is a concrete class with basic JSON-RPC functionality. In theory it could be used to implement
+ * other JSON-RPC clients, but as this is a Bitcoin-focused project you probably want to look at
+ * {@link BitcoinClient} and its subclasses.
+ *
+ * This client uses strongly-typed POJOs representing {@link JsonRpcRequest} and {@link JsonRpcResponse}. The
+ * response object uses a type parameter to specify the object that is the actual JSON-RPC `result`.
+ * Early versions of this client were http://c2.com/cgi/wiki?StringlyTyped[stringly-typed], but
+ * these strong types allows us to use Jackson to deserialize
+ * directly to strongly-typed POJO's without using intermediate `Map` or `JsonNode` types.
+ *
  */
 public class RPCClient {
     private static final Logger log = LoggerFactory.getLogger(RPCClient.class);
@@ -58,6 +69,10 @@ public class RPCClient {
         this.mapper = new ObjectMapper();
     }
 
+    /**
+     * Get the URI of the server this client connects to
+     * @return Server URI
+     */
     public URI getServerURI() {
         return serverURI;
     }
@@ -126,12 +141,13 @@ public class RPCClient {
     }
 
     /**
-     * JSON-RPC remote method call that returns the 'result'
+     * JSON-RPC remote method call that returns 'response.result`
      *
      * @param method JSON RPC method call to send
      * @param params JSON RPC params
-     * @param <R> Expected return type -- will match type of variable method result is assigned to
-     * @return the 'result' field of the JSON RPC response
+     * @param pass:[<R>] Type of result object
+     * @param resultType desired result type as a Java class object
+     * @return the 'response.result' field of the JSON RPC response converted to type R
      */
     protected <R> R send(String method, List<Object> params, Class<R> resultType) throws IOException, JsonRPCStatusException {
         JsonRpcRequest request = new JsonRpcRequest(method, params);
@@ -150,6 +166,15 @@ public class RPCClient {
         return response.getResult();
     }
 
+    /**
+     * JSON-RPC remote method call that returns 'response.result`
+     *
+     * @param method JSON RPC method call to send
+     * @param params JSON RPC params
+     * @param pass:[<R>] Type of result object
+     * @param resultType desired result type as a Jackson JavaType object
+     * @return the 'response.result' field of the JSON RPC response converted to type R
+     */
     protected <R> R send(String method, List<Object> params, JavaType resultType) throws IOException, JsonRPCStatusException {
         JsonRpcRequest request = new JsonRpcRequest(method, params);
         // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
@@ -171,6 +196,10 @@ public class RPCClient {
      * Useful for:
      * * Simple (not client-side validated) command line utilities
      * * Functional tests that need to send incorrect types to the server to test error handling
+     *
+     * Now that we've pushed most of the parameter conversion into Jackson serializers
+     * there's little difference between this method and the `send()` that it calls.
+     * After some refactoring it can probably be eliminated.
      *
      * @param method Allows RPC method to be passed as a stream
      * @param params variable number of untyped objects
@@ -197,6 +226,7 @@ public class RPCClient {
         return connection;
     }
 
+    // TODO: Allow for self-signed certificates without disabling all verification
     private static void disableSslVerification() {
         try
         {
@@ -226,15 +256,18 @@ public class RPCClient {
 
             // Install the all-trusting host verifier
             HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
+        } catch (NoSuchAlgorithmException | KeyManagementException e ) {
+            log.error("Exception in disableSslVerification{}", e);
             e.printStackTrace();
         }
     }
 
     /**
      * Create a mutable param list (so send() can remove null parameters)
+     *
+     * This method is on the refactoring radar and we're hoping to be able to eliminate
+     * it and have various methods call `send()` directly.
+     *
      * @param parameters  A variable number of parameters as varargs or array
      * @return A mutable list of the same parameters
      */

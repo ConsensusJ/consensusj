@@ -20,7 +20,6 @@ public class RPCURI {
         try {
             return new URI(rpcproto, null, rpchost, RPCPORT_MAINNET, rpcfile, null, null);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -29,7 +28,6 @@ public class RPCURI {
         try {
             return new URI(rpcproto, null, rpchost, RPCPORT_TESTNET, rpcfile, null, null);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -38,7 +36,6 @@ public class RPCURI {
         try {
             return new URI(rpcproto, null, rpchost, RPCPORT_REGTEST, rpcfile, null, null);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
             return null;
         }
     }

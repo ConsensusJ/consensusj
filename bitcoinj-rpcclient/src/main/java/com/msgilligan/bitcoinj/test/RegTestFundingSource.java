@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,14 +41,13 @@ public class RegTestFundingSource implements FundingSource {
      * TODO: Improve performance. Can we mine multiple blocks with a single RPC?
      *
      * @param toAddress Address to fund with BTC
-     * @param requestedBTC Amount of BTC to "mine" and send
-     * @return
+     * @param requestedBtc Amount of BTC to "mine" and send
+     * @return The hash of transaction that provided the funds.
      */
     @Override
-    public Sha256Hash requestBitcoin(Address toAddress, Coin requestedAmount) throws JsonRPCException, IOException {
-        // Refactor code from BTCTestSupport to here.
-        log.debug("requestBitcoin requesting {}", requestedAmount);
-        if (requestedAmount.value > NetworkParameters.MAX_MONEY.value) {
+    public Sha256Hash requestBitcoin(Address toAddress, Coin requestedBtc) throws JsonRPCException, IOException {
+        log.debug("requestBitcoin requesting {}", requestedBtc);
+        if (requestedBtc.value > NetworkParameters.MAX_MONEY.value) {
             throw new IllegalArgumentException("request exceeds MAX_MONEY");
         }
         long amountGatheredSoFar = 0;
@@ -60,7 +60,7 @@ public class RegTestFundingSource implements FundingSource {
             client.generateBlocks((long)minCoinAge - client.getBlockCount());
         }
 
-        while (amountGatheredSoFar < requestedAmount.value) {
+        while (amountGatheredSoFar < requestedBtc.value) {
             client.generateBlock();
             int blockIndex = client.getBlockCount() - minCoinAge;
             Block block = client.getBlock(blockIndex);
@@ -79,10 +79,7 @@ public class RegTestFundingSource implements FundingSource {
         }
 
         // Don't care about change, we mine it anyway
-        Map<Address, Coin> outputs = new HashMap<Address, Coin>();
-        outputs.put(toAddress, requestedAmount);
-
-        String unsignedTxHex = client.createRawTransaction(inputs, outputs);
+        String unsignedTxHex = client.createRawTransaction(inputs, Collections.singletonMap(toAddress, requestedBtc));
         SignedRawTransaction signingResult = client.signRawTransaction(unsignedTxHex);
 
         assert signingResult.isComplete();
@@ -93,6 +90,12 @@ public class RegTestFundingSource implements FundingSource {
         return txid;
     }
 
+    /**
+     * Create an address and fund it with bitcoin
+     *
+     * @param amount
+     * @return Newly created address with the requested amount of bitcoin
+     */
     public Address createFundedAddress(Coin amount) throws Exception {
         Address address = client.getNewAddress();
         requestBitcoin(address, amount);
@@ -113,7 +116,7 @@ public class RegTestFundingSource implements FundingSource {
     }
 
     /**
-     * Collects <b>all</b> unspent outputs and spends the whole amount minus {@code stdRelayTxFee}, which is sent
+     * Collects *all* unspent outputs and spends the whole amount minus `stdRelayTxFee`, which is sent
      * to a new address, as fee, to sweep dust and to minimize the number of unspent outputs, to avoid creating too
      * large transactions. No new block is generated afterwards.
      *

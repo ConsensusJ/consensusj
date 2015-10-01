@@ -22,7 +22,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * BitcoinClient with extended/convenience methods
+ * = Extended Bitcoin JSON-RPC Client with added convenience methods
+ *
+ * This class adds extra methods that aren't 1:1 mappings to standard
+ * Bitcoin API RPC methods, but are useful for many common use cases -- specifically
+ * the ones we ran into while building integration tests.
  */
 public class BitcoinExtendedClient extends BitcoinClient {
     private final NetworkParameters netParams = RegTestParams.get();
@@ -73,11 +77,13 @@ public class BitcoinExtendedClient extends BitcoinClient {
         if (amountIn < (amountOut + stdTxFee.value)) {
             System.out.println("Insufficient funds"); // + ": ${amountIn} < ${amountOut + stdTxFee}"
         }
+        // Copy the Map (which may be immutable) and add change output if needed.
+        Map<Address,Coin> outputsWithChange = new HashMap<>(outputs);
         if (amountChange.value > 0) {
-            outputs.put(fromAddress, amountChange);
+            outputsWithChange.put(fromAddress, amountChange);
         }
 
-        return createRawTransaction(inputs, outputs);
+        return createRawTransaction(inputs, outputsWithChange);
     }
 
     /**
@@ -93,8 +99,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @return The hex-encoded raw transaction
      */
     public String createRawTransaction(Address fromAddress, Address toAddress, Coin amount) throws JsonRPCException, IOException {
-        HashMap<Address, Coin> outputs = new HashMap<Address, Coin>();
-        outputs.put(toAddress, amount);
+        Map<Address, Coin> outputs = Collections.singletonMap(toAddress, amount);
         return createRawTransaction(fromAddress, outputs);
     }
 
@@ -155,8 +160,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @return The transaction hash
      */
     public Sha256Hash sendBitcoin(Address fromAddress, Address toAddress, Coin amount) throws JsonRPCException, IOException {
-        Map<Address, Coin> outputs = new HashMap<Address, Coin>();
-        outputs.put(toAddress, amount);
+        Map<Address, Coin> outputs = Collections.singletonMap(toAddress, amount);
         return sendBitcoin(fromAddress, outputs);
     }
 

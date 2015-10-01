@@ -15,7 +15,10 @@ def javadocSpec = {
             "name=${project.name}," +
                     "version=${project.version}," +
                     "title-link=http://example.com[${project.name} ${project.version}]"
-    options.links('http://docs.oracle.com/javase/7/docs/api/', 'https://bitcoinj.github.io/javadoc/0.13.2/')
+    options.links(  'http://docs.oracle.com/javase/7/docs/api/',
+                    'https://bitcoinj.github.io/javadoc/0.13.2/',
+                    'http://fasterxml.github.io/jackson-core/javadoc/2.6/',
+                    'http://fasterxml.github.io/jackson-databind/javadoc/2.6/')
 }
 
 allprojects {
@@ -38,3 +41,6 @@ task javadocAll(type: Javadoc) {
     destinationDir = new File(buildDir, 'alljavadoc')
 }
 javadocAll javadocSpec
+javadocAll.doLast {
+    logger.warn "Consolidated JavaDoc generated at <file://${javadocAll.destinationDir}/index.html>"
+}

@@ -90,7 +90,7 @@ public class BitcoinClient extends RPCClient {
      * option to the `bitcoin-cli` command-line tool.
      *
      * @param timeout Timeout in seconds
-     * @return True if ready, false if timeout
+     * @return true if ready, false if timeout
      */
     public Boolean waitForServer(int timeout) throws JsonRPCException {
 
