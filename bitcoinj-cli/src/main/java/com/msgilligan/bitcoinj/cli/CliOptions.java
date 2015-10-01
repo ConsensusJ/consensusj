@@ -1,7 +1,6 @@
 package com.msgilligan.bitcoinj.cli;
 
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 
@@ -20,27 +19,27 @@ public class CliOptions extends Options {
             .addOptionGroup(new OptionGroup()
                     .addOption(new Option(null, "testnet", false, "Use the test network"))
                     .addOption(new Option(null, "regtest", false, "Enter regression test mode")))
-            .addOption(OptionBuilder.withLongOpt("rpcconnect")
-                    .withDescription("Send commands to node running on <ip> (default: 127.0.0.1)")
+            .addOption(Option.builder().longOpt("rpcconnect")
+                    .desc("Send commands to node running on <ip> (default: 127.0.0.1)")
                     .hasArg()
-                    .withArgName("ip")
-                    .create())
-                .addOption(OptionBuilder.withLongOpt("rpcport")
-                        .withDescription("Connect to JSON-RPC on <port> (default: 8332 or testnet: 18332)")
+                    .argName("ip")
+                    .build())
+                .addOption(Option.builder().longOpt("rpcport")
+                        .desc("Connect to JSON-RPC on <port> (default: 8332 or testnet: 18332)")
                         .hasArg()
-                        .withArgName("port")
-                        .create())
+                        .argName("port")
+                        .build())
                 .addOption(null, "rpcwait", false, "Wait for RPC server to start")
-                .addOption(OptionBuilder.withLongOpt("rpcuser")
-                        .withDescription("Username for JSON-RPC connections")
+                .addOption(Option.builder().longOpt("rpcuser")
+                        .desc("Username for JSON-RPC connections")
                         .hasArg()
-                        .withArgName("user")
-                        .create())
-                .addOption(OptionBuilder.withLongOpt("rpcpassword")
-                        .withDescription("Password for JSON-RPC connections")
+                        .argName("user")
+                        .build())
+                .addOption(Option.builder().longOpt("rpcpassword")
+                        .desc("Password for JSON-RPC connections")
                         .hasArg()
-                        .withArgName("pw")
-                        .create())
+                        .argName("pw")
+                        .build())
             .addOption(null, "rpcssl", false, "Use https for JSON-RPC connections");
     }
 

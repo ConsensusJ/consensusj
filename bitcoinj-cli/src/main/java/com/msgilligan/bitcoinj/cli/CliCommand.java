@@ -3,7 +3,7 @@ package com.msgilligan.bitcoinj.cli;
 import com.msgilligan.bitcoinj.rpc.JsonRPCException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.ParseException;
 
@@ -51,7 +51,7 @@ public abstract class CliCommand {
             this.usage = name;
         }
         this.options = options;
-        parser = new GnuParser();
+        parser = new DefaultParser();
         try {
             this.line = this.parser.parse(options, args);
         } catch (ParseException e) {

@@ -3,6 +3,7 @@ package com.msgilligan.bitcoinj.cli;
 import com.msgilligan.bitcoinj.rpc.JsonRPCException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,23 +24,18 @@ public class BitcoinJCli extends CliCommand {
     }
 
     public Integer runImpl() throws IOException {
-        // Hacked together parsing that barely supports the two RPC methods in the Spock test
-        // TODO: Make this better and complete
-        @SuppressWarnings("unchecked")
-        List<Object> args = (List<Object>) line.getArgList();
+        List<String> args = line.getArgList();
         if (args.size() == 0) {
             printError("rpc method required");
             printHelp();
             return(1);
         }
-        String method = (String) args.get(0);
+        String method = args.get(0);
         args.remove(0); // remove method from list
-        if (args.size() > 0 && args.get(0) != null) {
-            args.set(0, true);
-        }
+        List<Object> typedArgs = convertParameters(method, args);
         Object result;
         try {
-            result = client.cliSend(method, args.toArray());
+            result = client.cliSend(method, typedArgs.toArray());
         } catch (JsonRPCException e) {
             e.printStackTrace();
             return 1;
@@ -48,5 +44,31 @@ public class BitcoinJCli extends CliCommand {
             pwout.println(result.toString());
         }
         return 0;
+    }
+
+    /**
+     * Convert params from strings to Java types that will map to correct JSON types
+     *
+     * TODO: Make this better and complete
+     *
+     * @param method the JSON-RPC method
+     * @param params Params with String type
+     * @return Params with correct Java types for JSON
+     */
+    protected List<Object> convertParameters(String method, List<String> params) {
+        List<Object> typedParams = new ArrayList<>();
+        switch (method) {
+            case "setgenerate":
+                typedParams.add(0, Boolean.parseBoolean(params.get(0)));
+                break;
+
+            default:
+                // Default (for now) is to leave them all as strings
+                for (String string : params) {
+                    typedParams.add(string);
+                }
+
+        }
+        return typedParams;
     }
 }
