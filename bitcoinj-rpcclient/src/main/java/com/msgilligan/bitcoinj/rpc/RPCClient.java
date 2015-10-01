@@ -43,27 +43,19 @@ public class RPCClient {
         }
     }
 
-    public RPCClient(RPCConfig config) {
-        this(config.getURI(), config.getUsername(), config.getPassword(), null);
-    }
-
-    public RPCClient(URI server, final String rpcuser, final String rpcpassword) {
-        this(server, rpcuser, rpcpassword, null);
-
-    }
-
     /**
+     * Construct a JSON-RPC client from URI, username, and password
      *
+     * Typically you'll want to use {@link BitcoinClient} or one of its subclasses
      * @param server server URI should not contain username/password
      * @param rpcuser username for the RPC HTTP connection
      * @param rpcpassword password for the RPC HTTP connection
-     * @param mapper Jackson object Mapper or null to use default mapper
      */
-    public RPCClient(URI server, final String rpcuser, final String rpcpassword, ObjectMapper mapper) {
+    public RPCClient(URI server, final String rpcuser, final String rpcpassword) {
         this.serverURI = server;
         this.username = rpcuser;
         this.password = rpcpassword;
-        this.mapper = (mapper == null) ? new ObjectMapper() : mapper;
+        this.mapper = new ObjectMapper();
     }
 
     public URI getServerURI() {
