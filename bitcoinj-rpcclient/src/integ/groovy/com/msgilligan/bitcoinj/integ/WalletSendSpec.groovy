@@ -34,7 +34,7 @@ class WalletSendSpec extends BaseRegTestSpec {
     void setupSpec() {
 //        BriefLogFormatter.initVerbose();
         BriefLogFormatter.initWithSilentBitcoinJ();
-        params = RegTestParams.get()
+        params = getNetParams()
 
         wallet = new Wallet(params)
         wallet.setCoinSelector(new AllowUnconfirmedCoinSelector())

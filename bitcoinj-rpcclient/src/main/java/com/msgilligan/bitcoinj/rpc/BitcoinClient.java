@@ -15,6 +15,7 @@ import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.RegTestParams;
@@ -66,10 +67,23 @@ public class BitcoinClient extends RPCClient {
      * @param server URI of the Bitcoin RPC server
      * @param rpcuser Username (if required)
      * @param rpcpassword Password (if required)
+     * @deprecated You need to specify NetworkParameters, defaulting to RegTest
      */
+    @Deprecated
     public BitcoinClient(URI server, String rpcuser, String rpcpassword) {
+        this(RegTestParams.get(), server, rpcuser, rpcpassword);
+    }
+
+    /**
+     * Construct a BitcoinClient from Network Parameters, URI, user name, and password.
+     * @param netParams Correct Network Parameters for destination server
+     * @param server URI of the Bitcoin RPC server
+     * @param rpcuser Username (if required)
+     * @param rpcpassword Password (if required)
+     */
+    public BitcoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         super(server, rpcuser, rpcpassword);
-        this.context = new Context(RegTestParams.get());
+        this.context = new Context(netParams);
         mapper.registerModule(new RpcClientModule(context.getParams()));
     }
 
@@ -77,8 +91,17 @@ public class BitcoinClient extends RPCClient {
      * Construct a BitcoinClient from an RPCConfig data object.
      * @param config Contains URI, user name, and password
      */
+    @Deprecated
     public BitcoinClient(RPCConfig config) {
-        this(config.getURI(), config.getUsername(), config.getPassword());
+        this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());
+    }
+
+    /**
+     * Get network parameters
+     * @return network parameters for the server
+     */
+    public NetworkParameters getNetParams() {
+        return context.getParams();
     }
 
     /**
@@ -371,9 +394,7 @@ public class BitcoinClient extends RPCClient {
     public Transaction getRawTransaction(Sha256Hash txid) throws JsonRPCException, IOException {
         String hexEncoded = send("getrawtransaction", txid);
         byte[] raw = HexUtil.hexStringToByteArray(hexEncoded);
-        // Hard-code RegTest for now
-        // TODO: All RPC client connections should have a BitcoinJ NetworkParameters object?
-        Transaction tx = new Transaction(RegTestParams.get(), raw);
+        Transaction tx = new Transaction(context.getParams(), raw);
         return tx;
     }
 

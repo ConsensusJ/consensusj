@@ -16,6 +16,10 @@ import java.net.URISyntaxException;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinClient;
 import com.msgilligan.bitcoinj.rpc.RPCConfig;
+import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.params.MainNetParams;
+import org.bitcoinj.params.RegTestParams;
+import org.bitcoinj.params.TestNet3Params;
 
 /**
  * Base class for CLI commands that use Bitcoin RPC
@@ -63,7 +67,11 @@ public abstract class CliCommand {
     public BitcoinClient getClient() {
         if (client == null) {
             System.out.println("Connecting to: " + getRPCConfig().getURI());
-            client = new BitcoinClient(getRPCConfig());
+            RPCConfig config = getRPCConfig();
+            client = new BitcoinClient( config.getNetParams(),
+                                        config.getURI(),
+                                        config.getUsername(),
+                                        config.getPassword());
         }
         return client;
     }
@@ -203,7 +211,15 @@ public abstract class CliCommand {
         URI uri = getServerURI();
         String user = line.getOptionValue("rpcuser", "");
         String pass = line.getOptionValue("rpcpassword", "");
-        RPCConfig cfg = new RPCConfig(uri, user, pass);
+        NetworkParameters netParams;
+        if (line.hasOption("regtest")) {
+            netParams = RegTestParams.get();
+        } else if (line.hasOption(("testnet"))) {
+            netParams = TestNet3Params.get();
+        } else {
+            netParams = MainNetParams.get();
+        }
+        RPCConfig cfg = new RPCConfig(netParams, uri, user, pass);
         return cfg;
     }
 

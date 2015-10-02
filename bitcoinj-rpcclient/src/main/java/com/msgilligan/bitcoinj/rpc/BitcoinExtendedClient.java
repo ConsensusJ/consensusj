@@ -29,14 +29,18 @@ import java.util.Map;
  * the ones we ran into while building integration tests.
  */
 public class BitcoinExtendedClient extends BitcoinClient {
-    private final NetworkParameters netParams = RegTestParams.get();
     public final Coin stdTxFee = Coin.valueOf(10000);
     public final Coin stdRelayTxFee = Coin.valueOf(1000);
     public final Integer defaultMaxConf = 9999999;
     public final long stdTxFeeSatoshis = stdTxFee.getValue();
 
+    @Deprecated
     public BitcoinExtendedClient(URI server, String rpcuser, String rpcpassword) {
-        super(server, rpcuser, rpcpassword);
+        super(RegTestParams.get(), server, rpcuser, rpcpassword);
+    }
+
+    public BitcoinExtendedClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
+        super(netParams, server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(RPCConfig config) {
@@ -186,8 +190,8 @@ public class BitcoinExtendedClient extends BitcoinClient {
     }
 
     public Transaction createSignedTransaction(ECKey fromKey, List<TransactionOutput> outputs) throws JsonRPCException, IOException {
-        Address fromAddress = fromKey.toAddress(netParams);
-        Transaction tx = new Transaction(netParams);
+        Address fromAddress = fromKey.toAddress(getNetParams());
+        Transaction tx = new Transaction(getNetParams());
 
         List<TransactionOutput> unspentOutputs = listUnspentJ(fromAddress);
 
@@ -226,7 +230,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
 
     public Transaction createSignedTransaction(ECKey fromKey, Address toAddress, Coin amount) throws JsonRPCException, IOException {
         List<TransactionOutput> outputs = Collections.singletonList(
-                new TransactionOutput(netParams, null, amount, toAddress));
+                new TransactionOutput(getNetParams(), null, amount, toAddress));
         return createSignedTransaction(fromKey, outputs);
     }
 
@@ -252,7 +256,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
         List<UnspentOutput> unspentOutputsRPC = listUnspent(0, defaultMaxConf, addresses); // RPC UnspentOutput objects
         List<TransactionOutPoint> unspentOutPoints = new ArrayList<TransactionOutPoint>();
         for (UnspentOutput it : unspentOutputsRPC) {
-            unspentOutPoints.add(new TransactionOutPoint(netParams, it.getVout(), it.getTxid()));
+            unspentOutPoints.add(new TransactionOutPoint(getNetParams(), it.getVout(), it.getTxid()));
         }
         return unspentOutPoints;
     }
