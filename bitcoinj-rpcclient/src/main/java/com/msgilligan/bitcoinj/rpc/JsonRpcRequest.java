@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.rpc;
 
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,11 +19,7 @@ public class JsonRpcRequest {
         this.jsonrpc = JSON_RPC_VERSION;
         this.id =  Long.toString(JsonRpcRequest.nextRequestId++);
         this.method = method;
-        if (params != null) {
-            // TODO: Should only remove nulls from the end
-            params.removeAll(Collections.singleton(null));  // Remove null entries (should only be at end)
-        }
-        this.params = params;
+        this.params = removeTrailingNulls(params);
     }
 
     public String getJsonrpc() {
@@ -41,4 +37,21 @@ public class JsonRpcRequest {
     public List<Object> getParams() {
         return params;
     }
+
+    /**
+     * Remove trailing nulls (all nulls *following* the last non-null object)
+     *
+     * This allows convenience methods to use `null` parameters to indicate the
+     * server-determined default should be used. If `null` were actually passed as
+     * JSON, then the server default would be overridden.  `null` can be used before
+     * the last non-null element, but those `null`s will be sent to the server.
+     */
+    private static List<Object> removeTrailingNulls(List<Object> params) {
+        LinkedList<Object> cleaned = new LinkedList<>(params);
+        while ((cleaned.size() > 0) && (cleaned.getLast() == null)) {
+            cleaned.removeLast();
+        }
+        return cleaned;
+    }
+
 }
