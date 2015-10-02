@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-ext.groovyVersion = '2.4.4'
+ext.groovyVersion = '2.4.5'
 
 allprojects {
     apply plugin: 'java'
