@@ -1,4 +1,4 @@
 /**
- * Classes for talking to bitcoind via the JSON-RPC interface
+ * Generic and Bitcoin JSON-RPC Java clients and supporting classes.
  */
 package com.msgilligan.bitcoinj.rpc;

@@ -20,9 +20,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import java.util.List;
 
 /**
- * User: sean
- * Date: 2/22/14
- * Time: 11:30 PM
  */
 @Configuration
 @EnableWebSocketMessageBroker

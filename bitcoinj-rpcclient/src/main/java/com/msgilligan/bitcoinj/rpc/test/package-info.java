@@ -1,4 +1,4 @@
 /**
- * Bitcoin RPC functional test support classes
+ * Bitcoin JSON-RPC functional test support classes
  */
 package com.msgilligan.bitcoinj.rpc.test;

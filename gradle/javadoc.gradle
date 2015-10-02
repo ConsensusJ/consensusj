@@ -9,7 +9,7 @@
 def javadocSpec = {
     options.docletpath = configurations.asciidoclet.files.asType(List)
     options.doclet = 'org.asciidoctor.Asciidoclet'
-//        options.overview = "src/main/java/overview.adoc"
+    options.overview = "doc/javadoc-overview.adoc"
     options.addStringOption '-base-dir', "${projectDir}"
     options.addStringOption '-attribute',
             "name=${project.name}," +
@@ -19,6 +19,8 @@ def javadocSpec = {
                     'https://bitcoinj.github.io/javadoc/0.13.2/',
                     'http://fasterxml.github.io/jackson-core/javadoc/2.6/',
                     'http://fasterxml.github.io/jackson-databind/javadoc/2.6/')
+
+    inputs.file(options.overview)
 }
 
 allprojects {

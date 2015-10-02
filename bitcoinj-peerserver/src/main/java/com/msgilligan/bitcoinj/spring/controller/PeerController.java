@@ -1,9 +1,7 @@
 package com.msgilligan.bitcoinj.spring.controller;
 
 /**
- * User: sean
- * Date: 2/22/14
- * Time: 6:40 PM
+ * REST and WebSocket (STOMP) Spring MVC Peer Controller
  */
 import com.msgilligan.bitcoinj.spring.service.PeerService;
 import org.bitcoinj.core.Peer;

@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.Module;
 import java.io.FileNotFoundException;
 
 /**
+ * Spring configuration for bitcoinj, Bitcoin services, and JSON-RPC server
  */
 @Configuration
 public class BitcoinConfig {

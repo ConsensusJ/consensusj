@@ -8,9 +8,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
- * User: sean
- * Date: 2/22/14
- * Time: 11:22 PM
+ * Spring Web configuration
  */
 @Configuration
 @EnableWebMvc

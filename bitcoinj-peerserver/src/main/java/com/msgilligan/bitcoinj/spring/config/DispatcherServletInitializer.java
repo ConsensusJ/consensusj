@@ -7,9 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 /**
- * User: sean
- * Date: 2/22/14
- * Time: 11:21 PM
+ *
  */
 public class DispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 

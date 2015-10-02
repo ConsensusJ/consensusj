@@ -6,6 +6,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Spring Boot application container for PeerServer
+ */
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(basePackages="com.msgilligan.bitcoinj.spring")
