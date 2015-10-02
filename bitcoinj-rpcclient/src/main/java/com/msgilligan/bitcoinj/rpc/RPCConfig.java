@@ -2,7 +2,6 @@ package com.msgilligan.bitcoinj.rpc;
 
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.RegTestParams;
-import sun.nio.ch.Net;
 
 import java.net.URI;
 
