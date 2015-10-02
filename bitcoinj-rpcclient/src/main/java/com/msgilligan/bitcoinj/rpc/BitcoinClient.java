@@ -214,7 +214,7 @@ public class BitcoinClient extends RPCClient {
      * @return The current block count
      */
     public Integer getBlockCount() throws JsonRPCException, IOException {
-        return send("getblockcount", Collections.emptyList());
+        return send("getblockcount");
     }
 
     /**
@@ -566,7 +566,7 @@ public class BitcoinClient extends RPCClient {
     }
 
     public ServerInfo getInfo() throws JsonRPCException, IOException {
-        return send("getinfo", ServerInfo.class, Collections.emptyList());
+        return send("getinfo", ServerInfo.class);
     }
 
     /**
@@ -653,7 +653,7 @@ public class BitcoinClient extends RPCClient {
      */
     public List<ChainTip> getChainTips() throws JsonRPCException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ChainTip.class);
-        return send("getchaintips",resultType, Collections.emptyList());
+        return send("getchaintips",resultType);
     }
 
     /**
@@ -666,6 +666,6 @@ public class BitcoinClient extends RPCClient {
      */
     public List<Sha256Hash> clearMemPool() throws JsonRPCException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
-        return send("clearmempool", resultType, Collections.emptyList());
+        return send("clearmempool", resultType);
     }
 }
