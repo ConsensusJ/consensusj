@@ -140,6 +140,18 @@ public class RPCClient {
         throw new JsonRPCStatusException(exceptionMessage, responseCode, responseMessage, jsonRPCCode, bodyString, bodyJson);
     }
 
+    @Deprecated
+    protected <R> R send(String method, List<Object> params, Class<R> resultType) throws IOException, JsonRPCStatusException {
+        return send(method, resultType, params);
+    }
+
+    /**
+     * Varargs version
+     */
+    protected <R> R send(String method, Class<R> resultType, Object... params) throws IOException, JsonRPCStatusException {
+        return send(method, resultType, Arrays.asList(params));
+    }
+
     /**
      * JSON-RPC remote method call that returns 'response.result`
      *
@@ -149,13 +161,13 @@ public class RPCClient {
      * @param resultType desired result type as a Java class object
      * @return the 'response.result' field of the JSON RPC response converted to type R
      */
-    protected <R> R send(String method, List<Object> params, Class<R> resultType) throws IOException, JsonRPCStatusException {
+    protected <R> R send(String method, Class<R> resultType, List<Object> params) throws IOException, JsonRPCStatusException {
         JsonRpcRequest request = new JsonRpcRequest(method, params);
         // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
         // (We can't use R because of type erasure)
         JavaType responseType = mapper.getTypeFactory().
                 constructParametrizedType(JsonRpcResponse.class, JsonRpcResponse.class, resultType);
-        JsonRpcResponse<R> response =  send(request, responseType);
+        JsonRpcResponse<R> response = send(request, responseType);
 
 //        assert response != null;
 //        assert response.getJsonrpc() != null;
@@ -166,16 +178,28 @@ public class RPCClient {
         return response.getResult();
     }
 
+    @Deprecated
+    protected <R> R send(String method, List<Object> params, JavaType resultType) throws IOException, JsonRPCStatusException {
+        return send(method, resultType, params);
+    }
+
+    /**
+     * Varargs version
+     */
+    protected <R> R send(String method, JavaType resultType, Object... params) throws IOException, JsonRPCStatusException {
+        return send(method, resultType, Arrays.asList(params));
+    }
+
     /**
      * JSON-RPC remote method call that returns 'response.result`
      *
+     * @param pass:[<R>] Type of result object
      * @param method JSON RPC method call to send
      * @param params JSON RPC params
-     * @param pass:[<R>] Type of result object
      * @param resultType desired result type as a Jackson JavaType object
      * @return the 'response.result' field of the JSON RPC response converted to type R
      */
-    protected <R> R send(String method, List<Object> params, JavaType resultType) throws IOException, JsonRPCStatusException {
+    protected <R> R send(String method, JavaType resultType, List<Object> params) throws IOException, JsonRPCStatusException {
         JsonRpcRequest request = new JsonRpcRequest(method, params);
         // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
         // (We can't use R because of type erasure)
@@ -186,27 +210,45 @@ public class RPCClient {
         return response.getResult();
     }
 
-    protected <R> R send(String method, List<Object> params) throws IOException, JsonRPCStatusException {
-        return (R) send(method, params, (Class<R>) Object.class);
-    }
-
     /**
-     * CLI-style send
+     * Call an RPC method and return default object type.
+     *
+     * Caller should cast returned object to the correct type.
      *
      * Useful for:
      * * Simple (not client-side validated) command line utilities
      * * Functional tests that need to send incorrect types to the server to test error handling
      *
-     * Now that we've pushed most of the parameter conversion into Jackson serializers
+     * @param method JSON RPC method call to send
+     * @param params JSON RPC params
+     * @param pass:[<R>] Type of result object
+     * @return the 'response.result' field of the JSON RPC response cast to type R
+     * @throws IOException
+     * @throws JsonRPCStatusException
+     */
+    public <R> R send(String method, Object... params) throws IOException, JsonRPCStatusException {
+        return send(method, Arrays.asList(params));
+    }
+
+    public <R> R send(String method, List<Object> params) throws IOException, JsonRPCStatusException {
+        return (R) send(method, (Class<R>) Object.class, params);
+    }
+
+    /**
+     * CLI-style send
+     *
+     * Now that we've pushed most of the parameter conversion into Jackson serializers,
      * there's little difference between this method and the `send()` that it calls.
-     * After some refactoring it can probably be eliminated.
+     * After some refactoring it is now being eliminated.
      *
      * @param method Allows RPC method to be passed as a stream
      * @param params variable number of untyped objects
      * @return The 'result' element from the returned JSON RPC response
+     * @deprecated There is now a send() method with the same calling conventions and behavior
      */
+    @Deprecated
     public Object cliSend(String method, Object... params) throws IOException, JsonRPCException {
-        return send(method, createParamList(params));
+        return send(method, params);
     }
 
     private HttpURLConnection openConnection() throws IOException {
@@ -270,7 +312,9 @@ public class RPCClient {
      *
      * @param parameters  A variable number of parameters as varargs or array
      * @return A mutable list of the same parameters
+     * @deprecated No longer needed: send() methods can now be called with varargs.
      */
+    @Deprecated
     protected List<Object> createParamList(Object... parameters) {
         return new ArrayList<Object>(Arrays.asList(parameters));
     }

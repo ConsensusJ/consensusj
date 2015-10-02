@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.rpc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JavaType;
 import com.msgilligan.bitcoinj.json.conversion.HexUtil;
 import com.msgilligan.bitcoinj.json.pojo.ChainTip;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
@@ -15,7 +15,6 @@ import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.RegTestParams;
@@ -26,7 +25,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -192,7 +191,7 @@ public class BitcoinClient extends RPCClient {
      * @return The current block count
      */
     public Integer getBlockCount() throws JsonRPCException, IOException {
-        return send("getblockcount", null);
+        return send("getblockcount", Collections.emptyList());
     }
 
     /**
@@ -202,8 +201,7 @@ public class BitcoinClient extends RPCClient {
      * @return The block hash
      */
     public Sha256Hash getBlockHash(Integer index) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(index);
-        return send("getblockhash", params, Sha256Hash.class);
+        return send("getblockhash", Sha256Hash.class, index);
     }
 
     /**
@@ -214,16 +212,12 @@ public class BitcoinClient extends RPCClient {
      */
     public Map<String, Object> getBlock(Sha256Hash hash) throws JsonRPCException, IOException {
         // Use "verbose = true"
-        List<Object> params = createParamList(hash, true);
-        Map<String, Object> json = send("getblock", params);
-        return json;
+        return send("getblock", hash, true);
     }
 
     public Block getRawBlock(Sha256Hash hash) throws JsonRPCException, IOException {
         // Use "verbose = false"
-        List<Object> params = createParamList(hash, false);
-        Block block = send("getblock", params, Block.class);
-        return block;
+        return send("getblock", Block.class, hash, false);
     }
 
     /**
@@ -249,10 +243,9 @@ public class BitcoinClient extends RPCClient {
      *
      */
     public List<Sha256Hash> setGenerate(Boolean generate, Long genproclimit) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(generate, genproclimit);
         // TODO: When we drop support for Bitcoin 0.9.x we can use automatic Jackson mapping here
         List<Sha256Hash> hashes = new ArrayList<Sha256Hash>();
-        Object result = send("setgenerate", params);
+        Object result = send("setgenerate", generate, genproclimit);
         if (result != null) {
             List<String> stringList = (List<String>) result;
             for (String hashString : stringList) {
@@ -296,9 +289,7 @@ public class BitcoinClient extends RPCClient {
      * @return A new Bitcoin address
      */
     public Address getNewAddress(String account) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(account);
-        Address address = send("getnewaddress", params, Address.class);
-        return address;
+        return send("getnewaddress", Address.class, account);
     }
 
     /**
@@ -308,9 +299,7 @@ public class BitcoinClient extends RPCClient {
      * @return The Bitcoin address
      */
     public Address getAccountAddress(String account) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(account);
-        Address address = send("getaccountaddress", params, Address.class);
-        return address;
+        return send("getaccountaddress", Address.class, account);
     }
 
     /**
@@ -322,9 +311,7 @@ public class BitcoinClient extends RPCClient {
      * @return The private key
      */
     public ECKey dumpPrivKey(Address address) throws IOException, JsonRPCStatusException {
-        List<Object> params = createParamList(address);
-        ECKey key = send("dumpprivkey", params, ECKey.class);
-        return key;
+        return send("dumpprivkey", ECKey.class, address);
     }
 
     /**
@@ -340,8 +327,7 @@ public class BitcoinClient extends RPCClient {
     public Boolean moveFunds(Address fromaccount, Address toaccount, Coin amount, Integer minconf, String comment)
             throws JsonRPCException,
             IOException {
-        List<Object> params = createParamList(fromaccount, toaccount, amount, minconf, comment);
-        return send("move", params);
+        return send("move", fromaccount, toaccount, amount, minconf, comment);
     }
 
     /**
@@ -356,9 +342,7 @@ public class BitcoinClient extends RPCClient {
      */
     public String createRawTransaction(List<Outpoint> inputs, Map<Address, Coin> outputs)
             throws JsonRPCException, IOException {
-        List<Object> params = Arrays.asList(inputs, outputs);
-        String transactionHex = send("createrawtransaction", params);
-        return transactionHex;
+        return send("createrawtransaction", inputs, outputs);
     }
 
     /**
@@ -368,9 +352,7 @@ public class BitcoinClient extends RPCClient {
      * @return The signed transaction and information whether it has a complete set of signature
      */
     public SignedRawTransaction signRawTransaction(String unsignedTransaction) throws IOException, JsonRPCException {
-        List<Object> params = createParamList(unsignedTransaction);
-        SignedRawTransaction signedTransaction = send("signrawtransaction", params, SignedRawTransaction.class);
-        return signedTransaction;
+        return send("signrawtransaction", SignedRawTransaction.class, unsignedTransaction);
     }
 
     public Object getRawTransaction(Sha256Hash txid, Boolean verbose) throws JsonRPCException, IOException {
@@ -387,8 +369,7 @@ public class BitcoinClient extends RPCClient {
      *  Return a BitcoinJ Transaction type
      */
     public Transaction getRawTransaction(Sha256Hash txid) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(txid);
-        String hexEncoded = send("getrawtransaction", params);
+        String hexEncoded = send("getrawtransaction", txid);
         byte[] raw = HexUtil.hexStringToByteArray(hexEncoded);
         // Hard-code RegTest for now
         // TODO: All RPC client connections should have a BitcoinJ NetworkParameters object?
@@ -398,9 +379,7 @@ public class BitcoinClient extends RPCClient {
 
     /* TODO: Return a stronger type than an a Map? Or maybe we always/only return bitcoinj Transaction? */
     public Map<String, Object> getRawTransactionMap(Sha256Hash txid) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(txid, 1);
-        Map<String, Object> json = send("getrawtransaction", params);
-        return json;
+        return send("getrawtransaction", txid, 1);
     }
 
     public Sha256Hash sendRawTransaction(Transaction tx) throws JsonRPCException, IOException {
@@ -412,15 +391,11 @@ public class BitcoinClient extends RPCClient {
     }
 
     public Sha256Hash sendRawTransaction(Transaction tx, Boolean allowHighFees) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(tx, allowHighFees);
-        Sha256Hash hash = send("sendrawtransaction", params, Sha256Hash.class);
-        return hash;
+        return send("sendrawtransaction", Sha256Hash.class, tx, allowHighFees);
     }
 
     public Sha256Hash sendRawTransaction(String hexTx, Boolean allowHighFees) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(hexTx, allowHighFees);
-        Sha256Hash hash = send("sendrawtransaction", params, Sha256Hash.class);
-        return hash;
+        return send("sendrawtransaction", Sha256Hash.class, hexTx, allowHighFees);
     }
 
     public Coin getReceivedByAddress(Address address) throws JsonRPCException, IOException {
@@ -437,16 +412,13 @@ public class BitcoinClient extends RPCClient {
      * @throws IOException
      */
     public Coin getReceivedByAddress(Address address, Integer minConf) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(address, minConf);
-        return send("getreceivedbyaddress", params, Coin.class);
+        return send("getreceivedbyaddress", Coin.class, address, minConf);
     }
 
     public List<ReceivedByAddressInfo> listReceivedByAddress(Integer minConf, Boolean includeEmpty)
             throws JsonRPCException, IOException {
-        List<Object> params = createParamList(minConf, includeEmpty);
-        List<ReceivedByAddressInfo> addresses = send("listreceivedbyaddress", params,
-                mapper.getTypeFactory().constructCollectionType(List.class, ReceivedByAddressInfo.class));
-        return addresses;
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ReceivedByAddressInfo.class);
+        return send("listreceivedbyaddress", resultType, minConf, includeEmpty);
     }
 
     /**
@@ -482,10 +454,8 @@ public class BitcoinClient extends RPCClient {
      */
     public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, Iterable<Address> filter)
             throws JsonRPCException, IOException {
-        List<Object> params = createParamList(minConf, maxConf, filter);
-        List<UnspentOutput> unspent = send("listunspent", params,
-                mapper.getTypeFactory().constructCollectionType(List.class, UnspentOutput.class));
-        return unspent;
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, UnspentOutput.class);
+        return send("listunspent", resultType, minConf, maxConf, filter);
     }
 
     /**
@@ -509,9 +479,7 @@ public class BitcoinClient extends RPCClient {
      */
     public TxOutInfo getTxOut(Sha256Hash txid, Integer vout, Boolean includeMemoryPool)
             throws JsonRPCException, IOException {
-        List<Object> params = createParamList(txid, vout, includeMemoryPool);
-        TxOutInfo txout = send("gettxout", params, TxOutInfo.class);
-        return txout;
+        return send("gettxout", TxOutInfo.class, txid, vout, includeMemoryPool);
     }
 
     /**
@@ -541,8 +509,7 @@ public class BitcoinClient extends RPCClient {
      * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`
      */
     public Coin getBalance(String account, Integer minConf) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(account, minConf);
-        return send("getbalance", params, Coin.class);
+        return send("getbalance", Coin.class, account, minConf);
     }
 
     public Sha256Hash sendToAddress(Address address, Coin amount) throws JsonRPCException, IOException {
@@ -551,19 +518,16 @@ public class BitcoinClient extends RPCClient {
 
     public Sha256Hash sendToAddress(Address address, Coin amount, String comment, String commentTo)
             throws JsonRPCException, IOException {
-        List<Object> params = createParamList(address, amount, comment, commentTo);
-        return send("sendtoaddress", params, Sha256Hash.class);
+        return send("sendtoaddress", Sha256Hash.class, address, amount, comment, commentTo);
     }
 
     public Sha256Hash sendFrom(String account, Address address, Coin amount)
             throws JsonRPCException, IOException {
-        List<Object> params = createParamList(account, address, amount);
-        return send("sendfrom", params, Sha256Hash.class);
+        return send("sendfrom", Sha256Hash.class, account, address, amount);
     }
 
     public Sha256Hash sendMany(String account, Map<Address, Coin> amounts) throws JsonRPCException, IOException {
-        List<Object> params = Arrays.asList(account, amounts);
-        return send("sendmany", params, Sha256Hash.class);
+        return send("sendmany", Sha256Hash.class, account, amounts);
     }
 
     /**
@@ -573,19 +537,15 @@ public class BitcoinClient extends RPCClient {
      * @return True if successful
      */
     public Boolean setTxFee(Coin amount) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(amount);
-        return send("settxfee", params);
+        return send("settxfee", amount);
     }
 
     public Map<String, Object> getTransaction(Sha256Hash txid) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(txid);
-        Map<String, Object> transaction = send("gettransaction", params);
-        return transaction;
+        return send("gettransaction", txid);
     }
 
     public ServerInfo getInfo() throws JsonRPCException, IOException {
-        ServerInfo result = send("getinfo", null, ServerInfo.class);
-        return result;
+        return send("getinfo", ServerInfo.class, Collections.emptyList());
     }
 
     /**
@@ -607,8 +567,7 @@ public class BitcoinClient extends RPCClient {
      * @return The help text
      */
     public String help(String command) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(command);
-        return send("help", params);
+        return send("help", command);
     }
 
     /**
@@ -650,8 +609,7 @@ public class BitcoinClient extends RPCClient {
      * @since Bitcoin Core 0.10
      */
     public void invalidateBlock(Sha256Hash hash) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(hash);
-        send("invalidateblock", params);
+        send("invalidateblock", hash);
     }
 
     /**
@@ -663,8 +621,7 @@ public class BitcoinClient extends RPCClient {
      * @since Bitcoin Core 0.10
      */
     public void reconsiderBlock(Sha256Hash hash) throws JsonRPCException, IOException {
-        List<Object> params = createParamList(hash);
-        send("reconsiderblock", params);
+        send("reconsiderblock", hash);
     }
 
     /**
@@ -674,9 +631,8 @@ public class BitcoinClient extends RPCClient {
      * @since Bitcoin Core 0.10
      */
     public List<ChainTip> getChainTips() throws JsonRPCException, IOException {
-        List<ChainTip> tips = send("getchaintips", null,
-                mapper.getTypeFactory().constructCollectionType(List.class, ChainTip.class));
-        return tips;
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ChainTip.class);
+        return send("getchaintips",resultType, Collections.emptyList());
     }
 
     /**
@@ -688,8 +644,7 @@ public class BitcoinClient extends RPCClient {
      * @return A list of transaction hashes of the removed transactions
      */
     public List<Sha256Hash> clearMemPool() throws JsonRPCException, IOException {
-        List<Sha256Hash> hashes = send("clearmempool", null,
-                mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class));
-        return hashes;
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
+        return send("clearmempool", resultType, Collections.emptyList());
     }
 }

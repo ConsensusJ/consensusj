@@ -44,7 +44,7 @@ public class BitcoinJCli extends CliCommand {
         List<Object> typedArgs = convertParameters(method, args);
         Object result;
         try {
-            result = client.cliSend(method, typedArgs.toArray());
+            result = client.send(method, typedArgs);
         } catch (JsonRPCException e) {
             e.printStackTrace();
             return 1;
