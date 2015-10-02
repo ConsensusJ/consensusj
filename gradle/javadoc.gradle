@@ -7,9 +7,9 @@
 //}
 
 def javadocSpec = {
+//    options.overview = "doc/javadoc-overview.adoc"
     options.docletpath = configurations.asciidoclet.files.asType(List)
     options.doclet = 'org.asciidoctor.Asciidoclet'
-    options.overview = "doc/javadoc-overview.adoc"
     options.addStringOption '-base-dir', "${projectDir}"
     options.addStringOption '-attribute',
             "name=${project.name}," +
@@ -20,7 +20,6 @@ def javadocSpec = {
                     'http://fasterxml.github.io/jackson-core/javadoc/2.6/',
                     'http://fasterxml.github.io/jackson-databind/javadoc/2.6/')
 
-    inputs.file(options.overview)
 }
 
 allprojects {
@@ -43,6 +42,10 @@ task javadocAll(type: Javadoc) {
     destinationDir = new File(buildDir, 'alljavadoc')
 }
 javadocAll javadocSpec
+javadocAll {
+    options.overview = "doc/javadoc-overview.adoc"
+    inputs.file(options.overview)
+}
 javadocAll.doLast {
     logger.warn "Consolidated JavaDoc generated at <file://${javadocAll.destinationDir}/index.html>"
 }
