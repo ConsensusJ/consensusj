@@ -49,4 +49,9 @@ class CoinCategorySpec extends Specification {
         expect:
         (Coin.COIN * 2) / Coin.COIN     == 2L
     }
+
+    def "negation works" () {
+        expect:
+        -Coin.COIN == Coin.COIN * -1
+    }
 }
