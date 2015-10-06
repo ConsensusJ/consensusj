@@ -23,5 +23,5 @@ githubPages {
 
 publishGhPages.dependsOn javadocAll, asciidoctor
 
-task publishToGhProject(dependsOn: publishGhPages, group: 'render',
-        description: "Publishes buildDir to Github Pages on 'gh-pages' branch")
+task publishSite(dependsOn: publishGhPages, group: 'render',
+        description: "Publishes ${siteDir} to Github Pages on 'gh-pages' branch")

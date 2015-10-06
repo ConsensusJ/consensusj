@@ -1,0 +1,16 @@
+= bitcoinj-addons Release Process
+
+. Update `CHANGELOG.adoc`
+. Set versions
+.. `README.adoc`
+.. bitcoinj-groovy `ExtensionModule`
+.. `gradle.properties`
+. Commit version bump and changelog.
+. Tag: `git tag -a v0.x.y -m "Release 0.x.y"`
+. Push: `git push --tags origin master`
+. Full build, test: `./gradlew clean jenkinsBuild regTest`
+. Push to bintray: `./gradlew bintrayUpload`
+. Update github-pages site (including JavaDoc): `./gradlew publishSite`
+
+
+
