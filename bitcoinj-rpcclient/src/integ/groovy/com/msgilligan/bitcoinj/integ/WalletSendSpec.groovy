@@ -3,6 +3,7 @@ package com.msgilligan.bitcoinj.integ
 import com.msgilligan.bitcoinj.rpc.JsonRPCStatusException
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.BlockChain
+import org.bitcoinj.core.Coin
 import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.core.PeerGroup
 import org.bitcoinj.core.Sha256Hash
@@ -20,7 +21,7 @@ import spock.lang.Stepwise
 /**
  * Various interoperability tests between RPC server and bitcoinj wallets.
  */
-@Ignore("'Send mined coins' intermittently fails because transaction is still pending")
+//@Ignore("'Send mined coins' intermittently fails because transaction is still pending")
 @Stepwise
 class WalletSendSpec extends BaseRegTestSpec {
     @Shared
@@ -51,9 +52,9 @@ class WalletSendSpec extends BaseRegTestSpec {
         def walletAddr = getNewAddress()
         def walletKey = dumpPrivKey(walletAddr)
         wallet.importKey(walletKey)
-        def fundingAmount = 20.0
+        def fundingAmount = 20.btc
         requestBitcoin(fundingAddress, fundingAmount)
-        def amount = 10.0
+        def amount = 10.btc
 
         when: "we send coins to the wallet and write a block"
         client.sendToAddress(walletAddr, amount)
@@ -69,16 +70,16 @@ class WalletSendSpec extends BaseRegTestSpec {
 
         then: "the coins arrive"
         client.getReceivedByAddress(walletAddr) == amount
-        wallet.getBalance() == btcToCoin(amount)
+        wallet.getBalance() == amount
     }
 
     def "Send from BitcoinJ wallet to the Bitcoin Core wallet"() {
         when: "we send coins from BitcoinJ and write a block"
-        BigDecimal startAmount = 10.0
-        BigDecimal amount = 1.0
+        Coin startAmount = 10.btc
+        Coin amount = 1.btc
         Address rpcAddress = getNewAddress()
         // Send it with BitcoinJ
-        Wallet.SendResult sendResult = wallet.sendCoins(peerGroup,rpcAddress,btcToCoin(amount))
+        Wallet.SendResult sendResult = wallet.sendCoins(peerGroup,rpcAddress,amount)
         // Wait for broadcast complete
         Transaction sentTx = sendResult.broadcastComplete.get()
         // Wait for it to show up on server as unconfirmed
@@ -90,19 +91,19 @@ class WalletSendSpec extends BaseRegTestSpec {
 
         then: "the new address has a balance of amount"
         getReceivedByAddress(rpcAddress) == amount
-        wallet.getBalance() == btcToCoin(startAmount) - btcToCoin(amount) - Transaction.REFERENCE_DEFAULT_MIN_TX_FEE
+        wallet.getBalance() == startAmount - amount - Transaction.REFERENCE_DEFAULT_MIN_TX_FEE
     }
 
     def "create and send a transaction from BitcoinJ using wallet.completeTx"() {
         when:
-        BigDecimal amount = 1.0
+        Coin amount = 1.btc
         def rpcAddress = getNewAddress()
         Transaction tx = new Transaction(params)
-        tx.addOutput(btcToCoin(amount), rpcAddress)
+        tx.addOutput(amount, rpcAddress)
         Wallet.SendRequest request = Wallet.SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
         wallet.commitTx(request.tx)
-        Transaction sentTx = peerGroup.broadcastTransaction(request.tx).get();
+        Transaction sentTx = peerGroup.broadcastTransaction(request.tx).future().get();
         // Wait for it to show up on server as unconfirmed
         waitForUnconfirmedTransaction(sentTx.hash)
         generateBlock()
@@ -113,10 +114,10 @@ class WalletSendSpec extends BaseRegTestSpec {
 
     def "create a raw transaction using BitcoinJ but send with an RPC"() {
         when:
-        BigDecimal amount = 1.0
+        Coin amount = 1.btc
         def rpcAddress = getNewAddress()
         Transaction tx = new Transaction(params)
-        tx.addOutput(btcToCoin(amount), rpcAddress)
+        tx.addOutput(amount, rpcAddress)
         Wallet.SendRequest request = Wallet.SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
         wallet.commitTx(request.tx)
