@@ -3,7 +3,28 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.0.10
+
+Released: 2015.10.06
+
+=== Potentially Breaking
+
+* Deprecated `BTC` utility class removed.
+* Alternate `RPCClient` constructors removed (doesn't affect `BitcoinClient`)
+* Some methods return POJOs where they previously returned `Map`.
+
+=== Features/Changes
+
+* `BitcoinClient` constructor now takes a *bitcoinj* NetworkParameters instance.
+* Add Jackson/JSON POJOs: `WalletTransactionInfo`, `RawTransactionInfo`, `BlockInfo`
+* Significant JavaDoc improvements.
+* Code cleanup and simplification.
+* Upgrade CLI module to use Apache Commons CLI version 1.3.1
+* Replace type conversion hack in BitcoinJCLI with a more-extensible type conversion mechanism.
+
 == v0.0.9
+
+Released: 2015.09.29
 
 This is the first release with a CHANGELOG.
 
