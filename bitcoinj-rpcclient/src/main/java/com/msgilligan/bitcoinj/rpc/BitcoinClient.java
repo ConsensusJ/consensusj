@@ -2,8 +2,10 @@ package com.msgilligan.bitcoinj.rpc;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.msgilligan.bitcoinj.json.conversion.HexUtil;
+import com.msgilligan.bitcoinj.json.pojo.BlockInfo;
 import com.msgilligan.bitcoinj.json.pojo.ChainTip;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
+import com.msgilligan.bitcoinj.json.pojo.RawTransactionInfo;
 import com.msgilligan.bitcoinj.json.pojo.ReceivedByAddressInfo;
 import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
@@ -27,7 +29,6 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -50,8 +51,7 @@ import java.util.Map;
  * Coin balance = client.getBalance();
  * --
  *
- * NOTE: This is still a work-in-progress and the API will change. High on the priority list is making
- * better use of https://github.com/FasterXML/jackson[Jackson] to replace some of the current `Map`-based types.
+ * NOTE: This is still a work-in-progress and the API will change.
  *
  */
 public class BitcoinClient extends RPCClient {
@@ -148,7 +148,7 @@ public class BitcoinClient extends RPCClient {
             } catch (IOException e) {
                 status = e.getMessage();
             } catch (JsonRPCStatusException e) {
-                // If server is in "warmup" mode, e.g. validating/parsing the blockchain...
+                // If server is in "warm-up" mode, e.g. validating/parsing the blockchain...
                 if (e.jsonRPCCode == -28) {
                     // ...then grab text message for status logging
                     status = e.getMessage();
@@ -234,12 +234,20 @@ public class BitcoinClient extends RPCClient {
      * @param hash The block hash
      * @return The information about the block
      */
-    public Map<String, Object> getBlock(Sha256Hash hash) throws JsonRPCException, IOException {
+    public BlockInfo getBlockInfo(Sha256Hash hash) throws JsonRPCException, IOException {
         // Use "verbose = true"
-        return send("getblock", hash, true);
+        return send("getblock", BlockInfo.class, hash, true);
     }
 
+    /**
+     * @deprecated Use getBlock()
+     */
+    @Deprecated
     public Block getRawBlock(Sha256Hash hash) throws JsonRPCException, IOException {
+        return getBlock(hash);
+    }
+
+    public Block getBlock(Sha256Hash hash) throws JsonRPCException, IOException {
         // Use "verbose = false"
         return send("getblock", Block.class, hash, false);
     }
@@ -252,7 +260,7 @@ public class BitcoinClient extends RPCClient {
      */
     public Block getBlock(Integer index) throws JsonRPCException, IOException {
         Sha256Hash blockHash = getBlockHash(index);
-        return getRawBlock(blockHash);
+        return getBlock(blockHash);
     }
 
     /**
@@ -382,7 +390,7 @@ public class BitcoinClient extends RPCClient {
     public Object getRawTransaction(Sha256Hash txid, Boolean verbose) throws JsonRPCException, IOException {
         Object result;
         if (verbose) {
-            result = getRawTransactionMap(txid);    // Verbose means JSON
+            result = getRawTransactionInfo(txid);    // Verbose means JSON
         } else {
             result = getRawTransaction(txid);  // Not-verbose is bitcoinj Transaction
         }
@@ -395,13 +403,11 @@ public class BitcoinClient extends RPCClient {
     public Transaction getRawTransaction(Sha256Hash txid) throws JsonRPCException, IOException {
         String hexEncoded = send("getrawtransaction", txid);
         byte[] raw = HexUtil.hexStringToByteArray(hexEncoded);
-        Transaction tx = new Transaction(context.getParams(), raw);
-        return tx;
+        return new Transaction(context.getParams(), raw);
     }
 
-    /* TODO: Return a stronger type than an a Map? Or maybe we always/only return bitcoinj Transaction? */
-    public Map<String, Object> getRawTransactionMap(Sha256Hash txid) throws JsonRPCException, IOException {
-        return send("getrawtransaction", txid, 1);
+    public RawTransactionInfo getRawTransactionInfo(Sha256Hash txid) throws JsonRPCException, IOException {
+        return send("getrawtransaction", RawTransactionInfo.class, txid, 1);
     }
 
     public Sha256Hash sendRawTransaction(Transaction tx) throws JsonRPCException, IOException {

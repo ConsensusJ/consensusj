@@ -97,10 +97,12 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
         when: "a new block is mined"
         generateBlock()
 
+        and: "we get info about the transaction"
+        def broadcastedTransaction = getRawTransactionInfo(txid)
+
         then: "the transaction should have 1 confirmation"
-        def broadcastedTransaction = getRawTransaction(txid, true)
-        def confirmations = broadcastedTransaction["confirmations"]
-        confirmations == 1
+        broadcastedTransaction.confirmations == 1
+        broadcastedTransaction.txid == txid
 
         and: "#fundingAddress has a remainder of coins minus transaction fees"
         def balanceRemaining = getBitcoinBalance(fundingAddress)
