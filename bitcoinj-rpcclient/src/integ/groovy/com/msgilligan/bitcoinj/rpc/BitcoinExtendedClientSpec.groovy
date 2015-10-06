@@ -2,6 +2,7 @@ package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.test.RegTestEnvironment
 import com.msgilligan.bitcoinj.test.RegTestFundingSource
+import org.bitcoinj.core.Coin
 import spock.lang.Specification
 
 
@@ -33,6 +34,16 @@ class BitcoinExtendedClientSpec extends Specification {
 
         then:
         tx != null
+        tx.amount == 0.btc  // inputs and outputs balance out as all are in the same wallet
+        tx.fee == -10000.satoshi
+        tx.details.findAll{ it.address == myAddress}.size() == 2
+        tx.details.findAll{ it.address == destAddress}.size() == 2
+        tx.details.findAll{ it.address == myAddress}.sum{it.amount} == 0.btc
+        tx.details.findAll{ it.category == "send"}.sum{it.amount} == -(50000000.satoshi + 49990000.satoshi)
+        tx.details.findAll{ it.category == "receive"}.sum{it.amount} == 50000000.satoshi + 49990000.satoshi
+        tx.details.findAll().sum{it.amount.value} == 0
+        tx.details.findAll{ it.address == destAddress}.sum{it.amount.value} == 0
+        tx.confirmations >= 1
         sourceBalance == 0.5.btc - client.stdTxFee
         destBalance == 0.5.btc
     }

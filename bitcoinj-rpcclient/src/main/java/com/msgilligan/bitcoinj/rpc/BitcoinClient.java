@@ -10,6 +10,7 @@ import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.TxOutInfo;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
 import com.msgilligan.bitcoinj.json.conversion.RpcClientModule;
+import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;
@@ -561,8 +562,8 @@ public class BitcoinClient extends RPCClient {
         return send("settxfee", amount);
     }
 
-    public Map<String, Object> getTransaction(Sha256Hash txid) throws JsonRPCException, IOException {
-        return send("gettransaction", txid);
+    public WalletTransactionInfo getTransaction(Sha256Hash txid) throws JsonRPCException, IOException {
+        return send("gettransaction", WalletTransactionInfo.class, txid);
     }
 
     public ServerInfo getInfo() throws JsonRPCException, IOException {
