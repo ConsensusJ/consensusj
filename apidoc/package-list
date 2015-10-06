@@ -1,4 +1,3 @@
-com.msgilligan.bitcoinj
 com.msgilligan.bitcoinj.cli
 com.msgilligan.bitcoinj.daemon
 com.msgilligan.bitcoinj.daemon.config
