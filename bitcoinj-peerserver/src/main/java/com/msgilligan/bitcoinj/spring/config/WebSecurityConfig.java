@@ -19,6 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/style/**").permitAll()
                 .antMatchers("/lib/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/bitcoinrpc").permitAll()
 
 //                .antMatchers("/stomp/**").permitAll()
