@@ -15,14 +15,17 @@ import java.util.Formatter;
 public class TransactionHexSerializer extends JsonSerializer<Transaction> {
     @Override
     public void serialize(Transaction value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-        // From: http://bitcoin.stackexchange.com/questions/8475/how-to-get-hex-string-from-transaction-in-bitcoinj
+        gen.writeString(bytesToHexString(value.bitcoinSerialize()));
+    }
+
+    // From: http://bitcoin.stackexchange.com/questions/8475/how-to-get-hex-string-from-transaction-in-bitcoinj
+    public static String bytesToHexString(byte[] bytes) {
         final StringBuilder sb = new StringBuilder();
         Formatter formatter = new Formatter(sb);
-        byte[] bytes = value.bitcoinSerialize();
         for (byte b : bytes) {
             formatter.format("%02x", b);
         }
         formatter.close();
-        gen.writeString(sb.toString());
+        return sb.toString();
     }
 }
