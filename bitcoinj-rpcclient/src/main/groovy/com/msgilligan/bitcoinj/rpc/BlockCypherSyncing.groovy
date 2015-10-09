@@ -4,6 +4,8 @@ import groovy.json.JsonSlurper
 
 /**
  * Implementation of BlockchainSyncing that uses BlockCypher.com API
+ *
+ * Note: 5 requests/sec and 600 requests/hr without API token.
  */
 trait BlockCypherSyncing extends BlockchainSyncing {
 
