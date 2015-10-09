@@ -34,8 +34,7 @@ dependencies {
     compile 'org.webjars:bootstrap:3.0.2'
     compile 'org.webjars:jquery:2.0.3'
     compile 'org.webjars:sockjs-client:0.3.4'
-    // We're using stomp-websocket 2.0.0 - so to use webjars we have to upgrade
-//    compile 'org.webjars:stomp-websocket:2.3.3'
+    compile 'org.webjars:stomp-websocket:2.3.3'
 }
 
 springBoot {
