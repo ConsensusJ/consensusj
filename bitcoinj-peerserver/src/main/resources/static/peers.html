@@ -8,16 +8,34 @@
 <div ng-controller="PeerCtrl">
     <div>
         <h2>Peers</h2>
-        <ul>
-            <li ng-repeat="peer in peers">{{peer}}</li>
-        </ul>
+        <table>
+            <tr>
+                <th>address</th>
+                <th>best height</th>
+                <th>version</th>
+            </tr>
+            <tr ng-repeat="peer in peers">
+                <td>{{peer.socketAddress}}</td>
+                <td>{{peer.bestHeight}}</td>
+                <td>{{peer.remoteVersion}}</td>
+            </tr>
+        </table>
     </div>
 
     <div>
         <h2>Transactions</h2>
-        <ul>
-            <li ng-repeat="tx in transactions">{{tx.hash}}</li>
-        </ul>
+        <table>
+            <tr>
+                <th>version</th>
+                <th>confirmations</th>
+                <th>hash</th>
+            </tr>
+            <tr ng-repeat="tx in transactions">
+                <td>{{tx.version}}</td>
+                <td>{{tx.confirmations}}</td>
+                <td>{{tx.hash}}</td>
+            </tr>
+        </table>
     </div>
 </div>
 

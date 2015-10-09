@@ -15,6 +15,9 @@ public class TransactionSerializer extends JsonSerializer<Transaction> {
     @Override
     public void serialize(Transaction value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
         jgen.writeStartObject();
+        // See RawTransactionInfo POJO for a more complete JSON representation of a Transaction that is used by JSON-RPC
+        jgen.writeNumberField("confirmations", value.getConfidence().getDepthInBlocks());
+        jgen.writeNumberField("version", value.getVersion());
         jgen.writeStringField("hash", value.getHashAsString());
         jgen.writeEndObject();
     }
