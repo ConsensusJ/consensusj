@@ -48,12 +48,11 @@ class WalletSendSpec extends BaseRegTestSpec {
 
     def "Send mined coins to fund a new BitcoinJ wallet"() {
         given:
-        def fundingAddress = getNewAddress()
+        def fundingAmount = 20.btc
+        def fundingAddress = createFundedAddress(fundingAmount)
         def walletAddr = getNewAddress()
         def walletKey = dumpPrivKey(walletAddr)
         wallet.importKey(walletKey)
-        def fundingAmount = 20.btc
-        requestBitcoin(fundingAddress, fundingAmount)
         def amount = 10.btc
 
         when: "we send coins to the wallet and write a block"
