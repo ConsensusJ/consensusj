@@ -54,7 +54,7 @@ import java.util.Map;
  * NOTE: This is still a work-in-progress and the API will change.
  *
  */
-public class BitcoinClient extends RPCClient {
+public class BitcoinClient extends RPCClient implements NetworkParametersProperty {
     private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);
 
     private static final int SECOND_IN_MSEC = 1000;
@@ -101,6 +101,7 @@ public class BitcoinClient extends RPCClient {
      * Get network parameters
      * @return network parameters for the server
      */
+    @Override
     public NetworkParameters getNetParams() {
         return context.getParams();
     }
