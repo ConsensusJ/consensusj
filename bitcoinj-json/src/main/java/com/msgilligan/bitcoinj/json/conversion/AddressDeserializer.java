@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.AddressFormatException;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 
 import java.io.IOException;
@@ -16,13 +17,19 @@ import java.io.IOException;
  *
  */
 public class AddressDeserializer extends JsonDeserializer<Address> {
+    private NetworkParameters netParams;
+
+    public AddressDeserializer(NetworkParameters netParams) {
+        this.netParams = netParams;
+    }
+
     @Override
     public Address deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         JsonToken token = p.getCurrentToken();
         switch (token) {
             case VALUE_STRING:
                 try {
-                    return new Address(null, p.getValueAsString());
+                    return new Address(netParams, p.getValueAsString());
                 } catch (AddressFormatException e) {
                     throw new InvalidFormatException("Invalid Address", p.getValueAsString(), Address.class);
                 }

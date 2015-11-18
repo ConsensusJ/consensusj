@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Sha256Hash;
 
 import java.io.IOException;
@@ -25,14 +26,14 @@ public class NameData {
     private final   String name;
     private final   Map<String, Object> value;     // Deserialized from escape JSON string
     private final   Sha256Hash txid;
-    private final   String address;
+    private final   Address address;
     private final   int expires_in;
 
     @JsonCreator
     public NameData(@JsonProperty("name")       String name,
                     @JsonProperty("value")      String value,
                     @JsonProperty("txid")       Sha256Hash txid,
-                    @JsonProperty("address")    String address,
+                    @JsonProperty("address")    Address address,
                     @JsonProperty("expires_in") int expires_in) throws IOException {
         this.name = name;
         this.value = (Map<String, Object>) mapper.readValue(value, Map.class);
@@ -65,7 +66,7 @@ public class NameData {
      *
      * @return Address as String (for now since bitcoinj won't allow N... addresses)
      */
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 

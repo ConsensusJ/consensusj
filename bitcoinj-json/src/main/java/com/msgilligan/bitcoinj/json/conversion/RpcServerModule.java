@@ -16,7 +16,7 @@ public class RpcServerModule extends SimpleModule {
     public RpcServerModule() {
         super("BitcoinJMappingServer", new Version(1, 0, 0, null, null, null));
 
-        this.addDeserializer(Address.class, new AddressDeserializer())
+        this.addDeserializer(Address.class, new AddressDeserializer(null))  // Null means use default list of netParams
                 .addDeserializer(Coin.class, new CoinDeserializer())
                 .addDeserializer(ECKey.class, new ECKeyDeserializer())
                 .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())
