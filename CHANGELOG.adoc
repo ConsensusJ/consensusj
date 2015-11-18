@@ -3,6 +3,19 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.0.11-SNAPSHOT
+
+Released: Not yet
+
+=== Features/Changes
+
+* Add minimal Namecoin RPC client and Namecoin address support (NMCMainNetParams)
+* WIP Spock test based on "Working with Contracts" bitcoinj documentation page.
+* A little bit of HTML formatting for in peers.html in PeerServer
+* Use WebJars to replace local copies of angular, jquery, bootstrap, etc.
+* Update versions of front-end libraries using WebJars
+* Add BlockCypherSyncing trait that uses BlockCypher API for syncing
+
 == v0.0.10
 
 Released: 2015.10.06
