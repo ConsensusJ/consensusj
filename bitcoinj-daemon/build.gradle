@@ -12,7 +12,7 @@ buildscript {
 
 apply plugin: 'spring-boot'
 
-archivesBaseName = 'bicoinj-daemon'
+archivesBaseName = 'bitcoinj-daemon'
 sourceCompatibility = 1.8
 
 idea {
