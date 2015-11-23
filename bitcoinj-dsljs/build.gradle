@@ -1,0 +1,8 @@
+apply plugin: 'java'
+
+dependencies {
+    compile project(':bitcoinj-rpcclient')
+}
+
+sourceCompatibility = 1.8
+

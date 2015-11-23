@@ -1,5 +1,5 @@
 include 'bitcoinj-json',                                             // JSON <-> Object mapping
         'bitcoinj-cli', 'bitcoinj-rpcclient',                        // Client
         'bitcoinj-server', 'bitcoinj-daemon', 'bitcoinj-peerserver', // Server lib + 2 server apps
-        'bitcoinj-groovy', 'bitcoinj-spock'                          // DSL/Testing
-
+        'bitcoinj-groovy', 'bitcoinj-spock',                         // DSL/Testing
+        'bitcoinj-dsljs'
