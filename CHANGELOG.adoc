@@ -3,12 +3,16 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
-== v0.0.11-SNAPSHOT
+== v0.0.11
 
-Released: Not yet
+Released: 2015.11.24
 
 === Features/Changes
 
+* Consistently use Groovy 2.4.5 (via ext.groovyVersion)
+* Ignore unknown properties in RPC getinfo call (causes crash in Omni client)
+* Add MainNet integration smoke test for bitcoinj-rpcclient
+* Upgrade to bitcoinj 0.13.3
 * Add minimal Namecoin RPC client and Namecoin address support (NMCMainNetParams)
 * WIP Spock test based on "Working with Contracts" bitcoinj documentation page.
 * A little bit of HTML formatting for in peers.html in PeerServer
