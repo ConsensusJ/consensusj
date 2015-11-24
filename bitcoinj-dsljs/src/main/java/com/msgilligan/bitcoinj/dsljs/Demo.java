@@ -7,8 +7,7 @@ import javax.script.ScriptException;
  */
 public class Demo {
     public static void main(String[] args) throws ScriptException {
-        System.out.println("Hello.");
         ScriptRunner runner = new ScriptRunner();
-        runner.evalResource("/javascript/getBlockheight.js");
+        runner.evalResource("/javascript/sendBitcoin.js");
     }
 }
