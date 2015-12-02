@@ -6,7 +6,7 @@
 . Set versions
 .. `README.adoc`
 .. bitcoinj-groovy `ExtensionModule`
-.. `gradle.properties`
+.. `build.gradle` (should move to `gradle.properties`)
 . Commit version bump and changelog.
 . Tag: `git tag -a v0.x.y -m "Release 0.x.y"`
 . Push: `git push --tags origin master`
