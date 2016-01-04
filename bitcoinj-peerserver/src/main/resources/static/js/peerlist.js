@@ -1,6 +1,6 @@
-angular.module('peers', []);
-
-function PeerCtrl($scope) {
+angular
+  .module('peers', [])
+  .controller('PeerCtrl', ['$scope', function PeerCtrl($scope) {
     // initialization
     $scope.peers = [];
     $scope.transactions = [];
@@ -34,4 +34,4 @@ function PeerCtrl($scope) {
     }, function(error) {
         console.log("STOMP protocol error " + error);
     });
-}
+}]);
