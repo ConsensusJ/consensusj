@@ -1,0 +1,5 @@
+dependencies {
+    compile 'org.javamoney:moneta-bp:1.0'
+}
+
+sourceCompatibility = 1.7
