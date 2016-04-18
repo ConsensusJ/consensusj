@@ -23,6 +23,10 @@ import javax.money.convert.RateType;
 import javax.money.spi.CurrencyProviderSpi;
 import java.io.IOException;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  *  Base ExchangeRateProvider using XChange library
@@ -36,6 +40,10 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     protected PollingMarketDataService marketDataService;
     protected Ticker ticker;
     protected CurrencyPair btcusdPair;
+    private ScheduledExecutorService stpe;
+    private ScheduledFuture<?> future;
+    private static final int initialDelay = 0;
+    private static final int period = 60;
 
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
                                               CurrencyPair btcusdPair) {
@@ -47,7 +55,31 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         CurrencyQuery query = CurrencyQueryBuilder.of().setCurrencyCodes("BTC").build();
         Set<CurrencyUnit> currencies = bitcoinCurrencyProvider.getCurrencies(query);
         btc = (CurrencyUnit) currencies.toArray()[0];
-        poll();
+        start();
+    }
+
+    protected void start() {
+        stpe = Executors.newScheduledThreadPool(2);
+        final BaseXChangeExchangeRateProvider that = this;
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                that.poll();
+            }
+        };
+        future = stpe.scheduleWithFixedDelay(task, initialDelay, period, TimeUnit.SECONDS);
+    }
+
+    public void stop() {
+        final ScheduledFuture<?> handle = future;
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                handle.cancel(true);
+            }
+        };
+        stpe.schedule(task, 0, TimeUnit.SECONDS);
+        stpe.shutdown();
     }
 
     protected void poll() {
@@ -73,6 +105,9 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         if (!(  conversionQuery.getBaseCurrency().getCurrencyCode().equals("BTC") &&
                 conversionQuery.getCurrency().getCurrencyCode().equals("USD"))) {
             return null;
+        }
+        if (ticker == null) {
+            return null;    // ticker not loaded yet (is returning null ok, here?)
         }
         final NumberValue factor = DefaultNumberValue.of(ticker.getLast());
         return new ExchangeRateBuilder(provider, RateType.DEFERRED)
