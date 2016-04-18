@@ -1,9 +1,9 @@
 dependencies {
     compile 'org.javamoney:moneta-bp:1.0'
 
-    compile 'com.squareup.retrofit2:retrofit:2.0.1'
-    compile 'com.squareup.retrofit2:converter-jackson:2.0.1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+    compile 'org.knowm.xchange:xchange-core:4.0.0'
+    compile 'org.knowm.xchange:xchange-bitfinex:4.0.0'
+    compile 'org.knowm.xchange:xchange-itbit:4.0.0'
 }
 
 sourceCompatibility = 1.7

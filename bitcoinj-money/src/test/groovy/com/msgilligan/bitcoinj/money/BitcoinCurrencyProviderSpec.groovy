@@ -63,12 +63,13 @@ class BitcoinCurrencyProviderSpec extends Specification  {
         currencies.size() == 0
     }
 
-    def "BTC can't be found via Monetary" () {
-        when: "We try to get currency 'BTC' when BitcoinCurrencyProvider is not registered"
+    def "BTC can be found via Monetary (via META-INF.services)" () {
+        when: "We try to get currency 'BTC' via registered services"
         CurrencyUnit btc = Monetary.getCurrency("BTC")
 
-        then: "An UnknownCurrencyException is thrown"
-        UnknownCurrencyException e = thrown()
+        then: "we find it"
+        btc.getCurrencyCode() == "BTC"
+        btc.getDefaultFractionDigits() == 8
     }
 
     def "we can create money with Money.of"() {
