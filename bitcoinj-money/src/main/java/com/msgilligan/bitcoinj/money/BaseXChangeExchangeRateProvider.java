@@ -10,9 +10,8 @@ import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.service.polling.marketdata.PollingMarketDataService;
 
-import javax.money.CurrencyQuery;
-import javax.money.CurrencyQueryBuilder;
 import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 import javax.money.NumberValue;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ConversionQuery;
@@ -20,9 +19,8 @@ import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
-import javax.money.spi.CurrencyProviderSpi;
 import java.io.IOException;
-import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -30,34 +28,45 @@ import java.util.concurrent.TimeUnit;
 
 /**
  *  Base ExchangeRateProvider using XChange library
+ *  Currently limited to a single conversion per instance
  */
 public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRateProvider {
     protected final ProviderContext providerContext;
-    protected CurrencyProviderSpi bitcoinCurrencyProvider = new BitcoinCurrencyProvider();
-    protected CurrencyUnit btc;
     protected String provider;
     protected Exchange exchange;
     protected PollingMarketDataService marketDataService;
+    protected CountDownLatch tickerReady = new CountDownLatch(1);
     protected Ticker ticker;
-    protected CurrencyPair btcusdPair;
+    protected CurrencyPair pair;    //
+    protected CurrencyUnit base;    // JavaMoney CurrencyUnit (e.g. Will be "BTC" for ItBit)
+    protected CurrencyUnit term;
     private ScheduledExecutorService stpe;
     private ScheduledFuture<?> future;
     private static final int initialDelay = 0;
     private static final int period = 60;
 
+    /**
+     * Construct using an XChange Exchange class object and a single currency pair
+     * @param exchangeClass
+     * @param pair XChange CurrencyPair (e.g. Wll have code "XBT" for ItBit)
+     * @param base JavaMoney CurrencyUnit (e.g. Will be "BTC" for ItBit)
+     * @param term Target currency type (typically a fiat currency like "USD")
+     */
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
-                                              CurrencyPair btcusdPair) {
+                                              CurrencyPair pair, String base, String term) {
         exchange = ExchangeFactory.INSTANCE.createExchange(exchangeClass.getName());
-        this.btcusdPair = btcusdPair;
+        this.pair = pair;
+        this.base = Monetary.getCurrency(base);
+        this.term = Monetary.getCurrency(term);
         provider = exchange.getExchangeSpecification().getExchangeName();
         providerContext = ProviderContext.of(provider, RateType.DEFERRED);
         marketDataService = exchange.getPollingMarketDataService();
-        CurrencyQuery query = CurrencyQueryBuilder.of().setCurrencyCodes("BTC").build();
-        Set<CurrencyUnit> currencies = bitcoinCurrencyProvider.getCurrencies(query);
-        btc = (CurrencyUnit) currencies.toArray()[0];
         start();
     }
 
+    /**
+     * Start the polling thread
+     */
     protected void start() {
         stpe = Executors.newScheduledThreadPool(2);
         final BaseXChangeExchangeRateProvider that = this;
@@ -70,6 +79,9 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         future = stpe.scheduleWithFixedDelay(task, initialDelay, period, TimeUnit.SECONDS);
     }
 
+    /**
+     * stop the polling thread
+     */
     public void stop() {
         final ScheduledFuture<?> handle = future;
         Runnable task = new Runnable() {
@@ -82,9 +94,13 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         stpe.shutdown();
     }
 
+    /**
+     * Poll the exchange for an updated Ticker
+     */
     protected void poll() {
         try {
-            ticker = marketDataService.getTicker(btcusdPair);
+            ticker = marketDataService.getTicker(pair);
+            tickerReady.countDown();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,12 +118,21 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
 
     @Override
     public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
-        if (!(  conversionQuery.getBaseCurrency().getCurrencyCode().equals("BTC") &&
-                conversionQuery.getCurrency().getCurrencyCode().equals("USD"))) {
+        if (!(  conversionQuery.getBaseCurrency().getCurrencyCode().equals(base.getCurrencyCode()) &&
+                conversionQuery.getCurrency().getCurrencyCode().equals(term.getCurrencyCode())) ) {
             return null;
         }
         if (ticker == null) {
-            return null;    // ticker not loaded yet (is returning null ok, here?)
+            // were we called before first poll completed?
+            try {
+                // wait for the CountdownLatch
+                boolean ready = tickerReady.await(60, TimeUnit.SECONDS);
+                if (!ready) {
+                    throw new RuntimeException("timeout");
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         final NumberValue factor = DefaultNumberValue.of(ticker.getLast());
         return new ExchangeRateBuilder(provider, RateType.DEFERRED)

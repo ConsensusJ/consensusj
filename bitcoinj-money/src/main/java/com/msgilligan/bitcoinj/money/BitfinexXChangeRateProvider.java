@@ -8,6 +8,6 @@ import org.knowm.xchange.currency.CurrencyPair;
  */
 public class BitfinexXChangeRateProvider extends BaseXChangeExchangeRateProvider {
     public BitfinexXChangeRateProvider() {
-        super(BitfinexExchange.class, CurrencyPair.BTC_USD);
+        super(BitfinexExchange.class, CurrencyPair.BTC_USD, "BTC", "USD");
     }
 }

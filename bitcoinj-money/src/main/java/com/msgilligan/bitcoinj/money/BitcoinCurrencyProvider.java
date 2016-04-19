@@ -50,7 +50,7 @@ public class BitcoinCurrencyProvider implements CurrencyProviderSpi {
     @Override
     public Set<CurrencyUnit> getCurrencies(CurrencyQuery query){
         // only ensure BTC is the code, or it is a default query.
-        if(query.getCurrencyCodes().contains("BTC") || query.getCurrencyCodes().isEmpty()){
+        if(query.getCurrencyCodes().contains("BTC") ||  query.getCurrencyCodes().isEmpty()){
             return bitcoinSet;
         }
         return Collections.emptySet();
