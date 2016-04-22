@@ -11,6 +11,7 @@ Add-on modules for https://bitcoinj.github.io[bitcoinj], including:
 * A *JSON-RPC Java client* for the Bitcoin API
 * *bitcoinj-cli* - a command line tool and supporting libraries for accessing the JSON-RPC API.
 * Bitcoin server libraries for *server-side JSON-RPC*.
+* Bitcoin currency and exchange implementations for http://javamoney.github.io[JavaMoney].
 * A Groovy-language *Domain Specific Language* for scripting and testing with *bitcoinj*
 * **bitcoinj-daemon** - A framework for a Java-based implementation of bitcoind.
 * **bitcoinj-peerserver** - A web application that connects to the P2P network and streams events to a browser using the STOMP protocol over *WebSocket*.
@@ -86,14 +87,19 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |Tests only (TBD)
 |Peer and transaction info over HTTP + WebSocket/STOMP. JSON-RPC server, too.
 
-|<<bitcoinj-groovy,bitcoinj-groovy>>
+|<<bitcoinj-money,bitcoinj-money>>
 |7
-|Yeah, baby!
+|Tests only (TBD)
+|http://javamoney.github.io[JavaMoney] currency and exchange support. Adapter to use http://knowm.org/open-source/xchange/[XChange] `Exchange` implementations as JavaMoney `ExchangeRateProvider`s.
+
+|<<bitcoinj-dsl,bitcoinj-dsl>>
+|7
+|Uses Groovy
 |Groovy DSL support.
 
 |<<bitcoinj-spock,bitcoinj-spock>>
 |7
-|Spock, baby!
+|Spock is a Groovy DSL for unit tests
 |https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes.
 |===
 
@@ -161,12 +167,12 @@ These sample Spock "feature tests" show the RPC client in action and are from th
 
 
 [#bitcoinj-json]
-==== bitcoin-json
+==== bitcoinj-json
 
 http://wiki.fasterxml.com/JacksonHome[Jackson] serializers, deserializers & POJOs used to create and parse JSON by both client and server implementations of Bitcoin JSON-RPC.
 
 [#bitcoinj-server]
-==== bitcoin-server
+==== bitcoinj-server
 
 Service objects that power the Daemon and PeerServer. Some objects, such as http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/spring/service/PeerGroupService.html[PeerGroupService], rely solely on http://docs.oracle.com/javase/7/docs/api/javax/annotation/package-summary.html[javax.annotation] and https://docs.oracle.com/javaee/6/api/javax/inject/package-summary.html[javax.inject] for configuration and can be wired with either Spring or (in theory)  https://github.com/google/guice[Guice]. The current focus is on http://projects.spring.io/spring-boot/[Spring Boot], but we're hoping to build a http://ratpack.io[Ratpack] server in the future.
 
@@ -194,6 +200,24 @@ PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring B
 .. The `peers.html' page is currently unstyled HTML.
 
 No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/0.13.2/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-{addons-version}.jar` command.
+
+[#bitcoinj-money]
+==== bitcoinj-money
+
+http://javamoney.github.io[JavaMoney] (also known as http://javamoney.github.io/api.html[JSR 354]) is the new Java Standard for advanced and flexible currency handling on the Java platform.
+
+"JSR 354 provides a portable and extendible framework for handling of Money & Currency. The API models monetary amounts and currencies in a platform independent and portable way, including well defined extension points."
+
+Support for virtual currencies is one of the key design goals in the specification. This module will allow Bitcoin to
+ be used by standard Java APIs in the same was as fiat currencies.
+
+The JavaMoney Reference Implementation (aka "Moneta") contains ExchangeRateProviders for ECB (European Central Bank) and IMF (International Monetary Fund).
+ There is also U.S. FRB (Federal Reserve Bank) and Yahoo Finance ExchangeRateProviders in the JavaMoney financial library add-on module.
+
+`bitcoinj-money` contains `BitcoinCurrencyProvider` which will add `"BTC"` as a standard currency code to any applications including the `bitcoinj-money` JAR in its classpath. and `"BTC"` will be available to your applications.
+
+The `bitcoinj-money` module also includes an adapter class `BaseXChangeExchangeRateProvider` that along with a 1-line subclass adapts implementations of the `Exchange` interface in the popular and complete http://knowm.org/open-source/xchange/[XChange] library to be used by JavaMoney-compatible applications.
+
 
 [#bitcoinj-groovy]
 ==== bitcoinj-groovy
