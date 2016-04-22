@@ -220,8 +220,8 @@ The JavaMoney Reference Implementation (aka "Moneta") contains implementations o
 The `bitcoinj-money` module also includes an adapter class `BaseXChangeExchangeRateProvider` that along with a 1-line subclass adapts implementations of the `Exchange` interface in the popular and complete http://knowm.org/open-source/xchange/[XChange] library to be used by JavaMoney-compatible applications.
 
 
-[#bitcoinj-groovy]
-==== bitcoinj-groovy
+[#bitcoinj-dsl]
+==== bitcoinj-dsl
 
 Groovy DSL support to write things like:
 
