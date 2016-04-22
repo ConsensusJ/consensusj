@@ -212,8 +212,8 @@ JSR 354 provides a portable and extendible framework for handling of Money & Cur
 Support for virtual currencies is one of the key design goals in the specification. The `bitcoinj-money` module will allow Bitcoin to
  be used by standard Java APIs in the same ways as fiat currencies.
 
-The JavaMoney Reference Implementation (aka "Moneta") contains `ExchangeRateProvider`s for ECB (European Central Bank) and IMF (International Monetary Fund).
- There is also U.S. FRB (Federal Reserve Bank) and Yahoo Finance `ExchangeRateProvider`s in the JavaMoney financial library add-on module.
+The JavaMoney Reference Implementation (aka "Moneta") contains implementations of `ExchangeRateProvider` for ECB (European Central Bank) and IMF (International Monetary Fund).
+ There is also U.S. FRB (Federal Reserve Bank) and Yahoo Finance `ExchangeRateProvider` in the JavaMoney financial library add-on module.
 
 `bitcoinj-money` contains `BitcoinCurrencyProvider` which will add `"BTC"` as a standard currency code to any applications including the `bitcoinj-money` JAR in its classpath. and `"BTC"` will be available to your applications.
 
