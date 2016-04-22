@@ -1,6 +1,6 @@
 include 'bitcoinj-json',                                             // JSON <-> Object mapping
         'bitcoinj-cli', 'bitcoinj-rpcclient',                        // Client
         'bitcoinj-server', 'bitcoinj-daemon', 'bitcoinj-peerserver', // Server lib + 2 server apps
-        'bitcoinj-groovy', 'bitcoinj-spock',                         // DSL/Testing
+        'bitcoinj-dsl', 'bitcoinj-spock',                            // DSL/Testing
         'bitcoinj-money'                                             // JavaMoney (JSR-354) support
 
