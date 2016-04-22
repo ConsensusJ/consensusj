@@ -3,6 +3,26 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.0.12
+
+Released: 2016.04.22
+
+=== Features/Changes
+
+* Add `bitcoinj-money` (JavaMoney support) module
+** BaseXChangeExchangeRateProvider and subclasses for Bitfinex and Itbit
+** BitcoinCurrencyProvider to add "BTC" currency code to Java
+* rename `bitcoinj-groovy` module to `bitcoinj-dsl`
+* Bump Gradle (wrapper) to 2.12
+* Bump Gradle Shadow plugin to 1.2.3
+* Bump bitcoinj to 0.13.6
+* Bump Groovy to 2.4.6
+* Update PeerServer to Angular.js 1.4.8 and Bootstrap 3.3.6
+
+=== Potentially Breaking
+
+* `bitcoinj-groovy` module renamed to `bitcoinj-dsl`
+
 == v0.0.11
 
 Released: 2015.11.24

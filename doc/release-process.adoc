@@ -5,8 +5,8 @@
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `README.adoc`
-.. bitcoinj-groovy `ExtensionModule`
-.. `build.gradle` (should move to `gradle.properties`)
+.. bitcoinj-dsl `ExtensionModule`
+.. `gradle.properties`
 . Commit version bump and changelog.
 . Tag: `git tag -a v0.x.y -m "Release 0.x.y"`
 . Push: `git push --tags origin master`
