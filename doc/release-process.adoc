@@ -11,7 +11,7 @@
 . Tag: `git tag -a v0.x.y -m "Release 0.x.y"`
 . Push: `git push --tags origin master`
 . Full build, test
-.. `./gradlew clean jenkinsBuild regTest`
+.. `./gradlew clean jenkinsBuild install regTest`
 .. Recommended: test with *OmniJ* regTests.
 . Publish to Bintray: 
 .. `./gradlew bintrayUpload`
