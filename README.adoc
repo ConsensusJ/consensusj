@@ -206,13 +206,14 @@ No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io
 
 http://javamoney.github.io[JavaMoney] (also known as http://javamoney.github.io/api.html[JSR 354]) is the new Java Standard for advanced and flexible currency handling on the Java platform.
 
-"JSR 354 provides a portable and extendible framework for handling of Money & Currency. The API models monetary amounts and currencies in a platform independent and portable way, including well defined extension points."
+[quote, JavaMoney Web Site]
+JSR 354 provides a portable and extendible framework for handling of Money & Currency. The API models monetary amounts and currencies in a platform independent and portable way, including well defined extension points.
 
-Support for virtual currencies is one of the key design goals in the specification. This module will allow Bitcoin to
- be used by standard Java APIs in the same was as fiat currencies.
+Support for virtual currencies is one of the key design goals in the specification. The `bitcoinj-money` module will allow Bitcoin to
+ be used by standard Java APIs in the same ways as fiat currencies.
 
-The JavaMoney Reference Implementation (aka "Moneta") contains ExchangeRateProviders for ECB (European Central Bank) and IMF (International Monetary Fund).
- There is also U.S. FRB (Federal Reserve Bank) and Yahoo Finance ExchangeRateProviders in the JavaMoney financial library add-on module.
+The JavaMoney Reference Implementation (aka "Moneta") contains `ExchangeRateProvider`s for ECB (European Central Bank) and IMF (International Monetary Fund).
+ There is also U.S. FRB (Federal Reserve Bank) and Yahoo Finance `ExchangeRateProvider`s in the JavaMoney financial library add-on module.
 
 `bitcoinj-money` contains `BitcoinCurrencyProvider` which will add `"BTC"` as a standard currency code to any applications including the `bitcoinj-money` JAR in its classpath. and `"BTC"` will be available to your applications.
 
