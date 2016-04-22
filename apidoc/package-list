@@ -3,6 +3,7 @@ com.msgilligan.bitcoinj.daemon
 com.msgilligan.bitcoinj.daemon.config
 com.msgilligan.bitcoinj.json.conversion
 com.msgilligan.bitcoinj.json.pojo
+com.msgilligan.bitcoinj.money
 com.msgilligan.bitcoinj.peerserver
 com.msgilligan.bitcoinj.rpc
 com.msgilligan.bitcoinj.rpc.test
@@ -11,3 +12,7 @@ com.msgilligan.bitcoinj.spring.config
 com.msgilligan.bitcoinj.spring.controller
 com.msgilligan.bitcoinj.spring.service
 com.msgilligan.bitcoinj.test
+com.msgilligan.namecoinj.cli
+com.msgilligan.namecoinj.core
+com.msgilligan.namecoinj.json.pojo
+com.msgilligan.namecoinj.rpc
