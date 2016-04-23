@@ -35,7 +35,8 @@ import java.util.concurrent.TimeUnit;
  *  Base ExchangeRateProvider using XChange library
  *  Currently limited to a single conversion per instance
  */
-public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRateProvider {
+public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRateProvider
+                                            implements ObservableExchangeRateProvider {
     protected final ProviderContext providerContext;
     protected String provider;
     protected Exchange exchange;
@@ -69,7 +70,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     /**
      * Start the polling thread
      */
-    protected void start() {
+    public void start() {
         stpe = Executors.newScheduledThreadPool(2);
         final BaseXChangeExchangeRateProvider that = this;
         Runnable task = new Runnable() {
@@ -111,6 +112,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         }
     }
 
+    @Override
     public void registerExchangeRateObserver(ExchangeRate rate, ExchangeRateObserver observer) {
         // TODO: validate rate as one this provider supports
         MonitoredCurrency monitor = monitoredCurrencies.get(rate.getCurrency());
