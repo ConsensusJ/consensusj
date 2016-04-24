@@ -8,4 +8,13 @@ class ItBitXChangeRateProviderSpec extends AbstractXChangeRateProviderSpec {
     def createProvider() {
         return new ItBitXChangeRateProvider()
     }
+
+    def "can list currency codes"() {
+        when:
+        def markets = provider.exchange.metaData.marketMetaDataMap
+
+        then:
+        markets.size() > 0
+    }
+
 }
