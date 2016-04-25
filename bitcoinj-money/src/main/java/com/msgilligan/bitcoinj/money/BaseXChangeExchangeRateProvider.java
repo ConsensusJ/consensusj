@@ -10,9 +10,6 @@ import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.service.polling.marketdata.PollingMarketDataService;
 
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
-import javax.money.NumberValue;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.CurrencyConversion;
@@ -20,7 +17,6 @@ import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,64 +29,59 @@ import java.util.concurrent.TimeUnit;
 
 /**
  *  Base ExchangeRateProvider using XChange library
- *  Currently limited to a single conversion per instance
+ *  Currently supports current DEFERRED rates only
  */
 public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRateProvider
                                             implements ObservableExchangeRateProvider {
     protected final ProviderContext providerContext;
-    protected String provider;
+    protected String name;
     protected Exchange exchange;
     protected PollingMarketDataService marketDataService;
-    protected CurrencyUnit base;    // JavaMoney CurrencyUnit (e.g. Will be "BTC" for ItBit)
     private ScheduledExecutorService stpe;
     private ScheduledFuture<?> future;
-    private final Map<CurrencyUnit, MonitoredCurrency> monitoredCurrencies = new HashMap<>();
+    private final Map<CurrencyUnitPair, MonitoredCurrency> monitoredCurrencies = new HashMap<>();
     private static final int initialDelay = 0;
     private static final int period = 60;
 
     /**
-     * Construct using an XChange Exchange class object and a single currency pair
+     * Construct using an XChange Exchange class object for a set of currencies
      * @param exchangeClass
-     * @param pair XChange CurrencyPair (e.g. Will have code "XBT" for ItBit)
-     * @param base JavaMoney CurrencyUnit (e.g. Will be "BTC" for ItBit)
-     * @param term Target currency type (typically a fiat currency like "USD")
+     * @param pairs pairs to monitor
      */
-    @Deprecated
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
-                                              CurrencyPair pair, String base, String term) {
+                                              CurrencyUnitPair... pairs) {
         exchange = ExchangeFactory.INSTANCE.createExchange(exchangeClass.getName());
-        this.base = Monetary.getCurrency(base);
-        provider = exchange.getExchangeSpecification().getExchangeName();
-        providerContext = ProviderContext.of(provider, RateType.DEFERRED);
+        name = exchange.getExchangeSpecification().getExchangeName();
+        providerContext = ProviderContext.of(name, RateType.DEFERRED);
         marketDataService = exchange.getPollingMarketDataService();
-        MonitoredCurrency monitoredCurrency = new MonitoredCurrency(Monetary.getCurrency(term), pair);
-        monitoredCurrencies.put(monitoredCurrency.term, monitoredCurrency);
+        for (CurrencyUnitPair pair : pairs) {
+            MonitoredCurrency monitoredCurrency = new MonitoredCurrency(pair, xchangePair(pair));
+            monitoredCurrencies.put(pair, monitoredCurrency);
+        }
         start();    // starting here causes first ticker to be read before observers can be registered!!!
+    }
+
+    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
+                                              String... pairs) {
+        this(exchangeClass, pairsConvert(pairs));
+    }
+
+    private static CurrencyUnitPair[] pairsConvert(String[] strings) {
+        CurrencyUnitPair[] units = new CurrencyUnitPair[strings.length];
+        for (int i = 0 ; i < strings.length ; i++) {
+            units[i] = new CurrencyUnitPair(strings[i]);
+        }
+        return units;
     }
 
     /**
-     * Construct using an XChange Exchange class object for a set of currencies
-     * @param exchangeClass
-     * @param base JavaMoney CurrencyUnit
-     * @param terms Target currency types
+     * Map from CurrencyUnitPair to XChange CurrencyPair
+     * Override to handle cases like ItBit that use "XBT" instead of "BTC"
+     * @param pair  CurrencyUnitPair using JavaMoney CurrencyUnits
+     * @return  XChange CurrencyPair
      */
-    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
-                                                String base, String... terms) {
-        exchange = ExchangeFactory.INSTANCE.createExchange(exchangeClass.getName());
-        this.base = Monetary.getCurrency(base);
-        provider = exchange.getExchangeSpecification().getExchangeName();
-        providerContext = ProviderContext.of(provider, RateType.DEFERRED);
-        marketDataService = exchange.getPollingMarketDataService();
-        for (String target : terms) {
-            MonitoredCurrency monitoredCurrency = new MonitoredCurrency(Monetary.getCurrency(target), xchangePair(base, target));
-            monitoredCurrencies.put(monitoredCurrency.term, monitoredCurrency);
-        }
-        start();    // starting here causes first ticker to be read before observers can be registered!!!
-
-    }
-
-    protected CurrencyPair xchangePair(String base, String target) {
-        return new CurrencyPair(base, target);
+    protected CurrencyPair xchangePair(CurrencyUnitPair pair) {
+        return new CurrencyPair(pair.getBase().getCurrencyCode(), pair.getTarget().getCurrencyCode());
     }
 
     /**
@@ -127,10 +118,10 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
      * Poll the exchange for updated Tickers
      */
     protected void poll() {
-        for (Map.Entry<CurrencyUnit, MonitoredCurrency> entry : monitoredCurrencies.entrySet()) {
+        for (Map.Entry<CurrencyUnitPair, MonitoredCurrency> entry : monitoredCurrencies.entrySet()) {
             try {
                 MonitoredCurrency monitor = entry.getValue();
-                monitor.setTicker(marketDataService.getTicker(monitor.pair));
+                monitor.setTicker(marketDataService.getTicker(monitor.exchangePair));
                 notifyExchangeRateObservers(monitor);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -139,9 +130,9 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     }
 
     @Override
-    public void registerExchangeRateObserver(ExchangeRate rate, ExchangeRateObserver observer) {
+    public void registerExchangeRateObserver(CurrencyUnitPair pair, ExchangeRateObserver observer) {
         // TODO: validate rate as one this provider supports
-        MonitoredCurrency monitor = monitoredCurrencies.get(rate.getCurrency());
+        MonitoredCurrency monitor = monitoredCurrencies.get(pair);
         monitor.observerList.add(observer);
     }
 
@@ -164,18 +155,18 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
 
     @Override
     public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
-        MonitoredCurrency monitoredCurrency = monitoredCurrencies.get(conversionQuery.getCurrency());
-        if (!(conversionQuery.getBaseCurrency().getCurrencyCode().equals(base.getCurrencyCode())) ||
-                (monitoredCurrency == null))  {
+        CurrencyUnitPair pair = new CurrencyUnitPair(conversionQuery.getBaseCurrency(), conversionQuery.getCurrency());
+        MonitoredCurrency monitoredCurrency = monitoredCurrencies.get(pair);
+        if (monitoredCurrency == null) {
             return null;
         }
         return buildExchangeRate(monitoredCurrency);
     }
 
     protected ExchangeRate buildExchangeRate(MonitoredCurrency monitoredCurrency) {
-        return new ExchangeRateBuilder(provider, RateType.DEFERRED)
-                .setBase(base)
-                .setTerm(monitoredCurrency.term)
+        return new ExchangeRateBuilder(name, RateType.DEFERRED)
+                .setBase(monitoredCurrency.pair.getBase())
+                .setTerm(monitoredCurrency.pair.getTarget())
                 .setFactor(DefaultNumberValue.of(monitoredCurrency.getTicker().getLast()))
                 .build();
     }
@@ -187,15 +178,15 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     }
 
     protected static class MonitoredCurrency {
-        final CurrencyPair pair;  // XChange currency pair
-        final CurrencyUnit term;  // Terminating (target) JavaMoney CurrencyUnit
+        final CurrencyUnitPair  pair;           // Terminating (target) JavaMoney CurrencyUnit
+        final CurrencyPair      exchangePair;   // XChange currency pair (format used by XChange/exchange)
         final List<ExchangeRateObserver> observerList = new ArrayList<>();
         private final CountDownLatch tickerReady = new CountDownLatch(1);
         private Ticker _ticker = null; // The '_' means use the getter and setter, please
 
-        public MonitoredCurrency(CurrencyUnit term, CurrencyPair pair) {
+        public MonitoredCurrency(CurrencyUnitPair pair, CurrencyPair exchangePair) {
             this.pair = pair;
-            this.term = term;
+            this.exchangePair = exchangePair;
         }
 
         Ticker getTicker() {

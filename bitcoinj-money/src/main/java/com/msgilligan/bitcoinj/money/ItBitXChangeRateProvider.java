@@ -8,13 +8,15 @@ import org.knowm.xchange.itbit.v1.ItBitExchange;
  */
 public class ItBitXChangeRateProvider extends BaseXChangeExchangeRateProvider {
     public ItBitXChangeRateProvider() {
-        super(ItBitExchange.class, "BTC", "USD", "EUR");
+        super(ItBitExchange.class, "BTC/USD", "BTC/EUR");
     }
 
-    protected CurrencyPair xchangePair(String base, String target) {
+    @Override
+    protected CurrencyPair xchangePair(CurrencyUnitPair pair) {
+        String base = pair.getBase().getCurrencyCode();
         if (base.equals("BTC")) {
             base = "XBT";
         }
-        return new CurrencyPair(base, target);
+        return new CurrencyPair(base, pair.getTarget().getCurrencyCode());
     }
 }

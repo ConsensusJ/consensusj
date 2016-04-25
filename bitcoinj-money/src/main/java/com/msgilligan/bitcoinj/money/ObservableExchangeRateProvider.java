@@ -7,7 +7,7 @@ import javax.money.convert.ExchangeRateProvider;
  *
  */
 public interface ObservableExchangeRateProvider extends ExchangeRateProvider {
-    void registerExchangeRateObserver(ExchangeRate rate, ExchangeRateObserver observer);
+    void registerExchangeRateObserver(CurrencyUnitPair pair, ExchangeRateObserver observer);
     void start();
     void stop();
 
