@@ -42,6 +42,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     private final Map<CurrencyUnitPair, MonitoredCurrency> monitoredCurrencies = new HashMap<>();
     private static final int initialDelay = 0;
     private static final int period = 60;
+    private volatile boolean stopping = false;
 
     /**
      * Construct using an XChange Exchange class object for a set of currencies
@@ -87,6 +88,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     /**
      * Start the polling thread
      */
+    @Override
     public void start() {
         stpe = Executors.newScheduledThreadPool(2);
         final BaseXChangeExchangeRateProvider that = this;
@@ -102,16 +104,21 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     /**
      * stop the polling thread
      */
+    @Override
     public void stop() {
-        final ScheduledFuture<?> handle = future;
-        Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                handle.cancel(true);
-            }
-        };
-        stpe.schedule(task, 0, TimeUnit.SECONDS);
-        stpe.shutdown();
+        if (!stopping) {
+            stopping = true;
+            final ScheduledFuture<?> handle = future;
+            Runnable task = new Runnable() {
+                @Override
+                public void run() {
+                    handle.cancel(true);
+                }
+            };
+            stpe.schedule(task, 0, TimeUnit.SECONDS);
+            stpe.shutdown();
+
+        }
     }
 
     /**
