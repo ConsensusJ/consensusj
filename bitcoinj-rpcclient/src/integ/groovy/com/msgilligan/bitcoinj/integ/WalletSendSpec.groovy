@@ -8,7 +8,8 @@ import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.core.PeerGroup
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Transaction
-import org.bitcoinj.core.Wallet
+import org.bitcoinj.wallet.Wallet
+import org.bitcoinj.wallet.SendRequest
 import org.bitcoinj.params.RegTestParams
 import org.bitcoinj.store.MemoryBlockStore
 import org.bitcoinj.utils.BriefLogFormatter
@@ -90,7 +91,7 @@ class WalletSendSpec extends BaseRegTestSpec {
 
         then: "the new address has a balance of amount"
         getReceivedByAddress(rpcAddress) == amount
-        wallet.getBalance() == startAmount - amount - Transaction.REFERENCE_DEFAULT_MIN_TX_FEE
+        wallet.getBalance() == startAmount - amount - sentTx.getFee()
     }
 
     def "create and send a transaction from BitcoinJ using wallet.completeTx"() {
@@ -99,7 +100,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         def rpcAddress = getNewAddress()
         Transaction tx = new Transaction(params)
         tx.addOutput(amount, rpcAddress)
-        Wallet.SendRequest request = Wallet.SendRequest.forTx(tx)
+        SendRequest request = SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
         wallet.commitTx(request.tx)
         Transaction sentTx = peerGroup.broadcastTransaction(request.tx).future().get();
@@ -117,7 +118,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         def rpcAddress = getNewAddress()
         Transaction tx = new Transaction(params)
         tx.addOutput(amount, rpcAddress)
-        Wallet.SendRequest request = Wallet.SendRequest.forTx(tx)
+        SendRequest request = SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
         wallet.commitTx(request.tx)
         def txid = client.sendRawTransaction(tx)

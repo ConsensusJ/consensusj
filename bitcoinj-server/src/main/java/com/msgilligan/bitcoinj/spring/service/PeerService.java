@@ -19,6 +19,7 @@ import org.bitcoinj.net.discovery.PeerDiscovery;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 import org.bitcoinj.core.*;
+import org.bitcoinj.core.listeners.AbstractPeerEventListener;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

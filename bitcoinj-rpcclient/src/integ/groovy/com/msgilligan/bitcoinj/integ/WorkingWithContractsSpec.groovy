@@ -12,7 +12,8 @@ import org.bitcoinj.core.TransactionOutput
 import org.bitcoinj.crypto.TransactionSignature
 import org.bitcoinj.script.Script;
 import org.bitcoinj.core.Transaction
-import org.bitcoinj.core.Wallet
+import org.bitcoinj.wallet.Wallet
+import org.bitcoinj.wallet.SendRequest
 import org.bitcoinj.params.RegTestParams
 import org.bitcoinj.script.ScriptBuilder
 import org.bitcoinj.store.MemoryBlockStore
@@ -117,7 +118,7 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
         and: "Use a Wallet to add inputs"
         // We have said we want to make 0.5 coins controlled by us and them.
         // But it's not a valid tx yet because there are no inputs.
-        Wallet.SendRequest req = Wallet.SendRequest.forTx(contract)
+        SendRequest req = Wallet.SendRequest.forTx(contract)
         wallet.completeTx(req)   // Could throw InsufficientMoneyException
 
         then:

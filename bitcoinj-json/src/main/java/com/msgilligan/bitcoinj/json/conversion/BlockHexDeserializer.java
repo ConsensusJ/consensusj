@@ -30,7 +30,7 @@ public class BlockHexDeserializer extends JsonDeserializer<Block> {
             case VALUE_STRING:
                 try {
                     byte[] payload = HexUtil.hexStringToByteArray(p.getValueAsString()); // convert  to hex
-                    return new Block(context.getParams(), payload, true, false, payload.length);
+                    return context.getParams().getDefaultSerializer().makeBlock(payload);
                 } catch (ProtocolException e) {
                     throw new InvalidFormatException("Invalid Block", p.getValueAsString(), Block.class);
                 }

@@ -3,7 +3,7 @@ package com.msgilligan.bitcoinj.spock
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.NetworkParameters
-import org.bitcoinj.core.Wallet
+import org.bitcoinj.wallet.Wallet
 import org.bitcoinj.params.MainNetParams
 import org.bitcoinj.utils.BriefLogFormatter
 import spock.lang.Shared
