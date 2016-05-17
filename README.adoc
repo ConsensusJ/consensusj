@@ -1,8 +1,9 @@
 = bitcoinj Add-ons 
 Sean Gilligan <https://github.com/msgilligan>
-v0.0.13
+v0.0.14
 :description: bitcoinj-addons README document.
-:addons-version: 0.0.13
+:addons-version: 0.0.14
+:bitcoinj-version: 0.14.1
 
 image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"] 
 
@@ -199,7 +200,7 @@ PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring B
 .. You must login using username: `admin`, password: `admin` to view this page.
 .. The `peers.html' page is currently unstyled HTML.
 
-No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/0.13.2/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-{addons-version}.jar` command.
+No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/{bitcoinj-version}/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-{addons-version}.jar` command.
 
 [#bitcoinj-money]
 ==== bitcoinj-money

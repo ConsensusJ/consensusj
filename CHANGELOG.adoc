@@ -3,6 +3,14 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.0.14
+
+Released: 2016.05.17
+
+=== Features/Changes
+
+* Update to bitcoinj 0.14.1 (adapt to breaking changes)
+
 == v0.0.13
 
 Released: 2016.04.28
