@@ -23,8 +23,8 @@ class BitcoinConfFileSpec extends Specification {
         then:
         conf.get("rpcconnect") == "127.0.0.1"
         conf.get("rpcport") == "8332"
-        conf.get("rpcuser") == "bitcoinrpc2"
-        conf.get("rpcpassword") == "pass2"
+        conf.get("rpcuser") == "bitcoinrpc"
+        conf.get("rpcpassword") == "pass"
     }
 
     def "File not found returns defaults"() {
@@ -38,8 +38,8 @@ class BitcoinConfFileSpec extends Specification {
         then:
         conf.get("rpcconnect") == "127.0.0.1"
         conf.get("rpcport") == "8332"
-        conf.get("rpcuser") == "bitcoinrpc"
-        conf.get("rpcpassword") == "pass"
+        conf.get("rpcuser") == ""
+        conf.get("rpcpassword") == ""
     }
 
 }
