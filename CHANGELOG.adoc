@@ -3,6 +3,14 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.1.0
+
+Released: 2016.05.25
+
+=== Features/Changes
+
+* Added very basic code to parse bitcoin.conf for RPC connection parameters
+
 == v0.0.14
 
 Released: 2016.05.17

@@ -1,6 +1,6 @@
 = bitcoinj Add-ons 
 Sean Gilligan <https://github.com/msgilligan>
-v0.0.14
+v0.1.0
 :description: bitcoinj-addons README document.
 :addons-version: 0.0.14
 :bitcoinj-version: 0.14.1
