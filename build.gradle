@@ -26,7 +26,7 @@ allprojects {
 
 subprojects {
     dependencies {
-        compile 'org.bitcoinj:bitcoinj-core:0.14.1'
+        compile 'org.bitcoinj:bitcoinj-core:0.14.2'
         compile 'org.slf4j:slf4j-api:1.7.7'
 
         testCompile "org.codehaus.groovy:groovy:${groovyVersion}"
