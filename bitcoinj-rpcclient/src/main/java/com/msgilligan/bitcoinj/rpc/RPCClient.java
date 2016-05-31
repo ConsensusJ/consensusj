@@ -19,7 +19,6 @@ import java.net.URI;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -178,11 +177,6 @@ public class RPCClient {
         return response.getResult();
     }
 
-    @Deprecated
-    protected <R> R send(String method, List<Object> params, JavaType resultType) throws IOException, JsonRPCStatusException {
-        return send(method, resultType, params);
-    }
-
     /**
      * Varargs version
      */
@@ -232,23 +226,6 @@ public class RPCClient {
 
     public <R> R send(String method, List<Object> params) throws IOException, JsonRPCStatusException {
         return (R) send(method, (Class<R>) Object.class, params);
-    }
-
-    /**
-     * CLI-style send
-     *
-     * Now that we've pushed most of the parameter conversion into Jackson serializers,
-     * there's little difference between this method and the `send()` that it calls.
-     * After some refactoring it is now being eliminated.
-     *
-     * @param method Allows RPC method to be passed as a stream
-     * @param params variable number of untyped objects
-     * @return The 'result' element from the returned JSON RPC response
-     * @deprecated There is now a send() method with the same calling conventions and behavior
-     */
-    @Deprecated
-    public Object cliSend(String method, Object... params) throws IOException, JsonRPCException {
-        return send(method, params);
     }
 
     private HttpURLConnection openConnection() throws IOException {
