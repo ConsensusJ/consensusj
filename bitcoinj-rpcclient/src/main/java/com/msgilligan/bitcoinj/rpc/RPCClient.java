@@ -303,19 +303,4 @@ public class RPCClient {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Create a mutable param list (so send() can remove null parameters)
-     *
-     * This method is on the refactoring radar and we're hoping to be able to eliminate
-     * it and have various methods call `send()` directly.
-     *
-     * @param parameters  A variable number of parameters as varargs or array
-     * @return A mutable list of the same parameters
-     * @deprecated No longer needed: send() methods can now be called with varargs.
-     */
-    @Deprecated
-    protected List<Object> createParamList(Object... parameters) {
-        return new ArrayList<Object>(Arrays.asList(parameters));
-    }
 }
