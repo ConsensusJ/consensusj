@@ -11,26 +11,9 @@ package com.msgilligan.bitcoinj.rpc
  * This client is provided for those looking for something simple, flexible, dynamic, and Groovy.
  *
  */
-class DynamicRPCClient extends RPCClient {
+class DynamicRPCClient extends RPCClient implements DynamicRPCFallback {
 
     DynamicRPCClient(URI server, String rpcuser, String rpcpassword) {
         super(server, rpcuser, rpcpassword)
-    }
-
-    /**
-     * Dynamically forward missing method calls to the server
-     *
-     * See http://groovy-lang.org/metaprogramming.html#_methodmissing
-     *
-     * TODO: This method could actually be moved to a trait, should it be?
-     *
-     * @param name The JSON-RPC method name
-     * @param args JSON-RPC arguments
-     * @return an object containing the JSON-RPC response.result
-     * @throws JsonRPCStatusException
-     */
-    def methodMissing(String name, def args) {
-        Object result = this.send(name, args as List)
-        return result
     }
 }

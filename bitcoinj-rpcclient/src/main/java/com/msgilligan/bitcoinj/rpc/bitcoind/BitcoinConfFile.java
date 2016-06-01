@@ -10,10 +10,19 @@ import java.io.IOException;
  * Currently focused on just getting connection info
  */
 public class BitcoinConfFile {
+    private static String BITCOINAPPNAME = "Bitcoin";
     private File file;
+
+    public BitcoinConfFile() {
+        this(new File(AppDataDirectory.forAppName(BITCOINAPPNAME), "bitcoin.conf"));
+    }
 
     public BitcoinConfFile(File confFile) {
         file = confFile;
+    }
+
+    public static BitcoinConf readDefaultConfig() {
+        return new BitcoinConfFile().read();
     }
 
     //
