@@ -2,6 +2,7 @@ package com.msgilligan.bitcoinj.rpc;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.msgilligan.bitcoinj.json.conversion.HexUtil;
+import com.msgilligan.bitcoinj.json.pojo.AddressGroupingItem;
 import com.msgilligan.bitcoinj.json.pojo.BlockInfo;
 import com.msgilligan.bitcoinj.json.pojo.ChainTip;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
@@ -575,6 +576,34 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
 
     public ServerInfo getInfo() throws JsonRPCException, IOException {
         return send("getinfo", ServerInfo.class);
+    }
+
+    /**
+     * Returns list of related addresses
+     * Also useful for finding all change addresses in the wallet
+     * @return a lost of address groupings
+     * @throws JsonRPCException
+     * @throws IOException
+     */
+    public List<List<AddressGroupingItem>>  listAddressGroupings() throws JsonRPCException, IOException {
+        // TODO: I'm not sure how to make Jackson mapping work automatically here.
+        List<List<List<Object>>> raw = send("listaddressgroupings");
+        List<List<AddressGroupingItem>> result = new ArrayList<>();
+        for (List<List<Object>> rawGrouping : raw) {
+            List<AddressGroupingItem> grouping = new ArrayList<>();
+            for (List<Object> addressItem : rawGrouping) {
+                String addressStr = (String) addressItem.get(0);
+                //TODO: Try to avoid using Double
+                Double balanceDouble = (Double) addressItem.get(1);
+                String account = (addressItem.size() > 2) ? (String) addressItem.get(2) : null;
+                Address address = Address.fromBase58(getNetParams(), addressStr);
+                Coin balance = Coin.valueOf(((Double)(balanceDouble * 100000000.0)).longValue());
+                AddressGroupingItem item = new AddressGroupingItem(address, balance, account);
+                grouping.add(item);
+            }
+            result.add(grouping);
+        }
+        return result;
     }
 
     /**

@@ -107,4 +107,12 @@ class BitcoinSpec extends BaseRegTestSpec {
         tips[0].height > 0
         tips[0].status == "active"
     }
+
+    def "We can get a list of address groupings"() {
+        when:
+        def groupings = listAddressGroupings()
+
+        then:
+        groupings.size() > 1
+    }
 }
