@@ -43,7 +43,6 @@ public class BitcoinExtendedClient extends BitcoinClient {
         super(netParams, server, rpcuser, rpcpassword);
     }
 
-    @Deprecated
     public BitcoinExtendedClient(RPCConfig config) {
         super(RegTestParams.get(), config.getURI(), config.getUsername(), config.getPassword());
     }

@@ -24,6 +24,7 @@ public class BitcoinConf extends HashMap<String, String> {
                 throw new RuntimeException("Error creating RPC URI", e1);
             }
         }
+        // TODO: Determine MainNet, TestNet, or RegTest from contents of .conf file
         RPCConfig config = new RPCConfig(MainNetParams.get(), uri,
                 get("rpcuser"), get("rpcpassword"));
         return config;

@@ -93,7 +93,6 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Construct a BitcoinClient from an RPCConfig data object.
      * @param config Contains URI, user name, and password
      */
-    @Deprecated
     public BitcoinClient(RPCConfig config) {
         this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());
     }
