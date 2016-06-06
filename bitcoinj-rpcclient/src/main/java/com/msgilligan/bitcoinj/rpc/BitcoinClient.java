@@ -591,13 +591,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
         for (List<List<Object>> rawGrouping : raw) {
             List<AddressGroupingItem> grouping = new ArrayList<>();
             for (List<Object> addressItem : rawGrouping) {
-                String addressStr = (String) addressItem.get(0);
-                //TODO: Try to avoid using Double
-                Double balanceDouble = (Double) addressItem.get(1);
-                String account = (addressItem.size() > 2) ? (String) addressItem.get(2) : null;
-                Address address = Address.fromBase58(getNetParams(), addressStr);
-                Coin balance = Coin.valueOf(((Double)(balanceDouble * 100000000.0)).longValue());
-                AddressGroupingItem item = new AddressGroupingItem(address, balance, account);
+                AddressGroupingItem item = new AddressGroupingItem(addressItem, getNetParams());
                 grouping.add(item);
             }
             result.add(grouping);
