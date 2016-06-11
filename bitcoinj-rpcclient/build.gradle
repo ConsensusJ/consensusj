@@ -14,7 +14,7 @@ dependencies {
 
     testCompile project(':bitcoinj-dsl')                // Use Groovy extensions in tests
 
-    testRuntime  'org.slf4j:slf4j-jdk14:1.7.7'          // Runtime implementation of slf4j
+    testRuntime  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
 }
 
 // Test Structure
