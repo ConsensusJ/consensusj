@@ -17,6 +17,6 @@ public class Application {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(Application.class);
         app.setShowBanner(false);
-        ApplicationContext ctx = app.run();
+        ApplicationContext ctx = app.run(args);
     }
 }
