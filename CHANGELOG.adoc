@@ -3,6 +3,29 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.1.1
+
+Released: 2016.06.19
+
+=== Features/Changes
+
+* Improvements to `bitcoin.conf` reading classes
+* new `BitcoinScriptingClient`
+** Has typed Java methods *and* dynamic, Groovy fallback methods
+** No configuration constructor that uses `bitcoin.conf`
+* new `AbstractRPCClient` to allow alternate HTTP transport client
+* new `DynamicRPCFallback` Groovy trait to add dynamic methods to any `RPCClient` subclass
+* new `NamecoinScriptingClient` and `namecoin.conf` file reading support
+* add `listAddressGroupings` method to `BitcoinClient`
+* Fix: correctly pass command-line `args` to daemon and peerserver apps
+* Update to bitcoinj 0.14.3
+* Update to Groovy 2.4.7
+* Other library updates (slf4j)
+
+=== Potentially Breaking
+
+* Remove some deprecated methods
+
 == v0.1.0
 
 Released: 2016.05.25

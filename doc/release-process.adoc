@@ -4,7 +4,7 @@
 
 . Update `CHANGELOG.adoc`
 . Set versions
-.. `README.adoc`
+.. `README.adoc` (check/set bitcoinj version variable, too)
 .. bitcoinj-dsl `ExtensionModule`
 .. `gradle.properties`
 . Commit version bump and changelog.
