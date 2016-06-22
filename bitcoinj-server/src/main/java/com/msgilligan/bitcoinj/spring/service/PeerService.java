@@ -15,11 +15,11 @@
  */
 package com.msgilligan.bitcoinj.spring.service;
 
+import org.bitcoinj.core.listeners.OnTransactionBroadcastListener;
 import org.bitcoinj.net.discovery.PeerDiscovery;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 import org.bitcoinj.core.*;
-import org.bitcoinj.core.listeners.AbstractPeerEventListener;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -47,7 +47,7 @@ public class PeerService extends PeerGroupService {
     @Override
     public void start() {
         super.start();
-        peerGroup.addEventListener(new MyPeerEventListener() );
+        peerGroup.addOnTransactionBroadcastListener(new MyPeerEventListener() );
     }
 
 
@@ -65,7 +65,7 @@ public class PeerService extends PeerGroupService {
         this.messagingTemplate.convertAndSend("/topic/tx", tx);
     }
 
-    private class MyPeerEventListener extends AbstractPeerEventListener {
+    private class MyPeerEventListener implements OnTransactionBroadcastListener {
         @Override
         public void onTransaction(Peer peer, Transaction tx) {
             System.out.println("Got transaction: " + tx.getHashAsString());

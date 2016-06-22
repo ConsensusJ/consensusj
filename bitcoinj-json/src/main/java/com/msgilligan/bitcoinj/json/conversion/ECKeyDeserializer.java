@@ -23,7 +23,7 @@ public class ECKeyDeserializer extends JsonDeserializer<ECKey> {
         switch (token) {
             case VALUE_STRING:
                 try {
-                    return new DumpedPrivateKey(null, p.getValueAsString()).getKey();
+                    return DumpedPrivateKey.fromBase58(null, p.getValueAsString()).getKey();
                 } catch (AddressFormatException e) {
                     throw new InvalidFormatException("Invalid Key", p.getValueAsString(), ECKey.class);
                 }

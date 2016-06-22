@@ -138,7 +138,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * Returns the Bitcoin balance of an address where spendable outputs have at least {@code minConf} and not more
      * than {@code maxConf} confirmations.
      *
-     * @param address The address
+     * @param address The address (must be in wallet)
      * @param minConf Minimum amount of confirmations
      * @param maxConf Maximum amount of confirmations
      * @return The balance
