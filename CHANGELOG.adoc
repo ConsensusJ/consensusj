@@ -3,6 +3,20 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.1.2-SNAPSHOT
+
+Released: **Not yet released**
+
+=== Features/Changes
+
+* `ExchangeRateObserver` will now get a notification immediately after subscribing if data already present
+* improved error handling/logging for JSON parsing exceptions in `RPCClient`
+
+=== Potentially Breaking
+
+* `notify` method renamed to `onExchangeRateChange` in `ExchangeRateObserver` interface
+
+
 == v0.1.1
 
 Released: 2016.06.19
