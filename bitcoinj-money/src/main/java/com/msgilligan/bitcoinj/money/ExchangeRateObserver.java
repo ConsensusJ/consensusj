@@ -6,5 +6,5 @@ import org.knowm.xchange.dto.marketdata.Ticker;
  *
  */
 public interface ExchangeRateObserver {
-    void notify(ExchangeRateChange change);
+    void onExchangeRateChange(ExchangeRateChange change);
 }

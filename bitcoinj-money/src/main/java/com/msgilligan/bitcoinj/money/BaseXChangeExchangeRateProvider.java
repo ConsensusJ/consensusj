@@ -141,12 +141,15 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         // TODO: validate rate as one this provider supports
         MonitoredCurrency monitor = monitoredCurrencies.get(pair);
         monitor.observerList.add(observer);
+        // If we've got data already, call observer immediately
+        if (monitor.isTickerAvailable()) {
+            observer.onExchangeRateChange(buildExchangeRateChange(monitor));
+        }
     }
 
     public void notifyExchangeRateObservers(MonitoredCurrency monitor) {
         for (ExchangeRateObserver observer : monitor.observerList) {
-
-            observer.notify(new ExchangeRateChange(buildExchangeRate(monitor), monitor.getTicker().getTimestamp().getTime()));
+            observer.onExchangeRateChange(buildExchangeRateChange(monitor));
         }
     }
 
@@ -168,6 +171,10 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
             return null;
         }
         return buildExchangeRate(monitoredCurrency);
+    }
+
+    private ExchangeRateChange buildExchangeRateChange(MonitoredCurrency monitor) {
+        return new ExchangeRateChange(buildExchangeRate(monitor), monitor.getTicker().getTimestamp().getTime());
     }
 
     protected ExchangeRate buildExchangeRate(MonitoredCurrency monitoredCurrency) {
@@ -194,6 +201,10 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         public MonitoredCurrency(CurrencyUnitPair pair, CurrencyPair exchangePair) {
             this.pair = pair;
             this.exchangePair = exchangePair;
+        }
+
+        boolean isTickerAvailable() {
+            return _ticker != null;
         }
 
         Ticker getTicker() {
