@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.rpc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -109,7 +110,22 @@ public class RPCClient extends AbstractRPCClient {
             handleBadResponseCode(responseCode, connection);
         }
 
-        JsonRpcResponse<R> responseJson = mapper.readValue(connection.getInputStream(), responseType);
+        JsonRpcResponse<R> responseJson;
+        try {
+            if (log.isDebugEnabled()) {
+                // If logging enabled, copy InputStream to string and log
+                String responseBody = convertStreamToString(connection.getInputStream());
+                log.debug("responseBody: {}", responseBody);
+                responseJson = mapper.readValue(responseBody, responseType);
+            } else {
+                // Otherwise convert directly to responseType
+                responseJson = mapper.readValue(connection.getInputStream(), responseType);
+            }
+        } catch (JsonProcessingException e) {
+            log.error("JsonProcessingException: {}", e);
+            // TODO: Map to some kind of JsonRPC exception similar to JsonRPCStatusException
+            throw e;
+        }
         log.debug("Resp json: {}", responseJson);
         connection.disconnect();
         return responseJson;
@@ -122,9 +138,10 @@ public class RPCClient extends AbstractRPCClient {
         int jsonRPCCode = 0;
         JsonRpcResponse bodyJson = null;    // Body as JSON if available
         String bodyString = null;               // Body as String if not JSON
+        InputStream errorStream = connection.getErrorStream();
         if (connection.getContentType().equals("application/json")) {
             // We got a JSON error response, parse it
-            bodyJson = mapper.readValue(connection.getErrorStream(), JsonRpcResponse.class);
+            bodyJson = mapper.readValue(errorStream, JsonRpcResponse.class);
             JsonRpcError error = bodyJson.getError();
             if (error != null) {
                 // If there's a more specific message in the JSON use it instead.
@@ -133,11 +150,15 @@ public class RPCClient extends AbstractRPCClient {
             }
         } else {
             // No JSON, read response body as string
-            InputStream errorStream = connection.getErrorStream();
-            bodyString = new Scanner(errorStream,"UTF-8").useDelimiter("\\A").next();
+            bodyString = convertStreamToString(errorStream);
             errorStream.close();
         }
         throw new JsonRPCStatusException(exceptionMessage, responseCode, responseMessage, jsonRPCCode, bodyString, bodyJson);
+    }
+
+    private static String convertStreamToString(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is,"UTF-8").useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 
     private HttpURLConnection openConnection() throws IOException {
