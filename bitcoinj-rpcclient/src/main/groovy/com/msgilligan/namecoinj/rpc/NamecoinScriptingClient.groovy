@@ -10,6 +10,6 @@ import com.msgilligan.namecoinj.rpc.NamecoinClient
  */
 class NamecoinScriptingClient extends NamecoinClient implements DynamicRPCFallback {
     public NamecoinScriptingClient() {
-        super( NamecoinClient.readConfig());
+        super(readConfig());
     }
 }
