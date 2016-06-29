@@ -9,6 +9,8 @@ import com.msgilligan.bitcoinj.test.RegTestFundingSource;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.params.RegTestParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -22,6 +24,7 @@ import java.util.function.Supplier;
  *
  */
 public class ScriptRunner {
+    private static final Logger log = LoggerFactory.getLogger(ScriptRunner.class);
     private ScriptEngine engine;
 
     public ScriptRunner() throws ScriptException {
@@ -39,12 +42,8 @@ public class ScriptRunner {
         engine.put("satoshi", (Function<Number, Coin>) (Number n) -> Coin.valueOf(n.longValue()));
         engine.put("btc", (Function<Number, Coin>) (Number n) -> Coin.valueOf(n.longValue() * Coin.COIN.value));
         engine.put("getBlockCount", (Supplier<Integer>)() -> {
-            try {
-                return client.getBlockCount();
-            } catch (JsonRPCException | IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
-            }
+            try { return client.getBlockCount(); }
+            catch (Exception e) { log.error("Exception: {}", e); throw new RuntimeException(e); }
         });
     }
 
