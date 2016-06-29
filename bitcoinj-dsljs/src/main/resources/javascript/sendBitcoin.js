@@ -1,6 +1,6 @@
 var Coin = Java.type('org.bitcoinj.core.Coin');
 
-var blockheight = client.getBlockCount();
+var blockheight = getBlockCount();
 print("blockheight = ${blockheight}");
 
 var coin = Coin.valueOf(2, 50); //btc(2);

@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.dsljs;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
+import com.msgilligan.bitcoinj.rpc.JsonRPCException;
 import com.msgilligan.bitcoinj.rpc.RPCURI;
 import com.msgilligan.bitcoinj.rpc.test.TestServers;
 import com.msgilligan.bitcoinj.test.RegTestEnvironment;
@@ -11,8 +12,10 @@ import org.bitcoinj.params.RegTestParams;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 /**
@@ -35,6 +38,14 @@ public class ScriptRunner {
         engine.put("funder", funder);
         engine.put("satoshi", (Function<Number, Coin>) (Number n) -> Coin.valueOf(n.longValue()));
         engine.put("btc", (Function<Number, Coin>) (Number n) -> Coin.valueOf(n.longValue() * Coin.COIN.value));
+        engine.put("getBlockCount", (Supplier<Integer>)() -> {
+            try {
+                return client.getBlockCount();
+            } catch (JsonRPCException | IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public Object evalResource(String resourcePath) throws ScriptException {
