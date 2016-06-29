@@ -3,7 +3,7 @@ apply plugin: 'java'
 dependencies {
     compile project(':bitcoinj-rpcclient')
 
-    runtime 'org.slf4j:slf4j-jdk14:1.7.7'               // Runtime implementation of slf4j
+    runtime "org.slf4j:slf4j-jdk14:${slf4jVersion}"       // Runtime implementation of slf4j
 }
 
 sourceCompatibility = 1.8
