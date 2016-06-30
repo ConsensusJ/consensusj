@@ -1,6 +1,7 @@
 com.msgilligan.bitcoinj.cli
 com.msgilligan.bitcoinj.daemon
 com.msgilligan.bitcoinj.daemon.config
+com.msgilligan.bitcoinj.dsljs
 com.msgilligan.bitcoinj.json.conversion
 com.msgilligan.bitcoinj.json.pojo
 com.msgilligan.bitcoinj.money
