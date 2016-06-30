@@ -5,12 +5,13 @@ A high-level view of the changes in each bitcoinj-addons binary release.
 
 == v0.1.2-SNAPSHOT
 
-Released: **Not yet released**
+Released: 2016.06.29
 
 === Features/Changes
 
 * `ExchangeRateObserver` will now get a notification immediately after subscribing if data already present
-* improved error handling/logging for JSON parsing exceptions in `RPCClient`
+* Improved error handling/logging for JSON parsing exceptions in `RPCClient`
+* `bitcoinj-dsljs`: Proof-of-concept model for JavaScript integration via http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html[Nashorn].
 
 === Potentially Breaking
 

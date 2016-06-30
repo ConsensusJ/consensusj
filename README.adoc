@@ -1,8 +1,8 @@
 = bitcoinj Add-ons 
 Sean Gilligan <https://github.com/msgilligan>
-v0.1.1
+v0.1.2
 :description: bitcoinj-addons README document.
-:addons-version: 0.1.1
+:addons-version: 0.1.2
 :bitcoinj-version: 0.14.3
 
 image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"] 
