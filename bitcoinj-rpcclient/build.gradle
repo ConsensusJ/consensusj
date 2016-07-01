@@ -13,8 +13,6 @@ dependencies {
     compile "org.codehaus.groovy:groovy-json:${groovyVersion}"
 
     testCompile project(':bitcoinj-dsl')                // Use Groovy extensions in tests
-
-    testRuntime  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
 }
 
 // Test Structure
@@ -53,6 +51,7 @@ task regTest(type: Test) {
     }
 
     systemProperty 'regtest', true
+    systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/integ/logging.properties"
     systemProperties ([ "omni.test.rpcTestUser": rpcTestUser,
                         "omni.test.rpcTestPassword": rpcTestPassword,
     ])
