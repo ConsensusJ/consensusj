@@ -39,8 +39,13 @@ We have published http://msgilligan.github.io/bitcoinj-addons/apidoc/index.html[
 
 bitcoinj-addons is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] and is tested by the https://ci.omni.foundation/[Omni Foundation Continuous Integration Server] (self-signed SSL certificate). You can check the https://ci.omni.foundation/job/bitcoinj-addons/[bitcoinj-addons job] for build status.
 
+
 // Jenkins Widget doesn't display correctly because of ci.omni.foundation self-signed SSL
 // image:https://ci.omni.foundation/buildStatus/icon?job=bitcoinj-addons[link="https://ci.omni.foundation/job/bitcoinj-addons/"]
+
+There is also a Travis CI build:
+image:https://travis-ci.org/msgilligan/bitcoinj-addons.svg?branch=master["Build Status", link="https://travis-ci.org/msgilligan/bitcoinj-addons"]
+
 
 === Requirements
 
