@@ -4,7 +4,7 @@ language: java
 install: true
 
 script:
- - sudo apt-get update && sudo apt-get install oracle-java8-installer
+ - sudo apt-get update && sudo apt-get install oracle-java8-installer graphviz
  - java -version
  - ./gradlew jenkinsBuild 
 
