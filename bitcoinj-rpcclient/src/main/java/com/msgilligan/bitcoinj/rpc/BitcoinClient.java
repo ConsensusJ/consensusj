@@ -38,7 +38,7 @@ import java.util.Map;
  *
  * A strongly-typed wrapper for the
  * https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core JSON-RPC API].
- * *bitcoinj* types are used where appropriate.
+ * bitcoinj* types are used where appropriate.
  * For example, requesting a block hash will return a {@link org.bitcoinj.core.Sha256Hash}:
  *
  * [source,java]
@@ -51,6 +51,8 @@ import java.util.Map;
  * --
  * Coin balance = client.getBalance();
  * --
+ *
+ * This version is written to be compatible with Bitcoin Core 0.9.0 and later
  *
  * NOTE: This is still a work-in-progress and the API will change.
  *
@@ -69,7 +71,8 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param server URI of the Bitcoin RPC server
      * @param rpcuser Username (if required)
      * @param rpcpassword Password (if required)
-     * @deprecated You need to specify NetworkParameters, defaulting to RegTest
+     * @deprecated You need to specify NetworkParameters, this constructor defaults to RegTest
+     * @see BitcoinClient#BitcoinClient(NetworkParameters, URI, String, String)
      */
     @Deprecated
     public BitcoinClient(URI server, String rpcuser, String rpcpassword) {
@@ -241,7 +244,8 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
     }
 
     /**
-     * @deprecated Use getBlock()
+     * @deprecated Use BitcoinClient#getBlock(Sha256Hash)
+     * @see BitcoinClient#getBlock(Sha256Hash)
      */
     @Deprecated
     public Block getRawBlock(Sha256Hash hash) throws JsonRPCException, IOException {
@@ -288,10 +292,33 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
         return hashes;
     }
 
+
+    /**
+     * generate blocks (RegTest mode only)
+     * @since Bitcoin Core 0.11.0
+     *
+     * @param numBlocks number of blocks to generate
+     * @return list containing block header hashes of the generated blocks
+     */
+    public List<Sha256Hash> generate(int numBlocks) throws IOException, JsonRPCStatusException {
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
+        return send("generate", resultType, numBlocks);
+    }
+
     /**
      * Convenience method for generating a single block when in RegTest mode
-     * @see BitcoinClient#generateBlocks(Long blocks)
+     * @see BitcoinClient#generate(int numBlocks)
      */
+    public List<Sha256Hash> generate() throws IOException, JsonRPCStatusException {
+        return generate(1);
+    }
+
+    /**
+     * Convenience method for generating a single block when in RegTest mode
+     * @deprecated Use BitcoinClient#generate()
+     * @see BitcoinClient#generate()
+     */
+    @Deprecated
     public List<Sha256Hash> generateBlock() throws JsonRPCException, IOException {
         return generateBlocks(1L);
     }
@@ -300,8 +327,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Convenience method for generating blocks when in RegTest mode
      *
      * @param blocks number of blocks to generate
-     * @see BitcoinClient#setGenerate(Boolean, Long)
+     * @deprecated Use BitcoinClient#generate(int)
+     * @see BitcoinClient#generate(int)
      */
+    @Deprecated
     public List<Sha256Hash> generateBlocks(Long blocks) throws JsonRPCException, IOException {
         return setGenerate(true, blocks);
     }
