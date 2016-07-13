@@ -38,7 +38,7 @@ import java.util.Map;
  *
  * A strongly-typed wrapper for the
  * https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core JSON-RPC API].
- * bitcoinj* types are used where appropriate.
+ * https://bitcoinj.github.io[bitcoinj] types are used where appropriate.
  * For example, requesting a block hash will return a {@link org.bitcoinj.core.Sha256Hash}:
  *
  * [source,java]
@@ -318,7 +318,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @deprecated Use BitcoinClient#generate()
      * @see BitcoinClient#generate()
      */
-    @Deprecated
+//    @Deprecated
     public List<Sha256Hash> generateBlock() throws JsonRPCException, IOException {
         return generateBlocks(1L);
     }
