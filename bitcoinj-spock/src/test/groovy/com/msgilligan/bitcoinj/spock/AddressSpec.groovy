@@ -5,19 +5,16 @@ import org.bitcoinj.core.ECKey
 import org.bitcoinj.params.MainNetParams
 import org.bitcoinj.params.RegTestParams
 import org.bitcoinj.params.TestNet3Params
-import org.spongycastle.util.encoders.Hex
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class AddressSpec extends Specification {
     static final mainNetParams = MainNetParams.get()
     static final testNetParams = TestNet3Params.get()
     static final regTestParams = RegTestParams.get()
-    final static BigInteger NotSoPrivatePrivateKey = new BigInteger(1, Hex.decode("180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19"));
+    static final NotSoPrivatePrivateKey = new BigInteger(1, "180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19".decodeHex())
+    static final key = ECKey.fromPrivate(NotSoPrivatePrivateKey, false)
 
     def "Create valid MainNet Address from private key"() {
-        setup: ""
-        def key = ECKey.fromPrivate(NotSoPrivatePrivateKey, false)
 
         when: "We create a MainNet Address"
         Address address = key.toAddress(mainNetParams)
@@ -29,8 +26,6 @@ class AddressSpec extends Specification {
     }
 
     def "Create valid TestNet Address from private key"() {
-        setup: ""
-        def key = ECKey.fromPrivate(NotSoPrivatePrivateKey, false)
 
         when: "We create a TestNet Address"
         Address address = key.toAddress(testNetParams)
@@ -42,8 +37,6 @@ class AddressSpec extends Specification {
     }
 
     def "Create valid RegTest Address from private key"() {
-        setup: ""
-        def key = ECKey.fromPrivate(NotSoPrivatePrivateKey, false)
 
         when: "We create a RegTest Address"
         Address address = key.toAddress(regTestParams)
