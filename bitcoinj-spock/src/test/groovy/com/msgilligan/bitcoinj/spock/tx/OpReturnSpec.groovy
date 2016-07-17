@@ -6,6 +6,7 @@ import org.bitcoinj.core.TransactionOutPoint
 import org.bitcoinj.script.ScriptBuilder
 import org.bitcoinj.script.ScriptOpCodes
 import org.bitcoinj.script.Script
+import spock.lang.Unroll
 
 
 /**
@@ -13,9 +14,11 @@ import org.bitcoinj.script.Script
  */
 class OpReturnSpec extends BaseTransactionSpec {
 
-    def "Can create and serialize an OP_RETURN transaction"() {
+    @Unroll
+    def "Can create and serialize an OP_RETURN transaction of #length bytes"(int length) {
         given: "32 bytes of test data"
-        def testData = Sha256Hash.of("abcd".decodeHex()).bytes;
+        //def testData = Sha256Hash.of("abcd".decodeHex()).bytes;
+        def testData = 0..<length as byte[]
 
         when: "we build an OP_RETURN transaction"
         Transaction tx = new Transaction(mainNetParams)
@@ -36,8 +39,15 @@ class OpReturnSpec extends BaseTransactionSpec {
             opcode == ScriptOpCodes.OP_RETURN
         }
         with (parsedTx.getOutput(0).scriptPubKey.chunks.get(1)) {
-            opcode == testData.length
+            opcode == opCodeFromLength(testData.length);
             data == testData
         }
+
+        where:
+        length << [0, 1, 39, 79, 80]
+    }
+
+    int opCodeFromLength(int length) {
+        return (length >= ScriptOpCodes.OP_PUSHDATA1) ? ScriptOpCodes.OP_PUSHDATA1 : length
     }
 }
