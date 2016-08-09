@@ -18,6 +18,7 @@ import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,7 +175,11 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     }
 
     private ExchangeRateChange buildExchangeRateChange(MonitoredCurrency monitor) {
-        return new ExchangeRateChange(buildExchangeRate(monitor), monitor.getTicker().getTimestamp().getTime());
+        Date date = monitor.getTicker().getTimestamp();
+        // Not all exchanges provide a timestamp, default to 0 if it is null
+        long milliseconds = (date != null) ? date.getTime() : 0;
+
+        return new ExchangeRateChange(buildExchangeRate(monitor), milliseconds);
     }
 
     protected ExchangeRate buildExchangeRate(MonitoredCurrency monitoredCurrency) {
