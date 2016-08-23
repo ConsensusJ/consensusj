@@ -14,6 +14,7 @@ com.msgilligan.bitcoinj.spring.config
 com.msgilligan.bitcoinj.spring.controller
 com.msgilligan.bitcoinj.spring.service
 com.msgilligan.bitcoinj.test
+com.msgilligan.ethereum.rpc
 com.msgilligan.namecoinj.cli
 com.msgilligan.namecoinj.core
 com.msgilligan.namecoinj.json.pojo
