@@ -10,6 +10,11 @@ import java.util.List;
 
 /**
  * A partial implementation of an Ethereum RPC Client
+ *
+ * How to mine just a little for "reg test mode" in Eth:
+ * https://github.com/ethereum/go-ethereum/wiki/bitchin-tricks
+ * See also:
+ * https://github.com/ethereum/go-ethereum/wiki/Management-APIs
  */
 public class EthereumClient extends RPCClient {
     public static URI DEFAULT_LOCALHOST;
