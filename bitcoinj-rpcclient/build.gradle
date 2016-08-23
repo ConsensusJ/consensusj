@@ -29,6 +29,15 @@ sourceSets {
     }
 }
 
+test {
+    testLogging.showStandardStreams = true
+    systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/test/logging.properties"
+    beforeTest { descriptor ->
+        logger.lifecycle('    ' + descriptor.getName())
+    }
+
+}
+
 task integrationTest(type: Test) {
     testClassesDir = sourceSets.integrationTest.output.classesDir
     classpath = sourceSets.integrationTest.runtimeClasspath
