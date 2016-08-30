@@ -147,10 +147,12 @@ public class RPCClient extends AbstractRPCClient {
                 // If there's a more specific message in the JSON use it instead.
                 exceptionMessage = error.getMessage();
                 jsonRPCCode = error.getCode();
+                log.error("json error code: {}, message: {}", jsonRPCCode, exceptionMessage);
             }
         } else {
             // No JSON, read response body as string
             bodyString = convertStreamToString(errorStream);
+            log.error("error string: {}", bodyString);
             errorStream.close();
         }
         throw new JsonRPCStatusException(exceptionMessage, responseCode, responseMessage, jsonRPCCode, bodyString, bodyJson);
