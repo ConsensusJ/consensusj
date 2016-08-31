@@ -35,7 +35,7 @@ class BitcoinJCliSpec extends Specification implements CLITestSupport {
 
     def "generate a block"() {
         when:
-        def result = command "-regtest -rpcuser=${rpcUser} -rpcpassword=${rpcPassword} -rpcwait setgenerate 1"
+        def result = command "-regtest -rpcuser=${rpcUser} -rpcpassword=${rpcPassword} -rpcwait generate 1"
 
         then:
         result.status == 0
