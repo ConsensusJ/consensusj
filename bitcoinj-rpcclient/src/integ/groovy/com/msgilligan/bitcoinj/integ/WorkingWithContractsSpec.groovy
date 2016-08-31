@@ -78,7 +78,7 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
 
         when: "we send coins to the wallet and write a block"
         client.sendToAddress(walletAddr, walletStartAmount)
-        client.generateBlock()
+        client.generate()
         Integer walletHeight, rpcHeight
         while ( (walletHeight = wallet.getLastBlockSeenHeight()) < (rpcHeight = client.getBlockCount()) ) {
             // TODO: Figure out a way to do this without polling and sleeping
@@ -208,7 +208,7 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
         broadcastTx != null
 
         when: "Block is recorded"
-        generateBlock()
+        generate()
 
         then: "the amount is returned to our wallet"
         wallet.getBalance() == walletStartAmount

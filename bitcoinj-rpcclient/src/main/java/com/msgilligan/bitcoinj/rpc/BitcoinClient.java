@@ -245,14 +245,14 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
         return send("getblock", BlockInfo.class, hash, true);
     }
 
-    /**
-     * @deprecated Use BitcoinClient#getBlock(Sha256Hash)
-     * @see BitcoinClient#getBlock(Sha256Hash)
-     */
-    @Deprecated
-    public Block getRawBlock(Sha256Hash hash) throws JsonRPCException, IOException {
-        return getBlock(hash);
-    }
+//    /**
+//     * @deprecated Use BitcoinClient#getBlock(Sha256Hash)
+//     * @see BitcoinClient#getBlock(Sha256Hash)
+//     */
+//    @Deprecated
+//    public Block getRawBlock(Sha256Hash hash) throws JsonRPCException, IOException {
+//        return getBlock(hash);
+//    }
 
     public Block getBlock(Sha256Hash hash) throws JsonRPCException, IOException {
         // Use "verbose = false"
@@ -276,22 +276,12 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param generate        turn generation on or off
      * @param genproclimit    Generation is limited to [genproclimit] processors, -1 is unlimited
      *                        in regtest mode genproclimit is number of blocks to generate immediately
-     * @return List<Sha256Hash>  Bitcoin 0.10.0+: list containing  block header hashes of the generated blocks or empty list
-     *                        if no blocks were generated
-     *                        Bitcoin 0.9.x: Empty list
+     * @return List<Sha256Hash>  list containing  block header hashes of the generated blocks or empty list
      *
      */
     public List<Sha256Hash> setGenerate(Boolean generate, Long genproclimit) throws JsonRPCException, IOException {
-        // TODO: When we drop support for Bitcoin 0.9.x we can use automatic Jackson mapping here
-        List<Sha256Hash> hashes = new ArrayList<Sha256Hash>();
-        Object result = send("setgenerate", generate, genproclimit);
-        if (result != null) {
-            List<String> stringList = (List<String>) result;
-            for (String hashString : stringList) {
-                hashes.add(Sha256Hash.wrap(hashString));
-            }
-        }
-        return hashes;
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
+        return send("setgenerate", resultType, generate, genproclimit);
     }
 
 
@@ -320,9 +310,13 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @deprecated Use BitcoinClient#generate()
      * @see BitcoinClient#generate()
      */
+// We commented out the Deprecated annotation because it was causing Groovy in OmniJ to do
+// something weird (like not find the method),
+// now I can't remember exactly what it was -- should try adding it back as part
+// of testing for release 0.2.0
 //    @Deprecated
     public List<Sha256Hash> generateBlock() throws JsonRPCException, IOException {
-        return generateBlocks(1L);
+        return generate();
     }
 
     /**
@@ -334,7 +328,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      */
     @Deprecated
     public List<Sha256Hash> generateBlocks(Long blocks) throws JsonRPCException, IOException {
-        return setGenerate(true, blocks);
+        return generate(blocks.intValue());
     }
 
     /**

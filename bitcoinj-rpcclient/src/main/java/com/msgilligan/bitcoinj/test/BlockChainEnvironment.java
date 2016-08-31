@@ -23,6 +23,5 @@ public interface BlockChainEnvironment {
      * @param numBlocks the number of blocks to wait for
      * @return A list of block hashes
      */
-    List<Sha256Hash> waitForBlocks(long numBlocks) throws Exception;
-
+    List<Sha256Hash> waitForBlocks(int numBlocks) throws Exception;
 }

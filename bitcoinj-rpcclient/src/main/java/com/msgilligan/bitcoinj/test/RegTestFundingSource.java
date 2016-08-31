@@ -57,11 +57,11 @@ public class RegTestFundingSource implements FundingSource {
         final int minCoinAge = 100;
 
         if (client.getBlockCount() < minCoinAge) {
-            client.generateBlocks((long)minCoinAge - client.getBlockCount());
+            client.generate(minCoinAge - client.getBlockCount());
         }
 
         while (amountGatheredSoFar < requestedBtc.value) {
-            client.generateBlock();
+            client.generate();
             int blockIndex = client.getBlockCount() - minCoinAge;
             Block block = client.getBlock(blockIndex);
             List<Transaction> blockTxs = block.getTransactions();

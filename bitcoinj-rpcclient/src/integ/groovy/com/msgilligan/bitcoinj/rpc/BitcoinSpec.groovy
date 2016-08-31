@@ -37,7 +37,7 @@ class BitcoinSpec extends BaseRegTestSpec {
         def version10 = getInfo().version > 100000
 
         when: "we generate 1 new block"
-        def result = generateBlock()
+        def result = generate()
 
         then: "the block height is 1 higher"
         blockCount == startHeight + 1
@@ -54,7 +54,7 @@ class BitcoinSpec extends BaseRegTestSpec {
         sendToAddress(destinationAddress, testAmount, "comment", "comment-to")
 
         and: "we generate 1 new block"
-        generateBlock()
+        generate()
 
         then: "the new address has a balance of testAmount"
         testAmount == getReceivedByAddress(destinationAddress)

@@ -17,7 +17,7 @@ class BTCTestSupportIntegrationSpec extends BaseRegTestSpec {
         requestBitcoin(requestingAddress, requestedAmount)
 
         and:
-        generateBlock()
+        generate()
 
         then:
         getBitcoinBalance(requestingAddress) == requestedAmount

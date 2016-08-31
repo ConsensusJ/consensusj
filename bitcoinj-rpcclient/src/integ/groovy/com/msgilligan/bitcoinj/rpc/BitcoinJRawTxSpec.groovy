@@ -48,7 +48,7 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
         fundingAddress = createFundedAddress(fundingAmount)
 
         and: "a block is recorded"
-        generateBlock()
+        generate()
 
         then: "the address should have that balance"
         def balance = getBitcoinBalance(fundingAddress)
@@ -95,7 +95,7 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
         txid != null
 
         when: "a new block is mined"
-        generateBlock()
+        generate()
 
         and: "we get info about the transaction"
         def broadcastedTransaction = getRawTransactionInfo(txid)

@@ -21,12 +21,12 @@ public class RegTestEnvironment implements BlockChainEnvironment {
     }
 
     @Override
-    public List<Sha256Hash> waitForBlock() throws JsonRPCException, IOException {
+    public List<Sha256Hash> waitForBlock() throws Exception {
         return waitForBlocks(1);
     }
 
     @Override
-    public List<Sha256Hash> waitForBlocks(long numBlocks) throws JsonRPCException, IOException {
-        return client.generateBlocks(numBlocks);
+    public List<Sha256Hash> waitForBlocks(int numBlocks) throws JsonRPCException, IOException {
+        return client.generate(numBlocks);
     }
 }
