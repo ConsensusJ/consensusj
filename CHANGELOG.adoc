@@ -3,6 +3,12 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.2.0-SNAPSHOT
+
+=== Breaking and potentially breaking changes
+
+* Bitcoin RPC clients require Bitcoin Core 0.11.x (or Omni Core 0.0.11.1) or later
+
 == v0.1.3
 
 Released: 2016.08.22
