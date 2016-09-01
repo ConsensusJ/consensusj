@@ -52,7 +52,7 @@ import java.util.Map;
  * Coin balance = client.getBalance();
  * --
  *
- * This version is written to be compatible with Bitcoin Core 0.11.0 and later. If used with
+ * This version is written to be compatible with Bitcoin Core 0.10.4 and later. If used with
  * Omni Core (an enhanced Bitcoin Core with Omni Protocol support) Omni Core 0.0.11.1
  * or later is required.
  *
