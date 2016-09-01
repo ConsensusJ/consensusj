@@ -66,6 +66,8 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
     private static final int RETRY_SECONDS = 1;
     private static final int MESSAGE_SECONDS = 10;
 
+    private int serverVersion = 0;    // 0 means unknown serverVersion
+
     protected final Context context;
 
     /**
@@ -109,6 +111,19 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
     @Override
     public NetworkParameters getNetParams() {
         return context.getParams();
+    }
+
+    /**
+     * Get a (cached after first call) serverVersion number
+     * @return serverVersion number of bitcoin node
+     * @throws IOException
+     * @throws JsonRPCException
+     */
+    private int getServerVersion() throws IOException, JsonRPCException {
+        if (serverVersion == 0) {
+            serverVersion = getInfo().getVersion();
+        }
+        return serverVersion;
     }
 
     /**
@@ -292,16 +307,21 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param numBlocks number of blocks to generate
      * @return list containing block header hashes of the generated blocks
      */
-    public List<Sha256Hash> generate(int numBlocks) throws IOException, JsonRPCStatusException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
-        return send("generate", resultType, numBlocks);
+    public List<Sha256Hash> generate(int numBlocks) throws IOException, JsonRPCException {
+        if (getServerVersion() > 110000) {
+            JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
+            return send("generate", resultType, numBlocks);
+        } else {
+            // For backward compatibility, to be removed eventually
+            return setGenerate(true, (long) numBlocks);
+        }
     }
 
     /**
      * Convenience method for generating a single block when in RegTest mode
      * @see BitcoinClient#generate(int numBlocks)
      */
-    public List<Sha256Hash> generate() throws IOException, JsonRPCStatusException {
+    public List<Sha256Hash> generate() throws IOException, JsonRPCException {
         return generate(1);
     }
 

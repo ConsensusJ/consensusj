@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.rpc.test.TestServers
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -41,6 +42,7 @@ class DynamicRPCClientSpec extends Specification {
         result >= 0
     }
 
+    @Ignore("Wait until we're able to require bitcoind 0.11.x or later")
     def "setgenerate"() {
         when:
         def result = client.generate(2)
