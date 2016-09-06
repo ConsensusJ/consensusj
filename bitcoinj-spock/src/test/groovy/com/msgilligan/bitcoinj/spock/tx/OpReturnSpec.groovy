@@ -23,7 +23,10 @@ class OpReturnSpec extends BaseTransactionSpec {
         when: "we build an OP_RETURN transaction"
         Transaction tx = new Transaction(mainNetParams)
         TransactionOutPoint outPoint = new TransactionOutPoint(mainNetParams, 0, utxo_id)
-        Script script = new ScriptBuilder().op(ScriptOpCodes.OP_RETURN).data(testData).build()
+        Script script = new ScriptBuilder()
+                .op(ScriptOpCodes.OP_RETURN)
+                .data(testData)
+                .build()
         tx.addOutput(utxo_amount, script)
         tx.addSignedInput(outPoint, ScriptBuilder.createOutputScript(fromAddr), fromKey)
 
