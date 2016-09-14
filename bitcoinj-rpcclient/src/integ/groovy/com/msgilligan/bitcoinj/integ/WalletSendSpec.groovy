@@ -134,7 +134,7 @@ class WalletSendSpec extends BaseRegTestSpec {
 
     /**
      * Wait for a transaction to show up on the server (as unconfirmed)
-     * (e.g. to make sure Transaction if fully received before generating a block)
+     * (e.g. to make sure Transaction is fully received before generating a block)
      *
      * @param txid Transaction ID (hash) of transaction we're waiting for
      */
