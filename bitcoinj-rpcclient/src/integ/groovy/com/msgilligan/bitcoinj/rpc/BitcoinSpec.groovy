@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.BaseRegTestSpec
+import com.msgilligan.bitcoinj.json.pojo.NetworkInfo
 import org.bitcoinj.core.Coin
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.params.RegTestParams
@@ -10,21 +11,22 @@ class BitcoinSpec extends BaseRegTestSpec {
 
     def "return basic info" () {
         when: "we request info"
-        def info = getInfo()
+        def info = client.getNetworkInfo()
 
         then: "we get back some basic information"
         info != null
-        info.version >= 90100
-        info.protocolversion >= 70002
+        info.version >= 100000
+        info.protocolVersion >= 70002
     }
 
     def "Get a list of available commands"() {
         given:
-        def commands = getCommands()
+        def commands = client.getCommands()
 
         expect:
         commands != null
-        commands.contains('getinfo')
+        commands.contains('getblockchaininfo')
+        commands.contains('getnetworkinfo')
         commands.contains('help')
         commands.contains('stop')
         commands.contains('setgenerate')
@@ -34,7 +36,7 @@ class BitcoinSpec extends BaseRegTestSpec {
     def "Use RegTest mode to generate a block upon request"() {
         given: "a certain starting height"
         def startHeight = blockCount
-        def version10 = getInfo().version > 100000
+        def version10 = client.getNetworkInfo().version > 100000
 
         when: "we generate 1 new block"
         def result = generate()

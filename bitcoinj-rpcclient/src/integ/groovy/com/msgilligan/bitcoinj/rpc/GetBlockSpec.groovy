@@ -15,7 +15,7 @@ class GetBlockSpec extends BaseRegTestSpec {
     def "Use RegTest mode to generate a block upon request"() {
         given: "a certain starting height"
         def startHeight = blockCount
-        def version10 = getInfo().version > 100000
+        def version10 = client.getNetworkInfo().version > 100000
 
         when: "we generate 1 new block"
         def result = generate()

@@ -3,8 +3,10 @@ package com.msgilligan.bitcoinj.rpc;
 import com.fasterxml.jackson.databind.JavaType;
 import com.msgilligan.bitcoinj.json.conversion.HexUtil;
 import com.msgilligan.bitcoinj.json.pojo.AddressGroupingItem;
+import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
 import com.msgilligan.bitcoinj.json.pojo.BlockInfo;
 import com.msgilligan.bitcoinj.json.pojo.ChainTip;
+import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.RawTransactionInfo;
 import com.msgilligan.bitcoinj.json.pojo.ReceivedByAddressInfo;
@@ -121,7 +123,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      */
     private int getServerVersion() throws IOException, JsonRPCException {
         if (serverVersion == 0) {
-            serverVersion = getInfo().getVersion();
+            serverVersion = getNetworkInfo().getVersion();
         }
         return serverVersion;
     }
@@ -259,15 +261,6 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
         // Use "verbose = true"
         return send("getblock", BlockInfo.class, hash, true);
     }
-
-//    /**
-//     * @deprecated Use BitcoinClient#getBlock(Sha256Hash)
-//     * @see BitcoinClient#getBlock(Sha256Hash)
-//     */
-//    @Deprecated
-//    public Block getRawBlock(Sha256Hash hash) throws JsonRPCException, IOException {
-//        return getBlock(hash);
-//    }
 
     public Block getBlock(Sha256Hash hash) throws JsonRPCException, IOException {
         // Use "verbose = false"
@@ -618,8 +611,40 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
         return send("gettransaction", WalletTransactionInfo.class, txid);
     }
 
+    /**
+     * Deprecated getinfo function
+     *
+     * Use GetBlockChainInfo and other alternatives instead
+     *
+     * @return Structure with various info fields
+     * @throws JsonRPCException
+     * @throws IOException
+     */
+    @Deprecated
     public ServerInfo getInfo() throws JsonRPCException, IOException {
         return send("getinfo", ServerInfo.class);
+    }
+
+    /**
+     * The getblockchaininfo RPC provides information about the current state of the block chain.
+     *
+     * @return An object containing information about the current state of the block chain.
+     * @throws IOException
+     * @throws JsonRPCStatusException
+     */
+    public BlockChainInfo getBlockChainInfo() throws IOException, JsonRPCStatusException {
+        return send("getblockchaininfo", BlockChainInfo.class);
+    }
+
+    /**
+     * The getnetworkinfo RPC returns information about the node’s connection to the network.
+     *
+     * @return information about the node’s connection to the network
+     * @throws IOException
+     * @throws JsonRPCStatusException
+     */
+    public NetworkInfo getNetworkInfo() throws IOException, JsonRPCStatusException {
+        return send("getnetworkinfo", NetworkInfo.class);
     }
 
     /**

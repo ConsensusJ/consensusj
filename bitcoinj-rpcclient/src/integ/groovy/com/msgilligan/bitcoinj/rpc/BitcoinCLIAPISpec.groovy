@@ -14,12 +14,12 @@ class BitcoinCLIAPISpec extends BaseRegTestSpec {
 
     def "return basic info" () {
         when: "we request info"
-        def info = getinfo()
+        def info = getnetworkinfo()
 
         then: "we get back some basic information"
         info != null
         info.version >= 90100
-        info.protocolversion >= 70002
+        info.protocolVersion >= 70002
     }
 
 
