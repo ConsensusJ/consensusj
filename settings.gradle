@@ -3,4 +3,5 @@ include 'bitcoinj-json',                                             // JSON <->
         'bitcoinj-server', 'bitcoinj-daemon', 'bitcoinj-peerserver', // Server lib + 2 server apps
         'bitcoinj-dsl', 'bitcoinj-spock',                            // DSL/Testing
         'bitcoinj-money',                                             // JavaMoney (JSR-354) support
-        'bitcoinj-dsljs'
+        'bitcoinj-dsljs',
+        'bitcoinj-proxy'

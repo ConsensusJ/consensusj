@@ -1,5 +1,8 @@
 package com.msgilligan.bitcoinj.rpc;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +17,17 @@ public class JsonRpcRequest {
     private final String  method;
     private final String  id;
     private final List<Object> params;
+
+    @JsonCreator
+    public JsonRpcRequest(@JsonProperty("jsonrpc")  String jsonrpc,
+                          @JsonProperty("method")   String method,
+                          @JsonProperty("id")       String id,
+                          @JsonProperty("params")   List<Object> params) {
+        this.jsonrpc = jsonrpc;
+        this.method = method;
+        this.id = id;
+        this.params = params;
+    }
 
     public JsonRpcRequest(String method, List<Object> params) {
         this.jsonrpc = JSON_RPC_VERSION;

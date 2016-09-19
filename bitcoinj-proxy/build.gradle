@@ -1,0 +1,25 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "io.ratpack:ratpack-gradle:1.4.2"
+    }
+}
+
+apply plugin: "io.ratpack.ratpack-java"
+
+sourceCompatibility = 1.8
+
+mainClassName = "com.msgilligan.bitcoinj.proxy.ProxyMain"
+
+dependencies {
+    compile project(':bitcoinj-rpcclient')
+}
+
+idea {
+    module {
+        jdkName = '1.8'
+//        languageLevel = '1.8'
+    }
+}
