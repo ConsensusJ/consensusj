@@ -20,7 +20,9 @@ public class ProxyMain {
                     ))
                     .handlers(chain -> chain
                             .post("rpc", new RpcProxyHandler())
-                            .get(context -> context.getResponse().send("(Not RPC) Hello world!"))
+                            .get("status", new ChainStatusHandler())
+                            .get("gen", new GenerateHandler())
+                            .get(context -> context.getResponse().send("Hello world! (Not RPC)"))
                 )
         );
     }

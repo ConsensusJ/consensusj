@@ -1,14 +1,12 @@
 package com.msgilligan.bitcoinj.proxy;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.msgilligan.bitcoinj.rpc.JsonRpcRequest;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import static ratpack.jackson.Jackson.fromJson;
 import ratpack.http.client.HttpClient;
 
-import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,25 +15,19 @@ import java.util.List;
  * Relay allowed RPC methods to a URI
  * (defaults to localhost with regtest port)
  */
-public class RpcProxyHandler implements Handler {
-    private static final String jsonType = "application/json";
-    private final URI remoteURI;
-    private final String remoteUserName;
-    private final String remotePassword;
+public class RpcProxyHandler extends AbstractJsonRpcHandler implements Handler {
     private final List<String> allowedMethods =  Arrays.asList("getblockcount", "setgenerate");
-    private final ObjectMapper mapper = new ObjectMapper();
 
-    public RpcProxyHandler() throws Exception {
-        remoteURI = new URI("http://localhost:18332");
-        remoteUserName = null;
-        remotePassword = null;
+    protected RpcProxyHandler() throws URISyntaxException {
+        super();
     }
 
-    public RpcProxyHandler(URI server, String userName, String password) throws Exception {
-        remoteURI = server;
-        remoteUserName = userName;
-        remotePassword = password;
-    }
+
+//    public RpcProxyHandler(URI server, String userName, String password) throws Exception {
+//        remoteURI = server;
+//        remoteUserName = userName;
+//        remotePassword = password;
+//    }
 
     @Override
     public void handle(Context ctx) throws Exception {
@@ -59,15 +51,4 @@ public class RpcProxyHandler implements Handler {
         });
     }
 
-    // TODO: Surely this method isn't necessary with Ratpack
-    private String requestToString(JsonRpcRequest request) {
-        String result;
-        try {
-            result = mapper.writeValueAsString(request);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            result = "proxy jackson error";
-        }
-        return result;
-    }
 }
