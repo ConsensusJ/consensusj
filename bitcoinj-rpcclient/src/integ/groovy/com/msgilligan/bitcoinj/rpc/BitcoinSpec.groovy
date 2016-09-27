@@ -29,7 +29,7 @@ class BitcoinSpec extends BaseRegTestSpec {
         commands.contains('getnetworkinfo')
         commands.contains('help')
         commands.contains('stop')
-        commands.contains('setgenerate')
+        //commands.contains('setgenerate')
         //commands.contains('generate')
     }
 

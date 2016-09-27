@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.json.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.Sha256Hash;
 
@@ -10,6 +11,8 @@ import java.util.List;
 /**
  * BlockInfo POJO returned by GetBlockInfo
  */
+@JsonIgnoreProperties(ignoreUnknown=true)
+// "strippedsize" property added (present in Bitcoin 0.13)
 public class BlockInfo {
     public final Sha256Hash hash;
     public final int confirmations;

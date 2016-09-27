@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.json.pojo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
@@ -23,6 +24,7 @@ public class WalletTransactionInfo {
     private final WalletConflictList walletconflicts;
     private final int time;
     private final int timereceived;
+    private final String bip125Replaceable;
     private final DetailList details;
     private final String hex;
 
@@ -37,6 +39,7 @@ public class WalletTransactionInfo {
                                  @JsonProperty("walletconflicts")   WalletConflictList walletconflicts,
                                  @JsonProperty("time")              int time,
                                  @JsonProperty("timereceived")      int timereceived,
+                                 @JsonProperty("bip125-replaceable") String bip125Replaceable,
                                  @JsonProperty("details")           DetailList details,
                                  @JsonProperty("hex")               String hex) {
         this.amount = amount;
@@ -49,6 +52,7 @@ public class WalletTransactionInfo {
         this.walletconflicts = walletconflicts;
         this.time = time;
         this.timereceived = timereceived;
+        this.bip125Replaceable = bip125Replaceable;
         this.details = details;
         this.hex = hex;
     }
@@ -107,11 +111,13 @@ public class WalletTransactionInfo {
     public static class DetailList extends ArrayList<Detail> {
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Detail {
         private final String account;
         private final Address address;
         private final String category;
         private final Coin amount;
+        private final String label;
         private final int vout;
         private final Coin fee;
 
@@ -119,12 +125,14 @@ public class WalletTransactionInfo {
                       @JsonProperty("address")  Address address,
                       @JsonProperty("category") String category,
                       @JsonProperty("amount")   Coin amount,
+                      @JsonProperty("label")    String label,
                       @JsonProperty("vout")     int vout,
                       @JsonProperty("fee")      Coin fee) {
             this.account = account;
             this.address = address;
             this.category = category;
             this.amount = amount;
+            this.label = label;
             this.vout = vout;
             this.fee = fee;
         }

@@ -17,18 +17,21 @@ public class ReceivedByAddressInfo {
     public final Coin amount;
     public final int confirmations;
     public final List<Sha256Hash> txids;
+    public final String label;
 
     @JsonCreator
     public ReceivedByAddressInfo(@JsonProperty("address") Address address,
                                  @JsonProperty("account") String account,
                                  @JsonProperty("amount") Coin amount,
                                  @JsonProperty("confirmations") int confirmations,
-                                 @JsonProperty("txids") List<Sha256Hash> txids) {
+                                 @JsonProperty("txids") List<Sha256Hash> txids,
+                                 @JsonProperty("label") String label) {
         this.address = address;
         this.account = account;
         this.amount = amount;
         this.confirmations = confirmations;
         this.txids = txids;
+        this.label = label;
     }
 
     public Address getAddress() {
