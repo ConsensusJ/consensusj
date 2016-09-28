@@ -26,13 +26,13 @@ class P2PKHSpec extends TxTestBaseSpec {
         // Assume only 1 (first) outpoint is needed (assuming utxos made by createIngredients are big enough)
         tx.addSignedInput(ingredients.outPoints.get(0), ScriptBuilder.createOutputScript(ingredients.address), ingredients.privateKey);
 
-        and: "send via RPC and generate a block"
+        and: "send via submitMethod [P2P, RPC] and generate a block"
         Transaction sentTx = submitMethod(tx)
 
         then: "the new address has a balance of amount"
-        getReceivedByAddress(destAddress) == amount  // Verify rpcAddress balance
+        getReceivedByAddress(destAddress) == amount  // Verify destAddress balance
 
-        where:
+        where: "submitMethod is P2P and then RPC"
         [submitMethod, methodName] << submitMethods
     }
 }
