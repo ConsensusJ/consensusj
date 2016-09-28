@@ -20,6 +20,9 @@ abstract class TxTestBaseSpec extends BaseRegTestSpec {
     @Shared
     PeerGroup peerGroup
 
+    // Array for data-driven testing that varies the submit method
+    @Shared
+    def submitMethods = [[this.&submitP2P, "P2P"], [this.&submitRPC, "RPC"]]
 
     void setupSpec() {
         params = getNetParams()
