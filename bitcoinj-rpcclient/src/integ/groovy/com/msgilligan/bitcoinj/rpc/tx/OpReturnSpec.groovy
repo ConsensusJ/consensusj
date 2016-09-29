@@ -10,7 +10,7 @@ import spock.lang.Stepwise
 import spock.lang.Unroll
 
 /**
- *
+ *  Create, send, record, and retrieve an OP_RETURN transaction
  */
 class OpReturnSpec extends TxTestBaseSpec {
     @Unroll
@@ -50,7 +50,7 @@ class OpReturnSpec extends TxTestBaseSpec {
         [submitMethod, methodName] << submitMethods
     }
 
-    private int opCodeFromLength(int length) {
+    private static int opCodeFromLength(int length) {
         return (length >= ScriptOpCodes.OP_PUSHDATA1) ? ScriptOpCodes.OP_PUSHDATA1 : length
     }
 

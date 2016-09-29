@@ -46,8 +46,9 @@ abstract class TxTestBaseSpec extends BaseRegTestSpec {
         def txid = sendRawTransaction(tx)
         generate()
         def sentTx = getRawTransaction(txid)
-        def txinfo = getTransaction(txid)
-        assert txinfo.confirmations == 1
+        // TODO: getTransaction() won't work for a non-wallet transaction
+//        def txinfo = getTransaction(txid)
+//        assert txinfo.confirmations == 1
         return sentTx
     }
 
@@ -64,8 +65,9 @@ abstract class TxTestBaseSpec extends BaseRegTestSpec {
                 pendingTx = getRawTransaction(txid)
             } catch (JsonRPCStatusException e) {
                 if (e.message != "No information available about transaction") {
-                    throw e;
+                    throw e
                 }
+                Thread.sleep(1000)
             }
         }
     }
