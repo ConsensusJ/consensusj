@@ -1,6 +1,5 @@
 package com.msgilligan.bitcoinj.rpc.tx
 
-import org.bitcoinj.core.Address
 import org.bitcoinj.core.Coin
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.Sha256Hash
@@ -125,9 +124,9 @@ class BareMultisigSpec extends TxTestBaseSpec {
         Transaction confirmedTx = submitRPC(spendTx)
 
         then:
-        // Wallet now has the money back in it.
-        // TODO: How to check the balance of a non-wallet transaction?
-        //getBitcoinBalance(clientKey.toAddress(params)) == amount
-        1 == 1
+        // [Client] now has the money back in it.
+        confirmedTx.outputs.size() == 1
+        confirmedTx.outputs[0].getScriptPubKey().isSentToRawPubKey()
+        confirmedTx.outputs[0].value == amount2
     }
 }

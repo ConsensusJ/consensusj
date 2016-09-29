@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.rpc.tx
 
 import com.msgilligan.bitcoinj.BaseRegTestSpec
+import com.msgilligan.bitcoinj.json.pojo.RawTransactionInfo
 import com.msgilligan.bitcoinj.rpc.JsonRPCStatusException
 import com.msgilligan.bitcoinj.test.RegTestFundingSource
 import com.msgilligan.bitcoinj.test.TransactionIngredients
@@ -43,12 +44,11 @@ abstract class TxTestBaseSpec extends BaseRegTestSpec {
     }
 
     Transaction submitRPC(Transaction tx) {
-        def txid = sendRawTransaction(tx)
+        Sha256Hash txid = sendRawTransaction(tx)
         generate()
-        def sentTx = getRawTransaction(txid)
-        // TODO: getTransaction() won't work for a non-wallet transaction
-//        def txinfo = getTransaction(txid)
-//        assert txinfo.confirmations == 1
+        Transaction sentTx = getRawTransaction(txid)
+        RawTransactionInfo txinfo = getRawTransactionInfo(txid)
+        assert txinfo.confirmations == 1
         return sentTx
     }
 
@@ -67,7 +67,7 @@ abstract class TxTestBaseSpec extends BaseRegTestSpec {
                 if (e.message != "No information available about transaction") {
                     throw e
                 }
-                Thread.sleep(1000)
+                Thread.sleep(250)   // wait 250 milliseconds
             }
         }
     }
