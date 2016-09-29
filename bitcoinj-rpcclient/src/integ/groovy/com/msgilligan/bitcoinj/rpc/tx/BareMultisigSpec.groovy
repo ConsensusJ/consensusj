@@ -1,51 +1,133 @@
 package com.msgilligan.bitcoinj.rpc.tx
 
+import org.bitcoinj.core.Address
 import org.bitcoinj.core.Coin
 import org.bitcoinj.core.ECKey
+import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Transaction
+import org.bitcoinj.core.TransactionInput
+import org.bitcoinj.core.TransactionOutput
+import org.bitcoinj.crypto.TransactionSignature
 import org.bitcoinj.script.ScriptBuilder
 import org.bitcoinj.script.Script
+import spock.lang.Shared
 import spock.lang.Stepwise
-import spock.lang.Unroll
 
 /**
- * Non-P2SH multisig - Fund and redeem a multisig output
+ * Non-P2SH multisig - Fund and redeem a bare multisig output
+ * Based on https://bitcoinj.github.io/working-with-contracts
+ * We have modified the example slightly to adapt it into a @Stepwise Spock test.
+ * Each "feature" test corresponds to a section of the example. The example does not
+ * specify the exact communication between the 'client' and 'server' and in some cases
+ * provides calls to unimplemented methods like `sendToClientApp(signature)`.
+ * In this Specification we're using the @Stepwise annotation and @Shared variables to
+ * communicate between the "client" and the "server"
  */
 @Stepwise
-class P2SHSpec extends TxTestBaseSpec {
+class BareMultisigSpec extends TxTestBaseSpec {
 
-    private static final ECKey key1 = new ECKey();
-    private static final ECKey key2 = new ECKey();
-    private static final ECKey key3 = new ECKey();
-    private static final List<ECKey> keys = [key1, key2, key3]
+    private static final ECKey clientKey = new ECKey();
+    private static final ECKey serverKey = new ECKey();
+    private static final List<ECKey> keys = [clientKey, serverKey]
+    private static final Coin amount = 49.999.btc
+    private static final Coin amount2 = amount - 0.001.btc
 
-    def "create and send a bitcoinj P2SH transaction"() {
-        given: "transaction ingredients, a destination address and an amount to send"
+    @Shared
+    Transaction contract
+
+    @Shared
+    TransactionSignature serverSignature
+
+    def "create and send a bitcoinj bare multisig transaction"() {
+        given: "transaction ingredients (and keys and amount in static finals)"
+        // ingredients is a test-fixture that is like a micro-wallet that can be used
+        // to fund transactions
         def ingredients = createIngredients(50.btc)
-        // since we're not currently using a change address, RPC calls won't let us
-        // spend too much 'absurdly-high-fee' or too little in transaction fees
-        // so maybe we should use change addresses in these tests?
-        Coin amount = 49.999.btc
-        //def destAddress = getNewAddress()
 
         when: "we build a transaction"
-        Transaction tx = new Transaction(params)
+        contract = new Transaction(params)
 
-        // 2-of-3 multisig
+        // 2-of-2 multisig
+        // Note that at this point it is not necessary to have the private key for either/any of the keys.
+        // In the bitcoinj example code it shows the server key being created from a variable called `publicKeyBytes`
         Script script = ScriptBuilder.createMultiSigOutputScript(2, keys)
-        tx.addOutput(amount, script)
+        contract.addOutput(amount, script)
         // Assume only 1 (first) outpoint is needed (assuming utxos made by createIngredients are big enough)
-        tx.addSignedInput(ingredients.outPoints.get(0), ScriptBuilder.createOutputScript(ingredients.address), ingredients.privateKey);
+        contract.addSignedInput(ingredients.outPoints.get(0), ScriptBuilder.createOutputScript(ingredients.address), ingredients.privateKey)
 
-        and: "send via submitMethod [P2P, RPC] and generate a block"
-        Transaction sentTx = submitRPC(tx)
+        and: "send via P2P and generate a block"
+        Transaction sentTx = submitRPC(contract)
 
         then: "the new address has a balance of amount"
-        getReceivedByAddress(destAddress) == amount  // Verify destAddress balance
+        sentTx != null
+        // What else can we verify here?
     }
 
-    def "redeem a multisig transaction"() {
+    def "server-side signing"() {
+        when: "we receive the transaction"
+        // The example says:
+        // Assume we get the multisig transaction we're trying to spend from
+        // somewhere, like a network connection.
+        // In the Spock test we get it from the contract shared variable
 
+        TransactionOutput multisigOutput = contract.getOutput(0)
+        Script multisigScript = multisigOutput.getScriptPubKey()
+        Coin value = multisigOutput.getValue()
+
+        then: "it's a multisig output and the amount is correct"
+        multisigScript.isSentToMultiSig()
+        value == amount
+
+        when: "OK, now build a transaction that spends the money back to the client."
+        Transaction spendTx = new Transaction(params);
+        spendTx.addOutput(amount2, clientKey)
+        spendTx.addInput(multisigOutput)
+
+        and: "we sign the transaction"
+        Sha256Hash sighash = spendTx.hashForSignature(0,                    // index of input to sign
+                multisigScript,         // redeem script
+                Transaction.SigHash.ALL,// hash type
+                false)                 // anyone can spend?
+        serverSignature = new TransactionSignature(serverKey.sign(sighash), Transaction.SigHash.ALL, false);
+        // In the bitcoinj example the server signature is sent to the client with an unspecified
+        // sendToClientApp(signature) method, in this Spock test it is sent via a @Shared variable
+
+        then:
+        serverSignature != null
+        // What else can we verify here?
     }
 
+    def "client-side signing and spending"() {
+        given:
+        TransactionOutput multisigOutput = contract.getOutput(0)
+
+        when: "we build a transaction"
+        Transaction spendTx = new Transaction(params)
+        spendTx.addOutput(amount2, clientKey)
+        TransactionInput input = spendTx.addInput(multisigOutput)
+        Sha256Hash sighash = spendTx.hashForSignature(0,
+                multisigOutput.getScriptPubKey(),
+                Transaction.SigHash.ALL,
+                false)
+        TransactionSignature mySignature = new TransactionSignature(clientKey.sign(sighash), Transaction.SigHash.ALL, false)
+
+        and: "a multisig input script"
+        // Create the script that spends the multi-sig output.
+        Script inputScript = ScriptBuilder.createMultiSigInputScript([mySignature, serverSignature])
+        input.setScriptSig(inputScript) // Add it to the input.
+
+        and: "it verifies"
+        // We can now check the server provided signature is correct, of course...
+        input.verify(multisigOutput)  // Throws an exception if the script doesn't run.
+
+        and: "we send it via P2P"
+        // It's valid! Let's take back the money.
+        Transaction confirmedTx = submitRPC(spendTx)
+
+        then:
+        // Wallet now has the money back in it.
+        // TODO: How to check the balance of a non-wallet transaction?
+        //getBitcoinBalance(clientKey.toAddress(params)) == amount
+        1 == 1
+    }
 }
