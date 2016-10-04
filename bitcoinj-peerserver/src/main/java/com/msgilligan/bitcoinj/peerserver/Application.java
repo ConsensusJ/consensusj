@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.peerserver;
 
+import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
@@ -16,7 +17,7 @@ public class Application {
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(Application.class);
-        app.setShowBanner(false);
+        app.setBannerMode(Banner.Mode.OFF);
         ApplicationContext ctx = app.run(args);
     }
 }

@@ -13,6 +13,7 @@ import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
+import org.bitcoinj.core.TransactionOutPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,6 +101,23 @@ public class RegTestFundingSource implements FundingSource {
         Address address = client.getNewAddress();
         requestBitcoin(address, amount);
         return address;
+    }
+
+    /**
+     * Create everything needed to assemble a custom transaction
+     * @param amount Amount of BTC to be available on new address
+     * @return An address, private key, and list of unspent outputs
+     * @throws JsonRPCException
+     * @throws IOException
+     */
+    public TransactionIngredients createIngredients(Coin amount) throws JsonRPCException, IOException {
+        TransactionIngredients ingredients = new TransactionIngredients();
+        Address address = client.getNewAddress();
+        requestBitcoin(address, amount);
+        ingredients.address = address;
+        ingredients.privateKey = client.dumpPrivKey(address);
+        ingredients.outPoints = client.listUnspentOutPoints(address);
+        return ingredients;
     }
 
     @Override

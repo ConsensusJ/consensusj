@@ -1,6 +1,8 @@
 package com.msgilligan.bitcoinj.json.pojo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.msgilligan.bitcoinj.json.conversion.TransactionHexSerializer;
 import org.bitcoinj.core.Coin;
@@ -15,6 +17,8 @@ import java.util.List;
 /**
  * RawTransaction POJO
  */
+@JsonIgnoreProperties(ignoreUnknown=true)
+// "hash" property added (present in Bitcoin 0.13)
 public class RawTransactionInfo {
     public final String hex;
     public final Sha256Hash txid;

@@ -19,6 +19,7 @@ public class UnspentOutput {
     private final Coin        amount;
     private final int         confirmations;
     private final boolean     spendable;
+    private final Boolean     solvable;
 
     @JsonCreator
     public UnspentOutput(@JsonProperty("txid")          Sha256Hash  txid,
@@ -28,7 +29,8 @@ public class UnspentOutput {
                          @JsonProperty("scriptPubKey")  String      scriptPubKey,
                          @JsonProperty("amount")        Coin        amount,
                          @JsonProperty("confirmations") int         confirmations,
-                         @JsonProperty("spendable")     boolean     spendable) {
+                         @JsonProperty("spendable")     boolean     spendable,
+                         @JsonProperty("solvable")      Boolean     solvable) {
         this.txid = txid;
         this.vout = vout;
         this.address = address;
@@ -37,6 +39,7 @@ public class UnspentOutput {
         this.amount = amount;
         this.confirmations = confirmations;
         this.spendable = spendable;
+        this.solvable = solvable;
     }
 
     public Sha256Hash getTxid() {

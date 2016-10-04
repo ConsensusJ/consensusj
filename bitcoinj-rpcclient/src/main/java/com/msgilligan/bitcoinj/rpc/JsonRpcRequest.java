@@ -1,5 +1,9 @@
 package com.msgilligan.bitcoinj.rpc;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,11 +19,42 @@ public class JsonRpcRequest {
     private final String  id;
     private final List<Object> params;
 
+    /**
+     * For use by Jackson deserialization
+     * @param jsonrpc filled from the JSON object
+     * @param method filled from the JSON object
+     * @param id filled from the JSON object
+     * @param params filled from the JSON object
+     */
+    @JsonCreator
+    public JsonRpcRequest(@JsonProperty("jsonrpc")  String jsonrpc,
+                          @JsonProperty("method")   String method,
+                          @JsonProperty("id")       String id,
+                          @JsonProperty("params")   List<Object> params) {
+        this.jsonrpc = jsonrpc;
+        this.method = method;
+        this.id = id;
+        this.params = params;
+    }
+
+    /**
+     * For creating a JSON RPC request for serialization
+     * @param method Method of remote procedure to call
+     * @param params Parameters to serialize
+     */
     public JsonRpcRequest(String method, List<Object> params) {
         this.jsonrpc = JSON_RPC_VERSION;
         this.id =  Long.toString(JsonRpcRequest.nextRequestId++);
         this.method = method;
         this.params = removeTrailingNulls(params);
+    }
+
+    /**
+     * Convenience constructor for requests with empty parameter list
+     * @param method method name string
+     */
+    public JsonRpcRequest(String method) {
+        this(method, Collections.emptyList());
     }
 
     public String getJsonrpc() {

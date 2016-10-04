@@ -7,13 +7,13 @@ dependencies {
     // gems dependency configuration is added by
     // jruby-gradle-plugin. Here we define
     // the gems we need in our build.
-    gems 'rubygems:asciidoctor-diagram:1.2.1'
+    gems 'rubygems:asciidoctor-diagram:1.5.1'
 }
 
 asciidoctorj {
     // We can change the AsciidoctorJ
     // dependency version.
-    version = '1.5.3.2'
+    version = '1.5.4'
 }
 
 asciidoctor {

@@ -1,5 +1,7 @@
 package com.msgilligan.bitcoinj.cli;
 
+import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
+import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
 import com.msgilligan.bitcoinj.rpc.JsonRPCException;
 import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 
@@ -23,16 +25,18 @@ public class Status extends CliCommand {
 
     @Override
     public Integer runImpl() throws IOException {
-        ServerInfo info = null;
+        NetworkInfo networkInfo;
+        BlockChainInfo chainInfo;
         try {
-            info = client.getInfo();
+            networkInfo = client.getNetworkInfo();
+            chainInfo = client.getBlockChainInfo();
         } catch (JsonRPCException e) {
             e.printStackTrace();
             return 1;
         }
 
-        Integer bitcoinVersion = info.getVersion();
-        Integer blocks = info.getBlocks();
+        Integer bitcoinVersion = networkInfo.getVersion();
+        Integer blocks = chainInfo.getBlocks();
 
         pwout.println("Bitcoin Core Version: " + bitcoinVersion);
         pwout.println("Block count: " + blocks);

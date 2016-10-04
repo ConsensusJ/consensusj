@@ -53,7 +53,7 @@ class DynamicRPCClientSpec extends Specification {
 
     def "getinfo" () {
         when:
-        def info = client.getinfo()
+        def info = client.getnetworkinfo()
 
         then:
         info != null
