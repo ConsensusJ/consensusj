@@ -135,4 +135,8 @@ public abstract class AbstractRPCClient implements UntypedRPCClient {
         return send(method, Arrays.asList(params));
     }
 
+    public <R> R send(JSONRPCMethod method, Object... params) throws IOException, JsonRPCStatusException {
+        return send(method.name(), Arrays.asList(params));
+    }
+
 }

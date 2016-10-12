@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.proxy;
 
+import static com.msgilligan.bitcoinj.rpc.BitcoinClientMethod.*;
 import com.msgilligan.bitcoinj.rpc.JsonRpcRequest;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
@@ -7,8 +8,10 @@ import static ratpack.jackson.Jackson.fromJson;
 import ratpack.http.client.HttpClient;
 
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 /**
  * JsonRPC proxy handler
@@ -16,7 +19,9 @@ import java.util.List;
  * (defaults to localhost with regtest port)
  */
 public class RpcProxyHandler extends AbstractJsonRpcHandler implements Handler {
-    private final List<String> allowedMethods =  Arrays.asList("getblockcount", "setgenerate");
+    private final List<String> allowedMethods =
+            Stream.of(getblockcount, setgenerate)
+                .map(Enum::name).collect(Collectors.toList());
 
     protected RpcProxyHandler() throws URISyntaxException {
         super();

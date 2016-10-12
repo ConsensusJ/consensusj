@@ -34,6 +34,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import static com.msgilligan.bitcoinj.rpc.BitcoinClientMethod.*;
 
 /**
  * = JSON-RPC Client for *Bitcoin Core*
@@ -238,7 +239,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @return The current block count
      */
     public Integer getBlockCount() throws JsonRPCException, IOException {
-        return send("getblockcount");
+        return send(getblockcount);
     }
 
     /**
@@ -248,7 +249,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @return The block hash
      */
     public Sha256Hash getBlockHash(Integer index) throws JsonRPCException, IOException {
-        return send("getblockhash", Sha256Hash.class, index);
+        return send(getblockhash, Sha256Hash.class, index);
     }
 
     /**
@@ -289,7 +290,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      */
     public List<Sha256Hash> setGenerate(Boolean generate, Long genproclimit) throws JsonRPCException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
-        return send("setgenerate", resultType, generate, genproclimit);
+        return send(setgenerate, resultType, generate, genproclimit);
     }
 
 
@@ -303,7 +304,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
     public List<Sha256Hash> generate(int numBlocks) throws IOException, JsonRPCException {
         if (getServerVersion() > 110000) {
             JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
-            return send("generate", resultType, numBlocks);
+            return send(generate, resultType, numBlocks);
         } else {
             // For backward compatibility, to be removed eventually
             return setGenerate(true, (long) numBlocks);
