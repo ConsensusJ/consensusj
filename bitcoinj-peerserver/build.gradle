@@ -15,6 +15,8 @@ apply plugin: 'spring-boot'
 archivesBaseName = 'bitcoinj-peerserver'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 idea {
     module {
         jdkName = '1.8'
