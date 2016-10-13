@@ -18,7 +18,7 @@ class P2PKHSpec extends TxTestBaseSpec {
         // spend too much 'absurdly-high-fee' or too little in transaction fees
         // so maybe we should use change addresses in these tests?
         Coin amount = 49.999.btc
-        def destAddress = getNewAddress()
+        def destAddress = client.getNewAddress()
 
         when: "we build a transaction"
         Transaction tx = new Transaction(params)
@@ -30,7 +30,7 @@ class P2PKHSpec extends TxTestBaseSpec {
         Transaction sentTx = submitMethod(tx)
 
         then: "the new address has a balance of amount"
-        getReceivedByAddress(destAddress) == amount  // Verify destAddress balance
+        client.getReceivedByAddress(destAddress) == amount  // Verify destAddress balance
 
         where: "submitMethod is P2P and then RPC"
         [submitMethod, methodName] << submitMethods

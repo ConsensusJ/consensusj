@@ -27,7 +27,6 @@ class BareMultisigSpec extends TxTestBaseSpec {
 
     private static final ECKey clientKey = new ECKey();
     private static final ECKey serverKey = new ECKey();
-    private static final List<ECKey> keys = [clientKey, serverKey]
     private static final Coin amount = 49.999.btc
     private static final Coin amount2 = amount - 0.001.btc
 
@@ -49,7 +48,7 @@ class BareMultisigSpec extends TxTestBaseSpec {
         // 2-of-2 multisig
         // Note that at this point it is not necessary to have the private key for either/any of the keys.
         // In the bitcoinj example code it shows the server key being created from a variable called `publicKeyBytes`
-        Script script = ScriptBuilder.createMultiSigOutputScript(2, keys)
+        Script script = ScriptBuilder.createMultiSigOutputScript(2, [clientKey, serverKey])
         contract.addOutput(amount, script)
         // Assume only 1 (first) outpoint is needed (assuming utxos made by createIngredients are big enough)
         contract.addSignedInput(ingredients.outPoints.get(0), ScriptBuilder.createOutputScript(ingredients.address), ingredients.privateKey)

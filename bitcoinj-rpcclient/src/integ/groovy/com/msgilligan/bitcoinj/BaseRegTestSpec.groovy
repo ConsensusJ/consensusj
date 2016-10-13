@@ -26,16 +26,14 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     }
 
     void setupSpec() {
-        Boolean available = client.waitForServer(60)   // Wait up to 1 minute
-        if (!available) {
-            log.error "Timeout error."
-        }
-        assert available
+        serverReady()
 
         // Make sure we have enough test coins
-        while (getBalance() < minBTCForTests) {
+        // Do we really need to keep doing this now that most tests
+        // explicitly fund their addresses?
+        while (client.getBalance() < minBTCForTests) {
             // Mine blocks until we have some coins to spend
-            client.generate(1)
+            client.generate()
         }
     }
 

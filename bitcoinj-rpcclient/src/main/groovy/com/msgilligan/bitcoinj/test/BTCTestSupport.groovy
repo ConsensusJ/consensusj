@@ -15,10 +15,19 @@ trait BTCTestSupport implements BitcoinClientDelegate, FundingSourceDelegate, Lo
     final Coin stdRelayTxFee = 0.00001000.btc
     final Integer defaultMaxConf = 9999999
 
-    Boolean consolidateCoins() {
+    void serverReady() {
+        Boolean available = client.waitForServer(60)   // Wait up to 1 minute
+        if (!available) {
+            log.error "Timeout error."
+        }
+        assert available
+    }
+
+    void consolidateCoins() {
         fundingSource.fundingSourceMaintenance();
     }
 
+    @Deprecated
     Coin btcToCoin(final BigDecimal btc) {
         return BitcoinMath.btcToCoin(btc)
     }

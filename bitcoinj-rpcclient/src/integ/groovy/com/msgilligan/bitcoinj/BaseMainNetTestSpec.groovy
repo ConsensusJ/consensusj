@@ -24,11 +24,7 @@ abstract class BaseMainNetTestSpec extends Specification implements BTCTestSuppo
     }
 
     void setupSpec() {
-        Boolean available = client.waitForServer(60)   // Wait up to 1 minute
-        if (!available) {
-            log.error "Timeout error."
-        }
-        assert available
+        serverReady()
     }
 
     /**

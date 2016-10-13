@@ -28,6 +28,8 @@ allprojects {
 }
 
 subprojects {
+    targetCompatibility = 1.7
+
     dependencies {
         compile 'org.bitcoinj:bitcoinj-core:0.15-SNAPSHOT'
         compile "org.slf4j:slf4j-api:${slf4jVersion}"
