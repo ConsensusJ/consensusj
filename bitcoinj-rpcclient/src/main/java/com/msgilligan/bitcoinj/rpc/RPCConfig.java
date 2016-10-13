@@ -1,9 +1,12 @@
 package com.msgilligan.bitcoinj.rpc;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.RegTestParams;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Configuration class for JSON-RPC client
@@ -23,6 +26,17 @@ public class RPCConfig {
         this.uri = uri;
         this.username = username;
         this.password = password;
+    }
+
+    @JsonCreator
+    public RPCConfig(@JsonProperty("netid")     String netIdString,
+                     @JsonProperty("uri")       String uri,
+                     @JsonProperty("username")  String username,
+                     @JsonProperty("password")  String password) throws URISyntaxException {
+        this(NetworkParameters.fromID(netIdString),
+                new URI(uri),
+                username,
+                password);
     }
 
     @Deprecated
