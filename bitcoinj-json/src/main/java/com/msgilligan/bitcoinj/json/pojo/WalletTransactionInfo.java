@@ -13,6 +13,7 @@ import java.util.List;
 /**
  * Detailed information about an in-wallet transaction (from gettransaction RPC)
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WalletTransactionInfo {
     private final Coin amount;
     private final Coin fee;
