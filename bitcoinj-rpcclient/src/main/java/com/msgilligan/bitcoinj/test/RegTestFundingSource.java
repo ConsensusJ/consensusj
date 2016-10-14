@@ -144,7 +144,7 @@ public class RegTestFundingSource implements FundingSource {
      *
      * @return True, if enough outputs with a value of at least {@code stdRelayTxFee} were spent
      */
-    Boolean consolidateCoins() throws JsonRPCException, IOException {
+     void consolidateCoins() throws JsonRPCException, IOException {
         long amountIn = 0;
         List<Outpoint> inputs = new ArrayList<Outpoint>();
         List<UnspentOutput> unspentOutputs = client.listUnspent(1,defaultMaxConf);
@@ -158,7 +158,7 @@ public class RegTestFundingSource implements FundingSource {
 
         // Check if there is a sufficient high amount to sweep at all
         if (amountIn < client.stdRelayTxFee.value) {
-            return false;
+            //return false;
         }
 
         // No receiver, just spend most of it as fee (!)
@@ -174,7 +174,7 @@ public class RegTestFundingSource implements FundingSource {
         String signedTxHex = signingResult.getHex();
         Object txid = client.sendRawTransaction(signedTxHex, true);
 
-        return true;
+        //return true;
     }
 
 
