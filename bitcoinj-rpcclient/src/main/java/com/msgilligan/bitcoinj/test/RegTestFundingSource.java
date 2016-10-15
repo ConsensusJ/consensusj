@@ -158,7 +158,7 @@ public class RegTestFundingSource implements FundingSource {
 
         // Check if there is a sufficient high amount to sweep at all
         if (amountIn < client.stdRelayTxFee.value) {
-            //return false;
+            return; //false;
         }
 
         // No receiver, just spend most of it as fee (!)
@@ -174,7 +174,7 @@ public class RegTestFundingSource implements FundingSource {
         String signedTxHex = signingResult.getHex();
         Object txid = client.sendRawTransaction(signedTxHex, true);
 
-        //return true;
+        return; //true;
     }
 
 
