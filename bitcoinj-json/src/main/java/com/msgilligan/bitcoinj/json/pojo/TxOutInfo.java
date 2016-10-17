@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.json.pojo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Sha256Hash;
@@ -10,6 +11,7 @@ import java.util.Map;
 /**
  * Result of `gettxout`
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TxOutInfo {
     private final Sha256Hash bestblock;
     private final int        confirmations;

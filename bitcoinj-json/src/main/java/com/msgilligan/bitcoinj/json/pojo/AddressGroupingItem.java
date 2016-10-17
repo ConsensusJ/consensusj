@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.json.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.NetworkParameters;
@@ -10,6 +11,7 @@ import java.util.List;
  * For listaddressgroupings response
  * Note: In the JSON response this is actually an array
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AddressGroupingItem {
     private final Address address;
     private final Coin balance;

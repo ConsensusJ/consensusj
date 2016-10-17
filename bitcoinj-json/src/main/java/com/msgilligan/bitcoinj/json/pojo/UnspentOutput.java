@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.json.pojo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
@@ -10,6 +11,7 @@ import org.bitcoinj.core.Sha256Hash;
  * Data class for UnspentOutput as returned by listUnspent RPC
  * Because the class is immutable we have to give Jackson some hints via annotations.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UnspentOutput {
     private final Sha256Hash  txid;
     private final int         vout;

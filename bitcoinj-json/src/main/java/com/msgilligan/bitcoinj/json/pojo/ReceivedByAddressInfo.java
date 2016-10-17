@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.json.pojo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ReceivedByAddressInfo {
     public final Address address;
     public final String account;

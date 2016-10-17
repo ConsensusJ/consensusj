@@ -1,10 +1,12 @@
 package com.msgilligan.bitcoinj.json.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.bitcoinj.core.Sha256Hash;
 
 /**
  * Data class for Outpoint as used by RPC methods
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Outpoint {
     private final Sha256Hash txid;
     private final int        vout;
