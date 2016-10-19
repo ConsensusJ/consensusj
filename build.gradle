@@ -23,16 +23,14 @@ allprojects {
 
     repositories {
         jcenter()
-	mavenLocal()
     }
 }
 
 subprojects {
     targetCompatibility = 1.7
-    sourceCompatibility = 1.7
 
     dependencies {
-        compile 'org.bitcoinj:bitcoinj-core:0.15-SNAPSHOT'
+        compile 'org.bitcoinj:bitcoinj-core:0.14.3'
         compile "org.slf4j:slf4j-api:${slf4jVersion}"
 
         testCompile "org.codehaus.groovy:groovy:${groovyVersion}"
