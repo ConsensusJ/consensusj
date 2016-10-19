@@ -2,7 +2,7 @@ package com.msgilligan.bitcoinj.rpc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.msgilligan.bitcoinj.rpc.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +20,6 @@ import java.net.URI;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * = JSON-RPC Client
@@ -174,7 +171,7 @@ public class RPCClient extends AbstractRPCClient {
         connection.setRequestProperty("Connection", "close");   // Avoid EOFException: http://stackoverflow.com/questions/19641374/android-eofexception-when-using-httpurlconnection-headers
 
         String auth = username + ":" + password;
-        String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(auth.getBytes());
+        String basicAuth = "Basic " + Base64.encodeToString(auth.getBytes(),Base64.DEFAULT).trim();
         connection.setRequestProperty ("Authorization", basicAuth);
 
         return connection;

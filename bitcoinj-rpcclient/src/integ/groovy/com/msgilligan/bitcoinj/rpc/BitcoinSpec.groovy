@@ -5,6 +5,7 @@ import com.msgilligan.bitcoinj.json.pojo.NetworkInfo
 import org.bitcoinj.core.Coin
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.params.RegTestParams
+import spock.lang.Ignore
 
 class BitcoinSpec extends BaseRegTestSpec {
     static final Coin testAmount = 2.btc
