@@ -30,10 +30,6 @@ public class ProxyMain {
                             .post("rpc", new RpcProxyHandler())
                             .get("status", new ChainStatusHandler())
                             .get("gen", new GenerateHandler())
-                            .get("config", context -> {
-                                RPCConfig config = context.get(RPCConfig.class);
-                                context.render(json(config));
-                            })
                             .get(context -> context.getResponse().send("Hello world! (Not RPC)"))
                 )
         );

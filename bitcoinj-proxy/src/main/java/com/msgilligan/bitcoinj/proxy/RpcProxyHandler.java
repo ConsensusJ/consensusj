@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.proxy;
 
 import com.msgilligan.bitcoinj.rpc.JsonRpcRequest;
+import com.msgilligan.bitcoinj.rpc.RPCConfig;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import static ratpack.jackson.Jackson.fromJson;
@@ -23,23 +24,17 @@ public class RpcProxyHandler extends AbstractJsonRpcHandler implements Handler {
     }
 
 
-//    public RpcProxyHandler(URI server, String userName, String password) throws Exception {
-//        remoteURI = server;
-//        remoteUserName = userName;
-//        remotePassword = password;
-//    }
-
     @Override
-    public void handle(Context ctx) throws Exception {
+    public void handle(Context ctx, RPCConfig rpc)  {
         ctx.parse(fromJson(JsonRpcRequest.class)).then(rpcReq -> {
             if (allowedMethods.contains(rpcReq.getMethod())) {
-                ctx.get(HttpClient.class).requestStream(remoteURI, requestSpec -> {
+                ctx.get(HttpClient.class).requestStream(rpc.getURI(), requestSpec -> {
                     requestSpec.post();
                     requestSpec.body(body ->
                             body.type(jsonType).text(requestToString(rpcReq)));
                     requestSpec.redirects(0);
-                    if (remoteUserName != null) {
-                        requestSpec.basicAuth(remoteUserName, remotePassword);
+                    if (rpc.getUsername() != null) {
+                        requestSpec.basicAuth(rpc.getUsername(), rpc.getPassword());
                     }
                 }).then(responseStream -> {
                     responseStream.forwardTo(ctx.getResponse());

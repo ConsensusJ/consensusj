@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.rpc;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.RegTestParams;
@@ -44,8 +45,14 @@ public class RPCConfig {
         this(RegTestParams.get(), uri, username, password);
     }
 
+    @JsonIgnore
     public NetworkParameters getNetParams() {
         return netParams;
+    }
+
+    @JsonProperty("netid")
+    public String getNetIdString() {
+        return netParams.getId();
     }
 
     public URI getURI() {
