@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.proxy;
 
 import com.msgilligan.bitcoinj.rpc.JsonRpcRequest;
+import com.msgilligan.bitcoinj.rpc.RPCConfig;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.http.client.HttpClient;
@@ -17,14 +18,14 @@ public class ChainStatusHandler extends AbstractJsonRpcHandler implements Handle
     }
 
     @Override
-    public void handle(Context ctx) throws Exception {
-        ctx.get(HttpClient.class).requestStream(remoteURI, requestSpec -> {
+    public void handle(Context ctx, RPCConfig rpc) {
+        ctx.get(HttpClient.class).requestStream(rpc.getURI(), requestSpec -> {
             requestSpec.post();
             requestSpec.body(body ->
                     body.type(jsonType).text(buildStatusReq()));
             requestSpec.redirects(0);
-            if (remoteUserName != null) {
-                requestSpec.basicAuth(remoteUserName, remotePassword);
+            if (rpc.getUsername() != null) {
+                requestSpec.basicAuth(rpc.getUsername(), rpc.getPassword());
             }
         }).then(responseStream -> {
             // TODO: Extract from JsonRpcResponse and return more restful JSON format (no RPC wrapper)

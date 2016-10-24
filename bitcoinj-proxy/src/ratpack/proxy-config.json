@@ -1,0 +1,6 @@
+{"rpcclient": {
+  "netid": "org.bitcoin.regtest",
+  "uri": "http://localhost:18332",
+  "username": "bitcoinrpc",
+  "password": "pass"
+}}
