@@ -19,7 +19,7 @@ import java.util.List;
 public class RpcProxyHandler extends AbstractJsonRpcHandler implements Handler {
     private final List<String> allowedMethods =  Arrays.asList("getblockcount", "setgenerate");
 
-    protected RpcProxyHandler() throws URISyntaxException {
+    public RpcProxyHandler() throws URISyntaxException {
         super();
     }
 
