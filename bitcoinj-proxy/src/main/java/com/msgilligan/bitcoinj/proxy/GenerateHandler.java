@@ -7,7 +7,6 @@ import ratpack.handling.Handler;
 import ratpack.http.client.HttpClient;
 
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Collections;
 
 /**

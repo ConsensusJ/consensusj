@@ -7,9 +7,6 @@ import com.msgilligan.bitcoinj.rpc.RPCConfig;
 import ratpack.handling.Context;
 import ratpack.handling.InjectionHandler;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 /**
  * Base class for JSON RPC handlers (until we have a better solution for config and common code)
  */

@@ -7,11 +7,9 @@ import com.msgilligan.bitcoinj.rpc.RPCConfig;
 import org.bitcoinj.params.RegTestParams;
 import ratpack.server.BaseDir;
 import ratpack.server.RatpackServer;
-import static ratpack.jackson.Jackson.json;
 
 /**
  * Main class for a Bitcoin RPC reverse proxy server
- * TODO: Allow configuration of bitcoind URI, NetParams, user, password
  */
 public class ProxyMain {
     public static void main(String... args) throws Exception {
