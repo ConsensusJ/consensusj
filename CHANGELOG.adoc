@@ -3,11 +3,23 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
-== v0.2.0-SNAPSHOT
+== v0.2.0
+
+Released: 2016.10.24
 
 === Breaking and potentially breaking changes
 
-* Bitcoin RPC clients require Bitcoin Core 0.11.x (or Omni Core 0.0.11.1) or later
+* Bitcoin RPC clients require Bitcoin Core 0.10.4 (or Omni Core 0.0.11.1) or later
+* Migrate to using `generate` to generate blocks in regtest (with fallback for earlier versions)
+* Start migration away from getinfo to getblockchaininfo, getnetworkinfo
+* Many dependency version bumps, notably Jackson 2.8.1 and Spring Boot 1.4.0
+* Add proof-of-concept Ratpack-based JSON-RPC proxy server in bitcoinj-proxy
+* Handle new JSON properties that show up in responses on bitcoind 0.13+
+* Be generally more forgiving of new JSON properties in JSON-RPC responses
+* Add tests for creating/sending standalone bitcoinj Transactions
+* Add integration tests for OP_RETURN and Bare Multisig transactions via P2P and RPC
+* Make RPCConfig a Jackson POJO (for use in configuration files)
+* Move more test fixture methods from Spock base classes to Groovy traits
 
 == v0.1.3
 
