@@ -6,6 +6,7 @@ com.msgilligan.bitcoinj.json.conversion
 com.msgilligan.bitcoinj.json.pojo
 com.msgilligan.bitcoinj.money
 com.msgilligan.bitcoinj.peerserver
+com.msgilligan.bitcoinj.proxy
 com.msgilligan.bitcoinj.rpc
 com.msgilligan.bitcoinj.rpc.bitcoind
 com.msgilligan.bitcoinj.rpc.test
