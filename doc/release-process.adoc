@@ -8,12 +8,12 @@
 .. bitcoinj-dsl `ExtensionModule`
 .. `gradle.properties`
 . Commit version bump and changelog.
-. Tag: `git tag -a v0.x.y -m "Release 0.x.y"`
-. Push: `git push --tags origin master`
 . Full build, test
 .. `./gradlew clean jenkinsBuild install regTest`
 .. Recommended: test with *OmniJ* regTests.
-. Publish to Bintray: 
+. Tag: `git tag -a v0.x.y -m "Release 0.x.y"`
+. Push: `git push --tags origin master`
+. Publish to Bintray:
 .. `./gradlew bintrayUpload`
 .. Confirm publish of artifacts in Bintray Web UI.
 . Update github-pages site (including JavaDoc): `./gradlew publishSite`

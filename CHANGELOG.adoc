@@ -3,6 +3,14 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.2.1
+
+Released: 2016.11.06
+
+=== Features/Changes
+
+* `rpcclient`: Include Base64.java (from Android) and use it for Android support
+
 == v0.2.0
 
 Released: 2016.10.24
