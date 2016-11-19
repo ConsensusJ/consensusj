@@ -59,16 +59,14 @@ namespace com.msgilligan.namecoinj.rpc {
 
 namespace foundation.omni.rpc {
     class OmniClient
-    class OmniExtendedClient
     class OmniScriptingClient << Groovy >>
     class OmniCLIClient << Groovy >>
 
 
     com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient <|-- OmniClient
-    OmniClient <|-- OmniExtendedClient
-    OmniExtendedClient <|-- OmniScriptingClient
+    OmniClient <|-- OmniScriptingClient
     com.msgilligan.bitcoinj.rpc.DynamicRPCFallback <|.. OmniScriptingClient
-    OmniExtendedClient <|-- class OmniCLIClient
+    OmniClient <|-- class OmniCLIClient
 }
 
 
