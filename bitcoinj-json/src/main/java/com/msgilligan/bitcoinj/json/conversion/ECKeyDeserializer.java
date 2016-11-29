@@ -25,10 +25,10 @@ public class ECKeyDeserializer extends JsonDeserializer<ECKey> {
                 try {
                     return DumpedPrivateKey.fromBase58(null, p.getValueAsString()).getKey();
                 } catch (AddressFormatException e) {
-                    throw new InvalidFormatException("Invalid Key", p.getValueAsString(), ECKey.class);
+                    throw new InvalidFormatException(p, "Invalid Key", p.getValueAsString(), ECKey.class);
                 }
             default:
-                throw ctxt.mappingException(Address.class, token);
+                return (ECKey) ctxt.handleUnexpectedToken(ECKey.class, p);
         }
     }
 }

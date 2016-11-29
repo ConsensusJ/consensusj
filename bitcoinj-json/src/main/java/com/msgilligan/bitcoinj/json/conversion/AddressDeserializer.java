@@ -31,10 +31,10 @@ public class AddressDeserializer extends JsonDeserializer<Address> {
                 try {
                     return Address.fromBase58(netParams, p.getValueAsString());
                 } catch (AddressFormatException e) {
-                    throw new InvalidFormatException("Invalid Address", p.getValueAsString(), Address.class);
+                    throw new InvalidFormatException(p, "Invalid Address", p.getValueAsString(), Address.class);
                 }
             default:
-                throw ctxt.mappingException(Address.class, token);
+                return (Address) ctxt.handleUnexpectedToken(Address.class, p);
         }
     }
 }

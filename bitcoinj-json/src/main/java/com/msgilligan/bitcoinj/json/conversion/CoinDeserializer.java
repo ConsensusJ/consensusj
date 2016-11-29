@@ -28,7 +28,7 @@ public class CoinDeserializer extends JsonDeserializer<Coin> {
                 return Coin.valueOf(val);
 
             default:
-                throw ctxt.mappingException(Coin.class, token);
+                return (Coin) ctxt.handleUnexpectedToken(Coin.class, p);
         }
     }
 }

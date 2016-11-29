@@ -32,10 +32,10 @@ public class BlockHexDeserializer extends JsonDeserializer<Block> {
                     byte[] payload = HexUtil.hexStringToByteArray(p.getValueAsString()); // convert  to hex
                     return context.getParams().getDefaultSerializer().makeBlock(payload);
                 } catch (ProtocolException e) {
-                    throw new InvalidFormatException("Invalid Block", p.getValueAsString(), Block.class);
+                    throw new InvalidFormatException(p, "Invalid Block", p.getValueAsString(), Block.class);
                 }
             default:
-                throw ctxt.mappingException(Block.class, token);
+                return (Block) ctxt.handleUnexpectedToken(Block.class, p);
         }
     }
 }
