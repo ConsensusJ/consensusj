@@ -24,6 +24,7 @@ public class RpcClientModule extends SimpleModule {
             .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())
             .addSerializer(Address.class, new AddressSerializer())
             .addSerializer(Coin.class, new CoinSerializer())
+            .addSerializer(ECKey.class, new ECKeySerializer())
             .addSerializer(Sha256Hash.class, new Sha256HashSerializer())
             .addSerializer(Transaction.class, new TransactionHexSerializer());
     }
