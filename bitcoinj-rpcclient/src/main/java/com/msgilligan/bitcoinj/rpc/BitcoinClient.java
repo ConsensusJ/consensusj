@@ -279,11 +279,13 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
     }
 
     /**
-     * Turn generation on/off or, if in RegTest mode, generate blocks
+     * Turn generation on/off
+     *
+     * Note: `setgenerate` has been removed from regtest mode in recent Bitcoin Core, as `generate`
+     * should be used instead)
      *
      * @param generate        turn generation on or off
      * @param genproclimit    Generation is limited to [genproclimit] processors, -1 is unlimited
-     *                        in regtest mode genproclimit is number of blocks to generate immediately
      * @return List<Sha256Hash>  list containing  block header hashes of the generated blocks or empty list
      *
      */
@@ -323,11 +325,11 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @deprecated Use BitcoinClient#generate()
      * @see BitcoinClient#generate()
      */
-// We commented out the Deprecated annotation because it was causing Groovy in OmniJ to do
+// the Deprecated annotation was causing Groovy in OmniJ to do
 // something weird (like not find the method),
-// now I can't remember exactly what it was -- should try adding it back as part
-// of testing for release 0.2.0
-//    @Deprecated
+// I can't remember exactly what it was -- try adding it back as part
+// of testing for release 0.2.2
+    @Deprecated
     public List<Sha256Hash> generateBlock() throws JsonRPCException, IOException {
         return generate();
     }
