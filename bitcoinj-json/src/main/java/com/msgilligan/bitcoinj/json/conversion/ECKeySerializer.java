@@ -14,6 +14,6 @@ import java.io.IOException;
 public class ECKeySerializer extends JsonSerializer<ECKey> {
     @Override
     public void serialize(ECKey value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-        gen.writeNumber(value.toString());
+        gen.writeString(value.getPublicKeyAsHex());
     }
 }
