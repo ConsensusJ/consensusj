@@ -1,31 +1,39 @@
 package com.msgilligan.bitcoinj.proxy;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.msgilligan.bitcoinj.rpc.JsonRpcRequest;
 import com.msgilligan.bitcoinj.rpc.RPCConfig;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
+
 import static ratpack.jackson.Jackson.fromJson;
 import ratpack.http.client.HttpClient;
 
-import java.net.URISyntaxException;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * JsonRPC proxy handler
  * Relay allowed RPC methods to a URI
- * (defaults to localhost with regtest port)
  */
-public class RpcProxyHandler extends AbstractJsonRpcHandler implements Handler {
+@Singleton
+public class RpcProxyHandler implements Handler {
+    protected static final String jsonType = "application/json";
     private final List<String> allowedMethods =  Arrays.asList("getblockcount", "setgenerate");
+    private final RPCConfig rpc;
+    private final ObjectMapper mapper;
 
-    public RpcProxyHandler() throws URISyntaxException {
-        super();
+    @Inject
+    public RpcProxyHandler(RPCConfig rpcConfig, ObjectMapper objectMapper) {
+        rpc = rpcConfig;
+        mapper = objectMapper;
     }
 
-
     @Override
-    public void handle(Context ctx, RPCConfig rpc)  {
+    public void handle(Context ctx)  {
         ctx.parse(fromJson(JsonRpcRequest.class)).then(rpcReq -> {
             if (allowedMethods.contains(rpcReq.getMethod())) {
                 ctx.get(HttpClient.class).requestStream(rpc.getURI(), requestSpec -> {
@@ -44,6 +52,18 @@ public class RpcProxyHandler extends AbstractJsonRpcHandler implements Handler {
                 ctx.getResponse().status(403).send("JSON-RPC method not allowed by proxy");
             }
         });
+    }
+
+    // TODO: Surely this method isn't necessary with Ratpack
+    private String requestToString(JsonRpcRequest request) {
+        String result;
+        try {
+            result = mapper.writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            result = "proxy jackson error";
+        }
+        return result;
     }
 
 }

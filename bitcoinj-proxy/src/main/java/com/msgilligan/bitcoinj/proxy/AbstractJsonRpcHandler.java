@@ -10,6 +10,7 @@ import ratpack.handling.InjectionHandler;
 /**
  * Base class for JSON RPC handlers (until we have a better solution for config and common code)
  */
+@Deprecated
 public abstract class AbstractJsonRpcHandler extends InjectionHandler {
     protected static final String jsonType = "application/json";
     protected final ObjectMapper mapper = new ObjectMapper();
