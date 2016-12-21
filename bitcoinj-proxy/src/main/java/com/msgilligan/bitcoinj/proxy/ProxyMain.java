@@ -17,17 +17,17 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class ProxyMain {
     public static void main(String... args) throws Exception {
         RatpackServer.start(server -> server
-                    .serverConfig(config -> config
-                                    .port(5050)
-                                    .baseDir(BaseDir.find())
-                                    .json("proxy-config.json")
-                                    .require("/rpcclient", RPCConfig.class))
-                    .registry(Guice.registry(b -> b.module(BitcoinRpcProxyModule.class)))
-                    .handlers(chain -> chain
-                            .post("rpc", RpcProxyHandler.class)
-                            .get("status", ChainStatusHandler.class)
-                            .get("gen", GenerateHandler.class)
-                            .get(context -> context.getResponse().send("Hello world! (Not RPC)"))
+            .serverConfig(config -> config
+                            .port(5050)
+                            .baseDir(BaseDir.find())
+                            .json("proxy-config.json")
+                            .require("/rpcclient", RPCConfig.class))
+            .registry(Guice.registry(b -> b.module(BitcoinRpcProxyModule.class)))
+            .handlers(chain -> chain
+                    .post("rpc", RpcProxyHandler.class)
+                    .get("status", ChainStatusHandler.class)
+                    .get("gen", GenerateHandler.class)
+                    .get(context -> context.getResponse().send("Hello world! (Not RPC)"))
                 )
         );
     }
