@@ -1,10 +1,7 @@
 package com.msgilligan.bitcoinj.proxy;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.msgilligan.bitcoinj.json.conversion.RpcClientModule;
 import com.msgilligan.bitcoinj.rpc.RPCConfig;
-import org.bitcoinj.params.RegTestParams;
+import ratpack.guice.Guice;
 import ratpack.server.BaseDir;
 import ratpack.server.RatpackServer;
 
@@ -14,21 +11,17 @@ import ratpack.server.RatpackServer;
 public class ProxyMain {
     public static void main(String... args) throws Exception {
         RatpackServer.start(server -> server
-                    .serverConfig(config -> config
-                                    .port(5050)
-                                    .baseDir(BaseDir.find())
-                                    .json("proxy-config.json")
-                                    .require("/rpcclient", RPCConfig.class))
-                    .registryOf(r -> r
-                            .add(new ObjectMapper()
-                                    .registerModule(new Jdk8Module())
-                                    .registerModule(new RpcClientModule(RegTestParams.get()))
-                    ))
-                    .handlers(chain -> chain
-                            .post("rpc", new RpcProxyHandler())
-                            .get("status", new ChainStatusHandler())
-                            .get("gen", new GenerateHandler())
-                            .get(context -> context.getResponse().send("Hello world! (Not RPC)"))
+            .serverConfig(config -> config
+                            .port(5050)
+                            .baseDir(BaseDir.find())
+                            .json("proxy-config.json")
+                            .require("/rpcclient", RPCConfig.class))
+            .registry(Guice.registry(b -> b.module(BitcoinRpcProxyModule.class)))
+            .handlers(chain -> chain
+                    .post("rpc", RpcProxyHandler.class)
+                    .get("status", ChainStatusHandler.class)
+                    .get("gen", GenerateHandler.class)
+                    .get(ctx -> ctx.getResponse().send("Hello world! (Not RPC)"))
                 )
         );
     }
