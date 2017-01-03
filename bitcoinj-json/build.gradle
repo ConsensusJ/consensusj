@@ -2,5 +2,3 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.8.1'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.1'
 }
-
-sourceCompatibility = 1.7

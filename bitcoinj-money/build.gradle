@@ -5,5 +5,3 @@ dependencies {
     compile 'org.knowm.xchange:xchange-bitfinex:4.0.0'
     compile 'org.knowm.xchange:xchange-itbit:4.0.0'
 }
-
-sourceCompatibility = 1.7

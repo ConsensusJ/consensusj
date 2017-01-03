@@ -2,8 +2,6 @@ plugins {
     id 'maven'
 }
 
-sourceCompatibility = 1.7
-
 dependencies {
     compile project(':bitcoinj-json')
     compile 'com.fasterxml.jackson.core:jackson-core:2.8.1'
