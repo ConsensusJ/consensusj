@@ -9,10 +9,12 @@ import org.apache.commons.cli.ParseException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinClient;
 import com.msgilligan.bitcoinj.rpc.RPCConfig;
@@ -145,8 +147,8 @@ public abstract class CliCommand {
 
     public Integer run(InputStream in, PrintStream out, PrintStream err) {
         this.in = in;
-        this.pwout = new PrintWriter(out, true);
-        this.pwerr = new PrintWriter(err, true);
+        this.pwout = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
+        this.pwerr = new PrintWriter(new OutputStreamWriter(err, StandardCharsets.UTF_8), true);
 
         Integer status = checkArgs();
         if (status != 0) {

@@ -1,7 +1,6 @@
 package com.msgilligan.bitcoinj.dsljs;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
-import com.msgilligan.bitcoinj.rpc.JsonRPCException;
 import com.msgilligan.bitcoinj.rpc.RPCURI;
 import com.msgilligan.bitcoinj.rpc.test.TestServers;
 import com.msgilligan.bitcoinj.test.RegTestEnvironment;
@@ -14,8 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -51,7 +50,8 @@ public class ScriptRunner {
 
     public Object evalResource(String resourcePath) throws ScriptException {
         log.info("Running resource: {}", resourcePath);
-        InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream(resourcePath));
+        InputStreamReader reader =
+                new InputStreamReader(getClass().getResourceAsStream(resourcePath), StandardCharsets.UTF_8);
         return engine.eval(reader);
     }
 }
