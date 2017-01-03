@@ -44,6 +44,17 @@ subprojects {
 
         testRuntime  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
     }
+
+    tasks.withType(JavaCompile) {
+        doFirst {
+            if (sourceCompatibility == '1.7' && System.env.JDK7_HOME != null) {
+                options.bootClasspath = "$System.env.JDK7_HOME/jre/lib/rt.jar"
+                //options.bootClasspath += "$File.pathSeparator$System.env.JDK7_HOME/jre/lib/jce.jar"
+                // use the line above as an example to add jce.jar
+                // and other specific JDK jars
+            }
+        }
+    }
 }
 
 apply from: 'gradle/idea.gradle'
