@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.rpc;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.msgilligan.bitcoinj.json.conversion.HexUtil;
 import com.msgilligan.bitcoinj.json.pojo.AddressGroupingItem;
 import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
