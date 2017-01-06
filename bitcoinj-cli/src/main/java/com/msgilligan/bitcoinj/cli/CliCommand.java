@@ -195,7 +195,7 @@ public abstract class CliCommand {
         }
         if (line.hasOption("rpcport")) {
             String portString = line.getOptionValue("rpcport");
-            port = Integer.valueOf(portString);
+            port = Integer.parseInt(portString);
         }
         URI rpcServerURI = null;
         try {
