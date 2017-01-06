@@ -758,6 +758,44 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
         return send("getchaintips",resultType);
     }
 
+
+    /**
+     * Attempt to add or remove a node from the addnode list, or to try a connection to a node once.
+     *
+     * @param node node to add as a string in the form of <IP address>:<port>
+     * @param command `add`, `remove`, or `onetry`
+     * @throws IOException
+     * @throws JsonRPCStatusException
+     */
+    public void addNode(String node, String command) throws IOException, JsonRPCStatusException {
+        send("addnode", node, command);
+    }
+
+    /**
+     * Return information about the given added node
+     *
+     * @param details `true` to return detailed information
+     * @param node the node to provide information about
+     * @return A Jackson JsonNode object (until we define a POJO)
+     * @throws IOException
+     * @throws JsonRPCStatusException
+     */
+    public JsonNode getAddedNodeInfo(boolean details, String node) throws IOException, JsonRPCStatusException {
+        return send("getaddednodeinfo", JsonNode.class, details, node);
+    }
+
+    /**
+     * Return information about all added nodes
+     *
+     * @param details `true` to return detailed information
+     * @return A Jackson JsonNode object (until we define a POJO)
+     * @throws IOException
+     * @throws JsonRPCStatusException
+     */
+    public JsonNode getAddedNodeInfo(boolean details) throws IOException, JsonRPCStatusException {
+        return getAddedNodeInfo(details, null);
+    }
+
     /**
      * Clears the memory pool and returns a list of the removed transactions.
      *
