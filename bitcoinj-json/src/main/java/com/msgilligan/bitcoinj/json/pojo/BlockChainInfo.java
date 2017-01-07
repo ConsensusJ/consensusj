@@ -24,10 +24,10 @@ public class BlockChainInfo {
     public BlockChainInfo(@JsonProperty("chain")            String chain,
                           @JsonProperty("blocks")           int blocks,
                           @JsonProperty("headers")          int headers,
-                          @JsonProperty("bestblockhash")    Sha256Hash bestBlockHash,
-                          @JsonProperty("chain")            BigDecimal difficulty,
-                          @JsonProperty("chain")            BigDecimal verificationProgress,
-                          @JsonProperty("chain")            byte[] chainWork) {
+                          @JsonProperty("bestblockhash")        Sha256Hash bestBlockHash,
+                          @JsonProperty("difficulty")           BigDecimal difficulty,
+                          @JsonProperty("verificationProgress") BigDecimal verificationProgress,
+                          @JsonProperty("chainWork")            byte[] chainWork) {
         this.chain = chain;
         this.blocks = blocks;
         this.headers = headers;
