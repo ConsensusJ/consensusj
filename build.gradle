@@ -69,4 +69,5 @@ task testReport(type: TestReport) {
     reportOn subprojects*.test
 }
 
-task jenkinsBuild(dependsOn: [build, testReport, javadocAll, asciidoctor])
+task buildCI(dependsOn: [build, testReport, javadocAll, asciidoctor])
+task jenkinsBuild(dependsOn: buildCI)
