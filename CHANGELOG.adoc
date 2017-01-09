@@ -3,6 +3,39 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.2.2-SNAPSHOT
+
+Released: Not yet (available on `master` branch)
+
+==== *All submodules*
+
+* Assorted code, build, JavaDoc improvements
+* `build.gradle` reads `JDK7_HOME` environment variable to compile Java 7 modules with correct classpath
+
+==== *bitcoinj-rpcclient*
+
+* New RPC methods: `addnode`, `getaddednodeinfo`
+* Deprecate `BitcoinClient#generateBlock`
+
+==== *bitcoinj-json*
+
+* Add `ECKey` serializer (does *not* serialize private key)
+* Fix incorrectly named JSON properties in `BlockChainInfo` POJO
+* Fix deprecation warnings in serializers/deserializers
+
+==== *bitcoinj-money*
+
+* Upgrade to Moneta BP 1.1 (Java 7 Backport of JavaMoney Reference Implementation)
+* Upgrade to XChange 4.1.0
+
+==== *bitcoinj-proxy*
+
+* Significant code cleanup, simplification, and modularization
+* Create Guice module and use for registry
+* Use Guice injection in handlers
+* Use Guice and Retrofit to create a Retrofit-based Ratpack async JSON-RPC client
+* Upgrade Gradle Shadow Plugin to 1.2.4
+
 == v0.2.1
 
 Released: 2016.11.06
