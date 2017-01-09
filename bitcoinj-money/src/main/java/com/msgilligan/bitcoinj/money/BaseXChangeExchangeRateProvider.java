@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.money;
 
-import org.javamoney.moneta.ExchangeRateBuilder;
+import org.javamoney.moneta.convert.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LazyBoundCurrencyConversion;
 import org.javamoney.moneta.spi.base.BaseExchangeRateProvider;
