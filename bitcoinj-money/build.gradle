@@ -1,5 +1,5 @@
 dependencies {
-    compile 'org.javamoney:moneta-bp:1.0'
+    compile 'org.javamoney:moneta-bp:1.1'
 
     compile 'org.knowm.xchange:xchange-core:4.0.0'
     compile 'org.knowm.xchange:xchange-bitfinex:4.0.0'
