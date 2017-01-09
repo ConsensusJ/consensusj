@@ -12,22 +12,24 @@ import java.util.List;
  * Abstract Base class for a strongly-typed JSON-RPC client
  */
 public abstract class AbstractRPCClient implements UntypedRPCClient {
-    protected ObjectMapper mapper;
+    protected final ObjectMapper mapper;
+    private final JavaType defaultType;
 
     public AbstractRPCClient() {
-        this.mapper = new ObjectMapper();
+        mapper = new ObjectMapper();
+        defaultType = mapper.getTypeFactory().constructType(Object.class);
     }
 
     public abstract URI getServerURI();
 
     /**
      * Subclasses must implement this method to actually send the request
-     * @param request
-     * @param responseType
-     * @param <R>
-     * @return
-     * @throws IOException
-     * @throws JsonRPCStatusException
+     * @param request The request to send
+     * @param responseType The response to expected (used by Jackson for conversion)
+     * @param pass:[<R>] Type of result object
+     * @return A JSON RPC Response with `result` of type `R`
+     * @throws IOException network error
+     * @throws JsonRPCStatusException JSON RPC status error
      */
     protected abstract <R> JsonRpcResponse<R> send(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRPCStatusException;
 
@@ -106,12 +108,12 @@ public abstract class AbstractRPCClient implements UntypedRPCClient {
      * @param params JSON RPC params
      * @param pass:[<R>] Type of result object
      * @return the 'response.result' field of the JSON RPC response cast to type R
-     * @throws IOException
-     * @throws JsonRPCStatusException
+     * @throws IOException network error
+     * @throws JsonRPCStatusException JSON RPC status error
      */
     @Override
     public <R> R send(String method, List<Object> params) throws IOException, JsonRPCStatusException {
-        return (R) send(method, (Class<R>) Object.class, params);
+        return send(method, defaultType, params);
     }
 
     /**
@@ -127,8 +129,8 @@ public abstract class AbstractRPCClient implements UntypedRPCClient {
      * @param params JSON RPC params
      * @param pass:[<R>] Type of result object
      * @return the 'response.result' field of the JSON RPC response cast to type R
-     * @throws IOException
-     * @throws JsonRPCStatusException
+     * @throws IOException network error
+     * @throws JsonRPCStatusException JSON RPC status error
      */
     @Override
     public <R> R send(String method, Object... params) throws IOException, JsonRPCStatusException {

@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.rpc
 
 import groovy.transform.CompileStatic
+import org.bitcoinj.params.RegTestParams
 
 /**
  * Bitcoin JSON-RPC client with method names that exactly match wire and CLI names.
@@ -11,6 +12,6 @@ import groovy.transform.CompileStatic
 class BitcoinCLIClient extends BitcoinClient {
 
     BitcoinCLIClient(URI server, String rpcuser, String rpcpassword) {
-        super(server, rpcuser, rpcpassword)
+        super(RegTestParams.get(), server, rpcuser, rpcpassword)
     }
 }

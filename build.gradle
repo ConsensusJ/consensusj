@@ -53,6 +53,10 @@ subprojects {
         testRuntime  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
     }
 
+    compileJava {
+        options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
+    }
+
     tasks.withType(JavaCompile) {
         doFirst {
             if (sourceCompatibility == '1.7' && System.env.JDK7_HOME != null) {

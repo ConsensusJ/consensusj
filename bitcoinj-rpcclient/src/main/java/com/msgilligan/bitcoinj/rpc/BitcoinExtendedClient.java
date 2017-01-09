@@ -58,7 +58,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @param outputs The destinations and amounts to transfer
      * @return The hex-encoded raw transaction
      */
-    public String createRawTransaction(Address fromAddress, Map<Address, Coin> outputs) throws JsonRPCException, IOException {
+    public String createRawTransaction(Address fromAddress, Map<Address, Coin> outputs) throws JsonRPCStatusException, IOException {
         // Get unspent outputs via RPC
         List<UnspentOutput> unspentOutputs = listUnspent(0, defaultMaxConf, Collections.singletonList(fromAddress));
 
@@ -102,7 +102,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @param amount The amount
      * @return The hex-encoded raw transaction
      */
-    public String createRawTransaction(Address fromAddress, Address toAddress, Coin amount) throws JsonRPCException, IOException {
+    public String createRawTransaction(Address fromAddress, Address toAddress, Coin amount) throws JsonRPCStatusException, IOException {
         Map<Address, Coin> outputs = Collections.singletonMap(toAddress, amount);
         return createRawTransaction(fromAddress, outputs);
     }
@@ -115,7 +115,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @param address The address
      * @return The balance
      */
-    public Coin getBitcoinBalance(Address address) throws JsonRPCException, IOException {
+    public Coin getBitcoinBalance(Address address) throws JsonRPCStatusException, IOException {
         // NOTE: because null is currently removed from the argument lists passed via RPC, using it here for default
         // values would result in the RPC call "listunspent" with arguments [["address"]], which is invalid, similar
         // to a call with arguments [null, null, ["address"]], as expected arguments are either [], [int], [int, int]
@@ -130,7 +130,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @param minConf Minimum amount of confirmations
      * @return The balance
      */
-    public Coin getBitcoinBalance(Address address, Integer minConf) throws JsonRPCException, IOException {
+    public Coin getBitcoinBalance(Address address, Integer minConf) throws JsonRPCStatusException, IOException {
         return getBitcoinBalance(address, minConf, defaultMaxConf);
     }
 
@@ -143,7 +143,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @param maxConf Maximum amount of confirmations
      * @return The balance
      */
-    public Coin getBitcoinBalance(Address address, Integer minConf, Integer maxConf) throws JsonRPCException, IOException {
+    public Coin getBitcoinBalance(Address address, Integer minConf, Integer maxConf) throws JsonRPCStatusException, IOException {
         long btcBalance = 0;
         List<UnspentOutput> unspentOutputs = listUnspent(minConf, maxConf, Collections.singletonList(address));
 
@@ -163,7 +163,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @param amount      The amount to transfer
      * @return The transaction hash
      */
-    public Sha256Hash sendBitcoin(Address fromAddress, Address toAddress, Coin amount) throws JsonRPCException, IOException {
+    public Sha256Hash sendBitcoin(Address fromAddress, Address toAddress, Coin amount) throws JsonRPCStatusException, IOException {
         Map<Address, Coin> outputs = Collections.singletonMap(toAddress, amount);
         return sendBitcoin(fromAddress, outputs);
     }
@@ -176,7 +176,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @param outputs     The destinations and amounts to transfer
      * @return The transaction hash
      */
-    public Sha256Hash sendBitcoin(Address fromAddress, Map<Address, Coin> outputs) throws JsonRPCException, IOException {
+    public Sha256Hash sendBitcoin(Address fromAddress, Map<Address, Coin> outputs) throws JsonRPCStatusException, IOException {
         String unsignedTxHex = createRawTransaction(fromAddress, outputs);
         SignedRawTransaction signingResult = signRawTransaction(unsignedTxHex);
 
@@ -189,7 +189,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
         return txid;
     }
 
-    public Transaction createSignedTransaction(ECKey fromKey, List<TransactionOutput> outputs) throws JsonRPCException, IOException {
+    public Transaction createSignedTransaction(ECKey fromKey, List<TransactionOutput> outputs) throws JsonRPCStatusException, IOException {
         Address fromAddress = fromKey.toAddress(getNetParams());
         Transaction tx = new Transaction(getNetParams());
 
@@ -228,7 +228,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
         return tx;
     }
 
-    public Transaction createSignedTransaction(ECKey fromKey, Address toAddress, Coin amount) throws JsonRPCException, IOException {
+    public Transaction createSignedTransaction(ECKey fromKey, Address toAddress, Coin amount) throws JsonRPCStatusException, IOException {
         List<TransactionOutput> outputs = Collections.singletonList(
                 new TransactionOutput(getNetParams(), null, amount, toAddress));
         return createSignedTransaction(fromKey, outputs);
@@ -241,7 +241,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @param fromAddress Address to get UTXOs for
      * @return All unspent TransactionOutputs for fromAddress
      */
-    public List<TransactionOutput> listUnspentJ(Address fromAddress) throws JsonRPCException, IOException {
+    public List<TransactionOutput> listUnspentJ(Address fromAddress) throws JsonRPCStatusException, IOException {
         List<Address> addresses = Collections.singletonList(fromAddress);
         List<UnspentOutput> unspentOutputsRPC = listUnspent(0, defaultMaxConf, addresses); // RPC UnspentOutput objects
         List<TransactionOutput> unspentOutputsJ = new ArrayList<TransactionOutput>();
@@ -251,7 +251,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
         return unspentOutputsJ;
     }
 
-    public List<TransactionOutPoint> listUnspentOutPoints(Address fromAddress) throws JsonRPCException, IOException {
+    public List<TransactionOutPoint> listUnspentOutPoints(Address fromAddress) throws JsonRPCStatusException, IOException {
         List<Address> addresses = Collections.singletonList(fromAddress);
         List<UnspentOutput> unspentOutputsRPC = listUnspent(0, defaultMaxConf, addresses); // RPC UnspentOutput objects
         List<TransactionOutPoint> unspentOutPoints = new ArrayList<TransactionOutPoint>();

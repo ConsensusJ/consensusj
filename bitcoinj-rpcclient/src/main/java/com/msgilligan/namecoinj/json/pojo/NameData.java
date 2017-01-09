@@ -2,12 +2,13 @@ package com.msgilligan.namecoinj.json.pojo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Sha256Hash;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,6 +23,8 @@ import java.util.Map;
  */
 public class NameData {
     private static ObjectMapper mapper = new ObjectMapper();
+    private static JavaType mapType = mapper.getTypeFactory().constructMapType(Map.class, String.class, Object.class);
+
 
     private final   String name;
     private final   Map<String, Object> value;     // Deserialized from escape JSON string
@@ -36,7 +39,7 @@ public class NameData {
                     @JsonProperty("address")    Address address,
                     @JsonProperty("expires_in") int expires_in) throws IOException {
         this.name = name;
-        this.value = (Map<String, Object>) mapper.readValue(value, Map.class);
+        this.value = mapper.readValue(value, mapType);
         this.txid = txid;
         this.address = address;
         this.expires_in = expires_in;
