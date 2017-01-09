@@ -6,7 +6,7 @@ install: true
 script:
  - sudo apt-get update && sudo apt-get install oracle-java8-installer graphviz
  - java -version
- - ./gradlew jenkinsBuild 
+ - ./gradlew buildCI
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
