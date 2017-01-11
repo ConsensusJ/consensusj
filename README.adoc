@@ -9,18 +9,22 @@ image:https://travis-ci.org/msgilligan/bitcoinj-addons.svg?branch=master["Build 
 
 Add-on modules for https://bitcoinj.github.io[bitcoinj], including:
 
-* A *JSON-RPC Java client* for the Bitcoin API
-* *bitcoinj-cli* - a command line tool and supporting libraries for accessing the JSON-RPC API.
-* Bitcoin server libraries for *server-side JSON-RPC*.
+* A *JSON-RPC Java client* for the https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core API]
+* JSON library using https://github.com/FasterXML/jackson[Jackson] to convert between Bitcoin types and JSON
+** *bitcoinj* types <--> JSON (e.g. https://bitcoinj.github.io/javadoc/0.14.3/org/bitcoinj/core/Address.html[Address], https://bitcoinj.github.io/javadoc/0.14.3/org/bitcoinj/core/Sha256Hash.html[Sha256Hash], https://bitcoinj.github.io/javadoc/0.14.3/org/bitcoinj/core/Transaction.html[Transaction])
+** Strongly typed http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/json/pojo/package-summary.html[Java POJOs] <--> Bitcoin Core standard JSON (e.g. http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/json/pojo/BlockChainInfo.html[BlockChainInfo], http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/json/pojo/UnspentOutput.html[UnspentOutput], http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/json/pojo/ChainTip.html[ChainTip])
+* https://spring.io[Spring] and https://github.com/google/guice[Guice]-compatible Bitcoin server components for *server-side JSON-RPC*.
+* **bitcoinj-proxy** - A high-performance, non-blocking https://ratpack.io[Ratpack] server for proxying access to *bitcoind* or building Bitcoin-based microservices.
+* **bitcoinj-daemon** - A *Spring Boot*-based framework for a Java-based implementation of *bitcoind*.
+* **bitcoinj-peerserver** -  A *Spring Boot*-based web application that connects to the Bitcoin P2P network and streams events to a browser using the *STOMP* protocol over *WebSocket*.
 * Bitcoin currency and exchange implementations for http://javamoney.github.io[JavaMoney].
+* *bitcoinj-cli* - a command line tool and supporting libraries for accessing the JSON-RPC API.
 * A Groovy-language *Domain Specific Language* for scripting and testing with *bitcoinj*
-* **bitcoinj-daemon** - A framework for a Java-based implementation of bitcoind.
-* **bitcoinj-peerserver** - A web application that connects to the P2P network and streams events to a browser using the STOMP protocol over *WebSocket*.
 * Functional tests of bitcoind (and bitcoinj-daemon) JSON-RPC services, that run in https://bitcoinj.github.io/testing#regression-test-mode[regression test mode].
 
 WARNING: Do not use this software with your Bitcoin private keys without doing a rigorous audit of the code. (Feedback welcome.)
 
-WARNING: The API is not final and will change without warning.
+WARNING: The API is not final and *may* change without warning (we try to deprecate first).
 
 We're hoping that one or more modules will be accepted into the bitcoinj project. Most of these components are fairly new, but all are useful and ready for pull requests.
 
@@ -28,7 +32,7 @@ We're hoping that one or more modules will be accepted into the bitcoinj project
 
 === Binaries image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"]
 
-Although the API is changing rapidly, binary releases are available on https://bintray.com/msgilligan/maven/bitcoinj-addons/view[Bintray]. You can dowload JARs or use the provided Maven coordinates to link to them directly from your `pom.xml` or `build.gradle`.
+Although the API is changing, binary releases are available on https://bintray.com/msgilligan/maven/bitcoinj-addons/view[Bintray]. You can download JARs or use the provided Maven coordinates to link to them directly from your `pom.xml` or `build.gradle`.
 
 
 === API Documentation
@@ -49,7 +53,7 @@ image:https://travis-ci.org/msgilligan/bitcoinj-addons.svg?branch=master["Build 
 
 === Requirements
 
-* Most modules may use JDK 7 (subset) for Android compatibility (see table, below)
+* Most modules use JDK 7 (subset) for Android compatibility (see table, below)
 * Server modules and Spring Boot Apps require JDK 8 or later
 
 === Modules
@@ -82,6 +86,11 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |8
 |Tests only (TBD)
 |Service objects used by the server apps 
+
+|<<bitcoinj-proxy,bitcoinj-proxy>>
+|8
+|Tests only (TBD)
+|Ratpack-based server for proxying *bitcoind* and/or building microservices.
 
 |<<bitcoinj-daemon,bitcoinj-daemon>>
 |8
