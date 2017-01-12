@@ -15,9 +15,9 @@ import com.msgilligan.bitcoinj.rpc.test.TestServers
  */
 abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, Loggable {
     static final Coin minBTCForTests = 50.btc
-    static final private TestServers testServers = TestServers.instance
-    static final protected String rpcTestUser = testServers.rpcTestUser
-    static final protected String rpcTestPassword = testServers.rpcTestPassword;
+    static private TestServers testServers = TestServers.instance
+    static protected String rpcTestUser = testServers.rpcTestUser
+    static protected String rpcTestPassword = testServers.rpcTestPassword;
 
     // Initializer to set up trait properties, Since Spock doesn't allow constructors
     {
