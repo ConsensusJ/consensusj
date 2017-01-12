@@ -10,9 +10,9 @@ import java.nio.charset.StandardCharsets
  */
 trait CLITestSupport {
 
-    final TestServers testServers = TestServers.instance
-    final String rpcUser = testServers.rpcTestUser
-    final String rpcPassword = testServers.rpcTestPassword
+    TestServers testServers = TestServers.instance
+    String rpcUser = testServers.rpcTestUser
+    String rpcPassword = testServers.rpcTestPassword
 
     String[] parseCommandLine(String line) {
         String[] args = line.split(' ')     // (Overly?) simple parsing of string into args[]
