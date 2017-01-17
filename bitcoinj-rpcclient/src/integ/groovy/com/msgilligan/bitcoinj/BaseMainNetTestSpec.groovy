@@ -13,9 +13,10 @@ import spock.lang.Specification
  * Abstract Base class for Spock tests of Bitcoin Core on MainNet
  */
 abstract class BaseMainNetTestSpec extends Specification implements BTCTestSupport, Loggable {
-    static final private TestServers testServers = TestServers.instance
-    static final protected String rpcTestUser = testServers.rpcTestUser
-    static final protected String rpcTestPassword = testServers.rpcTestPassword;
+    /* TODO: When GROOVY-8048 is fixed restore `final` keywords below */
+    static /* final */ private TestServers testServers = TestServers.instance
+    static /* final */ protected String rpcTestUser = testServers.rpcTestUser
+    static /* final */ protected String rpcTestPassword = testServers.rpcTestPassword;
 
     // Initializer to set up trait properties, Since Spock doesn't allow constructors
     {
