@@ -9,9 +9,8 @@ import org.slf4j.LoggerFactory
  *
  * Note: we can't use the @Slf4j annotation on traits
  */
-@CompileStatic
 trait Loggable {
-    private static final Logger logger = LoggerFactory.getLogger( this.getClass() )
+    private final Logger logger = LoggerFactory.getLogger( this.getClass() )
 
     Logger getLog() {
         return logger

@@ -10,10 +10,8 @@ import java.nio.charset.StandardCharsets
  */
 trait CLITestSupport {
 
-    /* TODO: When GROOVY-8048 is fixed restore `final` keywords below */
-    /* final */ TestServers testServers = TestServers.instance
-    /* final */ String rpcUser = testServers.rpcTestUser
-    /* final */ String rpcPassword = testServers.rpcTestPassword
+    final String rpcUser = TestServers.instance.rpcTestUser
+    final String rpcPassword = TestServers.instance.rpcTestPassword
 
     String[] parseCommandLine(String line) {
         String[] args = line.split(' ')     // (Overly?) simple parsing of string into args[]

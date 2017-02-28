@@ -14,11 +14,10 @@ import com.msgilligan.bitcoinj.rpc.test.TestServers
  * Abstract Base class for Spock tests of Bitcoin Core in RegTest mode
  */
 abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, Loggable {
-    /* TODO: When GROOVY-8048 is fixed restore `final` keywords below */
-    static /* final */ Coin minBTCForTests = 50.btc
-    static /* final */ private TestServers testServers = TestServers.instance
-    static /* final */ protected String rpcTestUser = testServers.rpcTestUser
-    static /* final */ protected String rpcTestPassword = testServers.rpcTestPassword;
+    static final Coin minBTCForTests = 50.btc
+    static final private TestServers testServers = TestServers.instance
+    static final protected String rpcTestUser = testServers.rpcTestUser
+    static final protected String rpcTestPassword = testServers.rpcTestPassword;
 
     // Initializer to set up trait properties, Since Spock doesn't allow constructors
     {
