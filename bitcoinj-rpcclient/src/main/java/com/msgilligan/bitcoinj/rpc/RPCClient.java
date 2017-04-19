@@ -40,7 +40,7 @@ public class RPCClient extends AbstractRPCClient {
     private URI serverURI;
     private String username;
     private String password;
-    private static final boolean disableSslVerification = true;
+    private static final boolean disableSslVerification = false;
 
     static {
         if (disableSslVerification) {
