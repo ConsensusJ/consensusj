@@ -3,9 +3,17 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
-== v0.2.2-SNAPSHOT
+== v0.2.3-SNAPSHOT
 
-Released: Not yet (available on `master` branch)
+Not yet released.
+
+==== *All submodules*
+
+* Fix error when Gradle `bintrayUpload` task run on root project
+
+== v0.2.2
+
+Released: 2016.04.26
 
 ==== *All submodules*
 
