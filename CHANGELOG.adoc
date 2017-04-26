@@ -13,6 +13,7 @@ Released: Not yet (available on `master` branch)
 * Assorted code, build, JavaDoc improvements
 * `build.gradle` reads `JDK7_HOME` environment variable to compile Java 7 modules with correct classpath
 * Upgrade bitcoinj to 0.14.4
+* Upgrade jackson-core and jackson-databind to 2.8.7 (in modules that use Jackson)
 * Upgrade Groovy to 2.4.10
 * Upgrade Spock to 1.1-rc-4
 * Upgrade SLF4J to 1.7.25
@@ -41,6 +42,7 @@ Released: Not yet (available on `master` branch)
 * Create Guice module and use for registry
 * Use Guice injection in handlers
 * Use Guice and Retrofit to create a Retrofit-based Ratpack async JSON-RPC client
+* Upgrade Ratpack to 1.5.0-rc-1
 * Upgrade Gradle Shadow Plugin to 1.2.4
 
 == v0.2.1
