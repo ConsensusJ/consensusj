@@ -9,7 +9,7 @@
 .. `gradle.properties`
 . Commit version bump and changelog.
 . Full build, test
-.. `./gradlew clean jenkinsBuild install regTest`
+.. `./gradlew clean buildCI install regTest`
 .. Recommended: test with *OmniJ* regTests.
 . Tag: `git tag -a v0.x.y -m "Release 0.x.y"`
 . Push: `git push --tags origin master`
