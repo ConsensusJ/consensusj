@@ -67,8 +67,8 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
     private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);
 
     private static final int SECOND_IN_MSEC = 1000;
-    private static final int RETRY_SECONDS = 1;
-    private static final int MESSAGE_SECONDS = 10;
+    private static final int DEFAULT_RETRY_SECONDS = 1;
+    private static final int DEFAULT_MESSAGE_SECONDS = 10;
 
     private int serverVersion = 0;    // 0 means unknown serverVersion
 
@@ -138,9 +138,11 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * option to the `bitcoin-cli` command-line tool.
      *
      * @param timeout Timeout in seconds
+     * @param retrySeconds Retry interval in seconds
      * @return true if ready, false if timeout
+     * @throws JsonRPCException JSON RPC error
      */
-    public Boolean waitForServer(int timeout) throws JsonRPCException {
+    public Boolean waitForServer(int timeout, int retrySeconds, int messageSeconds) throws JsonRPCException {
 
         log.debug("Waiting for server RPC ready...");
 
@@ -187,8 +189,8 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
                     log.info("RPC Status: " + status);
                     statusLast = status;
                 }
-                Thread.sleep(RETRY_SECONDS * SECOND_IN_MSEC);
-                seconds += RETRY_SECONDS;
+                Thread.sleep(retrySeconds * SECOND_IN_MSEC);
+                seconds += retrySeconds;
             } catch (InterruptedException e) {
                 log.error(e.toString());
             }
@@ -196,6 +198,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
 
         log.error("waitForServer() timed out after {} seconds.", timeout);
         return false;
+    }
+
+    public Boolean waitForServer(int timeout) throws JsonRPCException {
+        return waitForServer(timeout, DEFAULT_RETRY_SECONDS, DEFAULT_MESSAGE_SECONDS);
     }
 
     /**
@@ -219,11 +225,11 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
                 return true;
             } else {
                 try {
-                    if (seconds % MESSAGE_SECONDS == 0) {
+                    if (seconds % DEFAULT_MESSAGE_SECONDS == 0) {
                         log.debug("Server at block " + block);
                     }
-                    Thread.sleep(RETRY_SECONDS * SECOND_IN_MSEC);
-                    seconds += RETRY_SECONDS;
+                    Thread.sleep(DEFAULT_RETRY_SECONDS * SECOND_IN_MSEC);
+                    seconds += DEFAULT_RETRY_SECONDS;
                 } catch (InterruptedException e) {
                     log.error(e.toString());
                 }
