@@ -10,6 +10,7 @@ Not yet released.
 ==== *All submodules*
 
 * Fix error when Gradle `bintrayUpload` task run on root project
+* Upgrade Groovy to 2.4.11
 
 == v0.2.2
 
