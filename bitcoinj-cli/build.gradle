@@ -1,27 +1,20 @@
 // JVM-based CLI tools 
 // bitcoinj-cli tool is packaged to a single jar with ShadowJar
-// RoboVM build needs to be updated, but offers possibility of a native executable
+// We previously explored the possibility of a native (AOT-compiled) executable using RoboVM
 //
 plugins {
     id 'application'
     id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
-configurations {
-    robovm
-}
-
 dependencies {
     compile project(':bitcoinj-rpcclient')
 
     compile 'commons-cli:commons-cli:1.3.1'
-
-    robovm  "org.codehaus.groovy:groovy:${groovyVersion}:grooid"
 }
 
 
 mainClassName = "com.msgilligan.bitcoinj.cli.BitcoinJCli"
-def roboExeName = "bitcoinj-cli"
 
 // Since other projects use this module as a dependency we don't want to publish the shadowjar
 // We need to change the build so that we build the executable jar with a new name
@@ -36,31 +29,6 @@ jar {
 shadowJar {
     baseName = 'bitcoinj-cli'
     classifier = ''
-}
-
-def homePath = System.properties['user.home']
-def roboVMHome = "${homePath}/robovm-1.0.0-beta-04"
-def roboLibPath = "robolib"
-
-task copyToRoboLib(type: Copy) {
-    into roboLibPath
-    from configurations.runtime
-}
-
-task roboCompile(type:Exec, dependsOn: [classes, copyToRoboLib]) {
-    executable "${roboVMHome}/bin/robovm"
-    args '-verbose', '-debug',
-            '-cp', "build/classes/main:${roboLibPath}/commons-cli-1.2.jar:${roboLibPath}/jackson-core-2.3.3.jar:${roboLibPath}/jackson-databind-2.3.3.jar:${roboLibPath}/jackson-annotations-2.3.0.jar",
-            '-d', 'build',
-            '-forcelinkclasses', 'com.android.okhttp.HttpHandler:com.android.org.conscrypt.OpenSSLSocketFactoryImpl',
-
-            '-o', "${roboExeName}",
-            "${mainClassName}"
-}
-
-task roboRun(type:Exec, dependsOn: roboCompile) {
-    executable "build/${roboExeName}"
-    args '-rvm:log=debug'
 }
 
 // Test Structure
