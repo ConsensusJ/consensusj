@@ -11,6 +11,7 @@ Not yet released.
 
 * Fix error when Gradle `bintrayUpload` task run on root project
 * Upgrade Groovy to 2.4.11
+* Upgrade Gradle to 3.5
 
 == v0.2.2
 
