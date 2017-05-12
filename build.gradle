@@ -43,7 +43,7 @@ subprojects {
         compile "org.slf4j:slf4j-api:${slf4jVersion}"
 
         testCompile "org.codehaus.groovy:groovy:${groovyVersion}"
-        testCompile("org.spockframework:spock-core:1.1-groovy-2.4-rc-4") {
+        testCompile("org.spockframework:spock-core:1.1-groovy-2.4") {
             exclude module: "groovy-all"
         }
 
