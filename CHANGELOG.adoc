@@ -13,6 +13,10 @@ Not yet released.
 * Upgrade Groovy to 2.4.11
 * Upgrade Gradle to 3.5
 
+==== *bitcoinj-money*
+
+* Upgrade to XChange 4.2.0
+
 == v0.2.2
 
 Released: 2016.04.26
@@ -44,7 +48,7 @@ Released: 2016.04.26
 ==== *bitcoinj-money*
 
 * Upgrade to Moneta BP 1.1 (Java 7 Backport of JavaMoney Reference Implementation)
-* Upgrade to XChange 4.1.1
+* Upgrade to XChange 4.1.0
 
 ==== *bitcoinj-proxy*
 

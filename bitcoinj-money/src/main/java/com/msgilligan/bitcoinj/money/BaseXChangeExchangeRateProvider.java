@@ -8,7 +8,7 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
-import org.knowm.xchange.service.polling.marketdata.PollingMarketDataService;
+import org.knowm.xchange.service.marketdata.MarketDataService;
 
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ConversionQuery;
@@ -37,7 +37,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     protected final ProviderContext providerContext;
     protected String name;
     protected Exchange exchange;
-    protected PollingMarketDataService marketDataService;
+    protected MarketDataService marketDataService;
     private ScheduledExecutorService stpe;
     private ScheduledFuture<?> future;
     private final Map<CurrencyUnitPair, MonitoredCurrency> monitoredCurrencies = new HashMap<>();
@@ -55,7 +55,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         exchange = ExchangeFactory.INSTANCE.createExchange(exchangeClass.getName());
         name = exchange.getExchangeSpecification().getExchangeName();
         providerContext = ProviderContext.of(name, RateType.DEFERRED);
-        marketDataService = exchange.getPollingMarketDataService();
+        marketDataService = exchange.getMarketDataService();
         for (CurrencyUnitPair pair : pairs) {
             MonitoredCurrency monitoredCurrency = new MonitoredCurrency(pair, xchangePair(pair));
             monitoredCurrencies.put(pair, monitoredCurrency);
