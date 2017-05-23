@@ -3,9 +3,9 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
-== v0.2.3-SNAPSHOT
+== v0.2.3
 
-Not yet released.
+Released: 2017.05.22
 
 ==== *All submodules*
 
@@ -15,11 +15,16 @@ Not yet released.
 
 ==== *bitcoinj-money*
 
+* Add Coinbase `ExchangeRateProvider`
 * Upgrade to XChange 4.2.0
+
+==== *bitcoinj-json*
+
+* Add `AddressKeyDeserializer` for deserializing to `Map<Address, Object>`
 
 == v0.2.2
 
-Released: 2016.04.26
+Released: 2017.04.26
 
 ==== *All submodules*
 
