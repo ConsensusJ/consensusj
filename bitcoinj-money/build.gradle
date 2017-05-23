@@ -4,4 +4,5 @@ dependencies {
     compile 'org.knowm.xchange:xchange-core:4.2.0'
     compile 'org.knowm.xchange:xchange-bitfinex:4.2.0'
     compile 'org.knowm.xchange:xchange-itbit:4.2.0'
+    compile 'org.knowm.xchange:xchange-coinbase:4.2.0'
 }
