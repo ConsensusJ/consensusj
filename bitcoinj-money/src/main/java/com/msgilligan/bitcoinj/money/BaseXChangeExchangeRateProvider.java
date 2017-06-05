@@ -9,6 +9,8 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.service.marketdata.MarketDataService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ConversionQuery;
@@ -34,6 +36,7 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRateProvider
                                             implements ObservableExchangeRateProvider {
+    private static final Logger log = LoggerFactory.getLogger(BaseXChangeExchangeRateProvider.class);
     protected final ProviderContext providerContext;
     protected String name;
     protected Exchange exchange;
@@ -126,14 +129,18 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
      * Poll the exchange for updated Tickers
      */
     protected void poll() {
-        for (Map.Entry<CurrencyUnitPair, MonitoredCurrency> entry : monitoredCurrencies.entrySet()) {
-            try {
+        try {
+            for (Map.Entry<CurrencyUnitPair, MonitoredCurrency> entry : monitoredCurrencies.entrySet()) {
                 MonitoredCurrency monitor = entry.getValue();
                 monitor.setTicker(marketDataService.getTicker(monitor.exchangePair));
                 notifyExchangeRateObservers(monitor);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (IOException e) {
+            // log and ignore IOException
+            log.error("IOException in BaseXChangeExchangeRateProvider::poll: {}", e);
+        } catch (Throwable e) {
+            log.error("Exception in BaseXChangeExchangeRateProvider::poll: {}", e);
+            throw e;
         }
     }
 
