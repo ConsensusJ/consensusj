@@ -55,7 +55,16 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
      */
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
                                               CurrencyUnitPair... pairs) {
+        this(exchangeClass,
+                Executors.newScheduledThreadPool(1),
+                pairs);
+    }
+
+    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
+                                              ScheduledExecutorService scheduledExecutorService,
+                                              CurrencyUnitPair... pairs) {
         exchange = ExchangeFactory.INSTANCE.createExchange(exchangeClass.getName());
+        stpe = scheduledExecutorService;
         name = exchange.getExchangeSpecification().getExchangeName();
         providerContext = ProviderContext.of(name, RateType.DEFERRED);
         marketDataService = exchange.getMarketDataService();
@@ -64,6 +73,12 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
             monitoredCurrencies.put(pair, monitoredCurrency);
         }
         start();    // starting here causes first ticker to be read before observers can be registered!!!
+    }
+
+    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
+                                              ScheduledExecutorService scheduledExecutorService,
+                                              String... pairs) {
+        this(exchangeClass, scheduledExecutorService, pairsConvert(pairs));
     }
 
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
@@ -94,7 +109,6 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
      */
     @Override
     public void start() {
-        stpe = Executors.newScheduledThreadPool(2);
         final BaseXChangeExchangeRateProvider that = this;
         Runnable task = new Runnable() {
             @Override
@@ -120,8 +134,6 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
                 }
             };
             stpe.schedule(task, 0, TimeUnit.SECONDS);
-            stpe.shutdown();
-
         }
     }
 
