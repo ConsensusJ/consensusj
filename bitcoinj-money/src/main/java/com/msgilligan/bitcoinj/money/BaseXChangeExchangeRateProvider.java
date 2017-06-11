@@ -220,7 +220,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         final CurrencyPair      exchangePair;   // XChange currency pair (format used by XChange/exchange)
         final List<ExchangeRateObserver> observerList = new ArrayList<>();
         private final CountDownLatch tickerReady = new CountDownLatch(1);
-        private Ticker _ticker = null; // The '_' means use the getter and setter, please
+        private volatile Ticker _ticker = null; // The '_' means use the getter and setter, please
 
         public MonitoredCurrency(CurrencyUnitPair pair, CurrencyPair exchangePair) {
             this.pair = pair;
