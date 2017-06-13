@@ -12,9 +12,11 @@ import org.knowm.xchange.service.marketdata.MarketDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.money.MonetaryException;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.CurrencyConversion;
+import javax.money.convert.CurrencyConversionException;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
@@ -29,6 +31,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  *  Base ExchangeRateProvider using XChange library
@@ -50,7 +53,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
 
     /**
      * Construct using an XChange Exchange class object for a set of currencies
-     * @param exchangeClass
+     * @param exchangeClass Class of XChange exchange we are wrapping
      * @param pairs pairs to monitor
      */
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
@@ -148,9 +151,10 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
                 notifyExchangeRateObservers(monitor);
             }
         } catch (IOException e) {
-            // log and ignore IOException
+            // log and ignore IOException (we'll try polling again next interval)
             log.error("IOException in BaseXChangeExchangeRateProvider::poll: {}", e);
         } catch (Throwable e) {
+            // log and rethrow others
             log.error("Exception in BaseXChangeExchangeRateProvider::poll: {}", e);
             throw e;
         }
@@ -163,14 +167,28 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         monitor.observerList.add(observer);
         // If we've got data already, call observer immediately
         if (monitor.isTickerAvailable()) {
-            observer.onExchangeRateChange(buildExchangeRateChange(monitor));
+            notifyObserver(observer, pair, monitor);
         }
     }
 
-    public void notifyExchangeRateObservers(MonitoredCurrency monitor) {
+    private void notifyExchangeRateObservers(MonitoredCurrency monitor) {
         for (ExchangeRateObserver observer : monitor.observerList) {
-            observer.onExchangeRateChange(buildExchangeRateChange(monitor));
+            notifyObserver(observer, monitor.pair, monitor);
         }
+    }
+
+    private void notifyObserver(ExchangeRateObserver observer, CurrencyUnitPair pair, MonitoredCurrency monitor) {
+        try {
+            observer.onExchangeRateChange(buildExchangeRateChange(pair, monitor.getTicker()));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interruption flag just in case
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);      // Unlikely to happen since ticker has usually been fetched
+        }
+    }
+
+    private void notifyObserver(ExchangeRateObserver observer, CurrencyUnitPair pair, Ticker ticker) {
+        observer.onExchangeRateChange(buildExchangeRateChange(pair, ticker));
     }
 
     @Override
@@ -188,25 +206,20 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         CurrencyUnitPair pair = new CurrencyUnitPair(conversionQuery.getBaseCurrency(), conversionQuery.getCurrency());
         MonitoredCurrency monitoredCurrency = monitoredCurrencies.get(pair);
         if (monitoredCurrency == null) {
-            return null;
+            throw new CurrencyConversionException(pair.getBase(),
+                    pair.getTarget(),
+                    null,
+                    "Pair not found.");
         }
-        return buildExchangeRate(monitoredCurrency);
-    }
-
-    private ExchangeRateChange buildExchangeRateChange(MonitoredCurrency monitor) {
-        Date date = monitor.getTicker().getTimestamp();
-        // Not all exchanges provide a timestamp, default to 0 if it is null
-        long milliseconds = (date != null) ? date.getTime() : 0;
-
-        return new ExchangeRateChange(buildExchangeRate(monitor), milliseconds);
-    }
-
-    protected ExchangeRate buildExchangeRate(MonitoredCurrency monitoredCurrency) {
-        return new ExchangeRateBuilder(name, RateType.DEFERRED)
-                .setBase(monitoredCurrency.pair.getBase())
-                .setTerm(monitoredCurrency.pair.getTarget())
-                .setFactor(DefaultNumberValue.of(monitoredCurrency.getTicker().getLast()))
-                .build();
+        ExchangeRate rate = null;
+        try {
+            rate = buildExchangeRate(pair, monitoredCurrency.getTicker());
+        } catch (TimeoutException e) {
+            throw new MonetaryException("Timeout loading exchange rate", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interruption flag
+        }
+        return rate;
     }
 
     @Override
@@ -215,41 +228,93 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
                 .of(getContext().getProviderName(), getContext().getRateTypes().iterator().next()));
     }
 
+    private ExchangeRateChange buildExchangeRateChange(CurrencyUnitPair pair, Ticker ticker) {
+        Date date = ticker.getTimestamp();
+        // Not all exchanges provide a timestamp, default to 0 if it is null
+        long milliseconds = (date != null) ? date.getTime() : 0;
+
+        return new ExchangeRateChange(buildExchangeRate(pair, ticker), milliseconds);
+    }
+    
+    private ExchangeRate buildExchangeRate(CurrencyUnitPair pair, Ticker ticker) {
+        return new ExchangeRateBuilder(name, RateType.DEFERRED)
+                .setBase(pair.getBase())
+                .setTerm(pair.getTarget())
+                .setFactor(DefaultNumberValue.of(ticker.getLast()))
+                .build();
+    }
+
     protected static class MonitoredCurrency {
         final CurrencyUnitPair  pair;           // Terminating (target) JavaMoney CurrencyUnit
         final CurrencyPair      exchangePair;   // XChange currency pair (format used by XChange/exchange)
         final List<ExchangeRateObserver> observerList = new ArrayList<>();
-        private final CountDownLatch tickerReady = new CountDownLatch(1);
-        private volatile Ticker _ticker = null; // The '_' means use the getter and setter, please
+        private final UpdateableValueLatch<Ticker> tickerLatch = new UpdateableValueLatch<>();
 
-        public MonitoredCurrency(CurrencyUnitPair pair, CurrencyPair exchangePair) {
+        MonitoredCurrency(CurrencyUnitPair pair, CurrencyPair exchangePair) {
             this.pair = pair;
             this.exchangePair = exchangePair;
         }
 
         boolean isTickerAvailable() {
-            return _ticker != null;
+            return tickerLatch.isSet();
         }
 
-        Ticker getTicker() {
-            if (_ticker == null) {
-                // were we called before first poll completed?
-                try {
-                    // wait for the CountdownLatch
-                    boolean ready = tickerReady.await(60, TimeUnit.SECONDS);
-                    if (!ready) {
-                        throw new RuntimeException("timeout");
-                    }
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+        /**
+         * Get Ticker from the UpdateableValueLatch
+         * @return ticker object
+         * @throws InterruptedException thread was interrupted by another thread
+         * @throws TimeoutException should only happen if first request times out
+         */
+        Ticker getTicker() throws InterruptedException, TimeoutException {
+            return tickerLatch.getValue();
+        }
+
+        /**
+         * Set the ticker object, called from polling method
+         * @param ticker ticker object
+         */
+        void setTicker(Ticker ticker) {
+            tickerLatch.setValue(ticker);
+        }
+    }
+
+    /**
+     * A value latch that will block if value not yet set, but allows
+     * the value to be updated regularly (e.g. when polling for new values)
+     * @param <T>  Type of value to latch
+     */
+    static class UpdateableValueLatch<T> {
+        private volatile T value = null;
+        private final CountDownLatch ready = new CountDownLatch(1);
+        private final long timeoutSeconds;
+
+        UpdateableValueLatch() {
+            this(120);
+        }
+
+        UpdateableValueLatch(long timeoutInSeconds) {
+            this.timeoutSeconds = timeoutInSeconds;
+        }
+
+        T getValue() throws InterruptedException, TimeoutException {
+            // were we called before first poll completed?
+            if (value == null) {
+                // wait for the CountDownLatch
+                boolean loaded = ready.await(timeoutSeconds, TimeUnit.SECONDS);
+                if (!loaded) {
+                    throw new TimeoutException("Timeout before value set");
                 }
             }
-            return _ticker;
+            return value;
         }
 
-        void setTicker(Ticker ticker) {
-            _ticker = ticker;
-            tickerReady.countDown();
+        /* synchronized ? */ void setValue(T newValue) {
+            value = newValue;
+            ready.countDown();
+        }
+
+        boolean isSet() {
+            return value != null;
         }
     }
 }
