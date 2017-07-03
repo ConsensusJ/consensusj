@@ -1,6 +1,7 @@
 package com.msgilligan.ethereum.rpc;
 
 import com.msgilligan.bitcoinj.rpc.JsonRPCStatusException;
+import com.msgilligan.bitcoinj.rpc.JsonRpcRequest;
 import com.msgilligan.bitcoinj.rpc.RPCClient;
 
 import java.io.IOException;
@@ -40,6 +41,15 @@ public class EthereumClient extends RPCClient {
 
     public EthereumClient() {
         super(DEFAULT_LOCALHOST, null, null);
+    }
+
+    /**
+     * Override to send JSON RPC version "2.0"
+     *
+     */
+    @Override
+    protected JsonRpcRequest buildJsonRequest(String method, List<Object> params) {
+        return new JsonRpcRequest(method, params, JsonRpcRequest.JSON_RPC_VERSION_2);
     }
 
     public String ethProtocolVersion() throws IOException, JsonRPCStatusException {

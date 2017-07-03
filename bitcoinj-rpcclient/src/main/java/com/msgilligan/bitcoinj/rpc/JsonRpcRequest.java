@@ -6,13 +6,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * JSON-RPC Request POJO
  */
 public class JsonRpcRequest {
-    private static final String JSON_RPC_VERSION = "1.0";
-    private static long nextRequestId = 0;
+    public static final String JSON_RPC_VERSION_1 = "1.0";
+    public static final String JSON_RPC_VERSION_2 = "2.0";
+    private static final String DEFAULT_JSON_RPC_VERSION = JSON_RPC_VERSION_1;
+    private static AtomicLong nextRequestId =  new AtomicLong(0);
 
     private final String  jsonrpc;   // version
     private final String  method;
@@ -43,8 +46,12 @@ public class JsonRpcRequest {
      * @param params Parameters to serialize
      */
     public JsonRpcRequest(String method, List<Object> params) {
-        this.jsonrpc = JSON_RPC_VERSION;
-        this.id =  Long.toString(JsonRpcRequest.nextRequestId++);
+        this(method, params, DEFAULT_JSON_RPC_VERSION);
+    }
+
+    public JsonRpcRequest(String method, List<Object> params, String jsonRpcVersion) {
+        this.jsonrpc = jsonRpcVersion;
+        this.id =  Long.toString(JsonRpcRequest.nextRequestId.incrementAndGet());
         this.method = method;
         this.params = removeTrailingNulls(params);
     }

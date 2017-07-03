@@ -25,7 +25,7 @@ class EthereumClientSpec extends Specification {
         def version = client.ethProtocolVersion()
 
         then:
-        version == "0x3f"
+        version == "63"
     }
 
     def "can check eth block number" () {
@@ -39,6 +39,7 @@ class EthereumClientSpec extends Specification {
         blockNumber >= 0
     }
 
+    @Ignore("not supported in Parity")
     def "can start mining" () {
         given:
         def client = new EthereumClient()
@@ -50,6 +51,7 @@ class EthereumClientSpec extends Specification {
         result == true
     }
 
+    @Ignore("not supported in Parity")
     def "can stop mining" () {
         given:
         def client = new EthereumClient()

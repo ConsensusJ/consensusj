@@ -33,6 +33,31 @@ public abstract class AbstractRPCClient implements UntypedRPCClient {
      */
     protected abstract <R> JsonRpcResponse<R> send(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRPCStatusException;
 
+    protected JsonRpcRequest buildJsonRequest(String method, List<Object> params) {
+        return new JsonRpcRequest(method, params);
+    }
+
+    private <R> R sendForResult(String method, JavaType responseType, List<Object> params) throws IOException, JsonRPCStatusException {
+        JsonRpcRequest request = buildJsonRequest(method, params);
+        JsonRpcResponse<R> response = send(request, responseType);
+
+//        assert response != null;
+//        assert response.getJsonrpc() != null;
+//        assert response.getJsonrpc().equals("2.0");
+//        assert response.getId() != null;
+//        assert response.getId().equals(request.getId());
+
+        if (response.getError() != null && response.getError().getCode() != 0) {
+            throw new JsonRPCStatusException(
+                    response.getError().getMessage(),
+                    200,    // If response code wasn't 200 we couldn't be here
+                    null,
+                    response.getError().getCode(),
+                    null,
+                    response);
+        }
+        return response.getResult();
+    }
 
     /**
      * JSON-RPC remote method call that returns 'response.result`
@@ -44,20 +69,11 @@ public abstract class AbstractRPCClient implements UntypedRPCClient {
      * @return the 'response.result' field of the JSON RPC response converted to type R
      */
     protected <R> R send(String method, Class<R> resultType, List<Object> params) throws IOException, JsonRPCStatusException {
-        JsonRpcRequest request = new JsonRpcRequest(method, params);
         // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
         // (We can't use R because of type erasure)
         JavaType responseType = mapper.getTypeFactory().
                 constructParametrizedType(JsonRpcResponse.class, JsonRpcResponse.class, resultType);
-        JsonRpcResponse<R> response = send(request, responseType);
-
-//        assert response != null;
-//        assert response.getJsonrpc() != null;
-//        assert response.getJsonrpc().equals("2.0");
-//        assert response.getId() != null;
-//        assert response.getId().equals(request.getId());
-
-        return response.getResult();
+        return sendForResult(method, responseType, params);
     }
 
     /**
@@ -78,14 +94,11 @@ public abstract class AbstractRPCClient implements UntypedRPCClient {
      * @return the 'response.result' field of the JSON RPC response converted to type R
      */
     protected <R> R send(String method, JavaType resultType, List<Object> params) throws IOException, JsonRPCStatusException {
-        JsonRpcRequest request = new JsonRpcRequest(method, params);
         // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
         // (We can't use R because of type erasure)
         JavaType responseType = mapper.getTypeFactory().
                 constructParametrizedType(JsonRpcResponse.class, JsonRpcResponse.class, resultType);
-        JsonRpcResponse<R> response =  send(request, responseType);
-
-        return response.getResult();
+        return sendForResult(method, responseType, params);
     }
 
     /**
