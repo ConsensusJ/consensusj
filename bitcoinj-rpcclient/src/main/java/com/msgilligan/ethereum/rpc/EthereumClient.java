@@ -5,6 +5,7 @@ import com.msgilligan.bitcoinj.rpc.JsonRpcRequest;
 import com.msgilligan.bitcoinj.rpc.RPCClient;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -62,6 +63,31 @@ public class EthereumClient extends RPCClient {
         return blockNum;
     }
 
+    public BigInteger ethGetBalance(String address) throws IOException, JsonRPCStatusException {
+        String weiAsHexString = this.send("eth_getBalance", address);
+        return quantityToInt(weiAsHexString);
+    }
+
+    public String ethCall(EthTxCallObject callObject) throws IOException, JsonRPCStatusException {
+        String data = this.send("eth_call", callObject);
+        return data;
+    }
+
+    public String web3ClientVersion() throws IOException, JsonRPCStatusException {
+        return this.send("web3_clientVersion");
+    }
+
+    /**
+     * Returns Keccak-256 (not the standardized SHA3-256) of the given data
+     * @param dataToHash
+     * @return
+     * @throws IOException
+     * @throws JsonRPCStatusException
+     */
+    public String web3Sha3(String dataToHash) throws IOException, JsonRPCStatusException {
+        return this.send("web3_sha3", dataToHash);
+    }
+
     public boolean minerStart(int numberOfThreads) throws IOException, JsonRPCStatusException {
         return this.send("miner_start", "0x" + Integer.toHexString(numberOfThreads));
     }
@@ -70,4 +96,7 @@ public class EthereumClient extends RPCClient {
         return this.send("miner_stop");
     }
 
+    private BigInteger quantityToInt(String weiAsHexString) {
+        return new BigInteger(weiAsHexString.substring(2), 16);
+    }
 }
