@@ -3,6 +3,28 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.2.4-SNAPSHOT
+
+Released: Not yet
+
+==== *bitcoinj-rpcclient*
+
+* Fix: Look for `bitcoin.conf` in `~/.bitcoin` on Linux (lower-case 'b')
+* Improved error-handling and concurrency
+* Partial support for JSON-RPC 2.0 (tested with Parity)
+* Preliminary support for Ethereum/Parity JSON-RPC
+* Update Ethereum calls for Parity and add a few methods
+
+==== *bitcoinj-money*
+
+* Improve concurrency and error-handling in `BaseXChangeExchangeRateProvider`
+
+==== *All submodules*
+
+ * Upgrade Groovy to 2.5.0-beta-1
+ * Upgrade several Gradle build plugins
+
+
 == v0.2.3
 
 Released: 2017.05.22
