@@ -22,7 +22,7 @@ public class AppDataDirectory {
         } else {
             // Other (probably a Unix variant)
             // Keep a clean home directory by prefixing with "."
-            applicationDataDirectoryName = System.getProperty("user.home") + "/." + appName;
+            applicationDataDirectoryName = System.getProperty("user.home") + "/." + appName.toLowerCase();
         }
 
         File applicationDataDirectory = new File(applicationDataDirectoryName);
