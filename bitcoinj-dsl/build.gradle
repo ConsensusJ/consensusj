@@ -1,6 +1,6 @@
 apply plugin: 'java'
 
 dependencies {
-    compile "org.codehaus.groovy:groovy:${groovyVersion}"
+    compile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
 }
 

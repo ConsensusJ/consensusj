@@ -7,8 +7,8 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
-    compile "org.codehaus.groovy:groovy:${groovyVersion}"
-    compile "org.codehaus.groovy:groovy-json:${groovyVersion}"
+    compile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    compile "org.codehaus.groovy:groovy-json:${groovyVersion}:indy"
 
     testCompile project(':bitcoinj-dsl')                // Use Groovy extensions in tests
 }

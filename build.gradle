@@ -42,7 +42,7 @@ subprojects {
         compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
         compile "org.slf4j:slf4j-api:${slf4jVersion}"
 
-        testCompile "org.codehaus.groovy:groovy:${groovyVersion}"
+        testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
         testCompile("org.spockframework:spock-core:${spockVersion}") {
             exclude module: "groovy-all"
         }
@@ -63,6 +63,10 @@ subprojects {
                 // and other specific JDK jars
             }
         }
+    }
+
+    tasks.withType(GroovyCompile) {
+        groovyOptions.optimizationOptions.indy = true
     }
 }
 
