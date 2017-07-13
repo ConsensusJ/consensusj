@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.4.0.RELEASE'
+        springBootVersion = '1.5.4.RELEASE'
     }
     repositories {
         jcenter()
@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 
 archivesBaseName = 'bitcoinj-peerserver'
 

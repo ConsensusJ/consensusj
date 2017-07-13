@@ -19,6 +19,10 @@ Released: Not yet
 
 * Improve concurrency and error-handling in `BaseXChangeExchangeRateProvider`
 
+==== *bitcoinj-daemon* and *bitcoinj-peerserver*
+
+ * Upgrade Spring Boot to 1.5.4
+
 ==== *All submodules*
 
  * Upgrade Groovy to 2.5.0-beta-1
