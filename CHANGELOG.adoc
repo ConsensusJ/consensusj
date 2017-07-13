@@ -22,6 +22,7 @@ Released: Not yet
 ==== *All submodules*
 
  * Upgrade Groovy to 2.5.0-beta-1
+ * Use Groovy invokedynamic ("indy") jars and compiler flag
  * Upgrade several Gradle build plugins
 
 
