@@ -50,6 +50,14 @@ subprojects {
         testRuntime  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
     }
 
+    // See http://blog.freeside.co/2014/06/24/gradle-and-groovys-invoke-dynamic-support/
+    configurations.all {
+        resolutionStrategy {
+            force "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+            force "org.codehaus.groovy:groovy-json:${groovyVersion}:indy"
+        }
+    }
+
     compileJava {
         options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
     }
