@@ -1,12 +1,10 @@
 package com.msgilligan.bitcoinj
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient
-import com.msgilligan.bitcoinj.rpc.Loggable
+import com.msgilligan.jsonrpc.Loggable
 import com.msgilligan.bitcoinj.rpc.RPCURI
 import com.msgilligan.bitcoinj.rpc.test.TestServers
 import com.msgilligan.bitcoinj.test.BTCTestSupport
-import com.msgilligan.bitcoinj.test.RegTestFundingSource
-import org.bitcoinj.core.Coin
 import spock.lang.Specification
 
 /**

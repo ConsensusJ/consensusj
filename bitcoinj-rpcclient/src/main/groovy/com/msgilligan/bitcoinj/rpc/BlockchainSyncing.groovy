@@ -1,5 +1,7 @@
 package com.msgilligan.bitcoinj.rpc
 
+import com.msgilligan.jsonrpc.Loggable
+
 /**
  * Wait for synchronization with a reference source of block height.
  *

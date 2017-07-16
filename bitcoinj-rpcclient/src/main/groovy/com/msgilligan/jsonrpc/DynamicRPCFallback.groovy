@@ -1,6 +1,4 @@
-package com.msgilligan.bitcoinj.rpc
-
-import com.msgilligan.jsonrpc.UntypedRPCClient
+package com.msgilligan.jsonrpc
 
 /**
  * Trait for adding dynamic RPC method fallback to any RPC client

@@ -54,7 +54,7 @@ namespace com.msgilligan.namecoinj.rpc {
 
     com.msgilligan.bitcoinj.rpc.BitcoinClient <|-- NamecoinClient
     NamecoinClient <|.. NamecoinScriptingClient
-    com.msgilligan.bitcoinj.rpc.DynamicRPCFallback <|.. NamecoinScriptingClient  
+    com.msgilligan.jsonrpc.DynamicRPCFallback <|.. NamecoinScriptingClient
 }
 
 namespace foundation.omni.rpc {
@@ -65,7 +65,7 @@ namespace foundation.omni.rpc {
 
     com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient <|-- OmniClient
     OmniClient <|-- OmniScriptingClient
-    com.msgilligan.bitcoinj.rpc.DynamicRPCFallback <|.. OmniScriptingClient
+    com.msgilligan.jsonrpc.DynamicRPCFallback <|.. OmniScriptingClient
     OmniClient <|-- class OmniCLIClient
 }
 

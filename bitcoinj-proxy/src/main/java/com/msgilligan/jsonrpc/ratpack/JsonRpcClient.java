@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.proxy;
+package com.msgilligan.jsonrpc.ratpack;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.msgilligan.jsonrpc.JsonRpcRequest;

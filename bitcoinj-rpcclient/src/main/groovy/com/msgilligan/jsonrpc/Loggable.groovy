@@ -1,6 +1,5 @@
-package com.msgilligan.bitcoinj.rpc
+package com.msgilligan.jsonrpc
 
-import groovy.transform.CompileStatic
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

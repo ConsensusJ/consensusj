@@ -1,7 +1,6 @@
 package com.msgilligan.namecoinj.rpc
 
-import com.msgilligan.bitcoinj.rpc.DynamicRPCFallback
-import com.msgilligan.namecoinj.rpc.NamecoinClient
+import com.msgilligan.jsonrpc.DynamicRPCFallback
 
 /**
  * Namecoin RPC client for scripting

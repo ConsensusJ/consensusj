@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.rpc.bitcoind.BitcoinConfFile
+import com.msgilligan.jsonrpc.DynamicRPCFallback
 
 /**
  * Bitcoin RPC client for scripting

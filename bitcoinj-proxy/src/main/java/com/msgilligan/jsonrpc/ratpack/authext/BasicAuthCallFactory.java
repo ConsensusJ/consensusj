@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.proxy.authext;
+package com.msgilligan.jsonrpc.ratpack.authext;
 
 import com.msgilligan.jsonrpc.util.Base64;
 import okhttp3.Call;

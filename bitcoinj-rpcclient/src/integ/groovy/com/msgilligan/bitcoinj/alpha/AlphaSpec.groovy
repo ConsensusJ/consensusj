@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.alpha
 
-import com.msgilligan.bitcoinj.rpc.DynamicRPCClient
+import com.msgilligan.jsonrpc.DynamicRPCClient
 import com.msgilligan.bitcoinj.rpc.RPCURI
 import com.msgilligan.bitcoinj.rpc.test.TestServers
 import org.bitcoinj.core.Address
@@ -8,9 +8,7 @@ import org.bitcoinj.core.DumpedPrivateKey
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Transaction
-import org.bitcoinj.core.TransactionInput
 import org.bitcoinj.core.TransactionOutPoint
-import org.bitcoinj.core.TransactionOutput
 import org.bitcoinj.params.RegTestParams
 import org.bitcoinj.script.ScriptBuilder
 import spock.lang.Ignore

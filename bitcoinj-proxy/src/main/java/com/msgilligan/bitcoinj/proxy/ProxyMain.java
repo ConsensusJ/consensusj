@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.proxy;
 
 import com.msgilligan.bitcoinj.rpc.RPCConfig;
+import com.msgilligan.jsonrpc.ratpack.RpcProxyHandler;
 import ratpack.guice.Guice;
 import ratpack.server.BaseDir;
 import ratpack.server.RatpackServer;
