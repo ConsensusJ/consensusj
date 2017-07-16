@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.rpc;
+package com.msgilligan.jsonrpc;
 
 import java.io.IOException;
 import java.util.List;

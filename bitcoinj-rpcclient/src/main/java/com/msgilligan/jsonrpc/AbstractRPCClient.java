@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.rpc;
+package com.msgilligan.jsonrpc;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Abstract Base class for a strongly-typed JSON-RPC client
+ * Abstract Base class for a strongly-typed JSON-RPC client. This abstract class handles
+ * the use of Jackson to map from JSON to Java, but leaves the core `send` method as
+ * `abstract` to be implemented by subclasses allowing implementation with alternative
+ * HTTP client libraries.
  */
 public abstract class AbstractRPCClient implements UntypedRPCClient {
     protected final ObjectMapper mapper;

@@ -1,7 +1,7 @@
-package com.msgilligan.bitcoinj.rpc;
+package com.msgilligan.jsonrpc;
 
 /**
- *
+ * JSON RPC Exception
  */
 public class JsonRPCException extends Exception {
 

@@ -1,8 +1,9 @@
-package com.msgilligan.bitcoinj.rpc;
+package com.msgilligan.jsonrpc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
-import com.msgilligan.bitcoinj.rpc.util.Base64;
+import com.msgilligan.bitcoinj.rpc.BitcoinClient;
+import com.msgilligan.jsonrpc.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,9 +25,8 @@ import java.security.cert.X509Certificate;
 /**
  * = JSON-RPC Client
  *
- * This is a concrete class with basic JSON-RPC functionality. In theory it could be used to implement
- * other JSON-RPC clients, but as this is a Bitcoin-focused project you probably want to look at
- * {@link BitcoinClient} and its subclasses.
+ * This is a concrete class with basic JSON-RPC functionality. Abstract `send` method is implemented
+ * using `HttpURLConnection`.
  *
  * This client uses strongly-typed POJOs representing {@link JsonRpcRequest} and {@link JsonRpcResponse}. The
  * response object uses a type parameter to specify the object that is the actual JSON-RPC `result`.

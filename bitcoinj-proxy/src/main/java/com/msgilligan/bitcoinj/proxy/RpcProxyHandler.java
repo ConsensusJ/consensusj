@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.proxy;
 
-import com.msgilligan.bitcoinj.rpc.JsonRpcRequest;
+import com.msgilligan.jsonrpc.JsonRpcRequest;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
 

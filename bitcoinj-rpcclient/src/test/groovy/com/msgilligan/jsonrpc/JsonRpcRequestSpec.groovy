@@ -1,5 +1,6 @@
-package com.msgilligan.bitcoinj.rpc
+package com.msgilligan.jsonrpc
 
+import com.msgilligan.jsonrpc.JsonRpcRequest
 import spock.lang.Specification
 import spock.lang.Unroll
 

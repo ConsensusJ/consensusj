@@ -14,6 +14,7 @@ Released: Not yet
 * Partial support for JSON-RPC 2.0 (tested with Parity)
 * Preliminary support for Ethereum/Parity JSON-RPC
 * Update Ethereum calls for Parity and add a few methods
+* Core JSON-RPC implementation moved from `bitcoinj.rpc` to `jsonrpc` subpackage.
 
 ==== *bitcoinj-money*
 
@@ -29,6 +30,9 @@ Released: Not yet
  * Use Groovy invokedynamic ("indy") jars and compiler flag
  * Upgrade several Gradle build plugins
 
+=== Breaking and potentially breaking changes
+
+ * Core JSON-RPC implementation moved from `bitcoinj.rpc` to `jsonrpc` subpackage.
 
 == v0.2.3
 

@@ -1,8 +1,8 @@
 package com.msgilligan.ethereum.rpc;
 
-import com.msgilligan.bitcoinj.rpc.JsonRPCStatusException;
-import com.msgilligan.bitcoinj.rpc.JsonRpcRequest;
-import com.msgilligan.bitcoinj.rpc.RPCClient;
+import com.msgilligan.jsonrpc.JsonRPCStatusException;
+import com.msgilligan.jsonrpc.JsonRpcRequest;
+import com.msgilligan.jsonrpc.RPCClient;
 
 import java.io.IOException;
 import java.math.BigInteger;

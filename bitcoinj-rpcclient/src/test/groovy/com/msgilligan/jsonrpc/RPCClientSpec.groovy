@@ -1,5 +1,6 @@
-package com.msgilligan.bitcoinj.rpc
+package com.msgilligan.jsonrpc
 
+import com.msgilligan.jsonrpc.RPCClient
 import spock.lang.Specification
 
 /**

@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.integ
 
-import com.msgilligan.bitcoinj.rpc.JsonRPCStatusException
+import com.msgilligan.jsonrpc.JsonRPCStatusException
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.BlockChain
 import org.bitcoinj.core.Coin
@@ -10,12 +10,10 @@ import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.wallet.Wallet
 import org.bitcoinj.wallet.SendRequest
-import org.bitcoinj.params.RegTestParams
 import org.bitcoinj.store.MemoryBlockStore
 import org.bitcoinj.utils.BriefLogFormatter
 import com.msgilligan.bitcoinj.BaseRegTestSpec
 import org.bitcoinj.wallet.AllowUnconfirmedCoinSelector
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Stepwise
 

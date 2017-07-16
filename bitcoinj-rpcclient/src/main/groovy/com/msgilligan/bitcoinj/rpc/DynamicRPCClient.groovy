@@ -1,5 +1,7 @@
 package com.msgilligan.bitcoinj.rpc
 
+import com.msgilligan.jsonrpc.RPCClient
+
 /**
  * Use Groovy <code>methodMissing</code> to allow *any* JSON-RPC call to be made
  * as <code>client.rpcMethod(args)</code>. Note that calling a non-existent method

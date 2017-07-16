@@ -3,6 +3,7 @@ package com.msgilligan.bitcoinj.rpc;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
+import com.msgilligan.jsonrpc.JsonRPCStatusException;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.ECKey;

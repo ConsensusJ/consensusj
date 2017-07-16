@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.rpc;
+package com.msgilligan.jsonrpc;
 
 /**
  * = JSON-RPC Response POJO

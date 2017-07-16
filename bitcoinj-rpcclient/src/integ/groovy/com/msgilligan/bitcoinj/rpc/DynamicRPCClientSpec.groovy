@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.rpc.test.TestServers
+import com.msgilligan.jsonrpc.JsonRPCStatusException
 import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification

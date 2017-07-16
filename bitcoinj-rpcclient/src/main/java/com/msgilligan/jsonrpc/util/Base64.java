@@ -17,7 +17,7 @@
 //package android.util;
 /* Copy of android.util.Base64 for use with rpc */
 
-package com.msgilligan.bitcoinj.rpc.util;
+package com.msgilligan.jsonrpc.util;
 import java.io.UnsupportedEncodingException;
 
 /**

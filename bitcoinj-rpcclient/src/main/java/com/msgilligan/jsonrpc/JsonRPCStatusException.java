@@ -1,6 +1,4 @@
-package com.msgilligan.bitcoinj.rpc;
-
-import java.util.Map;
+package com.msgilligan.jsonrpc;
 
 /**
  * JSON-RPC returned HTTP status other than 200

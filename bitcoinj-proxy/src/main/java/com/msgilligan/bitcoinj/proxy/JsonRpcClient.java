@@ -1,8 +1,8 @@
 package com.msgilligan.bitcoinj.proxy;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.msgilligan.bitcoinj.rpc.JsonRpcRequest;
-import com.msgilligan.bitcoinj.rpc.JsonRpcResponse;
+import com.msgilligan.jsonrpc.JsonRpcRequest;
+import com.msgilligan.jsonrpc.JsonRpcResponse;
 import ratpack.exec.Promise;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
