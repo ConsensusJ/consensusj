@@ -4,7 +4,7 @@ buildscript {
     }
     dependencies {
         classpath "io.ratpack:ratpack-gradle:1.5.0-rc-2"
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
 }
 
