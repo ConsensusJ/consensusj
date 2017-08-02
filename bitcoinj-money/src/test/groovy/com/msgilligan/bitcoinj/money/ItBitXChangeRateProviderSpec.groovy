@@ -11,7 +11,7 @@ class ItBitXChangeRateProviderSpec extends AbstractXChangeRateProviderSpec {
 
     def "can list currency codes"() {
         when:
-        def markets = provider.exchange.metaData.marketMetaDataMap
+        def markets = provider.exchange.exchangeMetaData.currencyPairs
 
         then:
         markets.size() > 0

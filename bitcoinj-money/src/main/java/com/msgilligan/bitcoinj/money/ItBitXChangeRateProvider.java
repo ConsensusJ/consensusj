@@ -10,12 +10,14 @@ import java.util.concurrent.ScheduledExecutorService;
  *  Bitfinex ExchangeRateProvider using XChange library
  */
 public class ItBitXChangeRateProvider extends BaseXChangeExchangeRateProvider {
+    static private final String[] pairs = {"BTC/USD", "BTC/EUR"};
+
     public ItBitXChangeRateProvider(ScheduledExecutorService scheduledExecutorService) {
-        super(ItBitExchange.class, scheduledExecutorService, "BTC/USD", "BTC/EUR");
+        super(ItBitExchange.class, scheduledExecutorService, pairs);
     }
     
     public ItBitXChangeRateProvider() {
-        super(ItBitExchange.class, "BTC/USD", "BTC/EUR");
+        super(ItBitExchange.class, pairs);
     }
 
     @Override
