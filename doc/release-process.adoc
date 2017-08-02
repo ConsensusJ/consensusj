@@ -26,7 +26,7 @@
 
 . Set versions back to -SNAPSHOT
 .. `gradle.properties`
-.. bitcoinj-groovy `ExtensionModule`
+.. bitcoinj-dsl `ExtensionModule`
 .. *Not* `README.adoc` -- it should match release version
 . Commit and push to master
 
