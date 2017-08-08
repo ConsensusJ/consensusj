@@ -10,6 +10,7 @@ Released: Not yet
 ==== *bitcoinj-rpcclient*
 
 * JSONRPCExtension now extends IOException
+* BitcoinClient handles thread interruption in waitFor* methods
 
 ==== *bitcoinj-money*
 

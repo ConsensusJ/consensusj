@@ -141,7 +141,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * option to the `bitcoin-cli` command-line tool.
      *
      * @param timeout Timeout in seconds
-     * @return true if ready, false if timeout
+     * @return true if ready, false if timeout or interrupted
      */
     public Boolean waitForServer(int timeout) throws JsonRPCException {
 
@@ -195,6 +195,8 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
                 seconds += RETRY_SECONDS;
             } catch (InterruptedException e) {
                 log.error(e.toString());
+                Thread.currentThread().interrupt();
+                return false;
             }
         }
 
@@ -209,7 +211,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param timeout     Timeout in seconds
      * @throws JsonRPCStatusException JSON RPC status exception
      * @throws IOException network error
-     * @return True if blockHeight reached, false if timeout
+     * @return True if blockHeight reached, false if timeout or interrupted
      */
     public Boolean waitForBlock(int blockHeight, int timeout) throws JsonRPCStatusException, IOException {
 
@@ -230,6 +232,8 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
                     seconds += RETRY_SECONDS;
                 } catch (InterruptedException e) {
                     log.error(e.toString());
+                    Thread.currentThread().interrupt();
+                    return false;
                 }
             }
         }
