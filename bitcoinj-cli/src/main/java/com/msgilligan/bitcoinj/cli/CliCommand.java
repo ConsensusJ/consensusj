@@ -162,10 +162,10 @@ public abstract class CliCommand {
 
         try {
             status = runImpl();
-        } catch (IOException e) {
+        } catch (JsonRPCException e) {
             e.printStackTrace();
             status = 1;
-        } catch (JsonRPCException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             status = 1;
         }

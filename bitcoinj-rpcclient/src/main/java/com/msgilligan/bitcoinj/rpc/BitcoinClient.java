@@ -173,8 +173,6 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
                 /* Android exception, ignore */
                 // Expected exceptions on Android, RoboVM
                 status = ignored.getMessage();
-            } catch (IOException e) {
-                status = e.getMessage();
             } catch (JsonRPCStatusException e) {
                 // If server is in "warm-up" mode, e.g. validating/parsing the blockchain...
                 if (e.jsonRPCCode == -28) {
@@ -183,6 +181,9 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
                 } else {
                     throw e;
                 }
+            } catch (IOException e) {
+                // Ignore all IOExceptions
+                status = e.getMessage();
             }
             try {
                 // Log status messages only once, if new or updated

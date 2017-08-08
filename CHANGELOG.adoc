@@ -7,6 +7,10 @@ A high-level view of the changes in each bitcoinj-addons binary release.
 
 Released: Not yet
 
+==== *bitcoinj-rpcclient*
+
+* JSONRPCExtension now extends IOException
+
 ==== *bitcoinj-money*
 
 * Upgrade to XChange 4.2.1
