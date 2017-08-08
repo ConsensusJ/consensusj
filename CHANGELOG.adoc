@@ -3,6 +3,16 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.2.5-SNAPSHOT
+
+Released: Not yet
+
+==== *bitcoinj-money*
+
+* Upgrade to XChange 4.2.1
+* Removed compile-time and transitive dependencies on specific XChange implementations
+
+
 == v0.2.4
 
 Released: 2017.07.16

@@ -50,6 +50,14 @@ abstract class AbstractXChangeRateProviderSpec extends Specification {
         amountInUSD.currency.currencyCode == "USD"
     }
 
+    def "can list currency codes"() {
+        when:
+        def markets = provider.exchange.exchangeMetaData.currencyPairs
+
+        then:
+        markets.size() > 0
+    }
+
     def setup() {
         provider = createProvider()
     }

@@ -53,21 +53,15 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
 
     /**
      * Construct using an XChange Exchange class object for a set of currencies
-     * @param exchangeClass Class of XChange exchange we are wrapping
+     * @param exchangeClassName Classname of XChange exchange we are wrapping
+     * @param scheduledExecutorService Executor service for running polling task
      * @param pairs pairs to monitor
      */
-    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
-                                              CurrencyUnitPair... pairs) {
-        this(exchangeClass,
-                Executors.newScheduledThreadPool(1),
-                pairs);
-    }
-
-    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
+    protected BaseXChangeExchangeRateProvider(String exchangeClassName,
                                               ScheduledExecutorService scheduledExecutorService,
                                               CurrencyUnitPair... pairs) {
-        exchange = ExchangeFactory.INSTANCE.createExchange(exchangeClass.getName());
-        stpe = scheduledExecutorService;
+        exchange = ExchangeFactory.INSTANCE.createExchange(exchangeClassName);
+        stpe = (scheduledExecutorService != null) ? scheduledExecutorService : Executors.newScheduledThreadPool(1);
         name = exchange.getExchangeSpecification().getExchangeName();
         providerContext = ProviderContext.of(name, RateType.DEFERRED);
         marketDataService = exchange.getMarketDataService();
@@ -76,6 +70,30 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
             monitoredCurrencies.put(pair, monitoredCurrency);
         }
         start();    // starting here causes first ticker to be read before observers can be registered!!!
+    }
+
+    /**
+     * Construct using an XChange Exchange class object for a set of currencies
+     * @param exchangeClass Class of XChange exchange we are wrapping
+     * @param pairs pairs to monitor
+     */
+    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
+                                              CurrencyUnitPair... pairs) {
+        this(exchangeClass,
+                null,
+                pairs);
+    }
+
+    /**
+     * Construct using an XChange Exchange class object for a set of currencies
+     * @param exchangeClass Class of XChange exchange we are wrapping
+     * @param scheduledExecutorService Executor service for running polling task
+     * @param pairs pairs to monitor
+     */
+    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
+                                              ScheduledExecutorService scheduledExecutorService,
+                                              CurrencyUnitPair... pairs) {
+        this(exchangeClass.getName(), scheduledExecutorService, pairs);
     }
 
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
@@ -89,7 +107,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         this(exchangeClass, pairsConvert(pairs));
     }
 
-    private static CurrencyUnitPair[] pairsConvert(String[] strings) {
+    protected static CurrencyUnitPair[] pairsConvert(String[] strings) {
         CurrencyUnitPair[] units = new CurrencyUnitPair[strings.length];
         for (int i = 0 ; i < strings.length ; i++) {
             units[i] = new CurrencyUnitPair(strings[i]);

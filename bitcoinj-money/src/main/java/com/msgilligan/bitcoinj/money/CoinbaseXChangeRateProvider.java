@@ -1,8 +1,5 @@
 package com.msgilligan.bitcoinj.money;
 
-import org.knowm.xchange.bitfinex.v1.BitfinexExchange;
-import org.knowm.xchange.coinbase.CoinbaseExchange;
-
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
@@ -10,12 +7,13 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public class CoinbaseXChangeRateProvider extends BaseXChangeExchangeRateProvider {
     static private final String[] pairs = {"BTC/USD"};
+    static private final String xchangeClassName = "org.knowm.xchange.coinbase.CoinbaseExchange";
 
     public CoinbaseXChangeRateProvider(ScheduledExecutorService scheduledExecutorService) {
-        super(CoinbaseExchange.class, scheduledExecutorService, pairs);
+        super(xchangeClassName, scheduledExecutorService, pairsConvert(pairs));
     }
 
     public CoinbaseXChangeRateProvider() {
-        super(CoinbaseExchange.class, pairs);
+        super(xchangeClassName, null, pairsConvert(pairs));
     }
 }

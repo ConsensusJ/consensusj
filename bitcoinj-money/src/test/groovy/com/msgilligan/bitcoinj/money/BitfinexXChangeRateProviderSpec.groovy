@@ -8,12 +8,4 @@ class BitfinexXChangeRateProviderSpec extends AbstractXChangeRateProviderSpec {
     def createProvider() {
         return new BitfinexXChangeRateProvider()
     }
-
-    def "can list currency codes"() {
-        when:
-        def markets = provider.exchange.exchangeMetaData.currencyPairs
-
-        then:
-        markets.size() > 0
-    }
 }

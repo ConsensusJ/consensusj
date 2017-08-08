@@ -1,8 +1,6 @@
 package com.msgilligan.bitcoinj.money;
 
-import org.knowm.xchange.bitfinex.v1.BitfinexExchange;
 import org.knowm.xchange.currency.CurrencyPair;
-import org.knowm.xchange.itbit.v1.ItBitExchange;
 
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -11,13 +9,14 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public class ItBitXChangeRateProvider extends BaseXChangeExchangeRateProvider {
     static private final String[] pairs = {"BTC/USD", "BTC/EUR"};
+    static private final String xchangeClassName = "org.knowm.xchange.itbit.v1.ItBitExchange";
 
     public ItBitXChangeRateProvider(ScheduledExecutorService scheduledExecutorService) {
-        super(ItBitExchange.class, scheduledExecutorService, pairs);
+        super(xchangeClassName, scheduledExecutorService, pairsConvert(pairs));
     }
     
     public ItBitXChangeRateProvider() {
-        super(ItBitExchange.class, pairs);
+        super(xchangeClassName, null, pairsConvert(pairs));
     }
 
     @Override
