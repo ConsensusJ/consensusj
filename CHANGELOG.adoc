@@ -3,9 +3,9 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
-== v0.2.5-SNAPSHOT
+== v0.2.5
 
-Released: Not yet
+Released: 2017.08.09
 
 ==== *bitcoinj-rpcclient*
 
