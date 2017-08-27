@@ -11,6 +11,10 @@ Released: Not yet
 
 * Upgrade to Ratpack 1.5.0 RC3
 
+==== *All submodules*
+
+* Upgrade to bitcoinj 0.14.5
+
 == v0.2.5
 
 Released: 2017.08.09
