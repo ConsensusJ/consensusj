@@ -7,9 +7,14 @@ A high-level view of the changes in each bitcoinj-addons binary release.
 
 Released: Not yet
 
+==== *bitcoinj-cli*
+
+* Add `org.slf4j:slf4j-simple` as a runtime dependency.
+
 ==== *bitcoinj-proxy*
 
-* Upgrade to Ratpack 1.5.0 RC3
+* Upgrade to Ratpack 1.5.0
+* Add `org.slf4j:slf4j-simple` as a runtime dependency.
 
 ==== *All submodules*
 

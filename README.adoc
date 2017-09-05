@@ -216,6 +216,11 @@ PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring B
 
 No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/{bitcoinj-version}/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-{addons-version}.jar` command.
 
+[#bitcoinj-proxy]
+==== bitcoinj-proxy
+
+A https://ratpack.io[Ratpack]-based proxy server that can proxy JSON-RPC commands to a connected *bitcoind* (or *Omni Core*) server. It can also be used as a starting point for JSON-RPC interoperable microservices.
+
 [#bitcoinj-money]
 ==== bitcoinj-money
 
