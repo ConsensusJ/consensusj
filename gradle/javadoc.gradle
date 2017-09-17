@@ -14,11 +14,14 @@ def javadocSpec = {
     options.addStringOption '-attribute',
             "name=${project.name}," +
                     "version=${project.version}," +
-                    "title-link=http://example.com[${project.name} ${project.version}]"
-    options.links(  'http://docs.oracle.com/javase/7/docs/api/',
-                    'https://bitcoinj.github.io/javadoc/0.14.3/',
-                    'http://fasterxml.github.io/jackson-core/javadoc/2.8/',
-                    'http://fasterxml.github.io/jackson-databind/javadoc/2.8/')
+                    "title-link=http://msgilligan.github.io/bitcoinj-addons/[${project.name} ${project.version}]"
+    options.addStringOption '-require', 'asciidoctor-diagram'
+    options.addStringOption '-gem-path', 'build/vendor'
+    options.addStringOption '-attribute', 'data-uri'
+    options.links(  'https://docs.oracle.com/javase/7/docs/api/',
+                    'https://bitcoinj.github.io/javadoc/0.14.5/',
+                    'https://fasterxml.github.io/jackson-core/javadoc/2.8/',
+                    'https://fasterxml.github.io/jackson-databind/javadoc/2.8/')
 
 }
 
@@ -30,6 +33,7 @@ allprojects {
 
     dependencies {
         asciidoclet 'org.asciidoctor:asciidoclet:1.+'
+        asciidoclet 'org.asciidoctor:asciidoctorj-diagram:1.5.4.1'
     }
 
     javadoc javadocSpec
