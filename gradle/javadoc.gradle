@@ -32,7 +32,7 @@ allprojects {
     }
 
     dependencies {
-        asciidoclet 'org.asciidoctor:asciidoclet:1.+'
+        asciidoclet 'org.asciidoctor:asciidoclet:1.5.4'
         asciidoclet 'org.asciidoctor:asciidoctorj-diagram:1.5.4.1'
     }
 
