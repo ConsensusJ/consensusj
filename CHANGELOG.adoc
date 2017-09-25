@@ -11,6 +11,10 @@ Released: Not yet
 
 * Add `org.slf4j:slf4j-simple` as a runtime dependency.
 
+==== *bitcoinj-money*
+
+* Upgrade to XChange 4.2.2
+
 ==== *bitcoinj-proxy*
 
 * Upgrade to Ratpack 1.5.0
