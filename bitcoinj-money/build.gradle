@@ -1,9 +1,11 @@
+def xChangeVersion = '4.2.2'
+
 dependencies {
     compile 'org.javamoney:moneta-bp:1.1'
 
-    compile 'org.knowm.xchange:xchange-core:4.2.2'
+    compile "org.knowm.xchange:xchange-core:${xChangeVersion}"
 
-    testCompile 'org.knowm.xchange:xchange-bitfinex:4.2.2'
-    testCompile 'org.knowm.xchange:xchange-itbit:4.2.2'
-    testCompile 'org.knowm.xchange:xchange-coinbase:4.2.2'
+    testCompile "org.knowm.xchange:xchange-bitfinex:${xChangeVersion}"
+    testCompile "org.knowm.xchange:xchange-itbit:${xChangeVersion}"
+    testCompile "org.knowm.xchange:xchange-coinbase:${xChangeVersion}"
 }
