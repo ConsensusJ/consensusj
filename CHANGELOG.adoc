@@ -23,6 +23,7 @@ Released: Not yet
 ==== *All submodules*
 
 * Upgrade to bitcoinj 0.14.5
+* Upgrade to Groovy 2.5.0-beta-2
 
 == v0.2.5
 
