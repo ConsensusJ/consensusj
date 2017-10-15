@@ -13,7 +13,7 @@ Released: Not yet
 
 ==== *bitcoinj-money*
 
-* Upgrade to XChange 4.2.2
+* Upgrade to XChange 4.2.3
 
 ==== *bitcoinj-proxy*
 
