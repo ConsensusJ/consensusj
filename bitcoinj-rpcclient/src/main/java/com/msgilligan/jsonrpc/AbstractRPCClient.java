@@ -117,11 +117,12 @@ public abstract class AbstractRPCClient implements UntypedRPCClient {
      * Caller should cast returned object to the correct type.
      *
      * Useful for:
+     * * Dynamically-dispatched JSON-RPC methods calls via Groovy subclasses
      * * Simple (not client-side validated) command line utilities
      * * Functional tests that need to send incorrect types to the server to test error handling
      *
      * @param method JSON RPC method call to send
-     * @param params JSON RPC params
+     * @param params JSON RPC parameters as a `List`
      * @param pass:[<R>] Type of result object
      * @return the 'response.result' field of the JSON RPC response cast to type R
      * @throws IOException network error
@@ -135,20 +136,15 @@ public abstract class AbstractRPCClient implements UntypedRPCClient {
     /**
      * Call an RPC method and return default object type.
      *
-     * Caller should cast returned object to the correct type.
-     *
-     * Useful for:
-     * * Simple (not client-side validated) command line utilities
-     * * Functional tests that need to send incorrect types to the server to test error handling
+     * Convenience version that takes `params` as array/varargs.
      *
      * @param method JSON RPC method call to send
-     * @param params JSON RPC params
+     * @param params JSON RPC parameters as array or varargs
      * @param pass:[<R>] Type of result object
      * @return the 'response.result' field of the JSON RPC response cast to type R
      * @throws IOException network error
      * @throws JsonRPCStatusException JSON RPC status error
      */
-    @Override
     public <R> R send(String method, Object... params) throws IOException, JsonRPCStatusException {
         return send(method, Arrays.asList(params));
     }
