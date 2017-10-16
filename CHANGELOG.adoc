@@ -3,7 +3,7 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
-== v0.2.6-SNAPSHOT
+== v0.2.6
 
 Released: 2017.10.16
 
