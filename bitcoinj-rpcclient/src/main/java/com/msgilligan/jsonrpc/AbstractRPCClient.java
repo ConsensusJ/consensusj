@@ -36,6 +36,16 @@ public abstract class AbstractRPCClient implements UntypedRPCClient {
      */
     protected abstract <R> JsonRpcResponse<R> send(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRPCStatusException;
 
+    /**
+     * Create a JsonRpcRequest from method and parameters
+     *
+     * Currently builds JSON-RPC 1.0 request, this method can be overridden for clients
+     * that need JSON-RPC 2.0 (e.g. Ethereum)
+     *
+     * @param method name of method to call
+     * @param params parameter Java objects
+     * @return A ready-to-send JsonRpcRequest
+     */
     protected JsonRpcRequest buildJsonRequest(String method, List<Object> params) {
         return new JsonRpcRequest(method, params);
     }
