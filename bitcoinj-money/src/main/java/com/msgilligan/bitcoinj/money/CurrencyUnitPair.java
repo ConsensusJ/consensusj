@@ -5,7 +5,7 @@ import javax.money.Monetary;
 import javax.money.convert.ExchangeRate;
 
 /**
- * Currency Pair using JavaMoney CurrencyUnits
+ * Currency Pair using JavaMoney CurrencyUnit type
  */
 public class CurrencyUnitPair implements Comparable<CurrencyUnitPair> {
 
@@ -21,7 +21,7 @@ public class CurrencyUnitPair implements Comparable<CurrencyUnitPair> {
 
     /*
      * @param base base currency as a JavaMoney currency code
-     * @param target base currency as a JavaMoney curency code
+     * @param target base currency as a JavaMoney currency code
      */
     public CurrencyUnitPair(String base, String target) {
         this(Monetary.getCurrency(base), Monetary.getCurrency(target));
@@ -43,10 +43,18 @@ public class CurrencyUnitPair implements Comparable<CurrencyUnitPair> {
         this(rate.getBaseCurrency(), rate.getCurrency());
     }
 
+    /**
+     * Get base CurrencyUnit
+     * @return base CurrencyUnit
+     */
     public CurrencyUnit getBase() {
         return base;
     }
 
+    /**
+     * Get target CurrencyUnit
+     * @return target CurrencyUnit
+     */
     public CurrencyUnit getTarget() {
         return target;
     }
