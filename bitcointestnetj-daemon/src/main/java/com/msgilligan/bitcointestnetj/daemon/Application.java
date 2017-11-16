@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.daemon;
+package com.msgilligan.bitcointestnetj.daemon;
 
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(basePackages={"com.msgilligan.bitcoinj.params.mainnet", "com.msgilligan.bitcoinj.daemon"})
+@ComponentScan(basePackages={"com.msgilligan.bitcoinj.params.testnet", "com.msgilligan.bitcoinj.daemon.config"})
 public class Application {
 
     public static void main(String[] args) {

@@ -12,7 +12,7 @@ buildscript {
 
 apply plugin: 'org.springframework.boot'
 
-archivesBaseName = 'bitcoinj-daemon'
+archivesBaseName = 'bitcointestnetj-daemon'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -26,11 +26,12 @@ idea {
 dependencies {
     compile project(':bitcoinj-params')
     compile project(':bitcoinj-server')
+    compile project(':bitcoinj-daemon')
     compile "org.springframework.boot:spring-boot-starter-web"
 }
 
 springBoot {
-    mainClass = "com.msgilligan.bitcoinj.daemon.Application"
+    mainClass = "com.msgilligan.bitcointestnetj.daemon.Application"
     backupSource = true
 }
 
