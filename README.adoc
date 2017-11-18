@@ -1,8 +1,8 @@
-= bitcoinj Add-ons 
+= ConensusJ (formerly bitcoinj-addons) 
 Sean Gilligan <https://github.com/msgilligan>
 v0.2.6
-:description: bitcoinj-addons README document.
-:addons-version: 0.2.6
+:description: ConensusJ README document.
+:consensusj-version: 0.2.6
 :bitcoinj-version: 0.14.5
 
 image:https://travis-ci.org/msgilligan/bitcoinj-addons.svg?branch=master["Build Status", link="https://travis-ci.org/msgilligan/bitcoinj-addons"] image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"] 
@@ -124,7 +124,7 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 An alternative implementation of `bitcoin-cli` in Java. Built as a fat jar executable with `java -jar`. The command:
 
 [subs="attributes"]
-    java -jar bitcoinj-cli-{addons-version}.jar -rpcport=8080 getblockcount
+    java -jar bitcoinj-cli-{consensusj-version}.jar -rpcport=8080 getblockcount
 
 will output:
 
@@ -136,7 +136,7 @@ NOTE: Only a few RPCs are currently supported. Pull requests welcome.
 For help type:
 
 [subs="attributes"]
-    java -jar bitcoinj-cli-{addons-version}.jar -?
+    java -jar bitcoinj-cli-{consensusj-version}.jar -?
 
 or read the http://msgilligan.github.io/bitcoinj-addons/manpage-bitcoinj-cli.html[manual page].
 
@@ -214,7 +214,7 @@ PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring B
 .. You must login using username: `admin`, password: `admin` to view this page.
 .. The `peers.html' page is currently unstyled HTML.
 
-No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/{bitcoinj-version}/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-{addons-version}.jar` command.
+No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/{bitcoinj-version}/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-{consensusj-version}.jar` command.
 
 [#bitcoinj-proxy]
 ==== bitcoinj-proxy
@@ -278,7 +278,7 @@ To build the CLI executable jar:
 To run it and display a list of command line options:
 
 [subs="attributes"]
-    java -jar bitcoinj-cli/build/libs/bitcoinj-cli-{addons-version}.jar -?
+    java -jar bitcoinj-cli/build/libs/bitcoinj-cli-{consensusj-version}.jar -?
 
 === Build and Run PeerServer Locally Using Gradle
 
@@ -292,10 +292,10 @@ NOTE: This will connect to the Bitcoin P2P network
 
     ./gradlew :bitcoinj-peerserver:assemble
 
-The JAR will be built at `build/libs/peerserver-{addons-version}.jar` and can be run with:
+The JAR will be built at `build/libs/peerserver-{consensusj-version}.jar` and can be run with:
 
 [subs="attributes"]
-    java -jar bitcoinj-peerserver/build/libs/peerserver-{addons-version}.jar
+    java -jar bitcoinj-peerserver/build/libs/peerserver-{consensusj-version}.jar
 
 
 
