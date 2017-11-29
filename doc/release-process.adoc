@@ -1,4 +1,4 @@
-= bitcoinj-addons Release Process
+= ConsensusJ Release Process
 
 == Main Release Process
 

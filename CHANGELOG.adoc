@@ -3,6 +3,12 @@
 
 A high-level view of the changes in each bitcoinj-addons binary release.
 
+== v0.2.7-SNAPSHOT
+
+==== *bitcoinj-proxy*
+
+* Upgrade to Ratpack 1.5.1
+
 == v0.2.6
 
 Released: 2017.10.16
