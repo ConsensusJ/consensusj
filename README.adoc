@@ -5,7 +5,7 @@ v0.2.6
 :consensusj-version: 0.2.6
 :bitcoinj-version: 0.14.5
 
-image:https://travis-ci.org/msgilligan/bitcoinj-addons.svg?branch=master["Build Status", link="https://travis-ci.org/msgilligan/bitcoinj-addons"] image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"] 
+image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.org/ConsensusJ/consensusj"] image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"] 
 
 Add-on modules for https://bitcoinj.github.io[bitcoinj], including:
 
@@ -41,14 +41,14 @@ We have published http://msgilligan.github.io/bitcoinj-addons/apidoc/index.html[
 
 === Continuous Integration 
 
-bitcoinj-addons is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] and is tested by the https://ci.omni.foundation/[Omni Foundation Continuous Integration Server] (self-signed SSL certificate). You can check the https://ci.omni.foundation/job/bitcoinj-addons/[bitcoinj-addons job] for build status.
+ConsensusJ is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] and is tested by the https://ci.omni.foundation/[Omni Foundation Continuous Integration Server] (self-signed SSL certificate). You can check the https://ci.omni.foundation/job/bitcoinj-addons/[bitcoinj-addons job] for build status.
 
 
 // Jenkins Widget doesn't display correctly because of ci.omni.foundation self-signed SSL
 // image:https://ci.omni.foundation/buildStatus/icon?job=bitcoinj-addons[link="https://ci.omni.foundation/job/bitcoinj-addons/"]
 
 There is also a Travis CI build:
-image:https://travis-ci.org/msgilligan/bitcoinj-addons.svg?branch=master["Build Status", link="https://travis-ci.org/msgilligan/bitcoinj-addons"]
+image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.org/ConsensusJ/consensusj"]
 
 
 === Requirements
