@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj.test;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
-import com.msgilligan.jsonrpc.JsonRPCException;
+import org.consensusj.jsonrpc.JsonRPCException;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.TxOutInfo;

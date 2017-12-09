@@ -1,8 +1,8 @@
 package com.msgilligan.ethereum.rpc;
 
-import com.msgilligan.jsonrpc.JsonRPCStatusException;
-import com.msgilligan.jsonrpc.JsonRpcRequest;
-import com.msgilligan.jsonrpc.RPCClient;
+import org.consensusj.jsonrpc.JsonRPCStatusException;
+import org.consensusj.jsonrpc.JsonRpcRequest;
+import org.consensusj.jsonrpc.RPCClient;
 
 import java.io.IOException;
 import java.math.BigInteger;

@@ -1,6 +1,6 @@
 package com.msgilligan.namecoinj.rpc
 
-import com.msgilligan.jsonrpc.DynamicRPCFallback
+import org.consensusj.jsonrpc.DynamicRPCFallback
 
 /**
  * Namecoin RPC client for scripting

@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj.test;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinClient;
-import com.msgilligan.jsonrpc.JsonRPCException;
+import org.consensusj.jsonrpc.JsonRPCException;
 import org.bitcoinj.core.Sha256Hash;
 
 import java.io.IOException;

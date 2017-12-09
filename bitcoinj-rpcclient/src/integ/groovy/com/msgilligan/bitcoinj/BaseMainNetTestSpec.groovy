@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient
-import com.msgilligan.jsonrpc.Loggable
+import org.consensusj.jsonrpc.Loggable
 import com.msgilligan.bitcoinj.rpc.RPCURI
 import com.msgilligan.bitcoinj.rpc.test.TestServers
 import com.msgilligan.bitcoinj.test.BTCTestSupport

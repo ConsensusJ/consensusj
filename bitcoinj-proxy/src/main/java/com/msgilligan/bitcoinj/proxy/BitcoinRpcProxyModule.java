@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj.proxy;
 
-import com.msgilligan.jsonrpc.ratpack.JsonRpcClientModule;
-import com.msgilligan.jsonrpc.ratpack.RpcProxyHandler;
+import org.consensusj.jsonrpc.ratpack.JsonRpcClientModule;
+import org.consensusj.jsonrpc.ratpack.RpcProxyHandler;
 
 /**
  * Guice Module to create handlers and client for JSON-RPC Proxy

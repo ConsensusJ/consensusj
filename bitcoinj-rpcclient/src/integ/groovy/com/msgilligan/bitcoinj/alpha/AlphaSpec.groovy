@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.alpha
 
-import com.msgilligan.jsonrpc.DynamicRPCClient
+import org.consensusj.jsonrpc.DynamicRPCClient
 import com.msgilligan.bitcoinj.rpc.RPCURI
 import com.msgilligan.bitcoinj.rpc.test.TestServers
 import org.bitcoinj.core.Address

@@ -1,6 +1,6 @@
 package com.msgilligan.namecoinj.cli;
 
-import com.msgilligan.jsonrpc.JsonRPCStatusException;
+import org.consensusj.jsonrpc.JsonRPCStatusException;
 import com.msgilligan.namecoinj.json.pojo.NameData;
 import com.msgilligan.namecoinj.rpc.NamecoinClient;
 import org.bitcoinj.core.Address;

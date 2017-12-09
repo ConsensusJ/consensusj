@@ -1,6 +1,6 @@
 package com.msgilligan.ethereum.rpc
 
-import com.msgilligan.jsonrpc.DynamicRPCFallback
+import org.consensusj.jsonrpc.DynamicRPCFallback
 
 /**
  * Use `methodMissing` to implement Ethereum RPC calls dynamically

@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.integ
 
-import com.msgilligan.jsonrpc.JsonRPCStatusException
+import org.consensusj.jsonrpc.JsonRPCStatusException
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.BlockChain
 import org.bitcoinj.core.Coin

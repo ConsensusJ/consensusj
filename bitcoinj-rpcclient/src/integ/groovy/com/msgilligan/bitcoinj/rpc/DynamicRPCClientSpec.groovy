@@ -1,8 +1,8 @@
 package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.rpc.test.TestServers
-import com.msgilligan.jsonrpc.DynamicRPCClient
-import com.msgilligan.jsonrpc.JsonRPCStatusException
+import org.consensusj.jsonrpc.DynamicRPCClient
+import org.consensusj.jsonrpc.JsonRPCStatusException
 import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification

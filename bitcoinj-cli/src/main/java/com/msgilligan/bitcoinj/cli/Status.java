@@ -2,7 +2,7 @@ package com.msgilligan.bitcoinj.cli;
 
 import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
 import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
-import com.msgilligan.jsonrpc.JsonRPCException;
+import org.consensusj.jsonrpc.JsonRPCException;
 
 import java.io.IOException;
 

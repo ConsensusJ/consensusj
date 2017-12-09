@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.cli;
 
-import com.msgilligan.jsonrpc.JsonRPCException;
+import org.consensusj.jsonrpc.JsonRPCException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;

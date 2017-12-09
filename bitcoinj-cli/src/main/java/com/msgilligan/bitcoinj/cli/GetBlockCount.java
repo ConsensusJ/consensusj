@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.cli;
 
-import com.msgilligan.jsonrpc.JsonRPCException;
+import org.consensusj.jsonrpc.JsonRPCException;
 
 import java.io.IOException;
 

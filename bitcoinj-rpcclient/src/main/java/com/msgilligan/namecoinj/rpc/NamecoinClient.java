@@ -1,7 +1,7 @@
 package com.msgilligan.namecoinj.rpc;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinClient;
-import com.msgilligan.jsonrpc.JsonRPCStatusException;
+import org.consensusj.jsonrpc.JsonRPCStatusException;
 import com.msgilligan.bitcoinj.rpc.RPCConfig;
 import com.msgilligan.bitcoinj.rpc.bitcoind.AppDataDirectory;
 import com.msgilligan.bitcoinj.rpc.bitcoind.BitcoinConfFile;
