@@ -171,10 +171,24 @@ public class RPCClient extends AbstractRPCClient {
         connection.setRequestProperty("Connection", "close");   // Avoid EOFException: http://stackoverflow.com/questions/19641374/android-eofexception-when-using-httpurlconnection-headers
 
         String auth = username + ":" + password;
-        String basicAuth = "Basic " + Base64.encodeToString(auth.getBytes(),Base64.DEFAULT).trim();
+        String basicAuth = "Basic " + base64Encode(auth);
         connection.setRequestProperty ("Authorization", basicAuth);
 
         return connection;
+    }
+
+    /**
+     * Encode username password as Base64 for basic authentication
+     *
+     * We're using an internal `Base64` utility class here (copied from Android) in order
+     * to have working, consistent behavior on JavaSE and Android. Prior to Android 8.0,
+     * Android has it's own implementation that differs from the JavaSE version.
+     * 
+     * @param authString An authorization string of the form `username:password`
+     * @return A compliant Base64 encoding of `authString`
+     */
+    protected static String base64Encode(String authString) {
+        return Base64.encodeToString(authString.getBytes(),Base64.DEFAULT).trim();
     }
 
     // TODO: Allow for self-signed certificates without disabling all verification

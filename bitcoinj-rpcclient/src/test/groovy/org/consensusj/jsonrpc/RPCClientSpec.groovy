@@ -18,7 +18,6 @@ class RPCClientSpec extends Specification {
         client.serverURI == "http://localhost:8080".toURI()
     }
 
-    @Ignore
     @Unroll
     def "Base64 works for #input"(String input, String expectedResult) {
         expect:
