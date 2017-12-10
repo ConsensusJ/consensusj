@@ -26,6 +26,6 @@ public class BasicAuthCallFactory implements okhttp3.Call.Factory {
 
     private static String authString(String username, String password) {
         String auth = username + ":" + password;
-        return "Basic " + Base64.encodeToString(auth.getBytes(),Base64.DEFAULT).trim();
+        return "Basic " + Base64.encodeToString(auth.getBytes(),Base64.NO_WRAP).trim();
     }
 }

@@ -12,7 +12,7 @@ class Base64Spec extends Specification{
         def auth = "myuser" + ":" + "mypass" + myInt;
 
         when:
-        def basicAuth1 = "Basic " + Base64.encodeToString(auth.getBytes(),Base64.DEFAULT).trim();
+        def basicAuth1 = "Basic " + Base64.encodeToString(auth.getBytes(),Base64.NO_WRAP).trim();
         def basicAuth2 = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(auth.getBytes());
 
         then:
