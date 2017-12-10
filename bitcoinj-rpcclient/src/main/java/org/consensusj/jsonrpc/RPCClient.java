@@ -188,7 +188,7 @@ public class RPCClient extends AbstractRPCClient {
      * @return A compliant Base64 encoding of `authString`
      */
     protected static String base64Encode(String authString) {
-        return Base64.encodeToString(authString.getBytes(),Base64.DEFAULT).trim();
+        return Base64.encodeToString(authString.getBytes(),Base64.NO_WRAP).trim();
     }
 
     // TODO: Allow for self-signed certificates without disabling all verification
