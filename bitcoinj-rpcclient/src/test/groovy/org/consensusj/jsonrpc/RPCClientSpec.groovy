@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc
 
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -17,6 +18,7 @@ class RPCClientSpec extends Specification {
         client.serverURI == "http://localhost:8080".toURI()
     }
 
+    @Ignore
     @Unroll
     def "Base64 works for #input"(String input, String expectedResult) {
         expect:
