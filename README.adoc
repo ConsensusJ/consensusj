@@ -7,7 +7,7 @@ v0.2.6
 
 image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.org/ConsensusJ/consensusj"] image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"] 
 
-Add-on modules for https://bitcoinj.github.io[bitcoinj], including:
+Cryptocurrency libraries based on https://bitcoinj.github.io[bitcoinj], including:
 
 * A *JSON-RPC Java client* for the https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core API]
 * JSON library using https://github.com/FasterXML/jackson[Jackson] to convert between Bitcoin types and JSON
