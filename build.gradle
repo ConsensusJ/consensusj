@@ -90,5 +90,7 @@ task testReport(type: TestReport) {
     reportOn subprojects*.test
 }
 
+build.dependsOn subprojects.build
+
 task buildCI(dependsOn: [build, testReport, javadocAll, asciidoctor])
 task jenkinsBuild(dependsOn: buildCI)
