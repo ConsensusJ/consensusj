@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.proxy;
+package org.consensusj.proxy;
 
 import com.msgilligan.bitcoinj.rpc.RPCConfig;
 import org.consensusj.jsonrpc.ratpack.RpcProxyHandler;

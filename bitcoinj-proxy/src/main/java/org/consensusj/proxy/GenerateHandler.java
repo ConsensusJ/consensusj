@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.proxy;
+package org.consensusj.proxy;
 
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.ratpack.JsonRpcClient;
@@ -7,24 +7,25 @@ import ratpack.handling.Handler;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Arrays;
 
 import static ratpack.jackson.Jackson.json;
 
 /**
- * Handle a GET request by posting a "getblockchaininfo" and returning the response
+ * Get requests will generate a block (regtest only)
  */
 @Singleton
-public class ChainStatusHandler implements Handler {
+public class GenerateHandler implements Handler {
     private final JsonRpcClient rpcClient;
 
     @Inject
-    public ChainStatusHandler(JsonRpcClient jsonRpcClient) {
+    public GenerateHandler(JsonRpcClient jsonRpcClient) {
         rpcClient = jsonRpcClient;
     }
 
     @Override
     public void handle(Context ctx) {
-        JsonRpcRequest rpcReq = new JsonRpcRequest("getblockchaininfo");
+        JsonRpcRequest rpcReq = new JsonRpcRequest("setgenerate", Arrays.asList(true, 1));
         rpcClient.call(rpcReq).then(rpcResponse -> ctx.render(json(rpcResponse)));
     }
 }

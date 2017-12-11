@@ -14,7 +14,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-mainClassName = "com.msgilligan.bitcoinj.proxy.ProxyMain"
+mainClassName = "org.consensusj.proxy.ProxyMain"
 
 dependencies {
     compile project(':bitcoinj-rpcclient')

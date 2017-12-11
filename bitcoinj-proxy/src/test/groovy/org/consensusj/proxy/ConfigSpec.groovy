@@ -1,6 +1,5 @@
-package com.msgilligan.bitcoinj.proxy
+package org.consensusj.proxy
 
-import com.google.common.io.Resources
 import spock.lang.Specification
 
 /**
