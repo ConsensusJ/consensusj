@@ -80,7 +80,7 @@ public class EthereumClient extends RPCClient {
     /**
      * Returns Keccak-256 (not the standardized SHA3-256) of the given data
      * @param dataToHash
-     * @return
+     * @return Keccak-256 hash of the data
      * @throws IOException
      * @throws JsonRPCStatusException
      */
