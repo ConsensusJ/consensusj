@@ -7,9 +7,12 @@ import org.bitcoinj.core.Context
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Transaction
+import org.bitcoinj.core.TransactionInput
 import org.bitcoinj.core.TransactionOutPoint
 import org.bitcoinj.params.MainNetParams
 import org.bitcoinj.script.ScriptBuilder
+import org.bitcoinj.script.Script
+
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
@@ -92,5 +95,18 @@ class TransactionSpec extends Specification {
         }
 
         parsedTx.lockTime == 0
+
+        when: "We validate the signature on each input"
+        def inputs = parsedTx.getInputs();
+        boolean validSig = false     // Only 1 input for now
+        for(int i = 0; i < inputs.size(); i++) {
+            TransactionInput input = inputs.get(i);
+            Script scriptSig = input.getScriptSig();
+            Script scriptPubKey = ScriptBuilder.createOutputScript(fromAddress);
+            scriptSig.correctlySpends(parsedTx, i, scriptPubKey, Script.ALL_VERIFY_FLAGS);
+        }
+
+        then: "Signature is valid"
+        true     // No exception
     }
 }
