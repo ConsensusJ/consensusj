@@ -7,7 +7,14 @@ A high-level view of the changes in each bitcoinj-addons binary release.
 
 ==== *bitcoinj-proxy*
 
-* Upgrade to Ratpack 1.5.1
+* Upgrade to Ratpack 1.5.4
+
+==== *All submodules*
+
+* Upgrade to bitcoinj 0.14.6
+* Upgrade to Jackson 2.9.4
+* Upgrade to Groovy 2.5.0-beta-3
+* Upgrade to Spring Boot 1.5.10.RELEASE
 
 == v0.2.6
 

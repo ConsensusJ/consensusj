@@ -4,7 +4,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
-        classpath "io.ratpack:ratpack-gradle:1.5.1"
+        classpath "io.ratpack:ratpack-gradle:1.5.4"
     }
 }
 
@@ -22,7 +22,7 @@ dependencies {
 
     compile ratpack.dependency('guice')
     compile ratpack.dependency('retrofit2')
-
+    
     runtime "org.slf4j:slf4j-simple:${slf4jVersion}"
 }
 

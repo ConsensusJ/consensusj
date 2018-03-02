@@ -1,6 +1,6 @@
 dependencies {
     compile project(':bitcoinj-json')
     compile "javax.inject:javax.inject:1"
-    compile "org.springframework.boot:spring-boot-starter-websocket:1.4.0.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-websocket:${springBootVersion}"
     compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:1.1"
 }

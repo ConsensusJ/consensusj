@@ -8,7 +8,7 @@ import spock.lang.Specification
 import ratpack.groovy.test.GroovyRatpackMainApplicationUnderTest
 
 /**
- *
+ * Functional test Spec for ProxyMain
  */
 class ProxyMainFunctionalSpec extends Specification {
     @Shared

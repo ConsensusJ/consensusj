@@ -85,7 +85,7 @@ public abstract class AbstractRPCClient implements UntypedRPCClient {
         // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
         // (We can't use R because of type erasure)
         JavaType responseType = mapper.getTypeFactory().
-                constructParametrizedType(JsonRpcResponse.class, JsonRpcResponse.class, resultType);
+                constructParametricType(JsonRpcResponse.class, JsonRpcResponse.class, resultType);
         return sendForResult(method, responseType, params);
     }
 
@@ -110,7 +110,7 @@ public abstract class AbstractRPCClient implements UntypedRPCClient {
         // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
         // (We can't use R because of type erasure)
         JavaType responseType = mapper.getTypeFactory().
-                constructParametrizedType(JsonRpcResponse.class, JsonRpcResponse.class, resultType);
+                constructParametricType(JsonRpcResponse.class, resultType);
         return sendForResult(method, responseType, params);
     }
 
