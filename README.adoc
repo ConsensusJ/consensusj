@@ -46,7 +46,7 @@ We have published http://msgilligan.github.io/bitcoinj-addons/apidoc/index.html[
 
 === Continuous Integration 
 
-ConsensusJ is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] and is tested by the https://ci.omni.foundation/[Omni Foundation Continuous Integration Server] (self-signed SSL certificate). You can check the https://ci.omni.foundation/job/bitcoinj-addons/[bitcoinj-addons job] for build status.
+ConsensusJ is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] and is tested by the https://ci.omni.foundation/[Omni Foundation Continuous Integration Server] (self-signed SSL certificate). You can check the https://ci.omni.foundation/job/consensusj/[consensusj job] for build status.
 
 
 // Jenkins Widget doesn't display correctly because of ci.omni.foundation self-signed SSL
