@@ -14,7 +14,7 @@ A high-level view of the changes in each bitcoinj-addons binary release.
 * Upgrade to bitcoinj 0.14.7
 * Upgrade to Jackson 2.9.4
 * Upgrade to Groovy 2.5.0-rc-1
-* Upgrade to Spring Boot 2.0.0.RELEASE
+* Upgrade to Spring Boot 2.0.1.RELEASE
 * Upgrade to Gradle 4.6
 
 == v0.2.6
