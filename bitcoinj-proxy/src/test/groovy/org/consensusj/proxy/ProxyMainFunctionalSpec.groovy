@@ -2,14 +2,14 @@ package org.consensusj.proxy
 
 import ratpack.test.MainClassApplicationUnderTest
 import spock.lang.AutoCleanup
+import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Specification
-
-import ratpack.groovy.test.GroovyRatpackMainApplicationUnderTest
 
 /**
  * Functional test Spec for ProxyMain
  */
+@IgnoreIf({jvm.getJavaSpecificationVersion() == "9"})
 class ProxyMainFunctionalSpec extends Specification {
     @Shared
     @AutoCleanup
