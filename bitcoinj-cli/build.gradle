@@ -24,7 +24,9 @@ mainClassName = "com.msgilligan.bitcoinj.cli.BitcoinJCli"
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'bitcoinj CLI client', 'Implementation-Version': version, 'Consensus-Class': mainClassName
+        attributes 'Implementation-Title': 'bitcoinj CLI client',
+                    'Implementation-Version': version,
+                    'Main-Class': mainClassName
     }
 }
 
