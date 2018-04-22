@@ -1,0 +1,17 @@
+[
+  {
+    "name" : "org.consensusj.jsonrpc.JsonRpcRequest",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  },
+  {
+    "name" : "java.lang.Object",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  },
+  {
+    "name" : "java.util.List",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+]

@@ -35,6 +35,23 @@ shadowJar {
     classifier = ''
 }
 
+// Compile a native image using Graal's native-image tool
+// Graal must be installed at $GRAAL_HOME
+task graalNativeImage(type:Exec, dependsOn: jar) {
+    workingDir = projectDir
+    executable = "${System.env.GRAAL_HOME}/bin/native-image"
+    args = [ '--verbose',
+             '-cp', configurations.runtime.asPath,
+             '-jar', jar.archivePath,
+             '-H:Path=build',
+             '-H:Name=cj-bitcoin-cli',
+             '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
+             '-H:EnableURLProtocols=http',
+             '-H:+ReportUnsupportedElementsAtRuntime'
+    ]
+}
+
+
 // Test Structure
 sourceSets {
     integrationTest {
