@@ -12,8 +12,6 @@ apply plugin: 'io.spring.dependency-management'
 
 
 archivesBaseName = 'bitcoinj-daemon'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 idea {
     module {

@@ -6,9 +6,6 @@ dependencies {
     runtime "org.slf4j:slf4j-jdk14:${slf4jVersion}"       // Runtime implementation of slf4j
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 idea {
     module {
         jdkName = '1.8'

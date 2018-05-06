@@ -12,9 +12,6 @@ buildscript {
 apply plugin: "io.ratpack.ratpack-groovy"
 apply plugin: 'com.github.johnrengelman.shadow'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 mainClassName = "org.consensusj.proxy.ProxyMain"
 
 dependencies {

@@ -35,8 +35,8 @@ allprojects {
 }
 
 subprojects {
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
     dependencies {
         compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"

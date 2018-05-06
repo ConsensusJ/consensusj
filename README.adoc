@@ -73,7 +73,7 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |Name |JDK |Grooviness |Description
 
 |<<bitcoinj-cli,bitcoinj-cli>>
-|7
+|8
 |Tests only
 |Command line RPC tool and CLI support/utility classes
 
@@ -88,7 +88,7 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |Jackson serializers, deserializers & POJOs for Bitcoin JSON-RPC
 
 |<<bitcoinj-server,bitcoinj-server>>
-|8
+|7
 |Tests only (TBD)
 |Service objects used by the server apps 
 
@@ -108,7 +108,7 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |Peer and transaction info over HTTP + WebSocket/STOMP. JSON-RPC server, too.
 
 |<<bitcoinj-money,bitcoinj-money>>
-|7
+|8
 |Tests only (TBD)
 |http://javamoney.github.io[JavaMoney] currency and exchange support. Adapter to use http://knowm.org/open-source/xchange/[XChange] `Exchange` implementations as JavaMoney `ExchangeRateProvider`s.
 
@@ -118,7 +118,7 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |Groovy DSL support.
 
 |<<bitcoinj-spock,bitcoinj-spock>>
-|7
+|8
 |Spock is a Groovy DSL for unit tests
 |https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes.
 |===
