@@ -134,23 +134,25 @@ public class RPCClient extends AbstractRPCClient {
         String exceptionMessage = responseMessage;
         int jsonRPCCode = 0;
         JsonRpcResponse bodyJson = null;    // Body as JSON if available
-        String bodyString = null;               // Body as String if not JSON
+        String bodyString = null;           // Body as String if not JSON
         InputStream errorStream = connection.getErrorStream();
-        if (connection.getContentType().equals("application/json")) {
-            // We got a JSON error response, parse it
-            bodyJson = mapper.readValue(errorStream, JsonRpcResponse.class);
-            JsonRpcError error = bodyJson.getError();
-            if (error != null) {
-                // If there's a more specific message in the JSON use it instead.
-                exceptionMessage = error.getMessage();
-                jsonRPCCode = error.getCode();
-                log.error("json error code: {}, message: {}", jsonRPCCode, exceptionMessage);
+        if (errorStream != null) {
+            if (connection.getContentType().equals("application/json")) {
+                // We got a JSON error response, parse it
+                bodyJson = mapper.readValue(errorStream, JsonRpcResponse.class);
+                JsonRpcError error = bodyJson.getError();
+                if (error != null) {
+                    // If there's a more specific message in the JSON use it instead.
+                    exceptionMessage = error.getMessage();
+                    jsonRPCCode = error.getCode();
+                    log.error("json error code: {}, message: {}", jsonRPCCode, exceptionMessage);
+                }
+            } else {
+                // No JSON, read response body as string
+                bodyString = convertStreamToString(errorStream);
+                log.error("error string: {}", bodyString);
+                errorStream.close();
             }
-        } else {
-            // No JSON, read response body as string
-            bodyString = convertStreamToString(errorStream);
-            log.error("error string: {}", bodyString);
-            errorStream.close();
         }
         throw new JsonRPCStatusException(exceptionMessage, responseCode, responseMessage, jsonRPCCode, bodyString, bodyJson);
     }
