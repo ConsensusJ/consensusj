@@ -5,9 +5,21 @@ A high-level view of the changes in each bitcoinj-addons binary release.
 
 == v0.2.7-SNAPSHOT
 
+=== *bitcoinj-cli*
+
+* BREAKING: Upgrade to Java 8
+
+=== *bitcoinj-money*
+
+* BREAKING: Upgrade to Java 8
+
 ==== *bitcoinj-proxy*
 
 * Upgrade to Ratpack 1.5.4
+
+=== *bitcoinj-spock*
+
+* BREAKING: Upgrade to Java 8
 
 ==== *All submodules*
 
