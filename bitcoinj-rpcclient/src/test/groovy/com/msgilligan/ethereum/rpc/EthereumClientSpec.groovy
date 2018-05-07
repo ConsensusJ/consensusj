@@ -1,11 +1,9 @@
 package com.msgilligan.ethereum.rpc
 
+import org.consensusj.jsonrpc.JsonRPCStatusException
 import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
-
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 
 /**
  * Test the few implemented static methods
@@ -16,12 +14,12 @@ class EthereumClientSpec extends Specification {
     @Shared EthereumClient client
 
     void setup() {
-        client = new EthereumClient()
+        client = new EthereumClient(InfuraHosts.INFURA_MAINNET_HOST, null,null)
     }
 
     def "constructor works correctly" () {
         expect:
-        client.serverURI == EthereumClient.DEFAULT_LOCALHOST
+        client
     }
 
     def "can check eth version" () {
@@ -29,7 +27,7 @@ class EthereumClientSpec extends Specification {
         def version = client.ethProtocolVersion()
 
         then:
-        version == "63"
+        version == "0x3f"
     }
 
     def "can check eth block number" () {
@@ -46,26 +44,25 @@ class EthereumClientSpec extends Specification {
         def expectedBalance = 0.0 * (10**18)
         
         when:
-        def balance = client.ethGetBalance(testAddr)
+        def balance = client.ethGetBalance(testAddr, "latest")
 
         then:
         balance == expectedBalance
     }
 
-    //@Ignore
     def "can make an eth call (check ERC-20 balance)" () {
         given:
         //def methodHash = client.web3Sha3('balanceOf(address)'.getBytes(StandardCharsets.UTF_8).encodeHex().toString())
         // data = methodHash + left-zero-filled address to query
         def data = "0x70a08231000000000000000000000000ab11204cfeaccffa63c2d23aef2ea9accdb0a0d5"
-        def callObject = new EthTxCallObject(null,
+        def callObject = new EthTxCallObject("0x48c80F1f4D53D5951e5D5438B54Cba84f29F32a5",
                 "0x48c80F1f4D53D5951e5D5438B54Cba84f29F32a5",  // REP (Augur)
-                null,
-                null,
-                null,
+                "0x0",
+                "0x0",
+                "0x0",
                 data )
         when:
-        String resultStr = client.ethCall(callObject)
+        String resultStr = client.ethCall(callObject, "latest")
         BigInteger balance = client.quantityToInt(resultStr)
 
         then:
@@ -77,7 +74,7 @@ class EthereumClientSpec extends Specification {
         String version = client.web3ClientVersion()
 
         then:
-        version == "Parity//v1.6.8-beta-c396229-20170608/x86_64-macos/rustc1.17.0"
+        version =~ /Geth\/.*/
     }
 
     def "can do a Keccak-256  hash (web3)" () {
@@ -91,22 +88,21 @@ class EthereumClientSpec extends Specification {
         hashed == "0x47173285a8d7341e5e972fc677286384f802f8ef42a5ec5f03bbfa254cb01fad"
     }
 
-    @Ignore("not supported in Parity")
-    def     "can start mining" () {
+    def "can start mining" () {
         when:
         def result = client.minerStart(3)
 
         then:
-        result == true
+        JsonRPCStatusException e = thrown()
+        e.httpMessage == "Method Not Allowed"
     }
 
-    @Ignore("not supported in Parity")
     def "can stop mining" () {
         when:
         def result = client.minerStop()
 
         then:
-        result == true
+        JsonRPCStatusException e = thrown()
+        e.httpMessage == "Method Not Allowed"
     }
-
 }

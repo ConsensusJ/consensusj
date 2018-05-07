@@ -36,7 +36,7 @@ public class EthereumClient extends RPCClient {
      * @param rpcuser     username for the RPC HTTP connection
      * @param rpcpassword password for the RPC HTTP connection
      */
-    private EthereumClient(URI server, String rpcuser, String rpcpassword) {
+    public EthereumClient(URI server, String rpcuser, String rpcpassword) {
         super(server, rpcuser, rpcpassword);
     }
 
@@ -63,13 +63,13 @@ public class EthereumClient extends RPCClient {
         return blockNum;
     }
 
-    public BigInteger ethGetBalance(String address) throws IOException, JsonRPCStatusException {
-        String weiAsHexString = this.send("eth_getBalance", address);
+    public BigInteger ethGetBalance(String address, String block) throws IOException, JsonRPCStatusException {
+        String weiAsHexString = this.send("eth_getBalance", address, block);
         return quantityToInt(weiAsHexString);
     }
 
-    public String ethCall(EthTxCallObject callObject) throws IOException, JsonRPCStatusException {
-        String data = this.send("eth_call", callObject);
+    public String ethCall(EthTxCallObject callObject, String block) throws IOException, JsonRPCStatusException {
+        String data = this.send("eth_call", callObject, block);
         return data;
     }
 

@@ -2,6 +2,8 @@ package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.msgilligan.bitcoinj.json.conversion.NumberStringSerializer;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -72,6 +74,7 @@ public class JsonRpcRequest {
         return method;
     }
 
+    @JsonSerialize(using=NumberStringSerializer.class)
     public String getId() {
         return id;
     }
@@ -95,5 +98,4 @@ public class JsonRpcRequest {
         }
         return cleaned;
     }
-
 }
