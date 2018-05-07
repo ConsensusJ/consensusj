@@ -1,8 +1,8 @@
 = bitcoinj-cli(1)
 Sean Gilligan
 :doctype: manpage
-:man manual: bitcoinj-addons Manual
-:man source: bitcoinj-addons 0.0.8
+:man manual: consensusj Manual
+:man source: consensusj 0.0.8
 :page-layout: base
 
 == NAME
@@ -88,15 +88,15 @@ Refer to the *bitcoinj-addons* issue tracker at https://github.com/msgilligan/bi
 
 *bitcoinj-cli* was written by Sean Gilligan.
 
-*bitcoinj-addons* was written by Sean Gilligan and DexX7.
+*consensusj* was written by Sean Gilligan and DexX7.
 
 *bitcoinj* was written by the bitcoinj project team.
 
 == RESOURCES
 
-*Git source repository on GitHub:* https://github.com/msgilligan/bitcoinj-addons
+*Git source repository on GitHub:* https://github.com/ConsensusJ/consensusj
 
 == COPYING
 
-Copyright \(C) 2014-2015 Sean Gilligan.
+Copyright \(C) 2014-2018 Sean Gilligan.
 Free use of this software is granted under the terms of the Apache Software License v2.

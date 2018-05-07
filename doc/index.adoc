@@ -1,15 +1,15 @@
-= bitcoinj-addons Github Pages
+= consensusj Github Pages
 Sean Gilligan
-v0.1, September 12, 2015: Stub
+v0.2, May 6, 2018: Stub
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
-Welcome to the GitHub Project Pages for *bitcoinj-addons*.
+Welcome to the GitHub Project Pages for *consensusj*.
 
 == Project Documentation
 
-The starting point for documentation on *bitcoinj-addons* is the https://github.com/msgilligan/bitcoinj-addons/blob/master/README.adoc[README] file. It contains links to all other documentation.
+The starting point for documentation on *ConsensusJ* is the https://github.com/ConsensusJ/consensusj/blob/master/README.adoc[README] file. It contains links to all other documentation.
 
-The main purpose of the GitHub Project Pages is to host the http://msgilligan.github.io/bitcoinj-addons/apidoc/index.html[API Documentation].
+The main purpose of the GitHub Project Pages is to host the http://consensusj.github.io/consensusj/apidoc/index.html[API Documentation].
 
 There is also the beginnings of a <<addons-user-guide.adoc#,User's Guide>>.
 

@@ -7,7 +7,7 @@
  * skinparam shadowing false
  * hide empty members
  *
- * namespace com.msgilligan.jsonrpc {
+ * namespace org.consensusj.jsonrpc {
  * interface UntypedRPCClient
  * abstract class AbstractRPCClient
  *

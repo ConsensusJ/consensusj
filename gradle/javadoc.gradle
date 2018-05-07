@@ -19,9 +19,9 @@ def javadocSpec = {
     options.addStringOption '-gem-path', 'build/vendor'
     options.addStringOption '-attribute', 'data-uri'
     options.links(  'https://docs.oracle.com/javase/7/docs/api/',
-                    'https://bitcoinj.github.io/javadoc/0.14.5/',
-                    'https://fasterxml.github.io/jackson-core/javadoc/2.8/',
-                    'https://fasterxml.github.io/jackson-databind/javadoc/2.8/')
+                    "https://bitcoinj.github.io/javadoc/${bitcoinjVersion}/",
+                    "https://fasterxml.github.io/jackson-core/javadoc/2.9/",
+                    "https://fasterxml.github.io/jackson-databind/javadoc/2.9/")
 
 }
 

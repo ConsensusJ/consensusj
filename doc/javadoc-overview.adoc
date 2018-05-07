@@ -1,4 +1,4 @@
-= bitcoinj-addons: JSON-RPC client and server, command-line tool, DSL, and more
+= ConsensusJ: JSON-RPC client and server, command-line tool, DSL, and more
 
 Modules include:
 
@@ -11,4 +11,4 @@ Modules include:
 * **bitcoinj-peerserver** - A web application that connects to the P2P network and streams events to a browser using the STOMP protocol over *WebSocket*.
 * Functional tests of bitcoind (and bitcoinj-daemon) JSON-RPC services, that run in https://bitcoinj.github.io/testing#regression-test-mode[regression test mode].
 
-This is consolidated JavaDoc for multiple JAR modules. See https://github.com/msgilligan/bitcoinj-addons#modules[Modules] in the README for details.
+This is consolidated JavaDoc for multiple JAR modules. See https://github.com/ConsensusJ/consensusj#modules[Modules] in the README for details.
