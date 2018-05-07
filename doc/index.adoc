@@ -1,9 +1,9 @@
-= consensusj Github Pages
+= ConsensusJ Github Pages
 Sean Gilligan
 v0.2, May 6, 2018: Stub
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
-Welcome to the GitHub Project Pages for *consensusj*.
+Welcome to the GitHub Project Pages for *ConsensusJ*.
 
 == Project Documentation
 
