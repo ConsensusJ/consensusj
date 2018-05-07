@@ -6,7 +6,6 @@ com.msgilligan.bitcoinj.json.conversion
 com.msgilligan.bitcoinj.json.pojo
 com.msgilligan.bitcoinj.money
 com.msgilligan.bitcoinj.peerserver
-com.msgilligan.bitcoinj.proxy
 com.msgilligan.bitcoinj.rpc
 com.msgilligan.bitcoinj.rpc.bitcoind
 com.msgilligan.bitcoinj.rpc.test
@@ -16,11 +15,12 @@ com.msgilligan.bitcoinj.spring.controller
 com.msgilligan.bitcoinj.spring.service
 com.msgilligan.bitcoinj.test
 com.msgilligan.ethereum.rpc
-com.msgilligan.jsonrpc
-com.msgilligan.jsonrpc.ratpack
-com.msgilligan.jsonrpc.ratpack.authext
-com.msgilligan.jsonrpc.util
 com.msgilligan.namecoinj.cli
 com.msgilligan.namecoinj.core
 com.msgilligan.namecoinj.json.pojo
 com.msgilligan.namecoinj.rpc
+org.consensusj.jsonrpc
+org.consensusj.jsonrpc.ratpack
+org.consensusj.jsonrpc.ratpack.authext
+org.consensusj.jsonrpc.util
+org.consensusj.proxy
