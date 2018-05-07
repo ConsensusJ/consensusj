@@ -191,7 +191,7 @@ These sample Spock "feature tests" show the RPC client in action and are from th
 [#bitcoinj-json]
 ==== bitcoinj-json
 
-http://wiki.fasterxml.com/JacksonHome[Jackson] serializers, deserializers & POJOs used to create and parse JSON by both client and server implementations of Bitcoin JSON-RPC.
+https://github.com/FasterXML/jackson/wiki[Jackson] serializers, deserializers & POJOs used to create and parse JSON by both client and server implementations of Bitcoin JSON-RPC.
 
 [#bitcoinj-server]
 ==== bitcoinj-server
@@ -201,7 +201,7 @@ Service objects that power the Daemon and PeerServer. Some objects, such as {cj-
 [#bitcoinj-daemon]
 ==== bitcoinj-daemon
 
-A starting point for building a complete `bitcoind` equivalent using **bitcoinj**. Currently serves a very https://github.com/msgilligan/bitcoinj-addons/blob/master/bitcoinj-json/src/main/java/com/msgilligan/bitcoinj/rpcserver/BitcoinJsonRpc.java[small subset] of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
+A starting point for building a complete `bitcoind` equivalent using **bitcoinj**. Currently serves a very https://github.com/ConsensusJ/consensusj/blob/master/bitcoinj-json/src/main/java/com/msgilligan/bitcoinj/rpcserver/BitcoinJsonRpc.java[small subset] of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
 
 Uses a `PeerGroup` to power the limited RPCs. Will use a `BlockStore`. (Pull requests welcome.)
 
