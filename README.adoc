@@ -3,7 +3,9 @@ Sean Gilligan <https://github.com/msgilligan>
 v0.2.6
 :description: ConensusJ README document.
 :consensusj-version: 0.2.6
-:bitcoinj-version: 0.14.5
+:bitcoinj-version: 0.14.7
+:bitcoinj-apidoc: https://bitcoinj.github.io/javadoc/{bitcoinj-version}/
+:cj-apidoc: https://consensusj.github.io/consensusj/apidoc
 :tip-caption: :bulb:
 :note-caption: :information_source:
 :important-caption: :heavy_exclamation_mark:
@@ -16,8 +18,8 @@ Cryptocurrency libraries based on https://bitcoinj.github.io[bitcoinj], includin
 
 * A *JSON-RPC Java client* for the https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core API]
 * JSON library using https://github.com/FasterXML/jackson[Jackson] to convert between Bitcoin types and JSON
-** *bitcoinj* types <--> JSON (e.g. https://bitcoinj.github.io/javadoc/0.14.3/org/bitcoinj/core/Address.html[Address], https://bitcoinj.github.io/javadoc/0.14.3/org/bitcoinj/core/Sha256Hash.html[Sha256Hash], https://bitcoinj.github.io/javadoc/0.14.3/org/bitcoinj/core/Transaction.html[Transaction])
-** Strongly typed http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/json/pojo/package-summary.html[Java POJOs] <--> Bitcoin Core standard JSON (e.g. http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/json/pojo/BlockChainInfo.html[BlockChainInfo], http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/json/pojo/UnspentOutput.html[UnspentOutput], http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/json/pojo/ChainTip.html[ChainTip])
+** *bitcoinj* types <--> JSON (e.g. {bitcoinj-apidoc}/org/bitcoinj/core/Address.html[Address], {bitcoinj-apidoc}/org/bitcoinj/core/Sha256Hash.html[Sha256Hash], {bitcoinj-apidoc}/org/bitcoinj/core/Transaction.html[Transaction])
+** Strongly typed {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/package-summary.html[Java POJOs] <--> Bitcoin Core standard JSON (e.g. {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/BlockChainInfo.html[BlockChainInfo], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/UnspentOutput.html[UnspentOutput], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/ChainTip.html[ChainTip])
 * https://spring.io[Spring] and https://github.com/google/guice[Guice]-compatible Bitcoin server components for *server-side JSON-RPC*.
 * **bitcoinj-proxy** - A high-performance, non-blocking https://ratpack.io[Ratpack] server for proxying access to *bitcoind* or building Bitcoin-based microservices.
 * **bitcoinj-daemon** - A *Spring Boot*-based framework for a Java-based implementation of *bitcoind*.
@@ -42,7 +44,7 @@ Although the API is changing, binary releases are available on https://bintray.c
 
 === API Documentation
 
-We have published http://msgilligan.github.io/bitcoinj-addons/apidoc/index.html[preliminary JavaDoc] to our Github pages site.
+We have published {cj-apidoc}/index.html[preliminary JavaDoc] to our Github pages site.
 
 === Continuous Integration 
 
@@ -143,7 +145,7 @@ For help type:
 [subs="attributes"]
     java -jar bitcoinj-cli-{consensusj-version}.jar -?
 
-or read the http://msgilligan.github.io/bitcoinj-addons/manpage-bitcoinj-cli.html[manual page].
+or read the http://consensusj.github.io/consensusj/manpage-bitcoinj-cli.html[manual page].
 
 [#bitcoinj-rpcclient]
 ==== bitcoinj-rpcclient: A Bitcoin JSON-RPC client using bitcoinj types
@@ -151,11 +153,11 @@ or read the http://msgilligan.github.io/bitcoinj-addons/manpage-bitcoinj-cli.htm
 If the RPC procedure takes a Bitcoin address as parameter, then the Java method will take an `org.bitcoinj.core.Address`.
 If the RPC returns a transaction, the Java method will return an `org.bitcoinj.core.Transaction`.
 
-See the JavaDoc for http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
+See the JavaDoc for {cj-apidoc}/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
 
 ===== Sample Spock Integration Tests
 
-These sample Spock "feature tests" show the RPC client in action and are from the file https://github.com/msgilligan/bitcoinj-addons/blob/master/bitcoinj-rpcclient/src/integ/groovy/com/msgilligan/bitcoinj/rpc/BitcoinSpec.groovy#L31-L55[BitcoinSpec.groovy].
+These sample Spock "feature tests" show the RPC client in action and are from the file https://github.com/ConsensusJ/consensusj/blob/master/bitcoinj-rpcclient/src/integ/groovy/com/msgilligan/bitcoinj/rpc/BitcoinSpec.groovy#L31-L55[BitcoinSpec.groovy].
 
 [source,groovy]
 ----
@@ -194,7 +196,7 @@ http://wiki.fasterxml.com/JacksonHome[Jackson] serializers, deserializers & POJO
 [#bitcoinj-server]
 ==== bitcoinj-server
 
-Service objects that power the Daemon and PeerServer. Some objects, such as http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/spring/service/PeerGroupService.html[PeerGroupService], rely solely on http://docs.oracle.com/javase/7/docs/api/javax/annotation/package-summary.html[javax.annotation] and https://docs.oracle.com/javaee/6/api/javax/inject/package-summary.html[javax.inject] for configuration and can be wired with either Spring or (in theory)  https://github.com/google/guice[Guice]. The current focus is on http://projects.spring.io/spring-boot/[Spring Boot], but we're hoping to build a http://ratpack.io[Ratpack] server in the future.
+Service objects that power the Daemon and PeerServer. Some objects, such as {cj-apidoc}/com/msgilligan/bitcoinj/spring/service/PeerGroupService.html[PeerGroupService], rely solely on http://docs.oracle.com/javase/7/docs/api/javax/annotation/package-summary.html[javax.annotation] and https://docs.oracle.com/javaee/6/api/javax/inject/package-summary.html[javax.inject] for configuration and can be wired with either Spring or (in theory)  https://github.com/google/guice[Guice]. The current focus is on http://projects.spring.io/spring-boot/[Spring Boot], but we're hoping to build a http://ratpack.io[Ratpack] server in the future.
 
 [#bitcoinj-daemon]
 ==== bitcoinj-daemon
