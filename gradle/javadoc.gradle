@@ -18,7 +18,10 @@ def javadocSpec = {
     options.addStringOption '-gem-path', 'build/vendor'
     options.addStringOption '-attribute', 'data-uri'
     options.addBooleanOption 'linksource', true         // include link to HTML source file
-    //options.addBooleanOption 'html5', true            // Requires JDK 9+ (TBD)
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption 'html5', true            // Requires JDK 9+
+        // Also requires changes to asciidoclet that will hopefully be in asciidoclet 1.5.5
+    }
 
     options.links(  'https://docs.oracle.com/javase/7/docs/api/',
                     "https://bitcoinj.github.io/javadoc/${bitcoinjVersion}/",
@@ -35,7 +38,7 @@ allprojects {
     
     dependencies {
         asciidoclet 'org.asciidoctor:asciidoclet:1.5.4'
-        asciidoclet 'org.asciidoctor:asciidoctorj-diagram:1.5.4.1'
+        asciidoclet 'org.asciidoctor:asciidoctorj-diagram:1.5.8'
     }
 
     javadoc javadocSpec

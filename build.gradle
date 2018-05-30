@@ -3,12 +3,12 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.asciidoctor:asciidoctorj-diagram:1.5.4.1'
+        classpath 'org.asciidoctor:asciidoctorj-diagram:1.5.8'
     }
 }
 
 plugins {
-    id 'org.asciidoctor.convert'        version '1.5.3'
+    id 'org.asciidoctor.convert'        version '1.5.7'
     id 'com.jfrog.bintray'              version '1.7.3'
     id 'org.ajoberstar.grgit'           version '2.2.0'
     id 'org.ajoberstar.git-publish'     version '0.4.1'
