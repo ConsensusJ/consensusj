@@ -69,7 +69,7 @@ public class RawTransactionInfo {
         this.blocktime = this.time; // same as time (see API doc)
         vin = new VinList();
         for (TransactionInput input : transaction.getInputs()) {
-            vin.add(new Vin(input.getHash(),
+            vin.add(new Vin(txid,
                             input.getOutpoint().getIndex(),
                             input.getScriptSig().toString(),
                             input.getSequenceNumber()));
