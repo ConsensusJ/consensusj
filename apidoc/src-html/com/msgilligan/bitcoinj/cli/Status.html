@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.cli;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import org.consensusj.jsonrpc.JsonRPCException;</a>
+<span class="sourceLineNo">006</span><a id="line.6"></a>
+<span class="sourceLineNo">007</span><a id="line.7">import java.io.IOException;</a>
+<span class="sourceLineNo">008</span><a id="line.8"></a>
+<span class="sourceLineNo">009</span><a id="line.9">/**</a>
+<span class="sourceLineNo">010</span><a id="line.10"> * A command-line client that prints some basic information retrieved via RPC</a>
+<span class="sourceLineNo">011</span><a id="line.11"> */</a>
+<span class="sourceLineNo">012</span><a id="line.12">public class Status extends CliCommand {</a>
+<span class="sourceLineNo">013</span><a id="line.13">    public final static String commandName = "btcstatus";</a>
+<span class="sourceLineNo">014</span><a id="line.14"></a>
+<span class="sourceLineNo">015</span><a id="line.15">    public Status(String[] args) {</a>
+<span class="sourceLineNo">016</span><a id="line.16">        super(commandName, new CliOptions(), args);</a>
+<span class="sourceLineNo">017</span><a id="line.17">    }</a>
+<span class="sourceLineNo">018</span><a id="line.18"></a>
+<span class="sourceLineNo">019</span><a id="line.19">    public static void main(String[] args) {</a>
+<span class="sourceLineNo">020</span><a id="line.20">        Status command = new Status(args);</a>
+<span class="sourceLineNo">021</span><a id="line.21">        Integer status = command.run();</a>
+<span class="sourceLineNo">022</span><a id="line.22">        System.exit(status);</a>
+<span class="sourceLineNo">023</span><a id="line.23">    }</a>
+<span class="sourceLineNo">024</span><a id="line.24"></a>
+<span class="sourceLineNo">025</span><a id="line.25">    @Override</a>
+<span class="sourceLineNo">026</span><a id="line.26">    public Integer runImpl() throws IOException {</a>
+<span class="sourceLineNo">027</span><a id="line.27">        NetworkInfo networkInfo;</a>
+<span class="sourceLineNo">028</span><a id="line.28">        BlockChainInfo chainInfo;</a>
+<span class="sourceLineNo">029</span><a id="line.29">        try {</a>
+<span class="sourceLineNo">030</span><a id="line.30">            networkInfo = client.getNetworkInfo();</a>
+<span class="sourceLineNo">031</span><a id="line.31">            chainInfo = client.getBlockChainInfo();</a>
+<span class="sourceLineNo">032</span><a id="line.32">        } catch (JsonRPCException e) {</a>
+<span class="sourceLineNo">033</span><a id="line.33">            e.printStackTrace();</a>
+<span class="sourceLineNo">034</span><a id="line.34">            return 1;</a>
+<span class="sourceLineNo">035</span><a id="line.35">        }</a>
+<span class="sourceLineNo">036</span><a id="line.36"></a>
+<span class="sourceLineNo">037</span><a id="line.37">        Integer bitcoinVersion = networkInfo.getVersion();</a>
+<span class="sourceLineNo">038</span><a id="line.38">        Integer blocks = chainInfo.getBlocks();</a>
+<span class="sourceLineNo">039</span><a id="line.39"></a>
+<span class="sourceLineNo">040</span><a id="line.40">        pwout.println("Bitcoin Core Version: " + bitcoinVersion);</a>
+<span class="sourceLineNo">041</span><a id="line.41">        pwout.println("Block count: " + blocks);</a>
+<span class="sourceLineNo">042</span><a id="line.42">        return 0;</a>
+<span class="sourceLineNo">043</span><a id="line.43">    }</a>
+<span class="sourceLineNo">044</span><a id="line.44">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>
