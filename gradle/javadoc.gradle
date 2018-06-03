@@ -35,9 +35,15 @@ allprojects {
     configurations {
         asciidoclet
     }
-    
+
+    repositories {
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+    }
+
     dependencies {
-        asciidoclet 'org.asciidoctor:asciidoclet:1.5.4'
+        asciidoclet 'org.asciidoctor:asciidoclet:1.5.5-SNAPSHOT'
         asciidoclet 'org.asciidoctor:asciidoctorj-diagram:1.5.8'
     }
 
