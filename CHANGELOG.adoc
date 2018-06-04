@@ -26,9 +26,11 @@ A high-level view of the changes in each bitcoinj-addons binary release.
 
 * Upgrade to bitcoinj 0.14.7
 * Upgrade to Jackson 2.9.5
-* Upgrade to Groovy 2.5.0-rc-3
+* Upgrade to Groovy 2.5.0
 * Upgrade to Spring Boot 2.0.1.RELEASE
 * Upgrade to Gradle 4.7
+* Upgrade to newer Asciidoctor components
+* Upgrade to Asciidoclet 1.5.5-SNAPSHOT for Java 9+ Javadoc
 
 == v0.2.6
 
