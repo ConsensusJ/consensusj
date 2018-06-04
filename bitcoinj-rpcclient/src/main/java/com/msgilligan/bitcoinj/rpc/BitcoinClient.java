@@ -43,7 +43,7 @@ import java.util.Map;
 /**
  * = JSON-RPC Client for *Bitcoin Core*
  *
- * A strongly-typed wrapper for the
+ * A strongly-typed wrapper for a {@index Bitcoin} RPC client using the
  * https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core JSON-RPC API].
  * https://bitcoinj.github.io[bitcoinj] types are used where appropriate.
  * For example, requesting a block hash will return a {@link org.bitcoinj.core.Sha256Hash}:
