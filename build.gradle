@@ -8,10 +8,20 @@ buildscript {
 }
 
 plugins {
+    id 'com.gradle.build-scan'          version '1.13.4'
     id 'org.asciidoctor.convert'        version '1.5.7'
     id 'com.jfrog.bintray'              version '1.7.3'
     id 'org.ajoberstar.grgit'           version '2.2.0'
     id 'org.ajoberstar.git-publish'     version '0.4.1'
+}
+
+buildScan {
+    if (System.getenv('CI')) {
+        publishAlways()
+        tag 'CI'
+    }
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
 }
 
 allprojects {
