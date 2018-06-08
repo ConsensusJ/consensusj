@@ -5,6 +5,34 @@
     "allPublicMethods" : true
   },
   {
+    "name" : "org.consensusj.jsonrpc.JsonRpcResponse",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "methods" : [
+      { "name" : "<init>", "parameterTypes" : [] }
+    ]
+  },
+  {
+    "name" : "org.consensusj.jsonrpc.JsonRpcError",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "methods" : [
+      { "name" : "<init>", "parameterTypes" : [] }
+    ]
+  },
+  {
+    "name" : "com.msgilligan.bitcoinj.json.conversion.NumberStringSerializer",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "methods" : [
+      { "name" : "<init>", "parameterTypes" : [] }
+    ]
+  },
+  {
     "name" : "java.lang.Object",
     "allDeclaredMethods" : true,
     "allPublicMethods" : true
