@@ -1,7 +1,7 @@
 apply plugin: 'org.ajoberstar.git-publish'
 
 def siteDir = "$buildDir/site"
-def apiDocDir = "$buildDir/alljavadoc"
+def apiDocDir = "$buildDir/docs/javadoc"
 
 gitPublish {
     repoUri = 'git@github.com:ConsensusJ/consensusj.git'
@@ -10,10 +10,8 @@ gitPublish {
 
     // what to publish, this is a standard CopySpec
     contents {
-        from(file("$siteDir")) {
-            into '.'
-        }
-        from(file("$apiDocDir")) {
+        from("$siteDir")
+        from("$apiDocDir") {
             into 'apidoc'
         }
     }

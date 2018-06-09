@@ -54,7 +54,6 @@ allprojects {
 task javadocAll(type: Javadoc) {
     source subprojects.collect {project -> project.sourceSets.main.allJava }
     classpath = files(subprojects.collect {project -> project.sourceSets.main.compileClasspath})
-    destinationDir = new File(buildDir, 'alljavadoc')
 }
 javadocAll javadocSpec << {
     options.overview = "doc/javadoc-overview.adoc"
