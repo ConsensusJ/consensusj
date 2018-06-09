@@ -1,242 +1,243 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
 <body>
+<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.cli;<a name="line.1"></a>
-<span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import com.msgilligan.bitcoinj.rpc.bitcoind.BitcoinConfFile;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import org.consensusj.jsonrpc.JsonRPCException;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import org.apache.commons.cli.CommandLine;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import org.apache.commons.cli.CommandLineParser;<a name="line.6"></a>
-<span class="sourceLineNo">007</span>import org.apache.commons.cli.DefaultParser;<a name="line.7"></a>
-<span class="sourceLineNo">008</span>import org.apache.commons.cli.HelpFormatter;<a name="line.8"></a>
-<span class="sourceLineNo">009</span>import org.apache.commons.cli.ParseException;<a name="line.9"></a>
-<span class="sourceLineNo">010</span><a name="line.10"></a>
-<span class="sourceLineNo">011</span>import java.io.IOException;<a name="line.11"></a>
-<span class="sourceLineNo">012</span>import java.io.InputStream;<a name="line.12"></a>
-<span class="sourceLineNo">013</span>import java.io.OutputStreamWriter;<a name="line.13"></a>
-<span class="sourceLineNo">014</span>import java.io.PrintStream;<a name="line.14"></a>
-<span class="sourceLineNo">015</span>import java.io.PrintWriter;<a name="line.15"></a>
-<span class="sourceLineNo">016</span>import java.net.URI;<a name="line.16"></a>
-<span class="sourceLineNo">017</span>import java.net.URISyntaxException;<a name="line.17"></a>
-<span class="sourceLineNo">018</span>import java.nio.charset.StandardCharsets;<a name="line.18"></a>
-<span class="sourceLineNo">019</span><a name="line.19"></a>
-<span class="sourceLineNo">020</span>import com.msgilligan.bitcoinj.rpc.BitcoinClient;<a name="line.20"></a>
-<span class="sourceLineNo">021</span>import com.msgilligan.bitcoinj.rpc.RPCConfig;<a name="line.21"></a>
-<span class="sourceLineNo">022</span>import org.bitcoinj.core.NetworkParameters;<a name="line.22"></a>
-<span class="sourceLineNo">023</span>import org.bitcoinj.params.MainNetParams;<a name="line.23"></a>
-<span class="sourceLineNo">024</span>import org.bitcoinj.params.RegTestParams;<a name="line.24"></a>
-<span class="sourceLineNo">025</span>import org.bitcoinj.params.TestNet3Params;<a name="line.25"></a>
-<span class="sourceLineNo">026</span><a name="line.26"></a>
-<span class="sourceLineNo">027</span>/**<a name="line.27"></a>
-<span class="sourceLineNo">028</span> * Base class for CLI commands that use Bitcoin RPC<a name="line.28"></a>
-<span class="sourceLineNo">029</span> */<a name="line.29"></a>
-<span class="sourceLineNo">030</span>public abstract class CliCommand {<a name="line.30"></a>
-<span class="sourceLineNo">031</span>    static final String defaultproto = "http";<a name="line.31"></a>
-<span class="sourceLineNo">032</span>    static final String defaulthost = "127.0.0.1";<a name="line.32"></a>
-<span class="sourceLineNo">033</span>    static final int defaultport = 8332;<a name="line.33"></a>
-<span class="sourceLineNo">034</span>    static final String defaultfile = "/";<a name="line.34"></a>
-<span class="sourceLineNo">035</span><a name="line.35"></a>
-<span class="sourceLineNo">036</span>    protected CommandLine line = null;<a name="line.36"></a>
-<span class="sourceLineNo">037</span>    protected CommandLineParser parser = null;<a name="line.37"></a>
-<span class="sourceLineNo">038</span>    protected CliOptions options;<a name="line.38"></a>
-<span class="sourceLineNo">039</span>    protected String name;<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    protected String usage;<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    protected HelpFormatter formatter = null;<a name="line.41"></a>
-<span class="sourceLineNo">042</span><a name="line.42"></a>
-<span class="sourceLineNo">043</span>    protected InputStream in;<a name="line.43"></a>
-<span class="sourceLineNo">044</span>    protected PrintWriter pwout;<a name="line.44"></a>
-<span class="sourceLineNo">045</span>    protected PrintWriter pwerr;<a name="line.45"></a>
-<span class="sourceLineNo">046</span><a name="line.46"></a>
-<span class="sourceLineNo">047</span>    protected BitcoinClient client = null;<a name="line.47"></a>
-<span class="sourceLineNo">048</span><a name="line.48"></a>
-<span class="sourceLineNo">049</span>    protected CliCommand(String name, CliOptions options, String[] args) {<a name="line.49"></a>
-<span class="sourceLineNo">050</span>        this(name, null, options, args);<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    }<a name="line.51"></a>
-<span class="sourceLineNo">052</span><a name="line.52"></a>
-<span class="sourceLineNo">053</span>    protected CliCommand(String name, String usage, CliOptions options, String[] args) {<a name="line.53"></a>
-<span class="sourceLineNo">054</span>        this.name = name;<a name="line.54"></a>
-<span class="sourceLineNo">055</span>        if (usage != null) {<a name="line.55"></a>
-<span class="sourceLineNo">056</span>            this.usage = usage;<a name="line.56"></a>
-<span class="sourceLineNo">057</span>        } else {<a name="line.57"></a>
-<span class="sourceLineNo">058</span>            this.usage = name;<a name="line.58"></a>
-<span class="sourceLineNo">059</span>        }<a name="line.59"></a>
-<span class="sourceLineNo">060</span>        this.options = options;<a name="line.60"></a>
-<span class="sourceLineNo">061</span>        parser = new DefaultParser();<a name="line.61"></a>
-<span class="sourceLineNo">062</span>        try {<a name="line.62"></a>
-<span class="sourceLineNo">063</span>            this.line = this.parser.parse(options, args);<a name="line.63"></a>
-<span class="sourceLineNo">064</span>        } catch (ParseException e) {<a name="line.64"></a>
-<span class="sourceLineNo">065</span>            e.printStackTrace();<a name="line.65"></a>
-<span class="sourceLineNo">066</span>            throw new RuntimeException(e);<a name="line.66"></a>
-<span class="sourceLineNo">067</span>        }<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    }<a name="line.68"></a>
-<span class="sourceLineNo">069</span><a name="line.69"></a>
-<span class="sourceLineNo">070</span>    public BitcoinClient getClient() {<a name="line.70"></a>
-<span class="sourceLineNo">071</span>        if (client == null) {<a name="line.71"></a>
-<span class="sourceLineNo">072</span>            System.out.println("Connecting to: " + getRPCConfig().getURI());<a name="line.72"></a>
-<span class="sourceLineNo">073</span>            RPCConfig config = getRPCConfig();<a name="line.73"></a>
-<span class="sourceLineNo">074</span>            client = new BitcoinClient( config.getNetParams(),<a name="line.74"></a>
-<span class="sourceLineNo">075</span>                                        config.getURI(),<a name="line.75"></a>
-<span class="sourceLineNo">076</span>                                        config.getUsername(),<a name="line.76"></a>
-<span class="sourceLineNo">077</span>                                        config.getPassword());<a name="line.77"></a>
-<span class="sourceLineNo">078</span>        }<a name="line.78"></a>
-<span class="sourceLineNo">079</span>        return client;<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    }<a name="line.80"></a>
-<span class="sourceLineNo">081</span><a name="line.81"></a>
-<span class="sourceLineNo">082</span>    /**<a name="line.82"></a>
-<span class="sourceLineNo">083</span>     * Can be used by subclasses to set a narrower type<a name="line.83"></a>
-<span class="sourceLineNo">084</span>     * @param client An instance of BitcoinClient or subclass<a name="line.84"></a>
-<span class="sourceLineNo">085</span>     */<a name="line.85"></a>
-<span class="sourceLineNo">086</span>    protected void setClient(BitcoinClient client) {<a name="line.86"></a>
-<span class="sourceLineNo">087</span>        this.client = client;<a name="line.87"></a>
-<span class="sourceLineNo">088</span>    }<a name="line.88"></a>
-<span class="sourceLineNo">089</span><a name="line.89"></a>
-<span class="sourceLineNo">090</span>    public void printHelp() {<a name="line.90"></a>
-<span class="sourceLineNo">091</span>        if (formatter == null) {<a name="line.91"></a>
-<span class="sourceLineNo">092</span>            formatter = new HelpFormatter();<a name="line.92"></a>
-<span class="sourceLineNo">093</span>            formatter.setLongOptPrefix("-");<a name="line.93"></a>
-<span class="sourceLineNo">094</span>        }<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        int leftPad = 4;<a name="line.95"></a>
-<span class="sourceLineNo">096</span>        int descPad = 2;<a name="line.96"></a>
-<span class="sourceLineNo">097</span>        int helpWidth = 120;<a name="line.97"></a>
-<span class="sourceLineNo">098</span>        String header = "";<a name="line.98"></a>
-<span class="sourceLineNo">099</span>        String footer = "";<a name="line.99"></a>
-<span class="sourceLineNo">100</span>        formatter.printHelp(pwout, helpWidth, usage, header, options, leftPad, descPad, footer, false);<a name="line.100"></a>
-<span class="sourceLineNo">101</span>    }<a name="line.101"></a>
-<span class="sourceLineNo">102</span><a name="line.102"></a>
-<span class="sourceLineNo">103</span>    public void printError(String str) {<a name="line.103"></a>
-<span class="sourceLineNo">104</span>        pwout.println(str);<a name="line.104"></a>
-<span class="sourceLineNo">105</span>    }<a name="line.105"></a>
-<span class="sourceLineNo">106</span><a name="line.106"></a>
-<span class="sourceLineNo">107</span>        /**<a name="line.107"></a>
-<span class="sourceLineNo">108</span>         * Check Options and Arguments<a name="line.108"></a>
-<span class="sourceLineNo">109</span>         *<a name="line.109"></a>
-<span class="sourceLineNo">110</span>         * Override to customize behavior.<a name="line.110"></a>
-<span class="sourceLineNo">111</span>         *<a name="line.111"></a>
-<span class="sourceLineNo">112</span>         * @return status code<a name="line.112"></a>
-<span class="sourceLineNo">113</span>         */<a name="line.113"></a>
-<span class="sourceLineNo">114</span>    public Integer checkArgs() {<a name="line.114"></a>
-<span class="sourceLineNo">115</span>        if (line.hasOption("?")) {<a name="line.115"></a>
-<span class="sourceLineNo">116</span>            printHelp();<a name="line.116"></a>
-<span class="sourceLineNo">117</span>            // Return 1 so tool can exit<a name="line.117"></a>
-<span class="sourceLineNo">118</span>            return 1;<a name="line.118"></a>
-<span class="sourceLineNo">119</span>        }<a name="line.119"></a>
-<span class="sourceLineNo">120</span>        return 0;<a name="line.120"></a>
-<span class="sourceLineNo">121</span>    }<a name="line.121"></a>
-<span class="sourceLineNo">122</span><a name="line.122"></a>
-<span class="sourceLineNo">123</span>    /**<a name="line.123"></a>
-<span class="sourceLineNo">124</span>     * Initial a client and if rpcwait option set, make sure server is accepting connections.<a name="line.124"></a>
-<span class="sourceLineNo">125</span>     * @return status code<a name="line.125"></a>
-<span class="sourceLineNo">126</span>     */<a name="line.126"></a>
-<span class="sourceLineNo">127</span>    public Integer preflight() {<a name="line.127"></a>
-<span class="sourceLineNo">128</span>        getClient();<a name="line.128"></a>
-<span class="sourceLineNo">129</span>        if (line.hasOption("rpcwait")) {<a name="line.129"></a>
-<span class="sourceLineNo">130</span>            boolean available = false;   // Wait up to 1 hour<a name="line.130"></a>
-<span class="sourceLineNo">131</span>            try {<a name="line.131"></a>
-<span class="sourceLineNo">132</span>                available = client.waitForServer(60*60);<a name="line.132"></a>
-<span class="sourceLineNo">133</span>            } catch (JsonRPCException e) {<a name="line.133"></a>
-<span class="sourceLineNo">134</span>                this.pwerr.println("JSON-RPC Exception: " + e.getMessage());<a name="line.134"></a>
-<span class="sourceLineNo">135</span>                return 1;<a name="line.135"></a>
-<span class="sourceLineNo">136</span>            }<a name="line.136"></a>
-<span class="sourceLineNo">137</span>            if (!available) {<a name="line.137"></a>
-<span class="sourceLineNo">138</span>                this.pwerr.println("Timeout error.");<a name="line.138"></a>
-<span class="sourceLineNo">139</span>                return 1;<a name="line.139"></a>
-<span class="sourceLineNo">140</span>            }<a name="line.140"></a>
-<span class="sourceLineNo">141</span>        }<a name="line.141"></a>
-<span class="sourceLineNo">142</span>        return 0;<a name="line.142"></a>
-<span class="sourceLineNo">143</span>    }<a name="line.143"></a>
-<span class="sourceLineNo">144</span><a name="line.144"></a>
-<span class="sourceLineNo">145</span>    public Integer run() {<a name="line.145"></a>
-<span class="sourceLineNo">146</span>        return run(System.in, System.out, System.err);<a name="line.146"></a>
-<span class="sourceLineNo">147</span>    }<a name="line.147"></a>
-<span class="sourceLineNo">148</span><a name="line.148"></a>
-<span class="sourceLineNo">149</span>    public Integer run(InputStream in, PrintStream out, PrintStream err) {<a name="line.149"></a>
-<span class="sourceLineNo">150</span>        this.in = in;<a name="line.150"></a>
-<span class="sourceLineNo">151</span>        this.pwout = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);<a name="line.151"></a>
-<span class="sourceLineNo">152</span>        this.pwerr = new PrintWriter(new OutputStreamWriter(err, StandardCharsets.UTF_8), true);<a name="line.152"></a>
-<span class="sourceLineNo">153</span><a name="line.153"></a>
-<span class="sourceLineNo">154</span>        Integer status = checkArgs();<a name="line.154"></a>
-<span class="sourceLineNo">155</span>        if (status != 0) {<a name="line.155"></a>
-<span class="sourceLineNo">156</span>            return status;<a name="line.156"></a>
-<span class="sourceLineNo">157</span>        }<a name="line.157"></a>
-<span class="sourceLineNo">158</span><a name="line.158"></a>
-<span class="sourceLineNo">159</span>        status = preflight();<a name="line.159"></a>
-<span class="sourceLineNo">160</span>        if (status != 0) {<a name="line.160"></a>
-<span class="sourceLineNo">161</span>            return status;<a name="line.161"></a>
-<span class="sourceLineNo">162</span>        }<a name="line.162"></a>
-<span class="sourceLineNo">163</span><a name="line.163"></a>
-<span class="sourceLineNo">164</span>        try {<a name="line.164"></a>
-<span class="sourceLineNo">165</span>            status = runImpl();<a name="line.165"></a>
-<span class="sourceLineNo">166</span>        } catch (JsonRPCException e) {<a name="line.166"></a>
-<span class="sourceLineNo">167</span>            e.printStackTrace();<a name="line.167"></a>
-<span class="sourceLineNo">168</span>            status = 1;<a name="line.168"></a>
-<span class="sourceLineNo">169</span>        } catch (IOException e) {<a name="line.169"></a>
-<span class="sourceLineNo">170</span>            e.printStackTrace();<a name="line.170"></a>
-<span class="sourceLineNo">171</span>            status = 1;<a name="line.171"></a>
-<span class="sourceLineNo">172</span>        }<a name="line.172"></a>
-<span class="sourceLineNo">173</span>        return status;<a name="line.173"></a>
-<span class="sourceLineNo">174</span>    }<a name="line.174"></a>
-<span class="sourceLineNo">175</span><a name="line.175"></a>
-<span class="sourceLineNo">176</span>    /**<a name="line.176"></a>
-<span class="sourceLineNo">177</span>     * Implement in subclasses<a name="line.177"></a>
-<span class="sourceLineNo">178</span>     * @return status code<a name="line.178"></a>
-<span class="sourceLineNo">179</span>     */<a name="line.179"></a>
-<span class="sourceLineNo">180</span>    abstract protected Integer runImpl() throws IOException, JsonRPCException;<a name="line.180"></a>
-<span class="sourceLineNo">181</span><a name="line.181"></a>
-<span class="sourceLineNo">182</span>    private URI getServerURI(URI confFileURI) {<a name="line.182"></a>
-<span class="sourceLineNo">183</span>        String proto = confFileURI.getScheme();<a name="line.183"></a>
-<span class="sourceLineNo">184</span>        String host = confFileURI.getHost();<a name="line.184"></a>
-<span class="sourceLineNo">185</span>        int port = confFileURI.getPort();<a name="line.185"></a>
-<span class="sourceLineNo">186</span>        String file = confFileURI.getPath();<a name="line.186"></a>
-<span class="sourceLineNo">187</span><a name="line.187"></a>
-<span class="sourceLineNo">188</span>        if (line.hasOption("rpcssl")) {<a name="line.188"></a>
-<span class="sourceLineNo">189</span>            proto = "https";<a name="line.189"></a>
-<span class="sourceLineNo">190</span>        }<a name="line.190"></a>
-<span class="sourceLineNo">191</span>        if (line.hasOption("rpcconnect")) {<a name="line.191"></a>
-<span class="sourceLineNo">192</span>            host = line.getOptionValue("rpcconnect", host);<a name="line.192"></a>
-<span class="sourceLineNo">193</span>        }<a name="line.193"></a>
-<span class="sourceLineNo">194</span>        if (line.hasOption("regtest") || line.hasOption("testnet")) {<a name="line.194"></a>
-<span class="sourceLineNo">195</span>            port = 18332;<a name="line.195"></a>
-<span class="sourceLineNo">196</span>        }<a name="line.196"></a>
-<span class="sourceLineNo">197</span>        if (line.hasOption("rpcport")) {<a name="line.197"></a>
-<span class="sourceLineNo">198</span>            String portString = line.getOptionValue("rpcport");<a name="line.198"></a>
-<span class="sourceLineNo">199</span>            port = Integer.parseInt(portString);<a name="line.199"></a>
-<span class="sourceLineNo">200</span>        }<a name="line.200"></a>
-<span class="sourceLineNo">201</span>        URI rpcServerURI = null;<a name="line.201"></a>
-<span class="sourceLineNo">202</span>        try {<a name="line.202"></a>
-<span class="sourceLineNo">203</span>            rpcServerURI = new URI(proto, null, host, port, file, null, null);<a name="line.203"></a>
-<span class="sourceLineNo">204</span>        } catch (URISyntaxException e) {<a name="line.204"></a>
-<span class="sourceLineNo">205</span>            // We should be careful that this never happens<a name="line.205"></a>
-<span class="sourceLineNo">206</span>            e.printStackTrace();<a name="line.206"></a>
-<span class="sourceLineNo">207</span>            // But if it does, throw an unchecked exception<a name="line.207"></a>
-<span class="sourceLineNo">208</span>            throw new RuntimeException(e);<a name="line.208"></a>
-<span class="sourceLineNo">209</span>        }<a name="line.209"></a>
-<span class="sourceLineNo">210</span>        return rpcServerURI;<a name="line.210"></a>
-<span class="sourceLineNo">211</span>    }<a name="line.211"></a>
-<span class="sourceLineNo">212</span><a name="line.212"></a>
-<span class="sourceLineNo">213</span>    protected RPCConfig getRPCConfig() {<a name="line.213"></a>
-<span class="sourceLineNo">214</span>        RPCConfig confFileConfig = BitcoinConfFile.readDefaultConfig().getRPCConfig();<a name="line.214"></a>
-<span class="sourceLineNo">215</span>        URI uri = getServerURI(confFileConfig.getURI());<a name="line.215"></a>
-<span class="sourceLineNo">216</span>        String user = line.getOptionValue("rpcuser", confFileConfig.getUsername());<a name="line.216"></a>
-<span class="sourceLineNo">217</span>        String pass = line.getOptionValue("rpcpassword", confFileConfig.getPassword());<a name="line.217"></a>
-<span class="sourceLineNo">218</span>        NetworkParameters netParams;<a name="line.218"></a>
-<span class="sourceLineNo">219</span>        if (line.hasOption("regtest")) {<a name="line.219"></a>
-<span class="sourceLineNo">220</span>            netParams = RegTestParams.get();<a name="line.220"></a>
-<span class="sourceLineNo">221</span>        } else if (line.hasOption(("testnet"))) {<a name="line.221"></a>
-<span class="sourceLineNo">222</span>            netParams = TestNet3Params.get();<a name="line.222"></a>
-<span class="sourceLineNo">223</span>        } else {<a name="line.223"></a>
-<span class="sourceLineNo">224</span>            netParams = MainNetParams.get();<a name="line.224"></a>
-<span class="sourceLineNo">225</span>        }<a name="line.225"></a>
-<span class="sourceLineNo">226</span>        RPCConfig cfg = new RPCConfig(netParams, uri, user, pass);<a name="line.226"></a>
-<span class="sourceLineNo">227</span>        return cfg;<a name="line.227"></a>
-<span class="sourceLineNo">228</span>    }<a name="line.228"></a>
-<span class="sourceLineNo">229</span><a name="line.229"></a>
-<span class="sourceLineNo">230</span><a name="line.230"></a>
-<span class="sourceLineNo">231</span>}<a name="line.231"></a>
+<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.cli;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.rpc.bitcoind.BitcoinConfFile;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import org.consensusj.jsonrpc.JsonRPCException;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import org.apache.commons.cli.CommandLine;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import org.apache.commons.cli.CommandLineParser;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import org.apache.commons.cli.DefaultParser;</a>
+<span class="sourceLineNo">008</span><a id="line.8">import org.apache.commons.cli.HelpFormatter;</a>
+<span class="sourceLineNo">009</span><a id="line.9">import org.apache.commons.cli.ParseException;</a>
+<span class="sourceLineNo">010</span><a id="line.10"></a>
+<span class="sourceLineNo">011</span><a id="line.11">import java.io.IOException;</a>
+<span class="sourceLineNo">012</span><a id="line.12">import java.io.InputStream;</a>
+<span class="sourceLineNo">013</span><a id="line.13">import java.io.OutputStreamWriter;</a>
+<span class="sourceLineNo">014</span><a id="line.14">import java.io.PrintStream;</a>
+<span class="sourceLineNo">015</span><a id="line.15">import java.io.PrintWriter;</a>
+<span class="sourceLineNo">016</span><a id="line.16">import java.net.URI;</a>
+<span class="sourceLineNo">017</span><a id="line.17">import java.net.URISyntaxException;</a>
+<span class="sourceLineNo">018</span><a id="line.18">import java.nio.charset.StandardCharsets;</a>
+<span class="sourceLineNo">019</span><a id="line.19"></a>
+<span class="sourceLineNo">020</span><a id="line.20">import com.msgilligan.bitcoinj.rpc.BitcoinClient;</a>
+<span class="sourceLineNo">021</span><a id="line.21">import com.msgilligan.bitcoinj.rpc.RPCConfig;</a>
+<span class="sourceLineNo">022</span><a id="line.22">import org.bitcoinj.core.NetworkParameters;</a>
+<span class="sourceLineNo">023</span><a id="line.23">import org.bitcoinj.params.MainNetParams;</a>
+<span class="sourceLineNo">024</span><a id="line.24">import org.bitcoinj.params.RegTestParams;</a>
+<span class="sourceLineNo">025</span><a id="line.25">import org.bitcoinj.params.TestNet3Params;</a>
+<span class="sourceLineNo">026</span><a id="line.26"></a>
+<span class="sourceLineNo">027</span><a id="line.27">/**</a>
+<span class="sourceLineNo">028</span><a id="line.28"> * Base class for CLI commands that use Bitcoin RPC</a>
+<span class="sourceLineNo">029</span><a id="line.29"> */</a>
+<span class="sourceLineNo">030</span><a id="line.30">public abstract class CliCommand {</a>
+<span class="sourceLineNo">031</span><a id="line.31">    static final String defaultproto = "http";</a>
+<span class="sourceLineNo">032</span><a id="line.32">    static final String defaulthost = "127.0.0.1";</a>
+<span class="sourceLineNo">033</span><a id="line.33">    static final int defaultport = 8332;</a>
+<span class="sourceLineNo">034</span><a id="line.34">    static final String defaultfile = "/";</a>
+<span class="sourceLineNo">035</span><a id="line.35"></a>
+<span class="sourceLineNo">036</span><a id="line.36">    protected CommandLine line = null;</a>
+<span class="sourceLineNo">037</span><a id="line.37">    protected CommandLineParser parser = null;</a>
+<span class="sourceLineNo">038</span><a id="line.38">    protected CliOptions options;</a>
+<span class="sourceLineNo">039</span><a id="line.39">    protected String name;</a>
+<span class="sourceLineNo">040</span><a id="line.40">    protected String usage;</a>
+<span class="sourceLineNo">041</span><a id="line.41">    protected HelpFormatter formatter = null;</a>
+<span class="sourceLineNo">042</span><a id="line.42"></a>
+<span class="sourceLineNo">043</span><a id="line.43">    protected InputStream in;</a>
+<span class="sourceLineNo">044</span><a id="line.44">    protected PrintWriter pwout;</a>
+<span class="sourceLineNo">045</span><a id="line.45">    protected PrintWriter pwerr;</a>
+<span class="sourceLineNo">046</span><a id="line.46"></a>
+<span class="sourceLineNo">047</span><a id="line.47">    protected BitcoinClient client = null;</a>
+<span class="sourceLineNo">048</span><a id="line.48"></a>
+<span class="sourceLineNo">049</span><a id="line.49">    protected CliCommand(String name, CliOptions options, String[] args) {</a>
+<span class="sourceLineNo">050</span><a id="line.50">        this(name, null, options, args);</a>
+<span class="sourceLineNo">051</span><a id="line.51">    }</a>
+<span class="sourceLineNo">052</span><a id="line.52"></a>
+<span class="sourceLineNo">053</span><a id="line.53">    protected CliCommand(String name, String usage, CliOptions options, String[] args) {</a>
+<span class="sourceLineNo">054</span><a id="line.54">        this.name = name;</a>
+<span class="sourceLineNo">055</span><a id="line.55">        if (usage != null) {</a>
+<span class="sourceLineNo">056</span><a id="line.56">            this.usage = usage;</a>
+<span class="sourceLineNo">057</span><a id="line.57">        } else {</a>
+<span class="sourceLineNo">058</span><a id="line.58">            this.usage = name;</a>
+<span class="sourceLineNo">059</span><a id="line.59">        }</a>
+<span class="sourceLineNo">060</span><a id="line.60">        this.options = options;</a>
+<span class="sourceLineNo">061</span><a id="line.61">        parser = new DefaultParser();</a>
+<span class="sourceLineNo">062</span><a id="line.62">        try {</a>
+<span class="sourceLineNo">063</span><a id="line.63">            this.line = this.parser.parse(options, args);</a>
+<span class="sourceLineNo">064</span><a id="line.64">        } catch (ParseException e) {</a>
+<span class="sourceLineNo">065</span><a id="line.65">            e.printStackTrace();</a>
+<span class="sourceLineNo">066</span><a id="line.66">            throw new RuntimeException(e);</a>
+<span class="sourceLineNo">067</span><a id="line.67">        }</a>
+<span class="sourceLineNo">068</span><a id="line.68">    }</a>
+<span class="sourceLineNo">069</span><a id="line.69"></a>
+<span class="sourceLineNo">070</span><a id="line.70">    public BitcoinClient getClient() {</a>
+<span class="sourceLineNo">071</span><a id="line.71">        if (client == null) {</a>
+<span class="sourceLineNo">072</span><a id="line.72">            System.out.println("Connecting to: " + getRPCConfig().getURI());</a>
+<span class="sourceLineNo">073</span><a id="line.73">            RPCConfig config = getRPCConfig();</a>
+<span class="sourceLineNo">074</span><a id="line.74">            client = new BitcoinClient( config.getNetParams(),</a>
+<span class="sourceLineNo">075</span><a id="line.75">                                        config.getURI(),</a>
+<span class="sourceLineNo">076</span><a id="line.76">                                        config.getUsername(),</a>
+<span class="sourceLineNo">077</span><a id="line.77">                                        config.getPassword());</a>
+<span class="sourceLineNo">078</span><a id="line.78">        }</a>
+<span class="sourceLineNo">079</span><a id="line.79">        return client;</a>
+<span class="sourceLineNo">080</span><a id="line.80">    }</a>
+<span class="sourceLineNo">081</span><a id="line.81"></a>
+<span class="sourceLineNo">082</span><a id="line.82">    /**</a>
+<span class="sourceLineNo">083</span><a id="line.83">     * Can be used by subclasses to set a narrower type</a>
+<span class="sourceLineNo">084</span><a id="line.84">     * @param client An instance of BitcoinClient or subclass</a>
+<span class="sourceLineNo">085</span><a id="line.85">     */</a>
+<span class="sourceLineNo">086</span><a id="line.86">    protected void setClient(BitcoinClient client) {</a>
+<span class="sourceLineNo">087</span><a id="line.87">        this.client = client;</a>
+<span class="sourceLineNo">088</span><a id="line.88">    }</a>
+<span class="sourceLineNo">089</span><a id="line.89"></a>
+<span class="sourceLineNo">090</span><a id="line.90">    public void printHelp() {</a>
+<span class="sourceLineNo">091</span><a id="line.91">        if (formatter == null) {</a>
+<span class="sourceLineNo">092</span><a id="line.92">            formatter = new HelpFormatter();</a>
+<span class="sourceLineNo">093</span><a id="line.93">            formatter.setLongOptPrefix("-");</a>
+<span class="sourceLineNo">094</span><a id="line.94">        }</a>
+<span class="sourceLineNo">095</span><a id="line.95">        int leftPad = 4;</a>
+<span class="sourceLineNo">096</span><a id="line.96">        int descPad = 2;</a>
+<span class="sourceLineNo">097</span><a id="line.97">        int helpWidth = 120;</a>
+<span class="sourceLineNo">098</span><a id="line.98">        String header = "";</a>
+<span class="sourceLineNo">099</span><a id="line.99">        String footer = "";</a>
+<span class="sourceLineNo">100</span><a id="line.100">        formatter.printHelp(pwout, helpWidth, usage, header, options, leftPad, descPad, footer, false);</a>
+<span class="sourceLineNo">101</span><a id="line.101">    }</a>
+<span class="sourceLineNo">102</span><a id="line.102"></a>
+<span class="sourceLineNo">103</span><a id="line.103">    public void printError(String str) {</a>
+<span class="sourceLineNo">104</span><a id="line.104">        pwout.println(str);</a>
+<span class="sourceLineNo">105</span><a id="line.105">    }</a>
+<span class="sourceLineNo">106</span><a id="line.106"></a>
+<span class="sourceLineNo">107</span><a id="line.107">        /**</a>
+<span class="sourceLineNo">108</span><a id="line.108">         * Check Options and Arguments</a>
+<span class="sourceLineNo">109</span><a id="line.109">         *</a>
+<span class="sourceLineNo">110</span><a id="line.110">         * Override to customize behavior.</a>
+<span class="sourceLineNo">111</span><a id="line.111">         *</a>
+<span class="sourceLineNo">112</span><a id="line.112">         * @return status code</a>
+<span class="sourceLineNo">113</span><a id="line.113">         */</a>
+<span class="sourceLineNo">114</span><a id="line.114">    public Integer checkArgs() {</a>
+<span class="sourceLineNo">115</span><a id="line.115">        if (line.hasOption("?")) {</a>
+<span class="sourceLineNo">116</span><a id="line.116">            printHelp();</a>
+<span class="sourceLineNo">117</span><a id="line.117">            // Return 1 so tool can exit</a>
+<span class="sourceLineNo">118</span><a id="line.118">            return 1;</a>
+<span class="sourceLineNo">119</span><a id="line.119">        }</a>
+<span class="sourceLineNo">120</span><a id="line.120">        return 0;</a>
+<span class="sourceLineNo">121</span><a id="line.121">    }</a>
+<span class="sourceLineNo">122</span><a id="line.122"></a>
+<span class="sourceLineNo">123</span><a id="line.123">    /**</a>
+<span class="sourceLineNo">124</span><a id="line.124">     * Initial a client and if rpcwait option set, make sure server is accepting connections.</a>
+<span class="sourceLineNo">125</span><a id="line.125">     * @return status code</a>
+<span class="sourceLineNo">126</span><a id="line.126">     */</a>
+<span class="sourceLineNo">127</span><a id="line.127">    public Integer preflight() {</a>
+<span class="sourceLineNo">128</span><a id="line.128">        getClient();</a>
+<span class="sourceLineNo">129</span><a id="line.129">        if (line.hasOption("rpcwait")) {</a>
+<span class="sourceLineNo">130</span><a id="line.130">            boolean available = false;   // Wait up to 1 hour</a>
+<span class="sourceLineNo">131</span><a id="line.131">            try {</a>
+<span class="sourceLineNo">132</span><a id="line.132">                available = client.waitForServer(60*60);</a>
+<span class="sourceLineNo">133</span><a id="line.133">            } catch (JsonRPCException e) {</a>
+<span class="sourceLineNo">134</span><a id="line.134">                this.pwerr.println("JSON-RPC Exception: " + e.getMessage());</a>
+<span class="sourceLineNo">135</span><a id="line.135">                return 1;</a>
+<span class="sourceLineNo">136</span><a id="line.136">            }</a>
+<span class="sourceLineNo">137</span><a id="line.137">            if (!available) {</a>
+<span class="sourceLineNo">138</span><a id="line.138">                this.pwerr.println("Timeout error.");</a>
+<span class="sourceLineNo">139</span><a id="line.139">                return 1;</a>
+<span class="sourceLineNo">140</span><a id="line.140">            }</a>
+<span class="sourceLineNo">141</span><a id="line.141">        }</a>
+<span class="sourceLineNo">142</span><a id="line.142">        return 0;</a>
+<span class="sourceLineNo">143</span><a id="line.143">    }</a>
+<span class="sourceLineNo">144</span><a id="line.144"></a>
+<span class="sourceLineNo">145</span><a id="line.145">    public Integer run() {</a>
+<span class="sourceLineNo">146</span><a id="line.146">        return run(System.in, System.out, System.err);</a>
+<span class="sourceLineNo">147</span><a id="line.147">    }</a>
+<span class="sourceLineNo">148</span><a id="line.148"></a>
+<span class="sourceLineNo">149</span><a id="line.149">    public Integer run(InputStream in, PrintStream out, PrintStream err) {</a>
+<span class="sourceLineNo">150</span><a id="line.150">        this.in = in;</a>
+<span class="sourceLineNo">151</span><a id="line.151">        this.pwout = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);</a>
+<span class="sourceLineNo">152</span><a id="line.152">        this.pwerr = new PrintWriter(new OutputStreamWriter(err, StandardCharsets.UTF_8), true);</a>
+<span class="sourceLineNo">153</span><a id="line.153"></a>
+<span class="sourceLineNo">154</span><a id="line.154">        Integer status = checkArgs();</a>
+<span class="sourceLineNo">155</span><a id="line.155">        if (status != 0) {</a>
+<span class="sourceLineNo">156</span><a id="line.156">            return status;</a>
+<span class="sourceLineNo">157</span><a id="line.157">        }</a>
+<span class="sourceLineNo">158</span><a id="line.158"></a>
+<span class="sourceLineNo">159</span><a id="line.159">        status = preflight();</a>
+<span class="sourceLineNo">160</span><a id="line.160">        if (status != 0) {</a>
+<span class="sourceLineNo">161</span><a id="line.161">            return status;</a>
+<span class="sourceLineNo">162</span><a id="line.162">        }</a>
+<span class="sourceLineNo">163</span><a id="line.163"></a>
+<span class="sourceLineNo">164</span><a id="line.164">        try {</a>
+<span class="sourceLineNo">165</span><a id="line.165">            status = runImpl();</a>
+<span class="sourceLineNo">166</span><a id="line.166">        } catch (JsonRPCException e) {</a>
+<span class="sourceLineNo">167</span><a id="line.167">            e.printStackTrace();</a>
+<span class="sourceLineNo">168</span><a id="line.168">            status = 1;</a>
+<span class="sourceLineNo">169</span><a id="line.169">        } catch (IOException e) {</a>
+<span class="sourceLineNo">170</span><a id="line.170">            e.printStackTrace();</a>
+<span class="sourceLineNo">171</span><a id="line.171">            status = 1;</a>
+<span class="sourceLineNo">172</span><a id="line.172">        }</a>
+<span class="sourceLineNo">173</span><a id="line.173">        return status;</a>
+<span class="sourceLineNo">174</span><a id="line.174">    }</a>
+<span class="sourceLineNo">175</span><a id="line.175"></a>
+<span class="sourceLineNo">176</span><a id="line.176">    /**</a>
+<span class="sourceLineNo">177</span><a id="line.177">     * Implement in subclasses</a>
+<span class="sourceLineNo">178</span><a id="line.178">     * @return status code</a>
+<span class="sourceLineNo">179</span><a id="line.179">     */</a>
+<span class="sourceLineNo">180</span><a id="line.180">    abstract protected Integer runImpl() throws IOException, JsonRPCException;</a>
+<span class="sourceLineNo">181</span><a id="line.181"></a>
+<span class="sourceLineNo">182</span><a id="line.182">    private URI getServerURI(URI confFileURI) {</a>
+<span class="sourceLineNo">183</span><a id="line.183">        String proto = confFileURI.getScheme();</a>
+<span class="sourceLineNo">184</span><a id="line.184">        String host = confFileURI.getHost();</a>
+<span class="sourceLineNo">185</span><a id="line.185">        int port = confFileURI.getPort();</a>
+<span class="sourceLineNo">186</span><a id="line.186">        String file = confFileURI.getPath();</a>
+<span class="sourceLineNo">187</span><a id="line.187"></a>
+<span class="sourceLineNo">188</span><a id="line.188">        if (line.hasOption("rpcssl")) {</a>
+<span class="sourceLineNo">189</span><a id="line.189">            proto = "https";</a>
+<span class="sourceLineNo">190</span><a id="line.190">        }</a>
+<span class="sourceLineNo">191</span><a id="line.191">        if (line.hasOption("rpcconnect")) {</a>
+<span class="sourceLineNo">192</span><a id="line.192">            host = line.getOptionValue("rpcconnect", host);</a>
+<span class="sourceLineNo">193</span><a id="line.193">        }</a>
+<span class="sourceLineNo">194</span><a id="line.194">        if (line.hasOption("regtest") || line.hasOption("testnet")) {</a>
+<span class="sourceLineNo">195</span><a id="line.195">            port = 18332;</a>
+<span class="sourceLineNo">196</span><a id="line.196">        }</a>
+<span class="sourceLineNo">197</span><a id="line.197">        if (line.hasOption("rpcport")) {</a>
+<span class="sourceLineNo">198</span><a id="line.198">            String portString = line.getOptionValue("rpcport");</a>
+<span class="sourceLineNo">199</span><a id="line.199">            port = Integer.parseInt(portString);</a>
+<span class="sourceLineNo">200</span><a id="line.200">        }</a>
+<span class="sourceLineNo">201</span><a id="line.201">        URI rpcServerURI = null;</a>
+<span class="sourceLineNo">202</span><a id="line.202">        try {</a>
+<span class="sourceLineNo">203</span><a id="line.203">            rpcServerURI = new URI(proto, null, host, port, file, null, null);</a>
+<span class="sourceLineNo">204</span><a id="line.204">        } catch (URISyntaxException e) {</a>
+<span class="sourceLineNo">205</span><a id="line.205">            // We should be careful that this never happens</a>
+<span class="sourceLineNo">206</span><a id="line.206">            e.printStackTrace();</a>
+<span class="sourceLineNo">207</span><a id="line.207">            // But if it does, throw an unchecked exception</a>
+<span class="sourceLineNo">208</span><a id="line.208">            throw new RuntimeException(e);</a>
+<span class="sourceLineNo">209</span><a id="line.209">        }</a>
+<span class="sourceLineNo">210</span><a id="line.210">        return rpcServerURI;</a>
+<span class="sourceLineNo">211</span><a id="line.211">    }</a>
+<span class="sourceLineNo">212</span><a id="line.212"></a>
+<span class="sourceLineNo">213</span><a id="line.213">    protected RPCConfig getRPCConfig() {</a>
+<span class="sourceLineNo">214</span><a id="line.214">        RPCConfig confFileConfig = BitcoinConfFile.readDefaultConfig().getRPCConfig();</a>
+<span class="sourceLineNo">215</span><a id="line.215">        URI uri = getServerURI(confFileConfig.getURI());</a>
+<span class="sourceLineNo">216</span><a id="line.216">        String user = line.getOptionValue("rpcuser", confFileConfig.getUsername());</a>
+<span class="sourceLineNo">217</span><a id="line.217">        String pass = line.getOptionValue("rpcpassword", confFileConfig.getPassword());</a>
+<span class="sourceLineNo">218</span><a id="line.218">        NetworkParameters netParams;</a>
+<span class="sourceLineNo">219</span><a id="line.219">        if (line.hasOption("regtest")) {</a>
+<span class="sourceLineNo">220</span><a id="line.220">            netParams = RegTestParams.get();</a>
+<span class="sourceLineNo">221</span><a id="line.221">        } else if (line.hasOption(("testnet"))) {</a>
+<span class="sourceLineNo">222</span><a id="line.222">            netParams = TestNet3Params.get();</a>
+<span class="sourceLineNo">223</span><a id="line.223">        } else {</a>
+<span class="sourceLineNo">224</span><a id="line.224">            netParams = MainNetParams.get();</a>
+<span class="sourceLineNo">225</span><a id="line.225">        }</a>
+<span class="sourceLineNo">226</span><a id="line.226">        RPCConfig cfg = new RPCConfig(netParams, uri, user, pass);</a>
+<span class="sourceLineNo">227</span><a id="line.227">        return cfg;</a>
+<span class="sourceLineNo">228</span><a id="line.228">    }</a>
+<span class="sourceLineNo">229</span><a id="line.229"></a>
+<span class="sourceLineNo">230</span><a id="line.230"></a>
+<span class="sourceLineNo">231</span><a id="line.231">}</a>
 
 
 
@@ -299,5 +300,6 @@
 
 </pre>
 </div>
+</main>
 </body>
 </html>

@@ -1,112 +1,113 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 </head>
 <body>
+<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package org.consensusj.jsonrpc;<a name="line.1"></a>
-<span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import com.fasterxml.jackson.annotation.JsonCreator;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import com.fasterxml.jackson.annotation.JsonProperty;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import com.fasterxml.jackson.databind.annotation.JsonSerialize;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import com.msgilligan.bitcoinj.json.conversion.NumberStringSerializer;<a name="line.6"></a>
-<span class="sourceLineNo">007</span><a name="line.7"></a>
-<span class="sourceLineNo">008</span>import java.util.Collections;<a name="line.8"></a>
-<span class="sourceLineNo">009</span>import java.util.LinkedList;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import java.util.List;<a name="line.10"></a>
-<span class="sourceLineNo">011</span>import java.util.concurrent.atomic.AtomicLong;<a name="line.11"></a>
-<span class="sourceLineNo">012</span><a name="line.12"></a>
-<span class="sourceLineNo">013</span>/**<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * JSON-RPC Request POJO<a name="line.14"></a>
-<span class="sourceLineNo">015</span> */<a name="line.15"></a>
-<span class="sourceLineNo">016</span>public class JsonRpcRequest {<a name="line.16"></a>
-<span class="sourceLineNo">017</span>    public static final String JSON_RPC_VERSION_1 = "1.0";<a name="line.17"></a>
-<span class="sourceLineNo">018</span>    public static final String JSON_RPC_VERSION_2 = "2.0";<a name="line.18"></a>
-<span class="sourceLineNo">019</span>    private static final String DEFAULT_JSON_RPC_VERSION = JSON_RPC_VERSION_1;<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    private static AtomicLong nextRequestId =  new AtomicLong(0);<a name="line.20"></a>
-<span class="sourceLineNo">021</span><a name="line.21"></a>
-<span class="sourceLineNo">022</span>    private final String  jsonrpc;   // version<a name="line.22"></a>
-<span class="sourceLineNo">023</span>    private final String  method;<a name="line.23"></a>
-<span class="sourceLineNo">024</span>    private final String  id;<a name="line.24"></a>
-<span class="sourceLineNo">025</span>    private final List&lt;Object&gt; params;<a name="line.25"></a>
-<span class="sourceLineNo">026</span><a name="line.26"></a>
-<span class="sourceLineNo">027</span>    /**<a name="line.27"></a>
-<span class="sourceLineNo">028</span>     * For use by Jackson deserialization<a name="line.28"></a>
-<span class="sourceLineNo">029</span>     * @param jsonrpc filled from the JSON object<a name="line.29"></a>
-<span class="sourceLineNo">030</span>     * @param method filled from the JSON object<a name="line.30"></a>
-<span class="sourceLineNo">031</span>     * @param id filled from the JSON object<a name="line.31"></a>
-<span class="sourceLineNo">032</span>     * @param params filled from the JSON object<a name="line.32"></a>
-<span class="sourceLineNo">033</span>     */<a name="line.33"></a>
-<span class="sourceLineNo">034</span>    @JsonCreator<a name="line.34"></a>
-<span class="sourceLineNo">035</span>    public JsonRpcRequest(@JsonProperty("jsonrpc")  String jsonrpc,<a name="line.35"></a>
-<span class="sourceLineNo">036</span>                          @JsonProperty("method")   String method,<a name="line.36"></a>
-<span class="sourceLineNo">037</span>                          @JsonProperty("id")       String id,<a name="line.37"></a>
-<span class="sourceLineNo">038</span>                          @JsonProperty("params")   List&lt;Object&gt; params) {<a name="line.38"></a>
-<span class="sourceLineNo">039</span>        this.jsonrpc = jsonrpc;<a name="line.39"></a>
-<span class="sourceLineNo">040</span>        this.method = method;<a name="line.40"></a>
-<span class="sourceLineNo">041</span>        this.id = id;<a name="line.41"></a>
-<span class="sourceLineNo">042</span>        this.params = params;<a name="line.42"></a>
-<span class="sourceLineNo">043</span>    }<a name="line.43"></a>
-<span class="sourceLineNo">044</span><a name="line.44"></a>
-<span class="sourceLineNo">045</span>    /**<a name="line.45"></a>
-<span class="sourceLineNo">046</span>     * For creating a JSON RPC request for serialization<a name="line.46"></a>
-<span class="sourceLineNo">047</span>     * @param method Method of remote procedure to call<a name="line.47"></a>
-<span class="sourceLineNo">048</span>     * @param params Parameters to serialize<a name="line.48"></a>
-<span class="sourceLineNo">049</span>     */<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    public JsonRpcRequest(String method, List&lt;Object&gt; params) {<a name="line.50"></a>
-<span class="sourceLineNo">051</span>        this(method, params, DEFAULT_JSON_RPC_VERSION);<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    }<a name="line.52"></a>
-<span class="sourceLineNo">053</span><a name="line.53"></a>
-<span class="sourceLineNo">054</span>    public JsonRpcRequest(String method, List&lt;Object&gt; params, String jsonRpcVersion) {<a name="line.54"></a>
-<span class="sourceLineNo">055</span>        this.jsonrpc = jsonRpcVersion;<a name="line.55"></a>
-<span class="sourceLineNo">056</span>        this.id =  Long.toString(JsonRpcRequest.nextRequestId.incrementAndGet());<a name="line.56"></a>
-<span class="sourceLineNo">057</span>        this.method = method;<a name="line.57"></a>
-<span class="sourceLineNo">058</span>        this.params = removeTrailingNulls(params);<a name="line.58"></a>
-<span class="sourceLineNo">059</span>    }<a name="line.59"></a>
-<span class="sourceLineNo">060</span><a name="line.60"></a>
-<span class="sourceLineNo">061</span>    /**<a name="line.61"></a>
-<span class="sourceLineNo">062</span>     * Convenience constructor for requests with empty parameter list<a name="line.62"></a>
-<span class="sourceLineNo">063</span>     * @param method method name string<a name="line.63"></a>
-<span class="sourceLineNo">064</span>     */<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    public JsonRpcRequest(String method) {<a name="line.65"></a>
-<span class="sourceLineNo">066</span>        this(method, Collections.emptyList());<a name="line.66"></a>
-<span class="sourceLineNo">067</span>    }<a name="line.67"></a>
-<span class="sourceLineNo">068</span><a name="line.68"></a>
-<span class="sourceLineNo">069</span>    public String getJsonrpc() {<a name="line.69"></a>
-<span class="sourceLineNo">070</span>        return jsonrpc;<a name="line.70"></a>
-<span class="sourceLineNo">071</span>    }<a name="line.71"></a>
-<span class="sourceLineNo">072</span><a name="line.72"></a>
-<span class="sourceLineNo">073</span>    public String getMethod() {<a name="line.73"></a>
-<span class="sourceLineNo">074</span>        return method;<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    }<a name="line.75"></a>
-<span class="sourceLineNo">076</span><a name="line.76"></a>
-<span class="sourceLineNo">077</span>    @JsonSerialize(using=NumberStringSerializer.class)<a name="line.77"></a>
-<span class="sourceLineNo">078</span>    public String getId() {<a name="line.78"></a>
-<span class="sourceLineNo">079</span>        return id;<a name="line.79"></a>
-<span class="sourceLineNo">080</span>    }<a name="line.80"></a>
-<span class="sourceLineNo">081</span><a name="line.81"></a>
-<span class="sourceLineNo">082</span>    public List&lt;Object&gt; getParams() {<a name="line.82"></a>
-<span class="sourceLineNo">083</span>        return params;<a name="line.83"></a>
-<span class="sourceLineNo">084</span>    }<a name="line.84"></a>
-<span class="sourceLineNo">085</span><a name="line.85"></a>
-<span class="sourceLineNo">086</span>    /**<a name="line.86"></a>
-<span class="sourceLineNo">087</span>     * Remove trailing nulls (all nulls *following* the last non-null object)<a name="line.87"></a>
-<span class="sourceLineNo">088</span>     *<a name="line.88"></a>
-<span class="sourceLineNo">089</span>     * This allows convenience methods to use `null` parameters to indicate the<a name="line.89"></a>
-<span class="sourceLineNo">090</span>     * server-determined default should be used. If `null` were actually passed as<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     * JSON, then the server default would be overridden.  `null` can be used before<a name="line.91"></a>
-<span class="sourceLineNo">092</span>     * the last non-null element, but those `null`s will be sent to the server.<a name="line.92"></a>
-<span class="sourceLineNo">093</span>     */<a name="line.93"></a>
-<span class="sourceLineNo">094</span>    private static List&lt;Object&gt; removeTrailingNulls(List&lt;Object&gt; params) {<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        LinkedList&lt;Object&gt; cleaned = new LinkedList&lt;&gt;(params);<a name="line.95"></a>
-<span class="sourceLineNo">096</span>        while ((cleaned.size() &gt; 0) &amp;&amp; (cleaned.getLast() == null)) {<a name="line.96"></a>
-<span class="sourceLineNo">097</span>            cleaned.removeLast();<a name="line.97"></a>
-<span class="sourceLineNo">098</span>        }<a name="line.98"></a>
-<span class="sourceLineNo">099</span>        return cleaned;<a name="line.99"></a>
-<span class="sourceLineNo">100</span>    }<a name="line.100"></a>
-<span class="sourceLineNo">101</span>}<a name="line.101"></a>
+<pre><span class="sourceLineNo">001</span><a id="line.1">package org.consensusj.jsonrpc;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.annotation.JsonCreator;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.fasterxml.jackson.annotation.JsonProperty;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import com.fasterxml.jackson.databind.annotation.JsonSerialize;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import com.msgilligan.bitcoinj.json.conversion.NumberStringSerializer;</a>
+<span class="sourceLineNo">007</span><a id="line.7"></a>
+<span class="sourceLineNo">008</span><a id="line.8">import java.util.Collections;</a>
+<span class="sourceLineNo">009</span><a id="line.9">import java.util.LinkedList;</a>
+<span class="sourceLineNo">010</span><a id="line.10">import java.util.List;</a>
+<span class="sourceLineNo">011</span><a id="line.11">import java.util.concurrent.atomic.AtomicLong;</a>
+<span class="sourceLineNo">012</span><a id="line.12"></a>
+<span class="sourceLineNo">013</span><a id="line.13">/**</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * JSON-RPC Request POJO</a>
+<span class="sourceLineNo">015</span><a id="line.15"> */</a>
+<span class="sourceLineNo">016</span><a id="line.16">public class JsonRpcRequest {</a>
+<span class="sourceLineNo">017</span><a id="line.17">    public static final String JSON_RPC_VERSION_1 = "1.0";</a>
+<span class="sourceLineNo">018</span><a id="line.18">    public static final String JSON_RPC_VERSION_2 = "2.0";</a>
+<span class="sourceLineNo">019</span><a id="line.19">    private static final String DEFAULT_JSON_RPC_VERSION = JSON_RPC_VERSION_1;</a>
+<span class="sourceLineNo">020</span><a id="line.20">    private static AtomicLong nextRequestId =  new AtomicLong(0);</a>
+<span class="sourceLineNo">021</span><a id="line.21"></a>
+<span class="sourceLineNo">022</span><a id="line.22">    private final String  jsonrpc;   // version</a>
+<span class="sourceLineNo">023</span><a id="line.23">    private final String  method;</a>
+<span class="sourceLineNo">024</span><a id="line.24">    private final String  id;</a>
+<span class="sourceLineNo">025</span><a id="line.25">    private final List&lt;Object&gt; params;</a>
+<span class="sourceLineNo">026</span><a id="line.26"></a>
+<span class="sourceLineNo">027</span><a id="line.27">    /**</a>
+<span class="sourceLineNo">028</span><a id="line.28">     * For use by Jackson deserialization</a>
+<span class="sourceLineNo">029</span><a id="line.29">     * @param jsonrpc filled from the JSON object</a>
+<span class="sourceLineNo">030</span><a id="line.30">     * @param method filled from the JSON object</a>
+<span class="sourceLineNo">031</span><a id="line.31">     * @param id filled from the JSON object</a>
+<span class="sourceLineNo">032</span><a id="line.32">     * @param params filled from the JSON object</a>
+<span class="sourceLineNo">033</span><a id="line.33">     */</a>
+<span class="sourceLineNo">034</span><a id="line.34">    @JsonCreator</a>
+<span class="sourceLineNo">035</span><a id="line.35">    public JsonRpcRequest(@JsonProperty("jsonrpc")  String jsonrpc,</a>
+<span class="sourceLineNo">036</span><a id="line.36">                          @JsonProperty("method")   String method,</a>
+<span class="sourceLineNo">037</span><a id="line.37">                          @JsonProperty("id")       String id,</a>
+<span class="sourceLineNo">038</span><a id="line.38">                          @JsonProperty("params")   List&lt;Object&gt; params) {</a>
+<span class="sourceLineNo">039</span><a id="line.39">        this.jsonrpc = jsonrpc;</a>
+<span class="sourceLineNo">040</span><a id="line.40">        this.method = method;</a>
+<span class="sourceLineNo">041</span><a id="line.41">        this.id = id;</a>
+<span class="sourceLineNo">042</span><a id="line.42">        this.params = params;</a>
+<span class="sourceLineNo">043</span><a id="line.43">    }</a>
+<span class="sourceLineNo">044</span><a id="line.44"></a>
+<span class="sourceLineNo">045</span><a id="line.45">    /**</a>
+<span class="sourceLineNo">046</span><a id="line.46">     * For creating a JSON RPC request for serialization</a>
+<span class="sourceLineNo">047</span><a id="line.47">     * @param method Method of remote procedure to call</a>
+<span class="sourceLineNo">048</span><a id="line.48">     * @param params Parameters to serialize</a>
+<span class="sourceLineNo">049</span><a id="line.49">     */</a>
+<span class="sourceLineNo">050</span><a id="line.50">    public JsonRpcRequest(String method, List&lt;Object&gt; params) {</a>
+<span class="sourceLineNo">051</span><a id="line.51">        this(method, params, DEFAULT_JSON_RPC_VERSION);</a>
+<span class="sourceLineNo">052</span><a id="line.52">    }</a>
+<span class="sourceLineNo">053</span><a id="line.53"></a>
+<span class="sourceLineNo">054</span><a id="line.54">    public JsonRpcRequest(String method, List&lt;Object&gt; params, String jsonRpcVersion) {</a>
+<span class="sourceLineNo">055</span><a id="line.55">        this.jsonrpc = jsonRpcVersion;</a>
+<span class="sourceLineNo">056</span><a id="line.56">        this.id =  Long.toString(JsonRpcRequest.nextRequestId.incrementAndGet());</a>
+<span class="sourceLineNo">057</span><a id="line.57">        this.method = method;</a>
+<span class="sourceLineNo">058</span><a id="line.58">        this.params = removeTrailingNulls(params);</a>
+<span class="sourceLineNo">059</span><a id="line.59">    }</a>
+<span class="sourceLineNo">060</span><a id="line.60"></a>
+<span class="sourceLineNo">061</span><a id="line.61">    /**</a>
+<span class="sourceLineNo">062</span><a id="line.62">     * Convenience constructor for requests with empty parameter list</a>
+<span class="sourceLineNo">063</span><a id="line.63">     * @param method method name string</a>
+<span class="sourceLineNo">064</span><a id="line.64">     */</a>
+<span class="sourceLineNo">065</span><a id="line.65">    public JsonRpcRequest(String method) {</a>
+<span class="sourceLineNo">066</span><a id="line.66">        this(method, Collections.emptyList());</a>
+<span class="sourceLineNo">067</span><a id="line.67">    }</a>
+<span class="sourceLineNo">068</span><a id="line.68"></a>
+<span class="sourceLineNo">069</span><a id="line.69">    public String getJsonrpc() {</a>
+<span class="sourceLineNo">070</span><a id="line.70">        return jsonrpc;</a>
+<span class="sourceLineNo">071</span><a id="line.71">    }</a>
+<span class="sourceLineNo">072</span><a id="line.72"></a>
+<span class="sourceLineNo">073</span><a id="line.73">    public String getMethod() {</a>
+<span class="sourceLineNo">074</span><a id="line.74">        return method;</a>
+<span class="sourceLineNo">075</span><a id="line.75">    }</a>
+<span class="sourceLineNo">076</span><a id="line.76"></a>
+<span class="sourceLineNo">077</span><a id="line.77">    @JsonSerialize(using=NumberStringSerializer.class)</a>
+<span class="sourceLineNo">078</span><a id="line.78">    public String getId() {</a>
+<span class="sourceLineNo">079</span><a id="line.79">        return id;</a>
+<span class="sourceLineNo">080</span><a id="line.80">    }</a>
+<span class="sourceLineNo">081</span><a id="line.81"></a>
+<span class="sourceLineNo">082</span><a id="line.82">    public List&lt;Object&gt; getParams() {</a>
+<span class="sourceLineNo">083</span><a id="line.83">        return params;</a>
+<span class="sourceLineNo">084</span><a id="line.84">    }</a>
+<span class="sourceLineNo">085</span><a id="line.85"></a>
+<span class="sourceLineNo">086</span><a id="line.86">    /**</a>
+<span class="sourceLineNo">087</span><a id="line.87">     * Remove trailing nulls (all nulls *following* the last non-null object)</a>
+<span class="sourceLineNo">088</span><a id="line.88">     *</a>
+<span class="sourceLineNo">089</span><a id="line.89">     * This allows convenience methods to use `null` parameters to indicate the</a>
+<span class="sourceLineNo">090</span><a id="line.90">     * server-determined default should be used. If `null` were actually passed as</a>
+<span class="sourceLineNo">091</span><a id="line.91">     * JSON, then the server default would be overridden.  `null` can be used before</a>
+<span class="sourceLineNo">092</span><a id="line.92">     * the last non-null element, but those `null`s will be sent to the server.</a>
+<span class="sourceLineNo">093</span><a id="line.93">     */</a>
+<span class="sourceLineNo">094</span><a id="line.94">    private static List&lt;Object&gt; removeTrailingNulls(List&lt;Object&gt; params) {</a>
+<span class="sourceLineNo">095</span><a id="line.95">        LinkedList&lt;Object&gt; cleaned = new LinkedList&lt;&gt;(params);</a>
+<span class="sourceLineNo">096</span><a id="line.96">        while ((cleaned.size() &gt; 0) &amp;&amp; (cleaned.getLast() == null)) {</a>
+<span class="sourceLineNo">097</span><a id="line.97">            cleaned.removeLast();</a>
+<span class="sourceLineNo">098</span><a id="line.98">        }</a>
+<span class="sourceLineNo">099</span><a id="line.99">        return cleaned;</a>
+<span class="sourceLineNo">100</span><a id="line.100">    }</a>
+<span class="sourceLineNo">101</span><a id="line.101">}</a>
 
 
 
@@ -169,5 +170,6 @@
 
 </pre>
 </div>
+</main>
 </body>
 </html>

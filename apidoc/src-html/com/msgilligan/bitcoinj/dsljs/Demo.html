@@ -1,29 +1,30 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
 <body>
+<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.dsljs;<a name="line.1"></a>
-<span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import org.slf4j.Logger;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import org.slf4j.LoggerFactory;<a name="line.4"></a>
-<span class="sourceLineNo">005</span><a name="line.5"></a>
-<span class="sourceLineNo">006</span>import javax.script.ScriptException;<a name="line.6"></a>
-<span class="sourceLineNo">007</span><a name="line.7"></a>
-<span class="sourceLineNo">008</span>/**<a name="line.8"></a>
-<span class="sourceLineNo">009</span> * Demo of using bitcoinj DSL for JavaScript<a name="line.9"></a>
-<span class="sourceLineNo">010</span> */<a name="line.10"></a>
-<span class="sourceLineNo">011</span>public class Demo {<a name="line.11"></a>
-<span class="sourceLineNo">012</span>    private static final Logger log = LoggerFactory.getLogger(Demo.class);<a name="line.12"></a>
-<span class="sourceLineNo">013</span><a name="line.13"></a>
-<span class="sourceLineNo">014</span>    public static void main(String[] args) throws ScriptException {<a name="line.14"></a>
-<span class="sourceLineNo">015</span>        ScriptRunner runner = new ScriptRunner();<a name="line.15"></a>
-<span class="sourceLineNo">016</span>        runner.evalResource("/javascript/sendBitcoin.js");<a name="line.16"></a>
-<span class="sourceLineNo">017</span>    }<a name="line.17"></a>
-<span class="sourceLineNo">018</span>}<a name="line.18"></a>
+<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.dsljs;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import org.slf4j.Logger;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import org.slf4j.LoggerFactory;</a>
+<span class="sourceLineNo">005</span><a id="line.5"></a>
+<span class="sourceLineNo">006</span><a id="line.6">import javax.script.ScriptException;</a>
+<span class="sourceLineNo">007</span><a id="line.7"></a>
+<span class="sourceLineNo">008</span><a id="line.8">/**</a>
+<span class="sourceLineNo">009</span><a id="line.9"> * Demo of using bitcoinj DSL for JavaScript</a>
+<span class="sourceLineNo">010</span><a id="line.10"> */</a>
+<span class="sourceLineNo">011</span><a id="line.11">public class Demo {</a>
+<span class="sourceLineNo">012</span><a id="line.12">    private static final Logger log = LoggerFactory.getLogger(Demo.class);</a>
+<span class="sourceLineNo">013</span><a id="line.13"></a>
+<span class="sourceLineNo">014</span><a id="line.14">    public static void main(String[] args) throws ScriptException {</a>
+<span class="sourceLineNo">015</span><a id="line.15">        ScriptRunner runner = new ScriptRunner();</a>
+<span class="sourceLineNo">016</span><a id="line.16">        runner.evalResource("/javascript/sendBitcoin.js");</a>
+<span class="sourceLineNo">017</span><a id="line.17">    }</a>
+<span class="sourceLineNo">018</span><a id="line.18">}</a>
 
 
 
@@ -86,5 +87,6 @@
 
 </pre>
 </div>
+</main>
 </body>
 </html>

@@ -462,64 +462,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_json_rpc_clients">2. JSON-RPC Clients</h2>
 <div class="sectionbody">
-<div id="Class Diagram" class="literalblock">
+<div id="Class Diagram" class="imageblock">
 <div class="content">
-<pre>skinparam packageStyle Rect
-skinparam shadowing false
-hide empty members
-
-namespace com.msgilligan.jsonrpc {
-    interface UntypedRPCClient
-    abstract class AbstractRPCClient
-
-    class RPCClient
-
-    interface DynamicRPCFallback &lt;&lt; Groovy, trait &gt;&gt;
-    class DynamicRPCClient &lt;&lt; Groovy &gt;&gt;
-
-    UntypedRPCClient &lt;|.. AbstractRPCClient
-    AbstractRPCClient &lt;|-- RPCClient
-
-    UntypedRPCClient &lt;|.. DynamicRPCFallback
-    RPCClient &lt;|-- DynamicRPCClient
-    DynamicRPCFallback &lt;|.. DynamicRPCClient
-}
-
-namespace com.msgilligan.bitcoinj.rpc {
-    class BitcoinClient
-    class BitcoinExtendedClient
-
-    class BitcoinScriptingClient &lt;&lt; Groovy &gt;&gt;
-    class BitcoinCLIClient &lt;&lt; Groovy &gt;&gt;
-
-
-    com.msgilligan.jsonrpc.RPCClient &lt;|-- BitcoinClient
-    BitcoinClient &lt;|-- BitcoinExtendedClient
-    BitcoinExtendedClient &lt;|-- BitcoinScriptingClient
-    com.msgilligan.jsonrpc.DynamicRPCFallback &lt;|.. BitcoinScriptingClient
-    BitcoinClient &lt;|-- BitcoinCLIClient
-}
-
-namespace com.msgilligan.namecoinj.rpc {
-    class NamecoinClient
-    class NamecoinScriptingClient &lt;&lt; Groovy &gt;&gt;
-
-    com.msgilligan.bitcoinj.rpc.BitcoinClient &lt;|-- NamecoinClient
-    NamecoinClient &lt;|.. NamecoinScriptingClient
-    com.msgilligan.jsonrpc.DynamicRPCFallback &lt;|.. NamecoinScriptingClient
-}
-
-namespace foundation.omni.rpc {
-    class OmniClient
-    class OmniScriptingClient &lt;&lt; Groovy &gt;&gt;
-    class OmniCLIClient &lt;&lt; Groovy &gt;&gt;
-
-
-    com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient &lt;|-- OmniClient
-    OmniClient &lt;|-- OmniScriptingClient
-    com.msgilligan.jsonrpc.DynamicRPCFallback &lt;|.. OmniScriptingClient
-    OmniClient &lt;|-- OmniCLIClient
-}</pre>
+<img src="images/diag-e69bd96a3df15a23e9325cdffe3594b4.png" alt="diag e69bd96a3df15a23e9325cdffe3594b4" width="1212" height="675">
 </div>
 </div>
 </div>
