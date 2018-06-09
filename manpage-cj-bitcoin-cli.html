@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
 <meta name="author" content="Sean Gilligan">
-<title>bitcoinj-cli(1)</title>
+<title>cj-bitcoin-cli(1)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -428,10 +428,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="manpage">
 <div id="header">
-<h1>bitcoinj-cli(1) Manual Page</h1>
+<h1>cj-bitcoin-cli(1) Manual Page</h1>
 <h2>NAME</h2>
 <div class="sectionbody">
-<p>bitcoinj-cli - A Bitcoin API command-line client</p>
+<p>cj-bitcoin-cli - A Bitcoin API command-line client</p>
 </div>
 </div>
 <div id="content">
@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_synopsis">SYNOPSIS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>java -jar <strong>bitcoinj-cli</strong>-<em>version</em>.jar [<em>OPTION</em>]&#8230;&#8203; <em>command</em>&#8230;&#8203;  [<em>ARGUMENT</em>]&#8230;&#8203;</p>
+<p>cj-bitcoin-cli [<em>OPTION</em>]&#8230;&#8203; <em>command</em>&#8230;&#8203;  [<em>ARGUMENT</em>]&#8230;&#8203;</p>
 </div>
 </div>
 </div>
@@ -447,7 +447,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_description">DESCRIPTION</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>bitcoinj-cli(1) sends <em>command</em>&#8230;&#8203; [<em>ARGUMENT</em>]&#8230;&#8203; to the Bitcoin RPC server specified via [<em>OPTION</em>]&#8230;&#8203; or the default server at <code><a href="http://localhost:8332" class="bare">http://localhost:8332</a></code>.</p>
+<p>cj-bitcoin-cli(1) sends <em>command</em>&#8230;&#8203; [<em>ARGUMENT</em>]&#8230;&#8203; to the Bitcoin RPC server specified via [<em>OPTION</em>]&#8230;&#8203; or the default server at <code><a href="http://localhost:8332" class="bare">http://localhost:8332</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>By default it reads from the local <code>bitcoin.conf</code> for host, port, username, and password information.</p>
 </div>
 </div>
 </div>
@@ -549,10 +552,10 @@ SSL cert validation temporarily disabled to support self-signed certificates.
 <div class="ulist">
 <ul>
 <li>
-<p>getblockcount to default server:</p>
+<p>getblockcount to default server or server configured in <code>bitcoin.conf</code>:</p>
 <div class="listingblock">
 <div class="content">
-<pre>$ java -jar bitcoinj-cli-0.0.7.jar getblockcount</pre>
+<pre>$ cj-bitcoin-cli getblockcount</pre>
 </div>
 </div>
 </li>
@@ -560,7 +563,7 @@ SSL cert validation temporarily disabled to support self-signed certificates.
 <p>getconnectioncount to <code>bitcoinj-daemon</code> running on its default port:</p>
 <div class="listingblock">
 <div class="content">
-<pre>$ java -jar bitcoinj-cli-0.0.7.jar -rpcport=8080 getconnectioncount</pre>
+<pre>$ cj-bitcoin-cli -rpcport=8080 getconnectioncount</pre>
 </div>
 </div>
 </li>
@@ -572,7 +575,7 @@ SSL cert validation temporarily disabled to support self-signed certificates.
 <h2 id="_bugs">BUGS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Refer to the <strong>bitcoinj-addons</strong> issue tracker at <a href="https://github.com/msgilligan/bitcoinj-addons/issues?q=is%3Aopen" class="bare">https://github.com/msgilligan/bitcoinj-addons/issues?q=is%3Aopen</a>.</p>
+<p>Refer to the <strong>ConsensusJ</strong> issue tracker at <a href="https://github.com/ConsensusJ/consensusj/issues" class="bare">https://github.com/ConsensusJ/consensusj/issues</a>.</p>
 </div>
 </div>
 </div>
@@ -580,7 +583,7 @@ SSL cert validation temporarily disabled to support self-signed certificates.
 <h2 id="_authors">AUTHORS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><strong>bitcoinj-cli</strong> was written by Sean Gilligan.</p>
+<p><strong>cj-bitcoin-cli</strong> was written by Sean Gilligan.</p>
 </div>
 <div class="paragraph">
 <p><strong>consensusj</strong> was written by Sean Gilligan and DexX7.</p>
@@ -610,7 +613,7 @@ Free use of this software is granted under the terms of the Apache Software Lice
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-06 22:02:31 PDT
+Last updated 2018-06-09 13:09:48 PDT
 </div>
 </div>
 </body>
