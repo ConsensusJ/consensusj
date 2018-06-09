@@ -8,6 +8,9 @@ A high-level view of the changes in each bitcoinj-addons binary release.
 === *bitcoinj-cli*
 
 * BREAKING: Upgrade to Java 8
+* Rename command-line tool to cj-bitcoin-cli
+* Add Graal native-image build of cj-bitcoin-cli
+* cj-bitcoin-cli now reads `bitcoin.conf` for settings
 
 === *bitcoinj-money*
 

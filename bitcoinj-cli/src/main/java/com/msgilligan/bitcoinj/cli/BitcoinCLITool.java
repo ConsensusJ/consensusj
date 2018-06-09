@@ -10,10 +10,10 @@ import java.util.List;
  * An attempt at cloning the bitcoin-cli tool, but using Java and bitcoinj
  *
  */
-public class BitcoinJCli extends CliCommand {
-    public final static String commandName = "bitcoinj-cli";
+public class BitcoinCLITool extends CliCommand {
+    public final static String commandName = "cj-bitcoin-cli";
 
-    public BitcoinJCli(String[] args) {
+    public BitcoinCLITool(String[] args) {
         super(commandName, new CliOptions(), args);
     }
 
@@ -27,7 +27,7 @@ public class BitcoinJCli extends CliCommand {
      * @param args options, JSON-RPC method, JSON-RPC parameters
      */
     public static void main(String[] args) {
-        BitcoinJCli command = new BitcoinJCli(args);
+        BitcoinCLITool command = new BitcoinCLITool(args);
         Integer status = command.run();
         System.exit(status);
     }

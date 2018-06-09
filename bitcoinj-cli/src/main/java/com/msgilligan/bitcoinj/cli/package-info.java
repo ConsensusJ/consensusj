@@ -1,4 +1,4 @@
 /**
- *  Command-line tool and libraries for communicating with bitcoind using JSON-RPC
+ *  Command-line tool and library for communicating with cryptocurrency daemons using JSON-RPC
  */
 package com.msgilligan.bitcoinj.cli;

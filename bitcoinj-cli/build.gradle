@@ -1,38 +1,23 @@
-// JVM-based CLI tools 
-// bitcoinj-cli tool is packaged to a single jar with ShadowJar
-// We previously explored the possibility of a native (AOT-compiled) executable using RoboVM
-//
-plugins {
-    id 'application'
-    id 'com.github.johnrengelman.shadow' version '1.2.4'
-}
-
+/*
+ * CLI tool support library and `cj-bitcoin-cli` tool.
+ * `cj-bitcoin-cli` tool is compiled to a native command-line tool with Graal `native-image`
+ */
 dependencies {
     compile project(':bitcoinj-rpcclient')
 
-    compile 'commons-cli:commons-cli:1.3.1'
+    compile 'commons-cli:commons-cli:1.4'
     
     runtime "org.slf4j:slf4j-simple:${slf4jVersion}"
 }
 
-
-mainClassName = "com.msgilligan.bitcoinj.cli.BitcoinJCli"
-
-// Since other projects use this module as a dependency we don't want to publish the shadowjar
-// We need to change the build so that we build the executable jar with a new name
-//bintrayUpload.dependsOn shadowJar
+def mainClassName = "com.msgilligan.bitcoinj.cli.BitcoinCLITool"
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'bitcoinj CLI client',
+        attributes 'Implementation-Title': 'ConsensusJ Bitcoin CLI support',
                     'Implementation-Version': version,
                     'Main-Class': mainClassName
     }
-}
-
-shadowJar {
-    baseName = 'bitcoinj-cli'
-    classifier = ''
 }
 
 // Compile a native image using Graal's native-image tool

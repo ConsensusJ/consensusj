@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.cli;
 
+import com.msgilligan.bitcoinj.rpc.bitcoind.BitcoinConfFile;
 import org.consensusj.jsonrpc.JsonRPCException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -178,17 +179,17 @@ public abstract class CliCommand {
      */
     abstract protected Integer runImpl() throws IOException, JsonRPCException;
 
-    private URI getServerURI() {
-        String proto = defaultproto;
-        String host = defaulthost;
-        int port = defaultport;
-        String file = defaultfile;
+    private URI getServerURI(URI confFileURI) {
+        String proto = confFileURI.getScheme();
+        String host = confFileURI.getHost();
+        int port = confFileURI.getPort();
+        String file = confFileURI.getPath();
 
         if (line.hasOption("rpcssl")) {
             proto = "https";
         }
         if (line.hasOption("rpcconnect")) {
-            host = line.getOptionValue("rpcconnect", defaulthost);
+            host = line.getOptionValue("rpcconnect", host);
         }
         if (line.hasOption("regtest") || line.hasOption("testnet")) {
             port = 18332;
@@ -210,9 +211,10 @@ public abstract class CliCommand {
     }
 
     protected RPCConfig getRPCConfig() {
-        URI uri = getServerURI();
-        String user = line.getOptionValue("rpcuser", "");
-        String pass = line.getOptionValue("rpcpassword", "");
+        RPCConfig confFileConfig = BitcoinConfFile.readDefaultConfig().getRPCConfig();
+        URI uri = getServerURI(confFileConfig.getURI());
+        String user = line.getOptionValue("rpcuser", confFileConfig.getUsername());
+        String pass = line.getOptionValue("rpcpassword", confFileConfig.getPassword());
         NetworkParameters netParams;
         if (line.hasOption("regtest")) {
             netParams = RegTestParams.get();

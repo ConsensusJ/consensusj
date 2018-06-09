@@ -11,7 +11,7 @@ import spock.lang.Specification
  *
  * TODO: We should probably check the command output (eventually)
  */
-class BitcoinJCliSpec extends Specification implements CLITestSupport {
+class BitcoinCLITooliSpec extends Specification implements CLITestSupport {
 
     def "help option"() {
         when:
@@ -65,7 +65,7 @@ class BitcoinJCliSpec extends Specification implements CLITestSupport {
         String[] args = parseCommandLine(line)     // Parse line into separate args
 
         // Run the command
-        BitcoinJCli cli = new BitcoinJCli(args)
+        BitcoinCLITool cli = new BitcoinCLITool(args)
         return runCommand(cli)
     }
 

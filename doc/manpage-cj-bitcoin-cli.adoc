@@ -1,21 +1,23 @@
-= bitcoinj-cli(1)
+= cj-bitcoin-cli(1)
 Sean Gilligan
 :doctype: manpage
 :man manual: consensusj Manual
-:man source: consensusj 0.0.8
+:man source: consensusj 0.2.7
 :page-layout: base
 
 == NAME
 
-bitcoinj-cli - A Bitcoin API command-line client
+cj-bitcoin-cli - A Bitcoin API command-line client
 
 == SYNOPSIS
 
-java -jar *bitcoinj-cli*-_version_.jar [_OPTION_]... _command_...  [_ARGUMENT_]...
+cj-bitcoin-cli [_OPTION_]... _command_...  [_ARGUMENT_]...
 
 == DESCRIPTION
 
-bitcoinj-cli(1) sends _command_... [_ARGUMENT_]... to the Bitcoin RPC server specified via [_OPTION_]... or the default server at `http://localhost:8332`.   
+cj-bitcoin-cli(1) sends _command_... [_ARGUMENT_]... to the Bitcoin RPC server specified via [_OPTION_]... or the default server at `http://localhost:8332`.
+
+By default it reads from the local `bitcoin.conf` for host, port, username, and password information.
 
 == OPTIONS
 
@@ -66,27 +68,27 @@ WARNING: SSL cert validation temporarily disabled to support self-signed certifi
 
 == EXAMPLES
 
-* getblockcount to default server:
+* getblockcount to default server or server configured in `bitcoin.conf`:
 +
 ------------
-$ java -jar bitcoinj-cli-0.0.7.jar getblockcount
+$ cj-bitcoin-cli getblockcount
 ------------
 
 * getconnectioncount to `bitcoinj-daemon` running on its default port:
 +
 ------------
-$ java -jar bitcoinj-cli-0.0.7.jar -rpcport=8080 getconnectioncount
+$ cj-bitcoin-cli -rpcport=8080 getconnectioncount
 ------------
 
 
 
 == BUGS
 
-Refer to the *bitcoinj-addons* issue tracker at https://github.com/msgilligan/bitcoinj-addons/issues?q=is%3Aopen.
+Refer to the *ConsensusJ* issue tracker at https://github.com/ConsensusJ/consensusj/issues.
 
 == AUTHORS
 
-*bitcoinj-cli* was written by Sean Gilligan.
+*cj-bitcoin-cli* was written by Sean Gilligan.
 
 *consensusj* was written by Sean Gilligan and DexX7.
 
