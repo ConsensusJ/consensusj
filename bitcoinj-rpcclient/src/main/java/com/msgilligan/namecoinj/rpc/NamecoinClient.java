@@ -45,7 +45,7 @@ public class NamecoinClient extends BitcoinClient {
     public static RPCConfig readConfig() {
         File file = new File(AppDataDirectory.forAppName("Namecoin"), "namecoin.conf");
         BitcoinConfFile conf = new BitcoinConfFile(file);
-        RPCConfig config = conf.read().getRPCConfig();
+        RPCConfig config = conf.readWithFallback().getRPCConfig();
         // Since config is immutable we have to make a new one with NameCoin parameters
         config = new RPCConfig(NMCMainNetParams.get(),
                 config.getURI(),

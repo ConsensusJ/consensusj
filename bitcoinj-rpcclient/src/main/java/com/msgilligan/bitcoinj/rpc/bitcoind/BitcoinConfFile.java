@@ -1,15 +1,20 @@
 package com.msgilligan.bitcoinj.rpc.bitcoind;
 
-import java.io.BufferedReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.util.List;
 
 /**
  * Currently focused on just getting connection info
  */
 public class BitcoinConfFile {
+    private static final Logger log = LoggerFactory.getLogger(BitcoinConfFile.class);
     private static String BITCOINAPPNAME = "Bitcoin";
     private File file;
 
@@ -22,43 +27,63 @@ public class BitcoinConfFile {
     }
 
     public static BitcoinConf readDefaultConfig() {
-        return new BitcoinConfFile().read();
+        return new BitcoinConfFile().readWithFallback();
     }
 
     //
 
     /**
-     * read a bitcoin.conf file
-     * NOTE: Should we really use ugly JDK6 I/O here?
-     * TODO: Improved error handling, currently returns defaults if any error
+     * Read a `bitcoin.conf` file
+     *
      * @return The configuration object
      */
-    public BitcoinConf read()  {
+    public BitcoinConf read() throws IOException {
+        List<String> lines = Files.readAllLines(file.toPath(), Charset.defaultCharset() );
+        return parseLines(lines);
+    }
+
+    /**
+     * Try to read `.conf` file, fallback to defaults on error
+     *
+     * TODO: If any exception occurs we return default values
+     * maybe we should only do this on fileNotFound or accessDenied, etc.
+     * 
+     * @return Configuration read or defaults if read error
+     */
+    public BitcoinConf readWithFallback() {
         BitcoinConf conf = new BitcoinConf();
         setDefaults(conf);
 
-        BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader(file));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return conf;
-        }
-        String line;
-        try {
-            while((line = br.readLine()) != null) {
-                if (!line.startsWith("#")) {
-                    String trimmed = line.split("#")[0].trim();
-                    String[] kv = trimmed.split("=");
-                    if (kv.length == 2) {
-                        conf.put(kv[0], kv[1]);
-                    }
-
-                }
-            }
+            conf = read();
         } catch (IOException e) {
-            e.printStackTrace();
-            return conf;
+            if (e instanceof NoSuchFileException) {
+                log.warn("NoSuchFileException: " + file.getAbsolutePath()   );
+            } else {
+                log.error("Error reading " + file.getAbsolutePath() + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return conf;
+    }
+
+    /**
+     * Not-very-well tested parsing of Bitcoin.conf (or similar) file
+     * 
+     * @param lines An array of one-line-Strings from the file
+     * @return a BitcoinConf object
+     */
+    private BitcoinConf parseLines(List<String> lines) {
+        BitcoinConf conf = new BitcoinConf();
+        for (String line : lines) {
+            if (!line.startsWith("#")) {
+                String trimmed = line.split("#")[0].trim();
+                String[] kv = trimmed.split("=");
+                if (kv.length == 2) {
+                    conf.put(kv[0], kv[1]);
+                }
+
+            }
         }
         return conf;
     }

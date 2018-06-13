@@ -33,7 +33,7 @@ class BitcoinConfFileSpec extends Specification {
         def confFile = new BitcoinConfFile(file)
 
         when:
-        def conf = confFile.read()
+        def conf = confFile.readWithFallback()
 
         then:
         conf.get("rpcconnect") == "127.0.0.1"
