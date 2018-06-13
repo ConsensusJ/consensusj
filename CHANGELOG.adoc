@@ -16,7 +16,7 @@ A high-level view of the changes in each bitcoinj-addons binary release.
 
 * BREAKING: Upgrade to Java 8
 * Upgrade to XChange 4.3.7
-* Upgrade to `org.javamoney:moneta-bp` (JavaMoney  Backport) 1.2
+* Upgrade to `org.javamoney:moneta` (JavaMoney) 1.2.1 from `moneta-bp`
 
 ==== *bitcoinj-proxy*
 

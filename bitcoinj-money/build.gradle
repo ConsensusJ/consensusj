@@ -1,7 +1,7 @@
 def xChangeVersion = '4.3.7'
 
 dependencies {
-    compile 'org.javamoney:moneta-bp:1.2'
+    compile 'org.javamoney:moneta:1.2.1'
 
     compile "org.knowm.xchange:xchange-core:${xChangeVersion}"
 
