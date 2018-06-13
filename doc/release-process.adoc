@@ -17,6 +17,7 @@
 .. `./gradlew bintrayUpload`
 .. Confirm publish of artifacts in Bintray Web UI.
 . Update github-pages site (including JavaDoc): `./gradlew publishSite`
+.. Use Java 9 for this step to get HTML5 docs with search
 
 == Announcements
 

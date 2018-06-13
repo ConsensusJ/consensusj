@@ -38,6 +38,7 @@ allprojects {
 
     repositories {
         maven {
+            // For asciidoclet snapshot
             url 'https://oss.sonatype.org/content/repositories/snapshots/'
         }
     }
