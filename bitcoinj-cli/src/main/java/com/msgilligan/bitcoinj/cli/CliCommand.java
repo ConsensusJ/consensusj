@@ -179,14 +179,14 @@ public abstract class CliCommand {
      */
     abstract protected Integer runImpl() throws IOException, JsonRPCException;
 
-    private URI getServerURI(URI confFileURI) {
-        String proto = confFileURI.getScheme();
+    protected URI getServerURI(URI confFileURI) {
+        String scheme = confFileURI.getScheme();
         String host = confFileURI.getHost();
         int port = confFileURI.getPort();
         String file = confFileURI.getPath();
 
         if (line.hasOption("rpcssl")) {
-            proto = "https";
+            scheme = "https";
         }
         if (line.hasOption("rpcconnect")) {
             host = line.getOptionValue("rpcconnect", host);
@@ -200,7 +200,7 @@ public abstract class CliCommand {
         }
         URI rpcServerURI = null;
         try {
-            rpcServerURI = new URI(proto, null, host, port, file, null, null);
+            rpcServerURI = new URI(scheme, null, host, port, file, null, null);
         } catch (URISyntaxException e) {
             // We should be careful that this never happens
             e.printStackTrace();

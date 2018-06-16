@@ -12,11 +12,21 @@ import java.util.HashMap;
  * First cut is just a map, but future versions may be strongly typed
  */
 public class BitcoinConf extends HashMap<String, String> {
+    public final String rpcconnect = "rpconnect";
+    public final String rpcport = "rpcport";
+    public final String RPCCONNECT_DEFAULT = "localhost";
+    public final String RPCPORT_DEFAULT = "8332";
+
+    public BitcoinConf() {
+        super();
+        this.put(rpcconnect, RPCCONNECT_DEFAULT);
+        this.put(rpcport, RPCPORT_DEFAULT);
+    }
 
     public RPCConfig getRPCConfig() {
         URI uri = null;
         try {
-            uri = new URI("http://" + get("rpcconnect") + ":" + get("rpcport"));
+            uri = new URI("http://" + get(rpcconnect) + ":" + get(rpcport));
         } catch (URISyntaxException e) {
             try {
                 uri = new URI("http://127.0.0.1:8332");
