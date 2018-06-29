@@ -45,6 +45,7 @@ allprojects {
 
     dependencies {
         asciidoclet "org.asciidoctor:asciidoclet:${asciidocletVersion}"
+        asciidoclet "org.asciidoctor:asciidoctorj:${asciidoctorjVersion}"
         asciidoclet "org.asciidoctor:asciidoctorj-diagram:${asciidoctorjDiagramVersion}"
     }
 
