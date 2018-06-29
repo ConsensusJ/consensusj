@@ -44,8 +44,8 @@ allprojects {
     }
 
     dependencies {
-        asciidoclet 'org.asciidoctor:asciidoclet:1.5.5-SNAPSHOT'
-        asciidoclet 'org.asciidoctor:asciidoctorj-diagram:1.5.8'
+        asciidoclet "org.asciidoctor:asciidoclet:${asciidocletVersion}"
+        asciidoclet "org.asciidoctor:asciidoctorj-diagram:${asciidoctorjDiagramVersion}"
     }
 
     javadoc javadocSpec

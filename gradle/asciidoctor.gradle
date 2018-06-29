@@ -1,6 +1,6 @@
 asciidoctorj {
     // We can separately change the AsciidoctorJ dependency version.
-    version = '1.5.6'
+    version = asciidoctorjVersion
 }
 
 asciidoctor {
