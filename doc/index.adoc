@@ -11,7 +11,7 @@ The starting point for documentation on *ConsensusJ* is the https://github.com/C
 
 The main purpose of the GitHub Project Pages is to host the http://consensusj.github.io/consensusj/apidoc/index.html[API Documentation].
 
-There is also the beginnings of a <<addons-user-guide.adoc#,User's Guide>> and a <<manpage-cj-bitcoin-cli.adoc#,manpage for the cj-bitcoin-cli tool>>.
+There is also the beginnings of a <<consensusj-user-guide.adoc#,User's Guide>> and a <<manpage-cj-bitcoin-cli.adoc#,manpage for the cj-bitcoin-cli tool>>.
 
 
 
