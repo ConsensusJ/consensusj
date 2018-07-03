@@ -4,12 +4,13 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
-        classpath "io.ratpack:ratpack-gradle:1.5.4"
     }
 }
 
-//apply plugin: "io.ratpack.ratpack-java"
-apply plugin: "io.ratpack.ratpack-groovy"
+plugins {
+    id 'io.ratpack.ratpack-groovy'        version '1.5.4'
+}
+
 apply plugin: 'com.github.johnrengelman.shadow'
 
 mainClassName = "org.consensusj.proxy.ProxyMain"
