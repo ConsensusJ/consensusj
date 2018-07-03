@@ -1,4 +1,4 @@
-def xChangeVersion = '4.3.7'
+def xChangeVersion = '4.3.8'
 
 dependencies {
     compile 'org.javamoney:moneta:1.2.1'
