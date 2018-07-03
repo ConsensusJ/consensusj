@@ -17,6 +17,9 @@ public class BitcoinConf extends HashMap<String, String> {
     public final String RPCCONNECT_DEFAULT = "localhost";
     public final String RPCPORT_DEFAULT = "8332";
 
+    /**
+     *  Create a BitcoinConf with a default RPCConfig configuration.
+     */
     public BitcoinConf() {
         super();
         this.put(rpcconnect, RPCCONNECT_DEFAULT);
