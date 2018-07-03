@@ -1,9 +1,16 @@
-= bitcoinj-addons Changes
-:homepage: https://github.com/msgilligan/bitcoinj-addons
+= ConsensusJ Changes
+:homepage: https://github.com/ConensusJ/consensusj
 
-A high-level view of the changes in each bitcoinj-addons binary release.
+A high-level view of the changes in each ConsensusJ binary release.
 
 == v0.2.7-SNAPSHOT
+
+=== *bitcoinj-rpcclient*
+
+* BREAKING: Move `jsonrpc` subpackage from `com.msgilligan` to `org.consensusj`
+* Gracefully handle error case in `RPCClient` where `errorStream` is null
+* Update Ethereum clients to work with https://infura.io[Infura]
+* Fix Issue #24: RPCClient doesn't work with long username / password)
 
 === *bitcoinj-cli*
 
@@ -20,20 +27,25 @@ A high-level view of the changes in each bitcoinj-addons binary release.
 
 ==== *bitcoinj-proxy*
 
+* BREAKING: Move `proxy` package form `com.msgilligan.bitcoin` to `org.consensusj`
+* Add functional test of `ProxyMain`
 * Upgrade to Ratpack 1.5.4
 
 === *bitcoinj-spock*
 
+* Add signature-checking to `TransactionSpec`
 * BREAKING: Upgrade to Java 8
 
 ==== *All submodules*
 
+* Travis CI test builds on `oraclejdk9` and `openjdk8`
 * Upgrade to bitcoinj 0.14.7
 * Upgrade to Jackson 2.9.5
 * Upgrade to Groovy 2.5.0
 * Upgrade to Spring Boot 2.0.1.RELEASE
 * Upgrade to Gradle 4.7
 * Upgrade to newer Asciidoctor components
+* Centralize Asciidoctor component versioning in variables
 * Upgrade to Asciidoclet 1.5.5-SNAPSHOT for Java 9+ Javadoc
 
 == v0.2.6
@@ -344,7 +356,7 @@ This is the first release with a CHANGELOG.
 
 === Potentially Breaking
 
-* RPC client API, http://msgilligan.github.io/bitcoinj-addons/apidoc/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] is now using bitcoinj types for almost all JSON-RPC parameters and return types. See https://github.com/msgilligan/bitcoinj-addons/issues/9[Issue #9] to track progress.
+* RPC client API, https://consensusj.github.io/consensusj/apidoc/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] is now using bitcoinj types for almost all JSON-RPC parameters and return types. See https://github.com/ConsensusJ/consensusj/issues/9[Issue #9] to track progress.
 * RPC client API, `setGenerate()` (also `generateBlock()`, `generateBlocks()`) when talking to `bitcoind` 0.9.x or earlier will return an empty list rather than `null`. If server is `0.10.x` or later, will return a list of `Sha256Hash`.
 
 === Features/Changes
@@ -355,7 +367,7 @@ This is the first release with a CHANGELOG.
 
 === Bug fixes
 
-* https://github.com/msgilligan/bitcoinj-addons/issues/10[Issue #10] Broken links in `doc/index.adoc` fixed 
+* https://github.com/ConsensusJ/consensusj/issues/10[Issue #10] Broken links in `doc/index.adoc` fixed
 
 == REL-0.0.1 - v0.0.8
 

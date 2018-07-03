@@ -40,9 +40,9 @@ allprojects {
             repo = 'maven'
             name = 'bitcoinj-addons'
             desc = 'Add-On functionality for bitcoinj'
-            websiteUrl = 'https://github.com/msgilligan/bitcoinj-addons'
-            issueTrackerUrl = 'https://github.com/msgilligan/bitcoinj-addons/issues'
-            vcsUrl = 'https://github.com/msgilligan/bitcoinj-addons.git'
+            websiteUrl = 'https://github.com/ConsensusJ/consensusj'
+            issueTrackerUrl = 'https://github.com/ConsensusJ/consensusj/issues'
+            vcsUrl = 'https://github.com/ConsensusJ/consensusj.git'
             licenses = ['Apache-2.0']
             labels = ['bitcoin', 'bitcoinj', 'json-rpc', 'server', 'peergroup', 'stomp']
             version {

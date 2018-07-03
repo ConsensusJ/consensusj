@@ -52,7 +52,7 @@ ConsensusJ is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] an
 
 
 // Jenkins Widget doesn't display correctly because of ci.omni.foundation self-signed SSL
-// image:https://ci.omni.foundation/buildStatus/icon?job=bitcoinj-addons[link="https://ci.omni.foundation/job/bitcoinj-addons/"]
+// image:https://ci.omni.foundation/buildStatus/icon?job=consensusj[link="https://ci.omni.foundation/job/consensusj/"]
 
 There is also a Travis CI build:
 image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.org/ConsensusJ/consensusj"]
