@@ -1,125 +1,124 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
 <body>
-<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.money;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import javax.money.CurrencyUnit;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import javax.money.Monetary;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import javax.money.convert.ExchangeRate;</a>
-<span class="sourceLineNo">006</span><a id="line.6"></a>
-<span class="sourceLineNo">007</span><a id="line.7">/**</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * Currency Pair using JavaMoney CurrencyUnit type</a>
-<span class="sourceLineNo">009</span><a id="line.9"> */</a>
-<span class="sourceLineNo">010</span><a id="line.10">public class CurrencyUnitPair implements Comparable&lt;CurrencyUnitPair&gt; {</a>
-<span class="sourceLineNo">011</span><a id="line.11"></a>
-<span class="sourceLineNo">012</span><a id="line.12">    final private CurrencyUnit base;</a>
-<span class="sourceLineNo">013</span><a id="line.13">    final private CurrencyUnit target;</a>
-<span class="sourceLineNo">014</span><a id="line.14"></a>
-<span class="sourceLineNo">015</span><a id="line.15">    /**</a>
-<span class="sourceLineNo">016</span><a id="line.16">     * @param pair A string of the form "base/target"</a>
-<span class="sourceLineNo">017</span><a id="line.17">     */</a>
-<span class="sourceLineNo">018</span><a id="line.18">    public CurrencyUnitPair(String pair) {</a>
-<span class="sourceLineNo">019</span><a id="line.19">        this(Monetary.getCurrency(pair.split("/")[0]), Monetary.getCurrency(pair.split("/")[1]));</a>
-<span class="sourceLineNo">020</span><a id="line.20">    }</a>
-<span class="sourceLineNo">021</span><a id="line.21"></a>
-<span class="sourceLineNo">022</span><a id="line.22">    /*</a>
-<span class="sourceLineNo">023</span><a id="line.23">     * @param base base currency as a JavaMoney currency code</a>
-<span class="sourceLineNo">024</span><a id="line.24">     * @param target base currency as a JavaMoney currency code</a>
-<span class="sourceLineNo">025</span><a id="line.25">     */</a>
-<span class="sourceLineNo">026</span><a id="line.26">    public CurrencyUnitPair(String base, String target) {</a>
-<span class="sourceLineNo">027</span><a id="line.27">        this(Monetary.getCurrency(base), Monetary.getCurrency(target));</a>
-<span class="sourceLineNo">028</span><a id="line.28">    }</a>
-<span class="sourceLineNo">029</span><a id="line.29"></a>
-<span class="sourceLineNo">030</span><a id="line.30">    /*</a>
-<span class="sourceLineNo">031</span><a id="line.31">     * @param base base currency as a JavaMoney CurrencyUnit</a>
-<span class="sourceLineNo">032</span><a id="line.32">     * @param target base currency as a JavaMoney CurrencyUnit</a>
-<span class="sourceLineNo">033</span><a id="line.33">     */</a>
-<span class="sourceLineNo">034</span><a id="line.34">    public CurrencyUnitPair(CurrencyUnit base, CurrencyUnit target) {</a>
-<span class="sourceLineNo">035</span><a id="line.35">        this.base = base;</a>
-<span class="sourceLineNo">036</span><a id="line.36">        this.target = target;</a>
-<span class="sourceLineNo">037</span><a id="line.37">    }</a>
-<span class="sourceLineNo">038</span><a id="line.38"></a>
-<span class="sourceLineNo">039</span><a id="line.39">    /**</a>
-<span class="sourceLineNo">040</span><a id="line.40">     * @param rate specifies the base and target currencies</a>
-<span class="sourceLineNo">041</span><a id="line.41">     */</a>
-<span class="sourceLineNo">042</span><a id="line.42">    public CurrencyUnitPair(ExchangeRate rate) {</a>
-<span class="sourceLineNo">043</span><a id="line.43">        this(rate.getBaseCurrency(), rate.getCurrency());</a>
-<span class="sourceLineNo">044</span><a id="line.44">    }</a>
-<span class="sourceLineNo">045</span><a id="line.45"></a>
-<span class="sourceLineNo">046</span><a id="line.46">    /**</a>
-<span class="sourceLineNo">047</span><a id="line.47">     * Get base CurrencyUnit</a>
-<span class="sourceLineNo">048</span><a id="line.48">     * @return base CurrencyUnit</a>
-<span class="sourceLineNo">049</span><a id="line.49">     */</a>
-<span class="sourceLineNo">050</span><a id="line.50">    public CurrencyUnit getBase() {</a>
-<span class="sourceLineNo">051</span><a id="line.51">        return base;</a>
-<span class="sourceLineNo">052</span><a id="line.52">    }</a>
-<span class="sourceLineNo">053</span><a id="line.53"></a>
-<span class="sourceLineNo">054</span><a id="line.54">    /**</a>
-<span class="sourceLineNo">055</span><a id="line.55">     * Get target CurrencyUnit</a>
-<span class="sourceLineNo">056</span><a id="line.56">     * @return target CurrencyUnit</a>
-<span class="sourceLineNo">057</span><a id="line.57">     */</a>
-<span class="sourceLineNo">058</span><a id="line.58">    public CurrencyUnit getTarget() {</a>
-<span class="sourceLineNo">059</span><a id="line.59">        return target;</a>
-<span class="sourceLineNo">060</span><a id="line.60">    }</a>
-<span class="sourceLineNo">061</span><a id="line.61"></a>
-<span class="sourceLineNo">062</span><a id="line.62">    @Override</a>
-<span class="sourceLineNo">063</span><a id="line.63">    public String toString() {</a>
-<span class="sourceLineNo">064</span><a id="line.64"></a>
-<span class="sourceLineNo">065</span><a id="line.65">        return base.getCurrencyCode() + "/" + target.getCurrencyCode();</a>
-<span class="sourceLineNo">066</span><a id="line.66">    }</a>
-<span class="sourceLineNo">067</span><a id="line.67"></a>
-<span class="sourceLineNo">068</span><a id="line.68">    @Override</a>
-<span class="sourceLineNo">069</span><a id="line.69">    public int hashCode() {</a>
-<span class="sourceLineNo">070</span><a id="line.70"></a>
-<span class="sourceLineNo">071</span><a id="line.71">        final int prime = 31;</a>
-<span class="sourceLineNo">072</span><a id="line.72">        int result = 1;</a>
-<span class="sourceLineNo">073</span><a id="line.73">        result = prime * result + ((base == null) ? 0 : base.hashCode());</a>
-<span class="sourceLineNo">074</span><a id="line.74">        result = prime * result + ((target == null) ? 0 : target.hashCode());</a>
-<span class="sourceLineNo">075</span><a id="line.75">        return result;</a>
-<span class="sourceLineNo">076</span><a id="line.76">    }</a>
-<span class="sourceLineNo">077</span><a id="line.77"></a>
-<span class="sourceLineNo">078</span><a id="line.78">    @Override</a>
-<span class="sourceLineNo">079</span><a id="line.79">    public boolean equals(Object obj) {</a>
-<span class="sourceLineNo">080</span><a id="line.80"></a>
-<span class="sourceLineNo">081</span><a id="line.81">        if (this == obj) {</a>
-<span class="sourceLineNo">082</span><a id="line.82">            return true;</a>
-<span class="sourceLineNo">083</span><a id="line.83">        }</a>
-<span class="sourceLineNo">084</span><a id="line.84">        if (obj == null) {</a>
-<span class="sourceLineNo">085</span><a id="line.85">            return false;</a>
-<span class="sourceLineNo">086</span><a id="line.86">        }</a>
-<span class="sourceLineNo">087</span><a id="line.87">        if (getClass() != obj.getClass()) {</a>
-<span class="sourceLineNo">088</span><a id="line.88">            return false;</a>
-<span class="sourceLineNo">089</span><a id="line.89">        }</a>
-<span class="sourceLineNo">090</span><a id="line.90">        CurrencyUnitPair other = (CurrencyUnitPair) obj;</a>
-<span class="sourceLineNo">091</span><a id="line.91">        if (base == null) {</a>
-<span class="sourceLineNo">092</span><a id="line.92">            if (other.base != null) {</a>
-<span class="sourceLineNo">093</span><a id="line.93">                return false;</a>
-<span class="sourceLineNo">094</span><a id="line.94">            }</a>
-<span class="sourceLineNo">095</span><a id="line.95">        } else if (!base.equals(other.base)) {</a>
-<span class="sourceLineNo">096</span><a id="line.96">            return false;</a>
-<span class="sourceLineNo">097</span><a id="line.97">        }</a>
-<span class="sourceLineNo">098</span><a id="line.98">        if (target == null) {</a>
-<span class="sourceLineNo">099</span><a id="line.99">            if (other.target != null) {</a>
-<span class="sourceLineNo">100</span><a id="line.100">                return false;</a>
-<span class="sourceLineNo">101</span><a id="line.101">            }</a>
-<span class="sourceLineNo">102</span><a id="line.102">        } else if (!target.equals(other.target)) {</a>
-<span class="sourceLineNo">103</span><a id="line.103">            return false;</a>
-<span class="sourceLineNo">104</span><a id="line.104">        }</a>
-<span class="sourceLineNo">105</span><a id="line.105">        return true;</a>
-<span class="sourceLineNo">106</span><a id="line.106">    }</a>
-<span class="sourceLineNo">107</span><a id="line.107"></a>
-<span class="sourceLineNo">108</span><a id="line.108">    @Override</a>
-<span class="sourceLineNo">109</span><a id="line.109">    public int compareTo(CurrencyUnitPair o) {</a>
-<span class="sourceLineNo">110</span><a id="line.110"></a>
-<span class="sourceLineNo">111</span><a id="line.111">        return (base.compareTo(o.base) &lt;&lt; 16) + target.compareTo(o.target);</a>
-<span class="sourceLineNo">112</span><a id="line.112">    }</a>
-<span class="sourceLineNo">113</span><a id="line.113">}</a>
+<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.money;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import javax.money.CurrencyUnit;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import javax.money.Monetary;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import javax.money.convert.ExchangeRate;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>/**<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * Currency Pair using JavaMoney CurrencyUnit type<a name="line.8"></a>
+<span class="sourceLineNo">009</span> */<a name="line.9"></a>
+<span class="sourceLineNo">010</span>public class CurrencyUnitPair implements Comparable&lt;CurrencyUnitPair&gt; {<a name="line.10"></a>
+<span class="sourceLineNo">011</span><a name="line.11"></a>
+<span class="sourceLineNo">012</span>    final private CurrencyUnit base;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>    final private CurrencyUnit target;<a name="line.13"></a>
+<span class="sourceLineNo">014</span><a name="line.14"></a>
+<span class="sourceLineNo">015</span>    /**<a name="line.15"></a>
+<span class="sourceLineNo">016</span>     * @param pair A string of the form "base/target"<a name="line.16"></a>
+<span class="sourceLineNo">017</span>     */<a name="line.17"></a>
+<span class="sourceLineNo">018</span>    public CurrencyUnitPair(String pair) {<a name="line.18"></a>
+<span class="sourceLineNo">019</span>        this(Monetary.getCurrency(pair.split("/")[0]), Monetary.getCurrency(pair.split("/")[1]));<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    }<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>    /*<a name="line.22"></a>
+<span class="sourceLineNo">023</span>     * @param base base currency as a JavaMoney currency code<a name="line.23"></a>
+<span class="sourceLineNo">024</span>     * @param target base currency as a JavaMoney currency code<a name="line.24"></a>
+<span class="sourceLineNo">025</span>     */<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    public CurrencyUnitPair(String base, String target) {<a name="line.26"></a>
+<span class="sourceLineNo">027</span>        this(Monetary.getCurrency(base), Monetary.getCurrency(target));<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    }<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>    /*<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     * @param base base currency as a JavaMoney CurrencyUnit<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     * @param target base currency as a JavaMoney CurrencyUnit<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     */<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    public CurrencyUnitPair(CurrencyUnit base, CurrencyUnit target) {<a name="line.34"></a>
+<span class="sourceLineNo">035</span>        this.base = base;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        this.target = target;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    }<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>    /**<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * @param rate specifies the base and target currencies<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     */<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    public CurrencyUnitPair(ExchangeRate rate) {<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        this(rate.getBaseCurrency(), rate.getCurrency());<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    }<a name="line.44"></a>
+<span class="sourceLineNo">045</span><a name="line.45"></a>
+<span class="sourceLineNo">046</span>    /**<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     * Get base CurrencyUnit<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * @return base CurrencyUnit<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     */<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    public CurrencyUnit getBase() {<a name="line.50"></a>
+<span class="sourceLineNo">051</span>        return base;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    }<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>    /**<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * Get target CurrencyUnit<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * @return target CurrencyUnit<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    public CurrencyUnit getTarget() {<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        return target;<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    }<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>    @Override<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    public String toString() {<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>        return base.getCurrencyCode() + "/" + target.getCurrencyCode();<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    }<a name="line.66"></a>
+<span class="sourceLineNo">067</span><a name="line.67"></a>
+<span class="sourceLineNo">068</span>    @Override<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    public int hashCode() {<a name="line.69"></a>
+<span class="sourceLineNo">070</span><a name="line.70"></a>
+<span class="sourceLineNo">071</span>        final int prime = 31;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        int result = 1;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        result = prime * result + ((base == null) ? 0 : base.hashCode());<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        result = prime * result + ((target == null) ? 0 : target.hashCode());<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        return result;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    }<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    @Override<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    public boolean equals(Object obj) {<a name="line.79"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>        if (this == obj) {<a name="line.81"></a>
+<span class="sourceLineNo">082</span>            return true;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        }<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        if (obj == null) {<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            return false;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        }<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        if (getClass() != obj.getClass()) {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>            return false;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        }<a name="line.89"></a>
+<span class="sourceLineNo">090</span>        CurrencyUnitPair other = (CurrencyUnitPair) obj;<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        if (base == null) {<a name="line.91"></a>
+<span class="sourceLineNo">092</span>            if (other.base != null) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>                return false;<a name="line.93"></a>
+<span class="sourceLineNo">094</span>            }<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        } else if (!base.equals(other.base)) {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            return false;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        }<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        if (target == null) {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>            if (other.target != null) {<a name="line.99"></a>
+<span class="sourceLineNo">100</span>                return false;<a name="line.100"></a>
+<span class="sourceLineNo">101</span>            }<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        } else if (!target.equals(other.target)) {<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            return false;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        }<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        return true;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    }<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>    @Override<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    public int compareTo(CurrencyUnitPair o) {<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>        return (base.compareTo(o.base) &lt;&lt; 16) + target.compareTo(o.target);<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    }<a name="line.112"></a>
+<span class="sourceLineNo">113</span>}<a name="line.113"></a>
 
 
 
@@ -182,6 +181,5 @@
 
 </pre>
 </div>
-</main>
 </body>
 </html>

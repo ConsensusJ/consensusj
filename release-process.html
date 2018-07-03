@@ -490,7 +490,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </li>
 <li>
-<p>Update github-pages site (including JavaDoc): <code>./gradlew publishSite</code></p>
+<p>Update Github-pages site (including JavaDoc)&#8201;&#8212;&#8201;Use Java 9 for this step to get HTML5 JavaDoc with search:</p>
+<div class="literalblock">
+<div class="content">
+<pre>export JAVA_HOME=`/usr/libexec/java_home -v9`
+./gradlew publishSite</pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
@@ -539,7 +545,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-19 15:05:48 PST
+Last updated 2018-07-03 16:22:32 PDT
 </div>
 </div>
 </body>

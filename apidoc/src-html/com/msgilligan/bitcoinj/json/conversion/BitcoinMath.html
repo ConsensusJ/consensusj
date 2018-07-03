@@ -1,70 +1,69 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 </head>
 <body>
-<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.json.conversion;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import org.bitcoinj.core.Coin;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">import java.math.BigDecimal;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import java.math.MathContext;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import java.math.RoundingMode;</a>
-<span class="sourceLineNo">008</span><a id="line.8"></a>
-<span class="sourceLineNo">009</span><a id="line.9">/**</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * Utilities for Bitcoin Math</a>
-<span class="sourceLineNo">011</span><a id="line.11"> */</a>
-<span class="sourceLineNo">012</span><a id="line.12">public class BitcoinMath {</a>
-<span class="sourceLineNo">013</span><a id="line.13">    public static final MathContext DEFAULT_CONTEXT = new MathContext(0, RoundingMode.UNNECESSARY);</a>
-<span class="sourceLineNo">014</span><a id="line.14">    public static final int DEFAULT_SCALE = Coin.SMALLEST_UNIT_EXPONENT;</a>
-<span class="sourceLineNo">015</span><a id="line.15">    public static final BigDecimal satoshiPerCoinDecimal = new BigDecimal(Coin.COIN.value, DEFAULT_CONTEXT);</a>
-<span class="sourceLineNo">016</span><a id="line.16"></a>
-<span class="sourceLineNo">017</span><a id="line.17">    /**</a>
-<span class="sourceLineNo">018</span><a id="line.18">     * Convert from BTC `BigDecimal` value to satoshi `long`.</a>
-<span class="sourceLineNo">019</span><a id="line.19">     *</a>
-<span class="sourceLineNo">020</span><a id="line.20">     * @param btc Bitcoin amount in BTC units</a>
-<span class="sourceLineNo">021</span><a id="line.21">     * @return number of satoshi (long)</a>
-<span class="sourceLineNo">022</span><a id="line.22">     */</a>
-<span class="sourceLineNo">023</span><a id="line.23">    public static long btcToSatoshi(final BigDecimal btc) {</a>
-<span class="sourceLineNo">024</span><a id="line.24">        BigDecimal satoshisDecimal = btc.multiply(satoshiPerCoinDecimal);</a>
-<span class="sourceLineNo">025</span><a id="line.25">        return satoshisDecimal.longValueExact();</a>
-<span class="sourceLineNo">026</span><a id="line.26">    }</a>
-<span class="sourceLineNo">027</span><a id="line.27"></a>
-<span class="sourceLineNo">028</span><a id="line.28">    /**</a>
-<span class="sourceLineNo">029</span><a id="line.29">     * Convert from satoshi `long` to BTC `BigDecimal`.</a>
-<span class="sourceLineNo">030</span><a id="line.30">     *</a>
-<span class="sourceLineNo">031</span><a id="line.31">     * @param satoshi number of satoshi (long)</a>
-<span class="sourceLineNo">032</span><a id="line.32">     * @return Bitcoin amount in BTC units</a>
-<span class="sourceLineNo">033</span><a id="line.33">     */</a>
-<span class="sourceLineNo">034</span><a id="line.34">    public static BigDecimal satoshiToBtc(final long satoshi) {</a>
-<span class="sourceLineNo">035</span><a id="line.35">        BigDecimal bdSatoshi = new BigDecimal(satoshi, BitcoinMath.DEFAULT_CONTEXT);</a>
-<span class="sourceLineNo">036</span><a id="line.36">        return bdSatoshi.divide(satoshiPerCoinDecimal, DEFAULT_SCALE, RoundingMode.UNNECESSARY);</a>
-<span class="sourceLineNo">037</span><a id="line.37">    }</a>
-<span class="sourceLineNo">038</span><a id="line.38"></a>
-<span class="sourceLineNo">039</span><a id="line.39">    /**</a>
-<span class="sourceLineNo">040</span><a id="line.40">     * Convert from BTC `BigDecimal` value to `Coin` type.</a>
-<span class="sourceLineNo">041</span><a id="line.41">     *</a>
-<span class="sourceLineNo">042</span><a id="line.42">     * @param btc Bitcoin amount in BTC units</a>
-<span class="sourceLineNo">043</span><a id="line.43">     * @return bitcoinj `Coin` type (uses satoshi unit internally)</a>
-<span class="sourceLineNo">044</span><a id="line.44">     */</a>
-<span class="sourceLineNo">045</span><a id="line.45">    public static Coin btcToCoin(final BigDecimal btc) {</a>
-<span class="sourceLineNo">046</span><a id="line.46">        return Coin.valueOf(btcToSatoshi(btc));</a>
-<span class="sourceLineNo">047</span><a id="line.47">    }</a>
-<span class="sourceLineNo">048</span><a id="line.48"></a>
-<span class="sourceLineNo">049</span><a id="line.49">    /**</a>
-<span class="sourceLineNo">050</span><a id="line.50">     * Convert from `Coin` type to BTC `BigDecimal` value .</a>
-<span class="sourceLineNo">051</span><a id="line.51">     *</a>
-<span class="sourceLineNo">052</span><a id="line.52">     * @param coin Coin value to convert to BTC</a>
-<span class="sourceLineNo">053</span><a id="line.53">     * @return  Bitcoin amount in BTC units</a>
-<span class="sourceLineNo">054</span><a id="line.54">     */</a>
-<span class="sourceLineNo">055</span><a id="line.55">    public static BigDecimal coinToBTC(final Coin coin) {</a>
-<span class="sourceLineNo">056</span><a id="line.56">         return satoshiToBtc(coin.value);</a>
-<span class="sourceLineNo">057</span><a id="line.57">    }</a>
-<span class="sourceLineNo">058</span><a id="line.58">}</a>
+<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.json.conversion;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import org.bitcoinj.core.Coin;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.math.BigDecimal;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import java.math.MathContext;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import java.math.RoundingMode;<a name="line.7"></a>
+<span class="sourceLineNo">008</span><a name="line.8"></a>
+<span class="sourceLineNo">009</span>/**<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * Utilities for Bitcoin Math<a name="line.10"></a>
+<span class="sourceLineNo">011</span> */<a name="line.11"></a>
+<span class="sourceLineNo">012</span>public class BitcoinMath {<a name="line.12"></a>
+<span class="sourceLineNo">013</span>    public static final MathContext DEFAULT_CONTEXT = new MathContext(0, RoundingMode.UNNECESSARY);<a name="line.13"></a>
+<span class="sourceLineNo">014</span>    public static final int DEFAULT_SCALE = Coin.SMALLEST_UNIT_EXPONENT;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>    public static final BigDecimal satoshiPerCoinDecimal = new BigDecimal(Coin.COIN.value, DEFAULT_CONTEXT);<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>    /**<a name="line.17"></a>
+<span class="sourceLineNo">018</span>     * Convert from BTC `BigDecimal` value to satoshi `long`.<a name="line.18"></a>
+<span class="sourceLineNo">019</span>     *<a name="line.19"></a>
+<span class="sourceLineNo">020</span>     * @param btc Bitcoin amount in BTC units<a name="line.20"></a>
+<span class="sourceLineNo">021</span>     * @return number of satoshi (long)<a name="line.21"></a>
+<span class="sourceLineNo">022</span>     */<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    public static long btcToSatoshi(final BigDecimal btc) {<a name="line.23"></a>
+<span class="sourceLineNo">024</span>        BigDecimal satoshisDecimal = btc.multiply(satoshiPerCoinDecimal);<a name="line.24"></a>
+<span class="sourceLineNo">025</span>        return satoshisDecimal.longValueExact();<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    }<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>    /**<a name="line.28"></a>
+<span class="sourceLineNo">029</span>     * Convert from satoshi `long` to BTC `BigDecimal`.<a name="line.29"></a>
+<span class="sourceLineNo">030</span>     *<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     * @param satoshi number of satoshi (long)<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     * @return Bitcoin amount in BTC units<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     */<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    public static BigDecimal satoshiToBtc(final long satoshi) {<a name="line.34"></a>
+<span class="sourceLineNo">035</span>        BigDecimal bdSatoshi = new BigDecimal(satoshi, BitcoinMath.DEFAULT_CONTEXT);<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        return bdSatoshi.divide(satoshiPerCoinDecimal, DEFAULT_SCALE, RoundingMode.UNNECESSARY);<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    }<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>    /**<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * Convert from BTC `BigDecimal` value to `Coin` type.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     *<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * @param btc Bitcoin amount in BTC units<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     * @return bitcoinj `Coin` type (uses satoshi unit internally)<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     */<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    public static Coin btcToCoin(final BigDecimal btc) {<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        return Coin.valueOf(btcToSatoshi(btc));<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    }<a name="line.47"></a>
+<span class="sourceLineNo">048</span><a name="line.48"></a>
+<span class="sourceLineNo">049</span>    /**<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * Convert from `Coin` type to BTC `BigDecimal` value .<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     *<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * @param coin Coin value to convert to BTC<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * @return  Bitcoin amount in BTC units<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     */<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    public static BigDecimal coinToBTC(final Coin coin) {<a name="line.55"></a>
+<span class="sourceLineNo">056</span>         return satoshiToBtc(coin.value);<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    }<a name="line.57"></a>
+<span class="sourceLineNo">058</span>}<a name="line.58"></a>
 
 
 
@@ -127,6 +126,5 @@
 
 </pre>
 </div>
-</main>
 </body>
 </html>

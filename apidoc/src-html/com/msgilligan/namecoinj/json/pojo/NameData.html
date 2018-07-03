@@ -1,91 +1,90 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 </head>
 <body>
-<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.namecoinj.json.pojo;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.annotation.JsonCreator;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import com.fasterxml.jackson.annotation.JsonProperty;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import com.fasterxml.jackson.databind.JavaType;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import com.fasterxml.jackson.databind.ObjectMapper;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import org.bitcoinj.core.Address;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import org.bitcoinj.core.Sha256Hash;</a>
-<span class="sourceLineNo">009</span><a id="line.9"></a>
-<span class="sourceLineNo">010</span><a id="line.10">import java.io.IOException;</a>
-<span class="sourceLineNo">011</span><a id="line.11">import java.util.List;</a>
-<span class="sourceLineNo">012</span><a id="line.12">import java.util.Map;</a>
-<span class="sourceLineNo">013</span><a id="line.13"></a>
-<span class="sourceLineNo">014</span><a id="line.14">/**</a>
-<span class="sourceLineNo">015</span><a id="line.15"> * Namecoin name data</a>
-<span class="sourceLineNo">016</span><a id="line.16"> *</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * example format:</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * [name:d/beelin,</a>
-<span class="sourceLineNo">019</span><a id="line.19"> * value:{"alias":"beelin.github.io"},</a>
-<span class="sourceLineNo">020</span><a id="line.20"> * txid:5737868f7044ade9b0c04698c563955d9b49db841a4e575bc384873073b956ed,</a>
-<span class="sourceLineNo">021</span><a id="line.21"> * address:NAPwebo2VLvGdBFC4cHrLRPS6ZXPKddx9Z,</a>
-<span class="sourceLineNo">022</span><a id="line.22"> * expires_in:31874]</a>
-<span class="sourceLineNo">023</span><a id="line.23"> */</a>
-<span class="sourceLineNo">024</span><a id="line.24">public class NameData {</a>
-<span class="sourceLineNo">025</span><a id="line.25">    private static ObjectMapper mapper = new ObjectMapper();</a>
-<span class="sourceLineNo">026</span><a id="line.26">    private static JavaType mapType = mapper.getTypeFactory().constructMapType(Map.class, String.class, Object.class);</a>
-<span class="sourceLineNo">027</span><a id="line.27"></a>
-<span class="sourceLineNo">028</span><a id="line.28"></a>
-<span class="sourceLineNo">029</span><a id="line.29">    private final   String name;</a>
-<span class="sourceLineNo">030</span><a id="line.30">    private final   Map&lt;String, Object&gt; value;     // Deserialized from escape JSON string</a>
-<span class="sourceLineNo">031</span><a id="line.31">    private final   Sha256Hash txid;</a>
-<span class="sourceLineNo">032</span><a id="line.32">    private final   Address address;</a>
-<span class="sourceLineNo">033</span><a id="line.33">    private final   int expires_in;</a>
-<span class="sourceLineNo">034</span><a id="line.34"></a>
-<span class="sourceLineNo">035</span><a id="line.35">    @JsonCreator</a>
-<span class="sourceLineNo">036</span><a id="line.36">    public NameData(@JsonProperty("name")       String name,</a>
-<span class="sourceLineNo">037</span><a id="line.37">                    @JsonProperty("value")      String value,</a>
-<span class="sourceLineNo">038</span><a id="line.38">                    @JsonProperty("txid")       Sha256Hash txid,</a>
-<span class="sourceLineNo">039</span><a id="line.39">                    @JsonProperty("address")    Address address,</a>
-<span class="sourceLineNo">040</span><a id="line.40">                    @JsonProperty("expires_in") int expires_in) throws IOException {</a>
-<span class="sourceLineNo">041</span><a id="line.41">        this.name = name;</a>
-<span class="sourceLineNo">042</span><a id="line.42">        this.value = mapper.readValue(value, mapType);</a>
-<span class="sourceLineNo">043</span><a id="line.43">        this.txid = txid;</a>
-<span class="sourceLineNo">044</span><a id="line.44">        this.address = address;</a>
-<span class="sourceLineNo">045</span><a id="line.45">        this.expires_in = expires_in;</a>
-<span class="sourceLineNo">046</span><a id="line.46">    }</a>
-<span class="sourceLineNo">047</span><a id="line.47"></a>
-<span class="sourceLineNo">048</span><a id="line.48">    /**</a>
-<span class="sourceLineNo">049</span><a id="line.49">     *</a>
-<span class="sourceLineNo">050</span><a id="line.50">     * @return namespace/name</a>
-<span class="sourceLineNo">051</span><a id="line.51">     */</a>
-<span class="sourceLineNo">052</span><a id="line.52">    public String getName() {</a>
-<span class="sourceLineNo">053</span><a id="line.53">        return name;</a>
-<span class="sourceLineNo">054</span><a id="line.54">    }</a>
-<span class="sourceLineNo">055</span><a id="line.55"></a>
-<span class="sourceLineNo">056</span><a id="line.56">    /**</a>
-<span class="sourceLineNo">057</span><a id="line.57">     *</a>
-<span class="sourceLineNo">058</span><a id="line.58">     * @return JSONNode</a>
-<span class="sourceLineNo">059</span><a id="line.59">     */</a>
-<span class="sourceLineNo">060</span><a id="line.60">    public Map&lt;String, Object&gt; getValue() {</a>
-<span class="sourceLineNo">061</span><a id="line.61">        return value;</a>
-<span class="sourceLineNo">062</span><a id="line.62">    }</a>
-<span class="sourceLineNo">063</span><a id="line.63"></a>
-<span class="sourceLineNo">064</span><a id="line.64">    public Sha256Hash getTxid() {</a>
-<span class="sourceLineNo">065</span><a id="line.65">        return txid;</a>
-<span class="sourceLineNo">066</span><a id="line.66">    }</a>
-<span class="sourceLineNo">067</span><a id="line.67"></a>
-<span class="sourceLineNo">068</span><a id="line.68">    /**</a>
-<span class="sourceLineNo">069</span><a id="line.69">     *</a>
-<span class="sourceLineNo">070</span><a id="line.70">     * @return Address as String (for now since bitcoinj won't allow N... addresses)</a>
-<span class="sourceLineNo">071</span><a id="line.71">     */</a>
-<span class="sourceLineNo">072</span><a id="line.72">    public Address getAddress() {</a>
-<span class="sourceLineNo">073</span><a id="line.73">        return address;</a>
-<span class="sourceLineNo">074</span><a id="line.74">    }</a>
-<span class="sourceLineNo">075</span><a id="line.75"></a>
-<span class="sourceLineNo">076</span><a id="line.76">    public int getExpires_in() {</a>
-<span class="sourceLineNo">077</span><a id="line.77">        return expires_in;</a>
-<span class="sourceLineNo">078</span><a id="line.78">    }</a>
-<span class="sourceLineNo">079</span><a id="line.79">}</a>
+<pre><span class="sourceLineNo">001</span>package com.msgilligan.namecoinj.json.pojo;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import com.fasterxml.jackson.annotation.JsonCreator;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import com.fasterxml.jackson.annotation.JsonProperty;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import com.fasterxml.jackson.databind.JavaType;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import com.fasterxml.jackson.databind.ObjectMapper;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import org.bitcoinj.core.Address;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import org.bitcoinj.core.Sha256Hash;<a name="line.8"></a>
+<span class="sourceLineNo">009</span><a name="line.9"></a>
+<span class="sourceLineNo">010</span>import java.io.IOException;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import java.util.List;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import java.util.Map;<a name="line.12"></a>
+<span class="sourceLineNo">013</span><a name="line.13"></a>
+<span class="sourceLineNo">014</span>/**<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * Namecoin name data<a name="line.15"></a>
+<span class="sourceLineNo">016</span> *<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * example format:<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * [name:d/beelin,<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * value:{"alias":"beelin.github.io"},<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * txid:5737868f7044ade9b0c04698c563955d9b49db841a4e575bc384873073b956ed,<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * address:NAPwebo2VLvGdBFC4cHrLRPS6ZXPKddx9Z,<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * expires_in:31874]<a name="line.22"></a>
+<span class="sourceLineNo">023</span> */<a name="line.23"></a>
+<span class="sourceLineNo">024</span>public class NameData {<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    private static ObjectMapper mapper = new ObjectMapper();<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    private static JavaType mapType = mapper.getTypeFactory().constructMapType(Map.class, String.class, Object.class);<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>    private final   String name;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    private final   Map&lt;String, Object&gt; value;     // Deserialized from escape JSON string<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    private final   Sha256Hash txid;<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    private final   Address address;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    private final   int expires_in;<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>    @JsonCreator<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    public NameData(@JsonProperty("name")       String name,<a name="line.36"></a>
+<span class="sourceLineNo">037</span>                    @JsonProperty("value")      String value,<a name="line.37"></a>
+<span class="sourceLineNo">038</span>                    @JsonProperty("txid")       Sha256Hash txid,<a name="line.38"></a>
+<span class="sourceLineNo">039</span>                    @JsonProperty("address")    Address address,<a name="line.39"></a>
+<span class="sourceLineNo">040</span>                    @JsonProperty("expires_in") int expires_in) throws IOException {<a name="line.40"></a>
+<span class="sourceLineNo">041</span>        this.name = name;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>        this.value = mapper.readValue(value, mapType);<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        this.txid = txid;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>        this.address = address;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>        this.expires_in = expires_in;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    }<a name="line.46"></a>
+<span class="sourceLineNo">047</span><a name="line.47"></a>
+<span class="sourceLineNo">048</span>    /**<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     *<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * @return namespace/name<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    public String getName() {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>        return name;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    }<a name="line.54"></a>
+<span class="sourceLineNo">055</span><a name="line.55"></a>
+<span class="sourceLineNo">056</span>    /**<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     *<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * @return JSONNode<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    public Map&lt;String, Object&gt; getValue() {<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        return value;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    }<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>    public Sha256Hash getTxid() {<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        return txid;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    }<a name="line.66"></a>
+<span class="sourceLineNo">067</span><a name="line.67"></a>
+<span class="sourceLineNo">068</span>    /**<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     *<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * @return Address as String (for now since bitcoinj won't allow N... addresses)<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     */<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    public Address getAddress() {<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        return address;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    }<a name="line.74"></a>
+<span class="sourceLineNo">075</span><a name="line.75"></a>
+<span class="sourceLineNo">076</span>    public int getExpires_in() {<a name="line.76"></a>
+<span class="sourceLineNo">077</span>        return expires_in;<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    }<a name="line.78"></a>
+<span class="sourceLineNo">079</span>}<a name="line.79"></a>
 
 
 
@@ -148,6 +147,5 @@
 
 </pre>
 </div>
-</main>
 </body>
 </html>

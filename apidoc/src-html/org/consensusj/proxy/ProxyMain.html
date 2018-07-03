@@ -1,46 +1,45 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 </head>
 <body>
-<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package org.consensusj.proxy;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.rpc.RPCConfig;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import org.consensusj.jsonrpc.ratpack.RpcProxyHandler;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import ratpack.guice.Guice;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import ratpack.server.BaseDir;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import ratpack.server.RatpackServer;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import ratpack.server.ServerConfig;</a>
-<span class="sourceLineNo">009</span><a id="line.9"></a>
-<span class="sourceLineNo">010</span><a id="line.10">/**</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * Main class for a Bitcoin RPC reverse proxy server</a>
-<span class="sourceLineNo">012</span><a id="line.12"> */</a>
-<span class="sourceLineNo">013</span><a id="line.13">public class ProxyMain {</a>
-<span class="sourceLineNo">014</span><a id="line.14">    public static void main(String... args) throws Exception {</a>
-<span class="sourceLineNo">015</span><a id="line.15">        ServerConfig serverConfig = ServerConfig.of(config -&gt; config</a>
-<span class="sourceLineNo">016</span><a id="line.16">                .port(5050)</a>
-<span class="sourceLineNo">017</span><a id="line.17">                .baseDir(BaseDir.find())</a>
-<span class="sourceLineNo">018</span><a id="line.18">                .json("proxy-config.json")</a>
-<span class="sourceLineNo">019</span><a id="line.19">                .require("/rpcclient", RPCConfig.class)</a>
-<span class="sourceLineNo">020</span><a id="line.20">        );</a>
-<span class="sourceLineNo">021</span><a id="line.21">        RatpackServer.start (server -&gt; server</a>
-<span class="sourceLineNo">022</span><a id="line.22">            .serverConfig(serverConfig)</a>
-<span class="sourceLineNo">023</span><a id="line.23">            .registry(Guice.registry(b -&gt; b.</a>
-<span class="sourceLineNo">024</span><a id="line.24">                    moduleConfig(BitcoinRpcProxyModule.class,</a>
-<span class="sourceLineNo">025</span><a id="line.25">                            serverConfig.get("/rpcclient", RPCConfig.class))))</a>
-<span class="sourceLineNo">026</span><a id="line.26">            .handlers(chain -&gt; chain</a>
-<span class="sourceLineNo">027</span><a id="line.27">                    .post("rpc", RpcProxyHandler.class)</a>
-<span class="sourceLineNo">028</span><a id="line.28">                    .get("status", ChainStatusHandler.class)</a>
-<span class="sourceLineNo">029</span><a id="line.29">                    .get("gen", GenerateHandler.class)</a>
-<span class="sourceLineNo">030</span><a id="line.30">                    .get(ctx -&gt; ctx.getResponse().send("Hello world! (Not RPC)"))</a>
-<span class="sourceLineNo">031</span><a id="line.31">                )</a>
-<span class="sourceLineNo">032</span><a id="line.32">        );</a>
-<span class="sourceLineNo">033</span><a id="line.33">    }</a>
-<span class="sourceLineNo">034</span><a id="line.34">}</a>
+<pre><span class="sourceLineNo">001</span>package org.consensusj.proxy;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import com.msgilligan.bitcoinj.rpc.RPCConfig;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import org.consensusj.jsonrpc.ratpack.RpcProxyHandler;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import ratpack.guice.Guice;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import ratpack.server.BaseDir;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import ratpack.server.RatpackServer;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import ratpack.server.ServerConfig;<a name="line.8"></a>
+<span class="sourceLineNo">009</span><a name="line.9"></a>
+<span class="sourceLineNo">010</span>/**<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * Main class for a Bitcoin RPC reverse proxy server<a name="line.11"></a>
+<span class="sourceLineNo">012</span> */<a name="line.12"></a>
+<span class="sourceLineNo">013</span>public class ProxyMain {<a name="line.13"></a>
+<span class="sourceLineNo">014</span>    public static void main(String... args) throws Exception {<a name="line.14"></a>
+<span class="sourceLineNo">015</span>        ServerConfig serverConfig = ServerConfig.of(config -&gt; config<a name="line.15"></a>
+<span class="sourceLineNo">016</span>                .port(5050)<a name="line.16"></a>
+<span class="sourceLineNo">017</span>                .baseDir(BaseDir.find())<a name="line.17"></a>
+<span class="sourceLineNo">018</span>                .json("proxy-config.json")<a name="line.18"></a>
+<span class="sourceLineNo">019</span>                .require("/rpcclient", RPCConfig.class)<a name="line.19"></a>
+<span class="sourceLineNo">020</span>        );<a name="line.20"></a>
+<span class="sourceLineNo">021</span>        RatpackServer.start (server -&gt; server<a name="line.21"></a>
+<span class="sourceLineNo">022</span>            .serverConfig(serverConfig)<a name="line.22"></a>
+<span class="sourceLineNo">023</span>            .registry(Guice.registry(b -&gt; b.<a name="line.23"></a>
+<span class="sourceLineNo">024</span>                    moduleConfig(BitcoinRpcProxyModule.class,<a name="line.24"></a>
+<span class="sourceLineNo">025</span>                            serverConfig.get("/rpcclient", RPCConfig.class))))<a name="line.25"></a>
+<span class="sourceLineNo">026</span>            .handlers(chain -&gt; chain<a name="line.26"></a>
+<span class="sourceLineNo">027</span>                    .post("rpc", RpcProxyHandler.class)<a name="line.27"></a>
+<span class="sourceLineNo">028</span>                    .get("status", ChainStatusHandler.class)<a name="line.28"></a>
+<span class="sourceLineNo">029</span>                    .get("gen", GenerateHandler.class)<a name="line.29"></a>
+<span class="sourceLineNo">030</span>                    .get(ctx -&gt; ctx.getResponse().send("Hello world! (Not RPC)"))<a name="line.30"></a>
+<span class="sourceLineNo">031</span>                )<a name="line.31"></a>
+<span class="sourceLineNo">032</span>        );<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    }<a name="line.33"></a>
+<span class="sourceLineNo">034</span>}<a name="line.34"></a>
 
 
 
@@ -103,6 +102,5 @@
 
 </pre>
 </div>
-</main>
 </body>
 </html>

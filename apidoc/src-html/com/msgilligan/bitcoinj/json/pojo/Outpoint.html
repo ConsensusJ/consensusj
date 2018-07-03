@@ -1,42 +1,41 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 </head>
 <body>
-<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.json.pojo;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.annotation.JsonIgnoreProperties;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import org.bitcoinj.core.Sha256Hash;</a>
-<span class="sourceLineNo">005</span><a id="line.5"></a>
-<span class="sourceLineNo">006</span><a id="line.6">/**</a>
-<span class="sourceLineNo">007</span><a id="line.7"> * Data class for Outpoint as used by RPC methods</a>
-<span class="sourceLineNo">008</span><a id="line.8"> */</a>
-<span class="sourceLineNo">009</span><a id="line.9">@JsonIgnoreProperties(ignoreUnknown = true)</a>
-<span class="sourceLineNo">010</span><a id="line.10">public class Outpoint {</a>
-<span class="sourceLineNo">011</span><a id="line.11">    private final Sha256Hash txid;</a>
-<span class="sourceLineNo">012</span><a id="line.12">    private final int        vout;</a>
-<span class="sourceLineNo">013</span><a id="line.13"></a>
-<span class="sourceLineNo">014</span><a id="line.14">    public Outpoint(Sha256Hash txid, int vout) {</a>
-<span class="sourceLineNo">015</span><a id="line.15">        this.txid = txid;</a>
-<span class="sourceLineNo">016</span><a id="line.16">        this.vout = vout;</a>
-<span class="sourceLineNo">017</span><a id="line.17">    }</a>
-<span class="sourceLineNo">018</span><a id="line.18"></a>
-<span class="sourceLineNo">019</span><a id="line.19">    public Sha256Hash getTxid() {</a>
-<span class="sourceLineNo">020</span><a id="line.20">        return txid;</a>
-<span class="sourceLineNo">021</span><a id="line.21">    }</a>
-<span class="sourceLineNo">022</span><a id="line.22"></a>
-<span class="sourceLineNo">023</span><a id="line.23">    public int getVout() {</a>
-<span class="sourceLineNo">024</span><a id="line.24">        return vout;</a>
-<span class="sourceLineNo">025</span><a id="line.25">    }</a>
-<span class="sourceLineNo">026</span><a id="line.26"></a>
-<span class="sourceLineNo">027</span><a id="line.27">    public String toString() {</a>
-<span class="sourceLineNo">028</span><a id="line.28">        return "{ " + txid + ", " + vout + " }";</a>
-<span class="sourceLineNo">029</span><a id="line.29">    }</a>
-<span class="sourceLineNo">030</span><a id="line.30">}</a>
+<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.json.pojo;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import com.fasterxml.jackson.annotation.JsonIgnoreProperties;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import org.bitcoinj.core.Sha256Hash;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>/**<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * Data class for Outpoint as used by RPC methods<a name="line.7"></a>
+<span class="sourceLineNo">008</span> */<a name="line.8"></a>
+<span class="sourceLineNo">009</span>@JsonIgnoreProperties(ignoreUnknown = true)<a name="line.9"></a>
+<span class="sourceLineNo">010</span>public class Outpoint {<a name="line.10"></a>
+<span class="sourceLineNo">011</span>    private final Sha256Hash txid;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>    private final int        vout;<a name="line.12"></a>
+<span class="sourceLineNo">013</span><a name="line.13"></a>
+<span class="sourceLineNo">014</span>    public Outpoint(Sha256Hash txid, int vout) {<a name="line.14"></a>
+<span class="sourceLineNo">015</span>        this.txid = txid;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>        this.vout = vout;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>    }<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>    public Sha256Hash getTxid() {<a name="line.19"></a>
+<span class="sourceLineNo">020</span>        return txid;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    }<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>    public int getVout() {<a name="line.23"></a>
+<span class="sourceLineNo">024</span>        return vout;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    }<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>    public String toString() {<a name="line.27"></a>
+<span class="sourceLineNo">028</span>        return "{ " + txid + ", " + vout + " }";<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    }<a name="line.29"></a>
+<span class="sourceLineNo">030</span>}<a name="line.30"></a>
 
 
 
@@ -99,6 +98,5 @@
 
 </pre>
 </div>
-</main>
 </body>
 </html>

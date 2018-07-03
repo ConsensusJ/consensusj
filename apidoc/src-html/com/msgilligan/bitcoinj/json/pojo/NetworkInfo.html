@@ -1,98 +1,97 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 </head>
 <body>
-<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.json.pojo;</a>
-<span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.annotation.JsonCreator;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import com.fasterxml.jackson.annotation.JsonIgnoreProperties;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import com.fasterxml.jackson.annotation.JsonProperty;</a>
-<span class="sourceLineNo">006</span><a id="line.6"></a>
-<span class="sourceLineNo">007</span><a id="line.7">/**</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * POJO for `getnetworkinfo` RPC response.</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * Warning: `network` and `address` will be upgraded to POJOs in the future</a>
-<span class="sourceLineNo">010</span><a id="line.10"> */</a>
-<span class="sourceLineNo">011</span><a id="line.11">@JsonIgnoreProperties(ignoreUnknown = true)</a>
-<span class="sourceLineNo">012</span><a id="line.12">public class NetworkInfo {</a>
-<span class="sourceLineNo">013</span><a id="line.13">    private final int version;</a>
-<span class="sourceLineNo">014</span><a id="line.14">    private final String subVersion;</a>
-<span class="sourceLineNo">015</span><a id="line.15">    private final int protocolVersion;</a>
-<span class="sourceLineNo">016</span><a id="line.16">    private final int timeOffset;</a>
-<span class="sourceLineNo">017</span><a id="line.17">    private final int connections;</a>
-<span class="sourceLineNo">018</span><a id="line.18">    private final String proxy;</a>
-<span class="sourceLineNo">019</span><a id="line.19">    private final int relayFee;</a>
-<span class="sourceLineNo">020</span><a id="line.20">    private final byte[] localServices;</a>
-<span class="sourceLineNo">021</span><a id="line.21">    private final Object[]  network;</a>
-<span class="sourceLineNo">022</span><a id="line.22">    private final Object[]  address;</a>
-<span class="sourceLineNo">023</span><a id="line.23"></a>
-<span class="sourceLineNo">024</span><a id="line.24">    @JsonCreator</a>
-<span class="sourceLineNo">025</span><a id="line.25">    public NetworkInfo(@JsonProperty("version")         int version,</a>
-<span class="sourceLineNo">026</span><a id="line.26">                       @JsonProperty("subversion")      String subVersion,</a>
-<span class="sourceLineNo">027</span><a id="line.27">                       @JsonProperty("protocolversion") int protocolVersion,</a>
-<span class="sourceLineNo">028</span><a id="line.28">                       @JsonProperty("timeOffset")      int timeOffset,</a>
-<span class="sourceLineNo">029</span><a id="line.29">                       @JsonProperty("connections")     int connections,</a>
-<span class="sourceLineNo">030</span><a id="line.30">                       @JsonProperty("proxy")           String proxy,</a>
-<span class="sourceLineNo">031</span><a id="line.31">                       @JsonProperty("relayFee")        int relayFee,</a>
-<span class="sourceLineNo">032</span><a id="line.32">                       @JsonProperty("localServices")   byte[] localServices,</a>
-<span class="sourceLineNo">033</span><a id="line.33">                       @JsonProperty("network")         Object[] network,</a>
-<span class="sourceLineNo">034</span><a id="line.34">                       @JsonProperty("address")         Object[] address) {</a>
-<span class="sourceLineNo">035</span><a id="line.35">        this.version = version;</a>
-<span class="sourceLineNo">036</span><a id="line.36">        this.subVersion = subVersion;</a>
-<span class="sourceLineNo">037</span><a id="line.37">        this.protocolVersion = protocolVersion;</a>
-<span class="sourceLineNo">038</span><a id="line.38">        this.timeOffset = timeOffset;</a>
-<span class="sourceLineNo">039</span><a id="line.39">        this.connections = connections;</a>
-<span class="sourceLineNo">040</span><a id="line.40">        this.proxy = proxy;</a>
-<span class="sourceLineNo">041</span><a id="line.41">        this.relayFee = relayFee;</a>
-<span class="sourceLineNo">042</span><a id="line.42">        this.localServices = localServices;</a>
-<span class="sourceLineNo">043</span><a id="line.43">        this.network = network;</a>
-<span class="sourceLineNo">044</span><a id="line.44">        this.address = address;</a>
-<span class="sourceLineNo">045</span><a id="line.45">    }</a>
-<span class="sourceLineNo">046</span><a id="line.46"></a>
-<span class="sourceLineNo">047</span><a id="line.47">    public int getVersion() {</a>
-<span class="sourceLineNo">048</span><a id="line.48">        return version;</a>
-<span class="sourceLineNo">049</span><a id="line.49">    }</a>
-<span class="sourceLineNo">050</span><a id="line.50"></a>
-<span class="sourceLineNo">051</span><a id="line.51">    public String getSubVersion() {</a>
-<span class="sourceLineNo">052</span><a id="line.52">        return subVersion;</a>
-<span class="sourceLineNo">053</span><a id="line.53">    }</a>
-<span class="sourceLineNo">054</span><a id="line.54"></a>
-<span class="sourceLineNo">055</span><a id="line.55">    public int getProtocolVersion() {</a>
-<span class="sourceLineNo">056</span><a id="line.56">        return protocolVersion;</a>
-<span class="sourceLineNo">057</span><a id="line.57">    }</a>
-<span class="sourceLineNo">058</span><a id="line.58"></a>
-<span class="sourceLineNo">059</span><a id="line.59">    public int getTimeOffset() {</a>
-<span class="sourceLineNo">060</span><a id="line.60">        return timeOffset;</a>
-<span class="sourceLineNo">061</span><a id="line.61">    }</a>
-<span class="sourceLineNo">062</span><a id="line.62"></a>
-<span class="sourceLineNo">063</span><a id="line.63">    public int getConnections() {</a>
-<span class="sourceLineNo">064</span><a id="line.64">        return connections;</a>
-<span class="sourceLineNo">065</span><a id="line.65">    }</a>
-<span class="sourceLineNo">066</span><a id="line.66"></a>
-<span class="sourceLineNo">067</span><a id="line.67">    public String getProxy() {</a>
-<span class="sourceLineNo">068</span><a id="line.68">        return proxy;</a>
-<span class="sourceLineNo">069</span><a id="line.69">    }</a>
-<span class="sourceLineNo">070</span><a id="line.70"></a>
-<span class="sourceLineNo">071</span><a id="line.71">    public int getRelayFee() {</a>
-<span class="sourceLineNo">072</span><a id="line.72">        return relayFee;</a>
-<span class="sourceLineNo">073</span><a id="line.73">    }</a>
-<span class="sourceLineNo">074</span><a id="line.74"></a>
-<span class="sourceLineNo">075</span><a id="line.75">    public byte[] getLocalServices() {</a>
-<span class="sourceLineNo">076</span><a id="line.76">        return localServices;</a>
-<span class="sourceLineNo">077</span><a id="line.77">    }</a>
-<span class="sourceLineNo">078</span><a id="line.78"></a>
-<span class="sourceLineNo">079</span><a id="line.79">    public Object[] getNetwork() {</a>
-<span class="sourceLineNo">080</span><a id="line.80">        return network;</a>
-<span class="sourceLineNo">081</span><a id="line.81">    }</a>
-<span class="sourceLineNo">082</span><a id="line.82"></a>
-<span class="sourceLineNo">083</span><a id="line.83">    public Object[] getAddress() {</a>
-<span class="sourceLineNo">084</span><a id="line.84">        return address;</a>
-<span class="sourceLineNo">085</span><a id="line.85">    }</a>
-<span class="sourceLineNo">086</span><a id="line.86">}</a>
+<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.json.pojo;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import com.fasterxml.jackson.annotation.JsonCreator;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import com.fasterxml.jackson.annotation.JsonIgnoreProperties;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import com.fasterxml.jackson.annotation.JsonProperty;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>/**<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * POJO for `getnetworkinfo` RPC response.<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * Warning: `network` and `address` will be upgraded to POJOs in the future<a name="line.9"></a>
+<span class="sourceLineNo">010</span> */<a name="line.10"></a>
+<span class="sourceLineNo">011</span>@JsonIgnoreProperties(ignoreUnknown = true)<a name="line.11"></a>
+<span class="sourceLineNo">012</span>public class NetworkInfo {<a name="line.12"></a>
+<span class="sourceLineNo">013</span>    private final int version;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>    private final String subVersion;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>    private final int protocolVersion;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    private final int timeOffset;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>    private final int connections;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>    private final String proxy;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    private final int relayFee;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    private final byte[] localServices;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    private final Object[]  network;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    private final Object[]  address;<a name="line.22"></a>
+<span class="sourceLineNo">023</span><a name="line.23"></a>
+<span class="sourceLineNo">024</span>    @JsonCreator<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    public NetworkInfo(@JsonProperty("version")         int version,<a name="line.25"></a>
+<span class="sourceLineNo">026</span>                       @JsonProperty("subversion")      String subVersion,<a name="line.26"></a>
+<span class="sourceLineNo">027</span>                       @JsonProperty("protocolversion") int protocolVersion,<a name="line.27"></a>
+<span class="sourceLineNo">028</span>                       @JsonProperty("timeOffset")      int timeOffset,<a name="line.28"></a>
+<span class="sourceLineNo">029</span>                       @JsonProperty("connections")     int connections,<a name="line.29"></a>
+<span class="sourceLineNo">030</span>                       @JsonProperty("proxy")           String proxy,<a name="line.30"></a>
+<span class="sourceLineNo">031</span>                       @JsonProperty("relayFee")        int relayFee,<a name="line.31"></a>
+<span class="sourceLineNo">032</span>                       @JsonProperty("localServices")   byte[] localServices,<a name="line.32"></a>
+<span class="sourceLineNo">033</span>                       @JsonProperty("network")         Object[] network,<a name="line.33"></a>
+<span class="sourceLineNo">034</span>                       @JsonProperty("address")         Object[] address) {<a name="line.34"></a>
+<span class="sourceLineNo">035</span>        this.version = version;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        this.subVersion = subVersion;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>        this.protocolVersion = protocolVersion;<a name="line.37"></a>
+<span class="sourceLineNo">038</span>        this.timeOffset = timeOffset;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        this.connections = connections;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        this.proxy = proxy;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>        this.relayFee = relayFee;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>        this.localServices = localServices;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        this.network = network;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>        this.address = address;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    }<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>    public int getVersion() {<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        return version;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    }<a name="line.49"></a>
+<span class="sourceLineNo">050</span><a name="line.50"></a>
+<span class="sourceLineNo">051</span>    public String getSubVersion() {<a name="line.51"></a>
+<span class="sourceLineNo">052</span>        return subVersion;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    }<a name="line.53"></a>
+<span class="sourceLineNo">054</span><a name="line.54"></a>
+<span class="sourceLineNo">055</span>    public int getProtocolVersion() {<a name="line.55"></a>
+<span class="sourceLineNo">056</span>        return protocolVersion;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    }<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>    public int getTimeOffset() {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        return timeOffset;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    }<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>    public int getConnections() {<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        return connections;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    }<a name="line.65"></a>
+<span class="sourceLineNo">066</span><a name="line.66"></a>
+<span class="sourceLineNo">067</span>    public String getProxy() {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        return proxy;<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    }<a name="line.69"></a>
+<span class="sourceLineNo">070</span><a name="line.70"></a>
+<span class="sourceLineNo">071</span>    public int getRelayFee() {<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        return relayFee;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    }<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>    public byte[] getLocalServices() {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        return localServices;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    }<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>    public Object[] getNetwork() {<a name="line.79"></a>
+<span class="sourceLineNo">080</span>        return network;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    }<a name="line.81"></a>
+<span class="sourceLineNo">082</span><a name="line.82"></a>
+<span class="sourceLineNo">083</span>    public Object[] getAddress() {<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        return address;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    }<a name="line.85"></a>
+<span class="sourceLineNo">086</span>}<a name="line.86"></a>
 
 
 
@@ -155,6 +154,5 @@
 
 </pre>
 </div>
-</main>
 </body>
 </html>
