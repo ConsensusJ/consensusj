@@ -32,9 +32,12 @@ sourceSets {
     }
 }
 
+def infuraApiKeyOrEmpty = System.env.INFURA_API_KEY ?: project.findProperty('infuraApiKey') ?: ''
+
 test {
     testLogging.showStandardStreams = true
     systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/test/logging.properties"
+    systemProperty 'org.consensusj.ethereum.infuraApiKey', infuraApiKeyOrEmpty
     beforeTest { descriptor ->
         logger.lifecycle('    ' + descriptor.getName())
     }
