@@ -2,7 +2,6 @@ package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
-import com.msgilligan.bitcoinj.rpc.BitcoinClient;
 import org.consensusj.jsonrpc.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +17,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -28,11 +29,10 @@ import java.security.cert.X509Certificate;
  * This is a concrete class with basic JSON-RPC functionality. Abstract `send` method is implemented
  * using `HttpURLConnection`.
  *
- * This client uses strongly-typed POJOs representing {@link JsonRpcRequest} and {@link JsonRpcResponse}. The
- * response object uses a type parameter to specify the object that is the actual JSON-RPC `result`.
- * Early versions of this client were http://c2.com/cgi/wiki?StringlyTyped[stringly-typed], but
- * these strong types allows us to use Jackson to deserialize
- * directly to strongly-typed POJO's without using intermediate `Map` or `JsonNode` types.
+ * Uses strongly-typed POJOs representing {@link JsonRpcRequest} and {@link JsonRpcResponse}. The
+ * response object uses a parameterized type for the object that is the actual JSON-RPC `result`.
+ * Using strong types and Jackson to serialize/deserialize to/from strongly-typed POJO's without
+ * using intermediate `Map` or `JsonNode` types.
  *
  */
 public class RPCClient extends AbstractRPCClient {
@@ -41,6 +41,7 @@ public class RPCClient extends AbstractRPCClient {
     private String username;
     private String password;
     private static final boolean disableSslVerification = false;
+    private static final Charset UTF8 = StandardCharsets.UTF_8;
 
     static {
         if (disableSslVerification) {
@@ -53,16 +54,15 @@ public class RPCClient extends AbstractRPCClient {
     /**
      * Construct a JSON-RPC client from URI, username, and password
      *
-     * Typically you'll want to use {@link BitcoinClient} or one of its subclasses
      * @param server server URI should not contain username/password
-     * @param rpcuser username for the RPC HTTP connection
-     * @param rpcpassword password for the RPC HTTP connection
+     * @param rpcUser username for the RPC HTTP connection
+     * @param rpcPassword password for the RPC HTTP connection
      */
-    public RPCClient(URI server, final String rpcuser, final String rpcpassword) {
+    public RPCClient(URI server, final String rpcUser, final String rpcPassword) {
         super();
         this.serverURI = server;
-        this.username = rpcuser;
-        this.password = rpcpassword;
+        this.username = rpcUser;
+        this.password = rpcPassword;
     }
 
     /**
@@ -128,8 +128,15 @@ public class RPCClient extends AbstractRPCClient {
         return responseJson;
     }
 
-    // Prepare and throw JsonRPCStatusException with all relevant info
-    private void handleBadResponseCode(int responseCode, HttpURLConnection connection) throws IOException, JsonRPCStatusException {
+    /**
+     * Prepare and throw JsonRPCStatusException with all relevant info
+     * @param responseCode Non-success response code
+     * @param connection the current connection
+     * @throws IOException IO Error
+     * @throws JsonRPCStatusException An exception containing the HTTP status coe and a message
+     */
+    private void handleBadResponseCode(int responseCode, HttpURLConnection connection) throws IOException, JsonRPCStatusException
+    {
         String responseMessage = connection.getResponseMessage();
         String exceptionMessage = responseMessage;
         int jsonRPCCode = 0;
@@ -158,7 +165,7 @@ public class RPCClient extends AbstractRPCClient {
     }
 
     private static String convertStreamToString(java.io.InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is,"UTF-8").useDelimiter("\\A");
+        java.util.Scanner s = new java.util.Scanner(is, UTF8.name()).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
 
@@ -166,10 +173,8 @@ public class RPCClient extends AbstractRPCClient {
         HttpURLConnection connection =  (HttpURLConnection) serverURI.toURL().openConnection();
         connection.setDoOutput(true); // For writes
         connection.setRequestMethod("POST");
-//        connection.setRequestProperty("Accept-Charset", StandardCharsets.UTF_8.toString());
-//        connection.setRequestProperty("Content-Type", " application/json;charset=" + StandardCharsets.UTF_8.toString());
-        connection.setRequestProperty("Accept-Charset", "UTF-8");
-        connection.setRequestProperty("Content-Type", "application/json;charset=" +  "UTF-8");
+        connection.setRequestProperty("Accept-Charset", UTF8.name());
+        connection.setRequestProperty("Content-Type", "application/json;charset=" +  UTF8.name());
         connection.setRequestProperty("Connection", "close");   // Avoid EOFException: http://stackoverflow.com/questions/19641374/android-eofexception-when-using-httpurlconnection-headers
 
         String auth = username + ":" + password;
