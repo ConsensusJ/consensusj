@@ -3,6 +3,14 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
+== v0.2.8-SNAPSHOT
+
+Released: Not yet
+
+=== *bitcoinj-rpcclient*
+
+* Fix Jackson type-conversion bug in `AbstractRPCClient#send`
+
 == v0.2.7
 
 Released: 2018.07.03
