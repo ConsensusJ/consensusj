@@ -93,7 +93,7 @@
 <span class="sourceLineNo">085</span>        // Construct a JavaType object so we can tell Jackson what type of result we are expecting.<a name="line.85"></a>
 <span class="sourceLineNo">086</span>        // (We can't use R because of type erasure)<a name="line.86"></a>
 <span class="sourceLineNo">087</span>        JavaType responseType = mapper.getTypeFactory().<a name="line.87"></a>
-<span class="sourceLineNo">088</span>                constructParametricType(JsonRpcResponse.class, JsonRpcResponse.class, resultType);<a name="line.88"></a>
+<span class="sourceLineNo">088</span>                constructParametricType(JsonRpcResponse.class, resultType);<a name="line.88"></a>
 <span class="sourceLineNo">089</span>        return sendForResult(method, responseType, params);<a name="line.89"></a>
 <span class="sourceLineNo">090</span>    }<a name="line.90"></a>
 <span class="sourceLineNo">091</span><a name="line.91"></a>
