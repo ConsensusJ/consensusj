@@ -129,14 +129,7 @@ public abstract class BaseXChangeExchangeRateProvider implements ExchangeRatePro
      */
     @Override
     public void start() {
-        final BaseXChangeExchangeRateProvider that = this;
-        Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                that.poll();
-            }
-        };
-        future = stpe.scheduleWithFixedDelay(task, initialDelay, period, TimeUnit.SECONDS);
+        future = stpe.scheduleWithFixedDelay(this::poll, initialDelay, period, TimeUnit.SECONDS);
     }
 
     /**
@@ -147,12 +140,7 @@ public abstract class BaseXChangeExchangeRateProvider implements ExchangeRatePro
         if (!stopping) {
             stopping = true;
             final ScheduledFuture<?> handle = future;
-            Runnable task = new Runnable() {
-                @Override
-                public void run() {
-                    handle.cancel(true);
-                }
-            };
+            Runnable task = () -> handle.cancel(true);
             stpe.schedule(task, 0, TimeUnit.SECONDS);
         }
     }
@@ -168,7 +156,11 @@ public abstract class BaseXChangeExchangeRateProvider implements ExchangeRatePro
                 notifyExchangeRateObservers(monitor);
             }
         } catch (IOException e) {
+            // TODO: Exceptions should not be swallowed here (or at least not all exceptions)
+            // Some IOExceptions may warrant retries, but not all of them
             // log and ignore IOException (we'll try polling again next interval)
+            // Actually I'm seeing that the CoinMarketCap ticker is returning IOException
+            // when it should return NotAvailableFromExchangeException
             log.error("IOException in BaseXChangeExchangeRateProvider::poll: {}", e);
         } catch (Throwable e) {
             // log and rethrow others
