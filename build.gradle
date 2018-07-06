@@ -50,7 +50,6 @@ subprojects {
     targetCompatibility = 1.8
 
     dependencies {
-        compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
         compile "org.slf4j:slf4j-api:${slf4jVersion}"
 
         testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
