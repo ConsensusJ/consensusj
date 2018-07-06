@@ -1,13 +1,18 @@
-package com.msgilligan.bitcoinj.json.conversion
+package org.consensusj.jsonrpc.internal
 
-import org.bitcoinj.core.Coin
-import org.bitcoinj.core.NetworkParameters
+import com.fasterxml.jackson.core.Version
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.module.SimpleModule
+import spock.lang.Shared
+import spock.lang.Specification
 import spock.lang.Unroll
 
 /**
  * Make sure NumberStringSerializer works for edge-case values
  */
-class NumberStringSerializerSpec extends BaseObjectMapperSpec {
+class NumberStringSerializerSpec extends Specification {
+    @Shared
+    def mapper
 
     @Unroll
     def "fragment #value serializes as #expectedResult"() {
@@ -33,5 +38,12 @@ class NumberStringSerializerSpec extends BaseObjectMapperSpec {
 
     def configureModule(module) {
         module.addSerializer(String.class, new NumberStringSerializer())
+    }
+    
+    def setup() {
+        mapper = new ObjectMapper()
+        def testModule = new SimpleModule("BitcoinJMappingClient", new Version(1, 0, 0, null, null, null))
+        configureModule(testModule)
+        mapper.registerModule(testModule)
     }
 }

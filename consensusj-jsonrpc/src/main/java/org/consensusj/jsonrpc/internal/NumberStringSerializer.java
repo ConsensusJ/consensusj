@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.json.conversion;
+package org.consensusj.jsonrpc.internal;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;

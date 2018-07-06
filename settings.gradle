@@ -1,4 +1,6 @@
-include 'bitcoinj-json',                                             // JSON <-> Object mapping
+include 'consensusj-jsonrpc',                                        // JSONRPC Java client
+        'consensusj-jsonrpc-gvy',                                    // JSONRPC Groovy client
+        'bitcoinj-json',                                             // JSON <-> Java Object mapping
         'bitcoinj-cli', 'bitcoinj-rpcclient',                        // Client
         'bitcoinj-server', 'bitcoinj-daemon', 'bitcoinj-peerserver', // Server lib + 2 server apps
         'bitcoinj-dsl', 'bitcoinj-spock',                            // DSL/Testing
