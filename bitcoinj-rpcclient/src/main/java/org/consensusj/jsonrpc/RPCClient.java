@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -41,7 +40,7 @@ public class RPCClient extends AbstractRPCClient {
     private String username;
     private String password;
     private static final boolean disableSslVerification = false;
-    private static final Charset UTF8 = StandardCharsets.UTF_8;
+    private static final String UTF8 = StandardCharsets.UTF_8.name();
 
     static {
         if (disableSslVerification) {
@@ -165,7 +164,7 @@ public class RPCClient extends AbstractRPCClient {
     }
 
     private static String convertStreamToString(java.io.InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is, UTF8.name()).useDelimiter("\\A");
+        java.util.Scanner s = new java.util.Scanner(is, UTF8).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
 
@@ -173,8 +172,8 @@ public class RPCClient extends AbstractRPCClient {
         HttpURLConnection connection =  (HttpURLConnection) serverURI.toURL().openConnection();
         connection.setDoOutput(true); // For writes
         connection.setRequestMethod("POST");
-        connection.setRequestProperty("Accept-Charset", UTF8.name());
-        connection.setRequestProperty("Content-Type", "application/json;charset=" +  UTF8.name());
+        connection.setRequestProperty("Accept-Charset", UTF8);
+        connection.setRequestProperty("Content-Type", "application/json;charset=" +  UTF8);
         connection.setRequestProperty("Connection", "close");   // Avoid EOFException: http://stackoverflow.com/questions/19641374/android-eofexception-when-using-httpurlconnection-headers
 
         String auth = username + ":" + password;
