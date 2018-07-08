@@ -1,0 +1,26 @@
+plugins {
+    id 'maven'
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+    compile project(':cjbtc-jsonrpc')
+    compile project(':consensusj-jsonrpc-gvy')
+
+    compile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    compile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+        transitive = false
+    }
+
+    testCompile project(':bitcoinj-dsl')                // Use Groovy extensions in tests
+}
+
+test {
+    testLogging.showStandardStreams = true
+    systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/test/logging.properties"
+    beforeTest { descriptor ->
+        logger.lifecycle('    ' + descriptor.getName())
+    }
+}

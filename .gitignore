@@ -5,6 +5,8 @@ build
 *.ipr
 *.iws
 bitcoinj-*/out
+consensusj-*/out
+cjbtc-*/out
 .asciidoctor/
 
 

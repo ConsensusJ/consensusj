@@ -1,5 +1,7 @@
 include 'consensusj-jsonrpc',                                        // JSONRPC Java client
         'consensusj-jsonrpc-gvy',                                    // JSONRPC Groovy client
+        'cjbtc-jsonrpc',
+        'cjbtc-jsonrpc-gvy',
         'bitcoinj-json',                                             // JSON <-> Java Object mapping
         'bitcoinj-cli', 'bitcoinj-rpcclient',                        // Client
         'bitcoinj-server', 'bitcoinj-daemon', 'bitcoinj-peerserver', // Server lib + 2 server apps
