@@ -21,8 +21,8 @@ public interface CLITestSupport {
     /**
      * Run a command and capture status and output
      *
-     * @param command
-     * @return
+     * @param command Command object instance to run
+     * @return Object containing status, stdout, stderr
      */
     default CLICommandResult runCommand(CliCommand command) throws UnsupportedEncodingException {
         // Setup CommandResult to capture status and streams
