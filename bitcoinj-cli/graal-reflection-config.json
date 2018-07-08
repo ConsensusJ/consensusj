@@ -25,7 +25,7 @@
     ]
   },
   {
-    "name" : "com.msgilligan.bitcoinj.json.conversion.NumberStringSerializer",
+    "name" : "org.consensusj.jsonrpc.internal.NumberStringSerializer",
     "allDeclaredMethods" : true,
     "allPublicMethods" : true,
     "methods" : [

@@ -3,11 +3,13 @@
  * `cj-bitcoin-cli` tool is compiled to a native command-line tool with Graal `native-image`
  */
 dependencies {
-    compile project(':bitcoinj-rpcclient')
+    compile project(':cjbtc-jsonrpc')
 
     compile 'commons-cli:commons-cli:1.4'
     
     runtime "org.slf4j:slf4j-simple:${slf4jVersion}"
+
+    testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
 }
 
 def mainClassName = "com.msgilligan.bitcoinj.cli.BitcoinCLITool"

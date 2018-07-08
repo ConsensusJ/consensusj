@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj.cli
 
-import com.msgilligan.bitcoinj.test.CLICommandResult
-import com.msgilligan.bitcoinj.test.CLITestSupport
+import com.msgilligan.bitcoinj.cli.test.CLICommandResult
+import com.msgilligan.bitcoinj.cli.test.CLITestSupport
 import spock.lang.Ignore
 import spock.lang.Specification
 
