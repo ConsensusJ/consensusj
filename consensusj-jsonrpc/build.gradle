@@ -16,9 +16,12 @@ dependencies {
     }
 }
 
+ext.moduleName = 'org.consensusj.jsonrpc'
+
 jar {
+    inputs.property("moduleName", moduleName)
     manifest {
-        attributes "Automatic-Module-Name": "org.consensusj.jsonrpc"
+        attributes "Automatic-Module-Name": moduleName
     }
 }
 
