@@ -6,6 +6,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
+    // Note:  jackson-core and jackson-databind have "Automatic-Module-Name" in manifest since 2.9.1
     compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
@@ -15,6 +16,11 @@ dependencies {
     }
 }
 
+jar {
+    manifest {
+        attributes "Automatic-Module-Name": "org.consensusj.jsonrpc"
+    }
+}
 
 test {
     testLogging.showStandardStreams = true
