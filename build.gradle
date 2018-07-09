@@ -30,7 +30,7 @@ allprojects {
     apply plugin: 'groovy'
     //apply plugin: 'findbugs'
 
-    version = bitcoinjAddonsVersion     // set in gradle.properties
+    version = consensusjVersion     // set in gradle.properties
     group = 'com.msgilligan'
 
     repositories {

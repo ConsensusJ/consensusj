@@ -46,7 +46,7 @@ allprojects {
             licenses = ['Apache-2.0']
             labels = ['bitcoin', 'bitcoinj', 'json-rpc', 'server', 'peergroup', 'stomp']
             version {
-                name = bitcoinjAddonsVersion
+                name = consensusjVersion
                 desc = 'Dangerously preliminary release.'
                 released  = new Date()
                 vcsTag = 'none'
