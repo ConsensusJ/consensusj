@@ -15,7 +15,7 @@ This section is TBD. For now the project https://github.com/ConsensusJ/consensus
 
 == JSON-RPC Clients
 
-[plantuml, format="png", id="Class Diagram"]
+[plantuml, format="svg", id="Class Diagram"]
 ....
 skinparam packageStyle Rect
 skinparam shadowing false
