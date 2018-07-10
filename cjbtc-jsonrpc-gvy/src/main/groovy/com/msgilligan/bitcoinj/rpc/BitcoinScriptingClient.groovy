@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.rpc.bitcoind.BitcoinConfFile
-import org.consensusj.jsonrpc.DynamicRPCFallback
+import org.consensusj.jsonrpc.groovy.DynamicRPCFallback
 
 /**
  * Bitcoin RPC client for scripting

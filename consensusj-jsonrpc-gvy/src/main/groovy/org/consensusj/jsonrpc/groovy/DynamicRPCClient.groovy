@@ -1,4 +1,7 @@
-package org.consensusj.jsonrpc
+package org.consensusj.jsonrpc.groovy
+
+import org.consensusj.jsonrpc.RPCClient
+
 /**
  * Use Groovy <code>methodMissing</code> to allow *any* JSON-RPC call to be made
  * as <code>client.rpcMethod(args)</code>. Note that calling a non-existent method

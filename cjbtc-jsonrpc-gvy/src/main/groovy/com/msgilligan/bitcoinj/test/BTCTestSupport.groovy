@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj.test
 
 import com.msgilligan.bitcoinj.rpc.BitcoinClientDelegate
-import org.consensusj.jsonrpc.Loggable
+import org.consensusj.jsonrpc.groovy.Loggable
 import com.msgilligan.bitcoinj.json.conversion.BitcoinMath
 import org.bitcoinj.core.Coin
 

@@ -16,14 +16,18 @@
  *
  * class RPCClient
  *
- * interface DynamicRPCFallback << Groovy, trait >>
- * class DynamicRPCClient << Groovy >>
- *
  * UntypedRPCClient <|.. AbstractRPCClient
  * AbstractRPCClient <|-- RPCClient
  *
- * UntypedRPCClient <|.. DynamicRPCFallback
- * RPCClient <|-- DynamicRPCClient
+ * }
+ *
+ * namespace org.consensusj.jsonrpc.groovy {
+ *
+ * interface DynamicRPCFallback << Groovy, trait >>
+ * class DynamicRPCClient << Groovy >>
+ *
+ * org.consensusj.jsonrpc.UntypedRPCClient <|.. DynamicRPCFallback
+ * org.consensusj.jsonrpc.RPCClient <|-- DynamicRPCClient
  * DynamicRPCFallback <|.. DynamicRPCClient
  * }
  * ....

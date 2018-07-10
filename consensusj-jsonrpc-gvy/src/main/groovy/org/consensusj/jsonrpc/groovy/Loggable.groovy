@@ -1,4 +1,4 @@
-package org.consensusj.jsonrpc
+package org.consensusj.jsonrpc.groovy
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
