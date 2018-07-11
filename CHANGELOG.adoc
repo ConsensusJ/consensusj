@@ -3,9 +3,47 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.2.9-SNAPSHOT
+== v0.2.9
 
-Released: In progress
+Released: 2018.07.10
+
+=== New Modules
+
+These new modules were all extracted from the existing `bitcoinj-rpcclient` module.
+
+consensusj-jsonrpc::
+ * Java JSON-RPC client with no bitcoinj dependency
+ * `Automatic-Module-Name: org.consensusj.jsonrpc`
+
+consensusj-jsonrpc-gvy::
+ * Groovy-enhanced JSON-RPC client with dynamic method support
+ * `Automatic-Module-Name: org.consensusj.jsonrpc.groovy`
+
+cjbtc-jsonrpc::
+ * Java Bitcoin JSON-RPC client
+ * Needs more refactoring before it can get an Automatic-Module-Name
+
+cjbtc-jsonrpc-gvy::
+ * Groovy-enhanced Bitcoin JSON-RPC with dynamic method support and integration test support classes
+ * Needs more refactoring before it can get an Automatic-Module-Name
+
+=== bitcoinj-rpcclient
+
+* Most code factored out into new modules
+* Still contains Ethereum and Namecoin JSON-RPC clients (but those will be factored into new modules in a future release)
+* Still contains Bitcoin integration tests
+
+=== bitcoinj-cli
+
+* Removed all Groovy code from compile source set (but not test) and removed Groovy transitive dependency.
+
+
+=== *All submodules*
+
+* Upgrade to Gradle 4.8.1
+* AsciidoctorJ 1.5.6, Asciidoclet 1.5.6-SNAPSHOT
+* Create `doc/puml` directory so asciidoclet can pull PlantUML from it _and_ IntelliJ can preview it properly.
+
 
 == v0.2.8
 
@@ -39,7 +77,7 @@ Released: 2018.07.03
 * Upgrade to XChange 4.3.8  
 * Upgrade to `org.javamoney:moneta` (JavaMoney) 1.2.1 from `moneta-bp`
 
-==== *bitcoinj-proxy*
+=== *bitcoinj-proxy*
 
 * BREAKING: Move `proxy` package form `com.msgilligan.bitcoin` to `org.consensusj`
 * Add functional test of `ProxyMain`
@@ -50,7 +88,7 @@ Released: 2018.07.03
 * Add signature-checking to `TransactionSpec`
 * BREAKING: Upgrade to Java 8
 
-==== *All submodules*
+=== *All submodules*
 
 * Travis CI test builds on `oraclejdk9` and `openjdk8`
 * Upgrade to bitcoinj 0.14.7

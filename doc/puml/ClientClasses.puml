@@ -1,0 +1,49 @@
+@startuml
+skinparam packageStyle Rect
+skinparam shadowing false
+hide empty members
+
+namespace org.consensusj.jsonrpc {
+    interface UntypedRPCClient
+    abstract class AbstractRPCClient
+    class RPCClient
+
+    UntypedRPCClient <|.. AbstractRPCClient
+    AbstractRPCClient <|-- RPCClient
+
+}
+
+namespace org.consensusj.jsonrpc.groovy {
+  interface DynamicRPCFallback << Groovy, trait >>
+  class DynamicRPCClient << Groovy >>
+
+  org.consensusj.jsonrpc.UntypedRPCClient <|.. DynamicRPCFallback
+  org.consensusj.jsonrpc.RPCClient <|-- DynamicRPCClient
+  DynamicRPCFallback <|.. DynamicRPCClient
+}
+
+namespace com.msgilligan.bitcoinj.rpc {
+    class BitcoinClient
+    class BitcoinExtendedClient
+
+    class BitcoinScriptingClient << Groovy >>
+    class BitcoinCLIClient << Groovy >>
+
+
+    org.consensusj.jsonrpc.RPCClient <|-- BitcoinClient
+    BitcoinClient <|-- BitcoinExtendedClient
+    BitcoinExtendedClient <|-- BitcoinScriptingClient
+    org.consensusj.jsonrpc.groovy.DynamicRPCFallback <|.. BitcoinScriptingClient
+    BitcoinClient <|-- BitcoinCLIClient
+}
+
+namespace com.msgilligan.namecoinj.rpc {
+    class NamecoinClient
+    class NamecoinScriptingClient << Groovy >>
+
+    com.msgilligan.bitcoinj.rpc.BitcoinClient <|-- NamecoinClient
+    NamecoinClient <|.. NamecoinScriptingClient
+    org.consensusj.jsonrpc.groovy.DynamicRPCFallback <|.. NamecoinScriptingClient
+}
+@enduml
+
