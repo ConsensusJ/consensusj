@@ -1,72 +1,73 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 </head>
 <body>
+<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.json.pojo;<a name="line.1"></a>
-<span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import com.fasterxml.jackson.annotation.JsonCreator;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import com.fasterxml.jackson.annotation.JsonIgnoreProperties;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import com.fasterxml.jackson.annotation.JsonProperty;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import org.bitcoinj.core.Coin;<a name="line.6"></a>
-<span class="sourceLineNo">007</span>import org.bitcoinj.core.Sha256Hash;<a name="line.7"></a>
-<span class="sourceLineNo">008</span><a name="line.8"></a>
-<span class="sourceLineNo">009</span>import java.util.Map;<a name="line.9"></a>
-<span class="sourceLineNo">010</span><a name="line.10"></a>
-<span class="sourceLineNo">011</span>/**<a name="line.11"></a>
-<span class="sourceLineNo">012</span> * Result of `gettxout`<a name="line.12"></a>
-<span class="sourceLineNo">013</span> */<a name="line.13"></a>
-<span class="sourceLineNo">014</span>@JsonIgnoreProperties(ignoreUnknown = true)<a name="line.14"></a>
-<span class="sourceLineNo">015</span>public class TxOutInfo {<a name="line.15"></a>
-<span class="sourceLineNo">016</span>    private final Sha256Hash bestblock;<a name="line.16"></a>
-<span class="sourceLineNo">017</span>    private final int        confirmations;<a name="line.17"></a>
-<span class="sourceLineNo">018</span>    private final Coin       value;<a name="line.18"></a>
-<span class="sourceLineNo">019</span>    private final Map        scriptPubKey;<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    private final int        version;<a name="line.20"></a>
-<span class="sourceLineNo">021</span>    private final boolean    coinbase;<a name="line.21"></a>
-<span class="sourceLineNo">022</span><a name="line.22"></a>
-<span class="sourceLineNo">023</span>    @JsonCreator<a name="line.23"></a>
-<span class="sourceLineNo">024</span>    public TxOutInfo(@JsonProperty("bestblock")     Sha256Hash  bestblock,<a name="line.24"></a>
-<span class="sourceLineNo">025</span>                     @JsonProperty("confirmations") int         confirmations,<a name="line.25"></a>
-<span class="sourceLineNo">026</span>                     @JsonProperty("value")         Coin        value,<a name="line.26"></a>
-<span class="sourceLineNo">027</span>                     @JsonProperty("scriptPubKey")  Map         scriptPubKey,<a name="line.27"></a>
-<span class="sourceLineNo">028</span>                     @JsonProperty("version")       int         version,<a name="line.28"></a>
-<span class="sourceLineNo">029</span>                     @JsonProperty("coinbase")      boolean     coinbase) {<a name="line.29"></a>
-<span class="sourceLineNo">030</span>        this.bestblock = bestblock;<a name="line.30"></a>
-<span class="sourceLineNo">031</span>        this.confirmations = confirmations;<a name="line.31"></a>
-<span class="sourceLineNo">032</span>        this.value = value;<a name="line.32"></a>
-<span class="sourceLineNo">033</span>        this.scriptPubKey = scriptPubKey;<a name="line.33"></a>
-<span class="sourceLineNo">034</span>        this.version = version;<a name="line.34"></a>
-<span class="sourceLineNo">035</span>        this.coinbase = coinbase;<a name="line.35"></a>
-<span class="sourceLineNo">036</span>    }<a name="line.36"></a>
-<span class="sourceLineNo">037</span><a name="line.37"></a>
-<span class="sourceLineNo">038</span>    public Sha256Hash getBestblock() {<a name="line.38"></a>
-<span class="sourceLineNo">039</span>        return bestblock;<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    }<a name="line.40"></a>
-<span class="sourceLineNo">041</span><a name="line.41"></a>
-<span class="sourceLineNo">042</span>    public int getConfirmations() {<a name="line.42"></a>
-<span class="sourceLineNo">043</span>        return confirmations;<a name="line.43"></a>
-<span class="sourceLineNo">044</span>    }<a name="line.44"></a>
-<span class="sourceLineNo">045</span><a name="line.45"></a>
-<span class="sourceLineNo">046</span>    public Coin getValue() {<a name="line.46"></a>
-<span class="sourceLineNo">047</span>        return value;<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    }<a name="line.48"></a>
-<span class="sourceLineNo">049</span><a name="line.49"></a>
-<span class="sourceLineNo">050</span>    public Map getScriptPubKey() {<a name="line.50"></a>
-<span class="sourceLineNo">051</span>        return scriptPubKey;<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    }<a name="line.52"></a>
-<span class="sourceLineNo">053</span><a name="line.53"></a>
-<span class="sourceLineNo">054</span>    public int getVersion() {<a name="line.54"></a>
-<span class="sourceLineNo">055</span>        return version;<a name="line.55"></a>
-<span class="sourceLineNo">056</span>    }<a name="line.56"></a>
-<span class="sourceLineNo">057</span><a name="line.57"></a>
-<span class="sourceLineNo">058</span>    public boolean isCoinbase() {<a name="line.58"></a>
-<span class="sourceLineNo">059</span>        return coinbase;<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    }<a name="line.60"></a>
-<span class="sourceLineNo">061</span>}<a name="line.61"></a>
+<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.json.pojo;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.annotation.JsonCreator;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.fasterxml.jackson.annotation.JsonIgnoreProperties;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import com.fasterxml.jackson.annotation.JsonProperty;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import org.bitcoinj.core.Coin;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import org.bitcoinj.core.Sha256Hash;</a>
+<span class="sourceLineNo">008</span><a id="line.8"></a>
+<span class="sourceLineNo">009</span><a id="line.9">import java.util.Map;</a>
+<span class="sourceLineNo">010</span><a id="line.10"></a>
+<span class="sourceLineNo">011</span><a id="line.11">/**</a>
+<span class="sourceLineNo">012</span><a id="line.12"> * Result of `gettxout`</a>
+<span class="sourceLineNo">013</span><a id="line.13"> */</a>
+<span class="sourceLineNo">014</span><a id="line.14">@JsonIgnoreProperties(ignoreUnknown = true)</a>
+<span class="sourceLineNo">015</span><a id="line.15">public class TxOutInfo {</a>
+<span class="sourceLineNo">016</span><a id="line.16">    private final Sha256Hash bestblock;</a>
+<span class="sourceLineNo">017</span><a id="line.17">    private final int        confirmations;</a>
+<span class="sourceLineNo">018</span><a id="line.18">    private final Coin       value;</a>
+<span class="sourceLineNo">019</span><a id="line.19">    private final Map        scriptPubKey;</a>
+<span class="sourceLineNo">020</span><a id="line.20">    private final int        version;</a>
+<span class="sourceLineNo">021</span><a id="line.21">    private final boolean    coinbase;</a>
+<span class="sourceLineNo">022</span><a id="line.22"></a>
+<span class="sourceLineNo">023</span><a id="line.23">    @JsonCreator</a>
+<span class="sourceLineNo">024</span><a id="line.24">    public TxOutInfo(@JsonProperty("bestblock")     Sha256Hash  bestblock,</a>
+<span class="sourceLineNo">025</span><a id="line.25">                     @JsonProperty("confirmations") int         confirmations,</a>
+<span class="sourceLineNo">026</span><a id="line.26">                     @JsonProperty("value")         Coin        value,</a>
+<span class="sourceLineNo">027</span><a id="line.27">                     @JsonProperty("scriptPubKey")  Map         scriptPubKey,</a>
+<span class="sourceLineNo">028</span><a id="line.28">                     @JsonProperty("version")       int         version,</a>
+<span class="sourceLineNo">029</span><a id="line.29">                     @JsonProperty("coinbase")      boolean     coinbase) {</a>
+<span class="sourceLineNo">030</span><a id="line.30">        this.bestblock = bestblock;</a>
+<span class="sourceLineNo">031</span><a id="line.31">        this.confirmations = confirmations;</a>
+<span class="sourceLineNo">032</span><a id="line.32">        this.value = value;</a>
+<span class="sourceLineNo">033</span><a id="line.33">        this.scriptPubKey = scriptPubKey;</a>
+<span class="sourceLineNo">034</span><a id="line.34">        this.version = version;</a>
+<span class="sourceLineNo">035</span><a id="line.35">        this.coinbase = coinbase;</a>
+<span class="sourceLineNo">036</span><a id="line.36">    }</a>
+<span class="sourceLineNo">037</span><a id="line.37"></a>
+<span class="sourceLineNo">038</span><a id="line.38">    public Sha256Hash getBestblock() {</a>
+<span class="sourceLineNo">039</span><a id="line.39">        return bestblock;</a>
+<span class="sourceLineNo">040</span><a id="line.40">    }</a>
+<span class="sourceLineNo">041</span><a id="line.41"></a>
+<span class="sourceLineNo">042</span><a id="line.42">    public int getConfirmations() {</a>
+<span class="sourceLineNo">043</span><a id="line.43">        return confirmations;</a>
+<span class="sourceLineNo">044</span><a id="line.44">    }</a>
+<span class="sourceLineNo">045</span><a id="line.45"></a>
+<span class="sourceLineNo">046</span><a id="line.46">    public Coin getValue() {</a>
+<span class="sourceLineNo">047</span><a id="line.47">        return value;</a>
+<span class="sourceLineNo">048</span><a id="line.48">    }</a>
+<span class="sourceLineNo">049</span><a id="line.49"></a>
+<span class="sourceLineNo">050</span><a id="line.50">    public Map getScriptPubKey() {</a>
+<span class="sourceLineNo">051</span><a id="line.51">        return scriptPubKey;</a>
+<span class="sourceLineNo">052</span><a id="line.52">    }</a>
+<span class="sourceLineNo">053</span><a id="line.53"></a>
+<span class="sourceLineNo">054</span><a id="line.54">    public int getVersion() {</a>
+<span class="sourceLineNo">055</span><a id="line.55">        return version;</a>
+<span class="sourceLineNo">056</span><a id="line.56">    }</a>
+<span class="sourceLineNo">057</span><a id="line.57"></a>
+<span class="sourceLineNo">058</span><a id="line.58">    public boolean isCoinbase() {</a>
+<span class="sourceLineNo">059</span><a id="line.59">        return coinbase;</a>
+<span class="sourceLineNo">060</span><a id="line.60">    }</a>
+<span class="sourceLineNo">061</span><a id="line.61">}</a>
 
 
 
@@ -129,5 +130,6 @@
 
 </pre>
 </div>
+</main>
 </body>
 </html>

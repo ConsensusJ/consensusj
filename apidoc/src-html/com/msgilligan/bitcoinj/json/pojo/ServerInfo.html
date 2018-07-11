@@ -1,134 +1,135 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 </head>
 <body>
+<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.json.pojo;<a name="line.1"></a>
-<span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import com.fasterxml.jackson.annotation.JsonCreator;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import com.fasterxml.jackson.annotation.JsonIgnoreProperties;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import com.fasterxml.jackson.annotation.JsonProperty;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import org.bitcoinj.core.Coin;<a name="line.6"></a>
-<span class="sourceLineNo">007</span><a name="line.7"></a>
-<span class="sourceLineNo">008</span>import java.math.BigDecimal;<a name="line.8"></a>
-<span class="sourceLineNo">009</span><a name="line.9"></a>
-<span class="sourceLineNo">010</span>/**<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * POJO for `getinfo` RPC response.<a name="line.11"></a>
-<span class="sourceLineNo">012</span> */<a name="line.12"></a>
-<span class="sourceLineNo">013</span>@JsonIgnoreProperties(ignoreUnknown = true)<a name="line.13"></a>
-<span class="sourceLineNo">014</span>public class ServerInfo {<a name="line.14"></a>
-<span class="sourceLineNo">015</span>    private final int version;<a name="line.15"></a>
-<span class="sourceLineNo">016</span>    private final int protocolversion;<a name="line.16"></a>
-<span class="sourceLineNo">017</span>    private final int walletversion;<a name="line.17"></a>
-<span class="sourceLineNo">018</span>    private final Coin balance;<a name="line.18"></a>
-<span class="sourceLineNo">019</span>    private final int blocks;<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    private final int timeoffset;<a name="line.20"></a>
-<span class="sourceLineNo">021</span>    private final int connections;<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    private final String proxy;<a name="line.22"></a>
-<span class="sourceLineNo">023</span>    private final BigDecimal difficulty;<a name="line.23"></a>
-<span class="sourceLineNo">024</span>    private final Boolean testnet;<a name="line.24"></a>
-<span class="sourceLineNo">025</span>    private final int keypoololdest;<a name="line.25"></a>
-<span class="sourceLineNo">026</span>    private final int keypoolsize;<a name="line.26"></a>
-<span class="sourceLineNo">027</span>    private final Coin paytxfee;<a name="line.27"></a>
-<span class="sourceLineNo">028</span>    private final Coin relayfee;<a name="line.28"></a>
-<span class="sourceLineNo">029</span>    private final String errors;<a name="line.29"></a>
-<span class="sourceLineNo">030</span><a name="line.30"></a>
-<span class="sourceLineNo">031</span>    @JsonCreator<a name="line.31"></a>
-<span class="sourceLineNo">032</span>    public ServerInfo(@JsonProperty("version")          int version,<a name="line.32"></a>
-<span class="sourceLineNo">033</span>                      @JsonProperty("protocolversion")  int protocolversion,<a name="line.33"></a>
-<span class="sourceLineNo">034</span>                      @JsonProperty("walletversion")    int walletversion,<a name="line.34"></a>
-<span class="sourceLineNo">035</span>                      @JsonProperty("balance")          Coin balance,<a name="line.35"></a>
-<span class="sourceLineNo">036</span>                      @JsonProperty("blocks")           int blocks,<a name="line.36"></a>
-<span class="sourceLineNo">037</span>                      @JsonProperty("timeoffset")       int timeoffset,<a name="line.37"></a>
-<span class="sourceLineNo">038</span>                      @JsonProperty("connections")      int connections,<a name="line.38"></a>
-<span class="sourceLineNo">039</span>                      @JsonProperty("proxy")            String proxy,<a name="line.39"></a>
-<span class="sourceLineNo">040</span>                      @JsonProperty("difficulty")       BigDecimal difficulty,<a name="line.40"></a>
-<span class="sourceLineNo">041</span>                      @JsonProperty("testnet")          Boolean testnet,<a name="line.41"></a>
-<span class="sourceLineNo">042</span>                      @JsonProperty("keypoololdest")    int keypoololdest,<a name="line.42"></a>
-<span class="sourceLineNo">043</span>                      @JsonProperty("keypoolsize")      int keypoolsize,<a name="line.43"></a>
-<span class="sourceLineNo">044</span>                      @JsonProperty("paytxfee")         Coin paytxfee,<a name="line.44"></a>
-<span class="sourceLineNo">045</span>                      @JsonProperty("relayfee")         Coin relayfee,<a name="line.45"></a>
-<span class="sourceLineNo">046</span>                      @JsonProperty("errors")           String errors) {<a name="line.46"></a>
-<span class="sourceLineNo">047</span>        this.version = version;<a name="line.47"></a>
-<span class="sourceLineNo">048</span>        this.protocolversion = protocolversion;<a name="line.48"></a>
-<span class="sourceLineNo">049</span>        this.walletversion = walletversion;<a name="line.49"></a>
-<span class="sourceLineNo">050</span>        this.balance = balance;<a name="line.50"></a>
-<span class="sourceLineNo">051</span>        this.blocks = blocks;<a name="line.51"></a>
-<span class="sourceLineNo">052</span>        this.timeoffset = timeoffset;<a name="line.52"></a>
-<span class="sourceLineNo">053</span>        this.connections = connections;<a name="line.53"></a>
-<span class="sourceLineNo">054</span>        this.proxy = proxy;<a name="line.54"></a>
-<span class="sourceLineNo">055</span>        this.difficulty = difficulty;<a name="line.55"></a>
-<span class="sourceLineNo">056</span>        this.testnet = testnet;<a name="line.56"></a>
-<span class="sourceLineNo">057</span>        this.keypoololdest = keypoololdest;<a name="line.57"></a>
-<span class="sourceLineNo">058</span>        this.keypoolsize = keypoolsize;<a name="line.58"></a>
-<span class="sourceLineNo">059</span>        this.paytxfee = paytxfee;<a name="line.59"></a>
-<span class="sourceLineNo">060</span>        this.relayfee = relayfee;<a name="line.60"></a>
-<span class="sourceLineNo">061</span>        this.errors = errors;<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    }<a name="line.62"></a>
-<span class="sourceLineNo">063</span><a name="line.63"></a>
-<span class="sourceLineNo">064</span>    public int getVersion() {<a name="line.64"></a>
-<span class="sourceLineNo">065</span>        return version;<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    }<a name="line.66"></a>
-<span class="sourceLineNo">067</span><a name="line.67"></a>
-<span class="sourceLineNo">068</span>    public int getProtocolversion() {<a name="line.68"></a>
-<span class="sourceLineNo">069</span>        return protocolversion;<a name="line.69"></a>
-<span class="sourceLineNo">070</span>    }<a name="line.70"></a>
-<span class="sourceLineNo">071</span><a name="line.71"></a>
-<span class="sourceLineNo">072</span>    public int getWalletversion() {<a name="line.72"></a>
-<span class="sourceLineNo">073</span>        return walletversion;<a name="line.73"></a>
-<span class="sourceLineNo">074</span>    }<a name="line.74"></a>
-<span class="sourceLineNo">075</span><a name="line.75"></a>
-<span class="sourceLineNo">076</span>    public Coin getBalance() {<a name="line.76"></a>
-<span class="sourceLineNo">077</span>        return balance;<a name="line.77"></a>
-<span class="sourceLineNo">078</span>    }<a name="line.78"></a>
-<span class="sourceLineNo">079</span><a name="line.79"></a>
-<span class="sourceLineNo">080</span>    public int getBlocks() {<a name="line.80"></a>
-<span class="sourceLineNo">081</span>        return blocks;<a name="line.81"></a>
-<span class="sourceLineNo">082</span>    }<a name="line.82"></a>
-<span class="sourceLineNo">083</span><a name="line.83"></a>
-<span class="sourceLineNo">084</span>    public int getTimeoffset() {<a name="line.84"></a>
-<span class="sourceLineNo">085</span>        return timeoffset;<a name="line.85"></a>
-<span class="sourceLineNo">086</span>    }<a name="line.86"></a>
-<span class="sourceLineNo">087</span><a name="line.87"></a>
-<span class="sourceLineNo">088</span>    public int getConnections() {<a name="line.88"></a>
-<span class="sourceLineNo">089</span>        return connections;<a name="line.89"></a>
-<span class="sourceLineNo">090</span>    }<a name="line.90"></a>
-<span class="sourceLineNo">091</span><a name="line.91"></a>
-<span class="sourceLineNo">092</span>    public String getProxy() {<a name="line.92"></a>
-<span class="sourceLineNo">093</span>        return proxy;<a name="line.93"></a>
-<span class="sourceLineNo">094</span>    }<a name="line.94"></a>
-<span class="sourceLineNo">095</span><a name="line.95"></a>
-<span class="sourceLineNo">096</span>    public BigDecimal getDifficulty() {<a name="line.96"></a>
-<span class="sourceLineNo">097</span>        return difficulty;<a name="line.97"></a>
-<span class="sourceLineNo">098</span>    }<a name="line.98"></a>
-<span class="sourceLineNo">099</span><a name="line.99"></a>
-<span class="sourceLineNo">100</span>    public Boolean getTestnet() {<a name="line.100"></a>
-<span class="sourceLineNo">101</span>        return testnet;<a name="line.101"></a>
-<span class="sourceLineNo">102</span>    }<a name="line.102"></a>
-<span class="sourceLineNo">103</span><a name="line.103"></a>
-<span class="sourceLineNo">104</span>    public int getKeypoololdest() {<a name="line.104"></a>
-<span class="sourceLineNo">105</span>        return keypoololdest;<a name="line.105"></a>
-<span class="sourceLineNo">106</span>    }<a name="line.106"></a>
-<span class="sourceLineNo">107</span><a name="line.107"></a>
-<span class="sourceLineNo">108</span>    public int getKeypoolsize() {<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        return keypoolsize;<a name="line.109"></a>
-<span class="sourceLineNo">110</span>    }<a name="line.110"></a>
-<span class="sourceLineNo">111</span><a name="line.111"></a>
-<span class="sourceLineNo">112</span>    public Coin getPaytxfee() {<a name="line.112"></a>
-<span class="sourceLineNo">113</span>        return paytxfee;<a name="line.113"></a>
-<span class="sourceLineNo">114</span>    }<a name="line.114"></a>
-<span class="sourceLineNo">115</span><a name="line.115"></a>
-<span class="sourceLineNo">116</span>    public Coin getRelayfee() {<a name="line.116"></a>
-<span class="sourceLineNo">117</span>        return relayfee;<a name="line.117"></a>
-<span class="sourceLineNo">118</span>    }<a name="line.118"></a>
-<span class="sourceLineNo">119</span><a name="line.119"></a>
-<span class="sourceLineNo">120</span>    public String getErrors() {<a name="line.120"></a>
-<span class="sourceLineNo">121</span>        return errors;<a name="line.121"></a>
-<span class="sourceLineNo">122</span>    }<a name="line.122"></a>
-<span class="sourceLineNo">123</span>}<a name="line.123"></a>
+<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.json.pojo;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.annotation.JsonCreator;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.fasterxml.jackson.annotation.JsonIgnoreProperties;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import com.fasterxml.jackson.annotation.JsonProperty;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import org.bitcoinj.core.Coin;</a>
+<span class="sourceLineNo">007</span><a id="line.7"></a>
+<span class="sourceLineNo">008</span><a id="line.8">import java.math.BigDecimal;</a>
+<span class="sourceLineNo">009</span><a id="line.9"></a>
+<span class="sourceLineNo">010</span><a id="line.10">/**</a>
+<span class="sourceLineNo">011</span><a id="line.11"> * POJO for `getinfo` RPC response.</a>
+<span class="sourceLineNo">012</span><a id="line.12"> */</a>
+<span class="sourceLineNo">013</span><a id="line.13">@JsonIgnoreProperties(ignoreUnknown = true)</a>
+<span class="sourceLineNo">014</span><a id="line.14">public class ServerInfo {</a>
+<span class="sourceLineNo">015</span><a id="line.15">    private final int version;</a>
+<span class="sourceLineNo">016</span><a id="line.16">    private final int protocolversion;</a>
+<span class="sourceLineNo">017</span><a id="line.17">    private final int walletversion;</a>
+<span class="sourceLineNo">018</span><a id="line.18">    private final Coin balance;</a>
+<span class="sourceLineNo">019</span><a id="line.19">    private final int blocks;</a>
+<span class="sourceLineNo">020</span><a id="line.20">    private final int timeoffset;</a>
+<span class="sourceLineNo">021</span><a id="line.21">    private final int connections;</a>
+<span class="sourceLineNo">022</span><a id="line.22">    private final String proxy;</a>
+<span class="sourceLineNo">023</span><a id="line.23">    private final BigDecimal difficulty;</a>
+<span class="sourceLineNo">024</span><a id="line.24">    private final Boolean testnet;</a>
+<span class="sourceLineNo">025</span><a id="line.25">    private final int keypoololdest;</a>
+<span class="sourceLineNo">026</span><a id="line.26">    private final int keypoolsize;</a>
+<span class="sourceLineNo">027</span><a id="line.27">    private final Coin paytxfee;</a>
+<span class="sourceLineNo">028</span><a id="line.28">    private final Coin relayfee;</a>
+<span class="sourceLineNo">029</span><a id="line.29">    private final String errors;</a>
+<span class="sourceLineNo">030</span><a id="line.30"></a>
+<span class="sourceLineNo">031</span><a id="line.31">    @JsonCreator</a>
+<span class="sourceLineNo">032</span><a id="line.32">    public ServerInfo(@JsonProperty("version")          int version,</a>
+<span class="sourceLineNo">033</span><a id="line.33">                      @JsonProperty("protocolversion")  int protocolversion,</a>
+<span class="sourceLineNo">034</span><a id="line.34">                      @JsonProperty("walletversion")    int walletversion,</a>
+<span class="sourceLineNo">035</span><a id="line.35">                      @JsonProperty("balance")          Coin balance,</a>
+<span class="sourceLineNo">036</span><a id="line.36">                      @JsonProperty("blocks")           int blocks,</a>
+<span class="sourceLineNo">037</span><a id="line.37">                      @JsonProperty("timeoffset")       int timeoffset,</a>
+<span class="sourceLineNo">038</span><a id="line.38">                      @JsonProperty("connections")      int connections,</a>
+<span class="sourceLineNo">039</span><a id="line.39">                      @JsonProperty("proxy")            String proxy,</a>
+<span class="sourceLineNo">040</span><a id="line.40">                      @JsonProperty("difficulty")       BigDecimal difficulty,</a>
+<span class="sourceLineNo">041</span><a id="line.41">                      @JsonProperty("testnet")          Boolean testnet,</a>
+<span class="sourceLineNo">042</span><a id="line.42">                      @JsonProperty("keypoololdest")    int keypoololdest,</a>
+<span class="sourceLineNo">043</span><a id="line.43">                      @JsonProperty("keypoolsize")      int keypoolsize,</a>
+<span class="sourceLineNo">044</span><a id="line.44">                      @JsonProperty("paytxfee")         Coin paytxfee,</a>
+<span class="sourceLineNo">045</span><a id="line.45">                      @JsonProperty("relayfee")         Coin relayfee,</a>
+<span class="sourceLineNo">046</span><a id="line.46">                      @JsonProperty("errors")           String errors) {</a>
+<span class="sourceLineNo">047</span><a id="line.47">        this.version = version;</a>
+<span class="sourceLineNo">048</span><a id="line.48">        this.protocolversion = protocolversion;</a>
+<span class="sourceLineNo">049</span><a id="line.49">        this.walletversion = walletversion;</a>
+<span class="sourceLineNo">050</span><a id="line.50">        this.balance = balance;</a>
+<span class="sourceLineNo">051</span><a id="line.51">        this.blocks = blocks;</a>
+<span class="sourceLineNo">052</span><a id="line.52">        this.timeoffset = timeoffset;</a>
+<span class="sourceLineNo">053</span><a id="line.53">        this.connections = connections;</a>
+<span class="sourceLineNo">054</span><a id="line.54">        this.proxy = proxy;</a>
+<span class="sourceLineNo">055</span><a id="line.55">        this.difficulty = difficulty;</a>
+<span class="sourceLineNo">056</span><a id="line.56">        this.testnet = testnet;</a>
+<span class="sourceLineNo">057</span><a id="line.57">        this.keypoololdest = keypoololdest;</a>
+<span class="sourceLineNo">058</span><a id="line.58">        this.keypoolsize = keypoolsize;</a>
+<span class="sourceLineNo">059</span><a id="line.59">        this.paytxfee = paytxfee;</a>
+<span class="sourceLineNo">060</span><a id="line.60">        this.relayfee = relayfee;</a>
+<span class="sourceLineNo">061</span><a id="line.61">        this.errors = errors;</a>
+<span class="sourceLineNo">062</span><a id="line.62">    }</a>
+<span class="sourceLineNo">063</span><a id="line.63"></a>
+<span class="sourceLineNo">064</span><a id="line.64">    public int getVersion() {</a>
+<span class="sourceLineNo">065</span><a id="line.65">        return version;</a>
+<span class="sourceLineNo">066</span><a id="line.66">    }</a>
+<span class="sourceLineNo">067</span><a id="line.67"></a>
+<span class="sourceLineNo">068</span><a id="line.68">    public int getProtocolversion() {</a>
+<span class="sourceLineNo">069</span><a id="line.69">        return protocolversion;</a>
+<span class="sourceLineNo">070</span><a id="line.70">    }</a>
+<span class="sourceLineNo">071</span><a id="line.71"></a>
+<span class="sourceLineNo">072</span><a id="line.72">    public int getWalletversion() {</a>
+<span class="sourceLineNo">073</span><a id="line.73">        return walletversion;</a>
+<span class="sourceLineNo">074</span><a id="line.74">    }</a>
+<span class="sourceLineNo">075</span><a id="line.75"></a>
+<span class="sourceLineNo">076</span><a id="line.76">    public Coin getBalance() {</a>
+<span class="sourceLineNo">077</span><a id="line.77">        return balance;</a>
+<span class="sourceLineNo">078</span><a id="line.78">    }</a>
+<span class="sourceLineNo">079</span><a id="line.79"></a>
+<span class="sourceLineNo">080</span><a id="line.80">    public int getBlocks() {</a>
+<span class="sourceLineNo">081</span><a id="line.81">        return blocks;</a>
+<span class="sourceLineNo">082</span><a id="line.82">    }</a>
+<span class="sourceLineNo">083</span><a id="line.83"></a>
+<span class="sourceLineNo">084</span><a id="line.84">    public int getTimeoffset() {</a>
+<span class="sourceLineNo">085</span><a id="line.85">        return timeoffset;</a>
+<span class="sourceLineNo">086</span><a id="line.86">    }</a>
+<span class="sourceLineNo">087</span><a id="line.87"></a>
+<span class="sourceLineNo">088</span><a id="line.88">    public int getConnections() {</a>
+<span class="sourceLineNo">089</span><a id="line.89">        return connections;</a>
+<span class="sourceLineNo">090</span><a id="line.90">    }</a>
+<span class="sourceLineNo">091</span><a id="line.91"></a>
+<span class="sourceLineNo">092</span><a id="line.92">    public String getProxy() {</a>
+<span class="sourceLineNo">093</span><a id="line.93">        return proxy;</a>
+<span class="sourceLineNo">094</span><a id="line.94">    }</a>
+<span class="sourceLineNo">095</span><a id="line.95"></a>
+<span class="sourceLineNo">096</span><a id="line.96">    public BigDecimal getDifficulty() {</a>
+<span class="sourceLineNo">097</span><a id="line.97">        return difficulty;</a>
+<span class="sourceLineNo">098</span><a id="line.98">    }</a>
+<span class="sourceLineNo">099</span><a id="line.99"></a>
+<span class="sourceLineNo">100</span><a id="line.100">    public Boolean getTestnet() {</a>
+<span class="sourceLineNo">101</span><a id="line.101">        return testnet;</a>
+<span class="sourceLineNo">102</span><a id="line.102">    }</a>
+<span class="sourceLineNo">103</span><a id="line.103"></a>
+<span class="sourceLineNo">104</span><a id="line.104">    public int getKeypoololdest() {</a>
+<span class="sourceLineNo">105</span><a id="line.105">        return keypoololdest;</a>
+<span class="sourceLineNo">106</span><a id="line.106">    }</a>
+<span class="sourceLineNo">107</span><a id="line.107"></a>
+<span class="sourceLineNo">108</span><a id="line.108">    public int getKeypoolsize() {</a>
+<span class="sourceLineNo">109</span><a id="line.109">        return keypoolsize;</a>
+<span class="sourceLineNo">110</span><a id="line.110">    }</a>
+<span class="sourceLineNo">111</span><a id="line.111"></a>
+<span class="sourceLineNo">112</span><a id="line.112">    public Coin getPaytxfee() {</a>
+<span class="sourceLineNo">113</span><a id="line.113">        return paytxfee;</a>
+<span class="sourceLineNo">114</span><a id="line.114">    }</a>
+<span class="sourceLineNo">115</span><a id="line.115"></a>
+<span class="sourceLineNo">116</span><a id="line.116">    public Coin getRelayfee() {</a>
+<span class="sourceLineNo">117</span><a id="line.117">        return relayfee;</a>
+<span class="sourceLineNo">118</span><a id="line.118">    }</a>
+<span class="sourceLineNo">119</span><a id="line.119"></a>
+<span class="sourceLineNo">120</span><a id="line.120">    public String getErrors() {</a>
+<span class="sourceLineNo">121</span><a id="line.121">        return errors;</a>
+<span class="sourceLineNo">122</span><a id="line.122">    }</a>
+<span class="sourceLineNo">123</span><a id="line.123">}</a>
 
 
 
@@ -191,5 +192,6 @@
 
 </pre>
 </div>
+</main>
 </body>
 </html>

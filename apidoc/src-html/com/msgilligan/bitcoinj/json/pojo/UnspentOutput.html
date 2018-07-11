@@ -1,87 +1,88 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 </head>
 <body>
+<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.json.pojo;<a name="line.1"></a>
-<span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import com.fasterxml.jackson.annotation.JsonCreator;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import com.fasterxml.jackson.annotation.JsonIgnoreProperties;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import com.fasterxml.jackson.annotation.JsonProperty;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import org.bitcoinj.core.Address;<a name="line.6"></a>
-<span class="sourceLineNo">007</span>import org.bitcoinj.core.Coin;<a name="line.7"></a>
-<span class="sourceLineNo">008</span>import org.bitcoinj.core.Sha256Hash;<a name="line.8"></a>
-<span class="sourceLineNo">009</span><a name="line.9"></a>
-<span class="sourceLineNo">010</span>/**<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * Data class for UnspentOutput as returned by listUnspent RPC<a name="line.11"></a>
-<span class="sourceLineNo">012</span> * Because the class is immutable we have to give Jackson some hints via annotations.<a name="line.12"></a>
-<span class="sourceLineNo">013</span> */<a name="line.13"></a>
-<span class="sourceLineNo">014</span>@JsonIgnoreProperties(ignoreUnknown = true)<a name="line.14"></a>
-<span class="sourceLineNo">015</span>public class UnspentOutput {<a name="line.15"></a>
-<span class="sourceLineNo">016</span>    private final Sha256Hash  txid;<a name="line.16"></a>
-<span class="sourceLineNo">017</span>    private final int         vout;<a name="line.17"></a>
-<span class="sourceLineNo">018</span>    private final Address     address;<a name="line.18"></a>
-<span class="sourceLineNo">019</span>    private final String      account;<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    private final String      scriptPubKey;<a name="line.20"></a>
-<span class="sourceLineNo">021</span>    private final Coin        amount;<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    private final int         confirmations;<a name="line.22"></a>
-<span class="sourceLineNo">023</span>    private final boolean     spendable;<a name="line.23"></a>
-<span class="sourceLineNo">024</span>    private final Boolean     solvable;<a name="line.24"></a>
-<span class="sourceLineNo">025</span><a name="line.25"></a>
-<span class="sourceLineNo">026</span>    @JsonCreator<a name="line.26"></a>
-<span class="sourceLineNo">027</span>    public UnspentOutput(@JsonProperty("txid")          Sha256Hash  txid,<a name="line.27"></a>
-<span class="sourceLineNo">028</span>                         @JsonProperty("vout")          int         vout,<a name="line.28"></a>
-<span class="sourceLineNo">029</span>                         @JsonProperty("address")       Address     address,<a name="line.29"></a>
-<span class="sourceLineNo">030</span>                         @JsonProperty("account")       String      account,<a name="line.30"></a>
-<span class="sourceLineNo">031</span>                         @JsonProperty("scriptPubKey")  String      scriptPubKey,<a name="line.31"></a>
-<span class="sourceLineNo">032</span>                         @JsonProperty("amount")        Coin        amount,<a name="line.32"></a>
-<span class="sourceLineNo">033</span>                         @JsonProperty("confirmations") int         confirmations,<a name="line.33"></a>
-<span class="sourceLineNo">034</span>                         @JsonProperty("spendable")     boolean     spendable,<a name="line.34"></a>
-<span class="sourceLineNo">035</span>                         @JsonProperty("solvable")      Boolean     solvable) {<a name="line.35"></a>
-<span class="sourceLineNo">036</span>        this.txid = txid;<a name="line.36"></a>
-<span class="sourceLineNo">037</span>        this.vout = vout;<a name="line.37"></a>
-<span class="sourceLineNo">038</span>        this.address = address;<a name="line.38"></a>
-<span class="sourceLineNo">039</span>        this.account = account;<a name="line.39"></a>
-<span class="sourceLineNo">040</span>        this.scriptPubKey = scriptPubKey;<a name="line.40"></a>
-<span class="sourceLineNo">041</span>        this.amount = amount;<a name="line.41"></a>
-<span class="sourceLineNo">042</span>        this.confirmations = confirmations;<a name="line.42"></a>
-<span class="sourceLineNo">043</span>        this.spendable = spendable;<a name="line.43"></a>
-<span class="sourceLineNo">044</span>        this.solvable = solvable;<a name="line.44"></a>
-<span class="sourceLineNo">045</span>    }<a name="line.45"></a>
-<span class="sourceLineNo">046</span><a name="line.46"></a>
-<span class="sourceLineNo">047</span>    public Sha256Hash getTxid() {<a name="line.47"></a>
-<span class="sourceLineNo">048</span>        return txid;<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    }<a name="line.49"></a>
-<span class="sourceLineNo">050</span><a name="line.50"></a>
-<span class="sourceLineNo">051</span>    public int getVout() {<a name="line.51"></a>
-<span class="sourceLineNo">052</span>        return vout;<a name="line.52"></a>
-<span class="sourceLineNo">053</span>    }<a name="line.53"></a>
-<span class="sourceLineNo">054</span><a name="line.54"></a>
-<span class="sourceLineNo">055</span>    public Address getAddress() {<a name="line.55"></a>
-<span class="sourceLineNo">056</span>        return address;<a name="line.56"></a>
-<span class="sourceLineNo">057</span>    }<a name="line.57"></a>
-<span class="sourceLineNo">058</span><a name="line.58"></a>
-<span class="sourceLineNo">059</span>    public String getAccount() {<a name="line.59"></a>
-<span class="sourceLineNo">060</span>        return account;<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    }<a name="line.61"></a>
-<span class="sourceLineNo">062</span><a name="line.62"></a>
-<span class="sourceLineNo">063</span>    public String getScriptPubKey() {<a name="line.63"></a>
-<span class="sourceLineNo">064</span>        return scriptPubKey;<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    }<a name="line.65"></a>
-<span class="sourceLineNo">066</span><a name="line.66"></a>
-<span class="sourceLineNo">067</span>    public Coin getAmount() {<a name="line.67"></a>
-<span class="sourceLineNo">068</span>        return amount;<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    }<a name="line.69"></a>
-<span class="sourceLineNo">070</span><a name="line.70"></a>
-<span class="sourceLineNo">071</span>    public int getConfirmations() {<a name="line.71"></a>
-<span class="sourceLineNo">072</span>        return confirmations;<a name="line.72"></a>
-<span class="sourceLineNo">073</span>    }<a name="line.73"></a>
-<span class="sourceLineNo">074</span><a name="line.74"></a>
-<span class="sourceLineNo">075</span>    public boolean getSpendable() { return spendable; }<a name="line.75"></a>
-<span class="sourceLineNo">076</span>}<a name="line.76"></a>
+<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.json.pojo;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.annotation.JsonCreator;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.fasterxml.jackson.annotation.JsonIgnoreProperties;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import com.fasterxml.jackson.annotation.JsonProperty;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import org.bitcoinj.core.Address;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import org.bitcoinj.core.Coin;</a>
+<span class="sourceLineNo">008</span><a id="line.8">import org.bitcoinj.core.Sha256Hash;</a>
+<span class="sourceLineNo">009</span><a id="line.9"></a>
+<span class="sourceLineNo">010</span><a id="line.10">/**</a>
+<span class="sourceLineNo">011</span><a id="line.11"> * Data class for UnspentOutput as returned by listUnspent RPC</a>
+<span class="sourceLineNo">012</span><a id="line.12"> * Because the class is immutable we have to give Jackson some hints via annotations.</a>
+<span class="sourceLineNo">013</span><a id="line.13"> */</a>
+<span class="sourceLineNo">014</span><a id="line.14">@JsonIgnoreProperties(ignoreUnknown = true)</a>
+<span class="sourceLineNo">015</span><a id="line.15">public class UnspentOutput {</a>
+<span class="sourceLineNo">016</span><a id="line.16">    private final Sha256Hash  txid;</a>
+<span class="sourceLineNo">017</span><a id="line.17">    private final int         vout;</a>
+<span class="sourceLineNo">018</span><a id="line.18">    private final Address     address;</a>
+<span class="sourceLineNo">019</span><a id="line.19">    private final String      account;</a>
+<span class="sourceLineNo">020</span><a id="line.20">    private final String      scriptPubKey;</a>
+<span class="sourceLineNo">021</span><a id="line.21">    private final Coin        amount;</a>
+<span class="sourceLineNo">022</span><a id="line.22">    private final int         confirmations;</a>
+<span class="sourceLineNo">023</span><a id="line.23">    private final boolean     spendable;</a>
+<span class="sourceLineNo">024</span><a id="line.24">    private final Boolean     solvable;</a>
+<span class="sourceLineNo">025</span><a id="line.25"></a>
+<span class="sourceLineNo">026</span><a id="line.26">    @JsonCreator</a>
+<span class="sourceLineNo">027</span><a id="line.27">    public UnspentOutput(@JsonProperty("txid")          Sha256Hash  txid,</a>
+<span class="sourceLineNo">028</span><a id="line.28">                         @JsonProperty("vout")          int         vout,</a>
+<span class="sourceLineNo">029</span><a id="line.29">                         @JsonProperty("address")       Address     address,</a>
+<span class="sourceLineNo">030</span><a id="line.30">                         @JsonProperty("account")       String      account,</a>
+<span class="sourceLineNo">031</span><a id="line.31">                         @JsonProperty("scriptPubKey")  String      scriptPubKey,</a>
+<span class="sourceLineNo">032</span><a id="line.32">                         @JsonProperty("amount")        Coin        amount,</a>
+<span class="sourceLineNo">033</span><a id="line.33">                         @JsonProperty("confirmations") int         confirmations,</a>
+<span class="sourceLineNo">034</span><a id="line.34">                         @JsonProperty("spendable")     boolean     spendable,</a>
+<span class="sourceLineNo">035</span><a id="line.35">                         @JsonProperty("solvable")      Boolean     solvable) {</a>
+<span class="sourceLineNo">036</span><a id="line.36">        this.txid = txid;</a>
+<span class="sourceLineNo">037</span><a id="line.37">        this.vout = vout;</a>
+<span class="sourceLineNo">038</span><a id="line.38">        this.address = address;</a>
+<span class="sourceLineNo">039</span><a id="line.39">        this.account = account;</a>
+<span class="sourceLineNo">040</span><a id="line.40">        this.scriptPubKey = scriptPubKey;</a>
+<span class="sourceLineNo">041</span><a id="line.41">        this.amount = amount;</a>
+<span class="sourceLineNo">042</span><a id="line.42">        this.confirmations = confirmations;</a>
+<span class="sourceLineNo">043</span><a id="line.43">        this.spendable = spendable;</a>
+<span class="sourceLineNo">044</span><a id="line.44">        this.solvable = solvable;</a>
+<span class="sourceLineNo">045</span><a id="line.45">    }</a>
+<span class="sourceLineNo">046</span><a id="line.46"></a>
+<span class="sourceLineNo">047</span><a id="line.47">    public Sha256Hash getTxid() {</a>
+<span class="sourceLineNo">048</span><a id="line.48">        return txid;</a>
+<span class="sourceLineNo">049</span><a id="line.49">    }</a>
+<span class="sourceLineNo">050</span><a id="line.50"></a>
+<span class="sourceLineNo">051</span><a id="line.51">    public int getVout() {</a>
+<span class="sourceLineNo">052</span><a id="line.52">        return vout;</a>
+<span class="sourceLineNo">053</span><a id="line.53">    }</a>
+<span class="sourceLineNo">054</span><a id="line.54"></a>
+<span class="sourceLineNo">055</span><a id="line.55">    public Address getAddress() {</a>
+<span class="sourceLineNo">056</span><a id="line.56">        return address;</a>
+<span class="sourceLineNo">057</span><a id="line.57">    }</a>
+<span class="sourceLineNo">058</span><a id="line.58"></a>
+<span class="sourceLineNo">059</span><a id="line.59">    public String getAccount() {</a>
+<span class="sourceLineNo">060</span><a id="line.60">        return account;</a>
+<span class="sourceLineNo">061</span><a id="line.61">    }</a>
+<span class="sourceLineNo">062</span><a id="line.62"></a>
+<span class="sourceLineNo">063</span><a id="line.63">    public String getScriptPubKey() {</a>
+<span class="sourceLineNo">064</span><a id="line.64">        return scriptPubKey;</a>
+<span class="sourceLineNo">065</span><a id="line.65">    }</a>
+<span class="sourceLineNo">066</span><a id="line.66"></a>
+<span class="sourceLineNo">067</span><a id="line.67">    public Coin getAmount() {</a>
+<span class="sourceLineNo">068</span><a id="line.68">        return amount;</a>
+<span class="sourceLineNo">069</span><a id="line.69">    }</a>
+<span class="sourceLineNo">070</span><a id="line.70"></a>
+<span class="sourceLineNo">071</span><a id="line.71">    public int getConfirmations() {</a>
+<span class="sourceLineNo">072</span><a id="line.72">        return confirmations;</a>
+<span class="sourceLineNo">073</span><a id="line.73">    }</a>
+<span class="sourceLineNo">074</span><a id="line.74"></a>
+<span class="sourceLineNo">075</span><a id="line.75">    public boolean getSpendable() { return spendable; }</a>
+<span class="sourceLineNo">076</span><a id="line.76">}</a>
 
 
 
@@ -144,5 +145,6 @@
 
 </pre>
 </div>
+</main>
 </body>
 </html>

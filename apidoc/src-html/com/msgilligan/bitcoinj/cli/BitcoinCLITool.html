@@ -1,94 +1,95 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
 <body>
+<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.cli;<a name="line.1"></a>
-<span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import org.consensusj.jsonrpc.JsonRPCException;<a name="line.3"></a>
-<span class="sourceLineNo">004</span><a name="line.4"></a>
-<span class="sourceLineNo">005</span>import java.io.IOException;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import java.util.ArrayList;<a name="line.6"></a>
-<span class="sourceLineNo">007</span>import java.util.List;<a name="line.7"></a>
-<span class="sourceLineNo">008</span><a name="line.8"></a>
-<span class="sourceLineNo">009</span>/**<a name="line.9"></a>
-<span class="sourceLineNo">010</span> * An attempt at cloning the bitcoin-cli tool, but using Java and bitcoinj<a name="line.10"></a>
-<span class="sourceLineNo">011</span> *<a name="line.11"></a>
-<span class="sourceLineNo">012</span> */<a name="line.12"></a>
-<span class="sourceLineNo">013</span>public class BitcoinCLITool extends CliCommand {<a name="line.13"></a>
-<span class="sourceLineNo">014</span>    public final static String commandName = "cj-bitcoin-cli";<a name="line.14"></a>
-<span class="sourceLineNo">015</span><a name="line.15"></a>
-<span class="sourceLineNo">016</span>    public BitcoinCLITool(String[] args) {<a name="line.16"></a>
-<span class="sourceLineNo">017</span>        super(commandName, new CliOptions(), args);<a name="line.17"></a>
-<span class="sourceLineNo">018</span>    }<a name="line.18"></a>
-<span class="sourceLineNo">019</span><a name="line.19"></a>
-<span class="sourceLineNo">020</span>    /**<a name="line.20"></a>
-<span class="sourceLineNo">021</span>     * main method for bitcoinj-cli tool.<a name="line.21"></a>
-<span class="sourceLineNo">022</span>     *<a name="line.22"></a>
-<span class="sourceLineNo">023</span>     * See {@link CliOptions} for options and https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core JSON-RPC API]<a name="line.23"></a>
-<span class="sourceLineNo">024</span>     * for the methods and parameters. Users can use `-?` to get general help or `help &lt;command&gt;` to get help<a name="line.24"></a>
-<span class="sourceLineNo">025</span>     * on a specific command.<a name="line.25"></a>
-<span class="sourceLineNo">026</span>     *<a name="line.26"></a>
-<span class="sourceLineNo">027</span>     * @param args options, JSON-RPC method, JSON-RPC parameters<a name="line.27"></a>
-<span class="sourceLineNo">028</span>     */<a name="line.28"></a>
-<span class="sourceLineNo">029</span>    public static void main(String[] args) {<a name="line.29"></a>
-<span class="sourceLineNo">030</span>        BitcoinCLITool command = new BitcoinCLITool(args);<a name="line.30"></a>
-<span class="sourceLineNo">031</span>        Integer status = command.run();<a name="line.31"></a>
-<span class="sourceLineNo">032</span>        System.exit(status);<a name="line.32"></a>
-<span class="sourceLineNo">033</span>    }<a name="line.33"></a>
-<span class="sourceLineNo">034</span><a name="line.34"></a>
-<span class="sourceLineNo">035</span>    public Integer runImpl() throws IOException {<a name="line.35"></a>
-<span class="sourceLineNo">036</span>        List&lt;String&gt; args = line.getArgList();<a name="line.36"></a>
-<span class="sourceLineNo">037</span>        if (args.size() == 0) {<a name="line.37"></a>
-<span class="sourceLineNo">038</span>            printError("rpc method required");<a name="line.38"></a>
-<span class="sourceLineNo">039</span>            printHelp();<a name="line.39"></a>
-<span class="sourceLineNo">040</span>            return(1);<a name="line.40"></a>
-<span class="sourceLineNo">041</span>        }<a name="line.41"></a>
-<span class="sourceLineNo">042</span>        String method = args.get(0);<a name="line.42"></a>
-<span class="sourceLineNo">043</span>        args.remove(0); // remove method from list<a name="line.43"></a>
-<span class="sourceLineNo">044</span>        List&lt;Object&gt; typedArgs = convertParameters(method, args);<a name="line.44"></a>
-<span class="sourceLineNo">045</span>        Object result;<a name="line.45"></a>
-<span class="sourceLineNo">046</span>        try {<a name="line.46"></a>
-<span class="sourceLineNo">047</span>            result = client.send(method, typedArgs);<a name="line.47"></a>
-<span class="sourceLineNo">048</span>        } catch (JsonRPCException e) {<a name="line.48"></a>
-<span class="sourceLineNo">049</span>            e.printStackTrace();<a name="line.49"></a>
-<span class="sourceLineNo">050</span>            return 1;<a name="line.50"></a>
-<span class="sourceLineNo">051</span>        }<a name="line.51"></a>
-<span class="sourceLineNo">052</span>        if (result != null) {<a name="line.52"></a>
-<span class="sourceLineNo">053</span>            pwout.println(result.toString());<a name="line.53"></a>
-<span class="sourceLineNo">054</span>        }<a name="line.54"></a>
-<span class="sourceLineNo">055</span>        return 0;<a name="line.55"></a>
-<span class="sourceLineNo">056</span>    }<a name="line.56"></a>
-<span class="sourceLineNo">057</span><a name="line.57"></a>
-<span class="sourceLineNo">058</span>    /**<a name="line.58"></a>
-<span class="sourceLineNo">059</span>     * Convert params from strings to Java types that will map to correct JSON types<a name="line.59"></a>
-<span class="sourceLineNo">060</span>     *<a name="line.60"></a>
-<span class="sourceLineNo">061</span>     * TODO: Make this better and complete<a name="line.61"></a>
-<span class="sourceLineNo">062</span>     *<a name="line.62"></a>
-<span class="sourceLineNo">063</span>     * @param method the JSON-RPC method<a name="line.63"></a>
-<span class="sourceLineNo">064</span>     * @param params Params with String type<a name="line.64"></a>
-<span class="sourceLineNo">065</span>     * @return Params with correct Java types for JSON<a name="line.65"></a>
-<span class="sourceLineNo">066</span>     */<a name="line.66"></a>
-<span class="sourceLineNo">067</span>    protected List&lt;Object&gt; convertParameters(String method, List&lt;String&gt; params) {<a name="line.67"></a>
-<span class="sourceLineNo">068</span>        List&lt;Object&gt; typedParams = new ArrayList&lt;&gt;();<a name="line.68"></a>
-<span class="sourceLineNo">069</span>        switch (method) {<a name="line.69"></a>
-<span class="sourceLineNo">070</span>            case "setgenerate":<a name="line.70"></a>
-<span class="sourceLineNo">071</span>                typedParams.add(0, Boolean.parseBoolean(params.get(0)));<a name="line.71"></a>
-<span class="sourceLineNo">072</span>                break;<a name="line.72"></a>
-<span class="sourceLineNo">073</span><a name="line.73"></a>
-<span class="sourceLineNo">074</span>            default:<a name="line.74"></a>
-<span class="sourceLineNo">075</span>                // Default (for now) is to leave them all as strings<a name="line.75"></a>
-<span class="sourceLineNo">076</span>                for (String string : params) {<a name="line.76"></a>
-<span class="sourceLineNo">077</span>                    typedParams.add(string);<a name="line.77"></a>
-<span class="sourceLineNo">078</span>                }<a name="line.78"></a>
-<span class="sourceLineNo">079</span><a name="line.79"></a>
-<span class="sourceLineNo">080</span>        }<a name="line.80"></a>
-<span class="sourceLineNo">081</span>        return typedParams;<a name="line.81"></a>
-<span class="sourceLineNo">082</span>    }<a name="line.82"></a>
-<span class="sourceLineNo">083</span>}<a name="line.83"></a>
+<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.cli;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import org.consensusj.jsonrpc.JsonRPCException;</a>
+<span class="sourceLineNo">004</span><a id="line.4"></a>
+<span class="sourceLineNo">005</span><a id="line.5">import java.io.IOException;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import java.util.ArrayList;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import java.util.List;</a>
+<span class="sourceLineNo">008</span><a id="line.8"></a>
+<span class="sourceLineNo">009</span><a id="line.9">/**</a>
+<span class="sourceLineNo">010</span><a id="line.10"> * An attempt at cloning the bitcoin-cli tool, but using Java and bitcoinj</a>
+<span class="sourceLineNo">011</span><a id="line.11"> *</a>
+<span class="sourceLineNo">012</span><a id="line.12"> */</a>
+<span class="sourceLineNo">013</span><a id="line.13">public class BitcoinCLITool extends CliCommand {</a>
+<span class="sourceLineNo">014</span><a id="line.14">    public final static String commandName = "cj-bitcoin-cli";</a>
+<span class="sourceLineNo">015</span><a id="line.15"></a>
+<span class="sourceLineNo">016</span><a id="line.16">    public BitcoinCLITool(String[] args) {</a>
+<span class="sourceLineNo">017</span><a id="line.17">        super(commandName, new CliOptions(), args);</a>
+<span class="sourceLineNo">018</span><a id="line.18">    }</a>
+<span class="sourceLineNo">019</span><a id="line.19"></a>
+<span class="sourceLineNo">020</span><a id="line.20">    /**</a>
+<span class="sourceLineNo">021</span><a id="line.21">     * main method for bitcoinj-cli tool.</a>
+<span class="sourceLineNo">022</span><a id="line.22">     *</a>
+<span class="sourceLineNo">023</span><a id="line.23">     * See {@link CliOptions} for options and https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core JSON-RPC API]</a>
+<span class="sourceLineNo">024</span><a id="line.24">     * for the methods and parameters. Users can use `-?` to get general help or `help &lt;command&gt;` to get help</a>
+<span class="sourceLineNo">025</span><a id="line.25">     * on a specific command.</a>
+<span class="sourceLineNo">026</span><a id="line.26">     *</a>
+<span class="sourceLineNo">027</span><a id="line.27">     * @param args options, JSON-RPC method, JSON-RPC parameters</a>
+<span class="sourceLineNo">028</span><a id="line.28">     */</a>
+<span class="sourceLineNo">029</span><a id="line.29">    public static void main(String[] args) {</a>
+<span class="sourceLineNo">030</span><a id="line.30">        BitcoinCLITool command = new BitcoinCLITool(args);</a>
+<span class="sourceLineNo">031</span><a id="line.31">        Integer status = command.run();</a>
+<span class="sourceLineNo">032</span><a id="line.32">        System.exit(status);</a>
+<span class="sourceLineNo">033</span><a id="line.33">    }</a>
+<span class="sourceLineNo">034</span><a id="line.34"></a>
+<span class="sourceLineNo">035</span><a id="line.35">    public Integer runImpl() throws IOException {</a>
+<span class="sourceLineNo">036</span><a id="line.36">        List&lt;String&gt; args = line.getArgList();</a>
+<span class="sourceLineNo">037</span><a id="line.37">        if (args.size() == 0) {</a>
+<span class="sourceLineNo">038</span><a id="line.38">            printError("rpc method required");</a>
+<span class="sourceLineNo">039</span><a id="line.39">            printHelp();</a>
+<span class="sourceLineNo">040</span><a id="line.40">            return(1);</a>
+<span class="sourceLineNo">041</span><a id="line.41">        }</a>
+<span class="sourceLineNo">042</span><a id="line.42">        String method = args.get(0);</a>
+<span class="sourceLineNo">043</span><a id="line.43">        args.remove(0); // remove method from list</a>
+<span class="sourceLineNo">044</span><a id="line.44">        List&lt;Object&gt; typedArgs = convertParameters(method, args);</a>
+<span class="sourceLineNo">045</span><a id="line.45">        Object result;</a>
+<span class="sourceLineNo">046</span><a id="line.46">        try {</a>
+<span class="sourceLineNo">047</span><a id="line.47">            result = client.send(method, typedArgs);</a>
+<span class="sourceLineNo">048</span><a id="line.48">        } catch (JsonRPCException e) {</a>
+<span class="sourceLineNo">049</span><a id="line.49">            e.printStackTrace();</a>
+<span class="sourceLineNo">050</span><a id="line.50">            return 1;</a>
+<span class="sourceLineNo">051</span><a id="line.51">        }</a>
+<span class="sourceLineNo">052</span><a id="line.52">        if (result != null) {</a>
+<span class="sourceLineNo">053</span><a id="line.53">            pwout.println(result.toString());</a>
+<span class="sourceLineNo">054</span><a id="line.54">        }</a>
+<span class="sourceLineNo">055</span><a id="line.55">        return 0;</a>
+<span class="sourceLineNo">056</span><a id="line.56">    }</a>
+<span class="sourceLineNo">057</span><a id="line.57"></a>
+<span class="sourceLineNo">058</span><a id="line.58">    /**</a>
+<span class="sourceLineNo">059</span><a id="line.59">     * Convert params from strings to Java types that will map to correct JSON types</a>
+<span class="sourceLineNo">060</span><a id="line.60">     *</a>
+<span class="sourceLineNo">061</span><a id="line.61">     * TODO: Make this better and complete</a>
+<span class="sourceLineNo">062</span><a id="line.62">     *</a>
+<span class="sourceLineNo">063</span><a id="line.63">     * @param method the JSON-RPC method</a>
+<span class="sourceLineNo">064</span><a id="line.64">     * @param params Params with String type</a>
+<span class="sourceLineNo">065</span><a id="line.65">     * @return Params with correct Java types for JSON</a>
+<span class="sourceLineNo">066</span><a id="line.66">     */</a>
+<span class="sourceLineNo">067</span><a id="line.67">    protected List&lt;Object&gt; convertParameters(String method, List&lt;String&gt; params) {</a>
+<span class="sourceLineNo">068</span><a id="line.68">        List&lt;Object&gt; typedParams = new ArrayList&lt;&gt;();</a>
+<span class="sourceLineNo">069</span><a id="line.69">        switch (method) {</a>
+<span class="sourceLineNo">070</span><a id="line.70">            case "setgenerate":</a>
+<span class="sourceLineNo">071</span><a id="line.71">                typedParams.add(0, Boolean.parseBoolean(params.get(0)));</a>
+<span class="sourceLineNo">072</span><a id="line.72">                break;</a>
+<span class="sourceLineNo">073</span><a id="line.73"></a>
+<span class="sourceLineNo">074</span><a id="line.74">            default:</a>
+<span class="sourceLineNo">075</span><a id="line.75">                // Default (for now) is to leave them all as strings</a>
+<span class="sourceLineNo">076</span><a id="line.76">                for (String string : params) {</a>
+<span class="sourceLineNo">077</span><a id="line.77">                    typedParams.add(string);</a>
+<span class="sourceLineNo">078</span><a id="line.78">                }</a>
+<span class="sourceLineNo">079</span><a id="line.79"></a>
+<span class="sourceLineNo">080</span><a id="line.80">        }</a>
+<span class="sourceLineNo">081</span><a id="line.81">        return typedParams;</a>
+<span class="sourceLineNo">082</span><a id="line.82">    }</a>
+<span class="sourceLineNo">083</span><a id="line.83">}</a>
 
 
 
@@ -151,5 +152,6 @@
 
 </pre>
 </div>
+</main>
 </body>
 </html>

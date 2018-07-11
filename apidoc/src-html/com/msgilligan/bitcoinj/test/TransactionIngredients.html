@@ -1,28 +1,29 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 </head>
 <body>
+<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.test;<a name="line.1"></a>
-<span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import org.bitcoinj.core.Address;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import org.bitcoinj.core.ECKey;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import org.bitcoinj.core.TransactionOutPoint;<a name="line.5"></a>
-<span class="sourceLineNo">006</span><a name="line.6"></a>
-<span class="sourceLineNo">007</span>import java.util.List;<a name="line.7"></a>
-<span class="sourceLineNo">008</span><a name="line.8"></a>
-<span class="sourceLineNo">009</span>/**<a name="line.9"></a>
-<span class="sourceLineNo">010</span> * Everything needed to build your own custom transaction<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * TODO: Make this an immutable bean<a name="line.11"></a>
-<span class="sourceLineNo">012</span> */<a name="line.12"></a>
-<span class="sourceLineNo">013</span>public class TransactionIngredients {<a name="line.13"></a>
-<span class="sourceLineNo">014</span>    public Address address;<a name="line.14"></a>
-<span class="sourceLineNo">015</span>    public ECKey   privateKey;<a name="line.15"></a>
-<span class="sourceLineNo">016</span>    public List&lt;TransactionOutPoint&gt; outPoints;<a name="line.16"></a>
-<span class="sourceLineNo">017</span>}<a name="line.17"></a>
+<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.test;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import org.bitcoinj.core.Address;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import org.bitcoinj.core.ECKey;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import org.bitcoinj.core.TransactionOutPoint;</a>
+<span class="sourceLineNo">006</span><a id="line.6"></a>
+<span class="sourceLineNo">007</span><a id="line.7">import java.util.List;</a>
+<span class="sourceLineNo">008</span><a id="line.8"></a>
+<span class="sourceLineNo">009</span><a id="line.9">/**</a>
+<span class="sourceLineNo">010</span><a id="line.10"> * Everything needed to build your own custom transaction</a>
+<span class="sourceLineNo">011</span><a id="line.11"> * TODO: Make this an immutable bean</a>
+<span class="sourceLineNo">012</span><a id="line.12"> */</a>
+<span class="sourceLineNo">013</span><a id="line.13">public class TransactionIngredients {</a>
+<span class="sourceLineNo">014</span><a id="line.14">    public Address address;</a>
+<span class="sourceLineNo">015</span><a id="line.15">    public ECKey   privateKey;</a>
+<span class="sourceLineNo">016</span><a id="line.16">    public List&lt;TransactionOutPoint&gt; outPoints;</a>
+<span class="sourceLineNo">017</span><a id="line.17">}</a>
 
 
 
@@ -85,5 +86,6 @@
 
 </pre>
 </div>
+</main>
 </body>
 </html>

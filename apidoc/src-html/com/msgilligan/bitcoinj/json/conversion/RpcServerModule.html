@@ -1,41 +1,42 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
 <title>Source code</title>
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 </head>
 <body>
+<main role="main">
 <div class="sourceContainer">
-<pre><span class="sourceLineNo">001</span>package com.msgilligan.bitcoinj.json.conversion;<a name="line.1"></a>
-<span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import com.fasterxml.jackson.core.Version;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import com.fasterxml.jackson.databind.module.SimpleModule;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import org.bitcoinj.core.Address;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import org.bitcoinj.core.Coin;<a name="line.6"></a>
-<span class="sourceLineNo">007</span>import org.bitcoinj.core.ECKey;<a name="line.7"></a>
-<span class="sourceLineNo">008</span>import org.bitcoinj.core.Peer;<a name="line.8"></a>
-<span class="sourceLineNo">009</span>import org.bitcoinj.core.Sha256Hash;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import org.bitcoinj.core.Transaction;<a name="line.10"></a>
-<span class="sourceLineNo">011</span><a name="line.11"></a>
-<span class="sourceLineNo">012</span>/**<a name="line.12"></a>
-<span class="sourceLineNo">013</span> *<a name="line.13"></a>
-<span class="sourceLineNo">014</span> */<a name="line.14"></a>
-<span class="sourceLineNo">015</span>public class RpcServerModule extends SimpleModule {<a name="line.15"></a>
-<span class="sourceLineNo">016</span>    public RpcServerModule() {<a name="line.16"></a>
-<span class="sourceLineNo">017</span>        super("BitcoinJMappingServer", new Version(1, 0, 0, null, null, null));<a name="line.17"></a>
-<span class="sourceLineNo">018</span><a name="line.18"></a>
-<span class="sourceLineNo">019</span>        this.addDeserializer(Address.class, new AddressDeserializer(null))  // Null means use default list of netParams<a name="line.19"></a>
-<span class="sourceLineNo">020</span>                .addDeserializer(Coin.class, new CoinDeserializer())<a name="line.20"></a>
-<span class="sourceLineNo">021</span>                .addDeserializer(ECKey.class, new ECKeyDeserializer())<a name="line.21"></a>
-<span class="sourceLineNo">022</span>                .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())<a name="line.22"></a>
-<span class="sourceLineNo">023</span>                .addSerializer(Address.class, new AddressSerializer())<a name="line.23"></a>
-<span class="sourceLineNo">024</span>                .addSerializer(Coin.class, new CoinSerializer())<a name="line.24"></a>
-<span class="sourceLineNo">025</span>                .addSerializer(ECKey.class, new ECKeySerializer())<a name="line.25"></a>
-<span class="sourceLineNo">026</span>                .addSerializer(Peer.class, new PeerSerializer())<a name="line.26"></a>
-<span class="sourceLineNo">027</span>                .addSerializer(Sha256Hash.class, new Sha256HashSerializer())<a name="line.27"></a>
-<span class="sourceLineNo">028</span>                .addSerializer(Transaction.class, new TransactionSerializer());<a name="line.28"></a>
-<span class="sourceLineNo">029</span>    }<a name="line.29"></a>
-<span class="sourceLineNo">030</span>}<a name="line.30"></a>
+<pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.json.conversion;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.core.Version;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.fasterxml.jackson.databind.module.SimpleModule;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import org.bitcoinj.core.Address;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import org.bitcoinj.core.Coin;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import org.bitcoinj.core.ECKey;</a>
+<span class="sourceLineNo">008</span><a id="line.8">import org.bitcoinj.core.Peer;</a>
+<span class="sourceLineNo">009</span><a id="line.9">import org.bitcoinj.core.Sha256Hash;</a>
+<span class="sourceLineNo">010</span><a id="line.10">import org.bitcoinj.core.Transaction;</a>
+<span class="sourceLineNo">011</span><a id="line.11"></a>
+<span class="sourceLineNo">012</span><a id="line.12">/**</a>
+<span class="sourceLineNo">013</span><a id="line.13"> *</a>
+<span class="sourceLineNo">014</span><a id="line.14"> */</a>
+<span class="sourceLineNo">015</span><a id="line.15">public class RpcServerModule extends SimpleModule {</a>
+<span class="sourceLineNo">016</span><a id="line.16">    public RpcServerModule() {</a>
+<span class="sourceLineNo">017</span><a id="line.17">        super("BitcoinJMappingServer", new Version(1, 0, 0, null, null, null));</a>
+<span class="sourceLineNo">018</span><a id="line.18"></a>
+<span class="sourceLineNo">019</span><a id="line.19">        this.addDeserializer(Address.class, new AddressDeserializer(null))  // Null means use default list of netParams</a>
+<span class="sourceLineNo">020</span><a id="line.20">                .addDeserializer(Coin.class, new CoinDeserializer())</a>
+<span class="sourceLineNo">021</span><a id="line.21">                .addDeserializer(ECKey.class, new ECKeyDeserializer())</a>
+<span class="sourceLineNo">022</span><a id="line.22">                .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())</a>
+<span class="sourceLineNo">023</span><a id="line.23">                .addSerializer(Address.class, new AddressSerializer())</a>
+<span class="sourceLineNo">024</span><a id="line.24">                .addSerializer(Coin.class, new CoinSerializer())</a>
+<span class="sourceLineNo">025</span><a id="line.25">                .addSerializer(ECKey.class, new ECKeySerializer())</a>
+<span class="sourceLineNo">026</span><a id="line.26">                .addSerializer(Peer.class, new PeerSerializer())</a>
+<span class="sourceLineNo">027</span><a id="line.27">                .addSerializer(Sha256Hash.class, new Sha256HashSerializer())</a>
+<span class="sourceLineNo">028</span><a id="line.28">                .addSerializer(Transaction.class, new TransactionSerializer());</a>
+<span class="sourceLineNo">029</span><a id="line.29">    }</a>
+<span class="sourceLineNo">030</span><a id="line.30">}</a>
 
 
 
@@ -98,5 +99,6 @@
 
 </pre>
 </div>
+</main>
 </body>
 </html>
