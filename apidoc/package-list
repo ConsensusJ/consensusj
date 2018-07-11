@@ -1,4 +1,5 @@
 com.msgilligan.bitcoinj.cli
+com.msgilligan.bitcoinj.cli.test
 com.msgilligan.bitcoinj.daemon
 com.msgilligan.bitcoinj.daemon.config
 com.msgilligan.bitcoinj.dsljs
@@ -20,6 +21,8 @@ com.msgilligan.namecoinj.core
 com.msgilligan.namecoinj.json.pojo
 com.msgilligan.namecoinj.rpc
 org.consensusj.jsonrpc
+org.consensusj.jsonrpc.groovy
+org.consensusj.jsonrpc.internal
 org.consensusj.jsonrpc.ratpack
 org.consensusj.jsonrpc.ratpack.authext
 org.consensusj.jsonrpc.util
