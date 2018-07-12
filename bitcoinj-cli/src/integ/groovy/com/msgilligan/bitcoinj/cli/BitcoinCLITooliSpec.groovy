@@ -6,7 +6,7 @@ import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
- * Integration Test Spec for the bitcoinj-cli tool
+ * Integration Test Spec for BitcoinCLITool
  * Assumes bitcoind running on localhost in RegTest mode.
  *
  * TODO: We should probably check the command output (eventually)

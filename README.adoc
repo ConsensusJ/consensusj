@@ -14,12 +14,14 @@ v0.2.9
 
 image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.org/ConsensusJ/consensusj"] image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"] 
 
-Cryptocurrency libraries based on https://bitcoinj.github.io[bitcoinj], including:
+Modular cryptocurrency libraries for Java, JVM languages, and Android. Including:
 
-* A *JSON-RPC Java client* for the https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core API]
+* A *Java JSON-RPC client* that serves as a base class for _any_ cryptocurrency platform that uses JSON-RPC for communication.
+* A *Groovy JSON-RPC client* that can use _dynamic_ methods for scripting, experimentation and functional tests of _any_ JSON-RPC server.
+* A *JSON-RPC Java client* for the https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core API] with strong, static types.
 * JSON library using https://github.com/FasterXML/jackson[Jackson] to convert between Bitcoin types and JSON
 ** *bitcoinj* types <--> JSON (e.g. {bitcoinj-apidoc}/org/bitcoinj/core/Address.html[Address], {bitcoinj-apidoc}/org/bitcoinj/core/Sha256Hash.html[Sha256Hash], {bitcoinj-apidoc}/org/bitcoinj/core/Transaction.html[Transaction])
-** Strongly typed {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/package-summary.html[Java POJOs] <--> Bitcoin Core standard JSON (e.g. {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/BlockChainInfo.html[BlockChainInfo], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/UnspentOutput.html[UnspentOutput], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/ChainTip.html[ChainTip])
+** Strongly-typed {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/package-summary.html[Java POJOs] <--> Bitcoin Core standard JSON (e.g. {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/BlockChainInfo.html[BlockChainInfo], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/UnspentOutput.html[UnspentOutput], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/ChainTip.html[ChainTip])
 * https://spring.io[Spring] and https://github.com/google/guice[Guice]-compatible Bitcoin server components for *server-side JSON-RPC*.
 * **bitcoinj-proxy** - A high-performance, non-blocking https://ratpack.io[Ratpack] server for proxying access to *bitcoind* or building Bitcoin-based microservices.
 * **bitcoinj-daemon** - A *Spring Boot*-based framework for a Java-based implementation of *bitcoind*.
@@ -29,11 +31,11 @@ Cryptocurrency libraries based on https://bitcoinj.github.io[bitcoinj], includin
 * A Groovy-language *Domain Specific Language* for scripting and testing with *bitcoinj*
 * Functional tests of bitcoind (and bitcoinj-daemon) JSON-RPC services, that run in https://bitcoinj.github.io/testing#regression-test-mode[regression test mode].
 
-WARNING: Do not use this software with your Bitcoin private keys without doing a rigorous audit of the code. (Feedback welcome.)
+WARNING: Do not use this software with your private keys without doing a rigorous audit of the code first. (Feedback welcome.)
 
-WARNING: The API is not final and *may* change without warning (we try to deprecate first).
+WARNING: The API is not final and prior to a 1.0 release *may* change without warning. Most of the API changes are fairly manageable though, and we try to deprecate first.
 
-We're hoping that one or more modules will be accepted into the bitcoinj project. Most of these components are fairly new, but all are useful and ready for pull requests.
+This project is a mono-repo with a large number of submodules/components that are published as independent binary libraries. Since it is easy to pull in just the modules you need via Maven coordinates, this allows you to manage your transitive dependencies and build small, tight applications and servers. Most of these components are fairly new, but all are useful and ready for pull requests.
 
 == Overview
 
@@ -60,16 +62,52 @@ image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Statu
 
 === Requirements
 
-* Most modules use JDK 7 (subset) for Android compatibility (see table, below)
-* Server modules and Spring Boot Apps require JDK 8 or later
+* Modules used by https://namecoin.org/2018/04/03/consensusj-0.2.7-binaries.html[ConsensusJ-Namecoin] use Java 7.
+* Most other modules are now using Java 8.
+
+Now that Android 7 and later support Java 8, we're trying to make Java 8 the baseline. But ConsensusJ-Namecoin is cool, so we have to convince them to upgrade to Java 8.
+
+=== ConsensusJ Modules
+
+We are in the process of refactoring all modules into the new `org.consensusj` namespace. As part of this process, once all the packages in a module are under `org.consensusj` and there are no split packages, we are assigning JPMS module names via the "Automatic Module" mechanism. This results in a consistent package structure, easier usage by Java 9+, and a smooth migration to JPMS module descriptors.
+
+The new modules also more clearly separate Java from Groovy, so the core Java modules have zero dependencies on Groovy JARs.
+
+.ConsensusJ Modules
+[cols="3,1,3,5"]
+|===
+|Name |Min JDK |JPMS module |Description
+
+|<<consensusj-jsonrpc,consensusj-jsonrpc>>
+| 7
+| `org.consensusj.jsonrpc`
+| Java JSON-RPC client
+
+|<<consensusj-jsonrpc-gvy,consensusj-jsonrpc-gvy>>
+| 8
+| `org.consensusj.jsonrpc.groovy`
+| Groovy JSON-RPC client (dynamic RPC methods)
+
+|<<cjbtc-jsonrpc,cjbtc-jsonrpc>>
+| 7
+| not ready yet
+| Java JSON-RPC Bitcoin client
+
+|<<cjbtc-jsonrpc-gvy,cjbtc-jsonrpc-gvy>>
+| 8
+| not ready yet
+| Groovy JSON-RPC Bitcoin client  (dynamic RPC methods)
+
+|===
+
 
 === Modules
 
-See the table below for an overview of the modules.
+See the table below for an overview of the modules in the old `com.msgilligan` namespace.
 The *JDK* column indicates the version of Java required.
 The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groovy Programming Language] within that module.
 
-.Modules
+.Legacy Modules
 [cols="3,1,3,5"]
 |===
 |Name |JDK |Grooviness |Description
@@ -82,7 +120,7 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |<<bitcoinj-rpcclient,bitcoinj-rpcclient>>
 |7
 |Optional + tests
-|Bitcoin JSON-RPC client
+|Bitcoin JSON-RPC integration tests, NMC & ETH clients
 
 |<<bitcoinj-json,bitcoinj-json>>
 |7
@@ -125,6 +163,32 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes.
 |===
 
+[#consensusj-jsonrpc]
+==== consensusj-jsonrpc
+
+Java implementation of a JSON-RPC client. {cj-apidoc}/org/consensusj/jsonrpc/RPCClient.html[RPCClient] can be subclassed or called directly using the `send()` method and `Object` parameters.
+
+[#consensusj-jsonrpc-gvy]
+==== consensusj-jsonrpc-gvy
+
+Dynamic RPC methods are implemented via the `DynamicRPCFallback` Groovy trait. `DynamicRPCClient` can be used to talk to any JSON-RPC server using standard Java types and Jackson JSON conversion.
+
+[#cjbtc-jsonrpc]
+==== cjbtc-jsonrpc
+
+Java Bitcoin JSON-RPC client and supporting types, both bitcoinj types and POJOs for Bitcoin Core JSON.
+
+If the RPC procedure takes a Bitcoin address as parameter, then the Java method will take an `org.bitcoinj.core.Address`.
+If the RPC returns a transaction, the Java method will return an `org.bitcoinj.core.Transaction`.
+
+See the JavaDoc for {cj-apidoc}/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
+
+[#cjbtc-jsonrpc-gvy]
+==== cjbtc-jsonrpc-gvy
+
+Subclass of Bitcoin JSON-RPC client with fallback to dynamic methods (using `DynamicRPCFallback`). This is useful when new methods are added to the server/protocol and static methods and types haven't been written for them yet.
+
+
 [#bitcoinj-cli]
 ==== bitcoinj-cli: An Bitcoin RPC command-line client
 
@@ -145,15 +209,19 @@ For help type:
 [subs="attributes"]
     java -jar bitcoinj-cli-{consensusj-version}.jar -?
 
-or read the http://consensusj.github.io/consensusj/manpage-bitcoinj-cli.html[manual page].
+or read the https://consensusj.github.io/consensusj/manpage-cj-bitcoin-cli.html[manual page].
+
 
 [#bitcoinj-rpcclient]
 ==== bitcoinj-rpcclient: A Bitcoin JSON-RPC client using bitcoinj types
 
-If the RPC procedure takes a Bitcoin address as parameter, then the Java method will take an `org.bitcoinj.core.Address`.
-If the RPC returns a transaction, the Java method will return an `org.bitcoinj.core.Transaction`.
+Most of the previous functionality of this module has been moved to the new `org.consensusj` modules. What remains is:
 
-See the JavaDoc for {cj-apidoc}/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
+* Bitcoin Core integration test framework and tests (Regression Tests using Spock)
+* A Namecoin (NMC) JSON-RPC Client
+* An Ethereum (ETH) JSON-RPC Client
+
+The remaining classes will be refactored into 3 new `org.consensusj` modules.
 
 ===== Sample Spock Integration Tests
 
