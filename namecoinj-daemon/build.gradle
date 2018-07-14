@@ -10,8 +10,7 @@ buildscript {
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-
-archivesBaseName = 'bitcoinj-daemon'
+archivesBaseName = 'namecoinj-daemon'
 
 idea {
     module {
@@ -20,20 +19,19 @@ idea {
     }
 }
 
-jar {
-    baseName = 'bitcoinj-daemon-lib'
-    enabled = true
+repositories {
+    mavenLocal()
 }
 
 dependencies {
-    compile project(':bitcoinj-params')
+    compile project(':libdohj-params')
     compile project(':bitcoinj-server')
+    compile project(':bitcoinj-daemon')
     compile "org.springframework.boot:spring-boot-starter-web"
 }
 
-
 springBoot {
-    mainClassName = "com.msgilligan.bitcoinj.daemon.Application"
+    mainClassName = "com.msgilligan.namecoinj.daemon.Application"
 }
 
 bintrayUpload.dependsOn bootJar
