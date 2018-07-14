@@ -6,7 +6,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-    compile project(':cjbtc-jsonrpc-gvy')
+    compile project(':cj-btc-jsonrpc-gvy')
     compile project(':bitcoinj-json')
     compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"

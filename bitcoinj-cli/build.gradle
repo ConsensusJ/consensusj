@@ -3,7 +3,7 @@
  * `cj-bitcoin-cli` tool is compiled to a native command-line tool with Graal `native-image`
  */
 dependencies {
-    compile project(':cjbtc-jsonrpc')
+    compile project(':cj-btc-jsonrpc')
 
     compile 'commons-cli:commons-cli:1.4'
     

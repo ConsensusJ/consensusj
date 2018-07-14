@@ -1,7 +1,7 @@
 include 'consensusj-jsonrpc',                                        // JSONRPC Java client
         'consensusj-jsonrpc-gvy',                                    // JSONRPC Groovy client
-        'cjbtc-jsonrpc',
-        'cjbtc-jsonrpc-gvy',
+        'cj-btc-jsonrpc',
+        'cj-btc-jsonrpc-gvy',
         'bitcoinj-json',                                             // JSON <-> Java Object mapping
         'bitcoinj-cli', 'bitcoinj-rpcclient',                        // Client
         'bitcoinj-server', 'bitcoinj-daemon', 'bitcoinj-peerserver', // Server lib + 2 server apps
@@ -9,4 +9,4 @@ include 'consensusj-jsonrpc',                                        // JSONRPC 
         'bitcoinj-money',                                             // JavaMoney (JSR-354) support
         'bitcoinj-dsljs',
         'bitcoinj-proxy',
-        'namecoinj-daemon'
+        'cj-nmc-daemon'

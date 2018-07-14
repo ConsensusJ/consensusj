@@ -6,7 +6,8 @@ build
 *.iws
 bitcoinj-*/out
 consensusj-*/out
-cjbtc-*/out
+cj-btc-*/out
+cj-nmc-*/out
 .asciidoctor/
 
 

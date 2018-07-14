@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compile project(':cjbtc-jsonrpc')
+    compile project(':cj-btc-jsonrpc')
     compile project(':consensusj-jsonrpc-gvy')
 
     compile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
