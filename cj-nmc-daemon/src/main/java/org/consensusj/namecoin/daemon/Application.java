@@ -1,6 +1,6 @@
-package org.consensusj.daemon;
+package org.consensusj.namecoin.daemon;
 
-import org.consensusj.daemon.config.NamecoinConfig;
+import org.consensusj.namecoin.daemon.config.NamecoinConfig;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

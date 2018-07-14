@@ -29,7 +29,7 @@ dependencies {
 }
 
 springBoot {
-    mainClassName = "com.msgilligan.namecoinj.daemon.Application"
+    mainClassName = "org.consensusj.namecoin.daemon.Application"
 }
 
 bintrayUpload.dependsOn bootJar

@@ -1,4 +1,4 @@
-package org.consensusj.daemon.config;
+package org.consensusj.namecoin.daemon.config;
 
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Configuration;

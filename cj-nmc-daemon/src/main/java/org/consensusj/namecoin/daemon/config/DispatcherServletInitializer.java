@@ -1,4 +1,4 @@
-package org.consensusj.daemon.config;
+package org.consensusj.namecoin.daemon.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

@@ -1,4 +1,4 @@
-package org.consensusj.daemon.config;
+package org.consensusj.namecoin.daemon.config;
 
 import com.fasterxml.jackson.databind.Module;
 import com.googlecode.jsonrpc4j.spring.JsonServiceExporter;
