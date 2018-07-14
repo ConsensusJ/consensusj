@@ -20,11 +20,6 @@ import java.io.FileNotFoundException;
 @Configuration
 public class BitcoinConfig {
     @Bean
-    public NetworkParameters networkParameters() {
-        return MainNetParams.get();
-    }
-
-    @Bean
     public PeerDiscovery peerDiscovery(NetworkParameters params) throws FileNotFoundException {
         PeerDiscovery pd;
         pd = new DnsDiscovery(params);

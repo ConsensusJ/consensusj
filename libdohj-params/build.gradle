@@ -1,0 +1,29 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+repositories {
+    mavenLocal()
+}
+
+jar {
+    baseName = 'libdohj-params'
+    enabled = true
+}
+
+bootJar {
+    enabled = false
+}
+
+dependencies {
+    compile "org.libdohj:libdohj-core:0.14-SNAPSHOT"
+    compile "org.springframework.boot:spring-boot-starter-web"
+}
