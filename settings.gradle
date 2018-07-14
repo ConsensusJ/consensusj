@@ -8,4 +8,5 @@ include 'consensusj-jsonrpc',                                        // JSONRPC 
         'bitcoinj-dsl', 'bitcoinj-spock',                            // DSL/Testing
         'bitcoinj-money',                                             // JavaMoney (JSR-354) support
         'bitcoinj-dsljs',
-        'bitcoinj-proxy'
+        'bitcoinj-proxy',
+        'namecoinj-daemon'
