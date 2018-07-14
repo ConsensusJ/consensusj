@@ -1,0 +1,60 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+archivesBaseName = 'namecoinj-daemon'
+
+idea {
+    module {
+        jdkName = '1.8'
+//        languageLevel = '1.8'
+    }
+}
+
+repositories {
+    mavenLocal()
+}
+
+dependencies {
+    compile project(':libdohj-params')
+    compile project(':bitcoinj-server')
+    compile project(':bitcoinj-daemon')
+    compile "org.springframework.boot:spring-boot-starter-web"
+}
+
+springBoot {
+    mainClassName = "com.msgilligan.namecoinj.daemon.Application"
+}
+
+bintrayUpload.dependsOn bootJar
+
+// See: http://docs.spring.io/spring-boot/docs/1.3.0.M4/reference/htmlsingle/#build-tool-plugins-gradle-publishing-artifacts-to-a-maven-repository-import
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom {
+                project {
+                    dependencyManagement {
+                        dependencies {
+                            dependency {
+                                groupId "org.springframework.boot"
+                                artifactId "spring-boot-dependencies"
+                                version springBootVersion
+                                type "pom"
+                                scope "import"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
