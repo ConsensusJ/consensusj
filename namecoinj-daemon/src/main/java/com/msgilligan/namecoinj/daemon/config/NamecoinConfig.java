@@ -15,10 +15,10 @@ import org.springframework.context.annotation.Configuration;
 import java.io.FileNotFoundException;
 
 /**
- * Spring configuration for bitcoinj, Bitcoin services, and JSON-RPC server
+ * Spring configuration for namecoinj, Namecoin services, and JSON-RPC server
  */
 @Configuration
-public class BitcoinConfig {
+public class NamecoinConfig {
     @Bean
     public NetworkParameters networkParameters() {
         // TODO: Replace this with Namecoin MainNet Params from libdohj

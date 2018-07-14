@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.daemon.config;
+package com.msgilligan.namecoinj.daemon.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

@@ -24,9 +24,7 @@ repositories {
 }
 
 dependencies {
-    compile project(':libdohj-params')
     compile project(':bitcoinj-server')
-    compile project(':bitcoinj-daemon')
     compile "org.springframework.boot:spring-boot-starter-web"
 }
 
