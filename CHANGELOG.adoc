@@ -3,9 +3,30 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.2.10-SNAPSHOT
+== v0.3.0-SNAPSHOT
 
-In-progress
+Released: 2018.07.10
+
+=== cj-btc-jsonrpc
+
+* module/filename changed from `cjbtc-jsonrpc`
+
+=== cj-btc-jsonrpc-gvy
+
+* module/filename changed from `cjbtc-jsonrpc-gvy`
+* Now requires Java 8
+
+=== cj-nmc-daemon
+
+* New Namecoin Daemon module created by Jeremy Rand
+* Currently a work-in-progress
+
+=== All Modules
+
+* Upgrade to Spring Boot 2.0.3
+* Upgrade to Asciidoclet 1.5.6 (release version)
+* Namecoin classes moved to `org.consensusj.namecoin`
+* Ethereum classes moved to `org.consensusj.ethereum`
 
 == v0.2.9
 
