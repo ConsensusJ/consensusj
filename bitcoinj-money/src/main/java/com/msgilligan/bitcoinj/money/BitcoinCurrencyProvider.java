@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.money;
 
 import org.javamoney.moneta.CurrencyUnitBuilder;
+import org.javamoney.moneta.spi.base.BaseCurrencyProviderSpi;
 
 import javax.money.CurrencyContext;
 import javax.money.CurrencyContextBuilder;
@@ -16,7 +17,7 @@ import java.util.Set;
  * @author Sean Gilligan
  * @author Werner Keil
  */
-public class BitcoinCurrencyProvider implements CurrencyProviderSpi {
+public class BitcoinCurrencyProvider extends BaseCurrencyProviderSpi implements CurrencyProviderSpi {
     private final static int bitcoinFractionDigits = 8;
     private final Set<CurrencyUnit> bitcoinSet;
 

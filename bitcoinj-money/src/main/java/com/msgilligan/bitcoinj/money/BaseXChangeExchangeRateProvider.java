@@ -3,6 +3,7 @@ package com.msgilligan.bitcoinj.money;
 import org.javamoney.moneta.convert.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LazyBoundCurrencyConversion;
+import org.javamoney.moneta.spi.base.BaseExchangeRateProvider;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.currency.CurrencyPair;
@@ -37,7 +38,7 @@ import java.util.concurrent.TimeoutException;
  *  Base ExchangeRateProvider using XChange library
  *  Currently supports current DEFERRED rates only
  */
-public abstract class BaseXChangeExchangeRateProvider implements ExchangeRateProvider, ObservableExchangeRateProvider {
+public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRateProvider implements ExchangeRateProvider, ObservableExchangeRateProvider {
     private static final Logger log = LoggerFactory.getLogger(BaseXChangeExchangeRateProvider.class);
     protected final ProviderContext providerContext;
     protected String name;
