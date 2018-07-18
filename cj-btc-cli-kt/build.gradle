@@ -1,0 +1,47 @@
+buildscript {
+    ext.kotlin_version = '1.2.51'
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin'
+
+dependencies {
+    compile project(':cj-btc-cli')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    runtime "org.slf4j:slf4j-simple:${slf4jVersion}"
+
+   // testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+}
+
+def mainClassName = "org.consensusj.cli.kotlin.BitcoinKotlinCLIToolKt"
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'ConsensusJ Bitcoin CLI support (Kotlin)',
+                    'Implementation-Version': version,
+                    'Main-Class': mainClassName
+    }
+}
+
+// Compile a native image using Graal's native-image tool
+// Graal must be installed at $GRAAL_HOME
+task graalNativeImage(type:Exec, dependsOn: jar) {
+    workingDir = projectDir
+    executable = "${System.env.GRAAL_HOME}/bin/native-image"
+    args = [ '--verbose',
+             '-cp', configurations.runtime.asPath,
+             '-jar', jar.archivePath,
+             '-H:Path=build',
+             '-H:Name=cj-bitcoin-cli-kotlin',
+             '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
+             '-H:EnableURLProtocols=http',
+             '-H:+ReportUnsupportedElementsAtRuntime'
+    ]
+}

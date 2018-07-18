@@ -3,7 +3,9 @@ include 'consensusj-jsonrpc',                                        // JSONRPC 
         'cj-btc-jsonrpc',
         'cj-btc-jsonrpc-gvy',
         'bitcoinj-json',                                             // JSON <-> Java Object mapping
-        'cj-btc-cli', 'bitcoinj-rpcclient',                        // Client
+        'cj-btc-cli',
+        'cj-btc-cli-kt',
+        'bitcoinj-rpcclient',                        // Client
         'bitcoinj-server', 'bitcoinj-daemon', 'bitcoinj-peerserver', // Server lib + 2 server apps
         'bitcoinj-dsl', 'bitcoinj-spock',                            // DSL/Testing
         'bitcoinj-money',                                             // JavaMoney (JSR-354) support
