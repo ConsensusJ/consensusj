@@ -111,7 +111,7 @@ public abstract class CliCommand {
          *
          * @return status code
          */
-    public Integer checkArgs() {
+    public int checkArgs() {
         if (line.hasOption("?")) {
             printHelp();
             // Return 1 so tool can exit
@@ -124,7 +124,7 @@ public abstract class CliCommand {
      * Initial a client and if rpcwait option set, make sure server is accepting connections.
      * @return status code
      */
-    public Integer preflight() {
+    public int preflight() {
         getClient();
         if (line.hasOption("rpcwait")) {
             boolean available = false;   // Wait up to 1 hour
@@ -142,7 +142,7 @@ public abstract class CliCommand {
         return 0;
     }
 
-    public Integer run() {
+    public int run() {
         return run(System.in, System.out, System.err);
     }
 
