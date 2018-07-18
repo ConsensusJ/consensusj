@@ -1,11 +1,11 @@
 package org.consensusj.jsonrpc.groovy
 
-import org.consensusj.jsonrpc.UntypedRPCClient
+import org.consensusj.jsonrpc.DynamicRpcMethodSupport
 
 /**
  * Trait for adding dynamic RPC method fallback to any RPC client
  */
-trait DynamicRPCFallback implements UntypedRPCClient {
+trait DynamicRpcMethodFallback implements DynamicRpcMethodSupport {
     /**
      * Dynamically forward missing method calls to the server
      *

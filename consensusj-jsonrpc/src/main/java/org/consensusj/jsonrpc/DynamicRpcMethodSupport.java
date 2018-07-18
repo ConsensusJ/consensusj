@@ -7,7 +7,7 @@ import java.util.List;
  * Basic JSON-RPC remote call interface for RPC calls
  *
  * The parameter list is "untyped" (declared as `List<Object>`) and implementations are responsible
- * for converting each Java object parameter to a valid and correct JSON object.
+ * for converting each Java object parameter to a valid and correctly-typed (for the method) JSON object.
  *
  * This is used to implement the `DynamicRPCFallback` trait in Groovy which is applied
  * to various Groovy RPC client implementations that typically inherit statically-dispatched
@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @see DynamicRPCClient
  */
-public interface UntypedRPCClient {
+public interface DynamicRpcMethodSupport {
     /**
      * Call an RPC method and return default object type.
      *

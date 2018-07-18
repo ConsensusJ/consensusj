@@ -14,7 +14,7 @@ import java.util.List;
  * `abstract` to be implemented by subclasses allowing implementation with alternative
  * HTTP client libraries.
  */
-public abstract class AbstractRPCClient implements UntypedRPCClient {
+public abstract class AbstractRPCClient implements DynamicRpcMethodSupport {
     protected final ObjectMapper mapper;
     private final JavaType defaultType;
 

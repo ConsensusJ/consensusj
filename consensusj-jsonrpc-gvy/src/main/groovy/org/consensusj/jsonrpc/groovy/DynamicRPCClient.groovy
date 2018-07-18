@@ -13,7 +13,7 @@ import org.consensusj.jsonrpc.RPCClient
  * This client is provided for those looking for something simple, flexible, dynamic, and Groovy.
  *
  */
-class DynamicRPCClient extends RPCClient implements DynamicRPCFallback {
+class DynamicRPCClient extends RPCClient implements DynamicRpcMethodFallback {
 
     DynamicRPCClient(URI server, String rpcuser, String rpcpassword) {
         super(server, rpcuser, rpcpassword)
