@@ -21,11 +21,13 @@ idea {
 
 repositories {
     mavenLocal()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     compile project(':bitcoinj-server')
     compile "org.springframework.boot:spring-boot-starter-web"
+    implementation "com.github.dogecoin:libdohj:31fb8985ba13fbf20f102679df75fc7daf5098d4"
 }
 
 springBoot {
