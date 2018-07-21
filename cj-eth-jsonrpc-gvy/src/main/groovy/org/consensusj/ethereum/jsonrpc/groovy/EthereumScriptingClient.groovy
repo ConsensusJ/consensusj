@@ -1,5 +1,6 @@
-package org.consensusj.ethereum.rpc
+package org.consensusj.ethereum.jsonrpc.groovy
 
+import org.consensusj.ethereum.jsonrpc.EthereumClient
 import org.consensusj.jsonrpc.groovy.DynamicRpcMethodFallback
 
 /**

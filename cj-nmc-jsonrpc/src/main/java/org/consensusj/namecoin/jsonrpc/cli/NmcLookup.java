@@ -1,8 +1,8 @@
-package org.consensusj.namecoin.cli;
+package org.consensusj.namecoin.jsonrpc.cli;
 
 import org.consensusj.jsonrpc.JsonRpcStatusException;
-import org.consensusj.namecoin.pojo.NameData;
-import org.consensusj.namecoin.rpc.NamecoinClient;
+import org.consensusj.namecoin.jsonrpc.pojo.NameData;
+import org.consensusj.namecoin.jsonrpc.NamecoinClient;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.AddressFormatException;
 

@@ -1,4 +1,4 @@
-package org.consensusj.namecoin.rpc
+package org.consensusj.namecoin.jsonrpc
 
 import spock.lang.Ignore
 import spock.lang.Shared

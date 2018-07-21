@@ -1,4 +1,4 @@
 /**
  * Namecoin JSON-RPC Client
  */
-package org.consensusj.namecoin.rpc;
+package org.consensusj.namecoin.jsonrpc;

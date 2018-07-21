@@ -1,6 +1,7 @@
-package org.consensusj.namecoin.rpc
+package org.consensusj.namecoin.jsonrpc.groovy
 
 import org.consensusj.jsonrpc.groovy.DynamicRpcMethodFallback
+import org.consensusj.namecoin.jsonrpc.NamecoinClient
 
 /**
  * Namecoin RPC client for scripting

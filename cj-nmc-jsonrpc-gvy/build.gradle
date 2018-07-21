@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     compile project(':consensusj-jsonrpc-gvy')
-    compile project(':cj-eth-jsonrpc')
+    compile project(':cj-nmc-jsonrpc')
 
     compile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
     compile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {

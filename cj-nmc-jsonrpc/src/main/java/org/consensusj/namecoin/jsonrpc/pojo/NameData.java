@@ -1,4 +1,4 @@
-package org.consensusj.namecoin.pojo;
+package org.consensusj.namecoin.jsonrpc.pojo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

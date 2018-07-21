@@ -1,4 +1,4 @@
-package org.consensusj.ethereum.rpc
+package org.consensusj.ethereum.jsonrpc
 
 import org.consensusj.jsonrpc.JsonRpcStatusException
 import spock.lang.Ignore
