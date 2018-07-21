@@ -1,6 +1,6 @@
 package org.consensusj.namecoin.cli;
 
-import org.consensusj.jsonrpc.JsonRPCStatusException;
+import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.namecoin.pojo.NameData;
 import org.consensusj.namecoin.rpc.NamecoinClient;
 import org.bitcoinj.core.Address;
@@ -14,7 +14,7 @@ import java.net.URISyntaxException;
  */
 public class NmcLookup {
 
-    public static void main(String[] args) throws URISyntaxException, IOException, JsonRPCStatusException, AddressFormatException {
+    public static void main(String[] args) throws URISyntaxException, IOException, JsonRpcStatusException, AddressFormatException {
         NamecoinClient client = new NamecoinClient(NamecoinClient.readConfig());
         NameData result = client.nameShow("d/beelin");
         System.out.println(result.getValue());

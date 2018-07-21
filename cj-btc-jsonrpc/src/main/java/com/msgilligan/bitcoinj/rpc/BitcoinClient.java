@@ -17,9 +17,9 @@ import com.msgilligan.bitcoinj.json.pojo.TxOutInfo;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
 import com.msgilligan.bitcoinj.json.conversion.RpcClientModule;
 import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo;
-import org.consensusj.jsonrpc.JsonRPCException;
-import org.consensusj.jsonrpc.JsonRPCStatusException;
-import org.consensusj.jsonrpc.RPCClient;
+import org.consensusj.jsonrpc.JsonRpcException;
+import org.consensusj.jsonrpc.JsonRpcStatusException;
+import org.consensusj.jsonrpc.RpcClient;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;
@@ -66,7 +66,7 @@ import java.util.Map;
  * NOTE: This is still a work-in-progress and the API will change.
  *
  */
-public class BitcoinClient extends RPCClient implements NetworkParametersProperty {
+public class BitcoinClient extends RpcClient implements NetworkParametersProperty {
     private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);
 
     private static final int SECOND_IN_MSEC = 1000;
@@ -107,7 +107,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Construct a BitcoinClient from an RPCConfig data object.
      * @param config Contains URI, user name, and password
      */
-    public BitcoinClient(RPCConfig config) {
+    public BitcoinClient(RpcConfig config) {
         this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());
     }
 
@@ -123,10 +123,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
     /**
      * Get a (cached after first call) serverVersion number
      * @return serverVersion number of bitcoin node
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    private int getServerVersion() throws IOException, JsonRPCStatusException {
+    private int getServerVersion() throws IOException, JsonRpcStatusException {
         if (serverVersion == 0) {
             serverVersion = getNetworkInfo().getVersion();
         }
@@ -143,7 +143,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param timeout Timeout in seconds
      * @return true if ready, false if timeout or interrupted
      */
-    public Boolean waitForServer(int timeout) throws JsonRPCException {
+    public Boolean waitForServer(int timeout) throws JsonRpcException {
 
         log.debug("Waiting for server RPC ready...");
 
@@ -166,14 +166,14 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
                         se.getMessage().equals("recvfrom failed: ECONNRESET (Connection reset by peer)")) {
                     status = se.getMessage();
                 } else {
-                    throw new JsonRPCException("Unexpected exception in waitForServer", se) ;
+                    throw new JsonRpcException("Unexpected exception in waitForServer", se) ;
                 }
 
             } catch (EOFException ignored) {
                 /* Android exception, ignore */
                 // Expected exceptions on Android, RoboVM
                 status = ignored.getMessage();
-            } catch (JsonRPCStatusException e) {
+            } catch (JsonRpcStatusException e) {
                 // If server is in "warm-up" mode, e.g. validating/parsing the blockchain...
                 if (e.jsonRPCCode == -28) {
                     // ...then grab text message for status logging
@@ -209,11 +209,11 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param blockHeight Block height to wait for
      * @param timeout     Timeout in seconds
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      * @return True if blockHeight reached, false if timeout or interrupted
      */
-    public Boolean waitForBlock(int blockHeight, int timeout) throws JsonRPCStatusException, IOException {
+    public Boolean waitForBlock(int blockHeight, int timeout) throws JsonRpcStatusException, IOException {
 
         log.info("Waiting for server to reach block " + blockHeight);
 
@@ -246,10 +246,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Returns the number of blocks in the longest block chain.
      *
      * @return The current block count
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Integer getBlockCount() throws JsonRPCStatusException, IOException {
+    public Integer getBlockCount() throws JsonRpcStatusException, IOException {
         return send("getblockcount");
     }
 
@@ -258,10 +258,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param index The block index
      * @return The block hash
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Sha256Hash getBlockHash(Integer index) throws JsonRPCStatusException, IOException {
+    public Sha256Hash getBlockHash(Integer index) throws JsonRpcStatusException, IOException {
         return send("getblockhash", Sha256Hash.class, index);
     }
 
@@ -270,15 +270,15 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param hash The block hash
      * @return The information about the block
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public BlockInfo getBlockInfo(Sha256Hash hash) throws JsonRPCStatusException, IOException {
+    public BlockInfo getBlockInfo(Sha256Hash hash) throws JsonRpcStatusException, IOException {
         // Use "verbose = true"
         return send("getblock", BlockInfo.class, hash, true);
     }
 
-    public Block getBlock(Sha256Hash hash) throws JsonRPCStatusException, IOException {
+    public Block getBlock(Sha256Hash hash) throws JsonRpcStatusException, IOException {
         // Use "verbose = false"
         return send("getblock", Block.class, hash, false);
     }
@@ -288,10 +288,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param index The block index
      * @return The information about the block
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Block getBlock(Integer index) throws JsonRPCStatusException, IOException {
+    public Block getBlock(Integer index) throws JsonRpcStatusException, IOException {
         Sha256Hash blockHash = getBlockHash(index);
         return getBlock(blockHash);
     }
@@ -305,11 +305,11 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param generate        turn generation on or off
      * @param genproclimit    Generation is limited to [genproclimit] processors, -1 is unlimited
      * @return List<Sha256Hash>  list containing  block header hashes of the generated blocks or empty list
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      *
      */
-    public List<Sha256Hash> setGenerate(Boolean generate, Long genproclimit) throws JsonRPCStatusException, IOException {
+    public List<Sha256Hash> setGenerate(Boolean generate, Long genproclimit) throws JsonRpcStatusException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
         return send("setgenerate", resultType, generate, genproclimit);
     }
@@ -321,10 +321,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param numBlocks number of blocks to generate
      * @return list containing block header hashes of the generated blocks
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public List<Sha256Hash> generate(int numBlocks) throws JsonRPCStatusException, IOException {
+    public List<Sha256Hash> generate(int numBlocks) throws JsonRpcStatusException, IOException {
         if (getServerVersion() > 110000) {
             JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
             return send("generate", resultType, numBlocks);
@@ -338,7 +338,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Convenience method for generating a single block when in RegTest mode
      * @see BitcoinClient#generate(int numBlocks)
      */
-    public List<Sha256Hash> generate() throws IOException, JsonRPCStatusException {
+    public List<Sha256Hash> generate() throws IOException, JsonRpcStatusException {
         return generate(1);
     }
 
@@ -352,7 +352,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
 // I can't remember exactly what it was -- try adding it back as part
 // of testing for release 0.2.2
     @Deprecated
-    public List<Sha256Hash> generateBlock() throws JsonRPCStatusException, IOException {
+    public List<Sha256Hash> generateBlock() throws JsonRpcStatusException, IOException {
         return generate();
     }
 
@@ -364,7 +364,7 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @see BitcoinClient#generate(int)
      */
     @Deprecated
-    public List<Sha256Hash> generateBlocks(Long blocks) throws JsonRPCStatusException, IOException {
+    public List<Sha256Hash> generateBlocks(Long blocks) throws JsonRpcStatusException, IOException {
         return generate(blocks.intValue());
     }
 
@@ -372,10 +372,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Creates a new Bitcoin address for receiving payments, linked to the default account "".
      *
      * @return A new Bitcoin address
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Address getNewAddress() throws JsonRPCStatusException, IOException {
+    public Address getNewAddress() throws JsonRpcStatusException, IOException {
         return getNewAddress(null);
     }
 
@@ -384,10 +384,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param account The account name for the address to be linked to.
      * @return A new Bitcoin address
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Address getNewAddress(String account) throws JsonRPCStatusException, IOException {
+    public Address getNewAddress(String account) throws JsonRpcStatusException, IOException {
         return send("getnewaddress", Address.class, account);
     }
 
@@ -396,10 +396,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param account The account name linked to the address.
      * @return The Bitcoin address
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Address getAccountAddress(String account) throws JsonRPCStatusException, IOException {
+    public Address getAccountAddress(String account) throws JsonRpcStatusException, IOException {
         return send("getaccountaddress", Address.class, account);
     }
 
@@ -410,10 +410,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param address Address corresponding to the private key to return
      * @return The private key
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public ECKey dumpPrivKey(Address address) throws JsonRPCStatusException, IOException {
+    public ECKey dumpPrivKey(Address address) throws JsonRpcStatusException, IOException {
         return send("dumpprivkey", ECKey.class, address);
     }
 
@@ -426,11 +426,11 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param minconf     Only use funds with at least this many confirmations
      * @param comment     An optional comment, stored in the wallet only
      * @return True, if successful, and false otherwise
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
     public Boolean moveFunds(Address fromaccount, Address toaccount, Coin amount, Integer minconf, String comment)
-            throws JsonRPCStatusException,
+            throws JsonRpcStatusException,
             IOException {
         return send("move", fromaccount, toaccount, amount, minconf, comment);
     }
@@ -444,11 +444,11 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param inputs  The outpoints to spent
      * @param outputs The destinations and amounts to transfer
      * @return The hex-encoded raw transaction
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
     public String createRawTransaction(List<Outpoint> inputs, Map<Address, Coin> outputs)
-            throws JsonRPCStatusException, IOException {
+            throws JsonRpcStatusException, IOException {
         return send("createrawtransaction", inputs, outputs);
     }
 
@@ -457,10 +457,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param unsignedTransaction The hex-encoded raw transaction
      * @return The signed transaction and information whether it has a complete set of signature
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public SignedRawTransaction signRawTransaction(String unsignedTransaction) throws JsonRPCStatusException, IOException {
+    public SignedRawTransaction signRawTransaction(String unsignedTransaction) throws JsonRpcStatusException, IOException {
         return send("signrawtransaction", SignedRawTransaction.class, unsignedTransaction);
     }
 
@@ -469,12 +469,12 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param txid Transaction ID/hash
      * @param verbose `true` to return JSON transaction
      * @return  RawTransactionInfo if verbose, otherwise Transaction
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      * @deprecated Use getRawTransaction or getRawTransactionInfo as appropriate
      */
     @Deprecated
-    public Object getRawTransaction(Sha256Hash txid, Boolean verbose) throws JsonRPCStatusException, IOException {
+    public Object getRawTransaction(Sha256Hash txid, Boolean verbose) throws JsonRpcStatusException, IOException {
         Object result;
         if (verbose) {
             result = getRawTransactionInfo(txid);    // Verbose means JSON
@@ -488,10 +488,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Get a "raw" transaction (which we map to a bitcoinj transaction)
      * @param txid Transaction ID/hash
      * @return bitcoinj Transaction
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Transaction getRawTransaction(Sha256Hash txid) throws JsonRPCStatusException, IOException {
+    public Transaction getRawTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {
         String hexEncoded = send("getrawtransaction", txid);
         byte[] raw = HexUtil.hexStringToByteArray(hexEncoded);
         return new Transaction(context.getParams(), raw);
@@ -501,30 +501,30 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Get a "raw" transaction as JSON (which we map to a RawTransactionInfo POJO)
      * @param txid Transaction ID/hash
      * @return RawTransactionInfo POJO
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public RawTransactionInfo getRawTransactionInfo(Sha256Hash txid) throws JsonRPCStatusException, IOException {
+    public RawTransactionInfo getRawTransactionInfo(Sha256Hash txid) throws JsonRpcStatusException, IOException {
         return send("getrawtransaction", RawTransactionInfo.class, txid, 1);
     }
 
-    public Sha256Hash sendRawTransaction(Transaction tx) throws JsonRPCStatusException, IOException {
+    public Sha256Hash sendRawTransaction(Transaction tx) throws JsonRpcStatusException, IOException {
         return sendRawTransaction(tx, null);
     }
 
-    public Sha256Hash sendRawTransaction(String hexTx) throws JsonRPCStatusException, IOException {
+    public Sha256Hash sendRawTransaction(String hexTx) throws JsonRpcStatusException, IOException {
         return sendRawTransaction(hexTx, null);
     }
 
-    public Sha256Hash sendRawTransaction(Transaction tx, Boolean allowHighFees) throws JsonRPCStatusException, IOException {
+    public Sha256Hash sendRawTransaction(Transaction tx, Boolean allowHighFees) throws JsonRpcStatusException, IOException {
         return send("sendrawtransaction", Sha256Hash.class, tx, allowHighFees);
     }
 
-    public Sha256Hash sendRawTransaction(String hexTx, Boolean allowHighFees) throws JsonRPCStatusException, IOException {
+    public Sha256Hash sendRawTransaction(String hexTx, Boolean allowHighFees) throws JsonRpcStatusException, IOException {
         return send("sendrawtransaction", Sha256Hash.class, hexTx, allowHighFees);
     }
 
-    public Coin getReceivedByAddress(Address address) throws JsonRPCStatusException, IOException {
+    public Coin getReceivedByAddress(Address address) throws JsonRpcStatusException, IOException {
         return getReceivedByAddress(address, 1);   // Default to 1 or more confirmations
     }
 
@@ -534,15 +534,15 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param address Address to query
      * @param minConf minimum number of confirmations
      * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Coin getReceivedByAddress(Address address, Integer minConf) throws JsonRPCStatusException, IOException {
+    public Coin getReceivedByAddress(Address address, Integer minConf) throws JsonRpcStatusException, IOException {
         return send("getreceivedbyaddress", Coin.class, address, minConf);
     }
 
     public List<ReceivedByAddressInfo> listReceivedByAddress(Integer minConf, Boolean includeEmpty)
-            throws JsonRPCStatusException, IOException {
+            throws JsonRpcStatusException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ReceivedByAddressInfo.class);
         return send("listreceivedbyaddress", resultType, minConf, includeEmpty);
     }
@@ -551,10 +551,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Returns a list of unspent transaction outputs with at least one confirmation.
      *
      * @return The unspent transaction outputs
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public List<UnspentOutput> listUnspent() throws JsonRPCStatusException, IOException {
+    public List<UnspentOutput> listUnspent() throws JsonRpcStatusException, IOException {
         return listUnspent(null, null, null);
     }
 
@@ -565,11 +565,11 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param minConf The minimum confirmations to filter
      * @param maxConf The maximum confirmations to filter
      * @return The unspent transaction outputs
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
     public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf)
-            throws JsonRPCStatusException, IOException {
+            throws JsonRpcStatusException, IOException {
         return listUnspent(minConf, maxConf, null);
     }
 
@@ -581,11 +581,11 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param maxConf The maximum confirmations to filter
      * @param filter  Include only transaction outputs to the specified addresses
      * @return The unspent transaction outputs
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
     public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, Iterable<Address> filter)
-            throws JsonRPCStatusException, IOException {
+            throws JsonRpcStatusException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, UnspentOutput.class);
         return send("listunspent", resultType, minConf, maxConf, filter);
     }
@@ -596,10 +596,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param txid The transaction hash
      * @param vout The transaction output index
      * @return Details about an unspent output or nothing, if the output was already spent
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public TxOutInfo getTxOut(Sha256Hash txid, Integer vout) throws JsonRPCStatusException, IOException {
+    public TxOutInfo getTxOut(Sha256Hash txid, Integer vout) throws JsonRpcStatusException, IOException {
         return getTxOut(txid, vout, null);
     }
 
@@ -610,11 +610,11 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param vout              The transaction output index
      * @param includeMemoryPool Whether to included the memory pool
      * @return Details about an unspent output or nothing, if the output was already spent
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
     public TxOutInfo getTxOut(Sha256Hash txid, Integer vout, Boolean includeMemoryPool)
-            throws JsonRPCStatusException, IOException {
+            throws JsonRpcStatusException, IOException {
         return send("gettxout", TxOutInfo.class, txid, vout, includeMemoryPool);
     }
 
@@ -622,10 +622,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Get the balance for a the default Bitcoin "account"
      *
      * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Coin getBalance() throws JsonRPCStatusException, IOException {
+    public Coin getBalance() throws JsonRpcStatusException, IOException {
         return getBalance(null, null);
     }
 
@@ -634,10 +634,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param account A Bitcoin "account". (Be wary of using this feature.)
      * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Coin getBalance(String account) throws JsonRPCStatusException, IOException {
+    public Coin getBalance(String account) throws JsonRpcStatusException, IOException {
         return getBalance(account, null);
     }
 
@@ -647,28 +647,28 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param account A Bitcoin "account". (Be wary of using this feature.)
      * @param minConf minimum number of confirmations
      * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Coin getBalance(String account, Integer minConf) throws JsonRPCStatusException, IOException {
+    public Coin getBalance(String account, Integer minConf) throws JsonRpcStatusException, IOException {
         return send("getbalance", Coin.class, account, minConf);
     }
 
-    public Sha256Hash sendToAddress(Address address, Coin amount) throws JsonRPCStatusException, IOException {
+    public Sha256Hash sendToAddress(Address address, Coin amount) throws JsonRpcStatusException, IOException {
         return sendToAddress(address, amount, null, null);
     }
 
     public Sha256Hash sendToAddress(Address address, Coin amount, String comment, String commentTo)
-            throws JsonRPCStatusException, IOException {
+            throws JsonRpcStatusException, IOException {
         return send("sendtoaddress", Sha256Hash.class, address, amount, comment, commentTo);
     }
 
     public Sha256Hash sendFrom(String account, Address address, Coin amount)
-            throws JsonRPCStatusException, IOException {
+            throws JsonRpcStatusException, IOException {
         return send("sendfrom", Sha256Hash.class, account, address, amount);
     }
 
-    public Sha256Hash sendMany(String account, Map<Address, Coin> amounts) throws JsonRPCStatusException, IOException {
+    public Sha256Hash sendMany(String account, Map<Address, Coin> amounts) throws JsonRpcStatusException, IOException {
         return send("sendmany", Sha256Hash.class, account, amounts);
     }
 
@@ -677,14 +677,14 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param amount The transaction fee in BTC/kB rounded to the nearest 0.00000001.
      * @return True if successful
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Boolean setTxFee(Coin amount) throws JsonRPCStatusException, IOException {
+    public Boolean setTxFee(Coin amount) throws JsonRpcStatusException, IOException {
         return send("settxfee", amount);
     }
 
-    public WalletTransactionInfo getTransaction(Sha256Hash txid) throws JsonRPCStatusException, IOException {
+    public WalletTransactionInfo getTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {
         return send("gettransaction", WalletTransactionInfo.class, txid);
     }
 
@@ -694,11 +694,11 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Use GetBlockChainInfo and other alternatives instead
      *
      * @return Structure with various info fields
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
     @Deprecated
-    public ServerInfo getInfo() throws JsonRPCStatusException, IOException {
+    public ServerInfo getInfo() throws JsonRpcStatusException, IOException {
         return send("getinfo", ServerInfo.class);
     }
 
@@ -706,10 +706,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * The getblockchaininfo RPC provides information about the current state of the block chain.
      *
      * @return An object containing information about the current state of the block chain.
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public BlockChainInfo getBlockChainInfo() throws JsonRPCStatusException, IOException {
+    public BlockChainInfo getBlockChainInfo() throws JsonRpcStatusException, IOException {
         return send("getblockchaininfo", BlockChainInfo.class);
     }
 
@@ -717,10 +717,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * The getnetworkinfo RPC returns information about the node’s connection to the network.
      *
      * @return information about the node’s connection to the network
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public NetworkInfo getNetworkInfo() throws JsonRPCStatusException, IOException  {
+    public NetworkInfo getNetworkInfo() throws JsonRpcStatusException, IOException  {
         return send("getnetworkinfo", NetworkInfo.class);
     }
 
@@ -728,10 +728,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Returns list of related addresses
      * Also useful for finding all change addresses in the wallet
      * @return a lost of address groupings
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public List<List<AddressGroupingItem>>  listAddressGroupings() throws JsonRPCStatusException, IOException {
+    public List<List<AddressGroupingItem>>  listAddressGroupings() throws JsonRpcStatusException, IOException {
         // TODO: I'm not sure how to make Jackson mapping work automatically here.
         List<List<List<Object>>> raw = send("listaddressgroupings");
         List<List<AddressGroupingItem>> result = new ArrayList<>();
@@ -753,10 +753,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * commands.
      *
      * @return The list of commands as string
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public String help() throws JsonRPCStatusException, IOException {
+    public String help() throws JsonRpcStatusException, IOException {
         return help(null);
     }
 
@@ -765,10 +765,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param command The name of the command to get help for
      * @return The help text
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public String help(String command) throws JsonRPCStatusException, IOException {
+    public String help(String command) throws JsonRpcStatusException, IOException {
         return send("help", command);
     }
 
@@ -778,10 +778,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * Commands which are unavailable will not be listed, such as wallet RPCs, if wallet support is disabled.
      *
      * @return The list of commands
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public List<String> getCommands() throws JsonRPCStatusException, IOException {
+    public List<String> getCommands() throws JsonRpcStatusException, IOException {
         List<String> commands = new ArrayList<String>();
         for (String entry : help().split("\n")) {
             if (!entry.isEmpty() && !entry.matches("== (.+) ==")) {
@@ -801,10 +801,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param command The name of the command to check
      * @return True if the command exists
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Boolean commandExists(String command) throws JsonRPCStatusException, IOException {
+    public Boolean commandExists(String command) throws JsonRpcStatusException, IOException {
         return !help(command).contains("help: unknown command");
     }
 
@@ -813,10 +813,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param hash The block hash
      * @since Bitcoin Core 0.10
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public void invalidateBlock(Sha256Hash hash) throws JsonRPCStatusException, IOException {
+    public void invalidateBlock(Sha256Hash hash) throws JsonRpcStatusException, IOException {
         send("invalidateblock", hash);
     }
 
@@ -827,10 +827,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param hash The hash of the block to reconsider
      * @since Bitcoin Core 0.10
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public void reconsiderBlock(Sha256Hash hash) throws JsonRPCStatusException, IOException {
+    public void reconsiderBlock(Sha256Hash hash) throws JsonRpcStatusException, IOException {
         send("reconsiderblock", hash);
     }
 
@@ -839,10 +839,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @return A list of chain tip information
      * @since Bitcoin Core 0.10
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public List<ChainTip> getChainTips() throws JsonRPCStatusException, IOException {
+    public List<ChainTip> getChainTips() throws JsonRpcStatusException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ChainTip.class);
         return send("getchaintips",resultType);
     }
@@ -853,10 +853,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param node node to add as a string in the form of <IP address>:<port>
      * @param command `add`, `remove`, or `onetry`
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public void addNode(String node, String command) throws JsonRPCStatusException, IOException {
+    public void addNode(String node, String command) throws JsonRpcStatusException, IOException {
         send("addnode", node, command);
     }
 
@@ -866,10 +866,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * @param details `true` to return detailed information
      * @param node the node to provide information about
      * @return A Jackson JsonNode object (until we define a POJO)
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public JsonNode getAddedNodeInfo(boolean details, String node) throws JsonRPCStatusException, IOException  {
+    public JsonNode getAddedNodeInfo(boolean details, String node) throws JsonRpcStatusException, IOException  {
         return send("getaddednodeinfo", JsonNode.class, details, node);
     }
 
@@ -878,10 +878,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      *
      * @param details `true` to return detailed information
      * @return A Jackson JsonNode object (until we define a POJO)
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public JsonNode getAddedNodeInfo(boolean details) throws JsonRPCStatusException, IOException  {
+    public JsonNode getAddedNodeInfo(boolean details) throws JsonRpcStatusException, IOException  {
         return getAddedNodeInfo(details, null);
     }
 
@@ -892,10 +892,10 @@ public class BitcoinClient extends RPCClient implements NetworkParametersPropert
      * See https://github.com/OmniLayer/OmniJ/pull/72[Pull Request #72] on GitHub
      *
      * @return A list of transaction hashes of the removed transactions
-     * @throws JsonRPCStatusException JSON RPC status exception
+     * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public List<Sha256Hash> clearMemPool() throws JsonRPCStatusException, IOException {
+    public List<Sha256Hash> clearMemPool() throws JsonRpcStatusException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
         return send("clearmempool", resultType);
     }

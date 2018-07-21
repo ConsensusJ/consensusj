@@ -15,14 +15,14 @@ import java.net.URISyntaxException;
  * Contains complete URL, username, and password.
  *
  */
-public class RPCConfig {
+public class RpcConfig {
 
     private final NetworkParameters netParams;
     private final URI uri;
     private final String   username;
     private final String   password;
 
-    public RPCConfig(NetworkParameters netParams, URI uri, String username, String password) {
+    public RpcConfig(NetworkParameters netParams, URI uri, String username, String password) {
         this.netParams = netParams;
         this.uri = uri;
         this.username = username;
@@ -30,7 +30,7 @@ public class RPCConfig {
     }
 
     @JsonCreator
-    public RPCConfig(@JsonProperty("netid")     String netIdString,
+    public RpcConfig(@JsonProperty("netid")     String netIdString,
                      @JsonProperty("uri")       String uri,
                      @JsonProperty("username")  String username,
                      @JsonProperty("password")  String password) throws URISyntaxException {
@@ -41,7 +41,7 @@ public class RPCConfig {
     }
 
     @Deprecated
-    public RPCConfig(URI uri, String username, String password) {
+    public RpcConfig(URI uri, String username, String password) {
         this(RegTestParams.get(), uri, username, password);
     }
 

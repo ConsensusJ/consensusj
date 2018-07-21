@@ -1,6 +1,6 @@
 package org.consensusj.proxy;
 
-import com.msgilligan.bitcoinj.rpc.RPCConfig;
+import com.msgilligan.bitcoinj.rpc.RpcConfig;
 import org.consensusj.jsonrpc.ratpack.RpcProxyHandler;
 import ratpack.guice.Guice;
 import ratpack.server.BaseDir;
@@ -16,13 +16,13 @@ public class ProxyMain {
                 .port(5050)
                 .baseDir(BaseDir.find())
                 .json("proxy-config.json")
-                .require("/rpcclient", RPCConfig.class)
+                .require("/rpcclient", RpcConfig.class)
         );
         RatpackServer.start (server -> server
             .serverConfig(serverConfig)
             .registry(Guice.registry(b -> b.
                     moduleConfig(BitcoinRpcProxyModule.class,
-                            serverConfig.get("/rpcclient", RPCConfig.class))))
+                            serverConfig.get("/rpcclient", RpcConfig.class))))
             .handlers(chain -> chain
                     .post("rpc", RpcProxyHandler.class)
                     .get("status", ChainStatusHandler.class)

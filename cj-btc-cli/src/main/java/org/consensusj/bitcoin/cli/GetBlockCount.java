@@ -1,6 +1,6 @@
 package org.consensusj.bitcoin.cli;
 
-import org.consensusj.jsonrpc.JsonRPCException;
+import org.consensusj.jsonrpc.JsonRpcException;
 
 import java.io.IOException;
 
@@ -25,7 +25,7 @@ public class GetBlockCount extends CliCommand {
         Integer blockCount = -1;
         try {
             blockCount = client.getBlockCount();
-        } catch (JsonRPCException e) {
+        } catch (JsonRpcException e) {
             e.printStackTrace();
             return 1;
         } catch (IOException e) {

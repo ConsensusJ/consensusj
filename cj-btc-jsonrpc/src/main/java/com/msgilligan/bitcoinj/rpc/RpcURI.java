@@ -6,7 +6,7 @@ import java.net.URISyntaxException;
 /**
  * Utility class with default connection information for Bitcoin JSON-RPC
  */
-public class RPCURI {
+public class RpcURI {
     public static final String rpcproto = "http";
     public static final String rpcssl = "https";
     public static final String rpchost = "127.0.0.1";

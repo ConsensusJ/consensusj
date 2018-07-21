@@ -2,7 +2,6 @@ package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.test.RegTestEnvironment
 import com.msgilligan.bitcoinj.test.RegTestFundingSource
-import org.bitcoinj.core.Coin
 import spock.lang.Specification
 
 
@@ -12,7 +11,7 @@ import spock.lang.Specification
 class BitcoinExtendedClientSpec extends Specification {
     def "test it"() {
         given: "a client, a source of funds, and a blockchain environment"
-        def client = new BitcoinExtendedClient(RPCURI.defaultRegTestURI, "bitcoinrpc", "pass")
+        def client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, "bitcoinrpc", "pass")
         def funder = new RegTestFundingSource(client)
         RegTestEnvironment chainEnv = new RegTestEnvironment(client)
         // Mine some blocks and setup a source of funds for testing
@@ -50,7 +49,7 @@ class BitcoinExtendedClientSpec extends Specification {
 
     def "a test"() {
         given:
-        def client = new BitcoinExtendedClient(RPCURI.defaultRegTestURI, "bitcoinrpc", "pass")
+        def client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, "bitcoinrpc", "pass")
         def funder = new RegTestFundingSource(client)
         //def fundingAddress = client.getNewAddress()
         def fundingAddress = funder.createFundedAddress(10.btc)

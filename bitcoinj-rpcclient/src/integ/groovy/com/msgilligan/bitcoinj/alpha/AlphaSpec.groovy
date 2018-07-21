@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj.alpha
 
-import org.consensusj.jsonrpc.groovy.DynamicRPCClient
-import com.msgilligan.bitcoinj.rpc.RPCURI
+import org.consensusj.jsonrpc.groovy.DynamicRpcClient
+import com.msgilligan.bitcoinj.rpc.RpcURI
 import com.msgilligan.bitcoinj.rpc.test.TestServers
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.DumpedPrivateKey
@@ -29,7 +29,7 @@ class AlphaSpec extends Specification {
     static final testAmount = 2.0
     static final netParams = RegTestParams.get()
 
-    @Shared DynamicRPCClient client
+    @Shared DynamicRpcClient client
 
     @Shared def fundedAddress
     @Shared String txid
@@ -127,6 +127,6 @@ class AlphaSpec extends Specification {
 
 
     void setupSpec() {
-        client = new DynamicRPCClient(RPCURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
+        client = new DynamicRpcClient(RpcURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
     }
 }

@@ -5,7 +5,11 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 == v0.3.0-SNAPSHOT
 
-Released: 2018.07.10
+Released: Not yet
+
+=== Breaking Changes
+
+* All classes with `RPC` in name now use `Rpc`
 
 === cj-btc-jsonrpc
 

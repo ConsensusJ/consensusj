@@ -1,8 +1,8 @@
 package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.rpc.test.TestServers
-import org.consensusj.jsonrpc.groovy.DynamicRPCClient
-import org.consensusj.jsonrpc.JsonRPCStatusException
+import org.consensusj.jsonrpc.groovy.DynamicRpcClient
+import org.consensusj.jsonrpc.JsonRpcStatusException
 import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
@@ -12,16 +12,16 @@ import spock.lang.Specification
  * Test DynamicRPCClient against a Bitcoin RPC server in RegTest mode
  *
  */
-class DynamicRPCClientSpec extends Specification {
+class DynamicRpcClientSpec extends Specification {
     static final private TestServers testServers = TestServers.instance
     static final protected String rpcTestUser = testServers.rpcTestUser
     static final protected String rpcTestPassword = testServers.rpcTestPassword
 
     @Shared
-    DynamicRPCClient client
+    DynamicRpcClient client
 
     void setupSpec() {
-        client = new DynamicRPCClient(RPCURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
+        client = new DynamicRpcClient(RpcURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
 
 // TODO: Need to implement waitForServer()
 // waitForServer() is in BitcoinClient because it uses getBlockCount()
@@ -69,7 +69,7 @@ class DynamicRPCClientSpec extends Specification {
         client.idontexist("parm", 2)
 
         then:
-        JsonRPCStatusException e = thrown()
+        JsonRpcStatusException e = thrown()
         e.message == "Method not found"
         e.httpMessage == "Not Found"
         e.httpCode == 404

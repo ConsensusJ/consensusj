@@ -34,8 +34,8 @@ import java.security.cert.X509Certificate;
  * using intermediate `Map` or `JsonNode` types.
  *
  */
-public class RPCClient extends AbstractRPCClient {
-    private static final Logger log = LoggerFactory.getLogger(RPCClient.class);
+public class RpcClient extends AbstractRpcClient {
+    private static final Logger log = LoggerFactory.getLogger(RpcClient.class);
     private URI serverURI;
     private String username;
     private String password;
@@ -57,7 +57,7 @@ public class RPCClient extends AbstractRPCClient {
      * @param rpcUser username for the RPC HTTP connection
      * @param rpcPassword password for the RPC HTTP connection
      */
-    public RPCClient(URI server, final String rpcUser, final String rpcPassword) {
+    public RpcClient(URI server, final String rpcUser, final String rpcPassword) {
         super();
         this.serverURI = server;
         this.username = rpcUser;
@@ -80,10 +80,10 @@ public class RPCClient extends AbstractRPCClient {
      * @param responseType Response type to deserialize to
      * @return JSON-RPC response
      * @throws IOException when thrown by the underlying HttpURLConnection
-     * @throws JsonRPCStatusException when the HTTP response code is other than 200
+     * @throws JsonRpcStatusException when the HTTP response code is other than 200
      */
     @Override
-    protected <R> JsonRpcResponse<R> send(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRPCStatusException {
+    protected <R> JsonRpcResponse<R> send(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException {
         HttpURLConnection connection = openConnection();
 
         // TODO: Make sure HTTP keep-alive will work
@@ -132,9 +132,9 @@ public class RPCClient extends AbstractRPCClient {
      * @param responseCode Non-success response code
      * @param connection the current connection
      * @throws IOException IO Error
-     * @throws JsonRPCStatusException An exception containing the HTTP status coe and a message
+     * @throws JsonRpcStatusException An exception containing the HTTP status coe and a message
      */
-    private void handleBadResponseCode(int responseCode, HttpURLConnection connection) throws IOException, JsonRPCStatusException
+    private void handleBadResponseCode(int responseCode, HttpURLConnection connection) throws IOException, JsonRpcStatusException
     {
         String responseMessage = connection.getResponseMessage();
         String exceptionMessage = responseMessage;
@@ -160,7 +160,7 @@ public class RPCClient extends AbstractRPCClient {
                 errorStream.close();
             }
         }
-        throw new JsonRPCStatusException(exceptionMessage, responseCode, responseMessage, jsonRPCCode, bodyString, bodyJson);
+        throw new JsonRpcStatusException(exceptionMessage, responseCode, responseMessage, jsonRPCCode, bodyString, bodyJson);
     }
 
     private static String convertStreamToString(java.io.InputStream is) {

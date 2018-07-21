@@ -1,6 +1,6 @@
 package org.consensusj.jsonrpc.groovy
 
-import org.consensusj.jsonrpc.RPCClient
+import org.consensusj.jsonrpc.RpcClient
 
 /**
  * Use Groovy <code>methodMissing</code> to allow *any* JSON-RPC call to be made
@@ -13,9 +13,9 @@ import org.consensusj.jsonrpc.RPCClient
  * This client is provided for those looking for something simple, flexible, dynamic, and Groovy.
  *
  */
-class DynamicRPCClient extends RPCClient implements DynamicRpcMethodFallback {
+class DynamicRpcClient extends RpcClient implements DynamicRpcMethodFallback {
 
-    DynamicRPCClient(URI server, String rpcuser, String rpcpassword) {
+    DynamicRpcClient(URI server, String rpcuser, String rpcpassword) {
         super(server, rpcuser, rpcpassword)
     }
 }

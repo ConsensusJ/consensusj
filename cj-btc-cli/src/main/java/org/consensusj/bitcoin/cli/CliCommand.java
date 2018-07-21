@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.cli;
 
 import com.msgilligan.bitcoinj.rpc.bitcoind.BitcoinConfFile;
-import org.consensusj.jsonrpc.JsonRPCException;
+import org.consensusj.jsonrpc.JsonRpcException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinClient;
-import com.msgilligan.bitcoinj.rpc.RPCConfig;
+import com.msgilligan.bitcoinj.rpc.RpcConfig;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.RegTestParams;
@@ -70,7 +70,7 @@ public abstract class CliCommand {
     public BitcoinClient getClient() {
         if (client == null) {
             System.out.println("Connecting to: " + getRPCConfig().getURI());
-            RPCConfig config = getRPCConfig();
+            RpcConfig config = getRPCConfig();
             client = new BitcoinClient( config.getNetParams(),
                                         config.getURI(),
                                         config.getUsername(),
@@ -130,7 +130,7 @@ public abstract class CliCommand {
             boolean available = false;   // Wait up to 1 hour
             try {
                 available = client.waitForServer(60*60);
-            } catch (JsonRPCException e) {
+            } catch (JsonRpcException e) {
                 this.pwerr.println("JSON-RPC Exception: " + e.getMessage());
                 return 1;
             }
@@ -163,7 +163,7 @@ public abstract class CliCommand {
 
         try {
             status = runImpl();
-        } catch (JsonRPCException e) {
+        } catch (JsonRpcException e) {
             e.printStackTrace();
             status = 1;
         } catch (IOException e) {
@@ -177,7 +177,7 @@ public abstract class CliCommand {
      * Implement in subclasses
      * @return status code
      */
-    abstract protected Integer runImpl() throws IOException, JsonRPCException;
+    abstract protected Integer runImpl() throws IOException, JsonRpcException;
 
     protected URI getServerURI(URI confFileURI) {
         String scheme = confFileURI.getScheme();
@@ -210,8 +210,8 @@ public abstract class CliCommand {
         return rpcServerURI;
     }
 
-    protected RPCConfig getRPCConfig() {
-        RPCConfig confFileConfig = BitcoinConfFile.readDefaultConfig().getRPCConfig();
+    protected RpcConfig getRPCConfig() {
+        RpcConfig confFileConfig = BitcoinConfFile.readDefaultConfig().getRPCConfig();
         URI uri = getServerURI(confFileConfig.getURI());
         String user = line.getOptionValue("rpcuser", confFileConfig.getUsername());
         String pass = line.getOptionValue("rpcpassword", confFileConfig.getPassword());
@@ -223,7 +223,7 @@ public abstract class CliCommand {
         } else {
             netParams = MainNetParams.get();
         }
-        RPCConfig cfg = new RPCConfig(netParams, uri, user, pass);
+        RpcConfig cfg = new RpcConfig(netParams, uri, user, pass);
         return cfg;
     }
 

@@ -1,6 +1,6 @@
 package org.consensusj.bitcoin.cli;
 
-import org.consensusj.jsonrpc.JsonRPCException;
+import org.consensusj.jsonrpc.JsonRpcException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class BitcoinCLITool extends CliCommand {
         Object result;
         try {
             result = client.send(method, typedArgs);
-        } catch (JsonRPCException e) {
+        } catch (JsonRpcException e) {
             e.printStackTrace();
             return 1;
         }

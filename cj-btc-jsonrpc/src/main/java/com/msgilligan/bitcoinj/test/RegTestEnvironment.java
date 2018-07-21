@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj.test;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinClient;
-import org.consensusj.jsonrpc.JsonRPCException;
+import org.consensusj.jsonrpc.JsonRpcException;
 import org.bitcoinj.core.Sha256Hash;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class RegTestEnvironment implements BlockChainEnvironment {
     }
 
     @Override
-    public List<Sha256Hash> waitForBlocks(int numBlocks) throws JsonRPCException, IOException {
+    public List<Sha256Hash> waitForBlocks(int numBlocks) throws JsonRpcException, IOException {
         return client.generate(numBlocks);
     }
 }

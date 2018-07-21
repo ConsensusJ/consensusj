@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.integ
 
-import org.consensusj.jsonrpc.JsonRPCStatusException
+import org.consensusj.jsonrpc.JsonRpcStatusException
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.BlockChain
 import org.bitcoinj.core.Coin
@@ -141,7 +141,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         while (pendingTx == null) {
             try {
                 pendingTx = getRawTransaction(txid)
-            } catch (JsonRPCStatusException e) {
+            } catch (JsonRpcStatusException e) {
                 if (e.message != "No information available about transaction") {
                     throw e;
                 }

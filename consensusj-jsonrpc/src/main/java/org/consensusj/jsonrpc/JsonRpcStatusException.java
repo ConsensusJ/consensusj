@@ -4,7 +4,7 @@ package org.consensusj.jsonrpc;
  * JSON-RPC returned HTTP status other than 200
  * Additional information is usually in JSON-RPC response
  */
-public class JsonRPCStatusException extends JsonRPCException {
+public class JsonRpcStatusException extends JsonRpcException {
     public final String httpMessage;
     public final int httpCode;
     public final int jsonRPCCode;
@@ -21,7 +21,7 @@ public class JsonRPCStatusException extends JsonRPCException {
      * @param responseBody responseBody body as string
      * @param responseBodyJson responseBody body as Json Map
      */
-    public JsonRPCStatusException(String message, int httpCode, String httpMessage, int jsonRPCCode, String responseBody, JsonRpcResponse responseBodyJson ) {
+    public JsonRpcStatusException(String message, int httpCode, String httpMessage, int jsonRPCCode, String responseBody, JsonRpcResponse responseBodyJson ) {
         super(message);
         this.httpCode = httpCode;
         this.httpMessage = httpMessage;

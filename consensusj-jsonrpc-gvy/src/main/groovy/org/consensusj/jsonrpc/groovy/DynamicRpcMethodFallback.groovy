@@ -14,7 +14,7 @@ trait DynamicRpcMethodFallback implements DynamicRpcMethodSupport {
      * @param name The JSON-RPC method name
      * @param args JSON-RPC arguments
      * @return an object containing the JSON-RPC response.result
-     * @throws org.consensusj.jsonrpc.JsonRPCStatusException
+     * @throws org.consensusj.jsonrpc.JsonRpcStatusException
      */
     def methodMissing(String name, def args) {
         Object result = this.send(name, args as List)

@@ -5,13 +5,13 @@ import java.io.IOException;
 /**
  * JSON RPC Exception
  */
-public class JsonRPCException extends IOException {
+public class JsonRpcException extends IOException {
 
-    public JsonRPCException(String message) {
+    public JsonRpcException(String message) {
         super(message);
     }
 
-    public JsonRPCException(String message, Throwable cause) {
+    public JsonRpcException(String message, Throwable cause) {
         super(message, cause);
     }
 

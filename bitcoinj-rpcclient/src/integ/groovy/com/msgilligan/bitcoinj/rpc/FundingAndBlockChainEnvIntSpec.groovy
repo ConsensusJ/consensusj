@@ -11,7 +11,7 @@ import spock.lang.Specification
 class FundingAndBlockChainEnvIntSpec extends Specification {
     def "test it"() {
         given: "a client, a source of funds, and a blockchain environment"
-        def client = new BitcoinExtendedClient(RPCURI.defaultRegTestURI, "bitcoinrpc", "pass")
+        def client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, "bitcoinrpc", "pass")
         def funder = new RegTestFundingSource(client)
         RegTestEnvironment chainEnv = new RegTestEnvironment(client)
         // Mine some blocks and setup a source of funds for testing

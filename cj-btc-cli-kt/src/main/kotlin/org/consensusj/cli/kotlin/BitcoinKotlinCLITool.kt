@@ -2,7 +2,7 @@ package org.consensusj.cli.kotlin
 
 import org.consensusj.bitcoin.cli.CliCommand
 import org.consensusj.bitcoin.cli.CliOptions
-import org.consensusj.jsonrpc.JsonRPCException
+import org.consensusj.jsonrpc.JsonRpcException
 
 import java.io.IOException
 import java.util.ArrayList
@@ -42,7 +42,7 @@ class BitcoinKotlinCLITool(args: Array<String>) : CliCommand(commandName, CliOpt
         val result: Any?
         try {
             result = client.send<Any>(method, typedArgs)
-        } catch (e: JsonRPCException) {
+        } catch (e: JsonRpcException) {
             e.printStackTrace()
             return 1
         }

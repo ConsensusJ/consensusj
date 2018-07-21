@@ -27,7 +27,7 @@ public interface DynamicRpcMethodSupport {
      * @param pass:[<R>] Type of result object
      * @return the `response.result` field of the JSON-RPC response cast to type R
      * @throws IOException network error
-     * @throws JsonRPCStatusException JSON RPC status error
+     * @throws JsonRpcStatusException JSON RPC status error
      */
-    <R> R send(String method, List<Object> params) throws IOException, JsonRPCStatusException;
+    <R> R send(String method, List<Object> params) throws IOException, JsonRpcStatusException;
 }

@@ -14,11 +14,11 @@ import java.util.List;
  * `abstract` to be implemented by subclasses allowing implementation with alternative
  * HTTP client libraries.
  */
-public abstract class AbstractRPCClient implements DynamicRpcMethodSupport {
+public abstract class AbstractRpcClient implements DynamicRpcMethodSupport {
     protected final ObjectMapper mapper;
     private final JavaType defaultType;
 
-    public AbstractRPCClient() {
+    public AbstractRpcClient() {
         mapper = new ObjectMapper();
         defaultType = mapper.getTypeFactory().constructType(Object.class);
     }
@@ -32,9 +32,9 @@ public abstract class AbstractRPCClient implements DynamicRpcMethodSupport {
      * @param pass:[<R>] Type of result object
      * @return A JSON RPC Response with `result` of type `R`
      * @throws IOException network error
-     * @throws JsonRPCStatusException JSON RPC status error
+     * @throws JsonRpcStatusException JSON RPC status error
      */
-    protected abstract <R> JsonRpcResponse<R> send(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRPCStatusException;
+    protected abstract <R> JsonRpcResponse<R> send(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException;
 
     /**
      * Create a JsonRpcRequest from method and parameters
@@ -50,7 +50,7 @@ public abstract class AbstractRPCClient implements DynamicRpcMethodSupport {
         return new JsonRpcRequest(method, params);
     }
 
-    private <R> R sendForResult(String method, JavaType responseType, List<Object> params) throws IOException, JsonRPCStatusException {
+    private <R> R sendForResult(String method, JavaType responseType, List<Object> params) throws IOException, JsonRpcStatusException {
         JsonRpcRequest request = buildJsonRequest(method, params);
         JsonRpcResponse<R> response = send(request, responseType);
 
@@ -61,7 +61,7 @@ public abstract class AbstractRPCClient implements DynamicRpcMethodSupport {
 //        assert response.getId().equals(request.getId());
 
         if (response.getError() != null && response.getError().getCode() != 0) {
-            throw new JsonRPCStatusException(
+            throw new JsonRpcStatusException(
                     response.getError().getMessage(),
                     200,    // If response code wasn't 200 we couldn't be here
                     null,
@@ -81,7 +81,7 @@ public abstract class AbstractRPCClient implements DynamicRpcMethodSupport {
      * @param resultType desired result type as a Java class object
      * @return the 'response.result' field of the JSON RPC response converted to type R
      */
-    protected <R> R send(String method, Class<R> resultType, List<Object> params) throws IOException, JsonRPCStatusException {
+    protected <R> R send(String method, Class<R> resultType, List<Object> params) throws IOException, JsonRpcStatusException {
         // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
         // (We can't use R because of type erasure)
         JavaType responseType = mapper.getTypeFactory().
@@ -92,7 +92,7 @@ public abstract class AbstractRPCClient implements DynamicRpcMethodSupport {
     /**
      * Varargs version
      */
-    protected <R> R send(String method, Class<R> resultType, Object... params) throws IOException, JsonRPCStatusException {
+    protected <R> R send(String method, Class<R> resultType, Object... params) throws IOException, JsonRpcStatusException {
         return send(method, resultType, Arrays.asList(params));
     }
 
@@ -106,7 +106,7 @@ public abstract class AbstractRPCClient implements DynamicRpcMethodSupport {
      * @param resultType desired result type as a Jackson JavaType object
      * @return the 'response.result' field of the JSON RPC response converted to type R
      */
-    protected <R> R send(String method, JavaType resultType, List<Object> params) throws IOException, JsonRPCStatusException {
+    protected <R> R send(String method, JavaType resultType, List<Object> params) throws IOException, JsonRpcStatusException {
         // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
         // (We can't use R because of type erasure)
         JavaType responseType = mapper.getTypeFactory().
@@ -117,7 +117,7 @@ public abstract class AbstractRPCClient implements DynamicRpcMethodSupport {
     /**
      * Varargs version
      */
-    protected <R> R send(String method, JavaType resultType, Object... params) throws IOException, JsonRPCStatusException {
+    protected <R> R send(String method, JavaType resultType, Object... params) throws IOException, JsonRpcStatusException {
         return send(method, resultType, Arrays.asList(params));
     }
 
@@ -136,10 +136,10 @@ public abstract class AbstractRPCClient implements DynamicRpcMethodSupport {
      * @param pass:[<R>] Type of result object
      * @return the 'response.result' field of the JSON RPC response cast to type R
      * @throws IOException network error
-     * @throws JsonRPCStatusException JSON RPC status error
+     * @throws JsonRpcStatusException JSON RPC status error
      */
     @Override
-    public <R> R send(String method, List<Object> params) throws IOException, JsonRPCStatusException {
+    public <R> R send(String method, List<Object> params) throws IOException, JsonRpcStatusException {
         return send(method, defaultType, params);
     }
 
@@ -153,9 +153,9 @@ public abstract class AbstractRPCClient implements DynamicRpcMethodSupport {
      * @param pass:[<R>] Type of result object
      * @return the 'response.result' field of the JSON RPC response cast to type R
      * @throws IOException network error
-     * @throws JsonRPCStatusException JSON RPC status error
+     * @throws JsonRpcStatusException JSON RPC status error
      */
-    public <R> R send(String method, Object... params) throws IOException, JsonRPCStatusException {
+    public <R> R send(String method, Object... params) throws IOException, JsonRpcStatusException {
         return send(method, Arrays.asList(params));
     }
 

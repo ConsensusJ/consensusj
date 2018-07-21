@@ -6,7 +6,7 @@ import com.google.inject.Provides;
 import com.msgilligan.bitcoinj.json.conversion.RpcClientModule;
 import com.msgilligan.bitcoinj.json.conversion.RpcServerModule;
 import org.consensusj.jsonrpc.ratpack.authext.BasicAuthCallFactory;
-import com.msgilligan.bitcoinj.rpc.RPCConfig;
+import com.msgilligan.bitcoinj.rpc.RpcConfig;
 import ratpack.guice.ConfigurableModule;
 import ratpack.retrofit.RatpackRetrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -15,13 +15,13 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  * Create an asynchronous JSON RPC Client using RatpackRetrofit
  * TODO: Remove specific dependencies on Bitcoin
  */
-public class JsonRpcClientModule extends ConfigurableModule<RPCConfig> {
+public class JsonRpcClientModule extends ConfigurableModule<RpcConfig> {
     @Override
     protected void configure() {
     }
 
     @Provides
-    ObjectMapper provideObjectMapper(RPCConfig config) {
+    ObjectMapper provideObjectMapper(RpcConfig config) {
         return new ObjectMapper()
                 .registerModule(new Jdk8Module())
                 .registerModule(new RpcClientModule(config.getNetParams()))
@@ -36,7 +36,7 @@ public class JsonRpcClientModule extends ConfigurableModule<RPCConfig> {
     @Provides
     JsonRpcClient provideJsonRpcClient(JacksonConverterFactory converterFactory,
                                        okhttp3.Call.Factory callFactory,
-                                       RPCConfig rpcConfig) {
+                                       RpcConfig rpcConfig) {
         return RatpackRetrofit
                 .client(rpcConfig.getURI())
                 .configure(b -> {
@@ -47,7 +47,7 @@ public class JsonRpcClientModule extends ConfigurableModule<RPCConfig> {
     }
 
     @Provides
-    okhttp3.Call.Factory provideCallFactory(RPCConfig config) {
+    okhttp3.Call.Factory provideCallFactory(RpcConfig config) {
         return new BasicAuthCallFactory(config.getUsername(), config.getPassword());
     }
 

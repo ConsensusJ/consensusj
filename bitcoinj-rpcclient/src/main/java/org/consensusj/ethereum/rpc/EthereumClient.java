@@ -1,8 +1,8 @@
 package org.consensusj.ethereum.rpc;
 
-import org.consensusj.jsonrpc.JsonRPCStatusException;
+import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.jsonrpc.JsonRpcRequest;
-import org.consensusj.jsonrpc.RPCClient;
+import org.consensusj.jsonrpc.RpcClient;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -18,7 +18,7 @@ import java.util.List;
  * See also:
  * https://github.com/ethereum/go-ethereum/wiki/Management-APIs
  */
-public class EthereumClient extends RPCClient {
+public class EthereumClient extends RpcClient {
     public static URI DEFAULT_LOCALHOST;
 
     static {
@@ -53,27 +53,27 @@ public class EthereumClient extends RPCClient {
         return new JsonRpcRequest(method, params, JsonRpcRequest.JSON_RPC_VERSION_2);
     }
 
-    public String ethProtocolVersion() throws IOException, JsonRPCStatusException {
+    public String ethProtocolVersion() throws IOException, JsonRpcStatusException {
         return this.send("eth_protocolVersion");
     }
 
-    public long ethBlockNumber() throws IOException, JsonRPCStatusException {
+    public long ethBlockNumber() throws IOException, JsonRpcStatusException {
         String blockNumString = this.send("eth_blockNumber");
         long blockNum = Long.decode(blockNumString);
         return blockNum;
     }
 
-    public BigInteger ethGetBalance(String address, String block) throws IOException, JsonRPCStatusException {
+    public BigInteger ethGetBalance(String address, String block) throws IOException, JsonRpcStatusException {
         String weiAsHexString = this.send("eth_getBalance", address, block);
         return quantityToInt(weiAsHexString);
     }
 
-    public String ethCall(EthTxCallObject callObject, String block) throws IOException, JsonRPCStatusException {
+    public String ethCall(EthTxCallObject callObject, String block) throws IOException, JsonRpcStatusException {
         String data = this.send("eth_call", callObject, block);
         return data;
     }
 
-    public String web3ClientVersion() throws IOException, JsonRPCStatusException {
+    public String web3ClientVersion() throws IOException, JsonRpcStatusException {
         return this.send("web3_clientVersion");
     }
 
@@ -82,17 +82,17 @@ public class EthereumClient extends RPCClient {
      * @param dataToHash
      * @return Keccak-256 hash of the data
      * @throws IOException
-     * @throws JsonRPCStatusException
+     * @throws JsonRpcStatusException
      */
-    public String web3Sha3(String dataToHash) throws IOException, JsonRPCStatusException {
+    public String web3Sha3(String dataToHash) throws IOException, JsonRpcStatusException {
         return this.send("web3_sha3", dataToHash);
     }
 
-    public boolean minerStart(int numberOfThreads) throws IOException, JsonRPCStatusException {
+    public boolean minerStart(int numberOfThreads) throws IOException, JsonRpcStatusException {
         return this.send("miner_start", "0x" + Integer.toHexString(numberOfThreads));
     }
 
-    public boolean minerStop() throws IOException, JsonRPCStatusException {
+    public boolean minerStop() throws IOException, JsonRpcStatusException {
         return this.send("miner_stop");
     }
 

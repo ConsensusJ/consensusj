@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj.dsljs;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
-import com.msgilligan.bitcoinj.rpc.RPCURI;
+import com.msgilligan.bitcoinj.rpc.RpcURI;
 import com.msgilligan.bitcoinj.rpc.test.TestServers;
 import com.msgilligan.bitcoinj.test.RegTestEnvironment;
 import com.msgilligan.bitcoinj.test.RegTestFundingSource;
@@ -31,7 +31,7 @@ public class ScriptRunner {
         NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
         engine = factory.getScriptEngine("-scripting");
         BitcoinExtendedClient client = new BitcoinExtendedClient(RegTestParams.get(),
-                RPCURI.getDefaultRegTestURI(),
+                RpcURI.getDefaultRegTestURI(),
                 TestServers.getInstance().getRpcTestUser(),
                 TestServers.getInstance().getRpcTestPassword());
         RegTestEnvironment env = new RegTestEnvironment(client);

@@ -2,7 +2,7 @@ package com.msgilligan.bitcoinj
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient
 import org.consensusj.jsonrpc.groovy.Loggable
-import com.msgilligan.bitcoinj.rpc.RPCURI
+import com.msgilligan.bitcoinj.rpc.RpcURI
 import com.msgilligan.bitcoinj.test.BTCTestSupport
 import com.msgilligan.bitcoinj.test.RegTestFundingSource
 import org.bitcoinj.core.Coin
@@ -21,7 +21,7 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
 
     // Initializer to set up trait properties, Since Spock doesn't allow constructors
     {
-        client = new BitcoinExtendedClient(RPCURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
+        client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
         fundingSource = new RegTestFundingSource(client)
     }
 

@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.rpc.bitcoind;
 
-import com.msgilligan.bitcoinj.rpc.RPCConfig;
+import com.msgilligan.bitcoinj.rpc.RpcConfig;
 import org.bitcoinj.params.MainNetParams;
 
 import java.net.URI;
@@ -26,7 +26,7 @@ public class BitcoinConf extends HashMap<String, String> {
         this.put(rpcport, RPCPORT_DEFAULT);
     }
 
-    public RPCConfig getRPCConfig() {
+    public RpcConfig getRPCConfig() {
         URI uri = null;
         try {
             uri = new URI("http://" + get(rpcconnect) + ":" + get(rpcport));
@@ -38,7 +38,7 @@ public class BitcoinConf extends HashMap<String, String> {
             }
         }
         // TODO: Determine MainNet, TestNet, or RegTest from contents of .conf file
-        RPCConfig config = new RPCConfig(MainNetParams.get(), uri,
+        RpcConfig config = new RpcConfig(MainNetParams.get(), uri,
                 get("rpcuser"), get("rpcpassword"));
         return config;
     }

@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj.test
 
 import com.msgilligan.bitcoinj.json.pojo.RawTransactionInfo
-import org.consensusj.jsonrpc.JsonRPCStatusException
+import org.consensusj.jsonrpc.JsonRpcStatusException
 import org.bitcoinj.core.Coin
 import org.bitcoinj.core.PeerGroup
 import org.bitcoinj.core.Sha256Hash
@@ -59,7 +59,7 @@ trait JTransactionTestSupport implements BTCTestSupport {
         while (pendingTx == null) {
             try {
                 pendingTx = client.getRawTransaction(txid)
-            } catch (JsonRPCStatusException e) {
+            } catch (JsonRpcStatusException e) {
                 if (e.message != "No information available about transaction") {
                     throw e
                 }

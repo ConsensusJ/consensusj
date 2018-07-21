@@ -1,6 +1,6 @@
 package org.consensusj.ethereum.rpc
 
-import org.consensusj.jsonrpc.JsonRPCStatusException
+import org.consensusj.jsonrpc.JsonRpcStatusException
 import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
@@ -93,7 +93,7 @@ class EthereumClientSpec extends Specification {
         def result = client.minerStart(3)
 
         then:
-        JsonRPCStatusException e = thrown()
+        JsonRpcStatusException e = thrown()
         e.httpMessage == "Method Not Allowed"
     }
 
@@ -102,7 +102,7 @@ class EthereumClientSpec extends Specification {
         def result = client.minerStop()
 
         then:
-        JsonRPCStatusException e = thrown()
+        JsonRpcStatusException e = thrown()
         e.httpMessage == "Method Not Allowed"
     }
 }

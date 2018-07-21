@@ -1,7 +1,7 @@
 package com.msgilligan.bitcoinj.test;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
-import org.consensusj.jsonrpc.JsonRPCException;
+import org.consensusj.jsonrpc.JsonRpcException;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.TxOutInfo;
@@ -45,7 +45,7 @@ public class RegTestFundingSource implements FundingSource {
      * @return The hash of transaction that provided the funds.
      */
     @Override
-    public Sha256Hash requestBitcoin(Address toAddress, Coin requestedBtc) throws JsonRPCException, IOException {
+    public Sha256Hash requestBitcoin(Address toAddress, Coin requestedBtc) throws JsonRpcException, IOException {
         log.debug("requestBitcoin requesting {}", requestedBtc);
         if (requestedBtc.value > NetworkParameters.MAX_MONEY.value) {
             throw new IllegalArgumentException("request exceeds MAX_MONEY");
@@ -106,10 +106,10 @@ public class RegTestFundingSource implements FundingSource {
      * Create everything needed to assemble a custom transaction
      * @param amount Amount of BTC to be available on new address
      * @return An address, private key, and list of unspent outputs
-     * @throws JsonRPCException
+     * @throws JsonRpcException
      * @throws IOException
      */
-    public TransactionIngredients createIngredients(Coin amount) throws JsonRPCException, IOException {
+    public TransactionIngredients createIngredients(Coin amount) throws JsonRpcException, IOException {
         TransactionIngredients ingredients = new TransactionIngredients();
         Address address = client.getNewAddress();
         requestBitcoin(address, amount);
@@ -123,7 +123,7 @@ public class RegTestFundingSource implements FundingSource {
     public void fundingSourceMaintenance() {
         try {
             consolidateCoins();
-        } catch (JsonRPCException e) {
+        } catch (JsonRpcException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -143,7 +143,7 @@ public class RegTestFundingSource implements FundingSource {
      *
      * @return True, if enough outputs with a value of at least {@code stdRelayTxFee} were spent
      */
-     void consolidateCoins() throws JsonRPCException, IOException {
+     void consolidateCoins() throws JsonRpcException, IOException {
         long amountIn = 0;
         List<Outpoint> inputs = new ArrayList<Outpoint>();
         List<UnspentOutput> unspentOutputs = client.listUnspent(1,defaultMaxConf);
