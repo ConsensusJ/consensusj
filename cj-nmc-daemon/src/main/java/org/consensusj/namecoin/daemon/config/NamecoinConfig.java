@@ -8,7 +8,7 @@ import com.msgilligan.bitcoinj.spring.service.PeerGroupService;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.net.discovery.DnsDiscovery;
 import org.bitcoinj.net.discovery.PeerDiscovery;
-import org.bitcoinj.params.MainNetParams;
+import org.libdohj.params.NamecoinMainNetParams;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,11 +21,10 @@ import java.io.FileNotFoundException;
 public class NamecoinConfig {
     @Bean
     public NetworkParameters networkParameters() {
-        // TODO: Replace this with Namecoin MainNet Params from libdohj
-        // We may also want to make this set from a configuration string
+        // TODO: We may also want to make this set from a configuration string
         // so a binary release can be configure via external string parameters
         // and NetworkParameters.fromID()
-        return MainNetParams.get();
+        return NamecoinMainNetParams.get();
     }
 
     @Bean
