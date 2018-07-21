@@ -32,7 +32,7 @@ class BitcoinKotlinCLITool(args: Array<String>) : CliCommand(commandName, CliOpt
     public override fun runImpl(): Int? {
         val args = line.argList
         if (args.size == 0) {
-            printError("rpc method required")
+            printError("jsonrpc method required")
             printHelp()
             return 1
         }

@@ -35,7 +35,7 @@ public class BitcoinCLITool extends CliCommand {
     public Integer runImpl() throws IOException {
         List<String> args = line.getArgList();
         if (args.size() == 0) {
-            printError("rpc method required");
+            printError("jsonrpc method required");
             printHelp();
             return(1);
         }

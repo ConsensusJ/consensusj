@@ -15,7 +15,7 @@
  */
 
 //package android.util;
-/* Copy of android.util.Base64 for use with rpc */
+/* Copy of android.util.Base64 for use with jsonrpc */
 
 package org.consensusj.jsonrpc.util;
 import java.io.UnsupportedEncodingException;

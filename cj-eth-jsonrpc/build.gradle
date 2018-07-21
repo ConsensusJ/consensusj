@@ -1,0 +1,13 @@
+plugins {
+    id 'maven'
+}
+
+dependencies {
+    compile project(':consensusj-jsonrpc')
+
+    testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    testCompile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+        transitive = false
+    }
+}
+

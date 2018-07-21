@@ -2,6 +2,10 @@ include 'consensusj-jsonrpc',                                        // JSONRPC 
         'consensusj-jsonrpc-gvy',                                    // JSONRPC Groovy client
         'cj-btc-jsonrpc',
         'cj-btc-jsonrpc-gvy',
+        'cj-eth-jsonrpc',
+        'cj-eth-jsonrpc-gvy',
+        'cj-nmc-jsonrpc',
+        'cj-nmc-jsonrpc-gvy',
         'bitcoinj-json',                                             // JSON <-> Java Object mapping
         'cj-btc-cli',
         'cj-btc-cli-kt',
