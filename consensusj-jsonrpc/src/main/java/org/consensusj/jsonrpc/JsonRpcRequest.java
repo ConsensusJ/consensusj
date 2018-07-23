@@ -19,10 +19,10 @@ public class JsonRpcRequest {
     private static final String DEFAULT_JSON_RPC_VERSION = JSON_RPC_VERSION_1;
     private static AtomicLong nextRequestId =  new AtomicLong(0);
 
-    private final String  jsonrpc;   // version
     private final String  method;
-    private final String  id;
     private final List<Object> params;
+    private final String  jsonrpc;   // version
+    private final String  id;
 
     /**
      * For use by Jackson deserialization
@@ -32,10 +32,10 @@ public class JsonRpcRequest {
      * @param params filled from the JSON object
      */
     @JsonCreator
-    public JsonRpcRequest(@JsonProperty("jsonrpc")  String jsonrpc,
-                          @JsonProperty("method")   String method,
-                          @JsonProperty("id")       String id,
-                          @JsonProperty("params")   List<Object> params) {
+    public JsonRpcRequest(@JsonProperty("method")   String method,
+                          @JsonProperty("params")   List<Object> params,
+                          @JsonProperty("jsonrpc")  String jsonrpc,
+                          @JsonProperty("id")       String id) {
         this.jsonrpc = jsonrpc;
         this.method = method;
         this.id = id;
@@ -43,7 +43,7 @@ public class JsonRpcRequest {
     }
 
     /**
-     * For creating a JSON RPC request for serialization
+     * Create a JSON RPC request (for serialization.)
      * @param method Method of remote procedure to call
      * @param params Parameters to serialize
      */
@@ -51,11 +51,15 @@ public class JsonRpcRequest {
         this(method, params, DEFAULT_JSON_RPC_VERSION);
     }
 
+    /**
+     * Create a JSON RPC request (for serialization.)
+     * Can be used to override default JSON RPC version.
+     * @param method Method of remote procedure to call
+     * @param params Parameters to serialize
+     * @param jsonRpcVersion JSON-RPC version string
+     */
     public JsonRpcRequest(String method, List<Object> params, String jsonRpcVersion) {
-        this.jsonrpc = jsonRpcVersion;
-        this.id =  Long.toString(JsonRpcRequest.nextRequestId.incrementAndGet());
-        this.method = method;
-        this.params = removeTrailingNulls(params);
+        this(method, removeTrailingNulls(params), jsonRpcVersion, Long.toString(JsonRpcRequest.nextRequestId.incrementAndGet()));
     }
 
     /**
