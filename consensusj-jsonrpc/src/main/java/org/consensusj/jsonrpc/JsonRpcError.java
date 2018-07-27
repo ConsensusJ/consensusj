@@ -1,34 +1,35 @@
 package org.consensusj.jsonrpc;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * JSON-RPC Error Object POJO
  */
 public class JsonRpcError {
-    int code;
-    String message;
-    Object data;
+    private final int code;
+    private final String message;
+    private final Object data;
+
+
+    @JsonCreator
+    public JsonRpcError(@JsonProperty("code") int code,
+                        @JsonProperty("message") String message,
+                        @JsonProperty("data") Object data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
 
     public int getCode() {
         return code;
     }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
     public String getMessage() {
         return message;
     }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
+    
     public Object getData() {
         return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
     }
 }

@@ -27,14 +27,14 @@ public abstract class AbstractRpcClient implements DynamicRpcMethodSupport {
 
     /**
      * Subclasses must implement this method to actually send the request
+     * @param pass:[<R>] Type of result object
      * @param request The request to send
      * @param responseType The response to expected (used by Jackson for conversion)
-     * @param pass:[<R>] Type of result object
      * @return A JSON RPC Response with `result` of type `R`
      * @throws IOException network error
      * @throws JsonRpcStatusException JSON RPC status error
      */
-    protected abstract <R> JsonRpcResponse<R> send(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException;
+    protected abstract <R> JsonRpcResponse<R> sendRequestForResponse(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException;
 
     /**
      * Create a JsonRpcRequest from method and parameters
@@ -52,7 +52,7 @@ public abstract class AbstractRpcClient implements DynamicRpcMethodSupport {
 
     private <R> R sendForResult(String method, JavaType responseType, List<Object> params) throws IOException, JsonRpcStatusException {
         JsonRpcRequest request = buildJsonRequest(method, params);
-        JsonRpcResponse<R> response = send(request, responseType);
+        JsonRpcResponse<R> response = sendRequestForResponse(request, responseType);
 
 //        assert response != null;
 //        assert response.getJsonrpc() != null;
@@ -75,10 +75,10 @@ public abstract class AbstractRpcClient implements DynamicRpcMethodSupport {
     /**
      * JSON-RPC remote method call that returns 'response.result`
      *
-     * @param method JSON RPC method call to send
-     * @param params JSON RPC params
      * @param pass:[<R>] Type of result object
+     * @param method JSON RPC method call to send
      * @param resultType desired result type as a Java class object
+     * @param params JSON RPC params
      * @return the 'response.result' field of the JSON RPC response converted to type R
      */
     protected <R> R send(String method, Class<R> resultType, List<Object> params) throws IOException, JsonRpcStatusException {
@@ -102,8 +102,8 @@ public abstract class AbstractRpcClient implements DynamicRpcMethodSupport {
      *
      * @param pass:[<R>] Type of result object
      * @param method JSON RPC method call to send
-     * @param params JSON RPC params
      * @param resultType desired result type as a Jackson JavaType object
+     * @param params JSON RPC params
      * @return the 'response.result' field of the JSON RPC response converted to type R
      */
     protected <R> R send(String method, JavaType resultType, List<Object> params) throws IOException, JsonRpcStatusException {
@@ -131,9 +131,9 @@ public abstract class AbstractRpcClient implements DynamicRpcMethodSupport {
      * * Simple (not client-side validated) command line utilities
      * * Functional tests that need to send incorrect types to the server to test error handling
      *
+     * @param pass:[<R>] Type of result object
      * @param method JSON RPC method call to send
      * @param params JSON RPC parameters as a `List`
-     * @param pass:[<R>] Type of result object
      * @return the 'response.result' field of the JSON RPC response cast to type R
      * @throws IOException network error
      * @throws JsonRpcStatusException JSON RPC status error
@@ -148,9 +148,9 @@ public abstract class AbstractRpcClient implements DynamicRpcMethodSupport {
      *
      * Convenience version that takes `params` as array/varargs.
      *
+     * @param pass:[<R>] Type of result object
      * @param method JSON RPC method call to send
      * @param params JSON RPC parameters as array or varargs
-     * @param pass:[<R>] Type of result object
      * @return the 'response.result' field of the JSON RPC response cast to type R
      * @throws IOException network error
      * @throws JsonRpcStatusException JSON RPC status error

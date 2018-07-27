@@ -175,7 +175,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
                 status = ignored.getMessage();
             } catch (JsonRpcStatusException e) {
                 // If server is in "warm-up" mode, e.g. validating/parsing the blockchain...
-                if (e.jsonRPCCode == -28) {
+                if (e.jsonRpcCode == -28) {
                     // ...then grab text message for status logging
                     status = e.getMessage();
                 } else {

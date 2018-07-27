@@ -27,15 +27,11 @@ public class BitcoinConf extends HashMap<String, String> {
     }
 
     public RpcConfig getRPCConfig() {
-        URI uri = null;
+        URI uri;
         try {
             uri = new URI("http://" + get(rpcconnect) + ":" + get(rpcport));
         } catch (URISyntaxException e) {
-            try {
-                uri = new URI("http://127.0.0.1:8332");
-            } catch (URISyntaxException e1) {
-                throw new RuntimeException("Error creating RPC URI", e1);
-            }
+            uri = URI.create("http://127.0.0.1:8332");
         }
         // TODO: Determine MainNet, TestNet, or RegTest from contents of .conf file
         RpcConfig config = new RpcConfig(MainNetParams.get(), uri,

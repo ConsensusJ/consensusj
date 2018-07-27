@@ -25,7 +25,7 @@ import java.security.cert.X509Certificate;
 /**
  * = JSON-RPC Client
  *
- * This is a concrete class with basic JSON-RPC functionality. Abstract `send` method is implemented
+ * This is a concrete class with basic JSON-RPC functionality. Abstract `sendRequestForResponse` method is implemented
  * using `HttpURLConnection`.
  *
  * Uses strongly-typed POJOs representing {@link JsonRpcRequest} and {@link JsonRpcResponse}. The
@@ -83,7 +83,7 @@ public class RpcClient extends AbstractRpcClient {
      * @throws JsonRpcStatusException when the HTTP response code is other than 200
      */
     @Override
-    protected <R> JsonRpcResponse<R> send(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException {
+    protected <R> JsonRpcResponse<R> sendRequestForResponse(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException {
         HttpURLConnection connection = openConnection();
 
         // TODO: Make sure HTTP keep-alive will work
@@ -94,10 +94,10 @@ public class RpcClient extends AbstractRpcClient {
         if (log.isDebugEnabled()) {
             log.debug("Req json: {}", mapper.writeValueAsString(request));
         }
-
-        OutputStream requestStream = connection.getOutputStream();
-        mapper.writeValue(requestStream, request);
-        requestStream.close();
+        
+        try (OutputStream requestStream = connection.getOutputStream()) {
+            mapper.writeValue(requestStream, request);
+        }
 
         int responseCode = connection.getResponseCode();
         log.debug("Response code: {}", responseCode);
@@ -138,7 +138,7 @@ public class RpcClient extends AbstractRpcClient {
     {
         String responseMessage = connection.getResponseMessage();
         String exceptionMessage = responseMessage;
-        int jsonRPCCode = 0;
+        int jsonRpcCode = 0;
         JsonRpcResponse bodyJson = null;    // Body as JSON if available
         String bodyString = null;           // Body as String if not JSON
         InputStream errorStream = connection.getErrorStream();
@@ -150,8 +150,8 @@ public class RpcClient extends AbstractRpcClient {
                 if (error != null) {
                     // If there's a more specific message in the JSON use it instead.
                     exceptionMessage = error.getMessage();
-                    jsonRPCCode = error.getCode();
-                    log.error("json error code: {}, message: {}", jsonRPCCode, exceptionMessage);
+                    jsonRpcCode = error.getCode();
+                    log.error("json error code: {}, message: {}", jsonRpcCode, exceptionMessage);
                 }
             } else {
                 // No JSON, read response body as string
@@ -160,7 +160,7 @@ public class RpcClient extends AbstractRpcClient {
                 errorStream.close();
             }
         }
-        throw new JsonRpcStatusException(exceptionMessage, responseCode, responseMessage, jsonRPCCode, bodyString, bodyJson);
+        throw new JsonRpcStatusException(exceptionMessage, responseCode, responseMessage, jsonRpcCode, bodyString, bodyJson);
     }
 
     private static String convertStreamToString(java.io.InputStream is) {

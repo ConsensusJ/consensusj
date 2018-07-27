@@ -9,12 +9,11 @@ import java.util.List;
  * The parameter list is "untyped" (declared as `List<Object>`) and implementations are responsible
  * for converting each Java object parameter to a valid and correctly-typed (for the method) JSON object.
  *
- * This is used to implement the `DynamicRPCFallback` trait in Groovy which is applied
+ * This is used to implement the `DynamicRpcMethodFallback` trait in Groovy which is applied
  * to various Groovy RPC client implementations that typically inherit statically-dispatched
  * methods from Java classes, but use `methodMissing()` to add JSON-RPC methods dynamically.
  * This may be useful in other Dynamic JVM languages, as well.
  *
- * @see DynamicRPCClient
  */
 public interface DynamicRpcMethodSupport {
     /**

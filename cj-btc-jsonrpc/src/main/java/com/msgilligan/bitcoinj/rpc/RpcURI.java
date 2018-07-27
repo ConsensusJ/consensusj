@@ -1,7 +1,6 @@
 package com.msgilligan.bitcoinj.rpc;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * Utility class with default connection information for Bitcoin JSON-RPC
@@ -17,27 +16,19 @@ public class RpcURI {
     public static final int RPCPORT_REGTEST = 18332;
 
     public static URI getDefaultMainNetURI() {
-        try {
-            return new URI(rpcproto, null, rpchost, RPCPORT_MAINNET, rpcfile, null, null);
-        } catch (URISyntaxException e) {
-            return null;
-        }
+        return createURI(rpcproto, rpchost, RPCPORT_MAINNET, rpcfile);
     }
 
     public static URI getDefaultTestNetURI() {
-        try {
-            return new URI(rpcproto, null, rpchost, RPCPORT_TESTNET, rpcfile, null, null);
-        } catch (URISyntaxException e) {
-            return null;
-        }
+        return createURI(rpcproto, rpchost, RPCPORT_TESTNET, rpcfile);
     }
 
     public static URI getDefaultRegTestURI() {
-        try {
-            return new URI(rpcproto, null, rpchost, RPCPORT_REGTEST, rpcfile, null, null);
-        } catch (URISyntaxException e) {
-            return null;
-        }
+        return createURI(rpcproto, rpchost, RPCPORT_REGTEST, rpcfile);
+    }
+
+    private static URI createURI(String proto, String host, int port, String file) {
+        return URI.create(rpcproto + "://" + rpchost + ":" + RPCPORT_MAINNET + rpcfile);
     }
 
 }

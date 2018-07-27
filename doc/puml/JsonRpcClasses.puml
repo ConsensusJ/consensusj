@@ -4,21 +4,21 @@ skinparam shadowing false
 hide empty members
 
 namespace org.consensusj.jsonrpc {
-    interface UntypedRPCClient
-    abstract class AbstractRPCClient
+    interface DynamicRpcMethodSupport
+    abstract class AbstractRpcClient
 
-    class RPCClient
+    class RpcClient
 
-    UntypedRPCClient <|.. AbstractRPCClient
-    AbstractRPCClient <|-- RPCClient
+    DynamicRpcMethodSupport <|.. AbstractRpcClient
+    AbstractRpcClient <|-- RpcClient
 }
 
 namespace org.consensusj.jsonrpc.groovy {
-    interface DynamicRPCFallback << Groovy, trait >>
-    class DynamicRPCClient << Groovy >>
+    interface DynamicRpcMethodFallback << Groovy, trait >>
+    class DynamicRpcClient << Groovy >>
 
-    org.consensusj.jsonrpc.UntypedRPCClient <|.. DynamicRPCFallback
-    org.consensusj.jsonrpc.RPCClient <|-- DynamicRPCClient
-    DynamicRPCFallback <|.. DynamicRPCClient
+    org.consensusj.jsonrpc.DynamicRpcMethodSupport <|.. DynamicRpcMethodFallback
+    org.consensusj.jsonrpc.RpcClient <|-- DynamicRpcClient
+    DynamicRpcMethodFallback <|.. DynamicRpcClient
 }
 @enduml

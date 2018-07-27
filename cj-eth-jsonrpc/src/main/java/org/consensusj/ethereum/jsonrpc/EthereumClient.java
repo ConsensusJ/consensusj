@@ -19,16 +19,8 @@ import java.util.List;
  * https://github.com/ethereum/go-ethereum/wiki/Management-APIs
  */
 public class EthereumClient extends RpcClient {
-    public static URI DEFAULT_LOCALHOST;
-
-    static {
-        try {
-            DEFAULT_LOCALHOST = new URI("http://localhost:8545");
-        } catch (URISyntaxException e) {
-            DEFAULT_LOCALHOST = null;
-        }
-    }
-
+    public static final URI DEFAULT_LOCALHOST = URI.create("http://localhost:8545");
+    
     /**
      * Construct a JSON-RPC client from URI, username, and password
      *

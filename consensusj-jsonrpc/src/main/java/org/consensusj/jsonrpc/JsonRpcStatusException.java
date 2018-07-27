@@ -7,7 +7,7 @@ package org.consensusj.jsonrpc;
 public class JsonRpcStatusException extends JsonRpcException {
     public final String httpMessage;
     public final int httpCode;
-    public final int jsonRPCCode;
+    public final int jsonRpcCode;
     public final String response;
     public final JsonRpcResponse responseJson;
 
@@ -25,7 +25,7 @@ public class JsonRpcStatusException extends JsonRpcException {
         super(message);
         this.httpCode = httpCode;
         this.httpMessage = httpMessage;
-        this.jsonRPCCode = jsonRPCCode;
+        this.jsonRpcCode = jsonRPCCode;
         this.response = responseBody;
         this.responseJson = responseBodyJson;
     }
