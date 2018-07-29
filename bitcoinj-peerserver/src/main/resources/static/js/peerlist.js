@@ -23,7 +23,7 @@ angular
         });
 
         stompClient.subscribe("/topic/tx", function(message) {
-            console.log("got tx")
+            console.log("got tx");
             $scope.$apply(function() {
                 $scope.transactions.push(angular.fromJson(message.body));
             });

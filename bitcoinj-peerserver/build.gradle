@@ -27,11 +27,10 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-security"
 
     // WebJars:
-    compile 'org.webjars:angularjs:1.4.8'
-    compile 'org.webjars:bootstrap:3.3.6'
-    compile 'org.webjars:jquery:2.0.3'
-    compile 'org.webjars:sockjs-client:0.3.4'
-    compile 'org.webjars:stomp-websocket:2.3.3'
+    compile 'org.webjars:angularjs:1.7.2'
+    compile 'org.webjars:bootstrap:3.3.7-1'
+    compile 'org.webjars:sockjs-client:1.1.2'
+    compile 'org.webjars:stomp-websocket:2.3.3-1'
 }
 
 
