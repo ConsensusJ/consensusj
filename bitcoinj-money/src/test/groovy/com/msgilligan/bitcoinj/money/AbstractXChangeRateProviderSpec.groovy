@@ -60,7 +60,8 @@ abstract class AbstractXChangeRateProviderSpec extends Specification {
 
     def setup() {
         provider = createProvider()
+        provider.start()
     }
 
-    abstract createProvider()
+    abstract BaseXChangeExchangeRateProvider createProvider()
 }

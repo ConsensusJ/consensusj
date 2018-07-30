@@ -40,16 +40,18 @@ import java.util.concurrent.TimeoutException;
  */
 public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRateProvider implements ExchangeRateProvider, ObservableExchangeRateProvider {
     private static final Logger log = LoggerFactory.getLogger(BaseXChangeExchangeRateProvider.class);
-    protected final ProviderContext providerContext;
+    protected ProviderContext providerContext;
     protected String name;
+    private final String exchangeClassName;
     protected Exchange exchange;
     protected MarketDataService marketDataService;
     private ScheduledExecutorService stpe;
-    private ScheduledFuture<?> future;
+    private volatile boolean started = false;
+    private volatile boolean stopping = false;
+    private  ScheduledFuture<?> future;
     private final Map<CurrencyUnitPair, MonitoredCurrency> monitoredCurrencies = new HashMap<>();
     private static final int initialDelay = 0;
     private static final int period = 60;
-    private volatile boolean stopping = false;
 
     /**
      * Construct using an XChange Exchange class object for a set of currencies
@@ -60,16 +62,12 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     protected BaseXChangeExchangeRateProvider(String exchangeClassName,
                                               ScheduledExecutorService scheduledExecutorService,
                                               CurrencyUnitPair... pairs) {
-        exchange = ExchangeFactory.INSTANCE.createExchange(exchangeClassName);
+        this.exchangeClassName = exchangeClassName;
         stpe = (scheduledExecutorService != null) ? scheduledExecutorService : Executors.newScheduledThreadPool(1);
-        name = exchange.getExchangeSpecification().getExchangeName();
-        providerContext = ProviderContext.of(name, RateType.DEFERRED);
-        marketDataService = exchange.getMarketDataService();
         for (CurrencyUnitPair pair : pairs) {
             MonitoredCurrency monitoredCurrency = new MonitoredCurrency(pair, xchangePair(pair));
             monitoredCurrencies.put(pair, monitoredCurrency);
         }
-        start();    // starting here causes first ticker to be read before observers can be registered!!!
     }
 
     /**
@@ -126,19 +124,27 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     }
 
     /**
-     * Start the polling thread
+     * Initialize the exchange provider and start polling thread
      */
     @Override
-    public void start() {
-        future = stpe.scheduleWithFixedDelay(this::poll, initialDelay, period, TimeUnit.SECONDS);
+    public synchronized void start()  {
+        if (!started) {
+            started = true;
+            exchange = ExchangeFactory.INSTANCE.createExchange(exchangeClassName);
+            name = exchange.getExchangeSpecification().getExchangeName();
+            providerContext = ProviderContext.of(name, RateType.DEFERRED);
+            marketDataService = exchange.getMarketDataService();
+
+            future = stpe.scheduleWithFixedDelay(this::poll, initialDelay, period, TimeUnit.SECONDS);
+        }
     }
 
     /**
      * stop the polling thread
      */
     @Override
-    public void stop() {
-        if (!stopping) {
+    public synchronized void stop() {
+        if (started && !stopping) {
             stopping = true;
             final ScheduledFuture<?> handle = future;
             Runnable task = () -> handle.cancel(true);
@@ -150,24 +156,19 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
      * Poll the exchange for updated Tickers
      */
     protected void poll() {
-        try {
-            for (Map.Entry<CurrencyUnitPair, MonitoredCurrency> entry : monitoredCurrencies.entrySet()) {
-                MonitoredCurrency monitor = entry.getValue();
+        monitoredCurrencies.forEach((key, monitor) -> {
+            try {
                 monitor.setTicker(marketDataService.getTicker(monitor.exchangePair));
-                notifyExchangeRateObservers(monitor);
+            } catch (IOException e) {
+                // TODO: Exceptions should not be swallowed here (or at least not all exceptions)
+                // Some IOExceptions may warrant retries, but not all of them
+                // log and ignore IOException (we'll try polling again next interval)
+                // Actually I'm seeing that the CoinMarketCap ticker is returning IOException
+                // when it should return NotAvailableFromExchangeException
+                log.error("IOException in BaseXChangeExchangeRateProvider::poll: {}", e);
             }
-        } catch (IOException e) {
-            // TODO: Exceptions should not be swallowed here (or at least not all exceptions)
-            // Some IOExceptions may warrant retries, but not all of them
-            // log and ignore IOException (we'll try polling again next interval)
-            // Actually I'm seeing that the CoinMarketCap ticker is returning IOException
-            // when it should return NotAvailableFromExchangeException
-            log.error("IOException in BaseXChangeExchangeRateProvider::poll: {}", e);
-        } catch (Throwable e) {
-            // log and rethrow others
-            log.error("Exception in BaseXChangeExchangeRateProvider::poll: {}", e);
-            throw e;
-        }
+            notifyExchangeRateObservers(monitor);
+        });
     }
 
     @Override
@@ -182,9 +183,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     }
 
     private void notifyExchangeRateObservers(MonitoredCurrency monitor) {
-        for (ExchangeRateObserver observer : monitor.observerList) {
-            notifyObserver(observer, monitor.pair, monitor);
-        }
+        monitor.observerList.forEach(observer -> notifyObserver(observer, monitor.pair, monitor));
     }
 
     private void notifyObserver(ExchangeRateObserver observer, CurrencyUnitPair pair, MonitoredCurrency monitor) {
@@ -196,11 +195,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
             throw new RuntimeException(e);      // Unlikely to happen since ticker has usually been fetched
         }
     }
-
-    private void notifyObserver(ExchangeRateObserver observer, CurrencyUnitPair pair, Ticker ticker) {
-        observer.onExchangeRateChange(buildExchangeRateChange(pair, ticker));
-    }
-
+    
     @Override
     public ProviderContext getContext() {
         return providerContext;

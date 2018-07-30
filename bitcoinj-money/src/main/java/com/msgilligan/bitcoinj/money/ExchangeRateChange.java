@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.money;
 
-import org.knowm.xchange.dto.marketdata.Ticker;
+//import org.knowm.xchange.dto.marketdata.Ticker;
 
 import javax.money.convert.ExchangeRate;
 
@@ -13,8 +13,8 @@ import javax.money.convert.ExchangeRate;
  * was updated but the exchange rate didn't, users still want to know.
  */
 public class ExchangeRateChange {
-    public ExchangeRate rate;
-    public Long timestamp;
+    public final ExchangeRate rate;
+    public final Long timestamp;
     //Ticker ticker;
 
     public ExchangeRateChange(ExchangeRate rate, long timestamp) {

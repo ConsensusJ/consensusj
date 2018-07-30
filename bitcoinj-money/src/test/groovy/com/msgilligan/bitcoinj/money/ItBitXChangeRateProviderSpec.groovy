@@ -5,7 +5,7 @@ import spock.lang.Ignore
 @Ignore("this is really an integration test")
 class ItBitXChangeRateProviderSpec extends AbstractXChangeRateProviderSpec {
     @Override
-    def createProvider() {
+    BaseXChangeExchangeRateProvider createProvider() {
         return new ItBitXChangeRateProvider()
     }
 }
