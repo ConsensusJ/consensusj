@@ -65,7 +65,9 @@ class BitcoinKotlinCLITool(args: Array<String>) : CliCommand(commandName, CliOpt
     protected fun convertParameters(method: String, params: List<String>): List<Any> {
         val typedParams = ArrayList<Any>()
         when (method) {
+            "generate",
             "setgenerate" -> typedParams.add(java.lang.Boolean.parseBoolean(params[0]))
+            "getblockhash" -> typedParams.add(Integer.valueOf(params[0]))
             // Default (for now) is to leave them all as strings
             else -> params.forEach { typedParams.add(it) }
         }

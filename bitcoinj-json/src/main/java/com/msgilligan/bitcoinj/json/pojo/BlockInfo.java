@@ -22,7 +22,7 @@ public class BlockInfo {
     public final Sha256Hash merkleroot;
     public final Sha256HashList tx;
     public final int time;
-    public final int nonce;
+    public final long nonce;
     public final String bits;
     public final BigDecimal difficulty;
     public final String chainwork;
@@ -37,7 +37,7 @@ public class BlockInfo {
                      @JsonProperty("merkleroot")        Sha256Hash merkleroot,
                      @JsonProperty("tx")                Sha256HashList tx,
                      @JsonProperty("time")              int time,
-                     @JsonProperty("nonce")             int nonce,
+                     @JsonProperty("nonce")             long nonce,
                      @JsonProperty("bits")              String bits,
                      @JsonProperty("difficulty")        BigDecimal difficulty,
                      @JsonProperty("chainwork")         String chainwork,

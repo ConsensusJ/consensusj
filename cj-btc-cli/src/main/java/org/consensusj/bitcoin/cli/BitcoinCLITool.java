@@ -1,5 +1,6 @@
 package org.consensusj.bitcoin.cli;
 
+import org.bitcoinj.core.Sha256Hash;
 import org.consensusj.jsonrpc.JsonRpcException;
 
 import java.io.IOException;
@@ -67,10 +68,15 @@ public class BitcoinCLITool extends CliCommand {
     protected List<Object> convertParameters(String method, List<String> params) {
         List<Object> typedParams = new ArrayList<>();
         switch (method) {
+            case "generate":
             case "setgenerate":
-                typedParams.add(0, Boolean.parseBoolean(params.get(0)));
+                typedParams.add(Boolean.parseBoolean(params.get(0)));
                 break;
 
+            case "getblockhash":
+                typedParams.add(Integer.valueOf(params.get(0)));
+                break;
+                
             default:
                 // Default (for now) is to leave them all as strings
                 for (String string : params) {

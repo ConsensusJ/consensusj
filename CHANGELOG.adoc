@@ -13,6 +13,10 @@ Released: Not yet
 * `JsonRpcResponse` is now immutable
 * Make order of constructor args consistent in JsonRpcRequest
 
+=== bitcoinj-json
+
+* use `long` for `nonce` in `BlockInfo` (fixes https://github.com/ConsensusJ/consensusj/issues/44[#44])
+
 === cj-btc-jsonrpc
 
 * module/filename changed from `cjbtc-jsonrpc`
@@ -22,10 +26,12 @@ Released: Not yet
 * module/filename changed from `cjbtc-jsonrpc-gvy`
 * Now requires Java 8
 
-=== cj-nmc-daemon
+=== New Modules
 
-* New Namecoin Daemon module created by Jeremy Rand
-* Currently a work-in-progress
+cj-nmc-daemon::
+
+ * New Namecoin daemon module created by Jeremy Rand
+ * Currently a work-in-progress
 
 === All Modules
 

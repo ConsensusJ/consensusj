@@ -10,9 +10,7 @@
     "allPublicMethods" : true,
     "allDeclaredFields" : true,
     "allPublicFields" : true,
-    "methods" : [
-      { "name" : "<init>", "parameterTypes" : [] }
-    ]
+    "allPublicConstructors" : true
   },
   {
     "name" : "org.consensusj.jsonrpc.JsonRpcError",
@@ -20,17 +18,13 @@
     "allPublicMethods" : true,
     "allDeclaredFields" : true,
     "allPublicFields" : true,
-    "methods" : [
-      { "name" : "<init>", "parameterTypes" : [] }
-    ]
+    "allPublicConstructors" : true
   },
   {
     "name" : "org.consensusj.jsonrpc.internal.NumberStringSerializer",
     "allDeclaredMethods" : true,
     "allPublicMethods" : true,
-    "methods" : [
-      { "name" : "<init>", "parameterTypes" : [] }
-    ]
+    "allPublicConstructors" : true
   },
   {
     "name" : "java.lang.Object",
