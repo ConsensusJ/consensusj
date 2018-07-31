@@ -70,7 +70,7 @@ public class BitcoinCLITool extends CliCommand {
         switch (method) {
             case "generate":
             case "setgenerate":
-                typedParams.add(Boolean.parseBoolean(params.get(0)));
+                typedParams.add(Integer.valueOf(params.get(0)));
                 break;
 
             case "getblockhash":
