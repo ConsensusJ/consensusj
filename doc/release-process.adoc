@@ -7,7 +7,7 @@
 .. `gradle.properties`
 .. `README.adoc` (check/set bitcoinj version variable, too)
 .. bitcoinj-dsl `ExtensionModule`
-. Update `README.adoc` and other documentation as necessary
+. Update `README.adoc` and other documentation as necessary 
 . Commit version bump and changelog.
 . Full build, test
 .. `./gradlew clean buildCI install regTest`
@@ -32,6 +32,7 @@
 . Set versions back to -SNAPSHOT
 .. `gradle.properties`
 .. bitcoinj-dsl `ExtensionModule`
+.. `CHANGELOG.adoc`
 .. *Not* `README.adoc` -- it should match release version
 . Commit and push to master
 
