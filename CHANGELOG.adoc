@@ -3,19 +3,36 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.3.0-SNAPSHOT
+== v0.3.0
 
-Released: Not yet
+Released: 2018.07.31
 
 === Breaking Changes
 
 * All classes with `RPC` in name now use `Rpc`
+* Low-level RPC send method is now `sendRequestForResponse()`
 * `JsonRpcResponse` is now immutable
 * Make order of constructor args consistent in JsonRpcRequest
+* Rename Dynamic RPC Methods support classes
+** `UntypedRPCClient` -> `DynamicRpcMethodSupport`
+** `DynamicRPCFallback` -> `DynamicRpcMethodFallback`
 
 === bitcoinj-json
 
 * use `long` for `nonce` in `BlockInfo` (fixes https://github.com/ConsensusJ/consensusj/issues/44[#44])
+
+=== *bitcoinj-money*
+
+* Switch back to `org.javamoney:moneta-bp` ("backport version") for Android support
+
+=== *bitcoinj-peerserver*
+
+* Upgrade AngularJS, Bootstrap, etc. to latest WebJars
+
+=== cj-btc-cli
+
+* module/filename changed from `bitcoinj-cli`
+* Fixes for JSON-RPC parameter type on `generate`/`setgenerate` and `getblockhash`
 
 === cj-btc-jsonrpc
 
@@ -28,17 +45,35 @@ Released: Not yet
 
 === New Modules
 
-cj-nmc-daemon::
+cj-btc-cli-kt::
+ * Experimental Kotlin version of `cj-btc-cli`
 
+cj-eth-jsonrpc::
+ * Proof-of-concept Ethereum JSON-RPC client
+
+cj-eth-jsonrpc-gvy::
+ * Groovy (Dynamic RPC methods) Ethereum JSON-RPC client
+
+cj-nmc-daemon::
  * New Namecoin daemon module created by Jeremy Rand
  * Currently a work-in-progress
 
+cj-nmc-jsonrpc::
+ * Proof-of-concept Namecoin JSON-RPC client
+
+cj-nmc-jsonrpc-gvy::
+ * Groovy (Dynamic RPC methods) Namecoin JSON-RPC client
+
 === All Modules
 
-* Upgrade to Spring Boot 2.0.3
-* Upgrade to Asciidoclet 1.5.6 (release version)
+* Fixes for RegTest integration tests
 * Namecoin classes moved to `org.consensusj.namecoin`
 * Ethereum classes moved to `org.consensusj.ethereum`
+* Upgrade Groovy to 2.5.1
+* Upgrade to Spring Boot 2.0.3
+* Upgrade to Gradle 4.9
+* Upgrade Bintray plugin to 1.8.4
+* Upgrade to Asciidoclet 1.5.6 (release version)
 
 == v0.2.9
 

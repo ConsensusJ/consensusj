@@ -1,8 +1,8 @@
 = ConsensusJ (formerly bitcoinj-addons)
 Sean Gilligan <https://github.com/msgilligan>
-v0.2.9
+v0.3.0
 :description: ConsensusJ README document.
-:consensusj-version: 0.2.9
+:consensusj-version: 0.3.0
 :bitcoinj-version: 0.14.7
 :bitcoinj-apidoc: https://bitcoinj.github.io/javadoc/{bitcoinj-version}/
 :cj-apidoc: https://consensusj.github.io/consensusj/apidoc
@@ -78,6 +78,51 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 |===
 |Name |Min JDK |JPMS module |Description
 
+|<<cj-btc-cli,cj-btc-cli>>
+| 8
+| not yet
+| Command-line JSON-RPC client for Bitcoin
+
+|<<cj-btc-cli-kt,cj-btc-cli-kt>>
+| 8
+| not yet
+| Command-line JSON-RPC client for Bitcoin in *Kotlin*
+
+|<<cj-btc-jsonrpc,cj-btc-jsonrpc>>
+| 7
+| not yet
+| Java JSON-RPC Bitcoin client
+
+|<<cj-btc-jsonrpc-gvy,cj-btc-jsonrpc-gvy>>
+| 8
+| not yet
+| Groovy JSON-RPC Bitcoin client  (dynamic RPC methods)
+
+|<<cj-eth-jsonrpc,cj-eth-jsonrpc>>
+| 8
+| not yet
+| Java JSON-RPC Ethereum client (proof-of-concept)
+
+|<<cj-eth-jsonrpc-gvy,cj-eth-jsonrpc-gvy>>
+| 8
+| not yet
+| Groovy JSON-RPC Ethereum client (dynamic RPC methods)
+
+|<<cj-nmc-daemon,cj-nmc-daemon>>
+| 8
+| not yet
+| Namecoin daemon work-in-progress
+
+|<<cj-nmc-jsonrpc,cj-nmc-jsonrpc>>
+| 8
+| not yet
+| Java JSON-RPC Namecoin client (proof-of-concept)
+
+|<<cj-nmc-jsonrpc-gvy,cj-nmc-jsonrpc-gvy>>
+| 8
+| not yet
+| Groovy JSON-RPC Namecoin client (dynamic RPC methods)
+
 |<<consensusj-jsonrpc,consensusj-jsonrpc>>
 | 7
 | `org.consensusj.jsonrpc`
@@ -88,15 +133,6 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 | `org.consensusj.jsonrpc.groovy`
 | Groovy JSON-RPC client (dynamic RPC methods)
 
-|<<cjbtc-jsonrpc,cjbtc-jsonrpc>>
-| 7
-| not ready yet
-| Java JSON-RPC Bitcoin client
-
-|<<cjbtc-jsonrpc-gvy,cjbtc-jsonrpc-gvy>>
-| 8
-| not ready yet
-| Groovy JSON-RPC Bitcoin client  (dynamic RPC methods)
 
 |===
 
@@ -112,15 +148,11 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |===
 |Name |JDK |Grooviness |Description
 
-|<<bitcoinj-cli,bitcoinj-cli>>
-|8
-|Tests only
-|Command line RPC tool and CLI support/utility classes
 
 |<<bitcoinj-rpcclient,bitcoinj-rpcclient>>
 |7
 |Optional + tests
-|Bitcoin JSON-RPC integration tests, NMC & ETH clients
+|Bitcoin JSON-RPC integration tests
 
 |<<bitcoinj-json,bitcoinj-json>>
 |7
@@ -173,8 +205,8 @@ Java implementation of a JSON-RPC client. {cj-apidoc}/org/consensusj/jsonrpc/RPC
 
 Dynamic RPC methods are implemented via the `DynamicRPCFallback` Groovy trait. `DynamicRPCClient` can be used to talk to any JSON-RPC server using standard Java types and Jackson JSON conversion.
 
-[#cjbtc-jsonrpc]
-==== cjbtc-jsonrpc
+[#cj-btc-jsonrpc]
+==== cj-btc-jsonrpc
 
 Java Bitcoin JSON-RPC client and supporting types, both bitcoinj types and POJOs for Bitcoin Core JSON.
 
@@ -183,19 +215,19 @@ If the RPC returns a transaction, the Java method will return an `org.bitcoinj.c
 
 See the JavaDoc for {cj-apidoc}/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
 
-[#cjbtc-jsonrpc-gvy]
-==== cjbtc-jsonrpc-gvy
+[#cj-btc-jsonrpc-gvy]
+==== cj-btc-jsonrpc-gvy
 
 Subclass of Bitcoin JSON-RPC client with fallback to dynamic methods (using `DynamicRPCFallback`). This is useful when new methods are added to the server/protocol and static methods and types haven't been written for them yet.
 
 
-[#bitcoinj-cli]
-==== bitcoinj-cli: An Bitcoin RPC command-line client
+[#cj-btc-cli]
+==== cj-btc-cli: An Bitcoin RPC command-line client
 
-An alternative implementation of `bitcoin-cli` in Java. Built as a fat jar executable with `java -jar`. The command:
+An alternative implementation of `bitcoin-cli` in Java. If converted to a fat jar, it is executable with `java -jar`. The command:
 
 [subs="attributes"]
-    java -jar bitcoinj-cli-{consensusj-version}.jar -rpcport=8080 getblockcount
+    java -jar cj-btc-cli-{consensusj-version}.jar -rpcport=8080 getblockcount
 
 will output:
 
@@ -353,7 +385,7 @@ To build the CLI executable jar:
 To run it and display a list of command line options:
 
 [subs="attributes"]
-    java -jar bitcoinj-cli/build/libs/bitcoinj-cli-{consensusj-version}.jar -?
+    java -jar bitcoinj-cli/build/libs/cj-btc-cli-{consensusj-version}.jar -?
 
 === Build and Run PeerServer Locally Using Gradle
 
