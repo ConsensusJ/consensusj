@@ -45,7 +45,7 @@ BTCPID=$!
 
 # Run integration tests
 echo "Running Bitcoin RPC integration tests in regtest mode..."
-./gradlew clean :bitcoin-rpcclient:regTest :bitcoinj-cli:regTest
+./gradlew clean :bitcoin-rpcclient:regTest :cj-btc-cli:regTest
 GRADLESTATUS=$?
 
 exit $GRADLESTATUS
