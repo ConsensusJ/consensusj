@@ -3,7 +3,7 @@ package com.msgilligan.bitcoinj.rpc
 import spock.lang.Specification
 
 /**
- *
+ * Check URI constants for correctness
  */
 class RpcURISpec extends Specification {
     def "test URI creation methods" () {

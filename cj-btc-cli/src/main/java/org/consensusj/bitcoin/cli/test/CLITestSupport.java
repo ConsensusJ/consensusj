@@ -1,5 +1,6 @@
 package org.consensusj.bitcoin.cli.test;
 
+import com.msgilligan.bitcoinj.rpc.test.TestServers;
 import org.consensusj.bitcoin.cli.CliCommand;
 
 import java.io.ByteArrayInputStream;
@@ -13,6 +14,9 @@ import java.nio.charset.StandardCharsets;
  *  Support functions for testing command-line tools
  */
 public interface CLITestSupport {
+    String rpcUser = TestServers.getInstance().getRpcTestUser();
+    String rpcPassword = TestServers.getInstance().getRpcTestPassword();
+
     default String[] parseCommandLine(String line) {
         String[] args = line.split(" ");     // (Overly?) simple parsing of string into args[]
         return args;
