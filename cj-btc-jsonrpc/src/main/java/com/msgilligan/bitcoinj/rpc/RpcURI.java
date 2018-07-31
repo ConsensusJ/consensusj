@@ -28,7 +28,7 @@ public class RpcURI {
     }
 
     private static URI createURI(String proto, String host, int port, String file) {
-        return URI.create(rpcproto + "://" + rpchost + ":" + RPCPORT_MAINNET + rpcfile);
+        return URI.create(rpcproto + "://" + rpchost + ":" + port + rpcfile);
     }
 
 }
