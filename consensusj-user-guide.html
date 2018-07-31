@@ -462,54 +462,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_json_rpc_clients">2. JSON-RPC Clients</h2>
 <div class="sectionbody">
-<div id="Class Diagram" class="literalblock">
+<div id="Class Diagram" class="imageblock">
 <div class="content">
-<pre>skinparam packageStyle Rect
-skinparam shadowing false
-hide empty members
-
-namespace org.consensusj.jsonrpc {
-    interface UntypedRPCClient
-    abstract class AbstractRPCClient
-    class RPCClient
-
-    UntypedRPCClient &lt;|.. AbstractRPCClient
-    AbstractRPCClient &lt;|-- RPCClient
-
-}
-
-namespace org.consensusj.jsonrpc.groovy {
-  interface DynamicRPCFallback &lt;&lt; Groovy, trait &gt;&gt;
-  class DynamicRPCClient &lt;&lt; Groovy &gt;&gt;
-
-  org.consensusj.jsonrpc.UntypedRPCClient &lt;|.. DynamicRPCFallback
-  org.consensusj.jsonrpc.RPCClient &lt;|-- DynamicRPCClient
-  DynamicRPCFallback &lt;|.. DynamicRPCClient
-}
-
-namespace com.msgilligan.bitcoinj.rpc {
-    class BitcoinClient
-    class BitcoinExtendedClient
-
-    class BitcoinScriptingClient &lt;&lt; Groovy &gt;&gt;
-    class BitcoinCLIClient &lt;&lt; Groovy &gt;&gt;
-
-
-    org.consensusj.jsonrpc.RPCClient &lt;|-- BitcoinClient
-    BitcoinClient &lt;|-- BitcoinExtendedClient
-    BitcoinExtendedClient &lt;|-- BitcoinScriptingClient
-    org.consensusj.jsonrpc.groovy.DynamicRPCFallback &lt;|.. BitcoinScriptingClient
-    BitcoinClient &lt;|-- BitcoinCLIClient
-}
-
-namespace com.msgilligan.namecoinj.rpc {
-    class NamecoinClient
-    class NamecoinScriptingClient &lt;&lt; Groovy &gt;&gt;
-
-    com.msgilligan.bitcoinj.rpc.BitcoinClient &lt;|-- NamecoinClient
-    NamecoinClient &lt;|.. NamecoinScriptingClient
-    org.consensusj.jsonrpc.groovy.DynamicRPCFallback &lt;|.. NamecoinScriptingClient
-}</pre>
+<img src="images/diag-66f4a88ea8ca943b5366d8061a2c04d2.svg" alt="diag 66f4a88ea8ca943b5366d8061a2c04d2" width="844" height="566">
 </div>
 </div>
 </div>

@@ -9,7 +9,7 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.rpc.bitcoind;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.rpc.RPCConfig;</a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.rpc.RpcConfig;</a>
 <span class="sourceLineNo">004</span><a id="line.4">import org.bitcoinj.params.MainNetParams;</a>
 <span class="sourceLineNo">005</span><a id="line.5"></a>
 <span class="sourceLineNo">006</span><a id="line.6">import java.net.URI;</a>
@@ -35,23 +35,19 @@
 <span class="sourceLineNo">026</span><a id="line.26">        this.put(rpcport, RPCPORT_DEFAULT);</a>
 <span class="sourceLineNo">027</span><a id="line.27">    }</a>
 <span class="sourceLineNo">028</span><a id="line.28"></a>
-<span class="sourceLineNo">029</span><a id="line.29">    public RPCConfig getRPCConfig() {</a>
-<span class="sourceLineNo">030</span><a id="line.30">        URI uri = null;</a>
+<span class="sourceLineNo">029</span><a id="line.29">    public RpcConfig getRPCConfig() {</a>
+<span class="sourceLineNo">030</span><a id="line.30">        URI uri;</a>
 <span class="sourceLineNo">031</span><a id="line.31">        try {</a>
 <span class="sourceLineNo">032</span><a id="line.32">            uri = new URI("http://" + get(rpcconnect) + ":" + get(rpcport));</a>
 <span class="sourceLineNo">033</span><a id="line.33">        } catch (URISyntaxException e) {</a>
-<span class="sourceLineNo">034</span><a id="line.34">            try {</a>
-<span class="sourceLineNo">035</span><a id="line.35">                uri = new URI("http://127.0.0.1:8332");</a>
-<span class="sourceLineNo">036</span><a id="line.36">            } catch (URISyntaxException e1) {</a>
-<span class="sourceLineNo">037</span><a id="line.37">                throw new RuntimeException("Error creating RPC URI", e1);</a>
-<span class="sourceLineNo">038</span><a id="line.38">            }</a>
-<span class="sourceLineNo">039</span><a id="line.39">        }</a>
-<span class="sourceLineNo">040</span><a id="line.40">        // TODO: Determine MainNet, TestNet, or RegTest from contents of .conf file</a>
-<span class="sourceLineNo">041</span><a id="line.41">        RPCConfig config = new RPCConfig(MainNetParams.get(), uri,</a>
-<span class="sourceLineNo">042</span><a id="line.42">                get("rpcuser"), get("rpcpassword"));</a>
-<span class="sourceLineNo">043</span><a id="line.43">        return config;</a>
-<span class="sourceLineNo">044</span><a id="line.44">    }</a>
-<span class="sourceLineNo">045</span><a id="line.45">}</a>
+<span class="sourceLineNo">034</span><a id="line.34">            uri = URI.create("http://127.0.0.1:8332");</a>
+<span class="sourceLineNo">035</span><a id="line.35">        }</a>
+<span class="sourceLineNo">036</span><a id="line.36">        // TODO: Determine MainNet, TestNet, or RegTest from contents of .conf file</a>
+<span class="sourceLineNo">037</span><a id="line.37">        RpcConfig config = new RpcConfig(MainNetParams.get(), uri,</a>
+<span class="sourceLineNo">038</span><a id="line.38">                get("rpcuser"), get("rpcpassword"));</a>
+<span class="sourceLineNo">039</span><a id="line.39">        return config;</a>
+<span class="sourceLineNo">040</span><a id="line.40">    }</a>
+<span class="sourceLineNo">041</span><a id="line.41">}</a>
 
 
 

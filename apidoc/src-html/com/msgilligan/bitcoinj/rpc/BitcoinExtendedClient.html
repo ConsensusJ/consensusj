@@ -12,7 +12,7 @@
 <span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.json.pojo.Outpoint;</a>
 <span class="sourceLineNo">004</span><a id="line.4">import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;</a>
 <span class="sourceLineNo">005</span><a id="line.5">import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import org.consensusj.jsonrpc.JsonRPCStatusException;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import org.consensusj.jsonrpc.JsonRpcStatusException;</a>
 <span class="sourceLineNo">007</span><a id="line.7">import org.bitcoinj.core.Address;</a>
 <span class="sourceLineNo">008</span><a id="line.8">import org.bitcoinj.core.Coin;</a>
 <span class="sourceLineNo">009</span><a id="line.9">import org.bitcoinj.core.ECKey;</a>
@@ -53,7 +53,7 @@
 <span class="sourceLineNo">044</span><a id="line.44">        super(netParams, server, rpcuser, rpcpassword);</a>
 <span class="sourceLineNo">045</span><a id="line.45">    }</a>
 <span class="sourceLineNo">046</span><a id="line.46"></a>
-<span class="sourceLineNo">047</span><a id="line.47">    public BitcoinExtendedClient(RPCConfig config) {</a>
+<span class="sourceLineNo">047</span><a id="line.47">    public BitcoinExtendedClient(RpcConfig config) {</a>
 <span class="sourceLineNo">048</span><a id="line.48">        super(RegTestParams.get(), config.getURI(), config.getUsername(), config.getPassword());</a>
 <span class="sourceLineNo">049</span><a id="line.49">    }</a>
 <span class="sourceLineNo">050</span><a id="line.50"></a>
@@ -68,7 +68,7 @@
 <span class="sourceLineNo">059</span><a id="line.59">     * @param outputs The destinations and amounts to transfer</a>
 <span class="sourceLineNo">060</span><a id="line.60">     * @return The hex-encoded raw transaction</a>
 <span class="sourceLineNo">061</span><a id="line.61">     */</a>
-<span class="sourceLineNo">062</span><a id="line.62">    public String createRawTransaction(Address fromAddress, Map&lt;Address, Coin&gt; outputs) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">062</span><a id="line.62">    public String createRawTransaction(Address fromAddress, Map&lt;Address, Coin&gt; outputs) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">063</span><a id="line.63">        // Get unspent outputs via RPC</a>
 <span class="sourceLineNo">064</span><a id="line.64">        List&lt;UnspentOutput&gt; unspentOutputs = listUnspent(0, defaultMaxConf, Collections.singletonList(fromAddress));</a>
 <span class="sourceLineNo">065</span><a id="line.65"></a>
@@ -112,7 +112,7 @@
 <span class="sourceLineNo">103</span><a id="line.103">     * @param amount The amount</a>
 <span class="sourceLineNo">104</span><a id="line.104">     * @return The hex-encoded raw transaction</a>
 <span class="sourceLineNo">105</span><a id="line.105">     */</a>
-<span class="sourceLineNo">106</span><a id="line.106">    public String createRawTransaction(Address fromAddress, Address toAddress, Coin amount) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">106</span><a id="line.106">    public String createRawTransaction(Address fromAddress, Address toAddress, Coin amount) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">107</span><a id="line.107">        Map&lt;Address, Coin&gt; outputs = Collections.singletonMap(toAddress, amount);</a>
 <span class="sourceLineNo">108</span><a id="line.108">        return createRawTransaction(fromAddress, outputs);</a>
 <span class="sourceLineNo">109</span><a id="line.109">    }</a>
@@ -125,7 +125,7 @@
 <span class="sourceLineNo">116</span><a id="line.116">     * @param address The address</a>
 <span class="sourceLineNo">117</span><a id="line.117">     * @return The balance</a>
 <span class="sourceLineNo">118</span><a id="line.118">     */</a>
-<span class="sourceLineNo">119</span><a id="line.119">    public Coin getBitcoinBalance(Address address) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">119</span><a id="line.119">    public Coin getBitcoinBalance(Address address) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">120</span><a id="line.120">        // NOTE: because null is currently removed from the argument lists passed via RPC, using it here for default</a>
 <span class="sourceLineNo">121</span><a id="line.121">        // values would result in the RPC call "listunspent" with arguments [["address"]], which is invalid, similar</a>
 <span class="sourceLineNo">122</span><a id="line.122">        // to a call with arguments [null, null, ["address"]], as expected arguments are either [], [int], [int, int]</a>
@@ -140,7 +140,7 @@
 <span class="sourceLineNo">131</span><a id="line.131">     * @param minConf Minimum amount of confirmations</a>
 <span class="sourceLineNo">132</span><a id="line.132">     * @return The balance</a>
 <span class="sourceLineNo">133</span><a id="line.133">     */</a>
-<span class="sourceLineNo">134</span><a id="line.134">    public Coin getBitcoinBalance(Address address, Integer minConf) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">134</span><a id="line.134">    public Coin getBitcoinBalance(Address address, Integer minConf) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">135</span><a id="line.135">        return getBitcoinBalance(address, minConf, defaultMaxConf);</a>
 <span class="sourceLineNo">136</span><a id="line.136">    }</a>
 <span class="sourceLineNo">137</span><a id="line.137"></a>
@@ -153,7 +153,7 @@
 <span class="sourceLineNo">144</span><a id="line.144">     * @param maxConf Maximum amount of confirmations</a>
 <span class="sourceLineNo">145</span><a id="line.145">     * @return The balance</a>
 <span class="sourceLineNo">146</span><a id="line.146">     */</a>
-<span class="sourceLineNo">147</span><a id="line.147">    public Coin getBitcoinBalance(Address address, Integer minConf, Integer maxConf) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">147</span><a id="line.147">    public Coin getBitcoinBalance(Address address, Integer minConf, Integer maxConf) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">148</span><a id="line.148">        long btcBalance = 0;</a>
 <span class="sourceLineNo">149</span><a id="line.149">        List&lt;UnspentOutput&gt; unspentOutputs = listUnspent(minConf, maxConf, Collections.singletonList(address));</a>
 <span class="sourceLineNo">150</span><a id="line.150"></a>
@@ -173,7 +173,7 @@
 <span class="sourceLineNo">164</span><a id="line.164">     * @param amount      The amount to transfer</a>
 <span class="sourceLineNo">165</span><a id="line.165">     * @return The transaction hash</a>
 <span class="sourceLineNo">166</span><a id="line.166">     */</a>
-<span class="sourceLineNo">167</span><a id="line.167">    public Sha256Hash sendBitcoin(Address fromAddress, Address toAddress, Coin amount) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">167</span><a id="line.167">    public Sha256Hash sendBitcoin(Address fromAddress, Address toAddress, Coin amount) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">168</span><a id="line.168">        Map&lt;Address, Coin&gt; outputs = Collections.singletonMap(toAddress, amount);</a>
 <span class="sourceLineNo">169</span><a id="line.169">        return sendBitcoin(fromAddress, outputs);</a>
 <span class="sourceLineNo">170</span><a id="line.170">    }</a>
@@ -186,7 +186,7 @@
 <span class="sourceLineNo">177</span><a id="line.177">     * @param outputs     The destinations and amounts to transfer</a>
 <span class="sourceLineNo">178</span><a id="line.178">     * @return The transaction hash</a>
 <span class="sourceLineNo">179</span><a id="line.179">     */</a>
-<span class="sourceLineNo">180</span><a id="line.180">    public Sha256Hash sendBitcoin(Address fromAddress, Map&lt;Address, Coin&gt; outputs) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">180</span><a id="line.180">    public Sha256Hash sendBitcoin(Address fromAddress, Map&lt;Address, Coin&gt; outputs) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">181</span><a id="line.181">        String unsignedTxHex = createRawTransaction(fromAddress, outputs);</a>
 <span class="sourceLineNo">182</span><a id="line.182">        SignedRawTransaction signingResult = signRawTransaction(unsignedTxHex);</a>
 <span class="sourceLineNo">183</span><a id="line.183"></a>
@@ -199,7 +199,7 @@
 <span class="sourceLineNo">190</span><a id="line.190">        return txid;</a>
 <span class="sourceLineNo">191</span><a id="line.191">    }</a>
 <span class="sourceLineNo">192</span><a id="line.192"></a>
-<span class="sourceLineNo">193</span><a id="line.193">    public Transaction createSignedTransaction(ECKey fromKey, List&lt;TransactionOutput&gt; outputs) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">193</span><a id="line.193">    public Transaction createSignedTransaction(ECKey fromKey, List&lt;TransactionOutput&gt; outputs) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">194</span><a id="line.194">        Address fromAddress = fromKey.toAddress(getNetParams());</a>
 <span class="sourceLineNo">195</span><a id="line.195">        Transaction tx = new Transaction(getNetParams());</a>
 <span class="sourceLineNo">196</span><a id="line.196"></a>
@@ -238,7 +238,7 @@
 <span class="sourceLineNo">229</span><a id="line.229">        return tx;</a>
 <span class="sourceLineNo">230</span><a id="line.230">    }</a>
 <span class="sourceLineNo">231</span><a id="line.231"></a>
-<span class="sourceLineNo">232</span><a id="line.232">    public Transaction createSignedTransaction(ECKey fromKey, Address toAddress, Coin amount) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">232</span><a id="line.232">    public Transaction createSignedTransaction(ECKey fromKey, Address toAddress, Coin amount) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">233</span><a id="line.233">        List&lt;TransactionOutput&gt; outputs = Collections.singletonList(</a>
 <span class="sourceLineNo">234</span><a id="line.234">                new TransactionOutput(getNetParams(), null, amount, toAddress));</a>
 <span class="sourceLineNo">235</span><a id="line.235">        return createSignedTransaction(fromKey, outputs);</a>
@@ -251,7 +251,7 @@
 <span class="sourceLineNo">242</span><a id="line.242">     * @param fromAddress Address to get UTXOs for</a>
 <span class="sourceLineNo">243</span><a id="line.243">     * @return All unspent TransactionOutputs for fromAddress</a>
 <span class="sourceLineNo">244</span><a id="line.244">     */</a>
-<span class="sourceLineNo">245</span><a id="line.245">    public List&lt;TransactionOutput&gt; listUnspentJ(Address fromAddress) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">245</span><a id="line.245">    public List&lt;TransactionOutput&gt; listUnspentJ(Address fromAddress) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">246</span><a id="line.246">        List&lt;Address&gt; addresses = Collections.singletonList(fromAddress);</a>
 <span class="sourceLineNo">247</span><a id="line.247">        List&lt;UnspentOutput&gt; unspentOutputsRPC = listUnspent(0, defaultMaxConf, addresses); // RPC UnspentOutput objects</a>
 <span class="sourceLineNo">248</span><a id="line.248">        List&lt;TransactionOutput&gt; unspentOutputsJ = new ArrayList&lt;TransactionOutput&gt;();</a>
@@ -261,7 +261,7 @@
 <span class="sourceLineNo">252</span><a id="line.252">        return unspentOutputsJ;</a>
 <span class="sourceLineNo">253</span><a id="line.253">    }</a>
 <span class="sourceLineNo">254</span><a id="line.254"></a>
-<span class="sourceLineNo">255</span><a id="line.255">    public List&lt;TransactionOutPoint&gt; listUnspentOutPoints(Address fromAddress) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">255</span><a id="line.255">    public List&lt;TransactionOutPoint&gt; listUnspentOutPoints(Address fromAddress) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">256</span><a id="line.256">        List&lt;Address&gt; addresses = Collections.singletonList(fromAddress);</a>
 <span class="sourceLineNo">257</span><a id="line.257">        List&lt;UnspentOutput&gt; unspentOutputsRPC = listUnspent(0, defaultMaxConf, addresses); // RPC UnspentOutput objects</a>
 <span class="sourceLineNo">258</span><a id="line.258">        List&lt;TransactionOutPoint&gt; unspentOutPoints = new ArrayList&lt;TransactionOutPoint&gt;();</a>

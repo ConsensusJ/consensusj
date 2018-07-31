@@ -10,7 +10,7 @@
 <pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.test;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
 <span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.rpc.BitcoinClient;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import org.consensusj.jsonrpc.JsonRPCException;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import org.consensusj.jsonrpc.JsonRpcException;</a>
 <span class="sourceLineNo">005</span><a id="line.5">import org.bitcoinj.core.Sha256Hash;</a>
 <span class="sourceLineNo">006</span><a id="line.6"></a>
 <span class="sourceLineNo">007</span><a id="line.7">import java.io.IOException;</a>
@@ -35,7 +35,7 @@
 <span class="sourceLineNo">026</span><a id="line.26">    }</a>
 <span class="sourceLineNo">027</span><a id="line.27"></a>
 <span class="sourceLineNo">028</span><a id="line.28">    @Override</a>
-<span class="sourceLineNo">029</span><a id="line.29">    public List&lt;Sha256Hash&gt; waitForBlocks(int numBlocks) throws JsonRPCException, IOException {</a>
+<span class="sourceLineNo">029</span><a id="line.29">    public List&lt;Sha256Hash&gt; waitForBlocks(int numBlocks) throws JsonRpcException, IOException {</a>
 <span class="sourceLineNo">030</span><a id="line.30">        return client.generate(numBlocks);</a>
 <span class="sourceLineNo">031</span><a id="line.31">    }</a>
 <span class="sourceLineNo">032</span><a id="line.32">}</a>

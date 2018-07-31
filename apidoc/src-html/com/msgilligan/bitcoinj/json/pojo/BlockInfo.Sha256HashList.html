@@ -31,7 +31,7 @@
 <span class="sourceLineNo">022</span><a id="line.22">    public final Sha256Hash merkleroot;</a>
 <span class="sourceLineNo">023</span><a id="line.23">    public final Sha256HashList tx;</a>
 <span class="sourceLineNo">024</span><a id="line.24">    public final int time;</a>
-<span class="sourceLineNo">025</span><a id="line.25">    public final int nonce;</a>
+<span class="sourceLineNo">025</span><a id="line.25">    public final long nonce;</a>
 <span class="sourceLineNo">026</span><a id="line.26">    public final String bits;</a>
 <span class="sourceLineNo">027</span><a id="line.27">    public final BigDecimal difficulty;</a>
 <span class="sourceLineNo">028</span><a id="line.28">    public final String chainwork;</a>
@@ -46,7 +46,7 @@
 <span class="sourceLineNo">037</span><a id="line.37">                     @JsonProperty("merkleroot")        Sha256Hash merkleroot,</a>
 <span class="sourceLineNo">038</span><a id="line.38">                     @JsonProperty("tx")                Sha256HashList tx,</a>
 <span class="sourceLineNo">039</span><a id="line.39">                     @JsonProperty("time")              int time,</a>
-<span class="sourceLineNo">040</span><a id="line.40">                     @JsonProperty("nonce")             int nonce,</a>
+<span class="sourceLineNo">040</span><a id="line.40">                     @JsonProperty("nonce")             long nonce,</a>
 <span class="sourceLineNo">041</span><a id="line.41">                     @JsonProperty("bits")              String bits,</a>
 <span class="sourceLineNo">042</span><a id="line.42">                     @JsonProperty("difficulty")        BigDecimal difficulty,</a>
 <span class="sourceLineNo">043</span><a id="line.43">                     @JsonProperty("chainwork")         String chainwork,</a>

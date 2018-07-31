@@ -26,9 +26,9 @@
 <span class="sourceLineNo">017</span><a id="line.17">import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;</a>
 <span class="sourceLineNo">018</span><a id="line.18">import com.msgilligan.bitcoinj.json.conversion.RpcClientModule;</a>
 <span class="sourceLineNo">019</span><a id="line.19">import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo;</a>
-<span class="sourceLineNo">020</span><a id="line.20">import org.consensusj.jsonrpc.JsonRPCException;</a>
-<span class="sourceLineNo">021</span><a id="line.21">import org.consensusj.jsonrpc.JsonRPCStatusException;</a>
-<span class="sourceLineNo">022</span><a id="line.22">import org.consensusj.jsonrpc.RPCClient;</a>
+<span class="sourceLineNo">020</span><a id="line.20">import org.consensusj.jsonrpc.JsonRpcException;</a>
+<span class="sourceLineNo">021</span><a id="line.21">import org.consensusj.jsonrpc.JsonRpcStatusException;</a>
+<span class="sourceLineNo">022</span><a id="line.22">import org.consensusj.jsonrpc.RpcClient;</a>
 <span class="sourceLineNo">023</span><a id="line.23">import org.bitcoinj.core.Address;</a>
 <span class="sourceLineNo">024</span><a id="line.24">import org.bitcoinj.core.Block;</a>
 <span class="sourceLineNo">025</span><a id="line.25">import org.bitcoinj.core.Coin;</a>
@@ -75,7 +75,7 @@
 <span class="sourceLineNo">066</span><a id="line.66"> * NOTE: This is still a work-in-progress and the API will change.</a>
 <span class="sourceLineNo">067</span><a id="line.67"> *</a>
 <span class="sourceLineNo">068</span><a id="line.68"> */</a>
-<span class="sourceLineNo">069</span><a id="line.69">public class BitcoinClient extends RPCClient implements NetworkParametersProperty {</a>
+<span class="sourceLineNo">069</span><a id="line.69">public class BitcoinClient extends RpcClient implements NetworkParametersProperty {</a>
 <span class="sourceLineNo">070</span><a id="line.70">    private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);</a>
 <span class="sourceLineNo">071</span><a id="line.71"></a>
 <span class="sourceLineNo">072</span><a id="line.72">    private static final int SECOND_IN_MSEC = 1000;</a>
@@ -116,7 +116,7 @@
 <span class="sourceLineNo">107</span><a id="line.107">     * Construct a BitcoinClient from an RPCConfig data object.</a>
 <span class="sourceLineNo">108</span><a id="line.108">     * @param config Contains URI, user name, and password</a>
 <span class="sourceLineNo">109</span><a id="line.109">     */</a>
-<span class="sourceLineNo">110</span><a id="line.110">    public BitcoinClient(RPCConfig config) {</a>
+<span class="sourceLineNo">110</span><a id="line.110">    public BitcoinClient(RpcConfig config) {</a>
 <span class="sourceLineNo">111</span><a id="line.111">        this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());</a>
 <span class="sourceLineNo">112</span><a id="line.112">    }</a>
 <span class="sourceLineNo">113</span><a id="line.113"></a>
@@ -132,10 +132,10 @@
 <span class="sourceLineNo">123</span><a id="line.123">    /**</a>
 <span class="sourceLineNo">124</span><a id="line.124">     * Get a (cached after first call) serverVersion number</a>
 <span class="sourceLineNo">125</span><a id="line.125">     * @return serverVersion number of bitcoin node</a>
-<span class="sourceLineNo">126</span><a id="line.126">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">126</span><a id="line.126">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">127</span><a id="line.127">     * @throws IOException network error</a>
 <span class="sourceLineNo">128</span><a id="line.128">     */</a>
-<span class="sourceLineNo">129</span><a id="line.129">    private int getServerVersion() throws IOException, JsonRPCStatusException {</a>
+<span class="sourceLineNo">129</span><a id="line.129">    private int getServerVersion() throws IOException, JsonRpcStatusException {</a>
 <span class="sourceLineNo">130</span><a id="line.130">        if (serverVersion == 0) {</a>
 <span class="sourceLineNo">131</span><a id="line.131">            serverVersion = getNetworkInfo().getVersion();</a>
 <span class="sourceLineNo">132</span><a id="line.132">        }</a>
@@ -152,7 +152,7 @@
 <span class="sourceLineNo">143</span><a id="line.143">     * @param timeout Timeout in seconds</a>
 <span class="sourceLineNo">144</span><a id="line.144">     * @return true if ready, false if timeout or interrupted</a>
 <span class="sourceLineNo">145</span><a id="line.145">     */</a>
-<span class="sourceLineNo">146</span><a id="line.146">    public Boolean waitForServer(int timeout) throws JsonRPCException {</a>
+<span class="sourceLineNo">146</span><a id="line.146">    public Boolean waitForServer(int timeout) throws JsonRpcException {</a>
 <span class="sourceLineNo">147</span><a id="line.147"></a>
 <span class="sourceLineNo">148</span><a id="line.148">        log.debug("Waiting for server RPC ready...");</a>
 <span class="sourceLineNo">149</span><a id="line.149"></a>
@@ -175,16 +175,16 @@
 <span class="sourceLineNo">166</span><a id="line.166">                        se.getMessage().equals("recvfrom failed: ECONNRESET (Connection reset by peer)")) {</a>
 <span class="sourceLineNo">167</span><a id="line.167">                    status = se.getMessage();</a>
 <span class="sourceLineNo">168</span><a id="line.168">                } else {</a>
-<span class="sourceLineNo">169</span><a id="line.169">                    throw new JsonRPCException("Unexpected exception in waitForServer", se) ;</a>
+<span class="sourceLineNo">169</span><a id="line.169">                    throw new JsonRpcException("Unexpected exception in waitForServer", se) ;</a>
 <span class="sourceLineNo">170</span><a id="line.170">                }</a>
 <span class="sourceLineNo">171</span><a id="line.171"></a>
 <span class="sourceLineNo">172</span><a id="line.172">            } catch (EOFException ignored) {</a>
 <span class="sourceLineNo">173</span><a id="line.173">                /* Android exception, ignore */</a>
 <span class="sourceLineNo">174</span><a id="line.174">                // Expected exceptions on Android, RoboVM</a>
 <span class="sourceLineNo">175</span><a id="line.175">                status = ignored.getMessage();</a>
-<span class="sourceLineNo">176</span><a id="line.176">            } catch (JsonRPCStatusException e) {</a>
+<span class="sourceLineNo">176</span><a id="line.176">            } catch (JsonRpcStatusException e) {</a>
 <span class="sourceLineNo">177</span><a id="line.177">                // If server is in "warm-up" mode, e.g. validating/parsing the blockchain...</a>
-<span class="sourceLineNo">178</span><a id="line.178">                if (e.jsonRPCCode == -28) {</a>
+<span class="sourceLineNo">178</span><a id="line.178">                if (e.jsonRpcCode == -28) {</a>
 <span class="sourceLineNo">179</span><a id="line.179">                    // ...then grab text message for status logging</a>
 <span class="sourceLineNo">180</span><a id="line.180">                    status = e.getMessage();</a>
 <span class="sourceLineNo">181</span><a id="line.181">                } else {</a>
@@ -218,11 +218,11 @@
 <span class="sourceLineNo">209</span><a id="line.209">     *</a>
 <span class="sourceLineNo">210</span><a id="line.210">     * @param blockHeight Block height to wait for</a>
 <span class="sourceLineNo">211</span><a id="line.211">     * @param timeout     Timeout in seconds</a>
-<span class="sourceLineNo">212</span><a id="line.212">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">212</span><a id="line.212">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">213</span><a id="line.213">     * @throws IOException network error</a>
 <span class="sourceLineNo">214</span><a id="line.214">     * @return True if blockHeight reached, false if timeout or interrupted</a>
 <span class="sourceLineNo">215</span><a id="line.215">     */</a>
-<span class="sourceLineNo">216</span><a id="line.216">    public Boolean waitForBlock(int blockHeight, int timeout) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">216</span><a id="line.216">    public Boolean waitForBlock(int blockHeight, int timeout) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">217</span><a id="line.217"></a>
 <span class="sourceLineNo">218</span><a id="line.218">        log.info("Waiting for server to reach block " + blockHeight);</a>
 <span class="sourceLineNo">219</span><a id="line.219"></a>
@@ -255,10 +255,10 @@
 <span class="sourceLineNo">246</span><a id="line.246">     * Returns the number of blocks in the longest block chain.</a>
 <span class="sourceLineNo">247</span><a id="line.247">     *</a>
 <span class="sourceLineNo">248</span><a id="line.248">     * @return The current block count</a>
-<span class="sourceLineNo">249</span><a id="line.249">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">249</span><a id="line.249">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">250</span><a id="line.250">     * @throws IOException network error</a>
 <span class="sourceLineNo">251</span><a id="line.251">     */</a>
-<span class="sourceLineNo">252</span><a id="line.252">    public Integer getBlockCount() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">252</span><a id="line.252">    public Integer getBlockCount() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">253</span><a id="line.253">        return send("getblockcount");</a>
 <span class="sourceLineNo">254</span><a id="line.254">    }</a>
 <span class="sourceLineNo">255</span><a id="line.255"></a>
@@ -267,10 +267,10 @@
 <span class="sourceLineNo">258</span><a id="line.258">     *</a>
 <span class="sourceLineNo">259</span><a id="line.259">     * @param index The block index</a>
 <span class="sourceLineNo">260</span><a id="line.260">     * @return The block hash</a>
-<span class="sourceLineNo">261</span><a id="line.261">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">261</span><a id="line.261">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">262</span><a id="line.262">     * @throws IOException network error</a>
 <span class="sourceLineNo">263</span><a id="line.263">     */</a>
-<span class="sourceLineNo">264</span><a id="line.264">    public Sha256Hash getBlockHash(Integer index) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">264</span><a id="line.264">    public Sha256Hash getBlockHash(Integer index) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">265</span><a id="line.265">        return send("getblockhash", Sha256Hash.class, index);</a>
 <span class="sourceLineNo">266</span><a id="line.266">    }</a>
 <span class="sourceLineNo">267</span><a id="line.267"></a>
@@ -279,15 +279,15 @@
 <span class="sourceLineNo">270</span><a id="line.270">     *</a>
 <span class="sourceLineNo">271</span><a id="line.271">     * @param hash The block hash</a>
 <span class="sourceLineNo">272</span><a id="line.272">     * @return The information about the block</a>
-<span class="sourceLineNo">273</span><a id="line.273">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">273</span><a id="line.273">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">274</span><a id="line.274">     * @throws IOException network error</a>
 <span class="sourceLineNo">275</span><a id="line.275">     */</a>
-<span class="sourceLineNo">276</span><a id="line.276">    public BlockInfo getBlockInfo(Sha256Hash hash) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">276</span><a id="line.276">    public BlockInfo getBlockInfo(Sha256Hash hash) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">277</span><a id="line.277">        // Use "verbose = true"</a>
 <span class="sourceLineNo">278</span><a id="line.278">        return send("getblock", BlockInfo.class, hash, true);</a>
 <span class="sourceLineNo">279</span><a id="line.279">    }</a>
 <span class="sourceLineNo">280</span><a id="line.280"></a>
-<span class="sourceLineNo">281</span><a id="line.281">    public Block getBlock(Sha256Hash hash) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">281</span><a id="line.281">    public Block getBlock(Sha256Hash hash) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">282</span><a id="line.282">        // Use "verbose = false"</a>
 <span class="sourceLineNo">283</span><a id="line.283">        return send("getblock", Block.class, hash, false);</a>
 <span class="sourceLineNo">284</span><a id="line.284">    }</a>
@@ -297,10 +297,10 @@
 <span class="sourceLineNo">288</span><a id="line.288">     *</a>
 <span class="sourceLineNo">289</span><a id="line.289">     * @param index The block index</a>
 <span class="sourceLineNo">290</span><a id="line.290">     * @return The information about the block</a>
-<span class="sourceLineNo">291</span><a id="line.291">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">291</span><a id="line.291">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">292</span><a id="line.292">     * @throws IOException network error</a>
 <span class="sourceLineNo">293</span><a id="line.293">     */</a>
-<span class="sourceLineNo">294</span><a id="line.294">    public Block getBlock(Integer index) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">294</span><a id="line.294">    public Block getBlock(Integer index) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">295</span><a id="line.295">        Sha256Hash blockHash = getBlockHash(index);</a>
 <span class="sourceLineNo">296</span><a id="line.296">        return getBlock(blockHash);</a>
 <span class="sourceLineNo">297</span><a id="line.297">    }</a>
@@ -314,11 +314,11 @@
 <span class="sourceLineNo">305</span><a id="line.305">     * @param generate        turn generation on or off</a>
 <span class="sourceLineNo">306</span><a id="line.306">     * @param genproclimit    Generation is limited to [genproclimit] processors, -1 is unlimited</a>
 <span class="sourceLineNo">307</span><a id="line.307">     * @return List&lt;Sha256Hash&gt;  list containing  block header hashes of the generated blocks or empty list</a>
-<span class="sourceLineNo">308</span><a id="line.308">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">308</span><a id="line.308">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">309</span><a id="line.309">     * @throws IOException network error</a>
 <span class="sourceLineNo">310</span><a id="line.310">     *</a>
 <span class="sourceLineNo">311</span><a id="line.311">     */</a>
-<span class="sourceLineNo">312</span><a id="line.312">    public List&lt;Sha256Hash&gt; setGenerate(Boolean generate, Long genproclimit) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">312</span><a id="line.312">    public List&lt;Sha256Hash&gt; setGenerate(Boolean generate, Long genproclimit) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">313</span><a id="line.313">        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);</a>
 <span class="sourceLineNo">314</span><a id="line.314">        return send("setgenerate", resultType, generate, genproclimit);</a>
 <span class="sourceLineNo">315</span><a id="line.315">    }</a>
@@ -330,10 +330,10 @@
 <span class="sourceLineNo">321</span><a id="line.321">     *</a>
 <span class="sourceLineNo">322</span><a id="line.322">     * @param numBlocks number of blocks to generate</a>
 <span class="sourceLineNo">323</span><a id="line.323">     * @return list containing block header hashes of the generated blocks</a>
-<span class="sourceLineNo">324</span><a id="line.324">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">324</span><a id="line.324">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">325</span><a id="line.325">     * @throws IOException network error</a>
 <span class="sourceLineNo">326</span><a id="line.326">     */</a>
-<span class="sourceLineNo">327</span><a id="line.327">    public List&lt;Sha256Hash&gt; generate(int numBlocks) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">327</span><a id="line.327">    public List&lt;Sha256Hash&gt; generate(int numBlocks) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">328</span><a id="line.328">        if (getServerVersion() &gt; 110000) {</a>
 <span class="sourceLineNo">329</span><a id="line.329">            JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);</a>
 <span class="sourceLineNo">330</span><a id="line.330">            return send("generate", resultType, numBlocks);</a>
@@ -347,7 +347,7 @@
 <span class="sourceLineNo">338</span><a id="line.338">     * Convenience method for generating a single block when in RegTest mode</a>
 <span class="sourceLineNo">339</span><a id="line.339">     * @see BitcoinClient#generate(int numBlocks)</a>
 <span class="sourceLineNo">340</span><a id="line.340">     */</a>
-<span class="sourceLineNo">341</span><a id="line.341">    public List&lt;Sha256Hash&gt; generate() throws IOException, JsonRPCStatusException {</a>
+<span class="sourceLineNo">341</span><a id="line.341">    public List&lt;Sha256Hash&gt; generate() throws IOException, JsonRpcStatusException {</a>
 <span class="sourceLineNo">342</span><a id="line.342">        return generate(1);</a>
 <span class="sourceLineNo">343</span><a id="line.343">    }</a>
 <span class="sourceLineNo">344</span><a id="line.344"></a>
@@ -361,7 +361,7 @@
 <span class="sourceLineNo">352</span><a id="line.352">// I can't remember exactly what it was -- try adding it back as part</a>
 <span class="sourceLineNo">353</span><a id="line.353">// of testing for release 0.2.2</a>
 <span class="sourceLineNo">354</span><a id="line.354">    @Deprecated</a>
-<span class="sourceLineNo">355</span><a id="line.355">    public List&lt;Sha256Hash&gt; generateBlock() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">355</span><a id="line.355">    public List&lt;Sha256Hash&gt; generateBlock() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">356</span><a id="line.356">        return generate();</a>
 <span class="sourceLineNo">357</span><a id="line.357">    }</a>
 <span class="sourceLineNo">358</span><a id="line.358"></a>
@@ -373,7 +373,7 @@
 <span class="sourceLineNo">364</span><a id="line.364">     * @see BitcoinClient#generate(int)</a>
 <span class="sourceLineNo">365</span><a id="line.365">     */</a>
 <span class="sourceLineNo">366</span><a id="line.366">    @Deprecated</a>
-<span class="sourceLineNo">367</span><a id="line.367">    public List&lt;Sha256Hash&gt; generateBlocks(Long blocks) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">367</span><a id="line.367">    public List&lt;Sha256Hash&gt; generateBlocks(Long blocks) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">368</span><a id="line.368">        return generate(blocks.intValue());</a>
 <span class="sourceLineNo">369</span><a id="line.369">    }</a>
 <span class="sourceLineNo">370</span><a id="line.370"></a>
@@ -381,10 +381,10 @@
 <span class="sourceLineNo">372</span><a id="line.372">     * Creates a new Bitcoin address for receiving payments, linked to the default account "".</a>
 <span class="sourceLineNo">373</span><a id="line.373">     *</a>
 <span class="sourceLineNo">374</span><a id="line.374">     * @return A new Bitcoin address</a>
-<span class="sourceLineNo">375</span><a id="line.375">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">375</span><a id="line.375">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">376</span><a id="line.376">     * @throws IOException network error</a>
 <span class="sourceLineNo">377</span><a id="line.377">     */</a>
-<span class="sourceLineNo">378</span><a id="line.378">    public Address getNewAddress() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">378</span><a id="line.378">    public Address getNewAddress() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">379</span><a id="line.379">        return getNewAddress(null);</a>
 <span class="sourceLineNo">380</span><a id="line.380">    }</a>
 <span class="sourceLineNo">381</span><a id="line.381"></a>
@@ -393,10 +393,10 @@
 <span class="sourceLineNo">384</span><a id="line.384">     *</a>
 <span class="sourceLineNo">385</span><a id="line.385">     * @param account The account name for the address to be linked to.</a>
 <span class="sourceLineNo">386</span><a id="line.386">     * @return A new Bitcoin address</a>
-<span class="sourceLineNo">387</span><a id="line.387">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">387</span><a id="line.387">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">388</span><a id="line.388">     * @throws IOException network error</a>
 <span class="sourceLineNo">389</span><a id="line.389">     */</a>
-<span class="sourceLineNo">390</span><a id="line.390">    public Address getNewAddress(String account) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">390</span><a id="line.390">    public Address getNewAddress(String account) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">391</span><a id="line.391">        return send("getnewaddress", Address.class, account);</a>
 <span class="sourceLineNo">392</span><a id="line.392">    }</a>
 <span class="sourceLineNo">393</span><a id="line.393"></a>
@@ -405,10 +405,10 @@
 <span class="sourceLineNo">396</span><a id="line.396">     *</a>
 <span class="sourceLineNo">397</span><a id="line.397">     * @param account The account name linked to the address.</a>
 <span class="sourceLineNo">398</span><a id="line.398">     * @return The Bitcoin address</a>
-<span class="sourceLineNo">399</span><a id="line.399">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">399</span><a id="line.399">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">400</span><a id="line.400">     * @throws IOException network error</a>
 <span class="sourceLineNo">401</span><a id="line.401">     */</a>
-<span class="sourceLineNo">402</span><a id="line.402">    public Address getAccountAddress(String account) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">402</span><a id="line.402">    public Address getAccountAddress(String account) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">403</span><a id="line.403">        return send("getaccountaddress", Address.class, account);</a>
 <span class="sourceLineNo">404</span><a id="line.404">    }</a>
 <span class="sourceLineNo">405</span><a id="line.405"></a>
@@ -419,10 +419,10 @@
 <span class="sourceLineNo">410</span><a id="line.410">     *</a>
 <span class="sourceLineNo">411</span><a id="line.411">     * @param address Address corresponding to the private key to return</a>
 <span class="sourceLineNo">412</span><a id="line.412">     * @return The private key</a>
-<span class="sourceLineNo">413</span><a id="line.413">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">413</span><a id="line.413">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">414</span><a id="line.414">     * @throws IOException network error</a>
 <span class="sourceLineNo">415</span><a id="line.415">     */</a>
-<span class="sourceLineNo">416</span><a id="line.416">    public ECKey dumpPrivKey(Address address) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">416</span><a id="line.416">    public ECKey dumpPrivKey(Address address) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">417</span><a id="line.417">        return send("dumpprivkey", ECKey.class, address);</a>
 <span class="sourceLineNo">418</span><a id="line.418">    }</a>
 <span class="sourceLineNo">419</span><a id="line.419"></a>
@@ -435,11 +435,11 @@
 <span class="sourceLineNo">426</span><a id="line.426">     * @param minconf     Only use funds with at least this many confirmations</a>
 <span class="sourceLineNo">427</span><a id="line.427">     * @param comment     An optional comment, stored in the wallet only</a>
 <span class="sourceLineNo">428</span><a id="line.428">     * @return True, if successful, and false otherwise</a>
-<span class="sourceLineNo">429</span><a id="line.429">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">429</span><a id="line.429">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">430</span><a id="line.430">     * @throws IOException network error</a>
 <span class="sourceLineNo">431</span><a id="line.431">     */</a>
 <span class="sourceLineNo">432</span><a id="line.432">    public Boolean moveFunds(Address fromaccount, Address toaccount, Coin amount, Integer minconf, String comment)</a>
-<span class="sourceLineNo">433</span><a id="line.433">            throws JsonRPCStatusException,</a>
+<span class="sourceLineNo">433</span><a id="line.433">            throws JsonRpcStatusException,</a>
 <span class="sourceLineNo">434</span><a id="line.434">            IOException {</a>
 <span class="sourceLineNo">435</span><a id="line.435">        return send("move", fromaccount, toaccount, amount, minconf, comment);</a>
 <span class="sourceLineNo">436</span><a id="line.436">    }</a>
@@ -453,11 +453,11 @@
 <span class="sourceLineNo">444</span><a id="line.444">     * @param inputs  The outpoints to spent</a>
 <span class="sourceLineNo">445</span><a id="line.445">     * @param outputs The destinations and amounts to transfer</a>
 <span class="sourceLineNo">446</span><a id="line.446">     * @return The hex-encoded raw transaction</a>
-<span class="sourceLineNo">447</span><a id="line.447">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">447</span><a id="line.447">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">448</span><a id="line.448">     * @throws IOException network error</a>
 <span class="sourceLineNo">449</span><a id="line.449">     */</a>
 <span class="sourceLineNo">450</span><a id="line.450">    public String createRawTransaction(List&lt;Outpoint&gt; inputs, Map&lt;Address, Coin&gt; outputs)</a>
-<span class="sourceLineNo">451</span><a id="line.451">            throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">451</span><a id="line.451">            throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">452</span><a id="line.452">        return send("createrawtransaction", inputs, outputs);</a>
 <span class="sourceLineNo">453</span><a id="line.453">    }</a>
 <span class="sourceLineNo">454</span><a id="line.454"></a>
@@ -466,10 +466,10 @@
 <span class="sourceLineNo">457</span><a id="line.457">     *</a>
 <span class="sourceLineNo">458</span><a id="line.458">     * @param unsignedTransaction The hex-encoded raw transaction</a>
 <span class="sourceLineNo">459</span><a id="line.459">     * @return The signed transaction and information whether it has a complete set of signature</a>
-<span class="sourceLineNo">460</span><a id="line.460">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">460</span><a id="line.460">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">461</span><a id="line.461">     * @throws IOException network error</a>
 <span class="sourceLineNo">462</span><a id="line.462">     */</a>
-<span class="sourceLineNo">463</span><a id="line.463">    public SignedRawTransaction signRawTransaction(String unsignedTransaction) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">463</span><a id="line.463">    public SignedRawTransaction signRawTransaction(String unsignedTransaction) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">464</span><a id="line.464">        return send("signrawtransaction", SignedRawTransaction.class, unsignedTransaction);</a>
 <span class="sourceLineNo">465</span><a id="line.465">    }</a>
 <span class="sourceLineNo">466</span><a id="line.466"></a>
@@ -478,12 +478,12 @@
 <span class="sourceLineNo">469</span><a id="line.469">     * @param txid Transaction ID/hash</a>
 <span class="sourceLineNo">470</span><a id="line.470">     * @param verbose `true` to return JSON transaction</a>
 <span class="sourceLineNo">471</span><a id="line.471">     * @return  RawTransactionInfo if verbose, otherwise Transaction</a>
-<span class="sourceLineNo">472</span><a id="line.472">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">472</span><a id="line.472">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">473</span><a id="line.473">     * @throws IOException network error</a>
 <span class="sourceLineNo">474</span><a id="line.474">     * @deprecated Use getRawTransaction or getRawTransactionInfo as appropriate</a>
 <span class="sourceLineNo">475</span><a id="line.475">     */</a>
 <span class="sourceLineNo">476</span><a id="line.476">    @Deprecated</a>
-<span class="sourceLineNo">477</span><a id="line.477">    public Object getRawTransaction(Sha256Hash txid, Boolean verbose) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">477</span><a id="line.477">    public Object getRawTransaction(Sha256Hash txid, Boolean verbose) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">478</span><a id="line.478">        Object result;</a>
 <span class="sourceLineNo">479</span><a id="line.479">        if (verbose) {</a>
 <span class="sourceLineNo">480</span><a id="line.480">            result = getRawTransactionInfo(txid);    // Verbose means JSON</a>
@@ -497,10 +497,10 @@
 <span class="sourceLineNo">488</span><a id="line.488">     * Get a "raw" transaction (which we map to a bitcoinj transaction)</a>
 <span class="sourceLineNo">489</span><a id="line.489">     * @param txid Transaction ID/hash</a>
 <span class="sourceLineNo">490</span><a id="line.490">     * @return bitcoinj Transaction</a>
-<span class="sourceLineNo">491</span><a id="line.491">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">491</span><a id="line.491">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">492</span><a id="line.492">     * @throws IOException network error</a>
 <span class="sourceLineNo">493</span><a id="line.493">     */</a>
-<span class="sourceLineNo">494</span><a id="line.494">    public Transaction getRawTransaction(Sha256Hash txid) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">494</span><a id="line.494">    public Transaction getRawTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">495</span><a id="line.495">        String hexEncoded = send("getrawtransaction", txid);</a>
 <span class="sourceLineNo">496</span><a id="line.496">        byte[] raw = HexUtil.hexStringToByteArray(hexEncoded);</a>
 <span class="sourceLineNo">497</span><a id="line.497">        return new Transaction(context.getParams(), raw);</a>
@@ -510,30 +510,30 @@
 <span class="sourceLineNo">501</span><a id="line.501">     * Get a "raw" transaction as JSON (which we map to a RawTransactionInfo POJO)</a>
 <span class="sourceLineNo">502</span><a id="line.502">     * @param txid Transaction ID/hash</a>
 <span class="sourceLineNo">503</span><a id="line.503">     * @return RawTransactionInfo POJO</a>
-<span class="sourceLineNo">504</span><a id="line.504">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">504</span><a id="line.504">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">505</span><a id="line.505">     * @throws IOException network error</a>
 <span class="sourceLineNo">506</span><a id="line.506">     */</a>
-<span class="sourceLineNo">507</span><a id="line.507">    public RawTransactionInfo getRawTransactionInfo(Sha256Hash txid) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">507</span><a id="line.507">    public RawTransactionInfo getRawTransactionInfo(Sha256Hash txid) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">508</span><a id="line.508">        return send("getrawtransaction", RawTransactionInfo.class, txid, 1);</a>
 <span class="sourceLineNo">509</span><a id="line.509">    }</a>
 <span class="sourceLineNo">510</span><a id="line.510"></a>
-<span class="sourceLineNo">511</span><a id="line.511">    public Sha256Hash sendRawTransaction(Transaction tx) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">511</span><a id="line.511">    public Sha256Hash sendRawTransaction(Transaction tx) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">512</span><a id="line.512">        return sendRawTransaction(tx, null);</a>
 <span class="sourceLineNo">513</span><a id="line.513">    }</a>
 <span class="sourceLineNo">514</span><a id="line.514"></a>
-<span class="sourceLineNo">515</span><a id="line.515">    public Sha256Hash sendRawTransaction(String hexTx) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">515</span><a id="line.515">    public Sha256Hash sendRawTransaction(String hexTx) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">516</span><a id="line.516">        return sendRawTransaction(hexTx, null);</a>
 <span class="sourceLineNo">517</span><a id="line.517">    }</a>
 <span class="sourceLineNo">518</span><a id="line.518"></a>
-<span class="sourceLineNo">519</span><a id="line.519">    public Sha256Hash sendRawTransaction(Transaction tx, Boolean allowHighFees) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">519</span><a id="line.519">    public Sha256Hash sendRawTransaction(Transaction tx, Boolean allowHighFees) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">520</span><a id="line.520">        return send("sendrawtransaction", Sha256Hash.class, tx, allowHighFees);</a>
 <span class="sourceLineNo">521</span><a id="line.521">    }</a>
 <span class="sourceLineNo">522</span><a id="line.522"></a>
-<span class="sourceLineNo">523</span><a id="line.523">    public Sha256Hash sendRawTransaction(String hexTx, Boolean allowHighFees) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">523</span><a id="line.523">    public Sha256Hash sendRawTransaction(String hexTx, Boolean allowHighFees) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">524</span><a id="line.524">        return send("sendrawtransaction", Sha256Hash.class, hexTx, allowHighFees);</a>
 <span class="sourceLineNo">525</span><a id="line.525">    }</a>
 <span class="sourceLineNo">526</span><a id="line.526"></a>
-<span class="sourceLineNo">527</span><a id="line.527">    public Coin getReceivedByAddress(Address address) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">527</span><a id="line.527">    public Coin getReceivedByAddress(Address address) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">528</span><a id="line.528">        return getReceivedByAddress(address, 1);   // Default to 1 or more confirmations</a>
 <span class="sourceLineNo">529</span><a id="line.529">    }</a>
 <span class="sourceLineNo">530</span><a id="line.530"></a>
@@ -543,15 +543,15 @@
 <span class="sourceLineNo">534</span><a id="line.534">     * @param address Address to query</a>
 <span class="sourceLineNo">535</span><a id="line.535">     * @param minConf minimum number of confirmations</a>
 <span class="sourceLineNo">536</span><a id="line.536">     * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`</a>
-<span class="sourceLineNo">537</span><a id="line.537">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">537</span><a id="line.537">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">538</span><a id="line.538">     * @throws IOException network error</a>
 <span class="sourceLineNo">539</span><a id="line.539">     */</a>
-<span class="sourceLineNo">540</span><a id="line.540">    public Coin getReceivedByAddress(Address address, Integer minConf) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">540</span><a id="line.540">    public Coin getReceivedByAddress(Address address, Integer minConf) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">541</span><a id="line.541">        return send("getreceivedbyaddress", Coin.class, address, minConf);</a>
 <span class="sourceLineNo">542</span><a id="line.542">    }</a>
 <span class="sourceLineNo">543</span><a id="line.543"></a>
 <span class="sourceLineNo">544</span><a id="line.544">    public List&lt;ReceivedByAddressInfo&gt; listReceivedByAddress(Integer minConf, Boolean includeEmpty)</a>
-<span class="sourceLineNo">545</span><a id="line.545">            throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">545</span><a id="line.545">            throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">546</span><a id="line.546">        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ReceivedByAddressInfo.class);</a>
 <span class="sourceLineNo">547</span><a id="line.547">        return send("listreceivedbyaddress", resultType, minConf, includeEmpty);</a>
 <span class="sourceLineNo">548</span><a id="line.548">    }</a>
@@ -560,10 +560,10 @@
 <span class="sourceLineNo">551</span><a id="line.551">     * Returns a list of unspent transaction outputs with at least one confirmation.</a>
 <span class="sourceLineNo">552</span><a id="line.552">     *</a>
 <span class="sourceLineNo">553</span><a id="line.553">     * @return The unspent transaction outputs</a>
-<span class="sourceLineNo">554</span><a id="line.554">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">554</span><a id="line.554">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">555</span><a id="line.555">     * @throws IOException network error</a>
 <span class="sourceLineNo">556</span><a id="line.556">     */</a>
-<span class="sourceLineNo">557</span><a id="line.557">    public List&lt;UnspentOutput&gt; listUnspent() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">557</span><a id="line.557">    public List&lt;UnspentOutput&gt; listUnspent() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">558</span><a id="line.558">        return listUnspent(null, null, null);</a>
 <span class="sourceLineNo">559</span><a id="line.559">    }</a>
 <span class="sourceLineNo">560</span><a id="line.560"></a>
@@ -574,11 +574,11 @@
 <span class="sourceLineNo">565</span><a id="line.565">     * @param minConf The minimum confirmations to filter</a>
 <span class="sourceLineNo">566</span><a id="line.566">     * @param maxConf The maximum confirmations to filter</a>
 <span class="sourceLineNo">567</span><a id="line.567">     * @return The unspent transaction outputs</a>
-<span class="sourceLineNo">568</span><a id="line.568">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">568</span><a id="line.568">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">569</span><a id="line.569">     * @throws IOException network error</a>
 <span class="sourceLineNo">570</span><a id="line.570">     */</a>
 <span class="sourceLineNo">571</span><a id="line.571">    public List&lt;UnspentOutput&gt; listUnspent(Integer minConf, Integer maxConf)</a>
-<span class="sourceLineNo">572</span><a id="line.572">            throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">572</span><a id="line.572">            throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">573</span><a id="line.573">        return listUnspent(minConf, maxConf, null);</a>
 <span class="sourceLineNo">574</span><a id="line.574">    }</a>
 <span class="sourceLineNo">575</span><a id="line.575"></a>
@@ -590,11 +590,11 @@
 <span class="sourceLineNo">581</span><a id="line.581">     * @param maxConf The maximum confirmations to filter</a>
 <span class="sourceLineNo">582</span><a id="line.582">     * @param filter  Include only transaction outputs to the specified addresses</a>
 <span class="sourceLineNo">583</span><a id="line.583">     * @return The unspent transaction outputs</a>
-<span class="sourceLineNo">584</span><a id="line.584">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">584</span><a id="line.584">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">585</span><a id="line.585">     * @throws IOException network error</a>
 <span class="sourceLineNo">586</span><a id="line.586">     */</a>
 <span class="sourceLineNo">587</span><a id="line.587">    public List&lt;UnspentOutput&gt; listUnspent(Integer minConf, Integer maxConf, Iterable&lt;Address&gt; filter)</a>
-<span class="sourceLineNo">588</span><a id="line.588">            throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">588</span><a id="line.588">            throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">589</span><a id="line.589">        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, UnspentOutput.class);</a>
 <span class="sourceLineNo">590</span><a id="line.590">        return send("listunspent", resultType, minConf, maxConf, filter);</a>
 <span class="sourceLineNo">591</span><a id="line.591">    }</a>
@@ -605,10 +605,10 @@
 <span class="sourceLineNo">596</span><a id="line.596">     * @param txid The transaction hash</a>
 <span class="sourceLineNo">597</span><a id="line.597">     * @param vout The transaction output index</a>
 <span class="sourceLineNo">598</span><a id="line.598">     * @return Details about an unspent output or nothing, if the output was already spent</a>
-<span class="sourceLineNo">599</span><a id="line.599">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">599</span><a id="line.599">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">600</span><a id="line.600">     * @throws IOException network error</a>
 <span class="sourceLineNo">601</span><a id="line.601">     */</a>
-<span class="sourceLineNo">602</span><a id="line.602">    public TxOutInfo getTxOut(Sha256Hash txid, Integer vout) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">602</span><a id="line.602">    public TxOutInfo getTxOut(Sha256Hash txid, Integer vout) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">603</span><a id="line.603">        return getTxOut(txid, vout, null);</a>
 <span class="sourceLineNo">604</span><a id="line.604">    }</a>
 <span class="sourceLineNo">605</span><a id="line.605"></a>
@@ -619,11 +619,11 @@
 <span class="sourceLineNo">610</span><a id="line.610">     * @param vout              The transaction output index</a>
 <span class="sourceLineNo">611</span><a id="line.611">     * @param includeMemoryPool Whether to included the memory pool</a>
 <span class="sourceLineNo">612</span><a id="line.612">     * @return Details about an unspent output or nothing, if the output was already spent</a>
-<span class="sourceLineNo">613</span><a id="line.613">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">613</span><a id="line.613">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">614</span><a id="line.614">     * @throws IOException network error</a>
 <span class="sourceLineNo">615</span><a id="line.615">     */</a>
 <span class="sourceLineNo">616</span><a id="line.616">    public TxOutInfo getTxOut(Sha256Hash txid, Integer vout, Boolean includeMemoryPool)</a>
-<span class="sourceLineNo">617</span><a id="line.617">            throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">617</span><a id="line.617">            throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">618</span><a id="line.618">        return send("gettxout", TxOutInfo.class, txid, vout, includeMemoryPool);</a>
 <span class="sourceLineNo">619</span><a id="line.619">    }</a>
 <span class="sourceLineNo">620</span><a id="line.620"></a>
@@ -631,10 +631,10 @@
 <span class="sourceLineNo">622</span><a id="line.622">     * Get the balance for a the default Bitcoin "account"</a>
 <span class="sourceLineNo">623</span><a id="line.623">     *</a>
 <span class="sourceLineNo">624</span><a id="line.624">     * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`</a>
-<span class="sourceLineNo">625</span><a id="line.625">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">625</span><a id="line.625">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">626</span><a id="line.626">     * @throws IOException network error</a>
 <span class="sourceLineNo">627</span><a id="line.627">     */</a>
-<span class="sourceLineNo">628</span><a id="line.628">    public Coin getBalance() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">628</span><a id="line.628">    public Coin getBalance() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">629</span><a id="line.629">        return getBalance(null, null);</a>
 <span class="sourceLineNo">630</span><a id="line.630">    }</a>
 <span class="sourceLineNo">631</span><a id="line.631"></a>
@@ -643,10 +643,10 @@
 <span class="sourceLineNo">634</span><a id="line.634">     *</a>
 <span class="sourceLineNo">635</span><a id="line.635">     * @param account A Bitcoin "account". (Be wary of using this feature.)</a>
 <span class="sourceLineNo">636</span><a id="line.636">     * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`</a>
-<span class="sourceLineNo">637</span><a id="line.637">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">637</span><a id="line.637">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">638</span><a id="line.638">     * @throws IOException network error</a>
 <span class="sourceLineNo">639</span><a id="line.639">     */</a>
-<span class="sourceLineNo">640</span><a id="line.640">    public Coin getBalance(String account) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">640</span><a id="line.640">    public Coin getBalance(String account) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">641</span><a id="line.641">        return getBalance(account, null);</a>
 <span class="sourceLineNo">642</span><a id="line.642">    }</a>
 <span class="sourceLineNo">643</span><a id="line.643"></a>
@@ -656,28 +656,28 @@
 <span class="sourceLineNo">647</span><a id="line.647">     * @param account A Bitcoin "account". (Be wary of using this feature.)</a>
 <span class="sourceLineNo">648</span><a id="line.648">     * @param minConf minimum number of confirmations</a>
 <span class="sourceLineNo">649</span><a id="line.649">     * @return Is now returning `Coin`, if you need to convert use `BitcoinMath.btcToCoin(result)`</a>
-<span class="sourceLineNo">650</span><a id="line.650">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">650</span><a id="line.650">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">651</span><a id="line.651">     * @throws IOException network error</a>
 <span class="sourceLineNo">652</span><a id="line.652">     */</a>
-<span class="sourceLineNo">653</span><a id="line.653">    public Coin getBalance(String account, Integer minConf) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">653</span><a id="line.653">    public Coin getBalance(String account, Integer minConf) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">654</span><a id="line.654">        return send("getbalance", Coin.class, account, minConf);</a>
 <span class="sourceLineNo">655</span><a id="line.655">    }</a>
 <span class="sourceLineNo">656</span><a id="line.656"></a>
-<span class="sourceLineNo">657</span><a id="line.657">    public Sha256Hash sendToAddress(Address address, Coin amount) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">657</span><a id="line.657">    public Sha256Hash sendToAddress(Address address, Coin amount) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">658</span><a id="line.658">        return sendToAddress(address, amount, null, null);</a>
 <span class="sourceLineNo">659</span><a id="line.659">    }</a>
 <span class="sourceLineNo">660</span><a id="line.660"></a>
 <span class="sourceLineNo">661</span><a id="line.661">    public Sha256Hash sendToAddress(Address address, Coin amount, String comment, String commentTo)</a>
-<span class="sourceLineNo">662</span><a id="line.662">            throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">662</span><a id="line.662">            throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">663</span><a id="line.663">        return send("sendtoaddress", Sha256Hash.class, address, amount, comment, commentTo);</a>
 <span class="sourceLineNo">664</span><a id="line.664">    }</a>
 <span class="sourceLineNo">665</span><a id="line.665"></a>
 <span class="sourceLineNo">666</span><a id="line.666">    public Sha256Hash sendFrom(String account, Address address, Coin amount)</a>
-<span class="sourceLineNo">667</span><a id="line.667">            throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">667</span><a id="line.667">            throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">668</span><a id="line.668">        return send("sendfrom", Sha256Hash.class, account, address, amount);</a>
 <span class="sourceLineNo">669</span><a id="line.669">    }</a>
 <span class="sourceLineNo">670</span><a id="line.670"></a>
-<span class="sourceLineNo">671</span><a id="line.671">    public Sha256Hash sendMany(String account, Map&lt;Address, Coin&gt; amounts) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">671</span><a id="line.671">    public Sha256Hash sendMany(String account, Map&lt;Address, Coin&gt; amounts) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">672</span><a id="line.672">        return send("sendmany", Sha256Hash.class, account, amounts);</a>
 <span class="sourceLineNo">673</span><a id="line.673">    }</a>
 <span class="sourceLineNo">674</span><a id="line.674"></a>
@@ -686,14 +686,14 @@
 <span class="sourceLineNo">677</span><a id="line.677">     *</a>
 <span class="sourceLineNo">678</span><a id="line.678">     * @param amount The transaction fee in BTC/kB rounded to the nearest 0.00000001.</a>
 <span class="sourceLineNo">679</span><a id="line.679">     * @return True if successful</a>
-<span class="sourceLineNo">680</span><a id="line.680">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">680</span><a id="line.680">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">681</span><a id="line.681">     * @throws IOException network error</a>
 <span class="sourceLineNo">682</span><a id="line.682">     */</a>
-<span class="sourceLineNo">683</span><a id="line.683">    public Boolean setTxFee(Coin amount) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">683</span><a id="line.683">    public Boolean setTxFee(Coin amount) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">684</span><a id="line.684">        return send("settxfee", amount);</a>
 <span class="sourceLineNo">685</span><a id="line.685">    }</a>
 <span class="sourceLineNo">686</span><a id="line.686"></a>
-<span class="sourceLineNo">687</span><a id="line.687">    public WalletTransactionInfo getTransaction(Sha256Hash txid) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">687</span><a id="line.687">    public WalletTransactionInfo getTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">688</span><a id="line.688">        return send("gettransaction", WalletTransactionInfo.class, txid);</a>
 <span class="sourceLineNo">689</span><a id="line.689">    }</a>
 <span class="sourceLineNo">690</span><a id="line.690"></a>
@@ -703,11 +703,11 @@
 <span class="sourceLineNo">694</span><a id="line.694">     * Use GetBlockChainInfo and other alternatives instead</a>
 <span class="sourceLineNo">695</span><a id="line.695">     *</a>
 <span class="sourceLineNo">696</span><a id="line.696">     * @return Structure with various info fields</a>
-<span class="sourceLineNo">697</span><a id="line.697">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">697</span><a id="line.697">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">698</span><a id="line.698">     * @throws IOException network error</a>
 <span class="sourceLineNo">699</span><a id="line.699">     */</a>
 <span class="sourceLineNo">700</span><a id="line.700">    @Deprecated</a>
-<span class="sourceLineNo">701</span><a id="line.701">    public ServerInfo getInfo() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">701</span><a id="line.701">    public ServerInfo getInfo() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">702</span><a id="line.702">        return send("getinfo", ServerInfo.class);</a>
 <span class="sourceLineNo">703</span><a id="line.703">    }</a>
 <span class="sourceLineNo">704</span><a id="line.704"></a>
@@ -715,10 +715,10 @@
 <span class="sourceLineNo">706</span><a id="line.706">     * The getblockchaininfo RPC provides information about the current state of the block chain.</a>
 <span class="sourceLineNo">707</span><a id="line.707">     *</a>
 <span class="sourceLineNo">708</span><a id="line.708">     * @return An object containing information about the current state of the block chain.</a>
-<span class="sourceLineNo">709</span><a id="line.709">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">709</span><a id="line.709">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">710</span><a id="line.710">     * @throws IOException network error</a>
 <span class="sourceLineNo">711</span><a id="line.711">     */</a>
-<span class="sourceLineNo">712</span><a id="line.712">    public BlockChainInfo getBlockChainInfo() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">712</span><a id="line.712">    public BlockChainInfo getBlockChainInfo() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">713</span><a id="line.713">        return send("getblockchaininfo", BlockChainInfo.class);</a>
 <span class="sourceLineNo">714</span><a id="line.714">    }</a>
 <span class="sourceLineNo">715</span><a id="line.715"></a>
@@ -726,10 +726,10 @@
 <span class="sourceLineNo">717</span><a id="line.717">     * The getnetworkinfo RPC returns information about the node’s connection to the network.</a>
 <span class="sourceLineNo">718</span><a id="line.718">     *</a>
 <span class="sourceLineNo">719</span><a id="line.719">     * @return information about the node’s connection to the network</a>
-<span class="sourceLineNo">720</span><a id="line.720">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">720</span><a id="line.720">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">721</span><a id="line.721">     * @throws IOException network error</a>
 <span class="sourceLineNo">722</span><a id="line.722">     */</a>
-<span class="sourceLineNo">723</span><a id="line.723">    public NetworkInfo getNetworkInfo() throws JsonRPCStatusException, IOException  {</a>
+<span class="sourceLineNo">723</span><a id="line.723">    public NetworkInfo getNetworkInfo() throws JsonRpcStatusException, IOException  {</a>
 <span class="sourceLineNo">724</span><a id="line.724">        return send("getnetworkinfo", NetworkInfo.class);</a>
 <span class="sourceLineNo">725</span><a id="line.725">    }</a>
 <span class="sourceLineNo">726</span><a id="line.726"></a>
@@ -737,10 +737,10 @@
 <span class="sourceLineNo">728</span><a id="line.728">     * Returns list of related addresses</a>
 <span class="sourceLineNo">729</span><a id="line.729">     * Also useful for finding all change addresses in the wallet</a>
 <span class="sourceLineNo">730</span><a id="line.730">     * @return a lost of address groupings</a>
-<span class="sourceLineNo">731</span><a id="line.731">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">731</span><a id="line.731">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">732</span><a id="line.732">     * @throws IOException network error</a>
 <span class="sourceLineNo">733</span><a id="line.733">     */</a>
-<span class="sourceLineNo">734</span><a id="line.734">    public List&lt;List&lt;AddressGroupingItem&gt;&gt;  listAddressGroupings() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">734</span><a id="line.734">    public List&lt;List&lt;AddressGroupingItem&gt;&gt;  listAddressGroupings() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">735</span><a id="line.735">        // TODO: I'm not sure how to make Jackson mapping work automatically here.</a>
 <span class="sourceLineNo">736</span><a id="line.736">        List&lt;List&lt;List&lt;Object&gt;&gt;&gt; raw = send("listaddressgroupings");</a>
 <span class="sourceLineNo">737</span><a id="line.737">        List&lt;List&lt;AddressGroupingItem&gt;&gt; result = new ArrayList&lt;&gt;();</a>
@@ -762,10 +762,10 @@
 <span class="sourceLineNo">753</span><a id="line.753">     * commands.</a>
 <span class="sourceLineNo">754</span><a id="line.754">     *</a>
 <span class="sourceLineNo">755</span><a id="line.755">     * @return The list of commands as string</a>
-<span class="sourceLineNo">756</span><a id="line.756">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">756</span><a id="line.756">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">757</span><a id="line.757">     * @throws IOException network error</a>
 <span class="sourceLineNo">758</span><a id="line.758">     */</a>
-<span class="sourceLineNo">759</span><a id="line.759">    public String help() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">759</span><a id="line.759">    public String help() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">760</span><a id="line.760">        return help(null);</a>
 <span class="sourceLineNo">761</span><a id="line.761">    }</a>
 <span class="sourceLineNo">762</span><a id="line.762"></a>
@@ -774,10 +774,10 @@
 <span class="sourceLineNo">765</span><a id="line.765">     *</a>
 <span class="sourceLineNo">766</span><a id="line.766">     * @param command The name of the command to get help for</a>
 <span class="sourceLineNo">767</span><a id="line.767">     * @return The help text</a>
-<span class="sourceLineNo">768</span><a id="line.768">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">768</span><a id="line.768">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">769</span><a id="line.769">     * @throws IOException network error</a>
 <span class="sourceLineNo">770</span><a id="line.770">     */</a>
-<span class="sourceLineNo">771</span><a id="line.771">    public String help(String command) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">771</span><a id="line.771">    public String help(String command) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">772</span><a id="line.772">        return send("help", command);</a>
 <span class="sourceLineNo">773</span><a id="line.773">    }</a>
 <span class="sourceLineNo">774</span><a id="line.774"></a>
@@ -787,10 +787,10 @@
 <span class="sourceLineNo">778</span><a id="line.778">     * Commands which are unavailable will not be listed, such as wallet RPCs, if wallet support is disabled.</a>
 <span class="sourceLineNo">779</span><a id="line.779">     *</a>
 <span class="sourceLineNo">780</span><a id="line.780">     * @return The list of commands</a>
-<span class="sourceLineNo">781</span><a id="line.781">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">781</span><a id="line.781">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">782</span><a id="line.782">     * @throws IOException network error</a>
 <span class="sourceLineNo">783</span><a id="line.783">     */</a>
-<span class="sourceLineNo">784</span><a id="line.784">    public List&lt;String&gt; getCommands() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">784</span><a id="line.784">    public List&lt;String&gt; getCommands() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">785</span><a id="line.785">        List&lt;String&gt; commands = new ArrayList&lt;String&gt;();</a>
 <span class="sourceLineNo">786</span><a id="line.786">        for (String entry : help().split("\n")) {</a>
 <span class="sourceLineNo">787</span><a id="line.787">            if (!entry.isEmpty() &amp;&amp; !entry.matches("== (.+) ==")) {</a>
@@ -810,10 +810,10 @@
 <span class="sourceLineNo">801</span><a id="line.801">     *</a>
 <span class="sourceLineNo">802</span><a id="line.802">     * @param command The name of the command to check</a>
 <span class="sourceLineNo">803</span><a id="line.803">     * @return True if the command exists</a>
-<span class="sourceLineNo">804</span><a id="line.804">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">804</span><a id="line.804">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">805</span><a id="line.805">     * @throws IOException network error</a>
 <span class="sourceLineNo">806</span><a id="line.806">     */</a>
-<span class="sourceLineNo">807</span><a id="line.807">    public Boolean commandExists(String command) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">807</span><a id="line.807">    public Boolean commandExists(String command) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">808</span><a id="line.808">        return !help(command).contains("help: unknown command");</a>
 <span class="sourceLineNo">809</span><a id="line.809">    }</a>
 <span class="sourceLineNo">810</span><a id="line.810"></a>
@@ -822,10 +822,10 @@
 <span class="sourceLineNo">813</span><a id="line.813">     *</a>
 <span class="sourceLineNo">814</span><a id="line.814">     * @param hash The block hash</a>
 <span class="sourceLineNo">815</span><a id="line.815">     * @since Bitcoin Core 0.10</a>
-<span class="sourceLineNo">816</span><a id="line.816">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">816</span><a id="line.816">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">817</span><a id="line.817">     * @throws IOException network error</a>
 <span class="sourceLineNo">818</span><a id="line.818">     */</a>
-<span class="sourceLineNo">819</span><a id="line.819">    public void invalidateBlock(Sha256Hash hash) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">819</span><a id="line.819">    public void invalidateBlock(Sha256Hash hash) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">820</span><a id="line.820">        send("invalidateblock", hash);</a>
 <span class="sourceLineNo">821</span><a id="line.821">    }</a>
 <span class="sourceLineNo">822</span><a id="line.822"></a>
@@ -836,10 +836,10 @@
 <span class="sourceLineNo">827</span><a id="line.827">     *</a>
 <span class="sourceLineNo">828</span><a id="line.828">     * @param hash The hash of the block to reconsider</a>
 <span class="sourceLineNo">829</span><a id="line.829">     * @since Bitcoin Core 0.10</a>
-<span class="sourceLineNo">830</span><a id="line.830">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">830</span><a id="line.830">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">831</span><a id="line.831">     * @throws IOException network error</a>
 <span class="sourceLineNo">832</span><a id="line.832">     */</a>
-<span class="sourceLineNo">833</span><a id="line.833">    public void reconsiderBlock(Sha256Hash hash) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">833</span><a id="line.833">    public void reconsiderBlock(Sha256Hash hash) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">834</span><a id="line.834">        send("reconsiderblock", hash);</a>
 <span class="sourceLineNo">835</span><a id="line.835">    }</a>
 <span class="sourceLineNo">836</span><a id="line.836"></a>
@@ -848,10 +848,10 @@
 <span class="sourceLineNo">839</span><a id="line.839">     *</a>
 <span class="sourceLineNo">840</span><a id="line.840">     * @return A list of chain tip information</a>
 <span class="sourceLineNo">841</span><a id="line.841">     * @since Bitcoin Core 0.10</a>
-<span class="sourceLineNo">842</span><a id="line.842">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">842</span><a id="line.842">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">843</span><a id="line.843">     * @throws IOException network error</a>
 <span class="sourceLineNo">844</span><a id="line.844">     */</a>
-<span class="sourceLineNo">845</span><a id="line.845">    public List&lt;ChainTip&gt; getChainTips() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">845</span><a id="line.845">    public List&lt;ChainTip&gt; getChainTips() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">846</span><a id="line.846">        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ChainTip.class);</a>
 <span class="sourceLineNo">847</span><a id="line.847">        return send("getchaintips",resultType);</a>
 <span class="sourceLineNo">848</span><a id="line.848">    }</a>
@@ -862,10 +862,10 @@
 <span class="sourceLineNo">853</span><a id="line.853">     *</a>
 <span class="sourceLineNo">854</span><a id="line.854">     * @param node node to add as a string in the form of &lt;IP address&gt;:&lt;port&gt;</a>
 <span class="sourceLineNo">855</span><a id="line.855">     * @param command `add`, `remove`, or `onetry`</a>
-<span class="sourceLineNo">856</span><a id="line.856">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">856</span><a id="line.856">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">857</span><a id="line.857">     * @throws IOException network error</a>
 <span class="sourceLineNo">858</span><a id="line.858">     */</a>
-<span class="sourceLineNo">859</span><a id="line.859">    public void addNode(String node, String command) throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">859</span><a id="line.859">    public void addNode(String node, String command) throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">860</span><a id="line.860">        send("addnode", node, command);</a>
 <span class="sourceLineNo">861</span><a id="line.861">    }</a>
 <span class="sourceLineNo">862</span><a id="line.862"></a>
@@ -875,10 +875,10 @@
 <span class="sourceLineNo">866</span><a id="line.866">     * @param details `true` to return detailed information</a>
 <span class="sourceLineNo">867</span><a id="line.867">     * @param node the node to provide information about</a>
 <span class="sourceLineNo">868</span><a id="line.868">     * @return A Jackson JsonNode object (until we define a POJO)</a>
-<span class="sourceLineNo">869</span><a id="line.869">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">869</span><a id="line.869">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">870</span><a id="line.870">     * @throws IOException network error</a>
 <span class="sourceLineNo">871</span><a id="line.871">     */</a>
-<span class="sourceLineNo">872</span><a id="line.872">    public JsonNode getAddedNodeInfo(boolean details, String node) throws JsonRPCStatusException, IOException  {</a>
+<span class="sourceLineNo">872</span><a id="line.872">    public JsonNode getAddedNodeInfo(boolean details, String node) throws JsonRpcStatusException, IOException  {</a>
 <span class="sourceLineNo">873</span><a id="line.873">        return send("getaddednodeinfo", JsonNode.class, details, node);</a>
 <span class="sourceLineNo">874</span><a id="line.874">    }</a>
 <span class="sourceLineNo">875</span><a id="line.875"></a>
@@ -887,10 +887,10 @@
 <span class="sourceLineNo">878</span><a id="line.878">     *</a>
 <span class="sourceLineNo">879</span><a id="line.879">     * @param details `true` to return detailed information</a>
 <span class="sourceLineNo">880</span><a id="line.880">     * @return A Jackson JsonNode object (until we define a POJO)</a>
-<span class="sourceLineNo">881</span><a id="line.881">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">881</span><a id="line.881">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">882</span><a id="line.882">     * @throws IOException network error</a>
 <span class="sourceLineNo">883</span><a id="line.883">     */</a>
-<span class="sourceLineNo">884</span><a id="line.884">    public JsonNode getAddedNodeInfo(boolean details) throws JsonRPCStatusException, IOException  {</a>
+<span class="sourceLineNo">884</span><a id="line.884">    public JsonNode getAddedNodeInfo(boolean details) throws JsonRpcStatusException, IOException  {</a>
 <span class="sourceLineNo">885</span><a id="line.885">        return getAddedNodeInfo(details, null);</a>
 <span class="sourceLineNo">886</span><a id="line.886">    }</a>
 <span class="sourceLineNo">887</span><a id="line.887"></a>
@@ -901,10 +901,10 @@
 <span class="sourceLineNo">892</span><a id="line.892">     * See https://github.com/OmniLayer/OmniJ/pull/72[Pull Request #72] on GitHub</a>
 <span class="sourceLineNo">893</span><a id="line.893">     *</a>
 <span class="sourceLineNo">894</span><a id="line.894">     * @return A list of transaction hashes of the removed transactions</a>
-<span class="sourceLineNo">895</span><a id="line.895">     * @throws JsonRPCStatusException JSON RPC status exception</a>
+<span class="sourceLineNo">895</span><a id="line.895">     * @throws JsonRpcStatusException JSON RPC status exception</a>
 <span class="sourceLineNo">896</span><a id="line.896">     * @throws IOException network error</a>
 <span class="sourceLineNo">897</span><a id="line.897">     */</a>
-<span class="sourceLineNo">898</span><a id="line.898">    public List&lt;Sha256Hash&gt; clearMemPool() throws JsonRPCStatusException, IOException {</a>
+<span class="sourceLineNo">898</span><a id="line.898">    public List&lt;Sha256Hash&gt; clearMemPool() throws JsonRpcStatusException, IOException {</a>
 <span class="sourceLineNo">899</span><a id="line.899">        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);</a>
 <span class="sourceLineNo">900</span><a id="line.900">        return send("clearmempool", resultType);</a>
 <span class="sourceLineNo">901</span><a id="line.901">    }</a>

@@ -10,7 +10,7 @@
 <pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.dsljs;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
 <span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import com.msgilligan.bitcoinj.rpc.RPCURI;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.msgilligan.bitcoinj.rpc.RpcURI;</a>
 <span class="sourceLineNo">005</span><a id="line.5">import com.msgilligan.bitcoinj.rpc.test.TestServers;</a>
 <span class="sourceLineNo">006</span><a id="line.6">import com.msgilligan.bitcoinj.test.RegTestEnvironment;</a>
 <span class="sourceLineNo">007</span><a id="line.7">import com.msgilligan.bitcoinj.test.RegTestFundingSource;</a>
@@ -40,7 +40,7 @@
 <span class="sourceLineNo">031</span><a id="line.31">        NashornScriptEngineFactory factory = new NashornScriptEngineFactory();</a>
 <span class="sourceLineNo">032</span><a id="line.32">        engine = factory.getScriptEngine("-scripting");</a>
 <span class="sourceLineNo">033</span><a id="line.33">        BitcoinExtendedClient client = new BitcoinExtendedClient(RegTestParams.get(),</a>
-<span class="sourceLineNo">034</span><a id="line.34">                RPCURI.getDefaultRegTestURI(),</a>
+<span class="sourceLineNo">034</span><a id="line.34">                RpcURI.getDefaultRegTestURI(),</a>
 <span class="sourceLineNo">035</span><a id="line.35">                TestServers.getInstance().getRpcTestUser(),</a>
 <span class="sourceLineNo">036</span><a id="line.36">                TestServers.getInstance().getRpcTestPassword());</a>
 <span class="sourceLineNo">037</span><a id="line.37">        RegTestEnvironment env = new RegTestEnvironment(client);</a>
