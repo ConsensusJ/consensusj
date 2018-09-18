@@ -10,7 +10,7 @@ Released: not yet
 === All Modules
 
 * Update to Groovy 2.5.2
-* Update to Spock 1.2-RC2
+* Update to Spock 1.2-RC3
 * Update to Jackson 2.9.6
 * Update to Spring Boot 2.0.4
 
