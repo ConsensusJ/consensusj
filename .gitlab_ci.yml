@@ -1,0 +1,21 @@
+image: ubuntu:xenial
+
+cache:
+  paths:
+  - .m2/
+  - .gradle/
+
+before_script:
+- apt-get --quiet update --yes
+- apt-get --quiet install --yes openjdk-8-jdk
+- apt-get --quiet install --yes graphviz
+
+- chmod +x ./gradlew
+
+build:
+  script:
+  - ./gradlew buildCI --scan
+  artifacts:
+    when: always
+    paths:
+    - build/site/
