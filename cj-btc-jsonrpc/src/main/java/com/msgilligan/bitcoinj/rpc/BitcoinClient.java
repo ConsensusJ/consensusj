@@ -714,9 +714,9 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     }
 
     /**
-     * The getnetworkinfo RPC returns information about the node’s connection to the network.
+     * The getnetworkinfo RPC returns information about the node's connection to the network.
      *
-     * @return information about the node’s connection to the network
+     * @return information about the node's connection to the network
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
