@@ -35,6 +35,18 @@ public class BitcoinExtendedClient extends BitcoinClient {
     public final Integer defaultMaxConf = 9999999;
     public final long stdTxFeeSatoshis = stdTxFee.getValue();
 
+    public Coin getStdTxFee() {
+        return stdTxFee;
+    }
+
+    public Coin getStdRelayTxFee() {
+        return stdRelayTxFee;
+    }
+
+    public Integer getDefaultMaxConf() {
+        return defaultMaxConf;
+    }
+
     @Deprecated
     public BitcoinExtendedClient(URI server, String rpcuser, String rpcpassword) {
         super(RegTestParams.get(), server, rpcuser, rpcpassword);
