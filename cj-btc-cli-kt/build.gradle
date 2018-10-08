@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.51'
+    ext.kotlin_version = '1.2.70'
     repositories {
         jcenter()
         google()
@@ -9,11 +9,15 @@ buildscript {
     }
 }
 
+plugins {
+    id 'java-library'
+}
+
 apply plugin: 'kotlin'
 
 dependencies {
-    compile project(':cj-btc-cli')
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    api project(':cj-btc-cli')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     runtime "org.slf4j:slf4j-simple:${slf4jVersion}"
 

@@ -1,11 +1,15 @@
+plugins {
+    id 'java-library'
+}
+
 def xChangeVersion = '4.3.8'
 
 dependencies {
-    compile 'org.javamoney:moneta-bp:1.2'
+    api 'org.javamoney:moneta-bp:1.2'
 
-    compile "org.knowm.xchange:xchange-core:${xChangeVersion}"
+    api "org.knowm.xchange:xchange-core:${xChangeVersion}"
 
-    testCompile "org.knowm.xchange:xchange-bitfinex:${xChangeVersion}"
-    testCompile "org.knowm.xchange:xchange-itbit:${xChangeVersion}"
-    testCompile "org.knowm.xchange:xchange-coinbase:${xChangeVersion}"
+    testImplementation "org.knowm.xchange:xchange-bitfinex:${xChangeVersion}"
+    testImplementation "org.knowm.xchange:xchange-itbit:${xChangeVersion}"
+    testImplementation "org.knowm.xchange:xchange-coinbase:${xChangeVersion}"
 }

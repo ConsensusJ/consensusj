@@ -1,17 +1,13 @@
-plugins {
-    id 'maven'
-}
-
 dependencies {
     compile project(':cj-btc-jsonrpc')
     compile project(':consensusj-jsonrpc-gvy')
 
-    compile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-    compile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    implementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    implementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
         transitive = false
     }
 
-    testCompile project(':bitcoinj-dsl')                // Use Groovy extensions in tests
+    testImplementation project(':bitcoinj-dsl')                // Use Groovy extensions in tests
 }
 
 test {

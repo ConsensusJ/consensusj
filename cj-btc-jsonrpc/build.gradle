@@ -1,18 +1,16 @@
 plugins {
-    id 'maven'
+    id 'java-library'
 }
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-    compile project(':consensusj-jsonrpc')
-    compile project(':bitcoinj-json')
-    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    api project(':consensusj-jsonrpc')
+    api project(':bitcoinj-json')
 
-    testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-    testCompile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
         transitive = false
     }
 

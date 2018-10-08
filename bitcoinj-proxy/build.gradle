@@ -16,7 +16,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 mainClassName = "org.consensusj.proxy.ProxyMain"
 
 dependencies {
-    compile project(':bitcoinj-rpcclient')
+    compile project(':cj-btc-jsonrpc')
 
     compile ratpack.dependency('guice')
     compile ratpack.dependency('retrofit2')

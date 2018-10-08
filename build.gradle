@@ -50,16 +50,16 @@ subprojects {
     targetCompatibility = 1.8
 
     dependencies {
-        compile "org.slf4j:slf4j-api:${slf4jVersion}"
+        implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 
-        testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-        testCompile("org.spockframework:spock-core:${spockVersion}") {
+        testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+        testImplementation("org.spockframework:spock-core:${spockVersion}") {
             exclude module: "groovy-all"
         }
 
-        testRuntime "net.bytebuddy:byte-buddy:1.8.21"                  // allows Spock to mock classes (in addition to interfaces)
-        testRuntime "org.objenesis:objenesis:2.6"                     // Allow Spock to mock classes with constructor arguments
-        testRuntime  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
+        testRuntimeOnly "net.bytebuddy:byte-buddy:1.8.21"                 // allows Spock to mock classes (in addition to interfaces)
+        testRuntimeOnly "org.objenesis:objenesis:2.6"                     // Allow Spock to mock classes with constructor arguments
+        testRuntimeOnly  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
     }
 
     // See http://blog.freeside.co/2014/06/24/gradle-and-groovys-invoke-dynamic-support/

@@ -1,8 +1,12 @@
+plugins {
+    id 'java-library'
+}
+
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-    compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
-    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    api "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
+    api "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 }

@@ -1,12 +1,12 @@
 plugins {
-    id 'maven'
+    id 'java-library'
 }
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-    compile project(':cj-btc-jsonrpc')
+    api project(':cj-btc-jsonrpc')
 
     testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
     testCompile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {

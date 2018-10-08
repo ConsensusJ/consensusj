@@ -1,12 +1,9 @@
-plugins {
-    id 'maven'
-}
-
 dependencies {
     compile project(':consensusj-jsonrpc')
+    compile "org.slf4j:slf4j-api:${slf4jVersion}"       // Loggable trait is part of API
     compile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
 
-    testCompile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
         transitive = false
     }
 }

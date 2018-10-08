@@ -1,9 +1,11 @@
-apply plugin: 'java'
+plugins {
+    id 'java-library'
+}
 
 dependencies {
-    compile project(':bitcoinj-rpcclient')
+    api project(':cj-btc-jsonrpc')
 
-    runtime "org.slf4j:slf4j-jdk14:${slf4jVersion}"       // Runtime implementation of slf4j
+    runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"       // Runtime implementation of slf4j
 }
 
 idea {

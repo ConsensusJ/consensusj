@@ -25,6 +25,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-websocket"
     compile "org.springframework.boot:spring-boot-starter-security"
+    compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
 
     // WebJars:
     compile 'org.webjars:angularjs:1.7.2'

@@ -1,9 +1,9 @@
 plugins {
-    id 'maven'
+    id 'java-library'
 }
 
 dependencies {
-    compile project(':consensusj-jsonrpc')
+    api project(':consensusj-jsonrpc')
 
     testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
     testCompile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {

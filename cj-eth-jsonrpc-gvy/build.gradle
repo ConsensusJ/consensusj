@@ -1,7 +1,3 @@
-plugins {
-    id 'maven'
-}
-
 dependencies {
     compile project(':consensusj-jsonrpc-gvy')
     compile project(':cj-eth-jsonrpc')
