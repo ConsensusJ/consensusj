@@ -18,8 +18,8 @@ dependencies {
 // Test Structure
 sourceSets {
     integrationTest {
-        compileClasspath = sourceSets.main.output + configurations.testRuntime
-        runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime
+        compileClasspath = sourceSets.main.output + configurations.testImplementation
+        runtimeClasspath = output + sourceSets.main.output + configurations.testImplementation
         groovy {
             srcDir 'src/integ/groovy'
         }
