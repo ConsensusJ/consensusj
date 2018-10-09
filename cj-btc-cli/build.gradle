@@ -7,9 +7,9 @@ plugins {
 }
 
 dependencies {
-    api project(':cj-btc-jsonrpc')
+    compile project(':cj-btc-jsonrpc')
 
-    api 'commons-cli:commons-cli:1.4'
+    compile 'commons-cli:commons-cli:1.4'
     
     runtimeOnly "org.slf4j:slf4j-simple:${slf4jVersion}"
 
