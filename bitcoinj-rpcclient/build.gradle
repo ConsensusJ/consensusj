@@ -2,24 +2,24 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-    testImplementation project(':cj-btc-jsonrpc-gvy')
-    testImplementation project(':bitcoinj-json')
-    testImplementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    testImplementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    testCompile project(':cj-btc-jsonrpc-gvy')
+    testCompile project(':bitcoinj-json')
+    testCompile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    testCompile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
-    testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-    testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    testCompile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
         transitive = false
     }
 
-    testImplementation project(':bitcoinj-dsl')                // Use Groovy extensions in tests
+    testCompile project(':bitcoinj-dsl')                // Use Groovy extensions in tests
 }
 
 // Test Structure
 sourceSets {
     integrationTest {
-        compileClasspath = sourceSets.main.output + configurations.testImplementation
-        runtimeClasspath = output + sourceSets.main.output + configurations.testImplementation
+        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime
         groovy {
             srcDir 'src/integ/groovy'
         }
