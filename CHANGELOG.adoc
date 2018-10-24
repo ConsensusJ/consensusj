@@ -3,17 +3,28 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.3.1-SNAPSHOT
+== v0.3.1
 
-Released: not yet
+Released: 2018.10.24
+
+=== cj-btc-jsonrpc
+
+* Add getters for `stdTxFee`, `stdRelayTxFee`, `defaultMaxConf` to `BitcoinExtendedClient`
+
+=== cj-btc-jsonrpc-gvy
+
+* Remove `stdTxFee`, `stdRelayTxFee`, `defaultMaxConf` from `BTCTestSupport` trait (now uses the getters in `BitcoinExtendedClient` via `BitcoinClientDelegate`)
+
 
 === All Modules
 
-* Update to Groovy 2.5.2
+* Use Gradle java-library plugin to build Java libraries (but not yet for Groovy libraries)
+* Update to Groovy 2.5.3
 * Update to Gradle 4.10.2
 * Update to Spock 1.2
 * Update to Jackson 2.9.6
 * Update to Spring Boot 2.0.4
+* Added GitLab CI build support
 
 == v0.3.0
 

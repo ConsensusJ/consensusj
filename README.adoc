@@ -1,8 +1,8 @@
 = ConsensusJ (formerly bitcoinj-addons)
 Sean Gilligan <https://github.com/msgilligan>
-v0.3.0
+v0.3.1
 :description: ConsensusJ README document.
-:consensusj-version: 0.3.0
+:consensusj-version: 0.3.1
 :bitcoinj-version: 0.14.7
 :bitcoinj-apidoc: https://bitcoinj.github.io/javadoc/{bitcoinj-version}/
 :cj-apidoc: https://consensusj.github.io/consensusj/apidoc
@@ -50,14 +50,18 @@ We have published {cj-apidoc}/index.html[preliminary JavaDoc] to our Github page
 
 === Continuous Integration 
 
-ConsensusJ is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] and is tested by the https://ci.omni.foundation/[Omni Foundation Continuous Integration Server] (self-signed SSL certificate). You can check the https://ci.omni.foundation/job/consensusj/[consensusj job] for build status.
+ConsensusJ is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] and is tested by the https://ci.omni.foundation/[Omni Foundation Continuous Integration Server]. There are also Travis CI and GitLab CI builds.
 
 
 // Jenkins Widget doesn't display correctly because of ci.omni.foundation self-signed SSL
 // image:https://ci.omni.foundation/buildStatus/icon?job=consensusj[link="https://ci.omni.foundation/job/consensusj/"]
 
-There is also a Travis CI build:
+* Omni Foundation Jenkins build: https://ci.omni.foundation/job/consensusj/[consensusj job] (note: self-signed SSL certificate)
+
+* Travis CI build:
 image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.org/ConsensusJ/consensusj"]
+
+* GitLab CI build: image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
 
 
 === Requirements
