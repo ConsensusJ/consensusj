@@ -3,6 +3,10 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
+== v0.3.2-SNAPSHOT
+
+In progress.
+
 == v0.3.1
 
 Released: 2018.10.24
