@@ -5,13 +5,17 @@ import com.googlecode.jsonrpc4j.spring.JsonServiceExporter;
 import com.msgilligan.bitcoinj.json.conversion.RpcServerModule;
 import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;
 import com.msgilligan.bitcoinj.spring.service.PeerGroupService;
+import com.msgilligan.bitcoinj.spring.service.WalletAppKitService;
+import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.net.discovery.DnsDiscovery;
 import org.bitcoinj.net.discovery.PeerDiscovery;
+import org.bitcoinj.kits.WalletAppKit;
 import org.libdohj.params.NamecoinMainNetParams;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 /**
@@ -19,6 +23,9 @@ import java.io.FileNotFoundException;
  */
 @Configuration
 public class NamecoinConfig {
+    private Context context;
+    private WalletAppKit kit;
+
     @Bean
     public NetworkParameters networkParameters() {
         // TODO: We may also want to make this set from a configuration string
@@ -36,6 +43,28 @@ public class NamecoinConfig {
     }
 
     @Bean
+    public Context getContext(NetworkParameters params) {
+        if (context == null) {
+            context = new Context(params);
+        }
+        return context;
+    }
+
+    @Bean
+    public WalletAppKit getKit(Context context) throws Exception {
+        if (kit == null) {
+
+            // TODO: make File(".") and filePrefix configurable
+            File directory = new File(".");
+            String filePrefix = "NamecoinJDaemon";
+
+            kit = new WalletAppKit(context, directory, filePrefix);
+        }
+
+        return kit;
+     }
+
+    @Bean
     public Module bitcoinJMapper() {
         return new RpcServerModule();
     }
@@ -45,10 +74,15 @@ public class NamecoinConfig {
         return new PeerGroupService(params, peerDiscovery);
     }
 
+    @Bean
+    public WalletAppKitService walletAppKitService(NetworkParameters params, Context context, WalletAppKit kit) {
+        return new WalletAppKitService(params, context, kit);
+    }
+
     @Bean(name="/")
-    public JsonServiceExporter bitcoinServiceExporter(PeerGroupService peerGroupService) {
+    public JsonServiceExporter bitcoinServiceExporter(WalletAppKitService walletAppKitService) {
         JsonServiceExporter exporter = new JsonServiceExporter();
-        exporter.setService(peerGroupService);
+        exporter.setService(walletAppKitService);
         exporter.setServiceInterface(BitcoinJsonRpc.class);
         exporter.setBackwardsComaptible(true);
         return exporter;
