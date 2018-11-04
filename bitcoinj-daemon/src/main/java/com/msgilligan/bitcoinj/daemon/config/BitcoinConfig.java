@@ -23,9 +23,6 @@ import java.io.FileNotFoundException;
  */
 @Configuration
 public class BitcoinConfig {
-    private Context context;
-    private WalletAppKit kit;
-
     @Bean
     public NetworkParameters networkParameters() {
         return MainNetParams.get();
@@ -41,24 +38,16 @@ public class BitcoinConfig {
 
     @Bean
     public Context getContext(NetworkParameters params) {
-        if (context == null) {
-            context = new Context(params);
-        }
-        return context;
+        return new Context(params);
     }
 
     @Bean
     public WalletAppKit getKit(Context context) throws Exception {
-        if (kit == null) {
+        // TODO: make File(".") and filePrefix configurable
+        File directory = new File(".");
+        String filePrefix = "BitcoinJDaemon";
 
-            // TODO: make File(".") and filePrefix configurable
-            File directory = new File(".");
-            String filePrefix = "BitcoinJDaemon";
-
-            kit = new WalletAppKit(context, directory, filePrefix);
-        }
-
-        return kit;
+        return new WalletAppKit(context, directory, filePrefix);
     }
 
     @Bean

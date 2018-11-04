@@ -23,9 +23,6 @@ import java.io.FileNotFoundException;
  */
 @Configuration
 public class NamecoinConfig {
-    private Context context;
-    private WalletAppKit kit;
-
     @Bean
     public NetworkParameters networkParameters() {
         // TODO: We may also want to make this set from a configuration string
@@ -44,24 +41,16 @@ public class NamecoinConfig {
 
     @Bean
     public Context getContext(NetworkParameters params) {
-        if (context == null) {
-            context = new Context(params);
-        }
-        return context;
+        return new Context(params);
     }
 
     @Bean
     public WalletAppKit getKit(Context context) throws Exception {
-        if (kit == null) {
+        // TODO: make File(".") and filePrefix configurable
+        File directory = new File(".");
+        String filePrefix = "NamecoinJDaemon";
 
-            // TODO: make File(".") and filePrefix configurable
-            File directory = new File(".");
-            String filePrefix = "NamecoinJDaemon";
-
-            kit = new WalletAppKit(context, directory, filePrefix);
-        }
-
-        return kit;
+        return new WalletAppKit(context, directory, filePrefix);
      }
 
     @Bean
