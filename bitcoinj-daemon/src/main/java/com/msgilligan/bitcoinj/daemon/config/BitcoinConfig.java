@@ -4,7 +4,10 @@ import com.googlecode.jsonrpc4j.spring.JsonServiceExporter;
 import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;
 import com.msgilligan.bitcoinj.json.conversion.RpcServerModule;
 import com.msgilligan.bitcoinj.spring.service.PeerGroupService;
+import com.msgilligan.bitcoinj.spring.service.WalletAppKitService;
+import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.net.discovery.DnsDiscovery;
 import org.bitcoinj.net.discovery.PeerDiscovery;
 import org.bitcoinj.params.MainNetParams;
@@ -12,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.Module;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 /**
@@ -33,6 +37,20 @@ public class BitcoinConfig {
     }
 
     @Bean
+    public Context getContext(NetworkParameters params) {
+        return new Context(params);
+    }
+
+    @Bean
+    public WalletAppKit getKit(Context context) throws Exception {
+        // TODO: make File(".") and filePrefix configurable
+        File directory = new File(".");
+        String filePrefix = "BitcoinJDaemon";
+
+        return new WalletAppKit(context, directory, filePrefix);
+    }
+
+    @Bean
     public Module bitcoinJMapper() {
         return new RpcServerModule();
     }
@@ -42,10 +60,15 @@ public class BitcoinConfig {
         return new PeerGroupService(params, peerDiscovery);
     }
 
+    @Bean
+    public WalletAppKitService walletAppKitService(NetworkParameters params, Context context, WalletAppKit kit) {
+        return new WalletAppKitService(params, context, kit);
+    }
+
     @Bean(name="/")
-    public JsonServiceExporter bitcoinServiceExporter(PeerGroupService peerGroupService) {
+    public JsonServiceExporter bitcoinServiceExporter(WalletAppKitService walletAppKitService) {
         JsonServiceExporter exporter = new JsonServiceExporter();
-        exporter.setService(peerGroupService);
+        exporter.setService(walletAppKitService);
         exporter.setServiceInterface(BitcoinJsonRpc.class);
         exporter.setBackwardsComaptible(true);
         return exporter;
