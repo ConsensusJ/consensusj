@@ -70,8 +70,8 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);
 
     private static final int SECOND_IN_MSEC = 1000;
-    private static final int RETRY_SECONDS = 1;
-    private static final int MESSAGE_SECONDS = 10;
+    private static final int RETRY_SECONDS = 5;
+    private static final int MESSAGE_SECONDS = 30;
 
     private int serverVersion = 0;    // 0 means unknown serverVersion
 
