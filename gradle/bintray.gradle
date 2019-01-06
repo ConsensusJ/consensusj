@@ -28,7 +28,7 @@ allprojects {
 //                }
             }
 
-        }
+        }                                                    
     }
 
     bintray {
@@ -47,7 +47,7 @@ allprojects {
             labels = ['bitcoin', 'bitcoinj', 'json-rpc', 'server', 'peergroup', 'stomp']
             version {
                 name = consensusjVersion
-                desc = 'Dangerously preliminary release.'
+                desc = 'Preliminary release.'
                 released  = new Date()
                 vcsTag = 'none'
             }
