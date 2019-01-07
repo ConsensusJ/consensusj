@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-def xChangeVersion = '4.3.8'
+def xChangeVersion = '4.3.12'
 
 dependencies {
     api 'org.javamoney:moneta-bp:1.2'
@@ -12,4 +12,5 @@ dependencies {
     testImplementation "org.knowm.xchange:xchange-bitfinex:${xChangeVersion}"
     testImplementation "org.knowm.xchange:xchange-itbit:${xChangeVersion}"
     testImplementation "org.knowm.xchange:xchange-coinbase:${xChangeVersion}"
+    testImplementation "org.knowm.xchange:xchange-coinbasepro:${xChangeVersion}"
 }

@@ -7,6 +7,13 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 In progress.
 
+=== bitcoinj-money
+
+* Upgrade to XChange 4.3.12
+* Add integration test for CoinbasePro Exchange
+* Deprecate Bitfinex, Coinbase, and ItBit exchange providers in favor of `DynamicXChangeRateProvider`
+* Add convenience constructors to `DynamicXChangeRateProvider` and `BaseXChangeExchangeRateProvider`
+
 === bitcoinj-server
 
 * Add `WalletAppKitService` (see https://github.com/ConsensusJ/consensusj/issues/42[Issue #42])

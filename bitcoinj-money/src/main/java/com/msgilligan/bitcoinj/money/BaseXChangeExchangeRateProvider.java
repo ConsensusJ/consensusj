@@ -105,6 +105,10 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
         this(exchangeClass, pairsConvert(pairs));
     }
 
+    protected BaseXChangeExchangeRateProvider(String exchangeClassName, ScheduledExecutorService scheduledExecutorService, String[] pairs) {
+        this(exchangeClassName, scheduledExecutorService, pairsConvert(pairs));
+    }
+
     protected static CurrencyUnitPair[] pairsConvert(String[] strings) {
         CurrencyUnitPair[] units = new CurrencyUnitPair[strings.length];
         for (int i = 0 ; i < strings.length ; i++) {

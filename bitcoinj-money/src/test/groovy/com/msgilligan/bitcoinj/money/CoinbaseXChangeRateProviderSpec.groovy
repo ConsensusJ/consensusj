@@ -6,6 +6,6 @@ import spock.lang.Ignore
 class CoinbaseXChangeRateProviderSpec extends AbstractXChangeRateProviderSpec {
     @Override
     BaseXChangeExchangeRateProvider createProvider() {
-        return new CoinbaseXChangeRateProvider()
+        return new DynamicXChangeRateProvider("org.knowm.xchange.coinbase.CoinbaseExchange", "BTC/USD")
     }
 }

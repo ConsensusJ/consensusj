@@ -3,8 +3,10 @@ package com.msgilligan.bitcoinj.money;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- *  Bitfinex ExchangeRateProvider using XChange library
+ * Bitfinex ExchangeRateProvider using XChange library
+ * @deprecated Use DynamicXChangeRateProvider
  */
+@Deprecated
 public class BitfinexXChangeRateProvider extends BaseXChangeExchangeRateProvider {
     static private final String[] pairs = {"BTC/USD"};
     static private final String xchangeClassName = "org.knowm.xchange.bitfinex.v1.BitfinexExchange";

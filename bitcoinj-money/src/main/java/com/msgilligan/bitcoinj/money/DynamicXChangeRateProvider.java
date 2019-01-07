@@ -10,8 +10,16 @@ public class DynamicXChangeRateProvider extends BaseXChangeExchangeRateProvider 
         super(exchangeClassName, scheduledExecutorService, pairs);
     }
 
+    public DynamicXChangeRateProvider(String exchangeClassName, ScheduledExecutorService scheduledExecutorService, String... pairs) {
+        super(exchangeClassName, scheduledExecutorService, pairs);
+    }
+
     public DynamicXChangeRateProvider(String exchangeClassName, CurrencyUnitPair... pairs) {
         this(exchangeClassName, null, pairs);
     }
 
+
+    public DynamicXChangeRateProvider(String exchangeClassName, String... pairs) {
+        this(exchangeClassName, null, pairs);
+    }
 }

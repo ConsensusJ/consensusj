@@ -5,8 +5,10 @@ import org.knowm.xchange.currency.CurrencyPair;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- *  Bitfinex ExchangeRateProvider using XChange library
+ * Bitfinex ExchangeRateProvider using XChange library
+ * @deprecated Use DynamicXChangeRateProvider
  */
+@Deprecated
 public class ItBitXChangeRateProvider extends BaseXChangeExchangeRateProvider {
     static private final String[] pairs = {"BTC/USD", "BTC/EUR"};
     static private final String xchangeClassName = "org.knowm.xchange.itbit.v1.ItBitExchange";
