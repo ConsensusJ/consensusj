@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(basePackages="com.msgilligan.bitcoinj.spring")
+@ComponentScan({"com.msgilligan.bitcoinj.peerserver.config","com.msgilligan.bitcoinj.peerserver.controller"})
 public class Application {
 
     public static void main(String[] args) {
