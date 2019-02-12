@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.spring.controller;
+package com.msgilligan.bitcoinj.peerserver.controller;
 
 /**
  * REST and WebSocket (STOMP) Spring MVC Peer Controller

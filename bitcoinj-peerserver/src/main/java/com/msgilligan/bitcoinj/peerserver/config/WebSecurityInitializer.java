@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.spring.config;
+package com.msgilligan.bitcoinj.peerserver.config;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

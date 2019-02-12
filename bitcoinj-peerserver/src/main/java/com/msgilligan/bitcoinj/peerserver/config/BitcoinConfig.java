@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.spring.config;
+package com.msgilligan.bitcoinj.peerserver.config;
 
 import com.googlecode.jsonrpc4j.spring.JsonServiceExporter;
 import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;
@@ -11,6 +11,7 @@ import org.bitcoinj.params.MainNetParams;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.Module;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 import java.io.FileNotFoundException;
 
@@ -36,10 +37,10 @@ public class BitcoinConfig {
         return new RpcServerModule();
     }
 
-//    @Bean
-//    public AutoJsonRpcServiceExporter jsonRpcServiceExporter() {
-//        return new AutoJsonRpcServiceExporter();
-//    }
+    @Bean
+    public PeerService peerGroupService(NetworkParameters params, PeerDiscovery peerDiscovery, SimpMessageSendingOperations simpMessageSendingOperations) {
+        return new PeerService(params, peerDiscovery, simpMessageSendingOperations);
+    }
 
 
     @Bean(name="/bitcoinrpc")

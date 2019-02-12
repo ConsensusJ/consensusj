@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.spring.config;
+package com.msgilligan.bitcoinj.peerserver.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Configuration
 @EnableWebSocketMessageBroker
-@ComponentScan(basePackages="com.msgilligan.peerlist")
+@ComponentScan(basePackages="com.msgilligan.bitcoinj.peerserver")
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Autowired ObjectMapper objectMapper;   // Seems to get injected with objectMapper with our added Module
 
