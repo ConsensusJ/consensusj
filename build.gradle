@@ -36,6 +36,7 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'https://jitpack.io' }
+        mavenLocal()
     }
 
 //    tasks.withType(FindBugs) {
