@@ -6,7 +6,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-    api "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
+    api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
     api "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 }
