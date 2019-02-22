@@ -68,7 +68,7 @@ public class PeerService extends PeerGroupService {
     private class MyPeerEventListener implements OnTransactionBroadcastListener {
         @Override
         public void onTransaction(Peer peer, Transaction tx) {
-            System.out.println("Got transaction: " + tx.getHashAsString());
+            System.out.println("Got transaction: " + tx.getTxId());
             onPGTransaction(peer, tx);
         }
     }

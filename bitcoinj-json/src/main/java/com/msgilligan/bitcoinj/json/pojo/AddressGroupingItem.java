@@ -28,7 +28,7 @@ public class AddressGroupingItem {
         //TODO: Try to avoid using Double
         Double balanceDouble = (Double) addressItem.get(1);
         account = (addressItem.size() > 2) ? (String) addressItem.get(2) : null;
-        address = Address.fromBase58(netParams, addressStr);
+        address = Address.fromString(netParams, addressStr);
         balance = Coin.valueOf(((Double)(balanceDouble * 100000000.0)).longValue());
 
     }

@@ -20,6 +20,6 @@ public class AddressKeyDeserializer extends KeyDeserializer {
 
     @Override
     public Object deserializeKey(String key, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        return Address.fromBase58(netParams, key);
+        return Address.fromString(netParams, key);
     }
 }

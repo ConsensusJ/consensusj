@@ -12,7 +12,8 @@ public class NMCMainNetParams extends MainNetParams {
         super();
         addressHeader = 52;
         p2shHeader = 5;  // What should this be for Namecoin??
-        acceptableAddressCodes = new int[] { addressHeader, p2shHeader };
+        // TODO: Figure out how to handle this properly based on bitcoinj 0.15+
+        //acceptableAddressCodes = new int[] { addressHeader, p2shHeader };
         dumpedPrivateKeyHeader = 128;
     }
 

@@ -2,6 +2,7 @@ package com.msgilligan.bitcoinj.spock
 
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.ECKey
+import org.bitcoinj.core.LegacyAddress
 import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.wallet.Wallet
 import org.bitcoinj.params.MainNetParams
@@ -14,7 +15,7 @@ import spock.lang.Specification
  */
 class WalletSpec  extends Specification {
     static final mainNetParams = MainNetParams.get()
-    static final Address roAddress = new Address(mainNetParams, "1KKKK6N21XKo48zWKuQKXdvSsCf95ibHFa")
+    static final Address roAddress = Address.fromString(mainNetParams, "1KKKK6N21XKo48zWKuQKXdvSsCf95ibHFa")
 
     @Shared
     NetworkParameters params

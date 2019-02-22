@@ -3,6 +3,7 @@ package com.msgilligan.bitcoinj.rpc;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
+import org.bitcoinj.script.Script;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
@@ -203,7 +204,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
     }
 
     public Transaction createSignedTransaction(ECKey fromKey, List<TransactionOutput> outputs) throws JsonRpcStatusException, IOException {
-        Address fromAddress = fromKey.toAddress(getNetParams());
+        Address fromAddress = Address.fromKey(getNetParams(), fromKey, Script.ScriptType.P2PKH);
         Transaction tx = new Transaction(getNetParams());
 
         List<TransactionOutput> unspentOutputs = listUnspentJ(fromAddress);

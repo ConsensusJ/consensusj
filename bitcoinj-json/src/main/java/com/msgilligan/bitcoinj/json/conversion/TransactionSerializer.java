@@ -18,7 +18,7 @@ public class TransactionSerializer extends JsonSerializer<Transaction> {
         // See RawTransactionInfo POJO for a more complete JSON representation of a Transaction that is used by JSON-RPC
         jgen.writeNumberField("confirmations", value.getConfidence().getDepthInBlocks());
         jgen.writeNumberField("version", value.getVersion());
-        jgen.writeStringField("hash", value.getHashAsString());
+        jgen.writeStringField("hash", value.getTxId().toString());
         jgen.writeEndObject();
     }
 }
