@@ -1,4 +1,4 @@
 dependencies {
-    testCompile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
+    testCompile "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
     testCompile project(':bitcoinj-dsl')                // Use Groovy extensions in tests
 }

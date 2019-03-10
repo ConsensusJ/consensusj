@@ -65,7 +65,7 @@ public class RegTestFundingSource implements FundingSource {
             int blockIndex = client.getBlockCount() - minCoinAge;
             Block block = client.getBlock(blockIndex);
             List<Transaction> blockTxs = block.getTransactions();
-            Sha256Hash coinbaseTx = blockTxs.get(0).getHash();
+            Sha256Hash coinbaseTx = blockTxs.get(0).getTxId();
             TxOutInfo txout = client.getTxOut(coinbaseTx, 0);
 
             // txout is empty, if output was already spent

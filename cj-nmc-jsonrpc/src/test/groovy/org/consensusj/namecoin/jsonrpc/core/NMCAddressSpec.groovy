@@ -3,8 +3,9 @@ package org.consensusj.namecoin.jsonrpc.core
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.DumpedPrivateKey
 import org.bitcoinj.core.ECKey
+import org.bitcoinj.core.LegacyAddress
 import org.bitcoinj.params.MainNetParams
-
+import org.bitcoinj.script.Script
 import spock.lang.Specification
 
 /**
@@ -23,7 +24,7 @@ class NMCAddressSpec extends Specification {
         def key = new ECKey()
 
         when: "We generate an NMC address from it"
-        def nmcAddress = key.toAddress(nmcNetParams)
+        def nmcAddress = Address.fromKey(nmcNetParams, key, Script.ScriptType.P2PKH)
         def firstChar = nmcAddress.toString().charAt(0)
 
         then: "It begins with 'M' or 'N'"
@@ -35,7 +36,7 @@ class NMCAddressSpec extends Specification {
         def key = new ECKey()
 
         when: "We construct an NMC address from it"
-        def nmcAddress = new Address(nmcNetParams, key.pubKeyHash)
+        def nmcAddress = new LegacyAddress(nmcNetParams, key.pubKeyHash)
         def firstChar = nmcAddress.toString().charAt(0)
 
         then: "It begins with an 'M' or 'N'"
@@ -44,10 +45,10 @@ class NMCAddressSpec extends Specification {
 
     def "We can create a BTC address from an NMC address"() {
         given: "An NMC address"
-        def nmcAddress = new Address(nmcNetParams, new ECKey().pubKeyHash)
+        def nmcAddress = new LegacyAddress(nmcNetParams, new ECKey().pubKeyHash)
 
         when: "We generate a BTC address from it"
-        def btcAddress = new Address(mainNetParams, nmcAddress.hash160)
+        def btcAddress = new LegacyAddress(mainNetParams, nmcAddress.hash160)
 
         then: "It begins with a '1'"
         btcAddress.toString().charAt(0) == '1' as char
@@ -58,7 +59,7 @@ class NMCAddressSpec extends Specification {
         def key = ECKey.fromPrivate(NotSoPrivatePrivateKey)
 
         when: "We generate an NMC address from it"
-        def nmcAddress = key.toAddress(nmcNetParams)
+        def nmcAddress = Address.fromKey(nmcNetParams, key, Script.ScriptType.P2PKH)
         def firstChar = nmcAddress.toString().charAt(0)
 
         then: "It begins with an 'N' and looks correct"
@@ -68,10 +69,10 @@ class NMCAddressSpec extends Specification {
 
     def "We can create a BTC address from a known NMC address"() {
         given: "An NMC address"
-        def nmcAddress = new Address(nmcNetParams, ECKey.fromPrivate(NotSoPrivatePrivateKey).pubKeyHash)
+        def nmcAddress = new LegacyAddress(nmcNetParams, ECKey.fromPrivate(NotSoPrivatePrivateKey).pubKeyHash)
 
         when: "We generate a BTC address from it"
-        def btcAddress = new Address(mainNetParams, nmcAddress.hash160)
+        def btcAddress = new LegacyAddress(mainNetParams, nmcAddress.hash160)
 
         then: "It begins with a '1'"
         btcAddress.toString().charAt(0) == '1' as char
@@ -85,10 +86,10 @@ class NMCAddressSpec extends Specification {
         def nmcPrivKeyString = "5JAHPeEsCHHm9xB51LvJW11bbGdu7yVWeaAtLJ8nac3odmqmyTx"
 
         when:
-        def nmcPrivateKey = new DumpedPrivateKey(nmcNetParams, nmcPrivKeyString)
+        def nmcPrivateKey = DumpedPrivateKey.fromBase58(nmcNetParams, nmcPrivKeyString)
         def key = nmcPrivateKey.getKey()
-        def nmcAddress = key.toAddress(nmcNetParams)
-        def btcAddress = key.toAddress(mainNetParams)
+        def nmcAddress = Address.fromKey(nmcNetParams, key, Script.ScriptType.P2PKH)
+        def btcAddress = Address.fromKey(mainNetParams, key, Script.ScriptType.P2PKH)
         def nmcExportKey = key.getPrivateKeyEncoded(nmcNetParams)
         def btcExportKey = key.getPrivateKeyEncoded(mainNetParams)
 

@@ -45,12 +45,12 @@ public class NamecoinConfig {
     }
 
     @Bean
-    public WalletAppKit getKit(Context context) throws Exception {
+    public WalletAppKit getKit(NetworkParameters params) throws Exception {
         // TODO: make File(".") and filePrefix configurable
         File directory = new File(".");
         String filePrefix = "NamecoinJDaemon";
 
-        return new WalletAppKit(context, directory, filePrefix);
+        return new WalletAppKit(params, directory, filePrefix);
      }
 
     @Bean

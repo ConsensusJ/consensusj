@@ -29,7 +29,7 @@ public class AddressDeserializer extends JsonDeserializer<Address> {
         switch (token) {
             case VALUE_STRING:
                 try {
-                    return Address.fromBase58(netParams, p.getValueAsString());
+                    return Address.fromString(netParams, p.getValueAsString());
                 } catch (AddressFormatException e) {
                     throw new InvalidFormatException(p, "Invalid Address", p.getValueAsString(), Address.class);
                 }

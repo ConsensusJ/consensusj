@@ -1,10 +1,12 @@
 package com.msgilligan.bitcoinj.spock
 
+import org.bitcoinj.core.Address
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.params.MainNetParams
 import org.bitcoinj.params.RegTestParams
 import org.bitcoinj.params.TestNet3Params
-import org.spongycastle.util.encoders.Hex
+import org.bitcoinj.script.Script
+import org.bouncycastle.util.encoders.Hex
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -32,9 +34,10 @@ class ECKeySpec extends Specification {
         ECKey.isPubKeyCanonical(key.pubKey) // Length is correct for compressed/uncompressed
         key.pubKeyHash.length == 20         // Is available in RIPEMD160 form
         // Can be converted to addresses (which have a different header for each network
-        key.toAddress(mainNetParams).version == mainNetParams.addressHeader
-        key.toAddress(testNetParams).version == testNetParams.addressHeader
-        key.toAddress(regTestParams).version == regTestParams.addressHeader
+        // This test is no longer directly testing the header becuase of changes in bitcoinj 0.15
+        Address.fromKey(mainNetParams, key, Script.ScriptType.P2PKH).parameters == mainNetParams
+        Address.fromKey(testNetParams, key, Script.ScriptType.P2PKH).parameters == testNetParams
+        Address.fromKey(regTestParams, key, Script.ScriptType.P2PKH).parameters == regTestParams
         key.creationTimeSeconds > 0          // since we created it, we know the creation time
     }
 

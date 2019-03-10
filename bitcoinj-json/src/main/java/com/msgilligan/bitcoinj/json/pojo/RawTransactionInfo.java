@@ -60,7 +60,7 @@ public class RawTransactionInfo {
      */
     public RawTransactionInfo(Transaction transaction) {
         this.hex = TransactionHexSerializer.bytesToHexString(transaction.bitcoinSerialize());
-        this.txid = transaction.getHash();
+        this.txid = transaction.getTxId();
         this.version = transaction.getVersion();
         this.locktime = transaction.getLockTime();
         this.blockhash = null;  // For now
