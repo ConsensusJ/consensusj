@@ -1,6 +1,5 @@
-package org.consensusj.bitcoin.cli;
+package org.consensusj.jsonrpc.cli;
 
-import org.bitcoinj.core.Sha256Hash;
 import org.consensusj.jsonrpc.JsonRpcException;
 
 import java.io.IOException;
@@ -8,13 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An attempt at cloning the bitcoin-cli tool, but using Java and bitcoinj
  *
  */
-public class BitcoinCLITool extends BitcoinCliCommand {
-    public final static String commandName = "cj-bitcoin-cli";
+public class JsonRpcTool extends CliCommand {
+    public final static String commandName = "jsonrpc";
 
-    public BitcoinCLITool(String[] args) {
+    public JsonRpcTool(String[] args) {
         super(commandName, new CliOptions(), args);
     }
 
@@ -28,11 +26,12 @@ public class BitcoinCLITool extends BitcoinCliCommand {
      * @param args options, JSON-RPC method, JSON-RPC parameters
      */
     public static void main(String[] args) {
-        BitcoinCLITool command = new BitcoinCLITool(args);
+        JsonRpcTool command = new JsonRpcTool(args);
         Integer status = command.run();
         System.exit(status);
     }
 
+    @Override
     public Integer runImpl() throws IOException {
         List<String> args = line.getArgList();
         if (args.size() == 0) {
@@ -68,6 +67,7 @@ public class BitcoinCLITool extends BitcoinCliCommand {
     protected List<Object> convertParameters(String method, List<String> params) {
         List<Object> typedParams = new ArrayList<>();
         switch (method) {
+            // NOTE: These are sample hard-coded methos from the Bitcoin CLI
             case "generate":
             case "setgenerate":
                 typedParams.add(Integer.valueOf(params.get(0)));
@@ -76,7 +76,7 @@ public class BitcoinCLITool extends BitcoinCliCommand {
             case "getblockhash":
                 typedParams.add(Integer.valueOf(params.get(0)));
                 break;
-                
+
             default:
                 // Default (for now) is to leave them all as strings
                 for (String string : params) {
@@ -86,4 +86,5 @@ public class BitcoinCLITool extends BitcoinCliCommand {
         }
         return typedParams;
     }
+
 }

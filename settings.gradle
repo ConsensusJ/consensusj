@@ -1,6 +1,7 @@
 include 'consensusj-decentralized-id',                                // W3C Decentralized ID
         'consensusj-jsonrpc',                                        // JSONRPC Java client
         'consensusj-jsonrpc-gvy',                                    // JSONRPC Groovy client
+        'consensusj-jsonrpc-cli',                                    // JSONRPC CLI library and tool
         'cj-btc-jsonrpc',
         'cj-btc-jsonrpc-gvy',
         'cj-eth-jsonrpc',
@@ -9,12 +10,11 @@ include 'consensusj-decentralized-id',                                // W3C Dec
         'cj-nmc-jsonrpc-gvy',
         'bitcoinj-json',                                             // JSON <-> Java Object mapping
         'cj-btc-cli',
-        'cj-btc-cli-kt',
-        'cj-btc-daemon-mn',                                         // Prototype Micronaut version of daemon
-        'bitcoinj-rpcclient',                        // Client
+        'cj-btc-daemon-mn',                                          // Prototype Micronaut version of daemon
+        'bitcoinj-rpcclient',                                        // Client
         'bitcoinj-server', 'bitcoinj-daemon', 'bitcoinj-peerserver', // Server lib + 2 server apps
         'bitcoinj-dsl', 'bitcoinj-spock',                            // DSL/Testing
-        'bitcoinj-money',                                             // JavaMoney (JSR-354) support
+        'bitcoinj-money',                                            // JavaMoney (JSR-354) support
         'bitcoinj-dsljs',
         'bitcoinj-proxy',
         'cj-nmc-daemon'

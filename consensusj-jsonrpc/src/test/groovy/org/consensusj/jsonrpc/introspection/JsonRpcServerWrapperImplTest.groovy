@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc.introspection
 
+import groovy.transform.CompileStatic
 import spock.lang.Specification
 
 /**
@@ -8,19 +9,13 @@ import spock.lang.Specification
 class JsonRpcServerWrapperImplTest extends Specification {
     def "callMethod works"() {
         given:
-        def wrapped = new JsonRpcServerWrapperImpl(new TestServiceObject())
+        def unwrapped = new TrivialJsonRpcService()
+        def wrapped = new JsonRpcServerWrapperImpl(unwrapped)
 
         when:
-        def result = wrapped.callMethod("one", []).get()
+        def result = wrapped.callMethod("getblockcount", []).get()
 
         then:
-        result == 1
+        result == 99
     }
-
-    class TestServiceObject {
-        Integer one() {
-            return 1;
-        }
-    }
-
 }

@@ -1,6 +1,7 @@
 package org.consensusj.bitcoin.cli
 
 import org.consensusj.jsonrpc.JsonRpcException
+import org.consensusj.jsonrpc.cli.CliCommand
 import spock.lang.Specification
 
 /**
@@ -35,8 +36,8 @@ class CliCommandSpec extends Specification {
         config != null
     }
 
-    private CliCommand createInstance() {
-        return new CliCommand("dummyName", "dummyUsage", new CliOptions(), dummyArgs) {
+    private BitcoinCliCommand createInstance() {
+        return new BitcoinCliCommand("dummyName", "dummyUsage", new CliOptions(), dummyArgs) {
             @Override
             protected Integer runImpl() throws IOException, JsonRpcException {
                 return null

@@ -1,7 +1,8 @@
 package org.consensusj.bitcoin.cli.test;
 
 import com.msgilligan.bitcoinj.rpc.test.TestServers;
-import org.consensusj.bitcoin.cli.CliCommand;
+import org.consensusj.jsonrpc.cli.CliCommand;
+import org.consensusj.jsonrpc.cli.test.CLICommandResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

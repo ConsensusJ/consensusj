@@ -10,19 +10,13 @@ import java.lang.invoke.MethodHandle
 class JsonRpcServerWrapperTest extends Specification {
     def "reflect works"() {
         given:
-        def unwrapped = new Echo()
+        def unwrapped = new TrivialJsonRpcService()
 
         when:
-        def result = JsonRpcServerWrapper.reflect(unwrapped)
+        def result = JsonRpcServerWrapper.reflect(unwrapped.class)
 
         then:
         result.size() >= 1      // TODO: This is 17 because of inherited methods form Object
-        result.get("echo") instanceof MethodHandle
-    }
-
-    class Echo {
-        Integer echo(Integer input) {
-            return input;
-        }
+        result.get("getblockcount") instanceof MethodHandle
     }
 }

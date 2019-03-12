@@ -1,0 +1,43 @@
+/*
+ * CLI tool support library and `cj-bitcoin-cli` tool.
+ * `cj-bitcoin-cli` tool is compiled to a native command-line tool with Graal `native-image`
+ */
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    compile project(':consensusj-jsonrpc')
+
+    compile 'commons-cli:commons-cli:1.4'
+
+    runtimeOnly "org.slf4j:slf4j-simple:${slf4jVersion}"
+
+    testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+}
+
+def mainClassName = "org.consensusj.jsonrpc.cli.JsonRpcTool"
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'ConsensusJ JsonRpc CLI library and tool',
+                'Implementation-Version': version,
+                'Main-Class': mainClassName
+    }
+}
+
+// Compile a native image using Graal's native-image tool
+// Graal must be installed at $GRAAL_HOME
+task graalNativeImage(type:Exec, dependsOn: jar) {
+    workingDir = projectDir
+    executable = "${System.env.GRAAL_HOME}/bin/native-image"
+    args = [ '--verbose',
+             '-cp', configurations.runtime.asPath,
+             '-jar', jar.archivePath,
+             '-H:Path=build',
+             '-H:Name=jsonrpc',
+             '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
+             '-H:EnableURLProtocols=http',
+             '-H:+ReportUnsupportedElementsAtRuntime'
+    ]
+}

@@ -12,8 +12,12 @@ public class JsonRpcServerWrapperImpl implements JsonRpcServerWrapper {
     private final Map<String, MethodHandle> methods;
 
     public JsonRpcServerWrapperImpl(Object serviceObject) {
+        this(serviceObject, JsonRpcServerWrapper.reflect(serviceObject.getClass()));
+    }
+
+    public JsonRpcServerWrapperImpl(Object serviceObject, Map<String, MethodHandle> methods) {
         this.service = serviceObject;
-        this.methods = JsonRpcServerWrapper.reflect(service);
+        this.methods = methods;
     }
 
     @Override

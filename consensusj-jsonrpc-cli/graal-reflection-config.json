@@ -21,6 +21,14 @@
     "allPublicConstructors" : true
   },
   {
+    "name" : "org.consensusj.jsonrpc.JsonRpcException",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allPublicConstructors" : true
+  },
+  {
     "name" : "org.consensusj.jsonrpc.internal.NumberStringSerializer",
     "allDeclaredMethods" : true,
     "allPublicMethods" : true,

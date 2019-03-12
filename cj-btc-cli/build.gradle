@@ -7,7 +7,9 @@ plugins {
 }
 
 dependencies {
-    api project(':cj-btc-jsonrpc')
+    // Using 'api' here breaks Spock integration test classpath for some reason
+    compile project(':consensusj-jsonrpc-cli')
+    compile project(':cj-btc-jsonrpc')
 
     compile 'commons-cli:commons-cli:1.4'
     

@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Create a REST endpoint from a JsonRpcHandler
  */
-@Controller("/")
+@Controller("/rpc")
 public class JsonRpcController {
     private JsonRpcServerWrapper handler;
 
