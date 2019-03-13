@@ -5,18 +5,20 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Peer;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
+import org.bitcoinj.params.MainNetParams;
 
 /**
  *
  */
 public class RpcServerModule extends SimpleModule {
-    public RpcServerModule() {
+    public RpcServerModule(NetworkParameters netParams) {
         super("BitcoinJMappingServer", new Version(1, 0, 0, null, null, null));
 
-        this.addDeserializer(Address.class, new AddressDeserializer(null))  // Null means use default list of netParams
+        this.addDeserializer(Address.class, new AddressDeserializer(netParams))  // Null means use default list of netParams
                 .addDeserializer(Coin.class, new CoinDeserializer())
                 .addDeserializer(ECKey.class, new ECKeyDeserializer())
                 .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())

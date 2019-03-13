@@ -20,7 +20,7 @@ idea {
 }
 
 dependencies {
-    compile project(':bitcoinj-server')
+    compile project(':cj-btc-services')
 
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-websocket"

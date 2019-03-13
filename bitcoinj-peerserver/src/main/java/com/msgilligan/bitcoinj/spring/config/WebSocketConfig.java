@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Configuration
 @EnableWebSocketMessageBroker
-@ComponentScan(basePackages="com.msgilligan.peerlist")
+@ComponentScan(basePackages="com.msgilligan.bitcoinj.spring")
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Autowired ObjectMapper objectMapper;   // Seems to get injected with objectMapper with our added Module
 

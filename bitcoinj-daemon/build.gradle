@@ -21,7 +21,7 @@ idea {
 }
 
 dependencies {
-    compile project(':bitcoinj-server')
+    compile project(':cj-btc-services')
 
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"

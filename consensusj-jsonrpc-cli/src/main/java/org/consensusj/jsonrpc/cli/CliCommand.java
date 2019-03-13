@@ -101,7 +101,7 @@ public abstract class CliCommand {
 
     public RpcClient getClient() {
         if (client == null) {
-            URI uri = URI.create("http://localhost:8080/rpc");  // Hardcoded for now
+            URI uri = URI.create("http://localhost:8080/");  // Hardcoded for now
             System.out.println("Connecting to: " + uri);
             client = new RpcClient(uri, null, null);
         }

@@ -3,7 +3,7 @@ package com.msgilligan.bitcoinj.spring.controller;
 /**
  * REST and WebSocket (STOMP) Spring MVC Peer Controller
  */
-import com.msgilligan.bitcoinj.spring.service.PeerService;
+import org.consensusj.bitcoin.spring.PeerStompService;
 import org.bitcoinj.core.Peer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -17,10 +17,10 @@ import java.util.List;
 
 @RestController
 public class PeerController {
-    private final PeerService peerService;
+    private final PeerStompService peerService;
 
     @Autowired
-    public PeerController(PeerService peerService) {
+    public PeerController(PeerStompService peerService) {
         this.peerService = peerService;
     }
 

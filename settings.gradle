@@ -10,6 +10,7 @@ include 'consensusj-decentralized-id',                                // W3C Dec
         'cj-nmc-jsonrpc-gvy',
         'bitcoinj-json',                                             // JSON <-> Java Object mapping
         'cj-btc-cli',
+        'cj-btc-services',                                           // Prototype Micronaut version of daemon
         'cj-btc-daemon-mn',                                          // Prototype Micronaut version of daemon
         'bitcoinj-rpcclient',                                        // Client
         'bitcoinj-server', 'bitcoinj-daemon', 'bitcoinj-peerserver', // Server lib + 2 server apps

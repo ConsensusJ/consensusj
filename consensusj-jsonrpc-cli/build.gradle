@@ -17,12 +17,15 @@ dependencies {
 }
 
 def mainClassName = "org.consensusj.jsonrpc.cli.JsonRpcTool"
+ext.moduleName = 'org.consensusj.jsonrpc.cli'
 
 jar {
+    inputs.property("moduleName", moduleName)
     manifest {
-        attributes 'Implementation-Title': 'ConsensusJ JsonRpc CLI library and tool',
-                'Implementation-Version': version,
-                'Main-Class': mainClassName
+        attributes  'Implementation-Title': 'ConsensusJ JSON-RPC CLI library and tool',
+                    'Automatic-Module-Name': moduleName,
+                    'Main-Class': mainClassName,
+                    'Implementation-Version': version
     }
 }
 

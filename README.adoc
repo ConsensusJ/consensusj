@@ -84,10 +84,10 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 | not yet
 | Command-line JSON-RPC client for Bitcoin
 
-|<<cj-btc-cli-kt,cj-btc-cli-kt>>
+|<<cj-btc-daemon-mn,cj-btc-daemon-mn>>
 | 8
 | not yet
-| Command-line JSON-RPC client for Bitcoin in *Kotlin*
+|JSON-RPC Bitcoin server daemon prototype, using Micronaut.
 
 |<<cj-btc-jsonrpc,cj-btc-jsonrpc>>
 | 8
@@ -127,7 +127,12 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 |<<consensusj-jsonrpc,consensusj-jsonrpc>>
 | 8
 | `org.consensusj.jsonrpc`
-| Java JSON-RPC client
+| JSON-RPC client
+
+|<<consensusj-jsonrpc,consensusj-jsonrpc-cli>>
+| 8
+| `org.consensusj.jsonrpc.cli`
+| JSON-RPC command-line interface (CLI) libraries and tool
 
 |<<consensusj-jsonrpc-gvy,consensusj-jsonrpc-gvy>>
 | 8
@@ -148,7 +153,6 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 [cols="3,1,3,5"]
 |===
 |Name |JDK |Grooviness |Description
-
 
 |<<bitcoinj-rpcclient,bitcoinj-rpcclient>>
 |8
@@ -173,7 +177,7 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |<<bitcoinj-daemon,bitcoinj-daemon>>
 |8
 |Tests only (TBD)
-|JSON-RPC bitcoin server daemon -- to replace `bitcoind` someday ;)
+|JSON-RPC Bitcoin server daemon -- equivalent to `bitcoind` when/if finished.
 
 |<<bitcoinj-peerserver,bitcoinj-peerserver>>
 |8
@@ -304,9 +308,12 @@ Service objects that power the Daemon and PeerServer. Some objects, such as {cj-
 
 A starting point for building a complete `bitcoind` equivalent using **bitcoinj**. Currently serves a very https://github.com/ConsensusJ/consensusj/blob/master/bitcoinj-json/src/main/java/com/msgilligan/bitcoinj/rpcserver/BitcoinJsonRpc.java[small subset] of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
 
-Uses a `PeerGroup` to power the limited RPCs. Will use a `BlockStore`. (Pull requests welcome.)
-
 Built as a fat, executable jar, so it can be run with `java -jar`.
+
+[#cj-btc-daemon-mn]
+==== Experimental Micronaut-based Bitcoin daemon
+
+An experimental port of `bitcoinj-daemon` to https://micronaut.io[Micronaut].
 
 [#bitcoinj-peerserver]
 ==== bitcoinj-peerserver

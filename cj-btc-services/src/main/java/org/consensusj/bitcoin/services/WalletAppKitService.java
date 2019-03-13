@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.spring.service;
+package org.consensusj.bitcoin.services;
 
 import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;
@@ -8,7 +8,6 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.PeerGroup;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.kits.WalletAppKit;
-import org.bitcoinj.net.discovery.PeerDiscovery;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -20,6 +19,8 @@ import java.math.BigDecimal;
  */
 @Named
 public class WalletAppKitService implements BitcoinJsonRpc {
+    private static final String userAgentName = "PeerList";
+    private static final String appVersion = "0.1";
     private static final int version = 1;
     private static final int protocolVersion = 1;
     private static final int walletVersion = 0;
@@ -32,8 +33,9 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     private BigDecimal difficulty = new BigDecimal(0);
 
     @Inject
-    public WalletAppKitService(NetworkParameters params, Context context,
-                       WalletAppKit kit) {
+    public WalletAppKitService(NetworkParameters params,
+                               Context context,
+                               WalletAppKit kit) {
         this.netParams = params;
         this.context = context;
         this.kit = kit;
@@ -42,11 +44,18 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     @PostConstruct
     public void start() {
         kit.setBlockingStartup(false);
+        kit.setUserAgent(userAgentName, appVersion);
         kit.startAsync();
+        kit.awaitRunning();
     }
 
     public NetworkParameters getNetworkParameters() {
         return this.netParams;
+    }
+
+    public PeerGroup getPeerGroup() {
+        kit.awaitRunning();
+        return kit.peerGroup();
     }
 
     @Override
@@ -62,7 +71,11 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         if(!kit.isRunning()) {
             return null;
         }
-        return kit.peerGroup().numConnectedPeers();
+        try {
+            return kit.peerGroup().numConnectedPeers();
+        } catch (IllegalStateException ex) {
+            return null;
+        }
     }
 
     @Override

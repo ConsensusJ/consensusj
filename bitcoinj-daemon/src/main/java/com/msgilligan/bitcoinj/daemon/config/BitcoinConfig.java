@@ -3,8 +3,7 @@ package com.msgilligan.bitcoinj.daemon.config;
 import com.googlecode.jsonrpc4j.spring.JsonServiceExporter;
 import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;
 import com.msgilligan.bitcoinj.json.conversion.RpcServerModule;
-import com.msgilligan.bitcoinj.spring.service.PeerGroupService;
-import com.msgilligan.bitcoinj.spring.service.WalletAppKitService;
+import org.consensusj.bitcoin.services.WalletAppKitService;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.kits.WalletAppKit;
@@ -51,15 +50,10 @@ public class BitcoinConfig {
     }
 
     @Bean
-    public Module bitcoinJMapper() {
-        return new RpcServerModule();
+    public Module bitcoinJMapper(NetworkParameters params) {
+        return new RpcServerModule(params);
     }
-
-    @Bean
-    public PeerGroupService peerGroupService(NetworkParameters params, PeerDiscovery peerDiscovery) {
-        return new PeerGroupService(params, peerDiscovery);
-    }
-
+    
     @Bean
     public WalletAppKitService walletAppKitService(NetworkParameters params, Context context, WalletAppKit kit) {
         return new WalletAppKitService(params, context, kit);

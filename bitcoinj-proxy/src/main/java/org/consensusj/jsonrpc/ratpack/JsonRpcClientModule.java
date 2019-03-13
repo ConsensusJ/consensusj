@@ -29,7 +29,7 @@ public class JsonRpcClientModule extends ConfigurableModule<RpcConfig> {
         return new ObjectMapper()
                 .registerModule(new Jdk8Module())
                 .registerModule(new RpcClientModule(config.getNetParams()))
-                .registerModule(new RpcServerModule());
+                .registerModule(new RpcServerModule(config.getNetParams()));
     }
     
     @Provides
