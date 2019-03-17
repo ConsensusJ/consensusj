@@ -43,11 +43,11 @@ public interface JsonRpcServerWrapper extends JsonRpcServer {
      * @param req The Request POJO
      * @return A future JSON RPC Response
      */
-    default CompletableFuture<JsonRpcResponse<?>> call(JsonRpcRequest req) {
-        return callMethod(req.getMethod(), req.getParams())
-                .handle((r, t) -> resultCompletionHandler(req, r, t));
+    default <R> CompletableFuture<JsonRpcResponse<R>> call(final JsonRpcRequest req) {
+        CompletableFuture<R> result = callMethod(req.getMethod(), req.getParams());
+        return result.handle((R r, Throwable ex) -> resultCompletionHandler(req, r, ex));
     }
-
+    
     /**
      * Map a request plus a result or error into a response
      *
@@ -56,7 +56,7 @@ public interface JsonRpcServerWrapper extends JsonRpcServer {
      * @param ex exception or null
      * @return A success or error response as appropriate
      */
-    default JsonRpcResponse<?> resultCompletionHandler(JsonRpcRequest req, Object result, Throwable ex) {
+    default <T> JsonRpcResponse<T> resultCompletionHandler(JsonRpcRequest req, T result, Throwable ex) {
         return (result != null) ?
                 wrapResult(req, result) :
                 wrapError(req, exceptionToError(ex));
@@ -81,14 +81,14 @@ public interface JsonRpcServerWrapper extends JsonRpcServer {
      * @param params List of JSON-RPC parameters
      * @return A future result POJO
      */
-    default CompletableFuture<Object> callMethod(String methodName, List<Object> params) {
-        CompletableFuture<Object> future = new CompletableFuture<>();
+    default <R> CompletableFuture<R> callMethod(String methodName, List<Object> params) {
+        CompletableFuture<R> future = new CompletableFuture<>();
         MethodHandle mh = getMethodHandle(methodName);
         if (mh != null) {
             try {
                 Object[] spParms = getSigPolyParms(params);
                 // TODO: Carefully check that `invokeWithArguments` is what we really need
-                Object result = mh.invokeWithArguments(spParms);
+                R result = (R) mh.invokeWithArguments(spParms);
                 future.complete(result);
             } catch (Throwable throwable) {
                 future.completeExceptionally(JsonRpcErrorException.of(SERVER_EXCEPTION));
@@ -143,12 +143,11 @@ public interface JsonRpcServerWrapper extends JsonRpcServer {
      * @param result the result to wrap
      * @return A valid JsonRpcResponse
      */
-    static JsonRpcResponse<?> wrapResult(JsonRpcRequest req, Object result) {
+    static <T> JsonRpcResponse<T> wrapResult(JsonRpcRequest req, T result) {
         return new JsonRpcResponse<>(result, null, req.getJsonrpc(), req.getId());
     }
 
-    static JsonRpcResponse<?> wrapError(JsonRpcRequest req, JsonRpcError error) {
+    static <T> JsonRpcResponse<T> wrapError(JsonRpcRequest req, JsonRpcError error) {
         return new JsonRpcResponse<>(null, error, req.getJsonrpc(), req.getId());
     }
-
 }

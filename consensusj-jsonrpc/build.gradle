@@ -4,8 +4,8 @@ plugins {
 
 dependencies {
     // Note:  jackson-core and jackson-databind have "Automatic-Module-Name" in manifest since 2.9.1
-    api "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
     testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
     testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
@@ -14,11 +14,15 @@ dependencies {
 }
 
 ext.moduleName = 'org.consensusj.jsonrpc'
+def mainClassName = "org.consensusj.jsonrpc.introspection.sample.SumTool"
 
 jar {
     inputs.property("moduleName", moduleName)
     manifest {
-        attributes "Automatic-Module-Name": moduleName
+        attributes  'Implementation-Title': 'ConsensusJ JSON-RPC Sample tool w/introspection',
+                'Automatic-Module-Name': moduleName,
+                'Main-Class': mainClassName,
+                'Implementation-Version': version
     }
 }
 
@@ -28,4 +32,20 @@ test {
     beforeTest { descriptor ->
         logger.lifecycle('    ' + descriptor.getName())
     }
+}
+
+// Compile a native image using Graal's native-image tool
+// Graal must be installed at $GRAAL_HOME
+task graalNativeImage(type:Exec, dependsOn: jar) {
+    workingDir = projectDir
+    executable = "${System.env.GRAAL_HOME}/bin/native-image"
+    args = [ '--verbose',
+             '-cp', configurations.runtime.asPath,
+             '-jar', jar.archivePath,
+             '-H:Path=build',
+             '-H:Name=SumTool',
+             '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
+             '-H:EnableURLProtocols=http',
+             '-H:+ReportUnsupportedElementsAtRuntime'
+    ]
 }

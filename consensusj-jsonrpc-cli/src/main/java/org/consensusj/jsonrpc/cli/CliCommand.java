@@ -14,6 +14,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import org.consensusj.jsonrpc.RpcClient;
@@ -101,7 +102,18 @@ public abstract class CliCommand {
 
     public RpcClient getClient() {
         if (client == null) {
-            URI uri = URI.create("http://localhost:8080/");  // Hardcoded for now
+            URI uri;
+            String urlString;
+            if ((urlString = line.getOptionValue("url")) != null ) {
+                //String urlString = options.getOption("url").getValue();
+                try {
+                    uri = new URI(urlString);
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                uri = URI.create("http://localhost:8080/");  // Hardcoded for now
+            }
             System.out.println("Connecting to: " + uri);
             client = new RpcClient(uri, null, null);
         }

@@ -22,7 +22,7 @@ public class JsonRpcController {
     }
 
     @Post(produces = MediaType.APPLICATION_JSON)
-    public CompletableFuture<JsonRpcResponse<?>> index(JsonRpcRequest req) {
+    public <R> CompletableFuture<JsonRpcResponse<R>> index(JsonRpcRequest req) {
         return handler.call(req);
     }
 

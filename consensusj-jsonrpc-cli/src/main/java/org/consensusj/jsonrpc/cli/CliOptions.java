@@ -12,6 +12,12 @@ public class CliOptions extends Options {
     public CliOptions() {
         super();
         this.addOption("?", null, false, "This help message")
+            .addOption(Option.builder().longOpt("url")
+                    .desc("Full URI for the JSON-RPC endpoint")
+                    .hasArg()
+                    .argName("url")
+                    .build())
+            // Bitcoin-CLI style options
             .addOption(Option.builder().longOpt("rpcconnect")
                     .desc("Send commands to node running on <ip> (default: 127.0.0.1)")
                     .hasArg()
