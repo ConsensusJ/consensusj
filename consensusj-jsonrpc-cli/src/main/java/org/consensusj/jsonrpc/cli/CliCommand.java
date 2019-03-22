@@ -18,18 +18,21 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import org.consensusj.jsonrpc.RpcClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class for CLI commands that use Bitcoin RPC
  */
 public abstract class CliCommand {
+    private static Logger log = LoggerFactory.getLogger(JsonRpcTool.class);
     static final String defaultproto = "http";
     static final String defaulthost = "127.0.0.1";
     static final int defaultport = 8332;
     static final String defaultfile = "/";
 
-    protected CommandLine line = null;
-    protected CommandLineParser parser = null;
+    protected CommandLine line;
+    protected CommandLineParser parser;
     protected Options options;
     protected String name;
     protected String usage;
@@ -38,6 +41,8 @@ public abstract class CliCommand {
     protected InputStream in;
     protected PrintWriter pwout;
     protected PrintWriter pwerr;
+
+    protected boolean verbose = false;
 
     protected RpcClient client = null;
 
@@ -57,8 +62,7 @@ public abstract class CliCommand {
             throw new RuntimeException(e);
         }
     }
-
-
+    
     /**
      * Can be used by subclasses to set a narrower type
      * @param client An instance of BitcoinClient or subclass
@@ -84,18 +88,22 @@ public abstract class CliCommand {
         pwout.println(str);
     }
 
-        /**
-         * Check Options and Arguments
-         *
-         * Override to customize behavior.
-         *
-         * @return status code
-         */
+    /**
+     * Check Options and Arguments
+     *
+     * Override to customize behavior.
+     *
+     * @return status code
+     */
     public int checkArgs() {
         if (line.hasOption("?")) {
             printHelp();
             // Return 1 so tool can exit
             return 1;
+        }
+        verbose = line.hasOption("v");
+        if (verbose) {
+            JavaLoggingSupport.setVerbose();
         }
         return 0;
     }
@@ -105,7 +113,6 @@ public abstract class CliCommand {
             URI uri;
             String urlString;
             if ((urlString = line.getOptionValue("url")) != null ) {
-                //String urlString = options.getOption("url").getValue();
                 try {
                     uri = new URI(urlString);
                 } catch (URISyntaxException e) {
@@ -114,7 +121,6 @@ public abstract class CliCommand {
             } else {
                 uri = URI.create("http://localhost:8080/");  // Hardcoded for now
             }
-            System.out.println("Connecting to: " + uri);
             client = new RpcClient(uri, null, null);
         }
         return client;
@@ -160,7 +166,7 @@ public abstract class CliCommand {
         }
         return status;
     }
-
+    
     /**
      * Implement in subclasses
      * @return status code

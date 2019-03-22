@@ -3,14 +3,12 @@ package org.consensusj.daemon.micronaut;
 import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;
 import org.bitcoinj.core.Coin;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
-import org.consensusj.jsonrpc.introspection.JsonRpcServerWrapper;
-import org.consensusj.jsonrpc.introspection.JsonRpcServerWrapperGraal;
-import org.consensusj.jsonrpc.introspection.JsonRpcServerWrapperImpl;
+import org.consensusj.jsonrpc.introspection.JsonRpcServiceWrapper;
+import org.consensusj.jsonrpc.introspection.AbstractJsonRpcService;
 
-import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -18,8 +16,8 @@ import java.util.Map;
  * Copy/paste from code in bitcoinj-server until we get
  * Micronaut DI config set up
  */
-public class BitcoinImpl extends JsonRpcServerWrapperGraal implements BitcoinJsonRpc {
-    private static final Map<String, MethodHandle> methods = JsonRpcServerWrapper.reflect(MethodHandles.lookup().lookupClass());
+public class BitcoinImpl extends AbstractJsonRpcService implements BitcoinJsonRpc {
+    private static final Map<String, Method> methods = JsonRpcServiceWrapper.reflect(MethodHandles.lookup().lookupClass());
     private static final int version = 1;
     private static final int protocolVersion = 1;
     private static final int walletVersion = 0;

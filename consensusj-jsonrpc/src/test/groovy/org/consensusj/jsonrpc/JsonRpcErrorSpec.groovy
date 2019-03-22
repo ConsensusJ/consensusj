@@ -9,7 +9,6 @@ import spock.lang.Specification
  */
 class JsonRpcErrorSpec extends Specification {
 
-    @Ignore("This was created to test a (postponed) immutable JsonRpcError class")
     def "constructor works correctly" () {
         given:
         def code = 0

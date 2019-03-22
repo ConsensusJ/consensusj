@@ -14,7 +14,7 @@ dependencies {
 }
 
 ext.moduleName = 'org.consensusj.jsonrpc'
-def mainClassName = "org.consensusj.jsonrpc.introspection.sample.SumTool"
+def mainClassName = "org.consensusj.jsonrpc.introspection.sample.MathTool"
 
 jar {
     inputs.property("moduleName", moduleName)
@@ -43,7 +43,7 @@ task graalNativeImage(type:Exec, dependsOn: jar) {
              '-cp', configurations.runtime.asPath,
              '-jar', jar.archivePath,
              '-H:Path=build',
-             '-H:Name=SumTool',
+             '-H:Name=MathTool',
              '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
              '-H:EnableURLProtocols=http',
              '-H:+ReportUnsupportedElementsAtRuntime'

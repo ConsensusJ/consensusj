@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
  * Can easily be used in controllers from Java Web frameworks.
  *
  */
-public interface JsonRpcServer {
+public interface JsonRpcService {
     /**
      * Handle a JSON-RPC Request POJO and return a Response POJO
      * @param req The Request POJO

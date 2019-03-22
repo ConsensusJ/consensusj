@@ -2,6 +2,7 @@ package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.consensusj.jsonrpc.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,7 @@ public class RpcClient extends AbstractRpcClient {
      */
     public RpcClient(URI server, final String rpcUser, final String rpcPassword) {
         super();
+        log.debug("Constructing JSON-RPC client for: {}", server);
         this.serverURI = server;
         this.username = rpcUser;
         this.password = rpcPassword;
@@ -92,7 +94,7 @@ public class RpcClient extends AbstractRpcClient {
         // http://android-developers.blogspot.com/2011/09/androids-http-clients.html
 
         if (log.isDebugEnabled()) {
-            log.debug("Req json: {}", mapper.writeValueAsString(request));
+            log.debug("JsonRpcRequest: {}", mapper.writeValueAsString(request));
         }
         
         try (OutputStream requestStream = connection.getOutputStream()) {
@@ -100,30 +102,34 @@ public class RpcClient extends AbstractRpcClient {
         }
 
         int responseCode = connection.getResponseCode();
-        log.debug("Response code: {}", responseCode);
+        log.debug("HTTP Response code: {}", responseCode);
 
         if (responseCode != 200) {
             handleBadResponseCode(responseCode, connection);
         }
 
+        JsonRpcResponse<R> responseJson = responseFromStream(connection.getInputStream(), responseType);
+        connection.disconnect();
+        return responseJson;
+    }
+
+    private <R> JsonRpcResponse<R> responseFromStream(InputStream inputStream, JavaType responseType) throws IOException {
         JsonRpcResponse<R> responseJson;
         try {
             if (log.isDebugEnabled()) {
                 // If logging enabled, copy InputStream to string and log
-                String responseBody = convertStreamToString(connection.getInputStream());
-                log.debug("responseBody: {}", responseBody);
+                String responseBody = convertStreamToString(inputStream);
+                log.debug("Response Body: {}", responseBody);
                 responseJson = mapper.readValue(responseBody, responseType);
             } else {
                 // Otherwise convert directly to responseType
-                responseJson = mapper.readValue(connection.getInputStream(), responseType);
+                responseJson = mapper.readValue(inputStream, responseType);
             }
         } catch (JsonProcessingException e) {
             log.error("JsonProcessingException: {}", e);
             // TODO: Map to some kind of JsonRPC exception similar to JsonRPCStatusException
             throw e;
         }
-        log.debug("Resp json: {}", responseJson);
-        connection.disconnect();
         return responseJson;
     }
 
@@ -132,7 +138,7 @@ public class RpcClient extends AbstractRpcClient {
      * @param responseCode Non-success response code
      * @param connection the current connection
      * @throws IOException IO Error
-     * @throws JsonRpcStatusException An exception containing the HTTP status coe and a message
+     * @throws JsonRpcStatusException An exception containing the HTTP status code and a message
      */
     private void handleBadResponseCode(int responseCode, HttpURLConnection connection) throws IOException, JsonRpcStatusException
     {
@@ -144,8 +150,10 @@ public class RpcClient extends AbstractRpcClient {
         InputStream errorStream = connection.getErrorStream();
         if (errorStream != null) {
             if (connection.getContentType().equals("application/json")) {
-                // We got a JSON error response, parse it
-                bodyJson = mapper.readValue(errorStream, JsonRpcResponse.class);
+                JavaType genericResponseType = mapper.getTypeFactory().
+                        constructParametricType(JsonRpcResponse.class, JsonNode.class);
+                // We got a JSON error response -- try to parse it as a JsonRpcResponse
+                bodyJson = responseFromStream(errorStream, genericResponseType);
                 JsonRpcError error = bodyJson.getError();
                 if (error != null) {
                     // If there's a more specific message in the JSON use it instead.

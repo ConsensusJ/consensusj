@@ -1,16 +1,22 @@
 package org.consensusj.jsonrpc.cli;
 
 import org.consensusj.jsonrpc.JsonRpcException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * JSON-RPC Command-line tool with logging support.
  */
 public class JsonRpcTool extends CliCommand {
     public final static String commandName = "jsonrpc";
+    // For a GraalVM command-line tool we muse configure Java Logging in main
+    // before initializing this Logger object
+    private static Logger log;
+
 
     public JsonRpcTool(String[] args) {
         super(commandName, new CliOptions(), args);
@@ -26,8 +32,12 @@ public class JsonRpcTool extends CliCommand {
      * @param args options, JSON-RPC method, JSON-RPC parameters
      */
     public static void main(String[] args) {
+        JavaLoggingSupport.configure("org.consensusj.jsonrpc");
+        log = LoggerFactory.getLogger(JsonRpcTool.class);
         JsonRpcTool command = new JsonRpcTool(args);
-        Integer status = command.run();
+        log.trace("About to run command object");
+        int status = command.run();
+        log.trace("Command object completed with status: {}", status);
         System.exit(status);
     }
 
@@ -65,26 +75,8 @@ public class JsonRpcTool extends CliCommand {
      * @return Params with correct Java types for JSON
      */
     protected List<Object> convertParameters(String method, List<String> params) {
-        List<Object> typedParams = new ArrayList<>();
-        switch (method) {
-            // NOTE: These are sample hard-coded methos from the Bitcoin CLI
-            case "generate":
-            case "setgenerate":
-                typedParams.add(Integer.valueOf(params.get(0)));
-                break;
-
-            case "getblockhash":
-                typedParams.add(Integer.valueOf(params.get(0)));
-                break;
-
-            default:
-                // Default (for now) is to leave them all as strings
-                for (String string : params) {
-                    typedParams.add(string);
-                }
-
-        }
-        return typedParams;
+        // Default (for now) is to leave them all as strings
+        return new ArrayList<>(params);
     }
 
 }

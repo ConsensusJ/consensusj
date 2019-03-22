@@ -4,13 +4,9 @@ import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcErrorException;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
-import org.consensusj.jsonrpc.JsonRpcServer;
+import org.consensusj.jsonrpc.JsonRpcService;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +18,7 @@ import static org.consensusj.jsonrpc.JsonRpcError.Error.SERVER_EXCEPTION;
 /**
  * Interface to wrap a Java class with JsonRpc support.
  */
-public interface JsonRpcServerWrapper extends JsonRpcServer {
+public interface JsonRpcServiceWrapper extends JsonRpcService {
     /**
      * Get the service object
      *
@@ -31,11 +27,11 @@ public interface JsonRpcServerWrapper extends JsonRpcServer {
     Object getServiceObject();
 
     /**
-     * Get a MethodHandle for a method
+     * Get a Method object for a named method
      * @param methodName the name of the method to call
      * @return method handle
      */
-    MethodHandle getMethodHandle(String methodName);
+    Method getMethod(String methodName);
 
     /**
      * Handle a request by calling method, getting a result, and embedding it in response.
@@ -83,12 +79,10 @@ public interface JsonRpcServerWrapper extends JsonRpcServer {
      */
     default <R> CompletableFuture<R> callMethod(String methodName, List<Object> params) {
         CompletableFuture<R> future = new CompletableFuture<>();
-        MethodHandle mh = getMethodHandle(methodName);
+        final Method mh = getMethod(methodName);
         if (mh != null) {
             try {
-                Object[] spParms = getSigPolyParms(params);
-                // TODO: Carefully check that `invokeWithArguments` is what we really need
-                R result = (R) mh.invokeWithArguments(spParms);
+                R result = (R) mh.invoke(getServiceObject(), params.toArray());
                 future.complete(result);
             } catch (Throwable throwable) {
                 future.completeExceptionally(JsonRpcErrorException.of(SERVER_EXCEPTION));
@@ -98,41 +92,19 @@ public interface JsonRpcServerWrapper extends JsonRpcServer {
         }
         return future;
     }
-
+    
     /**
-     * Build signature-polymorphic parameter list, by prepending
-     * serviceObject and converting to an array
-     * @param params The RPC parameters
-     * @return signature-polymorphic parameter list for MethodHandle#invoke
-     */
-    default Object[] getSigPolyParms(List<Object> params) {
-        // TODO: Find a simpler/optimal way to prepend service object on params
-        ArrayList<Object> list = new ArrayList<>(Arrays.asList(getServiceObject()));
-        if (params != null && params.size() > 0) {
-            list.addAll(params);
-        }
-        return list.toArray();
-    }
-
-    /**
-     * Use reflection/introspection to generate a map of method handles.
+     * Use reflection/introspection to generate a map of methods.
      * Generally this is called from the constructor of implementing classes.
      * @param apiClass The service class to reflect/introspect
-     * @return a map of method names to method handles
+     * @return a map of method names to method objects
      */
-    static Map<String, MethodHandle> reflect(Class<?>  apiClass) {
+    static Map<String, Method> reflect(Class<?>  apiClass) {
         java.lang.reflect.Method[] publicInheritedMethods = apiClass.getMethods();
-        MethodHandles.Lookup lookup = MethodHandles.lookup();
-        Map<String, MethodHandle> methods = new HashMap<>();
+        Map<String, Method> methods = new HashMap<>();
         for (Method method : publicInheritedMethods) {
             String name = method.getName();
-            MethodHandle handle;
-            try {
-                handle = lookup.unreflect(method);
-            } catch (IllegalAccessException e) {
-                continue;   // no access, Skip this one
-            }
-            methods.put(name, handle);
+            methods.put(name, method);
         }
         return methods;
     }

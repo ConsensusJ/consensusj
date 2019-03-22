@@ -1,16 +1,16 @@
 package org.consensusj.jsonrpc.introspection
 
-import groovy.transform.CompileStatic
+
 import spock.lang.Specification
 
 /**
- *
+ * Quick smoke test of DelegatingJsonRpcService
  */
-class JsonRpcServerWrapperImplTest extends Specification {
+class DelegatingJsonRpcServiceTest extends Specification {
     def "callMethod works"() {
         given:
         def unwrapped = new TrivialJsonRpcService()
-        def wrapped = new JsonRpcServerWrapperImpl(unwrapped)
+        def wrapped = new DelegatingJsonRpcService(unwrapped)
 
         when:
         def result = wrapped.callMethod("getblockcount", []).get()
