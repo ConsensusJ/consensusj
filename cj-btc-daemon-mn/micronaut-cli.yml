@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: org.consensusj.daemon.micronaut
+---
+testFramework: junit
+sourceLanguage: java
