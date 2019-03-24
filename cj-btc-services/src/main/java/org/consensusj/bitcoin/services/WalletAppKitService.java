@@ -8,6 +8,8 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.PeerGroup;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.kits.WalletAppKit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -19,6 +21,7 @@ import java.math.BigDecimal;
  */
 @Named
 public class WalletAppKitService implements BitcoinJsonRpc {
+    private static Logger log = LoggerFactory.getLogger(WalletAppKitService.class);
     private static final String userAgentName = "PeerList";
     private static final String appVersion = "0.1";
     private static final int version = 1;
@@ -43,10 +46,11 @@ public class WalletAppKitService implements BitcoinJsonRpc {
 
     @PostConstruct
     public void start() {
-        kit.setBlockingStartup(false);
+        log.info("WalletAppKitService.start()");
         kit.setUserAgent(userAgentName, appVersion);
+        kit.setBlockingStartup(false);
         kit.startAsync();
-        kit.awaitRunning();
+        //kit.awaitRunning();
     }
 
     public NetworkParameters getNetworkParameters() {
@@ -60,7 +64,9 @@ public class WalletAppKitService implements BitcoinJsonRpc {
 
     @Override
     public Integer getblockcount() {
+        log.info("getblockcount");
         if(!kit.isRunning()) {
+            log.warn("kit not running, returning null");
             return null;
         }
         return kit.chain().getChainHead().getHeight();

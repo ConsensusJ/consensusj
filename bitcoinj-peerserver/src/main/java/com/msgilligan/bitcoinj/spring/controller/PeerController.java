@@ -3,7 +3,7 @@ package com.msgilligan.bitcoinj.spring.controller;
 /**
  * REST and WebSocket (STOMP) Spring MVC Peer Controller
  */
-import org.consensusj.bitcoin.spring.PeerStompService;
+import com.msgilligan.bitcoinj.spring.services.PeerStompService;
 import org.bitcoinj.core.Peer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;

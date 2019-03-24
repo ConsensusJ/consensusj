@@ -5,5 +5,4 @@ plugins {
 dependencies {
     api project(':bitcoinj-json')
     api "javax.inject:javax.inject:1"
-    api "org.springframework.boot:spring-boot-starter-websocket:${springBootVersion}"
 }

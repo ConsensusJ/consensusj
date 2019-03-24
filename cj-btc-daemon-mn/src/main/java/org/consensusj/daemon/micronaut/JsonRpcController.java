@@ -2,6 +2,7 @@ package org.consensusj.daemon.micronaut;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
+import io.micronaut.context.annotation.Context;
 import io.micronaut.core.annotation.TypeHint;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -10,6 +11,8 @@ import io.micronaut.http.annotation.Post;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,21 +32,24 @@ import java.util.concurrent.CompletableFuture;
                 HashSet.class,
                 JsonRpcRequest.class,
                 JsonRpcResponse.class,
-                BitcoinImpl.class,
                 ServerInfo.class
         },
         accessType = {TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS, TypeHint.AccessType.ALL_DECLARED_METHODS}
 )
 @Controller("/rpc")
+@Context
 public class JsonRpcController {
+    private static Logger log = LoggerFactory.getLogger(JsonRpcController.class);
     private final JsonRpcService jsonRpcService;
 
-    public JsonRpcController() {
-        jsonRpcService = new BitcoinImpl();
+    public JsonRpcController(WalletAppKitJsonRpcService walletAppKitService) {
+        log.info("Constructing JsonRpcController");
+        jsonRpcService = walletAppKitService;
     }
 
     @Post(produces = MediaType.APPLICATION_JSON)
     public CompletableFuture<JsonRpcResponse<Object>> index(@Body JsonRpcRequest req) {
+        log.info("JSON-RPC call: {}", req.getMethod());
         return jsonRpcService.call(req);
     }
 

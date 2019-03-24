@@ -1,0 +1,53 @@
+[
+  {
+    "name" : "org.consensusj.jsonrpc.JsonRpcRequest",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  },
+  {
+    "name" : "org.consensusj.jsonrpc.JsonRpcResponse",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allPublicConstructors" : true
+  },
+  {
+    "name" : "org.consensusj.jsonrpc.JsonRpcError",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allPublicConstructors" : true
+  },
+  {
+    "name" : "org.consensusj.jsonrpc.JsonRpcException",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true,
+    "allPublicConstructors" : true
+  },
+  {
+    "name" : "org.consensusj.jsonrpc.internal.NumberStringSerializer",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allPublicConstructors" : true
+  },
+  {
+    "name" : "java.lang.Object",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  },
+  {
+    "name" : "java.util.List",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  },
+  {
+    "name" : "java.util.ArrayList",
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+]

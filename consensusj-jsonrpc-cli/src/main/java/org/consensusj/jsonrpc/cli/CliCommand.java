@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  * Base class for CLI commands that use Bitcoin RPC
  */
 public abstract class CliCommand {
-    private static Logger log = LoggerFactory.getLogger(JsonRpcTool.class);
+    private static Logger log = LoggerFactory.getLogger(CliCommand.class);
     static final String defaultproto = "http";
     static final String defaulthost = "127.0.0.1";
     static final int defaultport = 8332;

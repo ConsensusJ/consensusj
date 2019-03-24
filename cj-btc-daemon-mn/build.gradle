@@ -21,27 +21,22 @@ configurations {
 dependencies {
     annotationProcessor "io.micronaut:micronaut-graal"
     annotationProcessor "io.micronaut:micronaut-inject-java"
-    annotationProcessor "io.micronaut:micronaut-validation"
 
     compile project(':consensusj-jsonrpc')
     compile project(':bitcoinj-json')
+    compile project(':cj-btc-services')
 
-    compile "io.micronaut:micronaut-http-client"
     compile "io.micronaut:micronaut-http-server-netty"
     compile "io.micronaut:micronaut-inject"
-    compile "io.micronaut:micronaut-validation"
     compile "io.micronaut:micronaut-runtime"
     compileOnly "com.oracle.substratevm:svm"
-    //compileOnly "io.micronaut:micronaut-inject-java"
-    //runtime "io.micronaut:micronaut-graal"
+
     runtime "ch.qos.logback:logback-classic:1.2.3"
+
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
     testCompile "org.junit.jupiter:junit-jupiter-api"
     testCompile "io.micronaut.test:micronaut-test-junit5"
     testRuntime "org.junit.jupiter:junit-jupiter-engine"
-    //testCompile "junit:junit:4.12"
-    //testCompile "io.micronaut:micronaut-inject-java"
-    //testCompile "org.hamcrest:hamcrest-all:1.3"
 }
 
 shadowJar {
