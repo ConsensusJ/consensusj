@@ -1,7 +1,8 @@
-include 'consensusj-decentralized-id',                                // W3C Decentralized ID
-        'consensusj-jsonrpc',                                        // JSONRPC Java client
-        'consensusj-jsonrpc-gvy',                                    // JSONRPC Groovy client
-        'consensusj-jsonrpc-cli',                                    // JSONRPC CLI library and tool
+include 'consensusj-decentralized-id',                               // W3C Decentralized ID
+        'consensusj-jsonrpc',                                        // JSON-RPC Java client
+        'consensusj-jsonrpc-gvy',                                    // JSON-RPC Groovy client
+        'consensusj-jsonrpc-cli',                                    // JSON-RPC CLI library and tool
+        'consensusj-jsonrpc-daemon',                                 // JSON-RPC sample server
         'cj-btc-jsonrpc',
         'cj-btc-jsonrpc-gvy',
         'cj-eth-jsonrpc',

@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: org.consensusj.jsonrpc.daemon
+---
+testFramework: junit
+sourceLanguage: java

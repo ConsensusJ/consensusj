@@ -5,6 +5,8 @@ import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcService;
 import org.consensusj.jsonrpc.introspection.AbstractJsonRpcService;
 import org.consensusj.jsonrpc.introspection.JsonRpcServiceWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
@@ -13,19 +15,20 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Simple command-line tool that contains a JsonRpcService
+ * Simple service and command-line tool that contains a "math" JsonRpcService
  * Allows testing method dispatch independent of any server code or framework
  * (including compiling with Graal `native-image` and running as a native tool with SubstrateVM)
  */
-public class MathTool extends AbstractJsonRpcService {
+public class MathService extends AbstractJsonRpcService {
+    private static Logger log = LoggerFactory.getLogger(MathService.class);
     private static final Map<String, Method> methods = JsonRpcServiceWrapper.reflect(MethodHandles.lookup().lookupClass());
 
-    public MathTool() {
+    public MathService() {
         super(methods);
     }
 
     public static void main(String[] args) {
-        JsonRpcService service = new MathTool();
+        JsonRpcService service = new MathService();
         JsonRpcRequest req = new JsonRpcRequest("add", Arrays.asList(1, 2));
         JsonRpcResponse<Object> response = null;
         try {
@@ -43,10 +46,12 @@ public class MathTool extends AbstractJsonRpcService {
     }
 
     public Integer add(Integer a, Integer b) {
+        log.info("MathService: add {} + {}",a,b);
         return a + b;
     }
 
     public Integer subtract(Integer a, Integer b) {
+        log.info("MathService: subtract {} - {}",a,b);
         return a - b;
     }
 }

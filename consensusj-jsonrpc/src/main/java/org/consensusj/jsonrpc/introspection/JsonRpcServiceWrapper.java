@@ -5,6 +5,8 @@ import org.consensusj.jsonrpc.JsonRpcErrorException;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -19,6 +21,8 @@ import static org.consensusj.jsonrpc.JsonRpcError.Error.SERVER_EXCEPTION;
  * Interface to wrap a Java class with JsonRpc support.
  */
 public interface JsonRpcServiceWrapper extends JsonRpcService {
+    static final Logger log = LoggerFactory.getLogger(JsonRpcServiceWrapper.class);
+
     /**
      * Get the service object
      *
@@ -40,6 +44,7 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @return A future JSON RPC Response
      */
     default <R> CompletableFuture<JsonRpcResponse<R>> call(final JsonRpcRequest req) {
+        log.debug("JsonRpcServiceWrapper.call: {}", req.getMethod());
         CompletableFuture<R> result = callMethod(req.getMethod(), req.getParams());
         return result.handle((R r, Throwable ex) -> resultCompletionHandler(req, r, ex));
     }
@@ -78,6 +83,7 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @return A future result POJO
      */
     default <R> CompletableFuture<R> callMethod(String methodName, List<Object> params) {
+        log.debug("JsonRpcServiceWrapper.callMethod: {}", methodName);
         CompletableFuture<R> future = new CompletableFuture<>();
         final Method mh = getMethod(methodName);
         if (mh != null) {
@@ -85,6 +91,7 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
                 R result = (R) mh.invoke(getServiceObject(), params.toArray());
                 future.complete(result);
             } catch (Throwable throwable) {
+                // TODO: Better error handling here - at least return throwable.message to client
                 future.completeExceptionally(JsonRpcErrorException.of(SERVER_EXCEPTION));
             }
         } else {
