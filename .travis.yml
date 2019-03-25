@@ -1,10 +1,11 @@
-os: linux
+dist: xenial
 language: java
 
 install: true
 
 script:
- - sudo apt-get update && sudo apt-get install oracle-java8-installer graphviz
+ - sudo apt-get update
+ - sudo apt-get install oracle-java8-installer graphviz
  - java -version
  - ./gradlew buildCI --scan
 
