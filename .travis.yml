@@ -5,7 +5,7 @@ install: true
 
 script:
  - sudo apt-get update
- - sudo apt-get install oracle-java8-installer graphviz
+ - sudo apt-get install graphviz
  - java -version
  - ./gradlew buildCI --scan
 
