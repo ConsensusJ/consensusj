@@ -1,0 +1,32 @@
+plugins {
+    id 'java-library'
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+    implementation "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+
+    testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+        transitive = false
+    }
+}
+
+ext.moduleName = 'org.consensusj.decentralizedid'
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes "Automatic-Module-Name": moduleName
+    }
+}
+
+test {
+    testLogging.showStandardStreams = true
+    systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/test/logging.properties"
+    beforeTest { descriptor ->
+        logger.lifecycle('    ' + descriptor.getName())
+    }
+}
