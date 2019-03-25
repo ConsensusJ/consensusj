@@ -2,9 +2,6 @@ plugins {
     id 'java-library'
 }
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
-
 dependencies {
     api project(':bitcoinj-json')
     api "javax.inject:javax.inject:1"

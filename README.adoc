@@ -66,10 +66,7 @@ image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Statu
 
 === Requirements
 
-* Modules used by https://namecoin.org/2018/04/03/consensusj-0.2.7-binaries.html[ConsensusJ-Namecoin] use Java 7.
-* Most other modules are now using Java 8.
-
-Now that Android 7 and later support Java 8, we're trying to make Java 8 the baseline. But ConsensusJ-Namecoin is cool, so we have to convince them to upgrade to Java 8.
+* All modules now require Java 8 (Android 7) or later.
 
 === ConsensusJ Modules
 
@@ -93,7 +90,7 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 | Command-line JSON-RPC client for Bitcoin in *Kotlin*
 
 |<<cj-btc-jsonrpc,cj-btc-jsonrpc>>
-| 7
+| 8
 | not yet
 | Java JSON-RPC Bitcoin client
 
@@ -128,7 +125,7 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 | Groovy JSON-RPC Namecoin client (dynamic RPC methods)
 
 |<<consensusj-jsonrpc,consensusj-jsonrpc>>
-| 7
+| 8
 | `org.consensusj.jsonrpc`
 | Java JSON-RPC client
 
@@ -154,17 +151,17 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 
 
 |<<bitcoinj-rpcclient,bitcoinj-rpcclient>>
-|7
+|8
 |Optional + tests
 |Bitcoin JSON-RPC integration tests
 
 |<<bitcoinj-json,bitcoinj-json>>
-|7
+|8
 |Tests only (TBD)
 |Jackson serializers, deserializers & POJOs for Bitcoin JSON-RPC
 
 |<<bitcoinj-server,bitcoinj-server>>
-|7
+|8
 |Tests only (TBD)
 |Service objects used by the server apps 
 
@@ -189,7 +186,7 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |http://javamoney.github.io[JavaMoney] currency and exchange support. Adapter to use http://knowm.org/open-source/xchange/[XChange] `Exchange` implementations as JavaMoney `ExchangeRateProvider`s.
 
 |<<bitcoinj-dsl,bitcoinj-dsl>>
-|7
+|8
 |Uses Groovy
 |Groovy DSL support.
 
