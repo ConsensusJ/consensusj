@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.rpc
 
+import com.fasterxml.jackson.databind.node.NullNode
 import com.msgilligan.bitcoinj.rpc.test.TestServers
 import org.consensusj.jsonrpc.groovy.DynamicRpcClient
 import org.consensusj.jsonrpc.JsonRpcStatusException
@@ -74,7 +75,7 @@ class DynamicRpcClientSpec extends Specification {
         e.httpMessage == "Not Found"
         e.httpCode == 404
         e.response == null
-        e.responseJson.result == null
+        e.responseJson.result instanceof NullNode
         e.responseJson.error.code == -32601
         e.responseJson.error.message == "Method not found"
     }

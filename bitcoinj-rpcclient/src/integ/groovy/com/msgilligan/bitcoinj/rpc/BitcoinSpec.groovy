@@ -3,6 +3,7 @@ package com.msgilligan.bitcoinj.rpc
 import com.msgilligan.bitcoinj.BaseRegTestSpec
 import com.msgilligan.bitcoinj.json.pojo.NetworkInfo
 import org.bitcoinj.core.Coin
+import org.bitcoinj.core.LegacyAddress
 import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.params.RegTestParams
 
@@ -96,7 +97,7 @@ class BitcoinSpec extends BaseRegTestSpec {
         def key = dumpPrivKey(address)
 
         then: "when we convert the dumped key to an address we get the same address"
-        key.toAddress(netParams) == address
+        LegacyAddress.fromKey(netParams, key) == address
     }
 
     def "We can get information about chain tips"() {
