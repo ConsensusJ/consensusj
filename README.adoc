@@ -79,6 +79,31 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 |===
 |Name |Min JDK |JPMS module |Description
 
+|<<consensusj-jsonrpc,consensusj-jsonrpc>>
+| 8
+| `org.consensusj.decentralizedid`
+| Preliminary, experimental, W3C DID and BTCR DID Method support
+
+|<<consensusj-jsonrpc,consensusj-jsonrpc>>
+| 8
+| `org.consensusj.jsonrpc`
+| JSON-RPC client
+
+|<<consensusj-jsonrpc,consensusj-jsonrpc-cli>>
+| 8
+| `org.consensusj.jsonrpc.cli`
+| JSON-RPC command-line interface (CLI) libraries and tool
+
+|consensusj-jsonrpc-daemon
+| 8
+| `org.consensusj.jsonrpc.daemon`
+| JSON-RPC Sample Server
+
+|<<consensusj-jsonrpc-gvy,consensusj-jsonrpc-gvy>>
+| 8
+| `org.consensusj.jsonrpc.groovy`
+| Groovy JSON-RPC client (dynamic RPC methods)
+
 |<<cj-btc-cli,cj-btc-cli>>
 | 8
 | not yet
@@ -98,6 +123,11 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 | 8
 | not yet
 | Groovy JSON-RPC Bitcoin client  (dynamic RPC methods)
+
+|<<cj-btc-services,cj-btc-services>>
+| 8
+| not yet
+| Bitcoin Service-Layer objects - compatible with `javax.inject` (https://jcp.org/en/jsr/detail?id=330[JSR-330])
 
 |<<cj-eth-jsonrpc,cj-eth-jsonrpc>>
 | 8
@@ -124,20 +154,6 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 | not yet
 | Groovy JSON-RPC Namecoin client (dynamic RPC methods)
 
-|<<consensusj-jsonrpc,consensusj-jsonrpc>>
-| 8
-| `org.consensusj.jsonrpc`
-| JSON-RPC client
-
-|<<consensusj-jsonrpc,consensusj-jsonrpc-cli>>
-| 8
-| `org.consensusj.jsonrpc.cli`
-| JSON-RPC command-line interface (CLI) libraries and tool
-
-|<<consensusj-jsonrpc-gvy,consensusj-jsonrpc-gvy>>
-| 8
-| `org.consensusj.jsonrpc.groovy`
-| Groovy JSON-RPC client (dynamic RPC methods)
 
 
 |===
