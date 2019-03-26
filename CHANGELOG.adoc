@@ -3,9 +3,43 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.3.2-SNAPSHOT
+== v0.4.0-SNAPSHOT
 
-In progress.
+Still in progress, but should be released soon.
+
+=== Breaking Changes
+
+Release 0.4.0 upgrades to https://bitcoinj.github.io[*bitcoinj*] 0.15.1 for all modules with *bitcoinj* dependencies. *bitcoinj* 0.15.x adds support for Segregated Witness and contains https://bitcoinj.github.io/release-notes#version-015[breaking changes].
+
+Release 0.4.0 is also the first release where all modules requires JDK 8 or later.
+
+Some classes and modules have moved to different Java packages.
+
+=== consensusj-decentralized-id
+
+*New, experimental module:* https://w3c-ccg.github.io/did-spec/[Decentralized Identifiers (DIDs)], and specifically https://w3c-ccg.github.io/didm-btcr/[BTCR DID Method] support.
+
+=== consensusj-jsonrpc
+
+* Add proof-of-concept (https://www.graalvm.org[GraalVM]/SubstrateVM-compatible) JSON-RPC Server (Service Layer) support
+
+=== consensusj-jsonrpc-cli
+
+*New module:* a general-purpose (no Bitcoin or cryptocurrency dependencies or specialization) JSON-RPC command-line client with request and response logging. Can be compiled to a native command-line tool using the GraalVM https://www.graalvm.org/docs/reference-manual/aot-compilation/[native-image] tool.
+
+=== consensusj-jsonrpc-daemon
+
+*New module:* https://micronaut.io[Micronaut]-based (and GraalVM/SubstrateVM-compatible) JSON-RPC sample ("echo") server.
+
+=== cj-btc-daemon-mn
+
+*New module:* https://micronaut.io[Micronaut]-based proof-of-concept Bitcoin JSON-RPC server. This will probably replace the Spring-based `bitcoinj-daemon` going forward because it is faster and smaller. It also offers the possibility of GraalVM native-compilation if we can massage **bitcoinj** itself to work when statically compiled.
+
+=== cj-btc-services (was bitcoinj-server)
+
+* Add `WalletAppKitService` (see https://github.com/ConsensusJ/consensusj/issues/42[Issue #42])
+* Remove Spring dependency
+* Move `Peer*Service` to `PeerStompService` to `bitcoinj-peerserver` module (since it needs Spring to compile)
 
 === bitcoinj-money
 
@@ -14,9 +48,6 @@ In progress.
 * Deprecate Bitfinex, Coinbase, and ItBit exchange providers in favor of `DynamicXChangeRateProvider`
 * Add convenience constructors to `DynamicXChangeRateProvider` and `BaseXChangeExchangeRateProvider`
 
-=== bitcoinj-server
-
-* Add `WalletAppKitService` (see https://github.com/ConsensusJ/consensusj/issues/42[Issue #42])
 
 === bitcoinj-deamon
 
@@ -28,8 +59,12 @@ In progress.
 
 === All Modules
 
+* All modules now require JDK8 or later.
+* Update to bitcoinj 0.15.1
+* Update to SLF4J 1.7.26
 * Update to Jackson 2.9.8
 * Update to Groovy 2.5.6
+* Update to Spock 1.3
 
 == v0.3.1
 

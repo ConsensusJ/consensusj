@@ -1,22 +1,24 @@
-include 'consensusj-decentralized-id',                               // W3C Decentralized ID
-        'consensusj-jsonrpc',                                        // JSON-RPC Java client
-        'consensusj-jsonrpc-gvy',                                    // JSON-RPC Groovy client
-        'consensusj-jsonrpc-cli',                                    // JSON-RPC CLI library and tool
-        'consensusj-jsonrpc-daemon',                                 // JSON-RPC sample server
-        'cj-btc-jsonrpc',
-        'cj-btc-jsonrpc-gvy',
+include 'consensusj-decentralized-id',          // W3C Decentralized ID library (in-process)
+        'consensusj-jsonrpc',                   // JSON-RPC Java client
+        'consensusj-jsonrpc-gvy',               // JSON-RPC Groovy client
+        'consensusj-jsonrpc-cli',               // JSON-RPC CLI library and tool
+        'consensusj-jsonrpc-daemon',            // JSON-RPC sample server
+        'cj-btc-jsonrpc',                       // Bitcoin JSON-RPC client using bitcoinj-based types
+        'cj-btc-jsonrpc-gvy',                   // Bitcoin JSON-RPC client with Groovy dynamic method support
+        'cj-btc-cli',                           // Bitcoin JSON-RPC CLI 
+        'cj-btc-services',                      // bitcoinj-based service objects
+        'cj-btc-daemon-mn',                     // Prototype Micronaut version of daemon
         'cj-eth-jsonrpc',
         'cj-eth-jsonrpc-gvy',
         'cj-nmc-jsonrpc',
         'cj-nmc-jsonrpc-gvy',
-        'bitcoinj-json',                                             // JSON <-> Java Object mapping
-        'cj-btc-cli',
-        'cj-btc-services',                                           // Prototype Micronaut version of daemon
-        'cj-btc-daemon-mn',                                          // Prototype Micronaut version of daemon
-        'bitcoinj-rpcclient',                                        // Client
-        'bitcoinj-server', 'bitcoinj-daemon', 'bitcoinj-peerserver', // Server lib + 2 server apps
-        'bitcoinj-dsl', 'bitcoinj-spock',                            // DSL/Testing
-        'bitcoinj-money',                                            // JavaMoney (JSR-354) support
+        'cj-nmc-daemon',
+        'bitcoinj-json',                        // JSON <-> Java Object mapping
+        'bitcoinj-rpcclient',                   // RPC-based integration tests of bitcoind
+        'bitcoinj-daemon',                      // Spring-based bitcoind proof-of-concept
+        'bitcoinj-peerserver',                  // Spring-based P2P transaction viewer
+        'bitcoinj-dsl',                         // Groovy DSL for bitcoinj
+        'bitcoinj-spock',                       // Spock tests/demos of basic bitcoinj capabilities 
+        'bitcoinj-money',                       // JavaMoney (JSR-354) support
         'bitcoinj-dsljs',
-        'bitcoinj-proxy',
-        'cj-nmc-daemon'
+        'bitcoinj-proxy'
