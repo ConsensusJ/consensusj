@@ -14,8 +14,11 @@ allprojects {
     }
 
     artifacts {
-        archives sourceJar
-        archives javadocJar
+        // For some reason the next two lines need to be commented-out to work around
+        // an incompatibility between application and shadow plugin 4.0.4 that arises
+        // when trying to do a `gradle install`
+//        archives sourceJar
+//        archives javadocJar
     }
 
     publishing {
