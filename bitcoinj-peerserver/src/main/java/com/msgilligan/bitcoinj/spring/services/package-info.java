@@ -1,4 +1,4 @@
 /**
  * Spring-based Dependency-injected services for Bitcoin server applications and microservices.
  */
-package org.consensusj.bitcoin.spring;
+package com.msgilligan.bitcoinj.spring.services;

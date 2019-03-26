@@ -180,11 +180,6 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |Tests only (TBD)
 |Jackson serializers, deserializers & POJOs for Bitcoin JSON-RPC
 
-|<<bitcoinj-server,bitcoinj-server>>
-|8
-|Tests only (TBD)
-|Service objects used by the server apps 
-
 |<<bitcoinj-proxy,bitcoinj-proxy>>
 |8
 |Tests only (TBD)
@@ -314,10 +309,10 @@ These sample Spock "feature tests" show the RPC client in action and are from th
 
 https://github.com/FasterXML/jackson/wiki[Jackson] serializers, deserializers & POJOs used to create and parse JSON by both client and server implementations of Bitcoin JSON-RPC.
 
-[#bitcoinj-server]
-==== bitcoinj-server
+[#cj-btc-services]
+==== cj-btc-services
 
-Service objects that power the Daemon and PeerServer. Some objects, such as {cj-apidoc}/com/msgilligan/bitcoinj/spring/service/PeerGroupService.html[PeerGroupService], rely solely on http://docs.oracle.com/javase/7/docs/api/javax/annotation/package-summary.html[javax.annotation] and https://docs.oracle.com/javaee/6/api/javax/inject/package-summary.html[javax.inject] for configuration and can be wired with either Spring or (in theory)  https://github.com/google/guice[Guice]. The current focus is on http://projects.spring.io/spring-boot/[Spring Boot], but we're hoping to build a http://ratpack.io[Ratpack] server in the future.
+Service-Layer objects that power the Daemon(s) and PeerServer. These objects rely solely on http://docs.oracle.com/javase/7/docs/api/javax/annotation/package-summary.html[javax.annotation] and https://docs.oracle.com/javaee/6/api/javax/inject/package-summary.html[javax.inject] for configuration and can be wired with either Spring, https://docs.micronaut.io/latest/guide/index.html#ioc[Micronaut IOC], or https://github.com/google/guice[Guice].
 
 [#bitcoinj-daemon]
 ==== bitcoinj-daemon
