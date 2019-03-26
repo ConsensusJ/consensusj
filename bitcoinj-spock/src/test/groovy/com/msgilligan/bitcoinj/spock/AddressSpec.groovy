@@ -48,4 +48,33 @@ class AddressSpec extends Specification {
         address.parameters == regTestParams
     }
 
+    def "MainNet and TestNet3 address from same key aren't equals and don't compare"() {
+
+        when: "We create a ainNet and TestNet3 addresses"
+        Address mainNetAddr = Address.fromKey(mainNetParams, key, Script.ScriptType.P2PKH)
+        Address testNetAddr = Address.fromKey(testNetParams, key, Script.ScriptType.P2PKH)
+
+        then: "They don't equals() or compareTo()"
+        !mainNetAddr.equals(testNetAddr)
+        mainNetAddr.compareTo(testNetAddr) != 0
+
+        and: "Their STRINGS DON'T MATCH"
+        mainNetAddr.toString() != testNetAddr.toString()
+    }
+
+    def "TestNet3 and Regtest address from same key aren't equals and don't compare"() {
+
+        when: "We create a ainNet and TestNet3 addresses"
+        Address mainNetAddr = Address.fromKey(testNetParams, key, Script.ScriptType.P2PKH)
+        Address testNetAddr = Address.fromKey(regTestParams, key, Script.ScriptType.P2PKH)
+
+        then: "They don't equals() or compareTo()"
+        !mainNetAddr.equals(testNetAddr)
+        mainNetAddr.compareTo(testNetAddr) != 0
+
+        and: "Their STRINGS ACTUALLY DO MATCH"
+        mainNetAddr.toString() == testNetAddr.toString()
+    }
+
+
 }
