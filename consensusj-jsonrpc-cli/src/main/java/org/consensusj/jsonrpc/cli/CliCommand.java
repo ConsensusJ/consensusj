@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Base class for CLI commands that use Bitcoin RPC
+ * Base class for CLI commands that use JSON-RPC
  */
 public abstract class CliCommand {
     private static Logger log = LoggerFactory.getLogger(CliCommand.class);
