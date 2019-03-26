@@ -74,17 +74,6 @@ subprojects {
         options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
     }
 
-    tasks.withType(JavaCompile) {
-        doFirst {
-            if (sourceCompatibility == '1.7' && System.env.JDK7_HOME != null) {
-                options.bootstrapClasspath = files("$System.env.JDK7_HOME/jre/lib/rt.jar")
-                //options.bootClasspath += "$File.pathSeparator$System.env.JDK7_HOME/jre/lib/jce.jar"
-                // use the line above as an example to add jce.jar
-                // and other specific JDK jars
-            }
-        }
-    }
-
     tasks.withType(GroovyCompile) {
         groovyOptions.optimizationOptions.indy = true
     }
