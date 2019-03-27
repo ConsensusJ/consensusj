@@ -12,54 +12,71 @@
 <span class="sourceLineNo">003</span><a id="line.3">import com.googlecode.jsonrpc4j.spring.JsonServiceExporter;</a>
 <span class="sourceLineNo">004</span><a id="line.4">import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;</a>
 <span class="sourceLineNo">005</span><a id="line.5">import com.msgilligan.bitcoinj.json.conversion.RpcServerModule;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import com.msgilligan.bitcoinj.spring.service.PeerGroupService;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import org.bitcoinj.core.NetworkParameters;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import org.bitcoinj.net.discovery.DnsDiscovery;</a>
-<span class="sourceLineNo">009</span><a id="line.9">import org.bitcoinj.net.discovery.PeerDiscovery;</a>
-<span class="sourceLineNo">010</span><a id="line.10">import org.bitcoinj.params.MainNetParams;</a>
-<span class="sourceLineNo">011</span><a id="line.11">import org.springframework.context.annotation.Bean;</a>
-<span class="sourceLineNo">012</span><a id="line.12">import org.springframework.context.annotation.Configuration;</a>
-<span class="sourceLineNo">013</span><a id="line.13">import com.fasterxml.jackson.databind.Module;</a>
-<span class="sourceLineNo">014</span><a id="line.14"></a>
-<span class="sourceLineNo">015</span><a id="line.15">import java.io.FileNotFoundException;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import org.consensusj.bitcoin.services.WalletAppKitService;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import org.bitcoinj.core.Context;</a>
+<span class="sourceLineNo">008</span><a id="line.8">import org.bitcoinj.core.NetworkParameters;</a>
+<span class="sourceLineNo">009</span><a id="line.9">import org.bitcoinj.kits.WalletAppKit;</a>
+<span class="sourceLineNo">010</span><a id="line.10">import org.bitcoinj.net.discovery.DnsDiscovery;</a>
+<span class="sourceLineNo">011</span><a id="line.11">import org.bitcoinj.net.discovery.PeerDiscovery;</a>
+<span class="sourceLineNo">012</span><a id="line.12">import org.bitcoinj.params.MainNetParams;</a>
+<span class="sourceLineNo">013</span><a id="line.13">import org.springframework.context.annotation.Bean;</a>
+<span class="sourceLineNo">014</span><a id="line.14">import org.springframework.context.annotation.Configuration;</a>
+<span class="sourceLineNo">015</span><a id="line.15">import com.fasterxml.jackson.databind.Module;</a>
 <span class="sourceLineNo">016</span><a id="line.16"></a>
-<span class="sourceLineNo">017</span><a id="line.17">/**</a>
-<span class="sourceLineNo">018</span><a id="line.18"> * Spring configuration for bitcoinj, Bitcoin services, and JSON-RPC server</a>
-<span class="sourceLineNo">019</span><a id="line.19"> */</a>
-<span class="sourceLineNo">020</span><a id="line.20">@Configuration</a>
-<span class="sourceLineNo">021</span><a id="line.21">public class BitcoinConfig {</a>
-<span class="sourceLineNo">022</span><a id="line.22">    @Bean</a>
-<span class="sourceLineNo">023</span><a id="line.23">    public NetworkParameters networkParameters() {</a>
-<span class="sourceLineNo">024</span><a id="line.24">        return MainNetParams.get();</a>
-<span class="sourceLineNo">025</span><a id="line.25">    }</a>
-<span class="sourceLineNo">026</span><a id="line.26"></a>
-<span class="sourceLineNo">027</span><a id="line.27">    @Bean</a>
-<span class="sourceLineNo">028</span><a id="line.28">    public PeerDiscovery peerDiscovery(NetworkParameters params) throws FileNotFoundException {</a>
-<span class="sourceLineNo">029</span><a id="line.29">        PeerDiscovery pd;</a>
-<span class="sourceLineNo">030</span><a id="line.30">        pd = new DnsDiscovery(params);</a>
-<span class="sourceLineNo">031</span><a id="line.31">//        pd = new SeedPeers(params);</a>
-<span class="sourceLineNo">032</span><a id="line.32">        return pd;</a>
-<span class="sourceLineNo">033</span><a id="line.33">    }</a>
-<span class="sourceLineNo">034</span><a id="line.34"></a>
-<span class="sourceLineNo">035</span><a id="line.35">    @Bean</a>
-<span class="sourceLineNo">036</span><a id="line.36">    public Module bitcoinJMapper() {</a>
-<span class="sourceLineNo">037</span><a id="line.37">        return new RpcServerModule();</a>
-<span class="sourceLineNo">038</span><a id="line.38">    }</a>
-<span class="sourceLineNo">039</span><a id="line.39"></a>
-<span class="sourceLineNo">040</span><a id="line.40">    @Bean</a>
-<span class="sourceLineNo">041</span><a id="line.41">    public PeerGroupService peerGroupService(NetworkParameters params, PeerDiscovery peerDiscovery) {</a>
-<span class="sourceLineNo">042</span><a id="line.42">        return new PeerGroupService(params, peerDiscovery);</a>
-<span class="sourceLineNo">043</span><a id="line.43">    }</a>
-<span class="sourceLineNo">044</span><a id="line.44"></a>
-<span class="sourceLineNo">045</span><a id="line.45">    @Bean(name="/")</a>
-<span class="sourceLineNo">046</span><a id="line.46">    public JsonServiceExporter bitcoinServiceExporter(PeerGroupService peerGroupService) {</a>
-<span class="sourceLineNo">047</span><a id="line.47">        JsonServiceExporter exporter = new JsonServiceExporter();</a>
-<span class="sourceLineNo">048</span><a id="line.48">        exporter.setService(peerGroupService);</a>
-<span class="sourceLineNo">049</span><a id="line.49">        exporter.setServiceInterface(BitcoinJsonRpc.class);</a>
-<span class="sourceLineNo">050</span><a id="line.50">        exporter.setBackwardsComaptible(true);</a>
-<span class="sourceLineNo">051</span><a id="line.51">        return exporter;</a>
-<span class="sourceLineNo">052</span><a id="line.52">    }</a>
-<span class="sourceLineNo">053</span><a id="line.53">}</a>
+<span class="sourceLineNo">017</span><a id="line.17">import java.io.File;</a>
+<span class="sourceLineNo">018</span><a id="line.18">import java.io.FileNotFoundException;</a>
+<span class="sourceLineNo">019</span><a id="line.19"></a>
+<span class="sourceLineNo">020</span><a id="line.20">/**</a>
+<span class="sourceLineNo">021</span><a id="line.21"> * Spring configuration for bitcoinj, Bitcoin services, and JSON-RPC server</a>
+<span class="sourceLineNo">022</span><a id="line.22"> */</a>
+<span class="sourceLineNo">023</span><a id="line.23">@Configuration</a>
+<span class="sourceLineNo">024</span><a id="line.24">public class BitcoinConfig {</a>
+<span class="sourceLineNo">025</span><a id="line.25">    @Bean</a>
+<span class="sourceLineNo">026</span><a id="line.26">    public NetworkParameters networkParameters() {</a>
+<span class="sourceLineNo">027</span><a id="line.27">        return MainNetParams.get();</a>
+<span class="sourceLineNo">028</span><a id="line.28">    }</a>
+<span class="sourceLineNo">029</span><a id="line.29"></a>
+<span class="sourceLineNo">030</span><a id="line.30">    @Bean</a>
+<span class="sourceLineNo">031</span><a id="line.31">    public PeerDiscovery peerDiscovery(NetworkParameters params) throws FileNotFoundException {</a>
+<span class="sourceLineNo">032</span><a id="line.32">        PeerDiscovery pd;</a>
+<span class="sourceLineNo">033</span><a id="line.33">        pd = new DnsDiscovery(params);</a>
+<span class="sourceLineNo">034</span><a id="line.34">//        pd = new SeedPeers(params);</a>
+<span class="sourceLineNo">035</span><a id="line.35">        return pd;</a>
+<span class="sourceLineNo">036</span><a id="line.36">    }</a>
+<span class="sourceLineNo">037</span><a id="line.37"></a>
+<span class="sourceLineNo">038</span><a id="line.38">    @Bean</a>
+<span class="sourceLineNo">039</span><a id="line.39">    public Context getContext(NetworkParameters params) {</a>
+<span class="sourceLineNo">040</span><a id="line.40">        return new Context(params);</a>
+<span class="sourceLineNo">041</span><a id="line.41">    }</a>
+<span class="sourceLineNo">042</span><a id="line.42"></a>
+<span class="sourceLineNo">043</span><a id="line.43">    @Bean</a>
+<span class="sourceLineNo">044</span><a id="line.44">    public WalletAppKit getKit(NetworkParameters params) throws Exception {</a>
+<span class="sourceLineNo">045</span><a id="line.45">        // TODO: make File(".") and filePrefix configurable</a>
+<span class="sourceLineNo">046</span><a id="line.46">        File directory = new File(".");</a>
+<span class="sourceLineNo">047</span><a id="line.47">        String filePrefix = "BitcoinJDaemon";</a>
+<span class="sourceLineNo">048</span><a id="line.48"></a>
+<span class="sourceLineNo">049</span><a id="line.49">        return new WalletAppKit(params, directory, filePrefix);</a>
+<span class="sourceLineNo">050</span><a id="line.50">    }</a>
+<span class="sourceLineNo">051</span><a id="line.51"></a>
+<span class="sourceLineNo">052</span><a id="line.52">    @Bean</a>
+<span class="sourceLineNo">053</span><a id="line.53">    public Module bitcoinJMapper(NetworkParameters params) {</a>
+<span class="sourceLineNo">054</span><a id="line.54">        return new RpcServerModule(params);</a>
+<span class="sourceLineNo">055</span><a id="line.55">    }</a>
+<span class="sourceLineNo">056</span><a id="line.56">    </a>
+<span class="sourceLineNo">057</span><a id="line.57">    @Bean</a>
+<span class="sourceLineNo">058</span><a id="line.58">    public WalletAppKitService walletAppKitService(NetworkParameters params, Context context, WalletAppKit kit) {</a>
+<span class="sourceLineNo">059</span><a id="line.59">        return new WalletAppKitService(params, context, kit);</a>
+<span class="sourceLineNo">060</span><a id="line.60">    }</a>
+<span class="sourceLineNo">061</span><a id="line.61"></a>
+<span class="sourceLineNo">062</span><a id="line.62">    @Bean(name="/")</a>
+<span class="sourceLineNo">063</span><a id="line.63">    public JsonServiceExporter bitcoinServiceExporter(WalletAppKitService walletAppKitService) {</a>
+<span class="sourceLineNo">064</span><a id="line.64">        JsonServiceExporter exporter = new JsonServiceExporter();</a>
+<span class="sourceLineNo">065</span><a id="line.65">        exporter.setService(walletAppKitService);</a>
+<span class="sourceLineNo">066</span><a id="line.66">        exporter.setServiceInterface(BitcoinJsonRpc.class);</a>
+<span class="sourceLineNo">067</span><a id="line.67">        exporter.setBackwardsComaptible(true);</a>
+<span class="sourceLineNo">068</span><a id="line.68">        return exporter;</a>
+<span class="sourceLineNo">069</span><a id="line.69">    }</a>
+<span class="sourceLineNo">070</span><a id="line.70">}</a>
 
 
 

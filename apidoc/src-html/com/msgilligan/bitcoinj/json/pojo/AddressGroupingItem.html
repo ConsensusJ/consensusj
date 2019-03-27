@@ -37,7 +37,7 @@
 <span class="sourceLineNo">028</span><a id="line.28">        //TODO: Try to avoid using Double</a>
 <span class="sourceLineNo">029</span><a id="line.29">        Double balanceDouble = (Double) addressItem.get(1);</a>
 <span class="sourceLineNo">030</span><a id="line.30">        account = (addressItem.size() &gt; 2) ? (String) addressItem.get(2) : null;</a>
-<span class="sourceLineNo">031</span><a id="line.31">        address = Address.fromBase58(netParams, addressStr);</a>
+<span class="sourceLineNo">031</span><a id="line.31">        address = Address.fromString(netParams, addressStr);</a>
 <span class="sourceLineNo">032</span><a id="line.32">        balance = Coin.valueOf(((Double)(balanceDouble * 100000000.0)).longValue());</a>
 <span class="sourceLineNo">033</span><a id="line.33"></a>
 <span class="sourceLineNo">034</span><a id="line.34">    }</a>

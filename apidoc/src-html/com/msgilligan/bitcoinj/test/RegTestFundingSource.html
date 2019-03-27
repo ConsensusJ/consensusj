@@ -74,7 +74,7 @@
 <span class="sourceLineNo">065</span><a id="line.65">            int blockIndex = client.getBlockCount() - minCoinAge;</a>
 <span class="sourceLineNo">066</span><a id="line.66">            Block block = client.getBlock(blockIndex);</a>
 <span class="sourceLineNo">067</span><a id="line.67">            List&lt;Transaction&gt; blockTxs = block.getTransactions();</a>
-<span class="sourceLineNo">068</span><a id="line.68">            Sha256Hash coinbaseTx = blockTxs.get(0).getHash();</a>
+<span class="sourceLineNo">068</span><a id="line.68">            Sha256Hash coinbaseTx = blockTxs.get(0).getTxId();</a>
 <span class="sourceLineNo">069</span><a id="line.69">            TxOutInfo txout = client.getTxOut(coinbaseTx, 0);</a>
 <span class="sourceLineNo">070</span><a id="line.70"></a>
 <span class="sourceLineNo">071</span><a id="line.71">            // txout is empty, if output was already spent</a>

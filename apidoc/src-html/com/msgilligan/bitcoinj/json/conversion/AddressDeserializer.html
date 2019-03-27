@@ -38,7 +38,7 @@
 <span class="sourceLineNo">029</span><a id="line.29">        switch (token) {</a>
 <span class="sourceLineNo">030</span><a id="line.30">            case VALUE_STRING:</a>
 <span class="sourceLineNo">031</span><a id="line.31">                try {</a>
-<span class="sourceLineNo">032</span><a id="line.32">                    return Address.fromBase58(netParams, p.getValueAsString());</a>
+<span class="sourceLineNo">032</span><a id="line.32">                    return Address.fromString(netParams, p.getValueAsString());</a>
 <span class="sourceLineNo">033</span><a id="line.33">                } catch (AddressFormatException e) {</a>
 <span class="sourceLineNo">034</span><a id="line.34">                    throw new InvalidFormatException(p, "Invalid Address", p.getValueAsString(), Address.class);</a>
 <span class="sourceLineNo">035</span><a id="line.35">                }</a>

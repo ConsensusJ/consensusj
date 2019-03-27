@@ -14,29 +14,31 @@
 <span class="sourceLineNo">005</span><a id="line.5">import org.bitcoinj.core.Address;</a>
 <span class="sourceLineNo">006</span><a id="line.6">import org.bitcoinj.core.Coin;</a>
 <span class="sourceLineNo">007</span><a id="line.7">import org.bitcoinj.core.ECKey;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import org.bitcoinj.core.Peer;</a>
-<span class="sourceLineNo">009</span><a id="line.9">import org.bitcoinj.core.Sha256Hash;</a>
-<span class="sourceLineNo">010</span><a id="line.10">import org.bitcoinj.core.Transaction;</a>
-<span class="sourceLineNo">011</span><a id="line.11"></a>
-<span class="sourceLineNo">012</span><a id="line.12">/**</a>
-<span class="sourceLineNo">013</span><a id="line.13"> *</a>
-<span class="sourceLineNo">014</span><a id="line.14"> */</a>
-<span class="sourceLineNo">015</span><a id="line.15">public class RpcServerModule extends SimpleModule {</a>
-<span class="sourceLineNo">016</span><a id="line.16">    public RpcServerModule() {</a>
-<span class="sourceLineNo">017</span><a id="line.17">        super("BitcoinJMappingServer", new Version(1, 0, 0, null, null, null));</a>
-<span class="sourceLineNo">018</span><a id="line.18"></a>
-<span class="sourceLineNo">019</span><a id="line.19">        this.addDeserializer(Address.class, new AddressDeserializer(null))  // Null means use default list of netParams</a>
-<span class="sourceLineNo">020</span><a id="line.20">                .addDeserializer(Coin.class, new CoinDeserializer())</a>
-<span class="sourceLineNo">021</span><a id="line.21">                .addDeserializer(ECKey.class, new ECKeyDeserializer())</a>
-<span class="sourceLineNo">022</span><a id="line.22">                .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())</a>
-<span class="sourceLineNo">023</span><a id="line.23">                .addSerializer(Address.class, new AddressSerializer())</a>
-<span class="sourceLineNo">024</span><a id="line.24">                .addSerializer(Coin.class, new CoinSerializer())</a>
-<span class="sourceLineNo">025</span><a id="line.25">                .addSerializer(ECKey.class, new ECKeySerializer())</a>
-<span class="sourceLineNo">026</span><a id="line.26">                .addSerializer(Peer.class, new PeerSerializer())</a>
-<span class="sourceLineNo">027</span><a id="line.27">                .addSerializer(Sha256Hash.class, new Sha256HashSerializer())</a>
-<span class="sourceLineNo">028</span><a id="line.28">                .addSerializer(Transaction.class, new TransactionSerializer());</a>
-<span class="sourceLineNo">029</span><a id="line.29">    }</a>
-<span class="sourceLineNo">030</span><a id="line.30">}</a>
+<span class="sourceLineNo">008</span><a id="line.8">import org.bitcoinj.core.NetworkParameters;</a>
+<span class="sourceLineNo">009</span><a id="line.9">import org.bitcoinj.core.Peer;</a>
+<span class="sourceLineNo">010</span><a id="line.10">import org.bitcoinj.core.Sha256Hash;</a>
+<span class="sourceLineNo">011</span><a id="line.11">import org.bitcoinj.core.Transaction;</a>
+<span class="sourceLineNo">012</span><a id="line.12">import org.bitcoinj.params.MainNetParams;</a>
+<span class="sourceLineNo">013</span><a id="line.13"></a>
+<span class="sourceLineNo">014</span><a id="line.14">/**</a>
+<span class="sourceLineNo">015</span><a id="line.15"> *</a>
+<span class="sourceLineNo">016</span><a id="line.16"> */</a>
+<span class="sourceLineNo">017</span><a id="line.17">public class RpcServerModule extends SimpleModule {</a>
+<span class="sourceLineNo">018</span><a id="line.18">    public RpcServerModule(NetworkParameters netParams) {</a>
+<span class="sourceLineNo">019</span><a id="line.19">        super("BitcoinJMappingServer", new Version(1, 0, 0, null, null, null));</a>
+<span class="sourceLineNo">020</span><a id="line.20"></a>
+<span class="sourceLineNo">021</span><a id="line.21">        this.addDeserializer(Address.class, new AddressDeserializer(netParams))  // Null means use default list of netParams</a>
+<span class="sourceLineNo">022</span><a id="line.22">                .addDeserializer(Coin.class, new CoinDeserializer())</a>
+<span class="sourceLineNo">023</span><a id="line.23">                .addDeserializer(ECKey.class, new ECKeyDeserializer())</a>
+<span class="sourceLineNo">024</span><a id="line.24">                .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())</a>
+<span class="sourceLineNo">025</span><a id="line.25">                .addSerializer(Address.class, new AddressSerializer())</a>
+<span class="sourceLineNo">026</span><a id="line.26">                .addSerializer(Coin.class, new CoinSerializer())</a>
+<span class="sourceLineNo">027</span><a id="line.27">                .addSerializer(ECKey.class, new ECKeySerializer())</a>
+<span class="sourceLineNo">028</span><a id="line.28">                .addSerializer(Peer.class, new PeerSerializer())</a>
+<span class="sourceLineNo">029</span><a id="line.29">                .addSerializer(Sha256Hash.class, new Sha256HashSerializer())</a>
+<span class="sourceLineNo">030</span><a id="line.30">                .addSerializer(Transaction.class, new TransactionSerializer());</a>
+<span class="sourceLineNo">031</span><a id="line.31">    }</a>
+<span class="sourceLineNo">032</span><a id="line.32">}</a>
 
 
 

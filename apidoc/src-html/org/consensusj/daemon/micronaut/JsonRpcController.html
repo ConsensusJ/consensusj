@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">package org.consensusj.daemon.micronaut;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.databind.PropertyNamingStrategy;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.msgilligan.bitcoinj.json.pojo.ServerInfo;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import io.micronaut.context.annotation.Context;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import io.micronaut.core.annotation.TypeHint;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import io.micronaut.http.MediaType;</a>
+<span class="sourceLineNo">008</span><a id="line.8">import io.micronaut.http.annotation.Body;</a>
+<span class="sourceLineNo">009</span><a id="line.9">import io.micronaut.http.annotation.Controller;</a>
+<span class="sourceLineNo">010</span><a id="line.10">import io.micronaut.http.annotation.Post;</a>
+<span class="sourceLineNo">011</span><a id="line.11">import org.consensusj.jsonrpc.JsonRpcRequest;</a>
+<span class="sourceLineNo">012</span><a id="line.12">import org.consensusj.jsonrpc.JsonRpcResponse;</a>
+<span class="sourceLineNo">013</span><a id="line.13">import org.consensusj.jsonrpc.JsonRpcService;</a>
+<span class="sourceLineNo">014</span><a id="line.14">import org.slf4j.Logger;</a>
+<span class="sourceLineNo">015</span><a id="line.15">import org.slf4j.LoggerFactory;</a>
+<span class="sourceLineNo">016</span><a id="line.16"></a>
+<span class="sourceLineNo">017</span><a id="line.17">import java.util.ArrayList;</a>
+<span class="sourceLineNo">018</span><a id="line.18">import java.util.HashSet;</a>
+<span class="sourceLineNo">019</span><a id="line.19">import java.util.LinkedHashMap;</a>
+<span class="sourceLineNo">020</span><a id="line.20">import java.util.concurrent.CompletableFuture;</a>
+<span class="sourceLineNo">021</span><a id="line.21"></a>
+<span class="sourceLineNo">022</span><a id="line.22">/**</a>
+<span class="sourceLineNo">023</span><a id="line.23"> * Create a REST endpoint from a JsonRpcService</a>
+<span class="sourceLineNo">024</span><a id="line.24"> * Here we're using Micronaut annotations to wrap the JsonRpcService</a>
+<span class="sourceLineNo">025</span><a id="line.25"> * in an HTTP environment and to serialize JSON to and from Java POJOs.</a>
+<span class="sourceLineNo">026</span><a id="line.26"> */</a>
+<span class="sourceLineNo">027</span><a id="line.27">@TypeHint(</a>
+<span class="sourceLineNo">028</span><a id="line.28">        value = {</a>
+<span class="sourceLineNo">029</span><a id="line.29">                PropertyNamingStrategy.UpperCamelCaseStrategy.class,</a>
+<span class="sourceLineNo">030</span><a id="line.30">                ArrayList.class,</a>
+<span class="sourceLineNo">031</span><a id="line.31">                LinkedHashMap.class,</a>
+<span class="sourceLineNo">032</span><a id="line.32">                HashSet.class,</a>
+<span class="sourceLineNo">033</span><a id="line.33">                JsonRpcRequest.class,</a>
+<span class="sourceLineNo">034</span><a id="line.34">                JsonRpcResponse.class,</a>
+<span class="sourceLineNo">035</span><a id="line.35">                ServerInfo.class</a>
+<span class="sourceLineNo">036</span><a id="line.36">        },</a>
+<span class="sourceLineNo">037</span><a id="line.37">        accessType = {TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS, TypeHint.AccessType.ALL_DECLARED_METHODS}</a>
+<span class="sourceLineNo">038</span><a id="line.38">)</a>
+<span class="sourceLineNo">039</span><a id="line.39">@Controller("/rpc")</a>
+<span class="sourceLineNo">040</span><a id="line.40">@Context</a>
+<span class="sourceLineNo">041</span><a id="line.41">public class JsonRpcController {</a>
+<span class="sourceLineNo">042</span><a id="line.42">    private static Logger log = LoggerFactory.getLogger(JsonRpcController.class);</a>
+<span class="sourceLineNo">043</span><a id="line.43">    private final JsonRpcService jsonRpcService;</a>
+<span class="sourceLineNo">044</span><a id="line.44"></a>
+<span class="sourceLineNo">045</span><a id="line.45">    public JsonRpcController(WalletAppKitJsonRpcService walletAppKitService) {</a>
+<span class="sourceLineNo">046</span><a id="line.46">        log.info("Constructing JsonRpcController");</a>
+<span class="sourceLineNo">047</span><a id="line.47">        jsonRpcService = walletAppKitService;</a>
+<span class="sourceLineNo">048</span><a id="line.48">    }</a>
+<span class="sourceLineNo">049</span><a id="line.49"></a>
+<span class="sourceLineNo">050</span><a id="line.50">    @Post(produces = MediaType.APPLICATION_JSON)</a>
+<span class="sourceLineNo">051</span><a id="line.51">    public CompletableFuture&lt;JsonRpcResponse&lt;Object&gt;&gt; index(@Body JsonRpcRequest req) {</a>
+<span class="sourceLineNo">052</span><a id="line.52">        log.info("JSON-RPC call: {}", req.getMethod());</a>
+<span class="sourceLineNo">053</span><a id="line.53">        return jsonRpcService.call(req);</a>
+<span class="sourceLineNo">054</span><a id="line.54">    }</a>
+<span class="sourceLineNo">055</span><a id="line.55"></a>
+<span class="sourceLineNo">056</span><a id="line.56">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

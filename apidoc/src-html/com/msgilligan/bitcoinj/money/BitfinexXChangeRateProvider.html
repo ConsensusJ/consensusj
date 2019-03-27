@@ -12,20 +12,22 @@
 <span class="sourceLineNo">003</span><a id="line.3">import java.util.concurrent.ScheduledExecutorService;</a>
 <span class="sourceLineNo">004</span><a id="line.4"></a>
 <span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> *  Bitfinex ExchangeRateProvider using XChange library</a>
-<span class="sourceLineNo">007</span><a id="line.7"> */</a>
-<span class="sourceLineNo">008</span><a id="line.8">public class BitfinexXChangeRateProvider extends BaseXChangeExchangeRateProvider {</a>
-<span class="sourceLineNo">009</span><a id="line.9">    static private final String[] pairs = {"BTC/USD"};</a>
-<span class="sourceLineNo">010</span><a id="line.10">    static private final String xchangeClassName = "org.knowm.xchange.bitfinex.v1.BitfinexExchange";</a>
-<span class="sourceLineNo">011</span><a id="line.11"></a>
-<span class="sourceLineNo">012</span><a id="line.12">    public BitfinexXChangeRateProvider(ScheduledExecutorService scheduledExecutorService) {</a>
-<span class="sourceLineNo">013</span><a id="line.13">        super(xchangeClassName, scheduledExecutorService, pairsConvert(pairs));</a>
-<span class="sourceLineNo">014</span><a id="line.14">    }</a>
-<span class="sourceLineNo">015</span><a id="line.15"></a>
-<span class="sourceLineNo">016</span><a id="line.16">    public BitfinexXChangeRateProvider() {</a>
-<span class="sourceLineNo">017</span><a id="line.17">        super(xchangeClassName, null, pairsConvert(pairs));</a>
-<span class="sourceLineNo">018</span><a id="line.18">    }</a>
-<span class="sourceLineNo">019</span><a id="line.19">}</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * Bitfinex ExchangeRateProvider using XChange library</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * @deprecated Use DynamicXChangeRateProvider</a>
+<span class="sourceLineNo">008</span><a id="line.8"> */</a>
+<span class="sourceLineNo">009</span><a id="line.9">@Deprecated</a>
+<span class="sourceLineNo">010</span><a id="line.10">public class BitfinexXChangeRateProvider extends BaseXChangeExchangeRateProvider {</a>
+<span class="sourceLineNo">011</span><a id="line.11">    static private final String[] pairs = {"BTC/USD"};</a>
+<span class="sourceLineNo">012</span><a id="line.12">    static private final String xchangeClassName = "org.knowm.xchange.bitfinex.v1.BitfinexExchange";</a>
+<span class="sourceLineNo">013</span><a id="line.13"></a>
+<span class="sourceLineNo">014</span><a id="line.14">    public BitfinexXChangeRateProvider(ScheduledExecutorService scheduledExecutorService) {</a>
+<span class="sourceLineNo">015</span><a id="line.15">        super(xchangeClassName, scheduledExecutorService, pairsConvert(pairs));</a>
+<span class="sourceLineNo">016</span><a id="line.16">    }</a>
+<span class="sourceLineNo">017</span><a id="line.17"></a>
+<span class="sourceLineNo">018</span><a id="line.18">    public BitfinexXChangeRateProvider() {</a>
+<span class="sourceLineNo">019</span><a id="line.19">        super(xchangeClassName, null, pairsConvert(pairs));</a>
+<span class="sourceLineNo">020</span><a id="line.20">    }</a>
+<span class="sourceLineNo">021</span><a id="line.21">}</a>
 
 
 

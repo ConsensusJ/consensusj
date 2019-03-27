@@ -50,9 +50,9 @@ namespace com.msgilligan.namecoinj.rpc {
 
 PlantUML version 1.2018.01(Sun Jan 28 10:08:22 PST 2018)
 (APACHE source distribution)
-Java Runtime: Java(TM) SE Runtime Environment
-JVM: Java HotSpot(TM) 64-Bit Server VM
-Java Version: 9+181
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 9.0.4+11
 Operating System: Mac OS X
 OS Version: 10.13.6
 Default Encoding: UTF-8
