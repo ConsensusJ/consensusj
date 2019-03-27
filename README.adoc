@@ -1,9 +1,9 @@
 = ConsensusJ (formerly bitcoinj-addons)
 Sean Gilligan <https://github.com/msgilligan>
-v0.3.1
+v0.4.0
 :description: ConsensusJ README document.
-:consensusj-version: 0.3.1
-:bitcoinj-version: 0.14.7
+:consensusj-version: 0.4.0
+:bitcoinj-version: 0.15.1
 :bitcoinj-apidoc: https://bitcoinj.github.io/javadoc/{bitcoinj-version}/
 :cj-apidoc: https://consensusj.github.io/consensusj/apidoc
 :tip-caption: :bulb:
@@ -395,16 +395,27 @@ NOTE: The first time you run the build all dependency JARS will be downloaded.
 
     ./gradlew build
 
-=== Build CLI tool
+=== Build JSON-RPC CLI tool
 
 To build the CLI executable jar:
 
-    ./gradlew :bitcoinj-cli:shadowJar
+    ./gradlew :consensusj-jsonrpc-cli:shadowJar
 
 To run it and display a list of command line options:
 
 [subs="attributes"]
-    java -jar bitcoinj-cli/build/libs/cj-btc-cli-{consensusj-version}.jar -?
+    java -jar consensusj-jsonrpc-cli/build/libs/consensusj-jsonrpc-cli-{consensusj-version}.jar -?
+
+=== Build Bitcoin CLI tool
+
+To build the CLI executable jar:
+
+    ./gradlew :cj-btc-cli:shadowJar
+
+To run it and display a list of command line options:
+
+[subs="attributes"]
+    java -jar cj-btc-cli/build/libs/cj-btc-cli-{consensusj-version}.jar -?
 
 === Build and Run PeerServer Locally Using Gradle
 

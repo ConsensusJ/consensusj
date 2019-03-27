@@ -3,9 +3,11 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.4.0-SNAPSHOT
+== v0.4.0
 
-Still in progress, but should be released soon.
+Released: 2019.03.26
+
+*bitcoinj* 0.15.1 and JDK 8+ everywhere!
 
 === Breaking Changes
 
