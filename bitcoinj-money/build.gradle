@@ -2,10 +2,10 @@ plugins {
     id 'java-library'
 }
 
-def xChangeVersion = '4.3.12'
+def xChangeVersion = '4.3.16'
 
 dependencies {
-    api 'org.javamoney:moneta-bp:1.2'
+    api 'org.javamoney:moneta-bp:1.3'
 
     api "org.knowm.xchange:xchange-core:${xChangeVersion}"
 

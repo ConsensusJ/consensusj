@@ -7,6 +7,12 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 In progress
 
+=== bitcoinj-money
+
+* Upgrade to JavaMoney moneta-bp 1.3
+* Upgrade to XChange 4.3.16
+* Remove deprecated XChangeRateProviders (in favor of `DynamicXChangeRateProvider`)
+
 == v0.4.0
 
 Released: 2019.03.26
