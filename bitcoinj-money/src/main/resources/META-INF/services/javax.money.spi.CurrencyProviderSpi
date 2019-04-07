@@ -1,1 +1,1 @@
-com.msgilligan.bitcoinj.money.BitcoinCurrencyProvider
+org.consensusj.currency.BitcoinCurrencyProvider

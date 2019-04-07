@@ -1,6 +1,5 @@
-package com.msgilligan.bitcoinj.money;
+package org.consensusj.exchange;
 
-import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 
 /**

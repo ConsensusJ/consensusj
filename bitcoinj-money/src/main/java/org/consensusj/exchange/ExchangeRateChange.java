@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.money;
+package org.consensusj.exchange;
 
 //import org.knowm.xchange.dto.marketdata.Ticker;
 

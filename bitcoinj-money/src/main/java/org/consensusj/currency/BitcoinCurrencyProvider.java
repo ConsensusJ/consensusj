@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.money;
+package org.consensusj.currency;
 
 import org.javamoney.moneta.CurrencyUnitBuilder;
 import org.javamoney.moneta.spi.base.BaseCurrencyProviderSpi;

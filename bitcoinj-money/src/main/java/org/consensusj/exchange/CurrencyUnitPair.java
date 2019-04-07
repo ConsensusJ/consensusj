@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.money;
+package org.consensusj.exchange;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;

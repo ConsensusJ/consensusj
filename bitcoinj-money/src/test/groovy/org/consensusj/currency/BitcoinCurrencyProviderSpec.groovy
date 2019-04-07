@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.money
+package org.consensusj.currency
 
 import org.javamoney.moneta.CurrencyUnitBuilder
 import org.javamoney.moneta.Money
@@ -10,8 +10,6 @@ import javax.money.CurrencyQueryBuilder
 import javax.money.CurrencyUnit
 import javax.money.Monetary
 import javax.money.MonetaryAmount
-import javax.money.UnknownCurrencyException
-
 
 /**
  * Spock test specification for BitcoinCurrencyProvider

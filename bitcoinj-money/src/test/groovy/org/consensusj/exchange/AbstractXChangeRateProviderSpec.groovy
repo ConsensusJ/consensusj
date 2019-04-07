@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.money
+package org.consensusj.exchange
 
 import org.javamoney.moneta.Money
 import spock.lang.Shared

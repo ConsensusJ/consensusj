@@ -1,4 +1,4 @@
-package com.msgilligan.bitcoinj.money;
+package org.consensusj.exchange;
 
 /**
  * Implement this interface to register with `ObservableExchangeRateProvider` for rate updates
