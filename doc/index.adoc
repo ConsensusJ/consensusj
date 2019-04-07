@@ -1,6 +1,6 @@
 = ConsensusJ Github Pages
 Sean Gilligan
-v0.2.7, June 9, 2018: Stub
+v0.4.0, March 26, 2019: Stub
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
 Welcome to the GitHub Project Pages for *ConsensusJ*.
