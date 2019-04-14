@@ -41,8 +41,8 @@ allprojects {
         publications = ['jar'] // When uploading Maven-based publication files
         pkg {
             repo = 'maven'
-            name = 'bitcoinj-addons'
-            desc = 'Add-On functionality for bitcoinj'
+            name = 'consensusj'
+            desc = 'Modular cryptocurrency toolkit'
             websiteUrl = 'https://github.com/ConsensusJ/consensusj'
             issueTrackerUrl = 'https://github.com/ConsensusJ/consensusj/issues'
             vcsUrl = 'https://github.com/ConsensusJ/consensusj.git'
