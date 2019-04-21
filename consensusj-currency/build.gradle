@@ -1,0 +1,7 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    api 'org.javamoney:moneta-bp:1.3'
+}

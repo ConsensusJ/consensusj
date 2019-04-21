@@ -1,4 +1,5 @@
-include 'consensusj-decentralized-id',          // W3C Decentralized ID library (in-process)
+include 'consensusj-currency',                  // JavaMoney Currency Providers
+        'consensusj-decentralized-id',          // W3C Decentralized ID library (in-process)
         'consensusj-jsonrpc',                   // JSON-RPC Java client
         'consensusj-jsonrpc-gvy',               // JSON-RPC Groovy client
         'consensusj-jsonrpc-cli',               // JSON-RPC CLI library and tool
