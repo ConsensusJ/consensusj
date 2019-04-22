@@ -5,7 +5,7 @@ plugins {
 def xChangeVersion = '4.3.16'
 
 dependencies {
-    api 'org.javamoney:moneta-bp:1.3'
+    api "org.javamoney:moneta-bp:${javaMoneyBPVersion}"
 
     api "org.knowm.xchange:xchange-core:${xChangeVersion}"
 
@@ -14,3 +14,14 @@ dependencies {
     testImplementation "org.knowm.xchange:xchange-coinbase:${xChangeVersion}"
     testImplementation "org.knowm.xchange:xchange-coinbasepro:${xChangeVersion}"
 }
+
+ext.moduleName = 'org.consensusj.exchange'
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Automatic-Module-Name': moduleName,
+                'Implementation-Version': version
+    }
+}
+

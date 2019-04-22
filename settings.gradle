@@ -1,5 +1,6 @@
-include 'consensusj-currency',                  // JavaMoney Currency Providers
+include 'consensusj-currency',                  // JavaMoney Currency Provider(s)
         'consensusj-decentralized-id',          // W3C Decentralized ID library (in-process)
+        'consensusj-exchange',                  // JavaMoney Exchange Providers
         'consensusj-jsonrpc',                   // JSON-RPC Java client
         'consensusj-jsonrpc-gvy',               // JSON-RPC Groovy client
         'consensusj-jsonrpc-cli',               // JSON-RPC CLI library and tool
@@ -20,6 +21,5 @@ include 'consensusj-currency',                  // JavaMoney Currency Providers
         'bitcoinj-peerserver',                  // Spring-based P2P transaction viewer
         'bitcoinj-dsl',                         // Groovy DSL for bitcoinj
         'bitcoinj-spock',                       // Spock tests/demos of basic bitcoinj capabilities 
-        'bitcoinj-money',                       // JavaMoney (JSR-354) support
         'bitcoinj-dsljs',
         'bitcoinj-proxy'

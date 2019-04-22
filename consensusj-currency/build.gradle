@@ -3,5 +3,16 @@ plugins {
 }
 
 dependencies {
-    api 'org.javamoney:moneta-bp:1.3'
+    api "org.javamoney:moneta-bp:${javaMoneyBPVersion}"
+}
+
+
+ext.moduleName = 'org.consensusj.currency'
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Automatic-Module-Name': moduleName,
+                    'Implementation-Version': version
+    }
 }

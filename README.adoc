@@ -1,8 +1,8 @@
-= ConsensusJ (formerly bitcoinj-addons)
+= ConsensusJ
 Sean Gilligan <https://github.com/msgilligan>
-v0.4.0
+v0.5.0-SNAPSHOT
 :description: ConsensusJ README document.
-:consensusj-version: 0.4.0
+:consensusj-version: 0.5.0-SNAPSHOT
 :bitcoinj-version: 0.15.1
 :bitcoinj-apidoc: https://bitcoinj.github.io/javadoc/{bitcoinj-version}/
 :cj-apidoc: https://consensusj.github.io/consensusj/apidoc
@@ -77,12 +77,22 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 .ConsensusJ Modules
 [cols="3,1,3,5"]
 |===
-|Name |Min JDK |JPMS module |Description
+|Name |Min JDK |JPMS module name |Description
 
-|<<consensusj-jsonrpc,consensusj-jsonrpc>>
+|<<consensusj-currency,consensusj-currency>>
+| 8
+| `org.consensusj.currency`
+| http://javamoney.github.io[JavaMoney] Currency Provider(s)
+
+|<<consensusj-decentralizedid,consensusj-decentralizedid>>
 | 8
 | `org.consensusj.decentralizedid`
 | Preliminary, experimental, W3C DID and BTCR DID Method support
+
+|<<consensusj-exchange,consensusj-exchange>>
+| 8
+| `org.consensusj.exchange`
+| http://javamoney.github.io[JavaMoney] Exchange Providers. Adapter to use http://knowm.org/open-source/xchange/[XChange] `Exchange` implementations as JavaMoney `ExchangeRateProvider`s.
 
 |<<consensusj-jsonrpc,consensusj-jsonrpc>>
 | 8
@@ -159,7 +169,7 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 |===
 
 
-=== Modules
+=== Legacy Modules
 
 See the table below for an overview of the modules in the old `com.msgilligan` namespace.
 The *JDK* column indicates the version of Java required.
