@@ -29,6 +29,7 @@ In progress
 
 === All Modules
 
+* Update to bitcoinj 0.15.2
 * Update to Groovy 2.5.7
 
 == v0.4.0
