@@ -41,9 +41,11 @@ task graalNativeImage(type:Exec, dependsOn: jar) {
              '-jar', jar.archivePath,
              '-H:Path=build',
              '-H:Name=jsonrpc',
+             '--initialize-at-build-time=com.fasterxml.jackson.annotation.JsonProperty$Access',
              '-H:IncludeResources=logging.properties',
              '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
-             '-H:EnableURLProtocols=http',
-             '-H:+ReportUnsupportedElementsAtRuntime'
+             '-H:EnableURLProtocols=http,https',
+             '-H:+ReportUnsupportedElementsAtRuntime',
+             '-H:+ReportExceptionStackTraces'
     ]
 }
