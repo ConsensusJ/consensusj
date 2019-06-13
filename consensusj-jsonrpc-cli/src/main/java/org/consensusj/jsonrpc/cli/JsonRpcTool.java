@@ -75,8 +75,34 @@ public class JsonRpcTool extends CliCommand {
      * @return Params with correct Java types for JSON
      */
     protected List<Object> convertParameters(String method, List<String> params) {
-        // Default (for now) is to leave them all as strings
-        return new ArrayList<>(params);
+        List<Object> converted = new ArrayList<>();
+        for (String param : params) {
+            Object convertedParam = convertParam(param);
+            converted.add(convertedParam);
+        }
+        return converted;
+    }
+
+    /**
+     * Convert a single param from a command-line option {@code String} to a type more appropriate
+     * for Jackson/JSON-RPC.
+     * 
+     * @param param A string parameter to convert
+     * @return
+     */
+    private Object convertParam(String param) {
+        Object result;
+        switch (param) {
+            case "false":
+                result = 0;
+                break;
+            case "true":
+                result = 1;
+                break;
+            default:
+                result = param;
+        }
+        return result;
     }
 
 }
