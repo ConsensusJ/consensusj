@@ -121,7 +121,16 @@ public abstract class CliCommand {
             } else {
                 uri = URI.create("http://localhost:8080/");  // Hardcoded for now
             }
-            client = new RpcClient(uri, null, null);
+            String rpcUser = null;
+            String rpcPassword = null;
+            String rawUserInfo = uri.getRawUserInfo();
+            if (rawUserInfo != null) {
+                String[] split = rawUserInfo.split(":");
+                rpcUser = split[0];
+                rpcPassword = split[1];
+            }
+            String[] split = rawUserInfo.split(":");
+            client = new RpcClient(uri, rpcUser, rpcPassword);
         }
         return client;
     }
