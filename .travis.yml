@@ -7,7 +7,7 @@ script:
  - sudo apt-get update
  - sudo apt-get install graphviz
  - java -version
- - ./gradlew buildCI --scan
+ - ./gradlew buildCI --scan --stacktrace --info
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
