@@ -48,7 +48,10 @@ class TransactionSpec extends Specification {
 
     def "Can create an address from private key WIF"() {
         when: "we create a private key from WIF format string in the article"
-        byte[] privKey = Arrays.copyOfRange(Base58.decodeChecked(fromKeyWIF), 1, 33);
+        // Decode Base58
+        byte[] wifRaw = Base58.decodeChecked(fromKeyWIF)
+        // Remove header (first byte) and checksum (4 bytes after byte 33)
+        byte[] privKey = Arrays.copyOfRange(wifRaw, 1, 33)
         fromKey = new ECKey().fromPrivate(privKey, false)
 
         and: "we convert it to an address"
@@ -108,6 +111,6 @@ class TransactionSpec extends Specification {
         }
 
         then: "Signature is valid"
-        true     // No exception
+        noExceptionThrown()
     }
 }
