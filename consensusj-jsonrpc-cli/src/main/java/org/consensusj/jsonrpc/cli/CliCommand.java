@@ -129,7 +129,6 @@ public abstract class CliCommand {
                 rpcUser = split[0];
                 rpcPassword = split[1];
             }
-            String[] split = rawUserInfo.split(":");
             client = new RpcClient(uri, rpcUser, rpcPassword);
         }
         return client;

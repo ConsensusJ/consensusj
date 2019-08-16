@@ -13,8 +13,6 @@ class ExtendedTxRefSpec extends Specification {
 
         then:
         txRef != null
-        // Groovy uses introspection here to access the private fields
-        // See https://github.com/bitcoinj/bitcoinj/issues/1710
         txRef.bech32.hrp == "txtest"
         txRef.bech32.data == [6, 22, 4, 11, 9, 2, 8, 0, 0, 0] as byte[]
     }

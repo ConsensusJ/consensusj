@@ -99,6 +99,9 @@ public class JsonRpcTool extends CliCommand {
             case "true":
                 result = 1;
                 break;
+            case "1":
+                result = 1;  // Need to do this for all integers
+                break;
             default:
                 result = param;
         }
