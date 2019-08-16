@@ -20,5 +20,5 @@ cache:
 jdk:
   - openjdk8
   - openjdk9
-  - openjdk11
+  #- openjdk11 OpenJDK 11 disabled until we upgrade AsciiDoclet
   #- oraclejdk9 OracleJDK 9 has a certificate issue with jcenter
