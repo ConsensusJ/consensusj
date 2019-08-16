@@ -21,4 +21,4 @@ jdk:
   - openjdk8
   - openjdk9
   - openjdk11
-  - oraclejdk9
+  #- oraclejdk9 OracleJDK 9 has a certificate issue with jcenter
