@@ -13,7 +13,7 @@ public class RpcURI {
 
     public static final int RPCPORT_MAINNET = 8332;
     public static final int RPCPORT_TESTNET = 18332;
-    public static final int RPCPORT_REGTEST = 18332;
+    public static final int RPCPORT_REGTEST = 18443;  // Was same port as TESTNET until Bitcoin Core 0.16.0
 
     public static URI getDefaultMainNetURI() {
         return createURI(rpcproto, rpchost, RPCPORT_MAINNET, rpcfile);
