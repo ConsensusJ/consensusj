@@ -10,6 +10,6 @@ class RpcURISpec extends Specification {
         expect:
         RpcURI.defaultMainNetURI == "http://127.0.0.1:8332/".toURI()
         RpcURI.defaultTestNetURI == "http://127.0.0.1:18332/".toURI()
-        RpcURI.defaultRegTestURI == "http://127.0.0.1:18332/".toURI()
+        RpcURI.defaultRegTestURI == "http://127.0.0.1:18443/".toURI()
     }
 }
