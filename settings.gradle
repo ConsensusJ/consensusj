@@ -23,3 +23,4 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'bitcoinj-spock',                       // Spock tests/demos of basic bitcoinj capabilities 
         'bitcoinj-dsljs',
         'bitcoinj-proxy'
+enableFeaturePreview('STABLE_PUBLISHING')       // Prepare for Gradle 5.x new default publishing behavior
