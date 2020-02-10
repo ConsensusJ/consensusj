@@ -77,6 +77,13 @@ subprojects {
     tasks.withType(GroovyCompile) {
         groovyOptions.optimizationOptions.indy = true
     }
+
+    tasks.withType(AbstractArchiveTask) {
+        // This should result in reproducible JAR builds
+        // See: https://docs.gradle.org/current/userguide/working_with_files.html#sec:reproducible_archives
+        preserveFileTimestamps = false
+        reproducibleFileOrder = true
+    }
 }
 
 apply from: 'gradle/idea.gradle'
