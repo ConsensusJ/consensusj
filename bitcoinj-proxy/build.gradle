@@ -1,17 +1,7 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
-    }
-}
-
 plugins {
-    id 'io.ratpack.ratpack-groovy'        version '1.6.0'
+    id 'io.ratpack.ratpack-groovy'       version '1.7.6'
+    id "com.github.johnrengelman.shadow" version "4.0.4"
 }
-
-apply plugin: 'com.github.johnrengelman.shadow'
 
 mainClassName = "org.consensusj.proxy.ProxyMain"
 
