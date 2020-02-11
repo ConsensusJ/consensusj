@@ -1,5 +1,6 @@
 dependencies {
     compile "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
     compile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    implementation 'com.google.guava:guava:27.1-android'
 }
 

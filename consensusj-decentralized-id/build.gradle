@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    implementation 'com.google.guava:guava:27.1-android'
 
     testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
     testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
