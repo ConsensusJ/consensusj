@@ -12,6 +12,7 @@ import org.knowm.xchange.service.marketdata.MarketDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.money.CurrencyUnit;
 import javax.money.MonetaryException;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ConversionQuery;
@@ -49,6 +50,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     private volatile boolean started = false;
     private volatile boolean stopping = false;
     private  ScheduledFuture<?> future;
+    private final Map<CurrencyUnit, String> tickerSymbolConversions;
     private final Map<CurrencyUnitPair, MonitoredCurrency> monitoredCurrencies = new HashMap<>();
     private static final int initialDelay = 0;
     private static final int period = 60;
@@ -61,9 +63,11 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
      */
     protected BaseXChangeExchangeRateProvider(String exchangeClassName,
                                               ScheduledExecutorService scheduledExecutorService,
+                                              Map<CurrencyUnit, String> tickerSymbolConversions,
                                               CurrencyUnitPair... pairs) {
         this.exchangeClassName = exchangeClassName;
         stpe = (scheduledExecutorService != null) ? scheduledExecutorService : Executors.newScheduledThreadPool(1);
+        this.tickerSymbolConversions = (tickerSymbolConversions != null) ? tickerSymbolConversions : new HashMap<>();
         for (CurrencyUnitPair pair : pairs) {
             MonitoredCurrency monitoredCurrency = new MonitoredCurrency(pair, xchangePair(pair));
             monitoredCurrencies.put(pair, monitoredCurrency);
@@ -91,7 +95,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
                                               ScheduledExecutorService scheduledExecutorService,
                                               CurrencyUnitPair... pairs) {
-        this(exchangeClass.getName(), scheduledExecutorService, pairs);
+        this(exchangeClass.getName(), scheduledExecutorService, null, pairs);
     }
 
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
@@ -106,7 +110,7 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
     }
 
     protected BaseXChangeExchangeRateProvider(String exchangeClassName, ScheduledExecutorService scheduledExecutorService, String[] pairs) {
-        this(exchangeClassName, scheduledExecutorService, pairsConvert(pairs));
+        this(exchangeClassName, scheduledExecutorService, null, pairsConvert(pairs));
     }
 
     protected static CurrencyUnitPair[] pairsConvert(String[] strings) {
@@ -119,12 +123,23 @@ public abstract class BaseXChangeExchangeRateProvider extends BaseExchangeRatePr
 
     /**
      * Map from CurrencyUnitPair to XChange CurrencyPair
-     * Override to handle cases like ItBit that use "XBT" instead of "BTC"
+     * tickerSymbolConversions is used to handle cases like ItBit that uses "XBT" instead of "BTC"
      * @param pair  CurrencyUnitPair using JavaMoney CurrencyUnits
-     * @return  XChange CurrencyPair
+     * @return  XChange CurrencyPair with exchange-specific symbols if any
      */
     protected CurrencyPair xchangePair(CurrencyUnitPair pair) {
-        return new CurrencyPair(pair.getBase().getCurrencyCode(), pair.getTarget().getCurrencyCode());
+        return new CurrencyPair(convertSymbol(pair.getBase()),
+                                convertSymbol(pair.getTarget()));
+    }
+
+    /**
+     * Convert a JavaMoney CurrencyUnit to an XChange currency code string
+     * (This will be exchange-specific (e.g. ItBit uses "XBT" instead of "BTC")
+     * @param currencyUnit A JavaMoney currency unit
+     * @return exchange-specific symbol for the currency
+     */
+    public String convertSymbol(CurrencyUnit currencyUnit) {
+        return tickerSymbolConversions.getOrDefault(currencyUnit, currencyUnit.getCurrencyCode());
     }
 
     /**

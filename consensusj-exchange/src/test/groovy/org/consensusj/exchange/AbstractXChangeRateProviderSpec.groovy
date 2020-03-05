@@ -58,9 +58,18 @@ abstract class AbstractXChangeRateProviderSpec extends Specification {
         markets.size() > 0
     }
 
-    def setup() {
+    def setupSpec() {
+        // Note that creating a provider can create traffic to the API server
+        // and can trigger rate limiting. Se we create the provider in setupSpec()
+        // and not in setup()
         provider = createProvider()
         provider.start()
+    }
+
+    def cleanup() {
+        def sleepTime = 100
+        println "sleeping for ${sleepTime} milliseconds"
+        sleep(sleepTime) // To avoid rate-limit problems from API providers
     }
 
     abstract BaseXChangeExchangeRateProvider createProvider()

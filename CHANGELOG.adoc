@@ -20,8 +20,9 @@ In progress
 * Automatic Module Name `org.consensusj.exchange` for Java Platform Module System
 * Classes are now in `org.consensusj.exchange` package
 * Upgrade to JavaMoney moneta-bp 1.3
-* Upgrade to XChange 4.3.16
-* Remove deprecated XChangeRateProviders (in favor of `DynamicXChangeRateProvider`)
+* Upgrade to XChange 4.4.1
+* Remove deprecated `BaseXChangeExchangeRateProvider` subclasses (in favor of `DynamicXChangeRateProvider`)
+* `DynamicXChangeRateProvider` now handles exchange-specific currency codes (e.g. `XBT`)
 
 === bitcoinj-money
 

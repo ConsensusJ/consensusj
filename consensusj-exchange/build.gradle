@@ -2,13 +2,14 @@ plugins {
     id 'java-library'
 }
 
-def xChangeVersion = '4.3.16'
+def xChangeVersion = '4.4.1'
 
 dependencies {
     api "org.javamoney:moneta-bp:${javaMoneyBPVersion}"
 
     api "org.knowm.xchange:xchange-core:${xChangeVersion}"
 
+    testImplementation project(':consensusj-currency')  // For BTC Currency Code
     testImplementation "org.knowm.xchange:xchange-bitfinex:${xChangeVersion}"
     testImplementation "org.knowm.xchange:xchange-itbit:${xChangeVersion}"
     testImplementation "org.knowm.xchange:xchange-coinbase:${xChangeVersion}"
