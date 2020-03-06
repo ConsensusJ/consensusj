@@ -1,8 +1,8 @@
 = ConsensusJ
 Sean Gilligan <https://github.com/msgilligan>
-v0.5.0-SNAPSHOT
+v0.5.0
 :description: ConsensusJ README document.
-:consensusj-version: 0.5.0-SNAPSHOT
+:consensusj-version: 0.5.0
 :bitcoinj-version: 0.15.6
 :bitcoinj-apidoc: https://bitcoinj.github.io/javadoc/{bitcoinj-version}/
 :cj-apidoc: https://consensusj.github.io/consensusj/apidoc
@@ -168,6 +168,75 @@ The new modules also more clearly separate Java from Groovy, so the core Java mo
 
 |===
 
+[#consensusj-currency]
+==== consensusj-currency
+
+http://javamoney.github.io[JavaMoney] (also known as http://javamoney.github.io/api.html[JSR 354]) is the new Java Standard for advanced and flexible currency handling on the Java platform.
+
+[quote, JavaMoney Web Site]
+JSR 354 provides a portable and extensible framework for handling of Money & Currency. The API models monetary amounts and currencies in a platform independent and portable way, including well defined extension points.
+
+Support for virtual currencies is one of the key design goals in the specification. The `consensusj-currency` module allows Bitcoin to
+be used by standard Java APIs in the same ways as fiat currencies.
+
+`consensusj-currency` contains `BitcoinCurrencyProvider` which will add `"BTC"` as a standard currency code to any applications that includes the `consensusj-currency` JAR in its classpath.
+
+[#consensusj-exchange]
+==== consensusj-exchange
+
+The JavaMoney Reference Implementation (aka "Moneta") contains implementations of `ExchangeRateProvider` for ECB (European Central Bank) and IMF (International Monetary Fund).
+There is also U.S. FRB (Federal Reserve Bank) and Yahoo Finance `ExchangeRateProvider` in the JavaMoney financial library add-on module.
+
+
+The `#consensusj-exchange` module includes an adapter class `BaseXChangeExchangeRateProvider` that adapts implementations of the `Exchange` interface in the popular and complete http://knowm.org/open-source/xchange/[XChange] library to be used by JavaMoney-compatible applications.
+
+[#consensusj-jsonrpc]
+==== consensusj-jsonrpc
+
+Java implementation of a JSON-RPC client. {cj-apidoc}/org/consensusj/jsonrpc/RPCClient.html[RPCClient] can be subclassed or called directly using the `send()` method and `Object` parameters.
+
+[#consensusj-jsonrpc-gvy]
+==== consensusj-jsonrpc-gvy
+
+Dynamic RPC methods are implemented via the `DynamicRPCFallback` Groovy trait. `DynamicRPCClient` can be used to talk to any JSON-RPC server using standard Java types and Jackson JSON conversion.
+
+[#cj-btc-jsonrpc]
+==== cj-btc-jsonrpc
+
+Java Bitcoin JSON-RPC client and supporting types, both bitcoinj types and POJOs for Bitcoin Core JSON.
+
+If the RPC procedure takes a Bitcoin address as parameter, then the Java method will take an `org.bitcoinj.core.Address`.
+If the RPC returns a transaction, the Java method will return an `org.bitcoinj.core.Transaction`.
+
+See the JavaDoc for {cj-apidoc}/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
+
+[#cj-btc-jsonrpc-gvy]
+==== cj-btc-jsonrpc-gvy
+
+Subclass of Bitcoin JSON-RPC client with fallback to dynamic methods (using `DynamicRPCFallback`). This is useful when new methods are added to the server/protocol and static methods and types haven't been written for them yet.
+
+
+[#cj-btc-cli]
+==== cj-btc-cli: An Bitcoin RPC command-line client
+
+An alternative implementation of `bitcoin-cli` in Java. If converted to a fat jar, it is executable with `java -jar`. The command:
+
+[subs="attributes"]
+java -jar cj-btc-cli-{consensusj-version}.jar -rpcport=8080 getblockcount
+
+will output:
+
+    Connecting to: http://127.0.0.1:8080/
+    0
+
+NOTE: Only a few RPCs are currently supported. Pull requests welcome.
+
+For help type:
+
+[subs="attributes"]
+java -jar bitcoinj-cli-{consensusj-version}.jar -?
+
+or read the https://consensusj.github.io/consensusj/manpage-cj-bitcoin-cli.html[manual page].
 
 === Legacy Modules
 
@@ -205,11 +274,6 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |Tests only (TBD)
 |Peer and transaction info over HTTP + WebSocket/STOMP. JSON-RPC server, too.
 
-|<<bitcoinj-money,bitcoinj-money>>
-|8
-|Tests only (TBD)
-|http://javamoney.github.io[JavaMoney] currency and exchange support. Adapter to use http://knowm.org/open-source/xchange/[XChange] `Exchange` implementations as JavaMoney `ExchangeRateProvider`s.
-
 |<<bitcoinj-dsl,bitcoinj-dsl>>
 |8
 |Uses Groovy
@@ -221,53 +285,6 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes.
 |===
 
-[#consensusj-jsonrpc]
-==== consensusj-jsonrpc
-
-Java implementation of a JSON-RPC client. {cj-apidoc}/org/consensusj/jsonrpc/RPCClient.html[RPCClient] can be subclassed or called directly using the `send()` method and `Object` parameters.
-
-[#consensusj-jsonrpc-gvy]
-==== consensusj-jsonrpc-gvy
-
-Dynamic RPC methods are implemented via the `DynamicRPCFallback` Groovy trait. `DynamicRPCClient` can be used to talk to any JSON-RPC server using standard Java types and Jackson JSON conversion.
-
-[#cj-btc-jsonrpc]
-==== cj-btc-jsonrpc
-
-Java Bitcoin JSON-RPC client and supporting types, both bitcoinj types and POJOs for Bitcoin Core JSON.
-
-If the RPC procedure takes a Bitcoin address as parameter, then the Java method will take an `org.bitcoinj.core.Address`.
-If the RPC returns a transaction, the Java method will return an `org.bitcoinj.core.Transaction`.
-
-See the JavaDoc for {cj-apidoc}/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
-
-[#cj-btc-jsonrpc-gvy]
-==== cj-btc-jsonrpc-gvy
-
-Subclass of Bitcoin JSON-RPC client with fallback to dynamic methods (using `DynamicRPCFallback`). This is useful when new methods are added to the server/protocol and static methods and types haven't been written for them yet.
-
-
-[#cj-btc-cli]
-==== cj-btc-cli: An Bitcoin RPC command-line client
-
-An alternative implementation of `bitcoin-cli` in Java. If converted to a fat jar, it is executable with `java -jar`. The command:
-
-[subs="attributes"]
-    java -jar cj-btc-cli-{consensusj-version}.jar -rpcport=8080 getblockcount
-
-will output:
-
-    Connecting to: http://127.0.0.1:8080/
-    0
-
-NOTE: Only a few RPCs are currently supported. Pull requests welcome.
-
-For help type:
-
-[subs="attributes"]
-    java -jar bitcoinj-cli-{consensusj-version}.jar -?
-
-or read the https://consensusj.github.io/consensusj/manpage-cj-bitcoin-cli.html[manual page].
 
 
 [#bitcoinj-rpcclient]
@@ -357,23 +374,6 @@ No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io
 
 A https://ratpack.io[Ratpack]-based proxy server that can proxy JSON-RPC commands to a connected *bitcoind* (or *Omni Core*) server. It can also be used as a starting point for JSON-RPC interoperable microservices.
 
-[#bitcoinj-money]
-==== bitcoinj-money
-
-http://javamoney.github.io[JavaMoney] (also known as http://javamoney.github.io/api.html[JSR 354]) is the new Java Standard for advanced and flexible currency handling on the Java platform.
-
-[quote, JavaMoney Web Site]
-JSR 354 provides a portable and extendible framework for handling of Money & Currency. The API models monetary amounts and currencies in a platform independent and portable way, including well defined extension points.
-
-Support for virtual currencies is one of the key design goals in the specification. The `bitcoinj-money` module will allow Bitcoin to
- be used by standard Java APIs in the same ways as fiat currencies.
-
-The JavaMoney Reference Implementation (aka "Moneta") contains implementations of `ExchangeRateProvider` for ECB (European Central Bank) and IMF (International Monetary Fund).
- There is also U.S. FRB (Federal Reserve Bank) and Yahoo Finance `ExchangeRateProvider` in the JavaMoney financial library add-on module.
-
-`bitcoinj-money` contains `BitcoinCurrencyProvider` which will add `"BTC"` as a standard currency code to any applications including the `bitcoinj-money` JAR in its classpath. and `"BTC"` will be available to your applications.
-
-The `bitcoinj-money` module also includes an adapter class `BaseXChangeExchangeRateProvider` that along with a 1-line subclass adapts implementations of the `Exchange` interface in the popular and complete http://knowm.org/open-source/xchange/[XChange] library to be used by JavaMoney-compatible applications.
 
 
 [#bitcoinj-dsl]
