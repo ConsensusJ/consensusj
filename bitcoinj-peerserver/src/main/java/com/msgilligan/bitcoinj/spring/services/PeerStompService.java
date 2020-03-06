@@ -31,7 +31,7 @@ import java.security.Principal;
 import java.util.List;
 
 /**
- * Extend PeerGroupService with additional HTTP and WebSocket/STOMP services
+ * Use a PeerGroup to provide REST and WebSocket/STOMP services
  * for Peers and Transactions
  */
 @Named
@@ -55,7 +55,7 @@ public class PeerStompService implements PeerConnectedEventListener, PeerDisconn
     @PostConstruct
     public void start() {
         log.info("PeerStompService: start()");
-        log.info("PeerStompService: context from thread is: {}", Context.get().getParams().getId());
+        log.debug("PeerStompService: context from thread is: {}", Context.get().getParams().getId());
 //        peerGroup.start();    // Currently this is done in BitcoinConfig
         peerGroup.addConnectedEventListener(this);
         peerGroup.addDisconnectedEventListener(this);
