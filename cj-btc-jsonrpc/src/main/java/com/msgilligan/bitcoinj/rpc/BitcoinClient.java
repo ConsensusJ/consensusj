@@ -318,12 +318,14 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     /**
      * generate blocks (RegTest mode only)
      * @since Bitcoin Core 0.11.0
+     * @deprecated Use generateToAddress (deprecated in Bitcoin Core 0.18)
      *
      * @param numBlocks number of blocks to generate
      * @return list containing block header hashes of the generated blocks
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
+    @Deprecated
     public List<Sha256Hash> generate(int numBlocks) throws JsonRpcStatusException, IOException {
         if (getServerVersion() > 110000) {
             JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
@@ -338,8 +340,39 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      * Convenience method for generating a single block when in RegTest mode
      * @see BitcoinClient#generate(int numBlocks)
      */
+    @Deprecated
     public List<Sha256Hash> generate() throws IOException, JsonRpcStatusException {
         return generate(1);
+    }
+
+    /**
+     * Mine blocks immediately (RegTest mode)
+     * @since Bitcoin Core 0.13.0
+     *
+     * @param numBlocks Number of blocks to mine
+     * @param address Address to send mined coins to
+     * @param maxtries How many iterations to try (or null to use server default -- currently 1,000,000)
+     * @return list containing block header hashes of the generated blocks
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public List<Sha256Hash> generateToAddress(int numBlocks, Address address, Integer maxtries) throws IOException {
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
+        return send("generatetoaddress", resultType, (long) numBlocks, address, maxtries);
+    }
+
+    /**
+     * Mine blocks immediately (RegTest mode)
+     * @since Bitcoin Core 0.13.0
+     *
+     * @param numBlocks Number of blocks to mine
+     * @param address Address to send mined coins to
+     * @return list containing block header hashes of the generated blocks
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public List<Sha256Hash> generateToAddress(int numBlocks, Address address) throws IOException {
+        return generateToAddress(numBlocks,address, null);
     }
 
     /**
@@ -347,10 +380,6 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      * @deprecated Use BitcoinClient#generate()
      * @see BitcoinClient#generate()
      */
-// the Deprecated annotation was causing Groovy in OmniJ to do
-// something weird (like not find the method),
-// I can't remember exactly what it was -- try adding it back as part
-// of testing for release 0.2.2
     @Deprecated
     public List<Sha256Hash> generateBlock() throws JsonRpcStatusException, IOException {
         return generate();
