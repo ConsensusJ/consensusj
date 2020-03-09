@@ -3,6 +3,15 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
+== v0.5.1-SNAPSHOT
+
+Released: Not yet
+
+=== cj-btc-json-rpc
+
+* Add `generateToAddress` RPC (Added in Bitcoin Core 0.13.0)
+* Deprecated `generate` RPC (Deprecated in Bitcoin Core 0.18.0)
+
 == v0.5.0
 
 Released: 2020.03.06

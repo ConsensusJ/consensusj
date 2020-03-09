@@ -2,6 +2,8 @@
 
 == Main Release Process
 
+. Use Java 8 for official builds
+.. `sdk use java 8.0.242.hs-adpt` (or later version)
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`
