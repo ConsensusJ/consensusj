@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-def xChangeVersion = '4.4.1'
+def xChangeVersion = '4.4.2'
 
 dependencies {
     api "org.javamoney:moneta-bp:${javaMoneyBPVersion}"
