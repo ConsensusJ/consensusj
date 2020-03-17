@@ -29,7 +29,7 @@ public class BitcoinCLITool extends BitcoinCliCommand {
      */
     public static void main(String[] args) {
         BitcoinCLITool command = new BitcoinCLITool(args);
-        Integer status = command.run();
+        int status = command.run();
         System.exit(status);
     }
 

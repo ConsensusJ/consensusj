@@ -38,7 +38,6 @@ public abstract class CliCommand {
     protected String usage;
     protected HelpFormatter formatter = null;
 
-    protected InputStream in;
     protected PrintWriter pwout;
     protected PrintWriter pwerr;
 
@@ -145,11 +144,10 @@ public abstract class CliCommand {
     }
 
     public int run() {
-        return run(System.in, System.out, System.err);
+        return run(System.out, System.err);
     }
 
-    public Integer run(InputStream in, PrintStream out, PrintStream err) {
-        this.in = in;
+    public int run(PrintStream out, PrintStream err) {
         this.pwout = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), true);
         this.pwerr = new PrintWriter(new OutputStreamWriter(err, StandardCharsets.UTF_8), true);
 

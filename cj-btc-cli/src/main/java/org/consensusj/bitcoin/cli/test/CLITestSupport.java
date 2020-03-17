@@ -32,14 +32,13 @@ public interface CLITestSupport {
     default CLICommandResult runCommand(CliCommand command) throws UnsupportedEncodingException {
         // Setup CommandResult to capture status and streams
         CLICommandResult result = new CLICommandResult();
-        InputStream is = new ByteArrayInputStream(new byte[0]);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PrintStream cos = new PrintStream(bos);
         ByteArrayOutputStream bes = new ByteArrayOutputStream();
         PrintStream ces = new PrintStream(bes);
 
         // Run the command
-        result.status = command.run(is, cos, ces);
+        result.status = command.run(cos, ces);
 
         // Put output and error streams in strings
         String charset = StandardCharsets.UTF_8.toString();
