@@ -16,6 +16,11 @@ Released: Not yet
 
 * Upgrade to XChange 4.4.2
 
+=== All Modules
+
+* Update to Groovy 2.5.10
+
+
 == v0.5.0
 
 Released: 2020.03.06
