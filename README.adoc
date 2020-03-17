@@ -12,7 +12,7 @@ v0.5.0
 :caution-caption: :fire:
 :warning-caption: :warning:
 
-image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.org/ConsensusJ/consensusj"] image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"] image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"]
+image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.org/ConsensusJ/consensusj"] image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"] image:https://api.bintray.com/packages/msgilligan/maven/consensusj/images/download.svg[link="https://bintray.com/msgilligan/maven/consensusj/_latestVersion"]
 
 Modular cryptocurrency libraries for Java, JVM languages, and Android. Including:
 
@@ -39,9 +39,9 @@ This project is a mono-repo with a large number of submodules/components that ar
 
 == Overview
 
-=== Binaries image:https://api.bintray.com/packages/msgilligan/maven/bitcoinj-addons/images/download.svg[link="https://bintray.com/msgilligan/maven/bitcoinj-addons/_latestVersion"]
+=== Binaries image:https://api.bintray.com/packages/msgilligan/maven/consensusj/images/download.svg[link="https://bintray.com/msgilligan/maven/consensusj/_latestVersion"]
 
-Although the API is changing, binary releases are available on https://bintray.com/msgilligan/maven/bitcoinj-addons/view[Bintray]. You can download JARs or use the provided Maven coordinates to link to them directly from your `pom.xml` or `build.gradle`.
+Although the API is changing, binary releases are available on https://bintray.com/msgilligan/maven/consensusj/view[Bintray]. You can download JARs or use the provided Maven coordinates to link to them directly from your `pom.xml` or `build.gradle`.
 
 
 === API Documentation
