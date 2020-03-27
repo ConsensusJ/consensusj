@@ -13,6 +13,6 @@ jar {
     inputs.property("moduleName", moduleName)
     manifest {
         attributes  'Automatic-Module-Name': moduleName,
-                    'Implementation-Version': version
+                    'Implementation-Version': archiveVersion.get()
     }
 }

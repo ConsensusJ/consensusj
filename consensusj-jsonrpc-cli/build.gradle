@@ -27,7 +27,7 @@ jar {
         attributes  'Implementation-Title': 'ConsensusJ JSON-RPC CLI library and tool',
                     'Automatic-Module-Name': moduleName,
                     'Main-Class': mainClassName,
-                    'Implementation-Version': version
+                    'Implementation-Version': archiveVersion.get()
     }
 }
 
@@ -38,7 +38,7 @@ task graalNativeImage(type:Exec, dependsOn: jar) {
     executable = "${System.env.GRAAL_HOME}/bin/native-image"
     args = [ '--verbose',
              '-cp', configurations.runtime.asPath,
-             '-jar', jar.archivePath,
+             '-jar', jar.archiveFile.get(),
              '-H:Path=build',
              '-H:Name=jsonrpc',
              '--initialize-at-build-time=com.fasterxml.jackson.annotation.JsonProperty$Access',

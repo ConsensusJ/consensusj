@@ -22,7 +22,7 @@ jar {
         attributes  'Implementation-Title': 'ConsensusJ JSON-RPC Sample tool w/introspection',
                 'Automatic-Module-Name': moduleName,
                 'Main-Class': mainClassName,
-                'Implementation-Version': version
+                'Implementation-Version': archiveVersion.get()
     }
 }
 
@@ -41,7 +41,7 @@ task graalNativeImage(type:Exec, dependsOn: jar) {
     executable = "${System.env.GRAAL_HOME}/bin/native-image"
     args = [ '--verbose',
              '-cp', configurations.runtime.asPath,
-             '-jar', jar.archivePath,
+             '-jar', jar.archiveFile.get(),
              '-H:Path=build',
              '-H:Name=MathTool',
              '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
