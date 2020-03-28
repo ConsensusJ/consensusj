@@ -21,7 +21,7 @@
 .. Confirm publish of artifacts in Bintray Web UI.
 . Update Github-pages site (including JavaDoc) -- Use Java 9 for this step to get HTML5 JavaDoc with search:
 +
-    export JAVA_HOME=`/usr/libexec/java_home -v9`
+    export JAVA_HOME=`/usr/libexec/java_home -v9
     ./gradlew clean javadocAll publishSite
 
 
