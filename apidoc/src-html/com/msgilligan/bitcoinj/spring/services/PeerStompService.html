@@ -40,7 +40,7 @@
 <span class="sourceLineNo">031</span><a id="line.31">import java.util.List;</a>
 <span class="sourceLineNo">032</span><a id="line.32"></a>
 <span class="sourceLineNo">033</span><a id="line.33">/**</a>
-<span class="sourceLineNo">034</span><a id="line.34"> * Extend PeerGroupService with additional HTTP and WebSocket/STOMP services</a>
+<span class="sourceLineNo">034</span><a id="line.34"> * Use a PeerGroup to provide REST and WebSocket/STOMP services</a>
 <span class="sourceLineNo">035</span><a id="line.35"> * for Peers and Transactions</a>
 <span class="sourceLineNo">036</span><a id="line.36"> */</a>
 <span class="sourceLineNo">037</span><a id="line.37">@Named</a>
@@ -64,7 +64,7 @@
 <span class="sourceLineNo">055</span><a id="line.55">    @PostConstruct</a>
 <span class="sourceLineNo">056</span><a id="line.56">    public void start() {</a>
 <span class="sourceLineNo">057</span><a id="line.57">        log.info("PeerStompService: start()");</a>
-<span class="sourceLineNo">058</span><a id="line.58">        log.info("PeerStompService: context from thread is: {}", Context.get().getParams().getId());</a>
+<span class="sourceLineNo">058</span><a id="line.58">        log.debug("PeerStompService: context from thread is: {}", Context.get().getParams().getId());</a>
 <span class="sourceLineNo">059</span><a id="line.59">//        peerGroup.start();    // Currently this is done in BitcoinConfig</a>
 <span class="sourceLineNo">060</span><a id="line.60">        peerGroup.addConnectedEventListener(this);</a>
 <span class="sourceLineNo">061</span><a id="line.61">        peerGroup.addDisconnectedEventListener(this);</a>

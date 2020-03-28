@@ -84,11 +84,40 @@
 <span class="sourceLineNo">075</span><a id="line.75">     * @return Params with correct Java types for JSON</a>
 <span class="sourceLineNo">076</span><a id="line.76">     */</a>
 <span class="sourceLineNo">077</span><a id="line.77">    protected List&lt;Object&gt; convertParameters(String method, List&lt;String&gt; params) {</a>
-<span class="sourceLineNo">078</span><a id="line.78">        // Default (for now) is to leave them all as strings</a>
-<span class="sourceLineNo">079</span><a id="line.79">        return new ArrayList&lt;&gt;(params);</a>
-<span class="sourceLineNo">080</span><a id="line.80">    }</a>
-<span class="sourceLineNo">081</span><a id="line.81"></a>
-<span class="sourceLineNo">082</span><a id="line.82">}</a>
+<span class="sourceLineNo">078</span><a id="line.78">        List&lt;Object&gt; converted = new ArrayList&lt;&gt;();</a>
+<span class="sourceLineNo">079</span><a id="line.79">        for (String param : params) {</a>
+<span class="sourceLineNo">080</span><a id="line.80">            Object convertedParam = convertParam(param);</a>
+<span class="sourceLineNo">081</span><a id="line.81">            converted.add(convertedParam);</a>
+<span class="sourceLineNo">082</span><a id="line.82">        }</a>
+<span class="sourceLineNo">083</span><a id="line.83">        return converted;</a>
+<span class="sourceLineNo">084</span><a id="line.84">    }</a>
+<span class="sourceLineNo">085</span><a id="line.85"></a>
+<span class="sourceLineNo">086</span><a id="line.86">    /**</a>
+<span class="sourceLineNo">087</span><a id="line.87">     * Convert a single param from a command-line option {@code String} to a type more appropriate</a>
+<span class="sourceLineNo">088</span><a id="line.88">     * for Jackson/JSON-RPC.</a>
+<span class="sourceLineNo">089</span><a id="line.89">     * </a>
+<span class="sourceLineNo">090</span><a id="line.90">     * @param param A string parameter to convert</a>
+<span class="sourceLineNo">091</span><a id="line.91">     * @return</a>
+<span class="sourceLineNo">092</span><a id="line.92">     */</a>
+<span class="sourceLineNo">093</span><a id="line.93">    private Object convertParam(String param) {</a>
+<span class="sourceLineNo">094</span><a id="line.94">        Object result;</a>
+<span class="sourceLineNo">095</span><a id="line.95">        switch (param) {</a>
+<span class="sourceLineNo">096</span><a id="line.96">            case "false":</a>
+<span class="sourceLineNo">097</span><a id="line.97">                result = 0;</a>
+<span class="sourceLineNo">098</span><a id="line.98">                break;</a>
+<span class="sourceLineNo">099</span><a id="line.99">            case "true":</a>
+<span class="sourceLineNo">100</span><a id="line.100">                result = 1;</a>
+<span class="sourceLineNo">101</span><a id="line.101">                break;</a>
+<span class="sourceLineNo">102</span><a id="line.102">            case "1":</a>
+<span class="sourceLineNo">103</span><a id="line.103">                result = 1;  // Need to do this for all integers</a>
+<span class="sourceLineNo">104</span><a id="line.104">                break;</a>
+<span class="sourceLineNo">105</span><a id="line.105">            default:</a>
+<span class="sourceLineNo">106</span><a id="line.106">                result = param;</a>
+<span class="sourceLineNo">107</span><a id="line.107">        }</a>
+<span class="sourceLineNo">108</span><a id="line.108">        return result;</a>
+<span class="sourceLineNo">109</span><a id="line.109">    }</a>
+<span class="sourceLineNo">110</span><a id="line.110"></a>
+<span class="sourceLineNo">111</span><a id="line.111">}</a>
 
 
 

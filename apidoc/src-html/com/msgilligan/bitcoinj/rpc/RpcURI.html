@@ -22,7 +22,7 @@
 <span class="sourceLineNo">013</span><a id="line.13"></a>
 <span class="sourceLineNo">014</span><a id="line.14">    public static final int RPCPORT_MAINNET = 8332;</a>
 <span class="sourceLineNo">015</span><a id="line.15">    public static final int RPCPORT_TESTNET = 18332;</a>
-<span class="sourceLineNo">016</span><a id="line.16">    public static final int RPCPORT_REGTEST = 18332;</a>
+<span class="sourceLineNo">016</span><a id="line.16">    public static final int RPCPORT_REGTEST = 18443;  // Was same port as TESTNET until Bitcoin Core 0.16.0</a>
 <span class="sourceLineNo">017</span><a id="line.17"></a>
 <span class="sourceLineNo">018</span><a id="line.18">    public static URI getDefaultMainNetURI() {</a>
 <span class="sourceLineNo">019</span><a id="line.19">        return createURI(rpcproto, rpchost, RPCPORT_MAINNET, rpcfile);</a>
