@@ -28,13 +28,6 @@ allprojects {
         asciidoclet
     }
 
-    repositories {
-        maven {
-            // For asciidoclet snapshot
-            url 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-    }
-
     dependencies {
         asciidoclet "org.asciidoctor:asciidoclet:${asciidocletVersion}"
         asciidoclet "org.asciidoctor:asciidoctorj:${asciidoctorjVersion}"

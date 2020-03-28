@@ -1,3 +1,7 @@
+plugins {
+    id "com.gradle.enterprise" version "3.1.1"
+}
+
 include 'consensusj-currency',                  // JavaMoney Currency Provider(s)
         'consensusj-decentralized-id',          // W3C Decentralized ID library (in-process)
         'consensusj-exchange',                  // JavaMoney Exchange Providers
