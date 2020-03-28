@@ -25,7 +25,7 @@ dependencies {
     compile project(':bitcoinj-json')
     compile project(':cj-btc-services')
 
-    implementation 'com.google.guava:guava:28.1-android'
+    implementation 'com.google.guava:guava:28.2-android'
 
     compile "io.micronaut:micronaut-http-server-netty"
     compile "io.micronaut:micronaut-inject"
