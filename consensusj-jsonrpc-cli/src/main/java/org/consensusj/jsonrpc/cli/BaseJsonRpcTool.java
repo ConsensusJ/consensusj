@@ -10,12 +10,9 @@ import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.RpcClient;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -58,7 +55,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         String method = args.get(0);
         args.remove(0); // remove method from list
         List<Object> typedArgs = convertParameters(method, args);
-        Object result = null;
+        Object result;
         try {
             result = call.rpcClient().send(method, typedArgs);
         } catch (JsonRpcException e) {

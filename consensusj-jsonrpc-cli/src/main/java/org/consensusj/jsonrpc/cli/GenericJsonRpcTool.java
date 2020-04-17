@@ -1,11 +1,9 @@
 package org.consensusj.jsonrpc.cli;
 
 import org.apache.commons.cli.Options;
-import org.consensusj.jsonrpc.JsonRpcException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

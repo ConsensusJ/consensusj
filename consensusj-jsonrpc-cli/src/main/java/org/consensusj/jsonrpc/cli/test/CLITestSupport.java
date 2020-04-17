@@ -1,7 +1,6 @@
 package org.consensusj.jsonrpc.cli.test;
 
 import org.consensusj.jsonrpc.cli.BaseJsonRpcTool;
-import org.consensusj.jsonrpc.cli.test.CLICommandResult;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

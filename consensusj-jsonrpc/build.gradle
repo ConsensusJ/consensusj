@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-    // Note:  jackson-core and jackson-databind have "Automatic-Module-Name" in manifest since 2.9.1
     compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
