@@ -162,7 +162,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
                 // These are expected exceptions while waiting for a server
                 if (se.getMessage().equals("Unexpected end of file from server") ||
                         se.getMessage().equals("Connection reset") ||
-                        se.getMessage().equals("Connection refused") ||
+                        se.getMessage().contains("Connection refused") ||
                         se.getMessage().equals("recvfrom failed: ECONNRESET (Connection reset by peer)")) {
                     status = se.getMessage();
                 } else {
