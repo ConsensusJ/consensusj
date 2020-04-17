@@ -5,6 +5,7 @@
 plugins {
     id 'java-library'
     id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'de.jjohannes.extra-java-module-info' version "0.1"
 }
 
 sourceCompatibility = 9
@@ -28,13 +29,19 @@ dependencies {
 }
 
 def mainClassName = "org.consensusj.jsonrpc.cli.GenericJsonRpcTool"
-ext.moduleName = 'org.consensusj.jsonrpc.cli'
+
+java {
+    modularity.inferModulePath = true
+}
+
+extraJavaModuleInfo {
+    automaticModule("commons-cli-1.4.jar", "org.apache.commons.cli")
+    automaticModule("hamcrest-core-1.3.jar", "org.hamcrest")
+}
 
 jar {
-    inputs.property("moduleName", moduleName)
     manifest {
         attributes  'Implementation-Title': 'ConsensusJ JSON-RPC CLI library and tool',
-                    'Automatic-Module-Name': moduleName,
                     'Main-Class': mainClassName,
                     'Implementation-Version': archiveVersion.get()
     }
