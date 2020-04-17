@@ -2,14 +2,13 @@ package org.consensusj.jsonrpc.cli;
 
 
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 
 /**
  *
  */
-public class CliOptions extends Options {
-    public CliOptions() {
+public class JsonRpcToolOptions extends Options {
+    public JsonRpcToolOptions() {
         super();
         this.addOption("?", null, false, "This help message")
             .addOption(Option.builder()

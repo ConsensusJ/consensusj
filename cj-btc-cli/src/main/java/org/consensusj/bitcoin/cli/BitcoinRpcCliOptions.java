@@ -7,10 +7,10 @@ import org.apache.commons.cli.Options;
 /**
  * Command-line options for tools that communicate with Bitcoin RPC
  */
-public class CliOptions extends Options {
+public class BitcoinRpcCliOptions extends Options {
 
 
-    public CliOptions() {
+    public BitcoinRpcCliOptions() {
         super();
         this.addOption("?", null, false, "This help message")
 // 'conf' and 'datadir' aren't implemented yet.

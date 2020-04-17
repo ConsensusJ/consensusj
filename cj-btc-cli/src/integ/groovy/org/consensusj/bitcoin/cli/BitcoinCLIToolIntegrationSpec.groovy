@@ -1,7 +1,9 @@
 package org.consensusj.bitcoin.cli
 
+import com.msgilligan.bitcoinj.rpc.test.TestServers
 import org.consensusj.jsonrpc.cli.test.CLICommandResult
-import org.consensusj.bitcoin.cli.test.CLITestSupport
+import org.consensusj.jsonrpc.cli.test.CLITestSupport
+import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
@@ -10,7 +12,9 @@ import spock.lang.Specification
  *
  * TODO: We should probably check the command output (eventually)
  */
-class BitcoinCLITooliSpec extends Specification implements CLITestSupport {
+class BitcoinCLIToolIntegrationSpec extends Specification implements CLITestSupport {
+    final String rpcUser = TestServers.getInstance().getRpcTestUser();
+    final String rpcPassword = TestServers.getInstance().getRpcTestPassword();
 
     def "help option"() {
         when:
@@ -18,8 +22,8 @@ class BitcoinCLITooliSpec extends Specification implements CLITestSupport {
 
         then:
         result.status == 1
-        result.output.length() > 0
-        result.error.length() == 0
+        result.output.length() == 0
+        result.error.length() > 0
     }
 
     def "get block count"() {
@@ -63,8 +67,8 @@ class BitcoinCLITooliSpec extends Specification implements CLITestSupport {
         String[] args = parseCommandLine(line)     // Parse line into separate args
 
         // Run the command
-        BitcoinCLITool cli = new BitcoinCLITool(args)
-        return runCommand(cli)
+        BitcoinCLITool tool = new BitcoinCLITool()
+        return runTool(tool, args)
     }
 
 }

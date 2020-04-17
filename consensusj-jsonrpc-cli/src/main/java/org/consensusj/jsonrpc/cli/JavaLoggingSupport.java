@@ -25,7 +25,7 @@ public class JavaLoggingSupport {
      * Should be one of the first things called in `main()`
      */
     public static void configure(String loggerName) {
-        InputStream inputStream = JsonRpcTool.class.getResourceAsStream(loggingPropertiesResource);
+        InputStream inputStream = GenericJsonRpcTool.class.getResourceAsStream(loggingPropertiesResource);
         if (inputStream != null) {
             try {
                 LogManager.getLogManager().readConfiguration(inputStream);

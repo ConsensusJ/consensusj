@@ -7,6 +7,9 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
+sourceCompatibility = 9
+targetCompatibility = 9
+
 dependencies {
     compile project(':consensusj-jsonrpc')
 

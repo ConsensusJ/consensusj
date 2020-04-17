@@ -15,16 +15,18 @@ public class RpcURI {
     public static final int RPCPORT_TESTNET = 18332;
     public static final int RPCPORT_REGTEST = 18443;  // Was same port as TESTNET until Bitcoin Core 0.16.0
 
+    public static final URI DEFAULT_MAINNET_URI = createURI(rpcproto, rpchost, RPCPORT_MAINNET, rpcfile);
+    public static final URI DEFAULT_TESTNET_URI = createURI(rpcproto, rpchost, RPCPORT_TESTNET, rpcfile);
+    public static final URI DEFAULT_REGTEST_URI = createURI(rpcproto, rpchost, RPCPORT_REGTEST, rpcfile);
+
     public static URI getDefaultMainNetURI() {
-        return createURI(rpcproto, rpchost, RPCPORT_MAINNET, rpcfile);
+        return DEFAULT_MAINNET_URI;
     }
-
     public static URI getDefaultTestNetURI() {
-        return createURI(rpcproto, rpchost, RPCPORT_TESTNET, rpcfile);
+        return DEFAULT_TESTNET_URI;
     }
-
     public static URI getDefaultRegTestURI() {
-        return createURI(rpcproto, rpchost, RPCPORT_REGTEST, rpcfile);
+        return DEFAULT_REGTEST_URI;
     }
 
     private static URI createURI(String proto, String host, int port, String file) {

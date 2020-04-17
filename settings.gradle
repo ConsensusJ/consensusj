@@ -7,11 +7,9 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'consensusj-exchange',                  // JavaMoney Exchange Providers
         'consensusj-jsonrpc',                   // JSON-RPC Java client
         'consensusj-jsonrpc-gvy',               // JSON-RPC Groovy client
-        'consensusj-jsonrpc-cli',               // JSON-RPC CLI library and tool
         'consensusj-jsonrpc-daemon',            // JSON-RPC sample server
         'cj-btc-jsonrpc',                       // Bitcoin JSON-RPC client using bitcoinj-based types
         'cj-btc-jsonrpc-gvy',                   // Bitcoin JSON-RPC client with Groovy dynamic method support
-        'cj-btc-cli',                           // Bitcoin JSON-RPC CLI 
         'cj-btc-services',                      // bitcoinj-based service objects
         'cj-btc-daemon-mn',                     // Prototype Micronaut version of daemon
         'cj-eth-jsonrpc',
@@ -27,3 +25,11 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'bitcoinj-spock',                       // Spock tests/demos of basic bitcoinj capabilities 
         'bitcoinj-dsljs',
         'bitcoinj-proxy'
+
+if (JavaVersion.current().isJava9Compatible()) {
+    System.err.println "Including JDK 9 CLI modules because Java ${JavaVersion.current()} is JDK 9+"
+    include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
+    include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
+} else {
+    System.err.println "Skipping JDK 9 CLI modules, requires Java 9+, currently running Java ${JavaVersion.current()}"
+}
