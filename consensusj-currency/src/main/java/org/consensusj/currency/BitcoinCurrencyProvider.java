@@ -19,11 +19,13 @@ import java.util.Set;
  */
 public class BitcoinCurrencyProvider extends BaseCurrencyProviderSpi implements CurrencyProviderSpi {
     private final static int bitcoinFractionDigits = 8;
+
+    private static final CurrencyContext CONTEXT = CurrencyContextBuilder.of("BitcoinCurrencyContextProvider")
+            .build();
+
     private final Set<CurrencyUnit> bitcoinSet;
 
     public BitcoinCurrencyProvider() {
-        CurrencyContext CONTEXT = CurrencyContextBuilder.of("BitcoinCurrencyContextProvider")
-                .build();
         CurrencyUnit btcUnit = CurrencyUnitBuilder.of("BTC", CONTEXT)
                 .setDefaultFractionDigits(bitcoinFractionDigits)
                 .build();
