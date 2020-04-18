@@ -13,7 +13,7 @@ before_script:
 - export LANG=en_US.UTF-8
 - export LANGUAGE=en_US:en
 - export LC_ALL=en_US.UTF-8
-- apt-get --quiet install --yes openjdk-8-jdk
+- apt-get --quiet install --yes openjdk-9-jdk
 - apt-get --quiet install --yes graphviz
 
 - chmod +x ./gradlew
