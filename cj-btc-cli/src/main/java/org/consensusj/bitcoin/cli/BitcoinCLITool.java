@@ -9,11 +9,8 @@ import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.RegTestParams;
 import org.bitcoinj.params.TestNet3Params;
 import org.consensusj.jsonrpc.JsonRpcException;
-import org.consensusj.jsonrpc.RpcClient;
 import org.consensusj.jsonrpc.cli.BaseJsonRpcTool;
-import org.consensusj.jsonrpc.cli.GenericJsonRpcTool;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;

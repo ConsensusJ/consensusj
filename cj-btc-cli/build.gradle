@@ -11,12 +11,12 @@ targetCompatibility = 9
 
 dependencies {
     // Using 'api' here breaks Spock integration test classpath for some reason
-    compile project(':consensusj-jsonrpc-cli')
-    compile project(':cj-btc-jsonrpc')
+    implementation project(':consensusj-jsonrpc-cli')
+    implementation project(':cj-btc-jsonrpc')
 
-    compile 'commons-cli:commons-cli:1.4'
+    implementation 'commons-cli:commons-cli:1.4'
     
-    runtimeOnly "org.slf4j:slf4j-simple:${slf4jVersion}"
+    runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 
     testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
 }
@@ -25,11 +25,12 @@ def mainClassName = "org.consensusj.bitcoin.cli.BitcoinCLITool"
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'ConsensusJ Bitcoin CLI support',
-                    'Implementation-Version': archiveVersion.get(),
-                    'Main-Class': mainClassName
+        attributes 'Implementation-Title': 'ConsensusJ Bitcoin CLI tool',
+                    'Main-Class': mainClassName,
+                    'Implementation-Version': archiveVersion.get()
     }
 }
+
 
 // Compile a native image using Graal's native-image tool
 // Graal must be installed at $GRAAL_HOME
@@ -37,7 +38,7 @@ task graalNativeImage(type:Exec, dependsOn: jar) {
     workingDir = projectDir
     executable = "${System.env.GRAAL_HOME}/bin/native-image"
     args = [ '--verbose',
-             '-cp', configurations.runtime.asPath,
+             '-cp', sourceSets.main.runtimeClasspath.asPath,
              '-jar', jar.archiveFile.get(),
              '-H:Path=build',
              '-H:Name=cj-bitcoin-cli',
