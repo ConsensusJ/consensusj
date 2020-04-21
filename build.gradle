@@ -50,13 +50,13 @@ subprojects {
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 
+        testCompile "junit:junit:4.13"
         testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
         testCompile("org.spockframework:spock-core:${spockVersion}") {
             exclude module: "groovy-all"
         }
 
-        testCompile "junit:junit:4.13"
-        testRuntimeOnly "net.bytebuddy:byte-buddy:1.8.21"                 // allows Spock to mock classes (in addition to interfaces)
+        testRuntimeOnly "net.bytebuddy:byte-buddy:1.10.9"                 // allows Spock to mock classes (in addition to interfaces)
         testRuntimeOnly "org.objenesis:objenesis:3.1"                     // Allow Spock to mock classes with constructor arguments
         testRuntimeOnly  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
     }
