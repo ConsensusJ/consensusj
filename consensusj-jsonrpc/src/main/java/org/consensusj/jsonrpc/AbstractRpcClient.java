@@ -20,6 +20,9 @@ public abstract class AbstractRpcClient implements DynamicRpcMethodSupport {
 
     public AbstractRpcClient() {
         mapper = new ObjectMapper();
+        // TODO: Make  FAIL_ON_UNKNOWN_PROPERTIES configurable at build or run time and remove unnecessary
+        // annotations on various POJOs that we've defined.
+        //mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         defaultType = mapper.getTypeFactory().constructType(Object.class);
     }
 

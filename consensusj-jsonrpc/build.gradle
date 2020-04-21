@@ -10,10 +10,12 @@ dependencies {
     testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
         transitive = false
     }
+
+    testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 }
 
 ext.moduleName = 'org.consensusj.jsonrpc'
-def mainClassName = "org.consensusj.jsonrpc.introspection.sample.MathTool"
+def mainClassName = "org.consensusj.jsonrpc.introspection.sample.MathService"
 
 jar {
     inputs.property("moduleName", moduleName)
@@ -39,12 +41,14 @@ task graalNativeImage(type:Exec, dependsOn: jar) {
     workingDir = projectDir
     executable = "${System.env.GRAAL_HOME}/bin/native-image"
     args = [ '--verbose',
+             '--no-fallback',
              '-cp', "${-> sourceSets.main.runtimeClasspath.asPath}", // Lazy configuration resolution
              '-jar', jar.archiveFile.get(),
              '-H:Path=build',
              '-H:Name=MathTool',
+             '-H:+AllowIncompleteClasspath',
              '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
-             '-H:EnableURLProtocols=http',
-             '-H:+ReportUnsupportedElementsAtRuntime'
+             '-H:+ReportUnsupportedElementsAtRuntime',
+             '-H:+ReportExceptionStackTraces'
     ]
 }

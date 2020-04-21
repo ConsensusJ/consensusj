@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc.introspection.sample;
 
+import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcService;
@@ -33,15 +34,16 @@ public class MathService extends AbstractJsonRpcService {
         JsonRpcResponse<Object> response = null;
         try {
             response = service.call(req).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             System.exit(-1);
         }
         Integer sum = (Integer) response.getResult();
-
+        JsonRpcError error = response.getError();
+        if (sum == null) {
+            System.err.println("Error = " + response.getError().getMessage());
+            System.exit(-1);
+        }
         System.out.println("Sum is: " + sum);
     }
 
