@@ -40,7 +40,7 @@ task graalNativeImage(type:Exec, dependsOn: jar) {
     workingDir = projectDir
     executable = "${System.env.GRAAL_HOME}/bin/native-image"
     args = [ '--verbose',
-             '-cp', sourceSets.main.runtimeClasspath.asPath,
+             '-cp', "${-> sourceSets.main.runtimeClasspath.asPath}", // Lazy configuration resolution
              '-jar', jar.archiveFile.get(),
              '-H:Path=build',
              '-H:Name=jsonrpc',
