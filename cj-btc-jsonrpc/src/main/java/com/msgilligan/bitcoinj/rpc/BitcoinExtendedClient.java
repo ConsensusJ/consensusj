@@ -31,6 +31,9 @@ import java.util.Map;
  * the ones we ran into while building integration tests.
  */
 public class BitcoinExtendedClient extends BitcoinClient {
+    private final Script.ScriptType defaultScriptType = Script.ScriptType.P2PKH;
+    private final Address regTestMiningAddress;
+
     public final Coin stdTxFee = Coin.valueOf(10000);
     public final Coin stdRelayTxFee = Coin.valueOf(1000);
     public final Integer defaultMaxConf = 9999999;
@@ -48,18 +51,68 @@ public class BitcoinExtendedClient extends BitcoinClient {
         return defaultMaxConf;
     }
 
+
     @Deprecated
     public BitcoinExtendedClient(URI server, String rpcuser, String rpcpassword) {
-        super(RegTestParams.get(), server, rpcuser, rpcpassword);
+        this(RegTestParams.get(), server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         super(netParams, server, rpcuser, rpcpassword);
+        if (netParams.getId().equals(RegTestParams.ID_REGTEST)) {
+// TODO: If we want to do store mined coins on the client side, we might try this in the future
+//
+//            regTestMiningKey = new ECKey();
+//            regTestMiningAddress = Address.fromKey(RegTestParams.get(), regTestMiningKey, defaultScriptType);
+            try {
+                regTestMiningAddress = this.getNewAddress();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            regTestMiningAddress = null;
+        }
     }
 
     public BitcoinExtendedClient(RpcConfig config) {
-        super(RegTestParams.get(), config.getURI(), config.getUsername(), config.getPassword());
+        this(RegTestParams.get(), config.getURI(), config.getUsername(), config.getPassword());
     }
+
+    /**
+     *
+     * @deprecated Use BitcoinExtendedClient#generateBlocks or BitcoinClient#generateToAddress instead
+     */
+    @Deprecated
+    @Override
+    public List<Sha256Hash> generate(int numBlocks) throws JsonRpcStatusException, IOException {
+        return this.generateBlocks(numBlocks);
+    }
+
+    @Deprecated
+    @Override
+    public List<Sha256Hash> generate() throws IOException, JsonRpcStatusException {
+        return generateBlocks(1);
+    }
+
+    public Address getRegTestMiningAddress() {
+        return regTestMiningAddress;
+    }
+
+    /**
+     * Generate blocks and funds (RegTest only)
+     *
+     * Use this to generate blocks and receive the block reward in {@code this.regTestMiningAddress}
+     * which can the be used to fund transactions in RegTest mode.
+     * 
+     * @param numBlocks Number of blocks to mine
+     * @return list of block hashes
+     * @throws JsonRpcStatusException something broke
+     * @throws IOException something broke
+     */
+    public List<Sha256Hash> generateBlocks(int numBlocks) throws JsonRpcStatusException, IOException {
+        return this.generateToAddress(numBlocks, regTestMiningAddress);
+    }
+
 
     /**
      * Creates a raw transaction, spending from a single address, whereby no new change address is created, and

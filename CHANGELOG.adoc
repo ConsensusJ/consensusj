@@ -11,6 +11,8 @@ Released: Not yet
 
 * Add `generateToAddress` RPC (Added in Bitcoin Core 0.13.0)
 * Deprecated `generate` RPC (Deprecated in Bitcoin Core 0.18.0)
+* Remove `BitcoinClient.generateBlock()` and `BitcoinClient.generateBlocks()` RPC methods (unused by OmniJ)
+* Add `BitcoinExtendedClient.generateBlocks()` to help OmniJ transition to `generateToAddress`
 
 === consensusj-exchange
 

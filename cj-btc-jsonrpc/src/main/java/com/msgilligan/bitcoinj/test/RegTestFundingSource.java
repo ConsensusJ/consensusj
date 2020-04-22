@@ -39,9 +39,12 @@ public class RegTestFundingSource implements FundingSource {
      * Generate blocks and fund an address with requested amount of BTC
      *
      * TODO: Improve performance. Can we mine multiple blocks with a single RPC?
+     * TODO: Use client.generateToAddress() instead of deprecated generate()
+     * If we use `toAddress` as the destination of generateToAddress(), we
+     * can skip the generation and sending of the the raw transaction below.
      *
      * @param toAddress Address to fund with BTC
-     * @param requestedBtc Amount of BTC to "mine" and send
+     * @param requestedBtc Amount of BTC to "mine" and send (minimum ending balance of toAddress?)
      * @return The hash of transaction that provided the funds.
      */
     @Override
@@ -51,17 +54,17 @@ public class RegTestFundingSource implements FundingSource {
             throw new IllegalArgumentException("request exceeds MAX_MONEY");
         }
         long amountGatheredSoFar = 0;
-        ArrayList<Outpoint> inputs = new ArrayList<Outpoint>();
+        ArrayList<Outpoint> inputs = new ArrayList<>();
 
         // Newly mined coins need to mature to be spendable
         final int minCoinAge = 100;
 
         if (client.getBlockCount() < minCoinAge) {
-            client.generate(minCoinAge - client.getBlockCount());
+            client.generateBlocks(minCoinAge - client.getBlockCount());
         }
 
         while (amountGatheredSoFar < requestedBtc.value) {
-            client.generate();
+            client.generateBlocks(1);
             int blockIndex = client.getBlockCount() - minCoinAge;
             Block block = client.getBlock(blockIndex);
             List<Transaction> blockTxs = block.getTransactions();

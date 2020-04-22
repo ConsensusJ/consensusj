@@ -56,7 +56,7 @@ class WalletSendSpec extends BaseRegTestSpec {
 
         when: "we send coins to the wallet and write a block"
         client.sendToAddress(walletAddr, amount)
-        client.generate()
+        client.generateBlocks(1)
         Integer walletHeight, rpcHeight
         while ( (walletHeight = wallet.getLastBlockSeenHeight()) < (rpcHeight = client.getBlockCount()) ) {
             // TODO: Figure out a way to do this without polling and sleeping
@@ -83,7 +83,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         // Wait for it to show up on server as unconfirmed
         waitForUnconfirmedTransaction(sentTx.hash)
         // Once server has pending transaction, generate a block
-        generate()
+        generateBlocks(1)
         // Wait for wallet to get confirmation of the transaction
         sentTx.getConfidence().getDepthFuture(1).get()
 
@@ -104,7 +104,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         Transaction sentTx = peerGroup.broadcastTransaction(request.tx).future().get();
         // Wait for it to show up on server as unconfirmed
         waitForUnconfirmedTransaction(sentTx.hash)
-        generate()
+        generateBlocks(1)
 
         then: "the new address has a balance of amount"
         getReceivedByAddress(rpcAddress) == amount  // Verify rpcAddress balance
@@ -120,7 +120,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
         wallet.commitTx(request.tx)
         def txid = client.sendRawTransaction(tx)
-        generate()
+        generateBlocks(1)
         def confirmedTx = getTransaction(txid)
 
         then: "the transaction is confirmed"

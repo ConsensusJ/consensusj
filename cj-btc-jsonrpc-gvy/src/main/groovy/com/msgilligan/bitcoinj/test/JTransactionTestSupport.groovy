@@ -35,13 +35,13 @@ trait JTransactionTestSupport implements BTCTestSupport {
         Transaction sentTx = peerGroup.broadcastTransaction(tx).future().get();
         // Wait for it to show up on server as unconfirmed
         waitForUnconfirmedTransaction(sentTx.hash)
-        client.generate()
+        client.generateBlocks(1)
         return sentTx
     }
 
     Transaction submitRPC(Transaction tx) {
         Sha256Hash txid = client.sendRawTransaction(tx)
-        client.generate()
+        client.generateBlocks(1)
         Transaction sentTx = client.getRawTransaction(txid)
         RawTransactionInfo txinfo = client.getRawTransactionInfo(txid)
         assert txinfo.confirmations == 1
