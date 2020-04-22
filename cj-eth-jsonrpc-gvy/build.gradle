@@ -1,9 +1,9 @@
 dependencies {
-    compile project(':consensusj-jsonrpc-gvy')
-    compile project(':cj-eth-jsonrpc')
+    implementation project(':consensusj-jsonrpc-gvy')
+    implementation project(':cj-eth-jsonrpc')
 
-    compile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-    compile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    implementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    implementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
         transitive = false
     }
 }

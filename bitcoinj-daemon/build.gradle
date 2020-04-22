@@ -21,10 +21,10 @@ idea {
 }
 
 dependencies {
-    compile project(':cj-btc-services')
+    implementation project(':cj-btc-services')
 
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
 }
 
 

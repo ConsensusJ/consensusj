@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
     testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
     testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {

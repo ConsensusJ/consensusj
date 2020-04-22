@@ -16,9 +16,9 @@ dependencies {
     api 'commons-cli:commons-cli:1.4'
 
     // Add runtime adapter for JDK logging for shadowJar and GraalVM native-image builds
-    runtime "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+    runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 
-    testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
 }
 
 def mainClassName = "org.consensusj.jsonrpc.cli.GenericJsonRpcTool"

@@ -1,5 +1,5 @@
 dependencies {
-    testCompile "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
-    testCompile 'com.google.guava:guava:28.2-android'
-    testCompile project(':bitcoinj-dsl')                // Use Groovy extensions in tests
+    testImplementation "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    testImplementation 'com.google.guava:guava:28.2-android'
+    testImplementation project(':bitcoinj-dsl')                // Use Groovy extensions in tests
 }

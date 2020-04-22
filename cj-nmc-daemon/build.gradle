@@ -24,10 +24,10 @@ repositories {
 }
 
 dependencies {
-    compile project(':cj-btc-services')
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
-    compile "com.github.dogecoin:libdohj:31fb8985ba13fbf20f102679df75fc7daf5098d4"
+    implementation project(':cj-btc-services')
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
+    implementation "com.github.dogecoin:libdohj:31fb8985ba13fbf20f102679df75fc7daf5098d4"
 }
 
 springBoot {

@@ -1,6 +1,10 @@
+plugins {
+    id 'java-library'
+}
+
 dependencies {
-    compile project(':cj-btc-jsonrpc')
-    compile project(':consensusj-jsonrpc-gvy')
+    api project(':cj-btc-jsonrpc')
+    api project(':consensusj-jsonrpc-gvy')
 
     implementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
     implementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {

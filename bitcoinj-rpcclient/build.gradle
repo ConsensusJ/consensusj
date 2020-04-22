@@ -1,15 +1,15 @@
 dependencies {
-    testCompile project(':cj-btc-jsonrpc-gvy')
-    testCompile project(':bitcoinj-json')
-    testCompile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    testCompile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    testImplementation project(':cj-btc-jsonrpc-gvy')
+    testImplementation project(':bitcoinj-json')
+    testImplementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    testImplementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
-    testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-    testCompile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
         transitive = false
     }
 
-    testCompile project(':bitcoinj-dsl')                // Use Groovy extensions in tests
+    testImplementation project(':bitcoinj-dsl')                // Use Groovy extensions in tests
 }
 
 // Test Structure

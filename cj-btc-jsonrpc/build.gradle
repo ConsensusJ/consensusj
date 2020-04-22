@@ -11,7 +11,7 @@ dependencies {
         transitive = false
     }
 
-    testCompile project(':bitcoinj-dsl')                // Use Groovy extensions in tests
+    testImplementation project(':bitcoinj-dsl')                // Use Groovy extensions in tests
 }
 
 

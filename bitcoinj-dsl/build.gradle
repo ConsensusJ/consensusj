@@ -1,6 +1,10 @@
+plugins {
+    id 'java-library'
+}
+
 dependencies {
-    compile "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
-    compile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    implementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
     implementation 'com.google.guava:guava:28.2-android'
 }
 

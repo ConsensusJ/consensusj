@@ -20,18 +20,18 @@ idea {
 }
 
 dependencies {
-    compile project(':cj-btc-services')
+    implementation project(':cj-btc-services')
 
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-websocket"
-    compile "org.springframework.boot:spring-boot-starter-security"
-    compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-websocket"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "com.github.briandilley.jsonrpc4j:jsonrpc4j:${jsonrpc4jVersion}"
 
     // WebJars:
-    compile 'org.webjars:angularjs:1.7.2'
-    compile 'org.webjars:bootstrap:3.3.7-1'
-    compile 'org.webjars:sockjs-client:1.1.2'
-    compile 'org.webjars:stomp-websocket:2.3.3-1'
+    implementation 'org.webjars:angularjs:1.7.2'
+    implementation 'org.webjars:bootstrap:3.3.7-1'
+    implementation 'org.webjars:sockjs-client:1.1.2'
+    implementation 'org.webjars:stomp-websocket:2.3.3-1'
 }
 
 

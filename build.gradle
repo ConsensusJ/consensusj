@@ -50,9 +50,9 @@ subprojects {
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 
-        testCompile "junit:junit:4.13"
-        testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-        testCompile("org.spockframework:spock-core:${spockVersion}") {
+        testImplementation "junit:junit:4.13"
+        testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+        testImplementation("org.spockframework:spock-core:${spockVersion}") {
             exclude module: "groovy-all"
         }
 

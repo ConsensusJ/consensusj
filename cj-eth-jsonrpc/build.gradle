@@ -5,8 +5,8 @@ plugins {
 dependencies {
     api project(':consensusj-jsonrpc')
 
-    testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-    testCompile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
         transitive = false
     }
 }

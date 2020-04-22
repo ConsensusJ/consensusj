@@ -6,12 +6,12 @@ plugins {
 mainClassName = "org.consensusj.proxy.ProxyMain"
 
 dependencies {
-    compile project(':cj-btc-jsonrpc')
+    implementation project(':cj-btc-jsonrpc')
 
-    compile ratpack.dependency('guice')
-    compile ratpack.dependency('retrofit2')
+    implementation ratpack.dependency('guice')
+    implementation ratpack.dependency('retrofit2')
     
-    runtime "org.slf4j:slf4j-simple:${slf4jVersion}"
+    runtimeOnly "org.slf4j:slf4j-simple:${slf4jVersion}"
 }
 
 idea {

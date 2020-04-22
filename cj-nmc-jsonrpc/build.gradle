@@ -5,12 +5,12 @@ plugins {
 dependencies {
     api project(':cj-btc-jsonrpc')
 
-    testCompile "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-    testCompile ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
         transitive = false
     }
 
-    testCompile project(':bitcoinj-dsl')                // Use Groovy extensions in tests
+    testImplementation project(':bitcoinj-dsl')                // Use Groovy extensions in tests
 }
 
 
