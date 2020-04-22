@@ -18,7 +18,7 @@ class GetBlockSpec extends BaseRegTestSpec {
         def version10 = client.getNetworkInfo().version > 100000
 
         when: "we generate 1 new block"
-        def result = generate()
+        def result = generateBlocks(1)
 
         then: "the block height is 1 higher"
         blockCount == startHeight + 1

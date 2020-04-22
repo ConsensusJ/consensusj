@@ -20,7 +20,7 @@ class BitcoinStepwiseSpec extends BaseRegTestSpec {
         when: "we send some BTC to a newly created address"
         def throwAwayAddress = getNewAddress()
         sendToAddress(throwAwayAddress, 25.btc)
-        generate()
+        generateBlocks(1)
 
         then: "we have the correct amount of BTC there, or possibly more due to block reward"
         getBitcoinBalance(throwAwayAddress) >= 25.btc
@@ -30,7 +30,7 @@ class BitcoinStepwiseSpec extends BaseRegTestSpec {
         when: "we send some BTC to an address"
         wealthyAddress = getNewAddress(testAccount1Name)
         sendToAddress(wealthyAddress, sendAmount*2 + extraAmount)
-        generate()
+        generateBlocks(1)
 
         then: "we have the correct amount of BTC there"
         getBitcoinBalance(wealthyAddress) == sendAmount*2 + extraAmount
@@ -44,7 +44,7 @@ class BitcoinStepwiseSpec extends BaseRegTestSpec {
         when: "we create a new address and send testAmount to it"
         Address destinationAddress = getNewAddress(testAccount2Name)
         sendBitcoin(wealthyAddress, destinationAddress, testAmount)
-        generate()
+        generateBlocks(1)
 
         then: "the new address has a balance of testAmount"
         getBitcoinBalance(destinationAddress) == testAmount

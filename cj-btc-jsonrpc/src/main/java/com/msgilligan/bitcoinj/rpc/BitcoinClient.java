@@ -299,7 +299,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     /**
      * Turn generation on/off
      *
-     * Note: `setgenerate` has been removed from regtest mode in recent Bitcoin Core, as `generate`
+     * Note: `setgenerate` has been removed from regtest mode in Bitcoin Core, as `generateToAddress`
      * should be used instead)
      *
      * @param generate        turn generation on or off
@@ -318,7 +318,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     /**
      * generate blocks (RegTest mode only)
      * @since Bitcoin Core 0.11.0
-     * @deprecated Use generateToAddress (deprecated in Bitcoin Core 0.18)
+     * @deprecated Use BitcoinClient#generateToAddress
      *
      * @param numBlocks number of blocks to generate
      * @return list containing block header hashes of the generated blocks
@@ -327,17 +327,13 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      */
     @Deprecated
     public List<Sha256Hash> generate(int numBlocks) throws JsonRpcStatusException, IOException {
-        if (getServerVersion() > 110000) {
-            JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
-            return send("generate", resultType, numBlocks);
-        } else {
-            // For backward compatibility, to be removed eventually
-            return setGenerate(true, (long) numBlocks);
-        }
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
+        return send("generate", resultType, numBlocks);
     }
 
     /**
      * Convenience method for generating a single block when in RegTest mode
+     * @deprecated Use BitcoinClient#generateToAddress
      * @see BitcoinClient#generate(int numBlocks)
      */
     @Deprecated
@@ -373,28 +369,6 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      */
     public List<Sha256Hash> generateToAddress(int numBlocks, Address address) throws IOException {
         return generateToAddress(numBlocks,address, null);
-    }
-
-    /**
-     * Convenience method for generating a single block when in RegTest mode
-     * @deprecated Use BitcoinClient#generate()
-     * @see BitcoinClient#generate()
-     */
-    @Deprecated
-    public List<Sha256Hash> generateBlock() throws JsonRpcStatusException, IOException {
-        return generate();
-    }
-
-    /**
-     * Convenience method for generating blocks when in RegTest mode
-     *
-     * @param blocks number of blocks to generate
-     * @deprecated Use BitcoinClient#generate(int)
-     * @see BitcoinClient#generate(int)
-     */
-    @Deprecated
-    public List<Sha256Hash> generateBlocks(Long blocks) throws JsonRpcStatusException, IOException {
-        return generate(blocks.intValue());
     }
 
     /**

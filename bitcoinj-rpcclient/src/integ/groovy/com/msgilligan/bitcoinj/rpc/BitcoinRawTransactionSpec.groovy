@@ -31,7 +31,7 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
         sendToAddress(fundingAddress, fundingAmount)
 
         and: "a new block is mined"
-        generate()
+        generateBlocks(1)
 
         then: "the address should have that balance"
         def balance = getBitcoinBalance(fundingAddress)
@@ -67,7 +67,7 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
         txid != null
 
         when: "a new block is mined"
-        generate()
+        generateBlocks(1)
 
         and: "we get info about the transaction"
         def broadcastedTransaction = getRawTransactionInfo(txid)
@@ -93,7 +93,7 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
         sendBitcoin(destinationAddress, newAddress, amount)
 
         and: "a new block is mined"
-        generate()
+        generateBlocks(1)
 
         then: "the sending address should be empty"
         def balanceSource = getBitcoinBalance(destinationAddress)

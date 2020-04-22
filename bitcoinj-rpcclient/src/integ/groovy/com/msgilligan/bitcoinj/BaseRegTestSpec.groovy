@@ -33,7 +33,7 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
         // explicitly fund their addresses?
         while (client.getBalance() < minBTCForTests) {
             // Mine blocks until we have some coins to spend
-            client.generate()
+            client.generateBlocks(1)
         }
     }
 

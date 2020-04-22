@@ -1,8 +1,10 @@
 package com.msgilligan.bitcoinj.test;
 
-import com.msgilligan.bitcoinj.rpc.BitcoinClient;
+import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.bitcoinj.core.Sha256Hash;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,9 +16,10 @@ import java.util.List;
  *  every 'n' seconds, so tests could run in parallel, but would complete much quicker.
  */
 public class RegTestEnvironment implements BlockChainEnvironment {
-    private BitcoinClient client;
+    private static final Logger log = LoggerFactory.getLogger(RegTestEnvironment.class);
+    private final BitcoinExtendedClient client;
 
-    public RegTestEnvironment(BitcoinClient client) {
+    public RegTestEnvironment(BitcoinExtendedClient client) {
         this.client = client;
     }
 
@@ -27,6 +30,6 @@ public class RegTestEnvironment implements BlockChainEnvironment {
 
     @Override
     public List<Sha256Hash> waitForBlocks(int numBlocks) throws JsonRpcException, IOException {
-        return client.generate(numBlocks);
+        return client.generateBlocks(numBlocks);
     }
 }
