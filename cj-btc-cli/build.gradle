@@ -9,16 +9,23 @@ plugins {
 sourceCompatibility = 9
 targetCompatibility = 9
 
+configurations {
+    nativeToolImplementation.extendsFrom implementation
+}
+
 dependencies {
     // Using 'api' here breaks Spock integration test classpath for some reason
     implementation project(':consensusj-jsonrpc-cli')
     implementation project(':cj-btc-jsonrpc')
 
     implementation 'commons-cli:commons-cli:1.4'
-    
-    runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+
+    // Add SLF4J runtime adapter for JDK logging for GraalVM native-image build of bitcoin CLI tool
+    nativeToolImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 
     testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+
+    testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 }
 
 def mainClassName = "org.consensusj.bitcoin.cli.BitcoinCLITool"
@@ -32,19 +39,19 @@ jar {
 }
 
 
-// Compile a native image using Graal's native-image tool
+// Compile a native image using GraalVM's native-image tool
 // Graal must be installed at $GRAAL_HOME
 task graalNativeImage(type:Exec, dependsOn: jar) {
     workingDir = projectDir
     executable = "${System.env.GRAAL_HOME}/bin/native-image"
     args = [ '--verbose',
              '--no-fallback',
-             '-cp', "${-> sourceSets.main.runtimeClasspath.asPath}", // Lazy configuration resolution
+             '-cp', "${-> configurations.nativeToolImplementation.asPath}", // Lazy configuration resolution
              '-jar', jar.archiveFile.get(),
              '-H:Path=build',
              '-H:Name=cj-bitcoin-cli',
              '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
-             '-H:EnableURLProtocols=http',
+             '-H:EnableURLProtocols=http,https',
              '-H:+ReportUnsupportedElementsAtRuntime'
     ]
 }

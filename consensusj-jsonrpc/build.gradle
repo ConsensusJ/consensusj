@@ -2,9 +2,16 @@ plugins {
     id 'java-library'
 }
 
+configurations {
+    nativeSampleImplementation.extendsFrom implementation
+}
+
 dependencies {
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+
+    // Add SLF4J runtime adapter for JDK logging for GraalVM native-image build of MathService/Tool
+    nativeSampleImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 
     testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
     testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
@@ -35,20 +42,22 @@ test {
     }
 }
 
-// Compile a native image using Graal's native-image tool
+// Compile a native image of the MathService tool sample using Graal's native-image tool
 // Graal must be installed at $GRAAL_HOME
 task graalNativeImage(type:Exec, dependsOn: jar) {
     workingDir = projectDir
     executable = "${System.env.GRAAL_HOME}/bin/native-image"
     args = [ '--verbose',
              '--no-fallback',
-             '-cp', "${-> sourceSets.main.runtimeClasspath.asPath}", // Lazy configuration resolution
+             '-cp', "${-> configurations.nativeSampleImplementation.asPath}", // Lazy configuration resolution
              '-jar', jar.archiveFile.get(),
              '-H:Path=build',
              '-H:Name=MathTool',
+             '--initialize-at-build-time=org.consensusj.jsonrpc.introspection.sample.MathService,org.slf4j.helpers.NamedLoggerBase,org.slf4j.impl.JDK14LoggerAdapter,org.slf4j.helpers.MarkerIgnoringBase,org.slf4j.helpers.Util',
              '-H:+AllowIncompleteClasspath',
              '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
              '-H:+ReportUnsupportedElementsAtRuntime',
-             '-H:+ReportExceptionStackTraces'
+             '-H:+ReportExceptionStackTraces',
+             '-H:+TraceClassInitialization'
     ]
 }

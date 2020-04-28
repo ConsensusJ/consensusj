@@ -1,5 +1,11 @@
 [
   {
+    "name" : "org.consensusj.jsonrpc.introspection.MathService",
+    "allDeclaredMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicConstructors" : true
+  },
+  {
     "name" : "org.consensusj.jsonrpc.JsonRpcRequest",
     "allDeclaredMethods" : true,
     "allPublicMethods" : true
