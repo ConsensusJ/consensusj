@@ -2,7 +2,7 @@
 Sean Gilligan
 :doctype: manpage
 :man manual: consensusj Manual
-:man source: consensusj 0.2.7
+:man source: consensusj 0.5.1
 :page-layout: base
 
 == NAME
@@ -24,10 +24,10 @@ By default it reads from the local `bitcoin.conf` for host, port, username, and 
 === Connection Settings
 
 *-regtest*::
-  Server is in *RegTest* mode, connect to the the RegTest port (18332).
+  Server is in *RegTest* mode, connect to the RegTest port (18443).
 
 *-testnet*::
-  Server is running on TestNet, connect to the the TestNet port (18332).
+  Server is running on TestNet, connect to the TestNet port (18332).
 
 *--rpcconnect*=_HOST_::
   Hostname or IP of server to connect to.
