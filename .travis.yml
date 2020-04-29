@@ -1,7 +1,19 @@
 dist: xenial
 language: java
 
-install: true
+env:
+  global:
+  - OMNICORE_HOST=https://bintray.com/artifact/download/omni/OmniBinaries
+  - OMNICORE_RELEASE=omnicore-0.8.1
+  - OMNICORE_FILE=$OMNICORE_RELEASE-x86_64-linux-gnu.tar.gz
+  - OMNICORE_HASH=bfd7486d8cb84f1bd2cd72a1c0f1c993d30ad1bcb8ba16e75d2271872cfe0ce8
+
+install:
+  - wget "$OMNICORE_HOST/$OMNICORE_FILE"
+  - echo "$OMNICORE_HASH  $OMNICORE_FILE" | shasum --algorithm 256 --check
+  - mkdir -p copied-artifacts/src/
+  - tar zxvf $OMNICORE_FILE -C /tmp
+  - mv /tmp/$OMNICORE_RELEASE/bin/omnicored copied-artifacts/src/
 
 script:
  - sudo apt-get update

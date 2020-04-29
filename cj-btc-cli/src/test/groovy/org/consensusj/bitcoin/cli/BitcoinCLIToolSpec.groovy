@@ -24,7 +24,7 @@ class BitcoinCLIToolSpec extends Specification {
         def tool = createInstance()
 
         when:
-        URI expectedURI = "http://localhost:18332".toURI()
+        URI expectedURI = "http://localhost:18443".toURI()
         BitcoinCLITool.BitcoinCLICall call = (BitcoinCLITool.BitcoinCLICall) tool.createCall(System.out, System.err, "-regtest", "getblockcount")
         def client = call.rpcClient()
         def serverURI = client.getServerURI()
