@@ -1,6 +1,5 @@
 package com.msgilligan.bitcoinj.integ
 
-import com.google.common.collect.ImmutableList
 import com.msgilligan.bitcoinj.BaseRegTestSpec
 import org.bitcoinj.core.BlockChain
 import org.bitcoinj.core.Coin
@@ -108,7 +107,7 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
 
         and: "Prepare a template for the contract."
         Transaction contract = new Transaction(params)
-        List<ECKey> keys = ImmutableList.of(clientKey, serverKey)
+        List<ECKey> keys = Arrays.asList(clientKey, serverKey)
         // Create a 2-of-2 multisig output script.
         Script script = ScriptBuilder.createMultiSigOutputScript(2, keys)
         // Now add an output for 0.50 bitcoins that uses that script.
@@ -185,9 +184,9 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
         when:
         // Create the script that spends the multi-sig output.
         Script inputScript = ScriptBuilder.createMultiSigInputScript(
-                        ImmutableList.of(myTxSig, serverSignature))
+                Arrays.asList(myTxSig, serverSignature))
 //        Script inputScript = ScriptBuilder.createMultiSigInputScriptBytes(
-//                ImmutableList.of(mySignature.encodeToDER(), serverSignature.toCanonicalised().encodeToDER()))
+//                Arrays.asList(mySignature.encodeToDER(), serverSignature.toCanonicalised().encodeToDER()))
         // Add it to the input.
         input.setScriptSig(inputScript);
 

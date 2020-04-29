@@ -1,3 +1,8 @@
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
 dependencies {
     testImplementation project(':cj-btc-jsonrpc-gvy')
     testImplementation project(':bitcoinj-json')
@@ -15,8 +20,8 @@ dependencies {
 // Test Structure
 sourceSets {
     integrationTest {
-        compileClasspath = sourceSets.main.output + configurations.testRuntime
-        runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
         groovy {
             srcDir 'src/integ/groovy'
         }
@@ -46,6 +51,8 @@ task integrationTest(type: Test) {
 }
 
 task regTest(type: Test) {
+    description = 'Runs integration tests against Bitcon Core in regtest mode'
+    group = 'verification'
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
     outputs.upToDateWhen { false }

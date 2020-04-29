@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    api "com.google.guava:guava:28.2-android"
     api "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 }

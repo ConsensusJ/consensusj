@@ -11,6 +11,8 @@ targetCompatibility = 9
 
 configurations {
     nativeToolImplementation.extendsFrom implementation
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
 }
 
 dependencies {
@@ -60,8 +62,8 @@ task graalNativeImage(type:Exec, dependsOn: jar) {
 // Test Structure
 sourceSets {
     integrationTest {
-        compileClasspath = sourceSets.main.output + configurations.testRuntime
-        runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
         groovy {
             srcDir 'src/integ/groovy'
         }
@@ -72,6 +74,8 @@ sourceSets {
 }
 
 task regTest(type: Test) {
+    description = 'Runs integration tests against Bitcon Core in regtest mode'
+    group = 'verification'
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
     outputs.upToDateWhen { false }

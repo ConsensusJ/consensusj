@@ -39,7 +39,7 @@ class BitcoinCLIToolIntegrationSpec extends Specification implements CLITestSupp
 
     def "generate a block"() {
         when:
-        def result = command "-regtest -rpcuser=${rpcUser} -rpcpassword=${rpcPassword} -rpcwait generate 1"
+        def result = command "-regtest -rpcuser=${rpcUser} -rpcpassword=${rpcPassword} -rpcwait generatetoaddress 1 moneyqMan7uh8FqdCA2BV5yZ8qVrc9ikLP"
 
         then:
         result.status == 0
@@ -49,7 +49,7 @@ class BitcoinCLIToolIntegrationSpec extends Specification implements CLITestSupp
 
     def "get server info"() {
         when:
-        def result = command "-regtest -rpcuser=${rpcUser} -rpcpassword=${rpcPassword} -rpcwait getinfo"
+        def result = command "-regtest -rpcuser=${rpcUser} -rpcpassword=${rpcPassword} -rpcwait getblockchaininfo"
 
         then:
         result.status == 0

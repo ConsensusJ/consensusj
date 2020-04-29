@@ -17,6 +17,9 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.msgilligan.bitcoinj.rpc.RpcURI.RPCPORT_REGTEST;
+import static com.msgilligan.bitcoinj.rpc.RpcURI.RPCPORT_TESTNET;
+
 /**
  * An attempt at cloning the bitcoin-cli tool, but using Java and bitcoinj
  *
@@ -74,6 +77,14 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
             case "generate":
             case "setgenerate":
                 typedParams.add(Integer.valueOf(params.get(0)));
+                break;
+
+            case "generatetoaddress":
+                typedParams.add(Integer.valueOf(params.get(0)));
+                typedParams.add(params.get(1));
+                if (params.size() >= 3) {
+                    typedParams.add(Integer.valueOf(params.get(2)));
+                }
                 break;
 
             case "getblockhash":
@@ -154,8 +165,10 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
             if (line.hasOption("rpcconnect")) {
                 host = line.getOptionValue("rpcconnect", host);
             }
-            if (line.hasOption("regtest") || line.hasOption("testnet")) {
-                port = 18332;
+            if (line.hasOption("regtest"))  {
+                port = RPCPORT_REGTEST;
+            } else if (line.hasOption("testnet")) {
+                port = RPCPORT_TESTNET;
             }
             if (line.hasOption("rpcport")) {
                 String portString = line.getOptionValue("rpcport");
