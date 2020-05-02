@@ -26,6 +26,7 @@ import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,7 @@ import java.util.concurrent.TimeoutException;
 /**
  *
  */
-public abstract class KnowmExchangeRateProvider  extends BaseExchangeRateProvider implements ExchangeRateProvider {
+public class KnowmExchangeRateProvider  extends BaseExchangeRateProvider implements ExchangeRateProvider {
     protected final String exchangeClassName;
     protected final Map<CurrencyUnit, String> tickerSymbolConversions;
     protected final Map<CurrencyUnitPair, MonitoredCurrency> monitoredCurrencies = new HashMap<>();
@@ -56,7 +57,7 @@ public abstract class KnowmExchangeRateProvider  extends BaseExchangeRateProvide
      */
     protected KnowmExchangeRateProvider(String exchangeClassName,
                                               Map<CurrencyUnit, String> tickerSymbolConversions,
-                                              CurrencyUnitPair... pairs) {
+                                              Collection<CurrencyUnitPair> pairs) {
         this.exchangeClassName = exchangeClassName;
         this.tickerSymbolConversions = (tickerSymbolConversions != null) ? tickerSymbolConversions : new HashMap<>();
         for (CurrencyUnitPair pair : pairs) {

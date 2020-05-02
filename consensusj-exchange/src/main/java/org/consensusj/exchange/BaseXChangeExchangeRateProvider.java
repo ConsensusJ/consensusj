@@ -11,6 +11,8 @@ import javax.money.CurrencyUnit;
 import javax.money.convert.ExchangeRateProvider;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,19 +22,22 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 /**
  *  Base ExchangeRateProvider using XChange library
  *  Currently supports current DEFERRED rates only
  */
+@Deprecated
 public abstract class BaseXChangeExchangeRateProvider extends KnowmExchangeRateProvider implements ExchangeRateProvider, ObservableExchangeRateProvider {
     private static final Logger log = LoggerFactory.getLogger(BaseXChangeExchangeRateProvider.class);
-    private ScheduledExecutorService stpe;
-    private volatile boolean started = false;
-    private volatile boolean stopping = false;
-    private  ScheduledFuture<?> future;
     private static final int initialDelay = 0;
     private static final int period = 60;
+
+    private final ScheduledExecutorService stpe;
+    private volatile boolean started = false;
+    private volatile boolean stopping = false;
+    private ScheduledFuture<?> future;
 
     /**
      * Construct using an XChange Exchange class object for a set of currencies
@@ -43,9 +48,16 @@ public abstract class BaseXChangeExchangeRateProvider extends KnowmExchangeRateP
     protected BaseXChangeExchangeRateProvider(String exchangeClassName,
                                               ScheduledExecutorService scheduledExecutorService,
                                               Map<CurrencyUnit, String> tickerSymbolConversions,
-                                              CurrencyUnitPair... pairs) {
+                                              Collection<CurrencyUnitPair> pairs) {
         super(exchangeClassName, tickerSymbolConversions, pairs);
         stpe = (scheduledExecutorService != null) ? scheduledExecutorService : Executors.newScheduledThreadPool(1);
+    }
+
+    protected BaseXChangeExchangeRateProvider(String exchangeClassName,
+                                              ScheduledExecutorService scheduledExecutorService,
+                                              Map<CurrencyUnit, String> tickerSymbolConversions,
+                                              CurrencyUnitPair... pairs) {
+        this(exchangeClassName, scheduledExecutorService, tickerSymbolConversions, Arrays.asList(pairs));
     }
 
     /**
@@ -55,9 +67,10 @@ public abstract class BaseXChangeExchangeRateProvider extends KnowmExchangeRateP
      */
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
                                               CurrencyUnitPair... pairs) {
-        this(exchangeClass,
+        this(exchangeClass.getName(),
                 null,
-                pairs);
+                null,
+                Arrays.asList(pairs));
     }
 
     /**
@@ -69,32 +82,24 @@ public abstract class BaseXChangeExchangeRateProvider extends KnowmExchangeRateP
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
                                               ScheduledExecutorService scheduledExecutorService,
                                               CurrencyUnitPair... pairs) {
-        this(exchangeClass.getName(), scheduledExecutorService, null, pairs);
+        this(exchangeClass.getName(), scheduledExecutorService, null, Arrays.asList(pairs));
     }
 
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
                                               ScheduledExecutorService scheduledExecutorService,
                                               String... pairs) {
-        this(exchangeClass, scheduledExecutorService, pairsConvert(pairs));
+        this(exchangeClass.getName(), scheduledExecutorService, null, ExchangeUtils.pairsConvert(pairs));
     }
 
     protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
                                               String... pairs) {
-        this(exchangeClass, pairsConvert(pairs));
+        this(exchangeClass.getName(), null, null, ExchangeUtils.pairsConvert(pairs));
     }
 
     protected BaseXChangeExchangeRateProvider(String exchangeClassName, ScheduledExecutorService scheduledExecutorService, String[] pairs) {
-        this(exchangeClassName, scheduledExecutorService, null, pairsConvert(pairs));
+        this(exchangeClassName, scheduledExecutorService, null, ExchangeUtils.pairsConvert(pairs));
     }
-
-    protected static CurrencyUnitPair[] pairsConvert(String[] strings) {
-        CurrencyUnitPair[] units = new CurrencyUnitPair[strings.length];
-        for (int i = 0 ; i < strings.length ; i++) {
-            units[i] = new CurrencyUnitPair(strings[i]);
-        }
-        return units;
-    }
-
+    
 
 
     /**

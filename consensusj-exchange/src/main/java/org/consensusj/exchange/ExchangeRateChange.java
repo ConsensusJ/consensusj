@@ -12,6 +12,7 @@ import javax.money.convert.ExchangeRate;
  * TODO: And it should probably be called "Update" rather than "Change" -- if the timestamp
  * was updated but the exchange rate didn't, users still want to know.
  */
+@Deprecated
 public class ExchangeRateChange {
     public final ExchangeRate rate;
     public final Long timestamp;
