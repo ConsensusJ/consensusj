@@ -6,7 +6,7 @@ def xChangeVersion = '4.4.2'
 
 dependencies {
     api "org.javamoney:moneta-bp:${javaMoneyBPVersion}"
-    api 'io.reactivex.rxjava3:rxjava:3.0.1'
+    api 'io.reactivex.rxjava3:rxjava:3.0.2'
     api "org.knowm.xchange:xchange-core:${xChangeVersion}"
 
     testImplementation project(':consensusj-currency')  // For BTC Currency Code
