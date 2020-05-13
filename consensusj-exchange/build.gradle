@@ -10,10 +10,11 @@ dependencies {
     api "org.knowm.xchange:xchange-core:${xChangeVersion}"
 
     testImplementation project(':consensusj-currency')  // For BTC Currency Code
-    testImplementation "org.knowm.xchange:xchange-bitfinex:${xChangeVersion}"
-    testImplementation "org.knowm.xchange:xchange-itbit:${xChangeVersion}"
-    testImplementation "org.knowm.xchange:xchange-coinbase:${xChangeVersion}"
-    testImplementation "org.knowm.xchange:xchange-coinbasepro:${xChangeVersion}"
+    testRuntimeOnly "org.knowm.xchange:xchange-bitfinex:${xChangeVersion}"
+    testRuntimeOnly "org.knowm.xchange:xchange-itbit:${xChangeVersion}"
+    testRuntimeOnly "org.knowm.xchange:xchange-coinbase:${xChangeVersion}"
+    testRuntimeOnly "org.knowm.xchange:xchange-coinbasepro:${xChangeVersion}"
+    testRuntimeOnly "org.knowm.xchange:xchange-bittrex:${xChangeVersion}"
 }
 
 ext.moduleName = 'org.consensusj.exchange'
@@ -25,4 +26,13 @@ jar {
                 'Implementation-Version': archiveVersion.get()
     }
 }
+
+test {
+    testLogging.showStandardStreams = true
+    systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/test/logging.properties"
+    beforeTest { descriptor ->
+        logger.lifecycle('    ' + descriptor.getName())
+    }
+}
+
 

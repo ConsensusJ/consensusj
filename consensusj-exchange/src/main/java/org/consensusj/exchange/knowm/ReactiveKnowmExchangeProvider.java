@@ -3,6 +3,7 @@ package org.consensusj.exchange.knowm;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
+import org.consensusj.exchange.BaseXChangeExchangeRateProvider;
 import org.consensusj.exchange.CurrencyUnitPair;
 import org.consensusj.exchange.rx.ExchangeRateUpdate;
 import org.consensusj.exchange.rx.ObservablePair;
@@ -11,9 +12,12 @@ import org.consensusj.exchange.rx.ReactiveExchange;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
+import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.service.marketdata.MarketDataService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.money.CurrencyUnit;
 import javax.money.convert.ProviderContext;
@@ -31,9 +35,12 @@ import java.util.function.Supplier;
  *
  */
 public class ReactiveKnowmExchangeProvider implements ReactiveExchange {
+    private static final Logger log = LoggerFactory.getLogger(ReactiveKnowmExchangeProvider.class);
     protected final String exchangeClassName;
     protected final Map<CurrencyUnit, String> tickerSymbolConversions;
     protected final Observable<Long> interval;
+    protected final ExchangeSpecification exchangeSpecification;
+    
     protected final Map<CurrencyUnitPair, MonitoredCurrency> observablePairs = new HashMap<>();
 
     Function<CurrencyUnitPair, ExchangeRateUpdate> exchangePollingFunction;
@@ -49,7 +56,27 @@ public class ReactiveKnowmExchangeProvider implements ReactiveExchange {
                                          Map<CurrencyUnit, String> tickerSymbolConversions,
                                          Collection<CurrencyUnitPair> pairs,
                                          Observable<Long> interval) {
-        this.exchangeClassName = exchangeClassName;
+        this(null, exchangeClassName, tickerSymbolConversions, pairs, interval);
+    }
+
+    public ReactiveKnowmExchangeProvider(ExchangeSpecification exchangeSpecification,
+                                         Map<CurrencyUnit, String> tickerSymbolConversions,
+                                         Collection<CurrencyUnitPair> pairs,
+                                         Observable<Long> interval) {
+        this(exchangeSpecification, null, tickerSymbolConversions, pairs, interval);
+    }
+
+    public ReactiveKnowmExchangeProvider(ExchangeSpecification exchangeSpecification,
+                                          String exchangeClassName,
+                                          Map<CurrencyUnit, String> tickerSymbolConversions,
+                                          Collection<CurrencyUnitPair> pairs,
+                                          Observable<Long> interval) {
+        this.exchangeSpecification = exchangeSpecification;
+        if (exchangeSpecification != null) {
+            this.exchangeClassName = exchangeSpecification.getExchangeClassName();
+        } else {
+            this.exchangeClassName = exchangeClassName;
+        }
         this.tickerSymbolConversions = (tickerSymbolConversions != null) ? tickerSymbolConversions : Collections.emptyMap();
         this.interval = interval;
         for (CurrencyUnitPair pair : pairs) {
@@ -60,12 +87,21 @@ public class ReactiveKnowmExchangeProvider implements ReactiveExchange {
     
     private synchronized void initialize()  {
         if (!initialized) {
-            initialized = true;
-            exchange = ExchangeFactory.INSTANCE.createExchange(exchangeClassName);
+            log.info("initializing, calling createExchange()");
+            // createExchange w/o exchangeSpecification does a remote initialization that takes approximately 1.5 seconds
+            if (exchangeSpecification != null) {
+                exchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpecification);
+            } else {
+                exchange = ExchangeFactory.INSTANCE.createExchange(exchangeClassName);
+            }
+            log.info("initializing, getting name");
             name = exchange.getExchangeSpecification().getExchangeName();
             providerContext = ProviderContext.of(name, RateType.DEFERRED);
             marketDataService = exchange.getMarketDataService();
+            initialized = true;
+            log.info("initialized");
         }
+        log.info("exiting");
     }
 
     @Override
@@ -154,6 +190,5 @@ public class ReactiveKnowmExchangeProvider implements ReactiveExchange {
     public String convertSymbol(CurrencyUnit currencyUnit) {
         return tickerSymbolConversions.getOrDefault(currencyUnit, currencyUnit.getCurrencyCode());
     }
-
 
 }
