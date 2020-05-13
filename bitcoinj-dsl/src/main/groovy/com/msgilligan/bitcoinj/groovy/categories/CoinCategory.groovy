@@ -32,7 +32,7 @@ class CoinCategory {
     // TODO: Needs more tests!
 
     Coin negative() {
-        return Coin.valueOf(-this.value)
+        return valueOf(-this.value)
     }
 
     Coin plus(Coin right) {
