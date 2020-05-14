@@ -34,7 +34,7 @@ trait JTransactionTestSupport implements BTCTestSupport {
         }
         Transaction sentTx = peerGroup.broadcastTransaction(tx).future().get();
         // Wait for it to show up on server as unconfirmed
-        waitForUnconfirmedTransaction(sentTx.hash)
+        waitForUnconfirmedTransaction(sentTx.txId)
         client.generateBlocks(1)
         return sentTx
     }
@@ -60,7 +60,8 @@ trait JTransactionTestSupport implements BTCTestSupport {
             try {
                 pendingTx = client.getRawTransaction(txid)
             } catch (JsonRpcStatusException e) {
-                if (e.message != "No information available about transaction") {
+                if ((e.message != "No information available about transaction") &&
+                    (e.message != "No such mempool or blockchain transaction. Use gettransaction for wallet transactions.")){
                     throw e
                 }
                 Thread.sleep(250)   // wait 250 milliseconds
