@@ -13,11 +13,11 @@ class P2PKHSpec extends TxTestBaseSpec {
     @Unroll
     def "create and send a bitcoinj P2PKH transaction using #methodName"(submitMethod, methodName) {
         given: "transaction ingredients, a destination address and an amount to send"
-        def ingredients = createIngredients(50.btc)
+        def ingredients = createIngredients(10.btc)
         // since we're not currently using a change address, RPC calls won't let us
         // spend too much 'absurdly-high-fee' or too little in transaction fees
         // so maybe we should use change addresses in these tests?
-        Coin amount = 49.999.btc
+        Coin amount = 9.900.btc
         def destAddress = client.getNewAddress()
 
         when: "we build a transaction"

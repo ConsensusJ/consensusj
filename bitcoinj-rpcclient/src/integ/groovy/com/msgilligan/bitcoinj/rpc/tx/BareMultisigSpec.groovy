@@ -27,8 +27,8 @@ class BareMultisigSpec extends TxTestBaseSpec {
 
     private static final ECKey clientKey = new ECKey();
     private static final ECKey serverKey = new ECKey();
-    private static final Coin amount = 49.999.btc
-    private static final Coin amount2 = amount - 0.001.btc
+    private static final Coin amount = 9.999.btc
+    private static final Coin amount2 = amount - 0.100.btc
 
     @Shared
     Transaction contract
@@ -40,7 +40,7 @@ class BareMultisigSpec extends TxTestBaseSpec {
         given: "transaction ingredients (and keys and amount in static finals)"
         // ingredients is a test-fixture that is like a micro-wallet that can be used
         // to fund transactions
-        def ingredients = createIngredients(50.btc)
+        def ingredients = createIngredients(10.btc)
 
         when: "we build a transaction"
         contract = new Transaction(params)
