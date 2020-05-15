@@ -17,7 +17,7 @@ public class JsonRpcRequest {
     public static final String JSON_RPC_VERSION_1 = "1.0";
     public static final String JSON_RPC_VERSION_2 = "2.0";
     private static final String DEFAULT_JSON_RPC_VERSION = JSON_RPC_VERSION_1;
-    private static AtomicLong nextRequestId =  new AtomicLong(0);
+    private static final AtomicLong nextRequestId =  new AtomicLong(0);
 
     private final String  method;
     private final List<Object> params;
