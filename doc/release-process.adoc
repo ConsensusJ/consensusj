@@ -2,8 +2,8 @@
 
 == Main Release Process
 
-. Use Java 8 for official builds
-.. `sdk use java 8.0.242.hs-adpt` (or later version)
+. Use Java 9 for official builds
+.. `sdk use java 9.0.7-zulu` (or later version)
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`
@@ -19,10 +19,8 @@
 . Publish to Bintray:
 .. `./gradlew bintrayUpload`
 .. Confirm publish of artifacts in Bintray Web UI.
-. Update Github-pages site (including JavaDoc) -- Use Java 9 for this step to get HTML5 JavaDoc with search:
-+
-    sdk use java 9.0.7-zulu
-    ./gradlew clean javadocAll publishSite
+. Update Github-pages site (including JavaDoc)
+.. `./gradlew clean javadocAll publishSite`
 
 
 == Announcements

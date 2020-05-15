@@ -13,19 +13,45 @@ Released: Not yet
 * Deprecated `generate` RPC (Deprecated in Bitcoin Core 0.18.0)
 * Remove `BitcoinClient.generateBlock()` and `BitcoinClient.generateBlocks()` RPC methods (unused by OmniJ)
 * Add `BitcoinExtendedClient.generateBlocks()` to help OmniJ transition to `generateToAddress`
+* Properly handle slightly different "Connection refused" message returned by newer JVMs while waiting for server
+* Fix and improve Graal native-image build of MathTool sample
+
+=== cj-btc-cli
+
+* Upgrade to Java 9
+* Code cleanup
+* Implement ToolProvider interface 
+* Fix and improve Graal native-image build of `cj-bitcoin-cli`
+
+=== consensusj-jsonrpc-cli
+
+* Upgrade to Java 9
+* Is now a Java Module
+* Code cleanup
+* Implement ToolProvider interface 
+* Fix and improve Graal native-image build of `jsonrpc` tool.
+
 
 === consensusj-exchange
 
+* Implement Reactive exchange client using RxJava
 * Upgrade to XChange 4.4.2
 
 === All Modules
 
+* Gradle build improvements
+** Use `java-library` plugin for most modules
+** Get Graal native-image builds working again
+** CI configuration improvements
+** Fix Bitcoin Core regTest integration tests
+** Run regTest integration tests on TravisCI
 * Update to bitcoinj 0.15.7
 ** (Guava to 28.2-android)
 * Update to Jackson 2.10.3
 * Update to Gradle 6.4
+* Update to JUnit 4.13
 * Update to Groovy 3.0.3
-* Update to Spock 2.0-M2
+* Update to Spock 2.0-M2-groovy-3.0
 * Update to Gradle git-publish plugin 2.1.3
 
 
