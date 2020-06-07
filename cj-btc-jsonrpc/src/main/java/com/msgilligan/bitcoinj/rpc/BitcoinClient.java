@@ -269,7 +269,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      * Returns information about a block with the given block hash.
      *
      * @param hash The block hash
-     * @return The information about the block
+     * @return The information about the block (JSON/POJO object)
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
@@ -278,6 +278,14 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
         return send("getblock", BlockInfo.class, hash, true);
     }
 
+    /**
+     * Returns information about a block with the given block hash.
+     *
+     * @param hash The block hash
+     * @return The information about the block (bitcoinj {@link Block} object)
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
     public Block getBlock(Sha256Hash hash) throws JsonRpcStatusException, IOException {
         // Use "verbose = false"
         return send("getblock", Block.class, hash, false);
@@ -290,7 +298,9 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      * @return The information about the block
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
+     * @deprecated Use {@link BitcoinExtendedClient#getBlock(Integer)} if you need this.
      */
+    @Deprecated
     public Block getBlock(Integer index) throws JsonRpcStatusException, IOException {
         Sha256Hash blockHash = getBlockHash(index);
         return getBlock(blockHash);

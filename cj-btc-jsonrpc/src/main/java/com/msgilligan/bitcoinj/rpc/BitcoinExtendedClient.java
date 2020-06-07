@@ -3,6 +3,7 @@ package com.msgilligan.bitcoinj.rpc;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
+import org.bitcoinj.core.Block;
 import org.bitcoinj.script.Script;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.bitcoinj.core.Address;
@@ -113,6 +114,22 @@ public class BitcoinExtendedClient extends BitcoinClient {
         return this.generateToAddress(numBlocks, regTestMiningAddress);
     }
 
+    /**
+     * Returns information about a block at index provided.
+     * Use two RPCs: `getblockhash` and then `getblock`.
+     * Note: somewhat-overrides (primitive vs boxed) deprecated method that will be removed.
+     * The deprecated method in `BitcoinClient` takes an `Integer`, this method
+     * takes an `int`.
+     *
+     * @param index The block index
+     * @return The information about the block
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public Block getBlock(int index) throws JsonRpcStatusException, IOException {
+        Sha256Hash blockHash = getBlockHash(index);
+        return getBlock(blockHash);
+    }
 
     /**
      * Creates a raw transaction, spending from a single address, whereby no new change address is created, and
