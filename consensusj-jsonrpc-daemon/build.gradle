@@ -8,7 +8,7 @@ plugins {
 
 dependencyManagement {
     imports {
-        mavenBom 'io.micronaut:micronaut-bom:1.1.0.RC1'
+        mavenBom 'io.micronaut:micronaut-bom:1.3.6'
     }
 }
 
@@ -29,6 +29,7 @@ dependencies {
     compileOnly "com.oracle.substratevm:svm"
 
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
     testImplementation "org.junit.jupiter:junit-jupiter-api"
     testImplementation "io.micronaut.test:micronaut-test-junit5"
