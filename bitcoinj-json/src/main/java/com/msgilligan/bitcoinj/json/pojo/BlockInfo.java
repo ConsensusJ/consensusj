@@ -60,6 +60,8 @@ public class BlockInfo {
     }
 
     public static class Sha256HashList extends ArrayList<Sha256Hash> {
+        public Sha256HashList(List<Sha256Hash> collection) {
+            super(collection);
+        }
     }
-
 }
