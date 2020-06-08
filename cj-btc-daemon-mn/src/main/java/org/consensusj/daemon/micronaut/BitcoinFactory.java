@@ -1,5 +1,7 @@
 package org.consensusj.daemon.micronaut;
 
+import com.fasterxml.jackson.databind.Module;
+import com.msgilligan.bitcoinj.json.conversion.RpcServerModule;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import org.bitcoinj.core.Context;
@@ -52,5 +54,10 @@ public class BitcoinFactory {
         WalletAppKitService service = new WalletAppKitService(params, context, kit);
         service.start();
         return service;
+    }
+
+    @Singleton
+    public Module jacksonModule() {
+        return new RpcServerModule(null);
     }
 }

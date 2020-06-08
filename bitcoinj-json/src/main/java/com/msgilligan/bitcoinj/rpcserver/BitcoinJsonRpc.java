@@ -8,7 +8,9 @@ import org.bitcoinj.core.Sha256Hash;
  */
 public interface BitcoinJsonRpc {
     Integer getblockcount();
-    Object getblock(Sha256Hash blockHash, Integer verbosity);
+// TODO: Support Sha256Hash type in request params?
+//    Object getblock(Sha256Hash blockHash, Integer verbosity);
+    Object getblock(String blockHashString, Long verbosity);
     Sha256Hash getblockhash(Integer blockNumber);
     Integer getconnectioncount();
     ServerInfo getinfo();

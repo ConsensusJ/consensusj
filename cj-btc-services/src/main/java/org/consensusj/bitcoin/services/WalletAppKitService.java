@@ -39,7 +39,6 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     protected final NetworkParameters netParams;
     protected final Context context;
     protected final WalletAppKit kit;
-    protected final AbstractBlockChain blockChain;
 
     private int timeOffset = 0;
     private BigDecimal difficulty = new BigDecimal(0);
@@ -51,7 +50,6 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         this.netParams = params;
         this.context = context;
         this.kit = kit;
-        this.blockChain = kit.chain();
     }
 
     @PostConstruct
@@ -79,21 +77,25 @@ public class WalletAppKitService implements BitcoinJsonRpc {
             log.warn("kit not running, returning null");
             return null;
         }
-        return blockChain.getChainHead().getHeight();
+        return kit.chain().getChainHead().getHeight();
     }
 
     /**
      * Partial implementation of `getblock`
      *
-     * In the case where verbosity = 0, an a block is returned without transactions (which is incorrect)
-     * For verbosity = 1, we are int he ballpark but some fields may be missing or incorrect.
+     * In the case where verbosity = 0, a a block is returned without transactions (which is incorrect)
+     * For verbosity = 1, we return a BlockInfo, but some fields may be missing or incorrect.
      * For verbosity = 2, we are currently throwing an exception.
      * 
-     * @param blockHash The hash of the block we are to return
+     * @param blockHashString The hash of the block we are to return (as hex)
      * @param verbosity Specifies the format to return (currently only `1` halfway works)
      * @return Either a `Block` or `BlockInfo` depending upon verbosity.
      */
     @Override
+    public Object getblock(String blockHashString, Long verbosity) {
+        return getblock(Sha256Hash.wrap(blockHashString), verbosity.intValue());
+    }
+
     public Object getblock(Sha256Hash blockHash, Integer verbosity) {
         int verbosityInt = verbosity != null ? verbosity : 1;
         switch(verbosityInt) {
@@ -159,7 +161,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         // TODO: This block should have transactions
         StoredBlock storedBlock;
         try {
-            storedBlock = getStoredBlockByHash(blockChain, blockHash);
+            storedBlock = getStoredBlockByHash(kit.chain(), blockHash);
         } catch (BlockStoreException e) {
             throw new RuntimeException(e);
         }
@@ -169,7 +171,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     private BlockInfo getBlockInfo(Sha256Hash blockHash, boolean includeTx) {
         BlockInfo blockInfo;
         try {
-            blockInfo = getBlockInfoByHash(blockChain, blockHash, includeTx);
+            blockInfo = getBlockInfoByHash(kit.chain(), blockHash, includeTx);
         } catch (BlockStoreException e) {
             throw new RuntimeException(e);
         }
