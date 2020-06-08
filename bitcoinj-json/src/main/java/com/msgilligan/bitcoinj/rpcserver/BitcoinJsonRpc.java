@@ -10,7 +10,7 @@ public interface BitcoinJsonRpc {
     Integer getblockcount();
 // TODO: Support Sha256Hash type in request params?
 //    Object getblock(Sha256Hash blockHash, Integer verbosity);
-    Object getblock(String blockHashString, Long verbosity);
+    Object getblock(String blockHashString, Integer verbosity);
     Sha256Hash getblockhash(Integer blockNumber);
     Integer getconnectioncount();
     ServerInfo getinfo();

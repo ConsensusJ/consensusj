@@ -64,4 +64,60 @@ public class BlockInfo {
             super(collection);
         }
     }
+
+    public Sha256Hash getHash() {
+        return hash;
+    }
+
+    public int getConfirmations() {
+        return confirmations;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public Sha256Hash getMerkleroot() {
+        return merkleroot;
+    }
+
+    public Sha256HashList getTx() {
+        return tx;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public long getNonce() {
+        return nonce;
+    }
+
+    public String getBits() {
+        return bits;
+    }
+
+    public BigDecimal getDifficulty() {
+        return difficulty;
+    }
+
+    public String getChainwork() {
+        return chainwork;
+    }
+
+    public Sha256Hash getPreviousblockhash() {
+        return previousblockhash;
+    }
+
+    public Sha256Hash getNextblockhash() {
+        return nextblockhash;
+    }
 }

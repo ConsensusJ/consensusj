@@ -19,8 +19,8 @@ public class JsonRpcErrorException extends JsonRpcException {
     }
 
     public JsonRpcErrorException(JsonRpcError.Error code, Throwable cause) {
-        super(code.getMessage(), cause);
-        this.error = JsonRpcError.of(code);
+        super(code.getMessage() + ": " + cause.getMessage(), cause);
+        this.error = JsonRpcError.of(code, cause);
     }
 
     /**

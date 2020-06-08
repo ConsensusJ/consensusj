@@ -92,11 +92,11 @@ public class WalletAppKitService implements BitcoinJsonRpc {
      * @return Either a `Block` or `BlockInfo` depending upon verbosity.
      */
     @Override
-    public Object getblock(String blockHashString, Long verbosity) {
-        return getblock(Sha256Hash.wrap(blockHashString), verbosity.intValue());
+    public Object getblock(String blockHashString, Integer verbosity) {
+        return getblock2(Sha256Hash.wrap(blockHashString), verbosity);
     }
 
-    public Object getblock(Sha256Hash blockHash, Integer verbosity) {
+    public Object getblock2(Sha256Hash blockHash, Integer verbosity) {
         int verbosityInt = verbosity != null ? verbosity : 1;
         switch(verbosityInt) {
             case 0: return getBlock(blockHash);
@@ -172,6 +172,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         BlockInfo blockInfo;
         try {
             blockInfo = getBlockInfoByHash(kit.chain(), blockHash, includeTx);
+            log.info("blockinfo: {}, {}", blockInfo.hash, blockInfo.height);
         } catch (BlockStoreException e) {
             throw new RuntimeException(e);
         }
@@ -199,6 +200,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         Block header = block.getHeader();
         int blockHeight = block.getHeight();
         int confirmations = blockChain.getBestChainHeight() - blockHeight;
+        log.trace("building BlockInfo for hash: {} height: {}", blockHash, blockHeight);
         return new BlockInfo(header.getHash(),
                 confirmations,
                 header.getMessageSize(),

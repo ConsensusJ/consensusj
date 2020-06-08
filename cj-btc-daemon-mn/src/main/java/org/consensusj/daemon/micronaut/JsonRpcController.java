@@ -1,6 +1,7 @@
 package org.consensusj.daemon.micronaut;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.msgilligan.bitcoinj.json.pojo.BlockInfo;
 import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 import io.micronaut.context.annotation.Context;
 import io.micronaut.core.annotation.TypeHint;
@@ -8,12 +9,15 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import org.bitcoinj.core.Sha256Hash;
+import org.consensusj.bitcoin.services.WalletAppKitService;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -32,7 +36,10 @@ import java.util.concurrent.CompletableFuture;
                 HashSet.class,
                 JsonRpcRequest.class,
                 JsonRpcResponse.class,
-                ServerInfo.class
+                ServerInfo.class,
+                BlockInfo.class,
+                Sha256Hash.class,
+                WalletAppKitService.class
         },
         accessType = {TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS, TypeHint.AccessType.ALL_DECLARED_METHODS}
 )

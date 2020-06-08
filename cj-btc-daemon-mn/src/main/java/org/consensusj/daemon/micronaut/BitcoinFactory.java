@@ -2,7 +2,6 @@ package org.consensusj.daemon.micronaut;
 
 import com.fasterxml.jackson.databind.Module;
 import com.msgilligan.bitcoinj.json.conversion.RpcServerModule;
-import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
@@ -22,21 +21,18 @@ import java.io.File;
 public class BitcoinFactory {
     private static Logger log = LoggerFactory.getLogger(BitcoinFactory.class);
 
-    @Bean
     @Singleton
     public NetworkParameters networkParameters() {
         log.info("Returning NetworkParameters bean");
         return MainNetParams.get();
     }
 
-    @Bean
     @Singleton
     public Context getContext(NetworkParameters params) {
         log.info("Returning bitcoinj Context bean");
         return new Context(params);
     }
 
-    @Bean
     @Singleton
     public WalletAppKit getKit(NetworkParameters params) throws Exception {
         log.info("Returning WalletAppKit bean");
@@ -47,8 +43,7 @@ public class BitcoinFactory {
         return new WalletAppKit(params, directory, filePrefix);
     }
 
-    @Bean
-    @io.micronaut.context.annotation.Context
+    @Singleton
     public WalletAppKitService walletAppKitService(NetworkParameters params, Context context, WalletAppKit kit) {
         log.info("Returning WalletAppKitService bean");
         WalletAppKitService service = new WalletAppKitService(params, context, kit);

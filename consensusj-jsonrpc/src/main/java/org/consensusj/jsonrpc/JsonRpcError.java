@@ -27,8 +27,18 @@ public class JsonRpcError {
         this.data = null;
     }
 
+    private JsonRpcError(Error code, Throwable throwable) {
+        this.code = code.code;
+        this.message = code.message + ": " + throwable.getMessage();
+        this.data = null;
+    }
+
     public static JsonRpcError of(Error code) {
         return new JsonRpcError(code);
+    }
+
+    public static JsonRpcError of(Error code, Throwable throwable) {
+        return new JsonRpcError(code, throwable);
     }
 
     public int getCode() {

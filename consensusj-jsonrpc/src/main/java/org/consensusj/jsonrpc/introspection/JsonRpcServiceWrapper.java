@@ -91,8 +91,9 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
                 R result = (R) mh.invoke(getServiceObject(), params.toArray());
                 future.complete(result);
             } catch (Throwable throwable) {
-                // TODO: Better error handling here - at least return throwable.message to client
-                future.completeExceptionally(JsonRpcErrorException.of(SERVER_EXCEPTION));
+                log.error("Exception in invoked service object: ", throwable);
+                JsonRpcErrorException jsonRpcException = new JsonRpcErrorException(SERVER_EXCEPTION, throwable);
+                future.completeExceptionally(jsonRpcException);
             }
         } else {
             future.completeExceptionally(JsonRpcErrorException.of(METHOD_NOT_FOUND));
