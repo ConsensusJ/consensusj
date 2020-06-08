@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 VERSION=0.5.1-SNAPSHOT
-../gradlew build
-native-image --no-server -cp build/libs/cj-btc-daemon-mn-${VERSION}-all.jar
+../gradlew shadowJar
+native-image --no-server -jar build/libs/cj-btc-daemon-mn-${VERSION}.jar build/cjbitcoind
