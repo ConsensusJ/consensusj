@@ -75,25 +75,37 @@ public class GenericJsonRpcTool extends BaseJsonRpcTool {
      * for Jackson/JSON-RPC.
      * 
      * @param param A string parameter to convert
-     * @return
+     * @return The input parameter, possibly converted to a different type
      */
     private Object convertParam(String param) {
         Object result;
-        switch (param) {
-            case "false":
-                result = 0;
-                break;
-            case "true":
-                result = 1;
-                break;
-            case "1":
-                result = 1;  // Need to do this for all integers
-                break;
-            default:
-                result = param;
+        Long l = toLong(param);
+        if (l != null) {
+            // If the param is a valid Long, return a Long
+            result = l;
+        } else {
+            // Else, return a Boolean or String
+            switch (param) {
+                case "false":
+                    result = Boolean.FALSE;
+                    break;
+                case "true":
+                    result = Boolean.TRUE;
+                    break;
+                default:
+                    result = param;
+            }
         }
         return result;
     }
 
-
+    // Convert to Long (if possible), else return null
+    private static Long toLong(String strNum) {
+        try {
+            Long l = Long.parseLong(strNum);
+            return l;
+        } catch (NumberFormatException nfe) {
+            return null;
+        }
+    }
 }
