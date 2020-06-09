@@ -14,12 +14,18 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown=true)
 // "strippedsize" property added (present in Bitcoin 0.13)
 public class BlockInfo {
+    public enum IncludeTxFlag {
+        NO,         // Don't include transactions
+        IDONLY,     // Only include the Transaction ID/hash
+        YES         // Include transactions (in the format of getrawtransaction RPC)
+    }
     public final Sha256Hash hash;
     public final int confirmations;
     public final int size;
     public final int height;
     public final int version;
     public final Sha256Hash merkleroot;
+    private final int nTx;
     public final Sha256HashList tx;
     public final int time;
     public final long nonce;
@@ -35,6 +41,7 @@ public class BlockInfo {
                      @JsonProperty("height")            int height,
                      @JsonProperty("version")           int version,
                      @JsonProperty("merkleroot")        Sha256Hash merkleroot,
+                     @JsonProperty("nTx")               int nTx,
                      @JsonProperty("tx")                Sha256HashList tx,
                      @JsonProperty("time")              int time,
                      @JsonProperty("nonce")             long nonce,
@@ -49,6 +56,7 @@ public class BlockInfo {
         this.height = height;
         this.version = version;
         this.merkleroot = merkleroot;
+        this.nTx = nTx;
         this.tx = tx;
         this.time = time;
         this.nonce = nonce;
@@ -87,6 +95,10 @@ public class BlockInfo {
 
     public Sha256Hash getMerkleroot() {
         return merkleroot;
+    }
+
+    public int getNTx() {
+        return nTx;
     }
 
     public Sha256HashList getTx() {

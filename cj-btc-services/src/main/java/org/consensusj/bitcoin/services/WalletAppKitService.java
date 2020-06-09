@@ -1,5 +1,7 @@
 package org.consensusj.bitcoin.services;
 
+import com.msgilligan.bitcoinj.json.conversion.HexUtil;
+import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
 import com.msgilligan.bitcoinj.json.pojo.BlockInfo;
 import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;
@@ -40,8 +42,11 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     protected final Context context;
     protected final WalletAppKit kit;
 
+    /* Dummy fields for JSON RPC responses TODO: Implement them */
     private int timeOffset = 0;
     private BigDecimal difficulty = new BigDecimal(0);
+    private BigDecimal verificationProgress = new BigDecimal(0);
+    private byte[] chainWork = new byte[]{0x00, 0x00};
 
     @Inject
     public WalletAppKitService(NetworkParameters params,
@@ -80,11 +85,35 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         return kit.chain().getChainHead().getHeight();
     }
 
+    @Override
+    public Sha256Hash getbestblockhash() {
+        log.info("getbestblockhash");
+        if(!kit.isRunning()) {
+            log.warn("kit not running, returning null");
+            return null;
+        }
+        return kit.chain().getChainHead().getHeader().getHash();
+    }
+
+    @Override
+    public Object getblockheader(String blockHashString, Boolean verbose) {
+        return getblockheader2(Sha256Hash.wrap(blockHashString), verbose);
+    }
+
+    public Object getblockheader2(Sha256Hash blockHash, Boolean verbose) {
+        if (verbose == null || verbose) {
+            return getBlockInfo(blockHash, BlockInfo.IncludeTxFlag.NO);
+        } else {
+            return getBlock(blockHash);
+        }
+    }
+
+
     /**
      * Partial implementation of `getblock`
      *
      * In the case where verbosity = 0, a a block is returned without transactions (which is incorrect)
-     * For verbosity = 1, we return a BlockInfo, but some fields may be missing or incorrect.
+     * For verbosity = 1, we return a BlockInfo, but some fields may be missing or incorrect, including a list of TXIDs
      * For verbosity = 2, we are currently throwing an exception.
      * 
      * @param blockHashString The hash of the block we are to return (as hex)
@@ -100,8 +129,8 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         int verbosityInt = verbosity != null ? verbosity : 1;
         switch(verbosityInt) {
             case 0: return getBlock(blockHash);
-            case 1: return getBlockInfo(blockHash, false);
-            case 2: return getBlockInfo(blockHash, true);
+            case 1: return getBlockInfo(blockHash, BlockInfo.IncludeTxFlag.IDONLY);
+            case 2: return getBlockInfo(blockHash, BlockInfo.IncludeTxFlag.YES);
             default: throw new IllegalArgumentException("Unknown verbosity parameter");
         }
     }
@@ -157,7 +186,18 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         );
     }
 
-    private Block getBlock(Sha256Hash blockHash) {
+    @Override
+    public BlockChainInfo getblockchaininfo() {
+        return new BlockChainInfo("main",                     // Chain ID
+                kit.chain().getChainHead().getHeight(),             // Block processed
+                kit.chain().getChainHead().getHeight(),             // Headers validated
+                kit.chain().getChainHead().getHeader().getHash(),   // Best block hash
+                difficulty,
+                verificationProgress,
+                chainWork);
+    }
+
+    private Object getBlock(Sha256Hash blockHash) {
         // TODO: This block should have transactions
         StoredBlock storedBlock;
         try {
@@ -165,10 +205,10 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         } catch (BlockStoreException e) {
             throw new RuntimeException(e);
         }
-        return storedBlock.getHeader();
+        return blockToHex(storedBlock.getHeader());
     }
 
-    private BlockInfo getBlockInfo(Sha256Hash blockHash, boolean includeTx) {
+    private BlockInfo getBlockInfo(Sha256Hash blockHash, BlockInfo.IncludeTxFlag includeTx) {
         BlockInfo blockInfo;
         try {
             blockInfo = getBlockInfoByHash(kit.chain(), blockHash, includeTx);
@@ -192,9 +232,9 @@ public class WalletAppKitService implements BitcoinJsonRpc {
      * @return block information (currently incomplete and untested)
      * @throws BlockStoreException Something went wrong
      */
-    private static BlockInfo getBlockInfoByHash(AbstractBlockChain blockChain, Sha256Hash blockHash, boolean includeTx) throws BlockStoreException {
-        if (includeTx) {
-            throw new IllegalArgumentException("Current BlockStore only has block header information");
+    private static BlockInfo getBlockInfoByHash(AbstractBlockChain blockChain, Sha256Hash blockHash, BlockInfo.IncludeTxFlag includeTx) throws BlockStoreException {
+        if (includeTx == BlockInfo.IncludeTxFlag.YES) {
+            throw new IllegalArgumentException("Including transactions not supported yet");
         }
         StoredBlock block = getStoredBlockByHash(blockChain, blockHash);
         Block header = block.getHeader();
@@ -207,7 +247,8 @@ public class WalletAppKitService implements BitcoinJsonRpc {
                 blockHeight,
                 (int) header.getVersion(),
                 header.getMerkleRoot(),
-                includeTx ? hashListFromTxList(header.getTransactions()) : null,
+                -1,     // Unknown number of Transactions
+                (includeTx == BlockInfo.IncludeTxFlag.IDONLY) ? hashListFromTxList(header.getTransactions()) : null,
                 (int) header.getTimeSeconds(),
                 header.getNonce(),
                 null, // TODO: Return "bits" here
@@ -226,5 +267,15 @@ public class WalletAppKitService implements BitcoinJsonRpc {
                     .collect(Collectors.toList());
             return new BlockInfo.Sha256HashList(list);
         }
+    }
+
+    /**
+     * Convert a block to a String of hex bytes
+     *
+     * @param block
+     * @return
+     */
+    private static String blockToHex(Block block) {
+        return HexUtil.bytesToHexString(block.bitcoinSerialize());
     }
 }

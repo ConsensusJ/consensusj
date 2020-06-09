@@ -1,10 +1,9 @@
 package com.msgilligan.bitcoinj.json.pojo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.msgilligan.bitcoinj.json.conversion.TransactionHexSerializer;
+import com.msgilligan.bitcoinj.json.conversion.HexUtil;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
@@ -59,7 +58,7 @@ public class RawTransactionInfo {
      * @param transaction A bitcoinj confirmed or unconfirmed transaction
      */
     public RawTransactionInfo(Transaction transaction) {
-        this.hex = TransactionHexSerializer.bytesToHexString(transaction.bitcoinSerialize());
+        this.hex = HexUtil.bytesToHexString(transaction.bitcoinSerialize());
         this.txid = transaction.getTxId();
         this.version = transaction.getVersion();
         this.locktime = transaction.getLockTime();
