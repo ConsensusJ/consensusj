@@ -7,7 +7,6 @@ import org.consensusj.exchange.rx.ExchangeRateUpdate;
 import org.javamoney.moneta.convert.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LazyBoundCurrencyConversion;
-import org.javamoney.moneta.spi.base.BaseExchangeRateProvider;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.currency.CurrencyPair;
@@ -38,7 +37,7 @@ import java.util.concurrent.TimeoutException;
 /**
  *
  */
-public class KnowmExchangeRateProvider  extends BaseExchangeRateProvider implements ExchangeRateProvider {
+public class KnowmExchangeRateProvider implements ExchangeRateProvider {
     protected final String exchangeClassName;
     protected final Map<CurrencyUnit, String> tickerSymbolConversions;
     protected final Map<CurrencyUnitPair, MonitoredCurrency> monitoredCurrencies = new HashMap<>();
