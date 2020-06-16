@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api "org.javamoney:moneta:${javaMoneyMonetaVersion}"
+    api "org.javamoney:moneta-bp:${javaMoneyMonetaVersion}"
 }
 
 
