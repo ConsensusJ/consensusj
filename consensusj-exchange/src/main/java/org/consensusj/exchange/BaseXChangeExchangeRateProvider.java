@@ -27,9 +27,10 @@ import java.util.stream.Collectors;
 /**
  *  Base ExchangeRateProvider using XChange library
  *  Currently supports current DEFERRED rates only
+ * @deprecated Don't subclass, will be made final in next release and removed the release after that.
  */
 @Deprecated
-public abstract class BaseXChangeExchangeRateProvider extends KnowmExchangeRateProvider implements ExchangeRateProvider, ObservableExchangeRateProvider {
+public class BaseXChangeExchangeRateProvider extends KnowmExchangeRateProvider implements ExchangeRateProvider, ObservableExchangeRateProvider {
     private static final Logger log = LoggerFactory.getLogger(BaseXChangeExchangeRateProvider.class);
     private static final int initialDelay = 0;
     private static final int period = 60;
@@ -45,7 +46,7 @@ public abstract class BaseXChangeExchangeRateProvider extends KnowmExchangeRateP
      * @param scheduledExecutorService Executor service for running polling task
      * @param pairs pairs to monitor
      */
-    protected BaseXChangeExchangeRateProvider(String exchangeClassName,
+    public BaseXChangeExchangeRateProvider(String exchangeClassName,
                                               ScheduledExecutorService scheduledExecutorService,
                                               Map<CurrencyUnit, String> tickerSymbolConversions,
                                               Collection<CurrencyUnitPair> pairs) {
@@ -53,7 +54,7 @@ public abstract class BaseXChangeExchangeRateProvider extends KnowmExchangeRateP
         stpe = (scheduledExecutorService != null) ? scheduledExecutorService : Executors.newScheduledThreadPool(1);
     }
 
-    protected BaseXChangeExchangeRateProvider(String exchangeClassName,
+    public BaseXChangeExchangeRateProvider(String exchangeClassName,
                                               ScheduledExecutorService scheduledExecutorService,
                                               Map<CurrencyUnit, String> tickerSymbolConversions,
                                               CurrencyUnitPair... pairs) {
@@ -65,7 +66,7 @@ public abstract class BaseXChangeExchangeRateProvider extends KnowmExchangeRateP
      * @param exchangeClass Class of XChange exchange we are wrapping
      * @param pairs pairs to monitor
      */
-    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
+    public BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
                                               CurrencyUnitPair... pairs) {
         this(exchangeClass.getName(),
                 null,
@@ -79,24 +80,24 @@ public abstract class BaseXChangeExchangeRateProvider extends KnowmExchangeRateP
      * @param scheduledExecutorService Executor service for running polling task
      * @param pairs pairs to monitor
      */
-    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
+    public BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
                                               ScheduledExecutorService scheduledExecutorService,
                                               CurrencyUnitPair... pairs) {
         this(exchangeClass.getName(), scheduledExecutorService, null, Arrays.asList(pairs));
     }
 
-    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
+    public BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
                                               ScheduledExecutorService scheduledExecutorService,
                                               String... pairs) {
         this(exchangeClass.getName(), scheduledExecutorService, null, ExchangeUtils.pairsConvert(pairs));
     }
 
-    protected BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
+    public BaseXChangeExchangeRateProvider(Class<? extends Exchange> exchangeClass,
                                               String... pairs) {
         this(exchangeClass.getName(), null, null, ExchangeUtils.pairsConvert(pairs));
     }
 
-    protected BaseXChangeExchangeRateProvider(String exchangeClassName, ScheduledExecutorService scheduledExecutorService, String[] pairs) {
+    public BaseXChangeExchangeRateProvider(String exchangeClassName, ScheduledExecutorService scheduledExecutorService, String[] pairs) {
         this(exchangeClassName, scheduledExecutorService, null, ExchangeUtils.pairsConvert(pairs));
     }
     

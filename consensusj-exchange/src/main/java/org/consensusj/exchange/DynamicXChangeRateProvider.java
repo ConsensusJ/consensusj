@@ -6,6 +6,9 @@ import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Generic XChange ExchangeRateProvider that can wrap any XChange class
+ *
+ * @deprecated Will be removed in next release, migrate to BaseXChangeExchangeRateProvider which is also deprecated
+ * but will be around a little while longer. Or even better migrate to ReactiveExchange.
  */
 @Deprecated
 public class DynamicXChangeRateProvider extends BaseXChangeExchangeRateProvider {

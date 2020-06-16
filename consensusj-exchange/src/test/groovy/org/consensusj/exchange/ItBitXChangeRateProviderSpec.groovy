@@ -6,6 +6,6 @@ import spock.lang.Ignore
 class ItBitXChangeRateProviderSpec extends AbstractXChangeRateProviderSpec {
     @Override
     BaseXChangeExchangeRateProvider createProvider() {
-        return new DynamicXChangeRateProvider("org.knowm.xchange.itbit.ItBitExchange", "BTC/USD", "BTC/EUR")
+        return new BaseXChangeExchangeRateProvider("org.knowm.xchange.itbit.ItBitExchange", null, "BTC/USD", "BTC/EUR")
     }
 }

@@ -6,6 +6,6 @@ import spock.lang.Ignore
 class BitfinexXChangeRateProviderSpec extends AbstractXChangeRateProviderSpec {
     @Override
     BaseXChangeExchangeRateProvider createProvider() {
-        return new DynamicXChangeRateProvider("org.knowm.xchange.bitfinex.BitfinexExchange", "BTC/USD")
+        return new BaseXChangeExchangeRateProvider("org.knowm.xchange.bitfinex.BitfinexExchange", null, "BTC/USD")
     }
 }
