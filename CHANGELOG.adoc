@@ -5,7 +5,30 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 == v0.5.1-SNAPSHOT
 
-Released: Not yet
+Released: Not yet                                      
+
+=== bitcoinj-json
+
+* Add more (partially implemented) Blockchain RPCs to `BitcoinJsonRpc` interface
+** `getbestblockhash`
+** `getblock`
+** `getblockhash`
+** `getblockheader`
+** `getblockchaininfo`
+
+=== cj-btc-cli
+
+* Upgrade to Java 9
+* Code cleanup
+* Implement `ToolProvider` interface
+* Fix and improve Graal native-image build of `cj-bitcoin-cli`
+
+=== cj-btc-daemon
+
+* More (partially implemented) Blockchain RPCs via `WalletAppKitService` (see cj-btc-services, bitcoinj-json)
+* Improve Json RPC error handling
+* Fix native-image support
+* Upgrade to Micronaut 1.3.6
 
 === cj-btc-jsonrpc
 
@@ -16,31 +39,49 @@ Released: Not yet
 * Properly handle slightly different "Connection refused" message returned by newer JVMs while waiting for server
 * Fix and improve Graal native-image build of MathTool sample
 
-=== cj-btc-cli
+=== cj-btc-services
 
-* Upgrade to Java 9
-* Code cleanup
-* Implement ToolProvider interface 
-* Fix and improve Graal native-image build of `cj-bitcoin-cli`
+* Partially implement some Blockchain RPCs in `WalletAppKitService`
+** `getbestblockhash`
+** `getblock`
+** `getblockhash`
+** `getblockheader`
+** `getblockchaininfo`
 
-=== consensusj-jsonrpc-cli
+=== consensusj-currency
 
-* Upgrade to Java 9
-* Is now a Java Module
-* Code cleanup
-* Implement ToolProvider interface 
-* Fix and improve Graal native-image build of `jsonrpc` tool.
-
+* Upgrade to Moneta BP 1.4
 
 === consensusj-exchange
 
+* BaseXChangeExchangeRateProvider is now concrete and use of `DynamicXChangeRateProvider` is highly discourage (both are still deprecated)
 * Implement Reactive exchange client using RxJava
+* RxJava 3.0.4
 * Upgrade to XChange 4.4.2
+* Upgrade to Moneta BP 1.4
+
+=== consensusj-jsonrpc
+
+* `AbstractRpcClient` set `FAIL_ON_UNKNOWN_PROPERTIES` to `false` by default
+
+=== consensusj-jsonrpc-cli
+
+* Improved Parsing/conversion of params (works well enough for many commands)
+* Upgrade to Java 9
+* Is now a Java Module
+* Code cleanup
+* Implement `ToolProvider` interface
+* Fix and improve Graal native-image build of `jsonrpc` tool.
+
+=== consensusj-jsonrpc-daemon
+
+* Improve native-image support
+* Upgrade to Micronaut 1.3.6
 
 === All Modules
 
 * Gradle build improvements
-** Use `java-library` plugin for most modules
+** Use `java-library` plugin for most modules (and `api` dependencies)
 ** Get Graal native-image builds working again
 ** CI configuration improvements
 ** Fix Bitcoin Core regTest integration tests
