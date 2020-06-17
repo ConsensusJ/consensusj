@@ -89,7 +89,7 @@ Released: Not yet
 * Update to bitcoinj 0.15.7
 ** (Guava to 28.2-android)
 * Update to Jackson 2.10.3
-* Update to Gradle 6.4
+* Update to Gradle 6.5
 * Update to JUnit 4.13
 * Update to Groovy 3.0.4
 * Update to Spock 2.0-M3-groovy-3.0
