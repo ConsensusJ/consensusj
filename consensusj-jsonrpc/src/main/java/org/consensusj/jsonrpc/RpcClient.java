@@ -24,10 +24,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
 /**
- * = JSON-RPC Client
+ * = JSON-RPC Client using {@link HttpURLConnection}.
  *
- * This is a concrete class with basic JSON-RPC functionality. Abstract `sendRequestForResponse` method is implemented
- * using `HttpURLConnection`.
+ * This is a concrete class with generic JSON-RPC functionality. Abstract {@link AbstractRpcClient#sendRequestForResponse}
+ * is implemented using {@link HttpURLConnection}.
  *
  * Uses strongly-typed POJOs representing {@link JsonRpcRequest} and {@link JsonRpcResponse}. The
  * response object uses a parameterized type for the object that is the actual JSON-RPC `result`.

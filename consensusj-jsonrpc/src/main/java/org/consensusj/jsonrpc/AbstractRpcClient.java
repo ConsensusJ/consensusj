@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * Abstract Base class for a strongly-typed JSON-RPC client. This abstract class handles
- * the use of Jackson to map from JSON to Java, but leaves the core `send` method as
+ * the use of Jackson to map from JSON to Java Objects, but leaves the core `sendRequestForResponse` method as
  * `abstract` to be implemented by subclasses allowing implementation with alternative
  * HTTP client libraries.
  */
