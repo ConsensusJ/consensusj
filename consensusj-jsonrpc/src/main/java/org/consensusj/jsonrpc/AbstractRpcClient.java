@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,9 +21,9 @@ public abstract class AbstractRpcClient implements DynamicRpcMethodSupport {
 
     public AbstractRpcClient() {
         mapper = new ObjectMapper();
-        // TODO: Make  FAIL_ON_UNKNOWN_PROPERTIES configurable at build or run time and remove unnecessary
-        // annotations on various POJOs that we've defined.
-        //mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        // TODO: Provide external API to configure FAIL_ON_UNKNOWN_PROPERTIES
+        // TODO: Remove "ignore unknown" annotations on various POJOs that we've defined.
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         defaultType = mapper.getTypeFactory().constructType(Object.class);
     }
 
