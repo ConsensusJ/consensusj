@@ -88,6 +88,7 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
         final Method mh = getMethod(methodName);
         if (mh != null) {
             try {
+                @SuppressWarnings("unchecked")
                 R result = (R) mh.invoke(getServiceObject(), params.toArray());
                 future.complete(result);
             } catch (Throwable throwable) {

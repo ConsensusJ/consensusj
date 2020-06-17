@@ -7,7 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
@@ -50,9 +50,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    @SuppressWarnings("deprecation")
+    /**
+     * Override this PasswordEncoder in a real application.
+     * 
+     * @return A (deprecated) NoOp password encoder (for test apps only)
+     */
     @Bean
-    public static NoOpPasswordEncoder passwordEncoder() {
-        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+    public PasswordEncoder passwordEncoder() {
+        @SuppressWarnings("deprecation")
+        PasswordEncoder encoder = org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
+        return encoder;
     }
 }

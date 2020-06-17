@@ -132,6 +132,7 @@ public class KnowmExchangeRateProvider extends BaseExchangeRateProvider implemen
                 .of(getContext().getProviderName(), getContext().getRateTypes().iterator().next()));
     }
 
+    @SuppressWarnings("deprecation")
     protected ExchangeRateChange buildExchangeRateChange(CurrencyUnitPair pair, Ticker ticker) {
         Date date = ticker.getTimestamp();
         // Not all exchanges provide a timestamp, default to 0 if it is null
@@ -172,6 +173,7 @@ public class KnowmExchangeRateProvider extends BaseExchangeRateProvider implemen
     protected static class MonitoredCurrency {
         final public CurrencyUnitPair  pair;           // Terminating (target) JavaMoney CurrencyUnit
         final public CurrencyPair      exchangePair;   // XChange currency pair (format used by XChange/exchange)
+        @SuppressWarnings("deprecation")
         final public List<ExchangeRateObserver> observerList = new ArrayList<>();
         private final UpdateableValueLatch<Ticker> tickerLatch = new UpdateableValueLatch<>();
 
