@@ -13,6 +13,6 @@ public class Demo {
 
     public static void main(String[] args) throws ScriptException {
         ScriptRunner runner = new ScriptRunner();
-        runner.evalResource("/javascript/sendBitcoin.js");
+        runner.evalResource("/javascript/demo.js");
     }
 }
