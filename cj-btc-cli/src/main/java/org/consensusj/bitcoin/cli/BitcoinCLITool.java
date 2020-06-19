@@ -59,7 +59,7 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
 
     @Override
     public BitcoinCLICall createCall(PrintWriter out, PrintWriter err, String... args) {
-        return new BitcoinCLICall(out, err, args);
+        return new BitcoinCLICall(this, out, err, args);
     }
 
     /**
@@ -101,34 +101,33 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
         return typedParams;
     }
 
-    public class BitcoinCLICall extends BaseJsonRpcTool.CommonsCLICall {
+    public static class BitcoinCLICall extends BaseJsonRpcTool.CommonsCLICall {
         private BitcoinClient client;
         private final boolean rpcWait;
 
-        public BitcoinCLICall(PrintWriter out, PrintWriter err, String[] args) {
-            super(out, err, args);
-                rpcWait = line.hasOption("rpcwait");
+        public BitcoinCLICall(BitcoinCLITool tool, PrintWriter out, PrintWriter err, String[] args) {
+            super(tool, out, err, args);
+            rpcWait = line.hasOption("rpcwait");
         }
 
         @Override
         public BitcoinClient rpcClient() {
+            // Not threadsafe
+            // This needs work if there are ever going to be multiple clients calling this method
             if (client == null) {
                 System.out.println("Connecting to: " + getRPCConfig().getURI());
                 RpcConfig config = getRPCConfig();
-                client = new BitcoinClient( config.getNetParams(),
-                        config.getURI(),
-                        config.getUsername(),
-                        config.getPassword());
+                client = createClient(config);
                 if (rpcWait) {
                     boolean available = false;   // Wait up to 1 hour
                     try {
                         available = client.waitForServer(60*60);
                     } catch (JsonRpcException e) {
-                        printError(this, "JSON-RPC Exception: " + e.getMessage());
+                        rpcTool.printError(this, "JSON-RPC Exception: " + e.getMessage());
                         throw new ToolException(1, e.getMessage());
                     }
                     if (!available) {
-                        printError(this,"Timeout error.");
+                        rpcTool.printError(this,"Timeout error.");
                         throw new ToolException(1, "Timeout error.");
                     }
                 }
@@ -136,7 +135,19 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
             return client;
         }
 
-        private RpcConfig getRPCConfig() {
+        /**
+         * Override this method to customize the client implementation subclass
+         * @param config
+         * @return
+         */
+        protected BitcoinClient createClient(RpcConfig config) {
+            return new BitcoinClient( config.getNetParams(),
+                    config.getURI(),
+                    config.getUsername(),
+                    config.getPassword());
+        }
+
+        public RpcConfig getRPCConfig() {
             RpcConfig confFileConfig = BitcoinConfFile.readDefaultConfig().getRPCConfig();
             URI uri = getServerURI(confFileConfig.getURI());
             String user = line.getOptionValue("rpcuser", confFileConfig.getUsername());

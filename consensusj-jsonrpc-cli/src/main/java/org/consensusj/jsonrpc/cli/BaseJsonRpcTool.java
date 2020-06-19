@@ -33,11 +33,15 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         return name;
     }
 
+    public String usage() {
+        return usage;
+    }
+
     abstract public Options options();
 
     @Override
     public CommonsCLICall createCall(PrintWriter out, PrintWriter err, String... args) {
-        return new CommonsCLICall(out, err, args);
+        return new CommonsCLICall(this, out, err, args);
     }
 
     @Override
@@ -49,7 +53,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         List<String> args = call.line.getArgList();
         if (args.size() == 0) {
             printError(call,"jsonrpc method required");
-            printHelp(call);
+            printHelp(call, usage);
             throw new ToolException(1, "jsonrpc method required");
         }
         String method = args.get(0);
@@ -72,7 +76,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
 
     protected abstract List<Object> convertParameters(String method, List<String> params);
 
-    public void printHelp(Call call) {
+    public void printHelp(Call call, String usage) {
         int leftPad = 4;
         int descPad = 2;
         int helpWidth = 120;
@@ -86,21 +90,23 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
     }
 
 
-    public class CommonsCLICall extends JsonRpcClientTool.Call {
+    public static class CommonsCLICall extends JsonRpcClientTool.Call {
+        protected final BaseJsonRpcTool rpcTool;
         public final CommandLine line;
         public final boolean verbose;
         private RpcClient client;
 
-        public CommonsCLICall(PrintWriter out, PrintWriter err, String[] args) {
+        public CommonsCLICall(BaseJsonRpcTool parentTool, PrintWriter out, PrintWriter err, String[] args) {
             super(out, err, args);
+            this.rpcTool = parentTool;
             CommandLineParser parser = new DefaultParser();
             try {
-                this.line = parser.parse(options(), args);
+                this.line = parser.parse(rpcTool.options(), args);
             } catch (ParseException e) {
                 throw new JsonRpcClientTool.ToolException(1, "Parser error");
             }
             if (line.hasOption("?")) {
-                printHelp(this);
+                rpcTool.printHelp(this, rpcTool.usage());
                 throw new JsonRpcClientTool.ToolException(1, "Help Option was chosen");
             }
             verbose = line.hasOption("v");

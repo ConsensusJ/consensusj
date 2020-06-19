@@ -16,11 +16,8 @@ configurations {
 }
 
 dependencies {
-    // Using 'api' here breaks Spock integration test classpath for some reason
-    implementation project(':consensusj-jsonrpc-cli')
-    implementation project(':cj-btc-jsonrpc')
-
-    implementation 'commons-cli:commons-cli:1.4'
+    api project(':consensusj-jsonrpc-cli')
+    api project(':cj-btc-jsonrpc')
 
     // Add SLF4J runtime adapter for JDK logging for GraalVM native-image build of bitcoin CLI tool
     nativeToolImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
