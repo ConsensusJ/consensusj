@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,7 +75,62 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         }
     }
 
-    protected abstract List<Object> convertParameters(String method, List<String> params);
+    /**
+     * Convert params from strings to Java types that will map to correct JSON types
+     *
+     * TODO: Make this better and complete
+     *
+     * @param method the JSON-RPC method
+     * @param params Params with String type
+     * @return Params with correct Java types for JSON
+     */
+    protected List<Object> convertParameters(String method, List<String> params) {
+        List<Object> converted = new ArrayList<>();
+        for (String param : params) {
+            Object convertedParam = convertParam(param);
+            converted.add(convertedParam);
+        }
+        return converted;
+    }
+
+    /**
+     * Convert a single param from a command-line option {@code String} to a type more appropriate
+     * for Jackson/JSON-RPC.
+     *
+     * @param param A string parameter to convert
+     * @return The input parameter, possibly converted to a different type
+     */
+    protected Object convertParam(String param) {
+        Object result;
+        Long l = toLong(param);
+        if (l != null) {
+            // If the param is a valid Long, return a Long
+            result = l;
+        } else {
+            // Else, return a Boolean or String
+            switch (param) {
+                case "false":
+                    result = Boolean.FALSE;
+                    break;
+                case "true":
+                    result = Boolean.TRUE;
+                    break;
+                default:
+                    result = param;
+            }
+        }
+        return result;
+    }
+
+    // Convert to Long (if possible), else return null
+    protected static Long toLong(String strNum) {
+        try {
+            Long l = Long.parseLong(strNum);
+            return l;
+        } catch (NumberFormatException nfe) {
+            return null;
+        }
+    }
 
     public void printHelp(Call call, String usage) {
         int leftPad = 4;

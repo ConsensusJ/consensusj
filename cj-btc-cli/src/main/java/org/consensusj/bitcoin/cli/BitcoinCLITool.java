@@ -92,9 +92,9 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
                 break;
                 
             default:
-                // Default (for now) is to leave them all as strings
+                // Default parameter conversion
                 for (String string : params) {
-                    typedParams.add(string);
+                    typedParams.add(convertParam(string));
                 }
 
         }
