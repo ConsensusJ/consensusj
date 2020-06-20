@@ -1,6 +1,10 @@
+// A simple demo of ConsensusJ ScriptRunner capabilities
+
+// Call a JSON-RPC method with the `client` object
 var blockheight = client.getBlockCount();
 print("blockheight = ${blockheight}");
 
+// Use utility functions to create `Coin` objects for various amounts
 var satoshiAmount = satoshi(1);
 print("satoshiAmount = ${satoshiAmount.toFriendlyString()}");
 

@@ -9,10 +9,9 @@ ext.javadocSpec = {
     options.addStringOption '-require', 'asciidoctor-diagram'
     options.addStringOption '-gem-path', 'build/vendor'
     options.addStringOption '-attribute', 'data-uri'
-    options.addBooleanOption 'linksource', true         // include link to HTML source file
+    options.addBooleanOption 'linksource', true             // include link to HTML source file
     if (JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption 'html5', true            // Requires JDK 9+
-        // Also requires changes to asciidoclet that will hopefully be in asciidoclet 1.5.5
+        options.addBooleanOption 'html5', true              // Requires JDK 9+ and Asciidoclet 1.5.6
     }
 
     options.links(  'https://docs.oracle.com/javase/8/docs/api/',
@@ -23,7 +22,6 @@ ext.javadocSpec = {
 }
 
 allprojects {
-
     configurations {
         asciidoclet
     }
@@ -35,7 +33,6 @@ allprojects {
     }
 
     javadoc javadocSpec
-
 }
 
 task javadocAll(type: Javadoc) {
@@ -47,5 +44,5 @@ javadocAll javadocSpec << {
     inputs.file(options.overview)
 }
 javadocAll.doLast {
-    logger.warn "Consolidated JavaDoc generated at <file://${javadocAll.destinationDir}/index.html>"
+    logger.info "Consolidated JavaDoc generated at <file://${javadocAll.destinationDir}/index.html>"
 }
