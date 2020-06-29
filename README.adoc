@@ -1,9 +1,9 @@
 = ConsensusJ
 Sean Gilligan <https://github.com/msgilligan>
-v0.5.0
+v0.5.1
 :description: ConsensusJ README document.
-:consensusj-version: 0.5.0
-:bitcoinj-version: 0.15.6
+:consensusj-version: 0.5.1
+:bitcoinj-version: 0.15.7
 :bitcoinj-apidoc: https://bitcoinj.github.io/javadoc/{bitcoinj-version}/
 :cj-apidoc: https://consensusj.github.io/consensusj/apidoc
 :tip-caption: :bulb:

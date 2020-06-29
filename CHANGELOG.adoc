@@ -3,9 +3,9 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.5.1-SNAPSHOT
+== v0.5.1
 
-Released: Not yet                                      
+Released: 2020.06.28
 
 === bitcoinj-json
 
@@ -21,6 +21,7 @@ Released: Not yet
 * Upgrade to Java 9
 * Code cleanup
 * Implement `ToolProvider` interface
+* Inherit improved default parameter parsing from `consensusj-jsonrpc-cli`
 * Fix and improve Graal native-image build of `cj-bitcoin-cli`
 
 === cj-btc-daemon
