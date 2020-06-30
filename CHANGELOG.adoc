@@ -3,7 +3,9 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.5.2-SNAPSHOT
+== v0.5.2
+
+Released: 2020.06.30
 
 === cj-btc-jsonrpc
 
