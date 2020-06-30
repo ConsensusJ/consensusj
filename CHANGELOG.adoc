@@ -3,6 +3,17 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
+== v0.5.2-SNAPSHOT
+
+=== cj-btc-jsonrpc
+
+* Deprecate `signRawTransaction()`
+* Add `signRawTransactionWithWallet()` to replace `signRawTransaction()`
+
+=== All Modules
+
+* Gradle build `test { useJUnitPlatform() }` set in multiple places to re-enable Spock 2.0 tests
+
 == v0.5.1
 
 Released: 2020.06.28
@@ -95,6 +106,10 @@ Released: 2020.06.28
 * Update to Groovy 3.0.4
 * Update to Spock 2.0-M3-groovy-3.0
 * Update to Gradle git-publish plugin 2.1.3
+
+=== Known Issue
+
+* The three Spring Boot based projects: `bitcoinj-daemon`, `bitcoinj-peerserver`, and `jc-nmc-daemon` were not pushed to Bintray as part of the release process due to a Gradle plugin configuration issue.
 
 
 == v0.5.0
