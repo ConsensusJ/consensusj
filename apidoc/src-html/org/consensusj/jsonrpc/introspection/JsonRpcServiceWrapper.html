@@ -97,48 +97,50 @@
 <span class="sourceLineNo">088</span><a id="line.88">        final Method mh = getMethod(methodName);</a>
 <span class="sourceLineNo">089</span><a id="line.89">        if (mh != null) {</a>
 <span class="sourceLineNo">090</span><a id="line.90">            try {</a>
-<span class="sourceLineNo">091</span><a id="line.91">                R result = (R) mh.invoke(getServiceObject(), params.toArray());</a>
-<span class="sourceLineNo">092</span><a id="line.92">                future.complete(result);</a>
-<span class="sourceLineNo">093</span><a id="line.93">            } catch (Throwable throwable) {</a>
-<span class="sourceLineNo">094</span><a id="line.94">                // TODO: Better error handling here - at least return throwable.message to client</a>
-<span class="sourceLineNo">095</span><a id="line.95">                future.completeExceptionally(JsonRpcErrorException.of(SERVER_EXCEPTION));</a>
-<span class="sourceLineNo">096</span><a id="line.96">            }</a>
-<span class="sourceLineNo">097</span><a id="line.97">        } else {</a>
-<span class="sourceLineNo">098</span><a id="line.98">            future.completeExceptionally(JsonRpcErrorException.of(METHOD_NOT_FOUND));</a>
-<span class="sourceLineNo">099</span><a id="line.99">        }</a>
-<span class="sourceLineNo">100</span><a id="line.100">        return future;</a>
-<span class="sourceLineNo">101</span><a id="line.101">    }</a>
-<span class="sourceLineNo">102</span><a id="line.102">    </a>
-<span class="sourceLineNo">103</span><a id="line.103">    /**</a>
-<span class="sourceLineNo">104</span><a id="line.104">     * Use reflection/introspection to generate a map of methods.</a>
-<span class="sourceLineNo">105</span><a id="line.105">     * Generally this is called from the constructor of implementing classes.</a>
-<span class="sourceLineNo">106</span><a id="line.106">     * @param apiClass The service class to reflect/introspect</a>
-<span class="sourceLineNo">107</span><a id="line.107">     * @return a map of method names to method objects</a>
-<span class="sourceLineNo">108</span><a id="line.108">     */</a>
-<span class="sourceLineNo">109</span><a id="line.109">    static Map&lt;String, Method&gt; reflect(Class&lt;?&gt;  apiClass) {</a>
-<span class="sourceLineNo">110</span><a id="line.110">        java.lang.reflect.Method[] publicInheritedMethods = apiClass.getMethods();</a>
-<span class="sourceLineNo">111</span><a id="line.111">        Map&lt;String, Method&gt; methods = new HashMap&lt;&gt;();</a>
-<span class="sourceLineNo">112</span><a id="line.112">        for (Method method : publicInheritedMethods) {</a>
-<span class="sourceLineNo">113</span><a id="line.113">            String name = method.getName();</a>
-<span class="sourceLineNo">114</span><a id="line.114">            methods.put(name, method);</a>
-<span class="sourceLineNo">115</span><a id="line.115">        }</a>
-<span class="sourceLineNo">116</span><a id="line.116">        return methods;</a>
-<span class="sourceLineNo">117</span><a id="line.117">    }</a>
-<span class="sourceLineNo">118</span><a id="line.118"></a>
-<span class="sourceLineNo">119</span><a id="line.119">    /**</a>
-<span class="sourceLineNo">120</span><a id="line.120">     * Wrap a Result POJO in a JsonRpcResponse</a>
-<span class="sourceLineNo">121</span><a id="line.121">     * @param req The request we are responding to</a>
-<span class="sourceLineNo">122</span><a id="line.122">     * @param result the result to wrap</a>
-<span class="sourceLineNo">123</span><a id="line.123">     * @return A valid JsonRpcResponse</a>
-<span class="sourceLineNo">124</span><a id="line.124">     */</a>
-<span class="sourceLineNo">125</span><a id="line.125">    static &lt;T&gt; JsonRpcResponse&lt;T&gt; wrapResult(JsonRpcRequest req, T result) {</a>
-<span class="sourceLineNo">126</span><a id="line.126">        return new JsonRpcResponse&lt;&gt;(result, null, req.getJsonrpc(), req.getId());</a>
-<span class="sourceLineNo">127</span><a id="line.127">    }</a>
-<span class="sourceLineNo">128</span><a id="line.128"></a>
-<span class="sourceLineNo">129</span><a id="line.129">    static &lt;T&gt; JsonRpcResponse&lt;T&gt; wrapError(JsonRpcRequest req, JsonRpcError error) {</a>
-<span class="sourceLineNo">130</span><a id="line.130">        return new JsonRpcResponse&lt;&gt;(null, error, req.getJsonrpc(), req.getId());</a>
-<span class="sourceLineNo">131</span><a id="line.131">    }</a>
-<span class="sourceLineNo">132</span><a id="line.132">}</a>
+<span class="sourceLineNo">091</span><a id="line.91">                @SuppressWarnings("unchecked")</a>
+<span class="sourceLineNo">092</span><a id="line.92">                R result = (R) mh.invoke(getServiceObject(), params.toArray());</a>
+<span class="sourceLineNo">093</span><a id="line.93">                future.complete(result);</a>
+<span class="sourceLineNo">094</span><a id="line.94">            } catch (Throwable throwable) {</a>
+<span class="sourceLineNo">095</span><a id="line.95">                log.error("Exception in invoked service object: ", throwable);</a>
+<span class="sourceLineNo">096</span><a id="line.96">                JsonRpcErrorException jsonRpcException = new JsonRpcErrorException(SERVER_EXCEPTION, throwable);</a>
+<span class="sourceLineNo">097</span><a id="line.97">                future.completeExceptionally(jsonRpcException);</a>
+<span class="sourceLineNo">098</span><a id="line.98">            }</a>
+<span class="sourceLineNo">099</span><a id="line.99">        } else {</a>
+<span class="sourceLineNo">100</span><a id="line.100">            future.completeExceptionally(JsonRpcErrorException.of(METHOD_NOT_FOUND));</a>
+<span class="sourceLineNo">101</span><a id="line.101">        }</a>
+<span class="sourceLineNo">102</span><a id="line.102">        return future;</a>
+<span class="sourceLineNo">103</span><a id="line.103">    }</a>
+<span class="sourceLineNo">104</span><a id="line.104">    </a>
+<span class="sourceLineNo">105</span><a id="line.105">    /**</a>
+<span class="sourceLineNo">106</span><a id="line.106">     * Use reflection/introspection to generate a map of methods.</a>
+<span class="sourceLineNo">107</span><a id="line.107">     * Generally this is called from the constructor of implementing classes.</a>
+<span class="sourceLineNo">108</span><a id="line.108">     * @param apiClass The service class to reflect/introspect</a>
+<span class="sourceLineNo">109</span><a id="line.109">     * @return a map of method names to method objects</a>
+<span class="sourceLineNo">110</span><a id="line.110">     */</a>
+<span class="sourceLineNo">111</span><a id="line.111">    static Map&lt;String, Method&gt; reflect(Class&lt;?&gt;  apiClass) {</a>
+<span class="sourceLineNo">112</span><a id="line.112">        java.lang.reflect.Method[] publicInheritedMethods = apiClass.getMethods();</a>
+<span class="sourceLineNo">113</span><a id="line.113">        Map&lt;String, Method&gt; methods = new HashMap&lt;&gt;();</a>
+<span class="sourceLineNo">114</span><a id="line.114">        for (Method method : publicInheritedMethods) {</a>
+<span class="sourceLineNo">115</span><a id="line.115">            String name = method.getName();</a>
+<span class="sourceLineNo">116</span><a id="line.116">            methods.put(name, method);</a>
+<span class="sourceLineNo">117</span><a id="line.117">        }</a>
+<span class="sourceLineNo">118</span><a id="line.118">        return methods;</a>
+<span class="sourceLineNo">119</span><a id="line.119">    }</a>
+<span class="sourceLineNo">120</span><a id="line.120"></a>
+<span class="sourceLineNo">121</span><a id="line.121">    /**</a>
+<span class="sourceLineNo">122</span><a id="line.122">     * Wrap a Result POJO in a JsonRpcResponse</a>
+<span class="sourceLineNo">123</span><a id="line.123">     * @param req The request we are responding to</a>
+<span class="sourceLineNo">124</span><a id="line.124">     * @param result the result to wrap</a>
+<span class="sourceLineNo">125</span><a id="line.125">     * @return A valid JsonRpcResponse</a>
+<span class="sourceLineNo">126</span><a id="line.126">     */</a>
+<span class="sourceLineNo">127</span><a id="line.127">    static &lt;T&gt; JsonRpcResponse&lt;T&gt; wrapResult(JsonRpcRequest req, T result) {</a>
+<span class="sourceLineNo">128</span><a id="line.128">        return new JsonRpcResponse&lt;&gt;(result, null, req.getJsonrpc(), req.getId());</a>
+<span class="sourceLineNo">129</span><a id="line.129">    }</a>
+<span class="sourceLineNo">130</span><a id="line.130"></a>
+<span class="sourceLineNo">131</span><a id="line.131">    static &lt;T&gt; JsonRpcResponse&lt;T&gt; wrapError(JsonRpcRequest req, JsonRpcError error) {</a>
+<span class="sourceLineNo">132</span><a id="line.132">        return new JsonRpcResponse&lt;&gt;(null, error, req.getJsonrpc(), req.getId());</a>
+<span class="sourceLineNo">133</span><a id="line.133">    }</a>
+<span class="sourceLineNo">134</span><a id="line.134">}</a>
 
 
 

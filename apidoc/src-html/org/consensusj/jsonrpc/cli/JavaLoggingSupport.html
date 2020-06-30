@@ -34,7 +34,7 @@
 <span class="sourceLineNo">025</span><a id="line.25">     * Should be one of the first things called in `main()`</a>
 <span class="sourceLineNo">026</span><a id="line.26">     */</a>
 <span class="sourceLineNo">027</span><a id="line.27">    public static void configure(String loggerName) {</a>
-<span class="sourceLineNo">028</span><a id="line.28">        InputStream inputStream = JsonRpcTool.class.getResourceAsStream(loggingPropertiesResource);</a>
+<span class="sourceLineNo">028</span><a id="line.28">        InputStream inputStream = GenericJsonRpcTool.class.getResourceAsStream(loggingPropertiesResource);</a>
 <span class="sourceLineNo">029</span><a id="line.29">        if (inputStream != null) {</a>
 <span class="sourceLineNo">030</span><a id="line.30">            try {</a>
 <span class="sourceLineNo">031</span><a id="line.31">                LogManager.getLogManager().readConfiguration(inputStream);</a>

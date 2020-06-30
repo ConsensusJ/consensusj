@@ -9,60 +9,62 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span><a id="line.1">package org.consensusj.daemon.micronaut;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import io.micronaut.context.annotation.Bean;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import io.micronaut.context.annotation.Factory;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import org.bitcoinj.core.Context;</a>
-<span class="sourceLineNo">006</span><a id="line.6">import org.bitcoinj.core.NetworkParameters;</a>
-<span class="sourceLineNo">007</span><a id="line.7">import org.bitcoinj.kits.WalletAppKit;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import org.bitcoinj.params.MainNetParams;</a>
-<span class="sourceLineNo">009</span><a id="line.9">import org.consensusj.bitcoin.services.WalletAppKitService;</a>
-<span class="sourceLineNo">010</span><a id="line.10">import org.slf4j.Logger;</a>
-<span class="sourceLineNo">011</span><a id="line.11">import org.slf4j.LoggerFactory;</a>
-<span class="sourceLineNo">012</span><a id="line.12"></a>
-<span class="sourceLineNo">013</span><a id="line.13">import javax.inject.Singleton;</a>
-<span class="sourceLineNo">014</span><a id="line.14">import java.io.File;</a>
-<span class="sourceLineNo">015</span><a id="line.15"></a>
-<span class="sourceLineNo">016</span><a id="line.16">/**</a>
-<span class="sourceLineNo">017</span><a id="line.17"> * Initialize bitcoinj components, etc.</a>
-<span class="sourceLineNo">018</span><a id="line.18"> */</a>
-<span class="sourceLineNo">019</span><a id="line.19">@Factory</a>
-<span class="sourceLineNo">020</span><a id="line.20">public class BitcoinFactory {</a>
-<span class="sourceLineNo">021</span><a id="line.21">    private static Logger log = LoggerFactory.getLogger(BitcoinFactory.class);</a>
-<span class="sourceLineNo">022</span><a id="line.22"></a>
-<span class="sourceLineNo">023</span><a id="line.23">    @Bean</a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.databind.Module;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.msgilligan.bitcoinj.json.conversion.RpcServerModule;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import io.micronaut.context.annotation.Factory;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import org.bitcoinj.core.Context;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import org.bitcoinj.core.NetworkParameters;</a>
+<span class="sourceLineNo">008</span><a id="line.8">import org.bitcoinj.kits.WalletAppKit;</a>
+<span class="sourceLineNo">009</span><a id="line.9">import org.bitcoinj.params.MainNetParams;</a>
+<span class="sourceLineNo">010</span><a id="line.10">import org.consensusj.bitcoin.services.WalletAppKitService;</a>
+<span class="sourceLineNo">011</span><a id="line.11">import org.slf4j.Logger;</a>
+<span class="sourceLineNo">012</span><a id="line.12">import org.slf4j.LoggerFactory;</a>
+<span class="sourceLineNo">013</span><a id="line.13"></a>
+<span class="sourceLineNo">014</span><a id="line.14">import javax.inject.Singleton;</a>
+<span class="sourceLineNo">015</span><a id="line.15">import java.io.File;</a>
+<span class="sourceLineNo">016</span><a id="line.16"></a>
+<span class="sourceLineNo">017</span><a id="line.17">/**</a>
+<span class="sourceLineNo">018</span><a id="line.18"> * Initialize bitcoinj components, etc.</a>
+<span class="sourceLineNo">019</span><a id="line.19"> */</a>
+<span class="sourceLineNo">020</span><a id="line.20">@Factory</a>
+<span class="sourceLineNo">021</span><a id="line.21">public class BitcoinFactory {</a>
+<span class="sourceLineNo">022</span><a id="line.22">    private static Logger log = LoggerFactory.getLogger(BitcoinFactory.class);</a>
+<span class="sourceLineNo">023</span><a id="line.23"></a>
 <span class="sourceLineNo">024</span><a id="line.24">    @Singleton</a>
 <span class="sourceLineNo">025</span><a id="line.25">    public NetworkParameters networkParameters() {</a>
 <span class="sourceLineNo">026</span><a id="line.26">        log.info("Returning NetworkParameters bean");</a>
 <span class="sourceLineNo">027</span><a id="line.27">        return MainNetParams.get();</a>
 <span class="sourceLineNo">028</span><a id="line.28">    }</a>
 <span class="sourceLineNo">029</span><a id="line.29"></a>
-<span class="sourceLineNo">030</span><a id="line.30">    @Bean</a>
-<span class="sourceLineNo">031</span><a id="line.31">    @Singleton</a>
-<span class="sourceLineNo">032</span><a id="line.32">    public Context getContext(NetworkParameters params) {</a>
-<span class="sourceLineNo">033</span><a id="line.33">        log.info("Returning bitcoinj Context bean");</a>
-<span class="sourceLineNo">034</span><a id="line.34">        return new Context(params);</a>
-<span class="sourceLineNo">035</span><a id="line.35">    }</a>
-<span class="sourceLineNo">036</span><a id="line.36"></a>
-<span class="sourceLineNo">037</span><a id="line.37">    @Bean</a>
-<span class="sourceLineNo">038</span><a id="line.38">    @Singleton</a>
-<span class="sourceLineNo">039</span><a id="line.39">    public WalletAppKit getKit(NetworkParameters params) throws Exception {</a>
-<span class="sourceLineNo">040</span><a id="line.40">        log.info("Returning WalletAppKit bean");</a>
-<span class="sourceLineNo">041</span><a id="line.41">        // TODO: make File(".") and filePrefix configurable</a>
-<span class="sourceLineNo">042</span><a id="line.42">        File directory = new File(".");</a>
-<span class="sourceLineNo">043</span><a id="line.43">        String filePrefix = "BitcoinJDaemon";</a>
-<span class="sourceLineNo">044</span><a id="line.44"></a>
-<span class="sourceLineNo">045</span><a id="line.45">        return new WalletAppKit(params, directory, filePrefix);</a>
-<span class="sourceLineNo">046</span><a id="line.46">    }</a>
-<span class="sourceLineNo">047</span><a id="line.47"></a>
-<span class="sourceLineNo">048</span><a id="line.48">    @Bean</a>
-<span class="sourceLineNo">049</span><a id="line.49">    @io.micronaut.context.annotation.Context</a>
-<span class="sourceLineNo">050</span><a id="line.50">    public WalletAppKitService walletAppKitService(NetworkParameters params, Context context, WalletAppKit kit) {</a>
-<span class="sourceLineNo">051</span><a id="line.51">        log.info("Returning WalletAppKitService bean");</a>
-<span class="sourceLineNo">052</span><a id="line.52">        WalletAppKitService service = new WalletAppKitService(params, context, kit);</a>
-<span class="sourceLineNo">053</span><a id="line.53">        service.start();</a>
-<span class="sourceLineNo">054</span><a id="line.54">        return service;</a>
-<span class="sourceLineNo">055</span><a id="line.55">    }</a>
-<span class="sourceLineNo">056</span><a id="line.56">}</a>
+<span class="sourceLineNo">030</span><a id="line.30">    @Singleton</a>
+<span class="sourceLineNo">031</span><a id="line.31">    public Context getContext(NetworkParameters params) {</a>
+<span class="sourceLineNo">032</span><a id="line.32">        log.info("Returning bitcoinj Context bean");</a>
+<span class="sourceLineNo">033</span><a id="line.33">        return new Context(params);</a>
+<span class="sourceLineNo">034</span><a id="line.34">    }</a>
+<span class="sourceLineNo">035</span><a id="line.35"></a>
+<span class="sourceLineNo">036</span><a id="line.36">    @Singleton</a>
+<span class="sourceLineNo">037</span><a id="line.37">    public WalletAppKit getKit(NetworkParameters params) throws Exception {</a>
+<span class="sourceLineNo">038</span><a id="line.38">        log.info("Returning WalletAppKit bean");</a>
+<span class="sourceLineNo">039</span><a id="line.39">        // TODO: make File(".") and filePrefix configurable</a>
+<span class="sourceLineNo">040</span><a id="line.40">        File directory = new File(".");</a>
+<span class="sourceLineNo">041</span><a id="line.41">        String filePrefix = "BitcoinJDaemon";</a>
+<span class="sourceLineNo">042</span><a id="line.42"></a>
+<span class="sourceLineNo">043</span><a id="line.43">        return new WalletAppKit(params, directory, filePrefix);</a>
+<span class="sourceLineNo">044</span><a id="line.44">    }</a>
+<span class="sourceLineNo">045</span><a id="line.45"></a>
+<span class="sourceLineNo">046</span><a id="line.46">    @Singleton</a>
+<span class="sourceLineNo">047</span><a id="line.47">    public WalletAppKitService walletAppKitService(NetworkParameters params, Context context, WalletAppKit kit) {</a>
+<span class="sourceLineNo">048</span><a id="line.48">        log.info("Returning WalletAppKitService bean");</a>
+<span class="sourceLineNo">049</span><a id="line.49">        WalletAppKitService service = new WalletAppKitService(params, context, kit);</a>
+<span class="sourceLineNo">050</span><a id="line.50">        service.start();</a>
+<span class="sourceLineNo">051</span><a id="line.51">        return service;</a>
+<span class="sourceLineNo">052</span><a id="line.52">    }</a>
+<span class="sourceLineNo">053</span><a id="line.53"></a>
+<span class="sourceLineNo">054</span><a id="line.54">    @Singleton</a>
+<span class="sourceLineNo">055</span><a id="line.55">    public Module jacksonModule() {</a>
+<span class="sourceLineNo">056</span><a id="line.56">        return new RpcServerModule(null);</a>
+<span class="sourceLineNo">057</span><a id="line.57">    }</a>
+<span class="sourceLineNo">058</span><a id="line.58">}</a>
 
 
 

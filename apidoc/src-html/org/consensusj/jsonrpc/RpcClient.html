@@ -33,10 +33,10 @@
 <span class="sourceLineNo">024</span><a id="line.24">import java.security.cert.X509Certificate;</a>
 <span class="sourceLineNo">025</span><a id="line.25"></a>
 <span class="sourceLineNo">026</span><a id="line.26">/**</a>
-<span class="sourceLineNo">027</span><a id="line.27"> * = JSON-RPC Client</a>
+<span class="sourceLineNo">027</span><a id="line.27"> * = JSON-RPC Client using {@link HttpURLConnection}.</a>
 <span class="sourceLineNo">028</span><a id="line.28"> *</a>
-<span class="sourceLineNo">029</span><a id="line.29"> * This is a concrete class with basic JSON-RPC functionality. Abstract `sendRequestForResponse` method is implemented</a>
-<span class="sourceLineNo">030</span><a id="line.30"> * using `HttpURLConnection`.</a>
+<span class="sourceLineNo">029</span><a id="line.29"> * This is a concrete class with generic JSON-RPC functionality. Abstract {@link AbstractRpcClient#sendRequestForResponse}</a>
+<span class="sourceLineNo">030</span><a id="line.30"> * is implemented using {@link HttpURLConnection}.</a>
 <span class="sourceLineNo">031</span><a id="line.31"> *</a>
 <span class="sourceLineNo">032</span><a id="line.32"> * Uses strongly-typed POJOs representing {@link JsonRpcRequest} and {@link JsonRpcResponse}. The</a>
 <span class="sourceLineNo">033</span><a id="line.33"> * response object uses a parameterized type for the object that is the actual JSON-RPC `result`.</a>

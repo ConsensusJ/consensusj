@@ -9,16 +9,25 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.rpcserver;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.json.pojo.ServerInfo;</a>
-<span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">/**</a>
-<span class="sourceLineNo">006</span><a id="line.6"> * Standard Bitcoin JSON-RPC service</a>
-<span class="sourceLineNo">007</span><a id="line.7"> */</a>
-<span class="sourceLineNo">008</span><a id="line.8">public interface BitcoinJsonRpc {</a>
-<span class="sourceLineNo">009</span><a id="line.9">    Integer getblockcount();</a>
-<span class="sourceLineNo">010</span><a id="line.10">    Integer getconnectioncount();</a>
-<span class="sourceLineNo">011</span><a id="line.11">    ServerInfo getinfo();</a>
-<span class="sourceLineNo">012</span><a id="line.12">}</a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.msgilligan.bitcoinj.json.pojo.ServerInfo;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import org.bitcoinj.core.Sha256Hash;</a>
+<span class="sourceLineNo">006</span><a id="line.6"></a>
+<span class="sourceLineNo">007</span><a id="line.7">/**</a>
+<span class="sourceLineNo">008</span><a id="line.8"> * Standard Bitcoin JSON-RPC service</a>
+<span class="sourceLineNo">009</span><a id="line.9"> */</a>
+<span class="sourceLineNo">010</span><a id="line.10">public interface BitcoinJsonRpc {</a>
+<span class="sourceLineNo">011</span><a id="line.11">    Integer getblockcount();</a>
+<span class="sourceLineNo">012</span><a id="line.12">    Sha256Hash getbestblockhash();</a>
+<span class="sourceLineNo">013</span><a id="line.13">    Object getblockheader(String blockHashString, Boolean verbose);</a>
+<span class="sourceLineNo">014</span><a id="line.14">// TODO: Support Sha256Hash type in request params?</a>
+<span class="sourceLineNo">015</span><a id="line.15">//    Object getblock(Sha256Hash blockHash, Integer verbosity);</a>
+<span class="sourceLineNo">016</span><a id="line.16">    Object getblock(String blockHashString, Integer verbosity);</a>
+<span class="sourceLineNo">017</span><a id="line.17">    Sha256Hash getblockhash(Integer blockNumber);</a>
+<span class="sourceLineNo">018</span><a id="line.18">    Integer getconnectioncount();</a>
+<span class="sourceLineNo">019</span><a id="line.19">    ServerInfo getinfo();</a>
+<span class="sourceLineNo">020</span><a id="line.20">    BlockChainInfo getblockchaininfo();</a>
+<span class="sourceLineNo">021</span><a id="line.21">}</a>
 
 
 

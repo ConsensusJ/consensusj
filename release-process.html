@@ -436,6 +436,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="olist arabic">
 <ol class="arabic">
 <li>
+<p>Use Java 9 for official builds</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><code>sdk use java 9.0.7-zulu</code> (or later version)</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
 <p>Update <code>CHANGELOG.adoc</code></p>
 </li>
 <li>
@@ -493,12 +503,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </li>
 <li>
-<p>Update Github-pages site (including JavaDoc)&#8201;&#8212;&#8201;Use Java 9 for this step to get HTML5 JavaDoc with search:</p>
-<div class="literalblock">
-<div class="content">
-<pre>export JAVA_HOME=`/usr/libexec/java_home -v9`
-./gradlew clean javadocAll publishSite</pre>
-</div>
+<p>Update Github-pages site (including JavaDoc)</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><code>./gradlew clean javadocAll publishSite</code></p>
+</li>
+</ol>
 </div>
 </li>
 </ol>
@@ -548,10 +559,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_install_snapshot_to_local_maven_repo">Install Snapshot to local maven repo</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>./gradlew clean buildCI install</code></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-27 17:15:34 PDT
+Last updated 2020-06-15 18:38:03 PDT
 </div>
 </div>
 </body>

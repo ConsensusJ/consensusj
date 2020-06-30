@@ -9,69 +9,141 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.json.pojo;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.annotation.JsonIgnoreProperties;</a>
-<span class="sourceLineNo">004</span><a id="line.4">import com.fasterxml.jackson.annotation.JsonProperty;</a>
-<span class="sourceLineNo">005</span><a id="line.5">import org.bitcoinj.core.Sha256Hash;</a>
-<span class="sourceLineNo">006</span><a id="line.6"></a>
-<span class="sourceLineNo">007</span><a id="line.7">import java.math.BigDecimal;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import java.util.ArrayList;</a>
-<span class="sourceLineNo">009</span><a id="line.9">import java.util.List;</a>
-<span class="sourceLineNo">010</span><a id="line.10"></a>
-<span class="sourceLineNo">011</span><a id="line.11">/**</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * BlockInfo POJO returned by GetBlockInfo</a>
-<span class="sourceLineNo">013</span><a id="line.13"> */</a>
-<span class="sourceLineNo">014</span><a id="line.14">@JsonIgnoreProperties(ignoreUnknown=true)</a>
-<span class="sourceLineNo">015</span><a id="line.15">// "strippedsize" property added (present in Bitcoin 0.13)</a>
-<span class="sourceLineNo">016</span><a id="line.16">public class BlockInfo {</a>
-<span class="sourceLineNo">017</span><a id="line.17">    public final Sha256Hash hash;</a>
-<span class="sourceLineNo">018</span><a id="line.18">    public final int confirmations;</a>
-<span class="sourceLineNo">019</span><a id="line.19">    public final int size;</a>
-<span class="sourceLineNo">020</span><a id="line.20">    public final int height;</a>
-<span class="sourceLineNo">021</span><a id="line.21">    public final int version;</a>
-<span class="sourceLineNo">022</span><a id="line.22">    public final Sha256Hash merkleroot;</a>
-<span class="sourceLineNo">023</span><a id="line.23">    public final Sha256HashList tx;</a>
-<span class="sourceLineNo">024</span><a id="line.24">    public final int time;</a>
-<span class="sourceLineNo">025</span><a id="line.25">    public final long nonce;</a>
-<span class="sourceLineNo">026</span><a id="line.26">    public final String bits;</a>
-<span class="sourceLineNo">027</span><a id="line.27">    public final BigDecimal difficulty;</a>
-<span class="sourceLineNo">028</span><a id="line.28">    public final String chainwork;</a>
-<span class="sourceLineNo">029</span><a id="line.29">    public final Sha256Hash previousblockhash;</a>
-<span class="sourceLineNo">030</span><a id="line.30">    public final Sha256Hash nextblockhash;</a>
-<span class="sourceLineNo">031</span><a id="line.31"></a>
-<span class="sourceLineNo">032</span><a id="line.32">    public BlockInfo(@JsonProperty("hash")              Sha256Hash hash,</a>
-<span class="sourceLineNo">033</span><a id="line.33">                     @JsonProperty("confirmations")     int confirmations,</a>
-<span class="sourceLineNo">034</span><a id="line.34">                     @JsonProperty("size")              int size,</a>
-<span class="sourceLineNo">035</span><a id="line.35">                     @JsonProperty("height")            int height,</a>
-<span class="sourceLineNo">036</span><a id="line.36">                     @JsonProperty("version")           int version,</a>
-<span class="sourceLineNo">037</span><a id="line.37">                     @JsonProperty("merkleroot")        Sha256Hash merkleroot,</a>
-<span class="sourceLineNo">038</span><a id="line.38">                     @JsonProperty("tx")                Sha256HashList tx,</a>
-<span class="sourceLineNo">039</span><a id="line.39">                     @JsonProperty("time")              int time,</a>
-<span class="sourceLineNo">040</span><a id="line.40">                     @JsonProperty("nonce")             long nonce,</a>
-<span class="sourceLineNo">041</span><a id="line.41">                     @JsonProperty("bits")              String bits,</a>
-<span class="sourceLineNo">042</span><a id="line.42">                     @JsonProperty("difficulty")        BigDecimal difficulty,</a>
-<span class="sourceLineNo">043</span><a id="line.43">                     @JsonProperty("chainwork")         String chainwork,</a>
-<span class="sourceLineNo">044</span><a id="line.44">                     @JsonProperty("previousblockhash") Sha256Hash previousblockhash,</a>
-<span class="sourceLineNo">045</span><a id="line.45">                     @JsonProperty("nextblockhash")     Sha256Hash nextblockhash) {</a>
-<span class="sourceLineNo">046</span><a id="line.46">        this.hash = hash;</a>
-<span class="sourceLineNo">047</span><a id="line.47">        this.confirmations = confirmations;</a>
-<span class="sourceLineNo">048</span><a id="line.48">        this.size = size;</a>
-<span class="sourceLineNo">049</span><a id="line.49">        this.height = height;</a>
-<span class="sourceLineNo">050</span><a id="line.50">        this.version = version;</a>
-<span class="sourceLineNo">051</span><a id="line.51">        this.merkleroot = merkleroot;</a>
-<span class="sourceLineNo">052</span><a id="line.52">        this.tx = tx;</a>
-<span class="sourceLineNo">053</span><a id="line.53">        this.time = time;</a>
-<span class="sourceLineNo">054</span><a id="line.54">        this.nonce = nonce;</a>
-<span class="sourceLineNo">055</span><a id="line.55">        this.bits = bits;</a>
-<span class="sourceLineNo">056</span><a id="line.56">        this.difficulty = difficulty;</a>
-<span class="sourceLineNo">057</span><a id="line.57">        this.chainwork = chainwork;</a>
-<span class="sourceLineNo">058</span><a id="line.58">        this.previousblockhash = previousblockhash;</a>
-<span class="sourceLineNo">059</span><a id="line.59">        this.nextblockhash = nextblockhash;</a>
-<span class="sourceLineNo">060</span><a id="line.60">    }</a>
-<span class="sourceLineNo">061</span><a id="line.61"></a>
-<span class="sourceLineNo">062</span><a id="line.62">    public static class Sha256HashList extends ArrayList&lt;Sha256Hash&gt; {</a>
-<span class="sourceLineNo">063</span><a id="line.63">    }</a>
-<span class="sourceLineNo">064</span><a id="line.64"></a>
-<span class="sourceLineNo">065</span><a id="line.65">}</a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.fasterxml.jackson.annotation.JsonCreator;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import com.fasterxml.jackson.annotation.JsonIgnoreProperties;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import com.fasterxml.jackson.annotation.JsonProperty;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import org.bitcoinj.core.Sha256Hash;</a>
+<span class="sourceLineNo">007</span><a id="line.7"></a>
+<span class="sourceLineNo">008</span><a id="line.8">import java.math.BigDecimal;</a>
+<span class="sourceLineNo">009</span><a id="line.9">import java.util.ArrayList;</a>
+<span class="sourceLineNo">010</span><a id="line.10">import java.util.List;</a>
+<span class="sourceLineNo">011</span><a id="line.11"></a>
+<span class="sourceLineNo">012</span><a id="line.12">/**</a>
+<span class="sourceLineNo">013</span><a id="line.13"> * BlockInfo POJO returned by GetBlockInfo</a>
+<span class="sourceLineNo">014</span><a id="line.14"> */</a>
+<span class="sourceLineNo">015</span><a id="line.15">@JsonIgnoreProperties(ignoreUnknown=true)</a>
+<span class="sourceLineNo">016</span><a id="line.16">// "strippedsize" property added (present in Bitcoin 0.13)</a>
+<span class="sourceLineNo">017</span><a id="line.17">public class BlockInfo {</a>
+<span class="sourceLineNo">018</span><a id="line.18">    public enum IncludeTxFlag {</a>
+<span class="sourceLineNo">019</span><a id="line.19">        NO,         // Don't include transactions</a>
+<span class="sourceLineNo">020</span><a id="line.20">        IDONLY,     // Only include the Transaction ID/hash</a>
+<span class="sourceLineNo">021</span><a id="line.21">        YES         // Include transactions (in the format of getrawtransaction RPC)</a>
+<span class="sourceLineNo">022</span><a id="line.22">    }</a>
+<span class="sourceLineNo">023</span><a id="line.23">    public final Sha256Hash hash;</a>
+<span class="sourceLineNo">024</span><a id="line.24">    public final int confirmations;</a>
+<span class="sourceLineNo">025</span><a id="line.25">    public final int size;</a>
+<span class="sourceLineNo">026</span><a id="line.26">    public final int height;</a>
+<span class="sourceLineNo">027</span><a id="line.27">    public final int version;</a>
+<span class="sourceLineNo">028</span><a id="line.28">    public final Sha256Hash merkleroot;</a>
+<span class="sourceLineNo">029</span><a id="line.29">    private final int nTx;</a>
+<span class="sourceLineNo">030</span><a id="line.30">    public final Sha256HashList tx;</a>
+<span class="sourceLineNo">031</span><a id="line.31">    public final int time;</a>
+<span class="sourceLineNo">032</span><a id="line.32">    public final long nonce;</a>
+<span class="sourceLineNo">033</span><a id="line.33">    public final String bits;</a>
+<span class="sourceLineNo">034</span><a id="line.34">    public final BigDecimal difficulty;</a>
+<span class="sourceLineNo">035</span><a id="line.35">    public final String chainwork;</a>
+<span class="sourceLineNo">036</span><a id="line.36">    public final Sha256Hash previousblockhash;</a>
+<span class="sourceLineNo">037</span><a id="line.37">    public final Sha256Hash nextblockhash;</a>
+<span class="sourceLineNo">038</span><a id="line.38"></a>
+<span class="sourceLineNo">039</span><a id="line.39">    public BlockInfo(@JsonProperty("hash")              Sha256Hash hash,</a>
+<span class="sourceLineNo">040</span><a id="line.40">                     @JsonProperty("confirmations")     int confirmations,</a>
+<span class="sourceLineNo">041</span><a id="line.41">                     @JsonProperty("size")              int size,</a>
+<span class="sourceLineNo">042</span><a id="line.42">                     @JsonProperty("height")            int height,</a>
+<span class="sourceLineNo">043</span><a id="line.43">                     @JsonProperty("version")           int version,</a>
+<span class="sourceLineNo">044</span><a id="line.44">                     @JsonProperty("merkleroot")        Sha256Hash merkleroot,</a>
+<span class="sourceLineNo">045</span><a id="line.45">                     @JsonProperty("nTx")               int nTx,</a>
+<span class="sourceLineNo">046</span><a id="line.46">                     @JsonProperty("tx")                Sha256HashList tx,</a>
+<span class="sourceLineNo">047</span><a id="line.47">                     @JsonProperty("time")              int time,</a>
+<span class="sourceLineNo">048</span><a id="line.48">                     @JsonProperty("nonce")             long nonce,</a>
+<span class="sourceLineNo">049</span><a id="line.49">                     @JsonProperty("bits")              String bits,</a>
+<span class="sourceLineNo">050</span><a id="line.50">                     @JsonProperty("difficulty")        BigDecimal difficulty,</a>
+<span class="sourceLineNo">051</span><a id="line.51">                     @JsonProperty("chainwork")         String chainwork,</a>
+<span class="sourceLineNo">052</span><a id="line.52">                     @JsonProperty("previousblockhash") Sha256Hash previousblockhash,</a>
+<span class="sourceLineNo">053</span><a id="line.53">                     @JsonProperty("nextblockhash")     Sha256Hash nextblockhash) {</a>
+<span class="sourceLineNo">054</span><a id="line.54">        this.hash = hash;</a>
+<span class="sourceLineNo">055</span><a id="line.55">        this.confirmations = confirmations;</a>
+<span class="sourceLineNo">056</span><a id="line.56">        this.size = size;</a>
+<span class="sourceLineNo">057</span><a id="line.57">        this.height = height;</a>
+<span class="sourceLineNo">058</span><a id="line.58">        this.version = version;</a>
+<span class="sourceLineNo">059</span><a id="line.59">        this.merkleroot = merkleroot;</a>
+<span class="sourceLineNo">060</span><a id="line.60">        this.nTx = nTx;</a>
+<span class="sourceLineNo">061</span><a id="line.61">        this.tx = tx;</a>
+<span class="sourceLineNo">062</span><a id="line.62">        this.time = time;</a>
+<span class="sourceLineNo">063</span><a id="line.63">        this.nonce = nonce;</a>
+<span class="sourceLineNo">064</span><a id="line.64">        this.bits = bits;</a>
+<span class="sourceLineNo">065</span><a id="line.65">        this.difficulty = difficulty;</a>
+<span class="sourceLineNo">066</span><a id="line.66">        this.chainwork = chainwork;</a>
+<span class="sourceLineNo">067</span><a id="line.67">        this.previousblockhash = previousblockhash;</a>
+<span class="sourceLineNo">068</span><a id="line.68">        this.nextblockhash = nextblockhash;</a>
+<span class="sourceLineNo">069</span><a id="line.69">    }</a>
+<span class="sourceLineNo">070</span><a id="line.70"></a>
+<span class="sourceLineNo">071</span><a id="line.71">    public static class Sha256HashList extends ArrayList&lt;Sha256Hash&gt; {</a>
+<span class="sourceLineNo">072</span><a id="line.72">        @JsonCreator</a>
+<span class="sourceLineNo">073</span><a id="line.73">        public Sha256HashList(List&lt;Sha256Hash&gt; collection) {</a>
+<span class="sourceLineNo">074</span><a id="line.74">            super(collection);</a>
+<span class="sourceLineNo">075</span><a id="line.75">        }</a>
+<span class="sourceLineNo">076</span><a id="line.76">    }</a>
+<span class="sourceLineNo">077</span><a id="line.77"></a>
+<span class="sourceLineNo">078</span><a id="line.78">    public Sha256Hash getHash() {</a>
+<span class="sourceLineNo">079</span><a id="line.79">        return hash;</a>
+<span class="sourceLineNo">080</span><a id="line.80">    }</a>
+<span class="sourceLineNo">081</span><a id="line.81"></a>
+<span class="sourceLineNo">082</span><a id="line.82">    public int getConfirmations() {</a>
+<span class="sourceLineNo">083</span><a id="line.83">        return confirmations;</a>
+<span class="sourceLineNo">084</span><a id="line.84">    }</a>
+<span class="sourceLineNo">085</span><a id="line.85"></a>
+<span class="sourceLineNo">086</span><a id="line.86">    public int getSize() {</a>
+<span class="sourceLineNo">087</span><a id="line.87">        return size;</a>
+<span class="sourceLineNo">088</span><a id="line.88">    }</a>
+<span class="sourceLineNo">089</span><a id="line.89"></a>
+<span class="sourceLineNo">090</span><a id="line.90">    public int getHeight() {</a>
+<span class="sourceLineNo">091</span><a id="line.91">        return height;</a>
+<span class="sourceLineNo">092</span><a id="line.92">    }</a>
+<span class="sourceLineNo">093</span><a id="line.93"></a>
+<span class="sourceLineNo">094</span><a id="line.94">    public int getVersion() {</a>
+<span class="sourceLineNo">095</span><a id="line.95">        return version;</a>
+<span class="sourceLineNo">096</span><a id="line.96">    }</a>
+<span class="sourceLineNo">097</span><a id="line.97"></a>
+<span class="sourceLineNo">098</span><a id="line.98">    public Sha256Hash getMerkleroot() {</a>
+<span class="sourceLineNo">099</span><a id="line.99">        return merkleroot;</a>
+<span class="sourceLineNo">100</span><a id="line.100">    }</a>
+<span class="sourceLineNo">101</span><a id="line.101"></a>
+<span class="sourceLineNo">102</span><a id="line.102">    public int getNTx() {</a>
+<span class="sourceLineNo">103</span><a id="line.103">        return nTx;</a>
+<span class="sourceLineNo">104</span><a id="line.104">    }</a>
+<span class="sourceLineNo">105</span><a id="line.105"></a>
+<span class="sourceLineNo">106</span><a id="line.106">    public Sha256HashList getTx() {</a>
+<span class="sourceLineNo">107</span><a id="line.107">        return tx;</a>
+<span class="sourceLineNo">108</span><a id="line.108">    }</a>
+<span class="sourceLineNo">109</span><a id="line.109"></a>
+<span class="sourceLineNo">110</span><a id="line.110">    public int getTime() {</a>
+<span class="sourceLineNo">111</span><a id="line.111">        return time;</a>
+<span class="sourceLineNo">112</span><a id="line.112">    }</a>
+<span class="sourceLineNo">113</span><a id="line.113"></a>
+<span class="sourceLineNo">114</span><a id="line.114">    public long getNonce() {</a>
+<span class="sourceLineNo">115</span><a id="line.115">        return nonce;</a>
+<span class="sourceLineNo">116</span><a id="line.116">    }</a>
+<span class="sourceLineNo">117</span><a id="line.117"></a>
+<span class="sourceLineNo">118</span><a id="line.118">    public String getBits() {</a>
+<span class="sourceLineNo">119</span><a id="line.119">        return bits;</a>
+<span class="sourceLineNo">120</span><a id="line.120">    }</a>
+<span class="sourceLineNo">121</span><a id="line.121"></a>
+<span class="sourceLineNo">122</span><a id="line.122">    public BigDecimal getDifficulty() {</a>
+<span class="sourceLineNo">123</span><a id="line.123">        return difficulty;</a>
+<span class="sourceLineNo">124</span><a id="line.124">    }</a>
+<span class="sourceLineNo">125</span><a id="line.125"></a>
+<span class="sourceLineNo">126</span><a id="line.126">    public String getChainwork() {</a>
+<span class="sourceLineNo">127</span><a id="line.127">        return chainwork;</a>
+<span class="sourceLineNo">128</span><a id="line.128">    }</a>
+<span class="sourceLineNo">129</span><a id="line.129"></a>
+<span class="sourceLineNo">130</span><a id="line.130">    public Sha256Hash getPreviousblockhash() {</a>
+<span class="sourceLineNo">131</span><a id="line.131">        return previousblockhash;</a>
+<span class="sourceLineNo">132</span><a id="line.132">    }</a>
+<span class="sourceLineNo">133</span><a id="line.133"></a>
+<span class="sourceLineNo">134</span><a id="line.134">    public Sha256Hash getNextblockhash() {</a>
+<span class="sourceLineNo">135</span><a id="line.135">        return nextblockhash;</a>
+<span class="sourceLineNo">136</span><a id="line.136">    }</a>
+<span class="sourceLineNo">137</span><a id="line.137">}</a>
 
 
 

@@ -13,9 +13,10 @@
 <span class="sourceLineNo">004</span><a id="line.4"> * Implement this interface to register with `ObservableExchangeRateProvider` for rate updates</a>
 <span class="sourceLineNo">005</span><a id="line.5"> * TODO: Should we replace this with RxJava? Yes! Coming soon!</a>
 <span class="sourceLineNo">006</span><a id="line.6"> */</a>
-<span class="sourceLineNo">007</span><a id="line.7">public interface ExchangeRateObserver {</a>
-<span class="sourceLineNo">008</span><a id="line.8">    void onExchangeRateChange(ExchangeRateChange change);</a>
-<span class="sourceLineNo">009</span><a id="line.9">}</a>
+<span class="sourceLineNo">007</span><a id="line.7">@Deprecated</a>
+<span class="sourceLineNo">008</span><a id="line.8">public interface ExchangeRateObserver {</a>
+<span class="sourceLineNo">009</span><a id="line.9">    void onExchangeRateChange(ExchangeRateChange change);</a>
+<span class="sourceLineNo">010</span><a id="line.10">}</a>
 
 
 

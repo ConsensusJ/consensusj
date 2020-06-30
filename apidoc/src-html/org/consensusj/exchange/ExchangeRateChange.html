@@ -9,28 +9,26 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span><a id="line.1">package org.consensusj.exchange;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">//import org.knowm.xchange.dto.marketdata.Ticker;</a>
+<span class="sourceLineNo">003</span><a id="line.3">import javax.money.convert.ExchangeRate;</a>
 <span class="sourceLineNo">004</span><a id="line.4"></a>
-<span class="sourceLineNo">005</span><a id="line.5">import javax.money.convert.ExchangeRate;</a>
-<span class="sourceLineNo">006</span><a id="line.6"></a>
-<span class="sourceLineNo">007</span><a id="line.7">/**</a>
-<span class="sourceLineNo">008</span><a id="line.8"> * Data object passed to `ExchangeRateObserver` on rate updates</a>
-<span class="sourceLineNo">009</span><a id="line.9"> * TODO: This should become a JavaMoney version of the XChange Ticker</a>
-<span class="sourceLineNo">010</span><a id="line.10"> * It should have the JavaMoney currency types, all the rates,</a>
-<span class="sourceLineNo">011</span><a id="line.11"> * An optional server timestamp and a mandatory client timestamp</a>
-<span class="sourceLineNo">012</span><a id="line.12"> * TODO: And it should probably be called "Update" rather than "Change" -- if the timestamp</a>
-<span class="sourceLineNo">013</span><a id="line.13"> * was updated but the exchange rate didn't, users still want to know.</a>
-<span class="sourceLineNo">014</span><a id="line.14"> */</a>
-<span class="sourceLineNo">015</span><a id="line.15">public class ExchangeRateChange {</a>
-<span class="sourceLineNo">016</span><a id="line.16">    public final ExchangeRate rate;</a>
-<span class="sourceLineNo">017</span><a id="line.17">    public final Long timestamp;</a>
-<span class="sourceLineNo">018</span><a id="line.18">    //Ticker ticker;</a>
-<span class="sourceLineNo">019</span><a id="line.19"></a>
-<span class="sourceLineNo">020</span><a id="line.20">    public ExchangeRateChange(ExchangeRate rate, long timestamp) {</a>
-<span class="sourceLineNo">021</span><a id="line.21">        this.rate = rate;</a>
-<span class="sourceLineNo">022</span><a id="line.22">        this.timestamp = timestamp;</a>
-<span class="sourceLineNo">023</span><a id="line.23">    }</a>
-<span class="sourceLineNo">024</span><a id="line.24">}</a>
+<span class="sourceLineNo">005</span><a id="line.5">/**</a>
+<span class="sourceLineNo">006</span><a id="line.6"> * Data object passed to `ExchangeRateObserver` on rate updates</a>
+<span class="sourceLineNo">007</span><a id="line.7"> * TODO: This should become a JavaMoney version of the XChange Ticker</a>
+<span class="sourceLineNo">008</span><a id="line.8"> * It should have the JavaMoney currency types, all the rates,</a>
+<span class="sourceLineNo">009</span><a id="line.9"> * An optional server timestamp and a mandatory client timestamp</a>
+<span class="sourceLineNo">010</span><a id="line.10"> * TODO: And it should probably be called "Update" rather than "Change" -- if the timestamp</a>
+<span class="sourceLineNo">011</span><a id="line.11"> * was updated but the exchange rate didn't, users still want to know.</a>
+<span class="sourceLineNo">012</span><a id="line.12"> */</a>
+<span class="sourceLineNo">013</span><a id="line.13">@Deprecated</a>
+<span class="sourceLineNo">014</span><a id="line.14">public class ExchangeRateChange {</a>
+<span class="sourceLineNo">015</span><a id="line.15">    public final ExchangeRate rate;</a>
+<span class="sourceLineNo">016</span><a id="line.16">    public final Long timestamp;</a>
+<span class="sourceLineNo">017</span><a id="line.17"></a>
+<span class="sourceLineNo">018</span><a id="line.18">    public ExchangeRateChange(ExchangeRate rate, long timestamp) {</a>
+<span class="sourceLineNo">019</span><a id="line.19">        this.rate = rate;</a>
+<span class="sourceLineNo">020</span><a id="line.20">        this.timestamp = timestamp;</a>
+<span class="sourceLineNo">021</span><a id="line.21">    }</a>
+<span class="sourceLineNo">022</span><a id="line.22">}</a>
 
 
 

@@ -9,36 +9,39 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span><a id="line.1">package com.msgilligan.bitcoinj.test;</a>
 <span class="sourceLineNo">002</span><a id="line.2"></a>
-<span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.rpc.BitcoinClient;</a>
+<span class="sourceLineNo">003</span><a id="line.3">import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;</a>
 <span class="sourceLineNo">004</span><a id="line.4">import org.consensusj.jsonrpc.JsonRpcException;</a>
 <span class="sourceLineNo">005</span><a id="line.5">import org.bitcoinj.core.Sha256Hash;</a>
-<span class="sourceLineNo">006</span><a id="line.6"></a>
-<span class="sourceLineNo">007</span><a id="line.7">import java.io.IOException;</a>
-<span class="sourceLineNo">008</span><a id="line.8">import java.util.List;</a>
-<span class="sourceLineNo">009</span><a id="line.9"></a>
-<span class="sourceLineNo">010</span><a id="line.10">/**</a>
-<span class="sourceLineNo">011</span><a id="line.11"> *  Single-threaded RegTest testing environment.</a>
-<span class="sourceLineNo">012</span><a id="line.12"> *  (It is conceivable someone could write tests that run in parallel in RegTest mode</a>
-<span class="sourceLineNo">013</span><a id="line.13"> *  just as they would on MainNet or Testnet. There would be a timer that creates blocks</a>
-<span class="sourceLineNo">014</span><a id="line.14"> *  every 'n' seconds, so tests could run in parallel, but would complete much quicker.</a>
-<span class="sourceLineNo">015</span><a id="line.15"> */</a>
-<span class="sourceLineNo">016</span><a id="line.16">public class RegTestEnvironment implements BlockChainEnvironment {</a>
-<span class="sourceLineNo">017</span><a id="line.17">    private BitcoinClient client;</a>
-<span class="sourceLineNo">018</span><a id="line.18"></a>
-<span class="sourceLineNo">019</span><a id="line.19">    public RegTestEnvironment(BitcoinClient client) {</a>
-<span class="sourceLineNo">020</span><a id="line.20">        this.client = client;</a>
-<span class="sourceLineNo">021</span><a id="line.21">    }</a>
-<span class="sourceLineNo">022</span><a id="line.22"></a>
-<span class="sourceLineNo">023</span><a id="line.23">    @Override</a>
-<span class="sourceLineNo">024</span><a id="line.24">    public List&lt;Sha256Hash&gt; waitForBlock() throws Exception {</a>
-<span class="sourceLineNo">025</span><a id="line.25">        return waitForBlocks(1);</a>
-<span class="sourceLineNo">026</span><a id="line.26">    }</a>
-<span class="sourceLineNo">027</span><a id="line.27"></a>
-<span class="sourceLineNo">028</span><a id="line.28">    @Override</a>
-<span class="sourceLineNo">029</span><a id="line.29">    public List&lt;Sha256Hash&gt; waitForBlocks(int numBlocks) throws JsonRpcException, IOException {</a>
-<span class="sourceLineNo">030</span><a id="line.30">        return client.generate(numBlocks);</a>
-<span class="sourceLineNo">031</span><a id="line.31">    }</a>
-<span class="sourceLineNo">032</span><a id="line.32">}</a>
+<span class="sourceLineNo">006</span><a id="line.6">import org.slf4j.Logger;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import org.slf4j.LoggerFactory;</a>
+<span class="sourceLineNo">008</span><a id="line.8"></a>
+<span class="sourceLineNo">009</span><a id="line.9">import java.io.IOException;</a>
+<span class="sourceLineNo">010</span><a id="line.10">import java.util.List;</a>
+<span class="sourceLineNo">011</span><a id="line.11"></a>
+<span class="sourceLineNo">012</span><a id="line.12">/**</a>
+<span class="sourceLineNo">013</span><a id="line.13"> *  Single-threaded RegTest testing environment.</a>
+<span class="sourceLineNo">014</span><a id="line.14"> *  (It is conceivable someone could write tests that run in parallel in RegTest mode</a>
+<span class="sourceLineNo">015</span><a id="line.15"> *  just as they would on MainNet or Testnet. There would be a timer that creates blocks</a>
+<span class="sourceLineNo">016</span><a id="line.16"> *  every 'n' seconds, so tests could run in parallel, but would complete much quicker.</a>
+<span class="sourceLineNo">017</span><a id="line.17"> */</a>
+<span class="sourceLineNo">018</span><a id="line.18">public class RegTestEnvironment implements BlockChainEnvironment {</a>
+<span class="sourceLineNo">019</span><a id="line.19">    private static final Logger log = LoggerFactory.getLogger(RegTestEnvironment.class);</a>
+<span class="sourceLineNo">020</span><a id="line.20">    private final BitcoinExtendedClient client;</a>
+<span class="sourceLineNo">021</span><a id="line.21"></a>
+<span class="sourceLineNo">022</span><a id="line.22">    public RegTestEnvironment(BitcoinExtendedClient client) {</a>
+<span class="sourceLineNo">023</span><a id="line.23">        this.client = client;</a>
+<span class="sourceLineNo">024</span><a id="line.24">    }</a>
+<span class="sourceLineNo">025</span><a id="line.25"></a>
+<span class="sourceLineNo">026</span><a id="line.26">    @Override</a>
+<span class="sourceLineNo">027</span><a id="line.27">    public List&lt;Sha256Hash&gt; waitForBlock() throws Exception {</a>
+<span class="sourceLineNo">028</span><a id="line.28">        return waitForBlocks(1);</a>
+<span class="sourceLineNo">029</span><a id="line.29">    }</a>
+<span class="sourceLineNo">030</span><a id="line.30"></a>
+<span class="sourceLineNo">031</span><a id="line.31">    @Override</a>
+<span class="sourceLineNo">032</span><a id="line.32">    public List&lt;Sha256Hash&gt; waitForBlocks(int numBlocks) throws JsonRpcException, IOException {</a>
+<span class="sourceLineNo">033</span><a id="line.33">        return client.generateBlocks(numBlocks);</a>
+<span class="sourceLineNo">034</span><a id="line.34">    }</a>
+<span class="sourceLineNo">035</span><a id="line.35">}</a>
 
 
 
