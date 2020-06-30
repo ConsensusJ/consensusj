@@ -113,7 +113,7 @@ Released: 2020.06.28
 
 === Known Issue
 
-* The three Spring Boot based projects: `bitcoinj-daemon`, `bitcoinj-peerserver`, and `jc-nmc-daemon` were not pushed to Bintray as part of the release process due to a Gradle plugin configuration issue.
+* The three Spring Boot based projects: `bitcoinj-daemon`, `bitcoinj-peerserver`, and `cj-nmc-daemon` were not pushed to Bintray as part of the release process due to a Gradle plugin configuration issue.
 
 
 == v0.5.0

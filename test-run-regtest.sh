@@ -12,7 +12,7 @@ DATADIR=$HOME/bitcoin-data-dir
 LOGDIR=logs
 OMNILOG=/tmp/omnicore.log
 
-# Assume bitcoind built elsewhere and copied by without x permission
+# Assume bitcoind built elsewhere and copied without x permission
 chmod +x $BITCOIND
 
 # Setup bitcoin conf and data dir
@@ -31,6 +31,8 @@ rm -rf $DATADIR/regtest
 $BITCOIND -regtest -datadir=$DATADIR -paytxfee=0.0001 -minrelaytxfee=0.00001 -limitancestorcount=750 -limitdescendantcount=750 -rpcserialversion=0 > $LOGDIR/bitcoin.log &
 BTCSTATUS=$?
 BTCPID=$!
+
+echo $BITCOIND started return code $BTCSTATUS pid $BTCPID
 
 # Give server some time to start
 # sleep 30
