@@ -44,6 +44,7 @@ test {
 }
 
 task integrationTest(type: Test) {
+    useJUnitPlatform()
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
     outputs.upToDateWhen { false }
@@ -53,6 +54,7 @@ task integrationTest(type: Test) {
 task regTest(type: Test) {
     description = 'Runs integration tests against Bitcon Core in regtest mode'
     group = 'verification'
+    useJUnitPlatform()
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
     outputs.upToDateWhen { false }

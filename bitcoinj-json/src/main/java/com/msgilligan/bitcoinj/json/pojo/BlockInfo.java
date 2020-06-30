@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.json.pojo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.Sha256Hash;
@@ -68,6 +69,7 @@ public class BlockInfo {
     }
 
     public static class Sha256HashList extends ArrayList<Sha256Hash> {
+        @JsonCreator
         public Sha256HashList(List<Sha256Hash> collection) {
             super(collection);
         }

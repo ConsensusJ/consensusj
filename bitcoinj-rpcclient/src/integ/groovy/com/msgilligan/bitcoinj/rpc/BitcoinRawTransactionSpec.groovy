@@ -52,7 +52,7 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
 
     def "Sign unsigned raw transaction"() {
         when: "the transaction is signed"
-        def result = signRawTransaction(rawTransactionHex)
+        def result = signRawTransactionWithWallet(rawTransactionHex)
         rawTransactionHex = result["hex"]
 
         then: "all inputs should be signed"

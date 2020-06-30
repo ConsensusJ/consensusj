@@ -262,7 +262,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      */
     public Sha256Hash sendBitcoin(Address fromAddress, Map<Address, Coin> outputs) throws JsonRpcStatusException, IOException {
         String unsignedTxHex = createRawTransaction(fromAddress, outputs);
-        SignedRawTransaction signingResult = signRawTransaction(unsignedTxHex);
+        SignedRawTransaction signingResult = signRawTransactionWithWallet(unsignedTxHex);
 
         Boolean complete = signingResult.isComplete();
         assert complete;

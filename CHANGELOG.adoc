@@ -10,6 +10,10 @@ A high-level view of the changes in each ConsensusJ binary release.
 * Deprecate `signRawTransaction()`
 * Add `signRawTransactionWithWallet()` to replace `signRawTransaction()`
 
+=== bitcoinj-json
+
+* Add missing `@JsonCreator` to `GetBlockInfo.Sha256HashList`
+
 === All Modules
 
 * Gradle build `test { useJUnitPlatform() }` set in multiple places to re-enable Spock 2.0 tests

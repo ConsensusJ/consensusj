@@ -83,6 +83,10 @@ subprojects {
         preserveFileTimestamps = false
         reproducibleFileOrder = true
     }
+
+    test {
+        useJUnitPlatform()          // We're using Spock 2.0 and JUnit 5
+    }
 }
 
 apply from: 'gradle/idea.gradle'

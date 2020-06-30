@@ -83,7 +83,7 @@ public class RegTestFundingSource implements FundingSource {
 
         // Don't care about change, we mine it anyway
         String unsignedTxHex = client.createRawTransaction(inputs, Collections.singletonMap(toAddress, requestedBtc));
-        SignedRawTransaction signingResult = client.signRawTransaction(unsignedTxHex);
+        SignedRawTransaction signingResult = client.signRawTransactionWithWallet(unsignedTxHex);
 
         assert signingResult.isComplete();
 
@@ -168,7 +168,7 @@ public class RegTestFundingSource implements FundingSource {
         outputs.put(client.getNewAddress(), client.stdRelayTxFee);
 
         String unsignedTxHex = client.createRawTransaction(inputs, outputs);
-        SignedRawTransaction signingResult = client.signRawTransaction(unsignedTxHex);
+        SignedRawTransaction signingResult = client.signRawTransactionWithWallet(unsignedTxHex);
 
         Boolean complete = signingResult.isComplete();
         assert complete;

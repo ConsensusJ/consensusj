@@ -472,9 +472,26 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      * @return The signed transaction and information whether it has a complete set of signature
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
+     * @deprecated Deprecated in Bitcoin Core v0.17 and removed in Bitcoin Core v0.18
      */
+    @Deprecated
     public SignedRawTransaction signRawTransaction(String unsignedTransaction) throws JsonRpcStatusException, IOException {
         return send("signrawtransaction", SignedRawTransaction.class, unsignedTransaction);
+    }
+
+    /**
+     * Signs inputs of a raw transaction using the wallet. Arguments 2 and 3 of the RPC are currently
+     * not supported, which means UTXOs not currently in the blockchain can't be used and `sighashtype`
+     * defaults to `ALL`.
+     *
+     * @param unsignedTransaction The hex-encoded raw transaction
+     * @return The signed transaction and information whether it has a complete set of signature
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     * @since Bitcoin Core v0.17
+     */
+    public SignedRawTransaction signRawTransactionWithWallet(String unsignedTransaction) throws JsonRpcStatusException, IOException {
+        return send("signrawtransactionwithwallet", SignedRawTransaction.class, unsignedTransaction);
     }
 
     /**
