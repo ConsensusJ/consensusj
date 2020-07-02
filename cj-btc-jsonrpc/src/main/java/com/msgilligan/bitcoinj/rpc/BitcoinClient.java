@@ -538,18 +538,87 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
         return send("getrawtransaction", RawTransactionInfo.class, txid, 1);
     }
 
+    /**
+     * Submit a raw transaction to local node and network
+     *
+     * @since Bitcoin Core 0.19
+     * @param tx The raw transaction
+     * @param maxFeeRate  Reject transactions whose fee rate is higher than this value, expressed in BTC/kB.
+     *                    Set to 0 to accept any fee rate.
+     * @return SHA256 Transaction ID
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public Sha256Hash sendRawTransaction(Transaction tx, Coin maxFeeRate) throws JsonRpcStatusException, IOException {
+        return send("sendrawtransaction", Sha256Hash.class, tx, maxFeeRate);
+    }
+
+    /**
+     * Submit a raw transaction to local node and network
+     *
+     * @since Bitcoin Core 0.19
+     * @param hexTx The raw transaction as a hex-encoded string
+     * @param maxFeeRate  Reject transactions whose fee rate is higher than this value, expressed in BTC/kB.
+     *                    Set to 0 to accept any fee rate.
+     * @return SHA256 Transaction ID
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public Sha256Hash sendRawTransaction(String hexTx, Coin maxFeeRate) throws JsonRpcStatusException, IOException {
+        return send("sendrawtransaction", Sha256Hash.class, hexTx, maxFeeRate);
+    }
+
+    /**
+     * Submit a raw transaction to local node and network using server's default `maxFeeRate`
+     *
+     * @param tx The raw transaction
+     * @return SHA256 Transaction ID
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
     public Sha256Hash sendRawTransaction(Transaction tx) throws JsonRpcStatusException, IOException {
-        return sendRawTransaction(tx, null);
+        return sendRawTransaction(tx, (Coin) null);
     }
 
+    /**
+     * Submit a raw transaction to local node and network using server's default `maxFeeRate`
+     *
+     * @since Bitcoin Core 0.19
+     * @param hexTx The raw transaction as a hex-encoded string
+     * @return SHA256 Transaction ID
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
     public Sha256Hash sendRawTransaction(String hexTx) throws JsonRpcStatusException, IOException {
-        return sendRawTransaction(hexTx, null);
+        return sendRawTransaction(hexTx, (Coin) null);
     }
 
+    /**
+     * Submit a raw transaction to local node and network
+     *
+     * @param tx The raw transaction
+     * @param allowHighFees deprecated boolean parameter
+     * @return SHA256 Transaction ID
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     * @deprecated In Bitcoin Core 0.19 and later, use {@link BitcoinClient#sendRawTransaction(Transaction, Coin)}
+     */
+    @Deprecated
     public Sha256Hash sendRawTransaction(Transaction tx, Boolean allowHighFees) throws JsonRpcStatusException, IOException {
         return send("sendrawtransaction", Sha256Hash.class, tx, allowHighFees);
     }
 
+    /**
+     * Submit a raw transaction to local node and network
+     *
+     * @param hexTx The raw transaction as a hex-encoded string
+     * @param allowHighFees deprecated boolean parameter
+     * @return SHA256 Transaction ID
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     * @deprecated In Bitcoin Core 0.19 and later, use {@link BitcoinClient#sendRawTransaction(Transaction, Coin)}
+     */
+    @Deprecated
     public Sha256Hash sendRawTransaction(String hexTx, Boolean allowHighFees) throws JsonRpcStatusException, IOException {
         return send("sendrawtransaction", Sha256Hash.class, hexTx, allowHighFees);
     }
@@ -876,7 +945,6 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ChainTip.class);
         return send("getchaintips",resultType);
     }
-
 
     /**
      * Attempt to add or remove a node from the addnode list, or to try a connection to a node once.

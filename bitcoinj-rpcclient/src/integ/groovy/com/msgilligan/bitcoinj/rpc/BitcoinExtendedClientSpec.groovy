@@ -1,7 +1,9 @@
 package com.msgilligan.bitcoinj.rpc
 
+import com.msgilligan.bitcoinj.test.FundingSource
 import com.msgilligan.bitcoinj.test.RegTestEnvironment
 import com.msgilligan.bitcoinj.test.RegTestFundingSource
+import spock.lang.Shared
 import spock.lang.Specification
 
 
@@ -9,10 +11,14 @@ import spock.lang.Specification
  * Basic tests of Extended Client
  */
 class BitcoinExtendedClientSpec extends Specification {
-    def "test it"() {
+    @Shared
+    BitcoinExtendedClient client
+    
+    @Shared
+    FundingSource funder
+
+    def "Can create a funded address and send coins with sendBitcoin()"() {
         given: "a client, a source of funds, and a blockchain environment"
-        def client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, "bitcoinrpc", "pass")
-        def funder = new RegTestFundingSource(client)
         RegTestEnvironment chainEnv = new RegTestEnvironment(client)
         // Mine some blocks and setup a source of funds for testing
         def myAddress = funder.createFundedAddress(1.btc)
@@ -47,11 +53,8 @@ class BitcoinExtendedClientSpec extends Specification {
         destBalance == 0.5.btc
     }
 
-    def "a test"() {
+    def "Can create a funded address and sign a transaction locally using createSignedTransaction()"() {
         given:
-        def client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, "bitcoinrpc", "pass")
-        def funder = new RegTestFundingSource(client)
-        //def fundingAddress = client.getNewAddress()
         def fundingAddress = funder.createFundedAddress(10.btc)
         def key = client.dumpPrivKey(fundingAddress)
         def destinationAddress = client.getNewAddress("destinationAddress")
@@ -63,5 +66,12 @@ class BitcoinExtendedClientSpec extends Specification {
         tx != null
         tx.outputs.size() > 0
         tx.inputs.size() > 0
+    }
+
+    void setup() {
+        client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, "bitcoinrpc", "pass")
+        RegTestFundingSource regTestFundingSource = new RegTestFundingSource(client)
+        regTestFundingSource.checkForLegacyBitcoinCore()  // Remove once we're Bitcoin Core 0.19+ only
+        funder = regTestFundingSource
     }
 }

@@ -13,6 +13,7 @@ class FundingAndBlockChainEnvIntSpec extends Specification {
         given: "a client, a source of funds, and a blockchain environment"
         def client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, "bitcoinrpc", "pass")
         def funder = new RegTestFundingSource(client)
+        funder.checkForLegacyBitcoinCore()  // Remove once we're Bitcoin Core 0.19+ only
         RegTestEnvironment chainEnv = new RegTestEnvironment(client)
         // Mine some blocks and setup a source of funds for testing
         def myAddress = funder.createFundedAddress(1.btc)

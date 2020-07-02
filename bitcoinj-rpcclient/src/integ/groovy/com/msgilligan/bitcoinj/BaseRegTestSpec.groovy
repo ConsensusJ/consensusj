@@ -22,7 +22,10 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     // Initializer to set up trait properties, Since Spock doesn't allow constructors
     {
         client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
-        fundingSource = new RegTestFundingSource(client)
+        RegTestFundingSource regTestFundingSource = new RegTestFundingSource(client)
+        regTestFundingSource.checkForLegacyBitcoinCore()    // Remove once we're Bitcoin Core 0.19+ only
+        fundingSource = regTestFundingSource
+
     }
 
     void setupSpec() {

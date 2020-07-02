@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.test;
 
+import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
 import org.consensusj.jsonrpc.JsonRpcException;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
@@ -30,16 +31,42 @@ public class RegTestFundingSource implements FundingSource {
     final Integer defaultMaxConf = 9999999;
     private static final Logger log = LoggerFactory.getLogger(RegTestFundingSource.class);
     protected BitcoinExtendedClient client;
+    /**
+     * Prior to Bitcoin Core 0.19, the second parameter of sendRawTransaction
+     * was a boolean, not an integer containing maxFees
+     */
+    private boolean serverHasSendRawWithMaxFees = true;
 
     public RegTestFundingSource(BitcoinExtendedClient client) {
         this.client = client;
     }
 
     /**
+     * Check for and internally handle Bitcoin Core pre 0.19
+     * (Note that Omni Core 0.8.x is based on Bitcoin Core 0.18)
+     * @return `true` (if legacy), `false` (if modern), `null` (if error)
+     * @deprecated This method will be removed in a future release and Bitcoin Core 0.19+ will be required
+     */
+    @Deprecated
+    public Boolean checkForLegacyBitcoinCore() {
+        Boolean isLegacy = null;
+        try {
+            NetworkInfo networkInfo = client.getNetworkInfo();
+            isLegacy = networkInfo.getVersion() < 190000;
+        } catch (IOException e) {
+            log.error("Exception: ", e);
+        }
+        if (isLegacy != null && isLegacy) {
+            serverHasSendRawWithMaxFees = false;
+        }
+        return isLegacy;
+    }
+
+    /**
      * Generate blocks and fund an address with requested amount of BTC
      *
      * TODO: Improve performance. Can we mine multiple blocks with a single RPC?
-     * TODO: Use client.generateToAddress() instead of deprecated generate()
+     * TODO: Use client.generateToAddress() directly rather than through client.generateBlocks()
      * If we use `toAddress` as the destination of generateToAddress(), we
      * can skip the generation and sending of the the raw transaction below.
      *
@@ -88,7 +115,7 @@ public class RegTestFundingSource implements FundingSource {
         assert signingResult.isComplete();
 
         String signedTxHex = signingResult.getHex();
-        Sha256Hash txid = client.sendRawTransaction(signedTxHex, true);
+        Sha256Hash txid = sendRawTransactionUnlimitedFees(signedTxHex);
 
         return txid;
     }
@@ -164,20 +191,28 @@ public class RegTestFundingSource implements FundingSource {
         }
 
         // No receiver, just spend most of it as fee (!)
-        Map<Address,Coin> outputs = new HashMap<Address, Coin>();
+        Map<Address,Coin> outputs = new HashMap<>();
         outputs.put(client.getNewAddress(), client.stdRelayTxFee);
 
         String unsignedTxHex = client.createRawTransaction(inputs, outputs);
         SignedRawTransaction signingResult = client.signRawTransactionWithWallet(unsignedTxHex);
 
-        Boolean complete = signingResult.isComplete();
+        boolean complete = signingResult.isComplete();
         assert complete;
 
         String signedTxHex = signingResult.getHex();
-        Object txid = client.sendRawTransaction(signedTxHex, true);
+        Sha256Hash txid = sendRawTransactionUnlimitedFees(signedTxHex);
 
         return; //true;
     }
 
-
+    private Sha256Hash sendRawTransactionUnlimitedFees(String hexTx) throws IOException {
+        Sha256Hash txid;
+        if (serverHasSendRawWithMaxFees) {
+            txid = client.sendRawTransaction(hexTx, Coin.ZERO);
+        } else {
+            txid = client.sendRawTransaction(hexTx, true);
+        }
+        return txid;
+    }
 }
