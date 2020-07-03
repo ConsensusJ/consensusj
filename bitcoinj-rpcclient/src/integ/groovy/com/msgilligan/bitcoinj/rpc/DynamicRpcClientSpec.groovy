@@ -2,6 +2,10 @@ package com.msgilligan.bitcoinj.rpc
 
 import com.fasterxml.jackson.databind.node.NullNode
 import com.msgilligan.bitcoinj.rpc.test.TestServers
+import org.bitcoinj.core.Address
+import org.bitcoinj.core.ECKey
+import org.bitcoinj.core.SegwitAddress
+import org.bitcoinj.params.RegTestParams
 import org.consensusj.jsonrpc.groovy.DynamicRpcClient
 import org.consensusj.jsonrpc.JsonRpcStatusException
 import spock.lang.Ignore
@@ -45,10 +49,12 @@ class DynamicRpcClientSpec extends Specification {
         result >= 0
     }
 
-    @Ignore("Wait until we're able to require bitcoind 0.11.x or later")
-    def "setgenerate"() {
+    def "generatetoaddress"() {
+        given:
+        Address toAddress = SegwitAddress.fromKey(RegTestParams.get(), new ECKey())
+
         when:
-        def result = client.generate(2)
+        def result = client.generatetoaddress(2, toAddress.toString())
 
         then:
         result != null /* Bitcoin 0.10.x or later */
