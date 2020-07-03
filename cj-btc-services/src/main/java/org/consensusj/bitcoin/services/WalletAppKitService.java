@@ -227,7 +227,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         return blockToHex(storedBlock.getHeader());
     }
 
-    private BlockInfo getBlockInfo(Sha256Hash blockHash, BlockInfo.IncludeTxFlag includeTx) {
+    public BlockInfo getBlockInfo(Sha256Hash blockHash, BlockInfo.IncludeTxFlag includeTx) {
         BlockInfo blockInfo;
         try {
             blockInfo = getBlockInfoByHash(kit.chain(), blockHash, includeTx);

@@ -1,6 +1,7 @@
 package org.consensusj.daemon.micronaut;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
 import com.msgilligan.bitcoinj.json.pojo.BlockInfo;
 import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 import io.micronaut.context.annotation.Context;
@@ -37,6 +38,7 @@ import java.util.concurrent.CompletableFuture;
                 JsonRpcResponse.class,
                 ServerInfo.class,
                 BlockInfo.class,
+                BlockChainInfo.class,
                 Sha256Hash.class,
                 WalletAppKitService.class
         },
@@ -45,7 +47,7 @@ import java.util.concurrent.CompletableFuture;
 @Controller("/rpc")
 @Context
 public class JsonRpcController {
-    private static Logger log = LoggerFactory.getLogger(JsonRpcController.class);
+    private static final Logger log = LoggerFactory.getLogger(JsonRpcController.class);
     private final JsonRpcService jsonRpcService;
 
     public JsonRpcController(WalletAppKitJsonRpcService walletAppKitService) {

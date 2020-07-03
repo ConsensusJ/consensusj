@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Singleton
 public class WalletAppKitJsonRpcService extends DelegatingJsonRpcService {
-    private static Logger log = LoggerFactory.getLogger(WalletAppKitJsonRpcService.class);
+    private static final Logger log = LoggerFactory.getLogger(WalletAppKitJsonRpcService.class);
     private static final Map<String, Method> methods = JsonRpcServiceWrapper.reflect(WalletAppKitService.class);
 
     public WalletAppKitJsonRpcService(WalletAppKitService service) {
