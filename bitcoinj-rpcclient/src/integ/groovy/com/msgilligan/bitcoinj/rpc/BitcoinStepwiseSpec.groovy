@@ -3,7 +3,6 @@ package com.msgilligan.bitcoinj.rpc
 import com.msgilligan.bitcoinj.BaseRegTestSpec
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.Coin
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -54,7 +53,6 @@ class BitcoinStepwiseSpec extends BaseRegTestSpec {
         getBitcoinBalance(wealthyAddress) == wealthyStartBalance - testAmount - stdTxFee
     }
 
-    @Ignore("Did something change here in newer Bitcoin Core?")
     def "wealthyAddress shows up in listreceivedbyaddress"() {
         when:
         def result = listReceivedByAddress(1, false)
@@ -62,7 +60,7 @@ class BitcoinStepwiseSpec extends BaseRegTestSpec {
 
         then:
         found != null
-        found.account == testAccount1Name
+        found.label == testAccount1Name
         found.address == wealthyAddress
     }
 

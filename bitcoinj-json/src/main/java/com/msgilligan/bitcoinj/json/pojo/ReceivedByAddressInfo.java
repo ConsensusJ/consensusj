@@ -15,6 +15,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ReceivedByAddressInfo {
     public final Address address;
+    @Deprecated
     public final String account;
     public final Coin amount;
     public final int confirmations;
@@ -23,13 +24,12 @@ public class ReceivedByAddressInfo {
 
     @JsonCreator
     public ReceivedByAddressInfo(@JsonProperty("address") Address address,
-                                 @JsonProperty("account") String account,
                                  @JsonProperty("amount") Coin amount,
                                  @JsonProperty("confirmations") int confirmations,
                                  @JsonProperty("txids") List<Sha256Hash> txids,
                                  @JsonProperty("label") String label) {
         this.address = address;
-        this.account = account;
+        this.account = label;
         this.amount = amount;
         this.confirmations = confirmations;
         this.txids = txids;
@@ -40,6 +40,7 @@ public class ReceivedByAddressInfo {
         return address;
     }
 
+    @Deprecated
     public String getAccount() {
         return account;
     }
