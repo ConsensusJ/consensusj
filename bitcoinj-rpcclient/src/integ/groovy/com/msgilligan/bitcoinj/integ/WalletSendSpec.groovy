@@ -14,15 +14,12 @@ import org.bitcoinj.store.MemoryBlockStore
 import org.bitcoinj.utils.BriefLogFormatter
 import com.msgilligan.bitcoinj.BaseRegTestSpec
 import org.bitcoinj.wallet.AllowUnconfirmedCoinSelector
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Stepwise
 
 /**
  * Various interoperability tests between RPC server and bitcoinj wallets.
  */
-//@Ignore("'Send mined coins' intermittently fails because transaction is still pending")
-@Ignore("Not working since Migration away from deprecated generate RPC")
 @Stepwise
 class WalletSendSpec extends BaseRegTestSpec {
     @Shared
@@ -34,8 +31,7 @@ class WalletSendSpec extends BaseRegTestSpec {
 
 
     void setupSpec() {
-//        BriefLogFormatter.initVerbose();
-        BriefLogFormatter.initWithSilentBitcoinJ();
+        BriefLogFormatter.initWithSilentBitcoinJ()
         params = getNetParams()
 
         wallet = new Wallet(params)
@@ -79,15 +75,26 @@ class WalletSendSpec extends BaseRegTestSpec {
         Coin amount = 1.btc
         Address rpcAddress = getNewAddress()
         // Send it with BitcoinJ
+        log.info("Sending ${amount} coins to ${rpcAddress}")
         Wallet.SendResult sendResult = wallet.sendCoins(peerGroup,rpcAddress,amount)
         // Wait for broadcast complete
         Transaction sentTx = sendResult.broadcastComplete.get()
+        log.info("Broadcast complete, txid = ${sentTx.txId}")
         // Wait for it to show up on server as unconfirmed
-        waitForUnconfirmedTransaction(sentTx.hash)
+        log.info("Waiting for unconfirmed transaction to appear on server...")
+        waitForUnconfirmedTransaction(sentTx.getTxId())
+        log.info("... unconfirmed transaction found on server.")
         // Once server has pending transaction, generate a block
+        log.info("Generating a block")
         generateBlocks(1)
         // Wait for wallet to get confirmation of the transaction
-        sentTx.getConfidence().getDepthFuture(1).get()
+        def depthFuture = sentTx.getConfidence().getDepthFuture(1)
+        do {
+            log.warn("Waiting for bitcoinj wallet to get a confirmation of the transaction...")
+            // TODO: I don't think we should have to wait 3 seconds and generate additional blocks here.
+            sleep(3_000)
+            generateBlocks(1)
+        } while (!depthFuture.isDone())
 
         then: "the new address has a balance of amount"
         getReceivedByAddress(rpcAddress) == amount
@@ -103,9 +110,9 @@ class WalletSendSpec extends BaseRegTestSpec {
         SendRequest request = SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
         wallet.commitTx(request.tx)
-        Transaction sentTx = peerGroup.broadcastTransaction(request.tx).future().get();
+        Transaction sentTx = peerGroup.broadcastTransaction(request.tx).future().get()
         // Wait for it to show up on server as unconfirmed
-        waitForUnconfirmedTransaction(sentTx.hash)
+        waitForUnconfirmedTransaction(sentTx.txId)
         generateBlocks(1)
 
         then: "the new address has a balance of amount"
@@ -139,13 +146,13 @@ class WalletSendSpec extends BaseRegTestSpec {
      * @param txid Transaction ID (hash) of transaction we're waiting for
      */
     void waitForUnconfirmedTransaction(Sha256Hash txid) {
-        Transaction pendingTx = null;
+        Transaction pendingTx = null
         while (pendingTx == null) {
             try {
                 pendingTx = getRawTransaction(txid)
             } catch (JsonRpcStatusException e) {
                 if (e.message != "No information available about transaction") {
-                    throw e;
+                    throw e
                 }
             }
         }
