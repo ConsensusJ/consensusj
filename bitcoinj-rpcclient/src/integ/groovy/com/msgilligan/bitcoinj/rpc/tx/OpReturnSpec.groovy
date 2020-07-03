@@ -1,26 +1,20 @@
 package com.msgilligan.bitcoinj.rpc.tx
 
-import com.msgilligan.bitcoinj.BaseRegTestSpec
 import org.bitcoinj.core.Coin
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.script.Script
 import org.bitcoinj.script.ScriptBuilder
 import org.bitcoinj.script.ScriptOpCodes
-import spock.lang.IgnoreIf
-import spock.lang.Stepwise
 import spock.lang.Unroll
+
+import java.util.function.UnaryOperator
 
 /**
  *  Create, send, record, and retrieve an OP_RETURN transaction
- *  Note: for some reason this test in P2P mode is failing on Travis under openjdk8 with an infinite
- *  loop displaying
- *  `json error code: -5, message: No such mempool or blockchain transaction. Use gettransaction for wallet transactions`
- *  So for now we'll ignore the test if we are running under JDK less than 9.
  */
-@IgnoreIf({ javaVersion < 9 })
 class OpReturnSpec extends TxTestBaseSpec {
     @Unroll
-    def "create and send a bitcoinj OP_RETURN transaction using #methodName"(submitMethod, methodName) {
+    def "create and send a bitcoinj OP_RETURN transaction using #methodName"(UnaryOperator<Transaction> submitMethod, String methodName) {
         given: "data for the OP_RETURN, transaction ingredients, a destination address and an amount to send"
         def length = 80
         def testData = 0..<length as byte[]
@@ -41,7 +35,7 @@ class OpReturnSpec extends TxTestBaseSpec {
         tx.addSignedInput(ingredients.outPoints.get(0), ScriptBuilder.createOutputScript(ingredients.address), ingredients.privateKey);
 
         and: "send via submitMethod [P2P, RPC] and generate a block"
-        Transaction sentTx = submitMethod(tx)
+        Transaction sentTx = submitMethod.apply(tx)
 
         then: "we can retrieve and verify the data"
         with (sentTx.getOutput(0).scriptPubKey.chunks.get(0)) {
@@ -53,7 +47,9 @@ class OpReturnSpec extends TxTestBaseSpec {
         }
 
         where: "submitMethod is P2P and then RPC"
-        [submitMethod, methodName] << submitMethods
+        methodItem << submitMethods
+        submitMethod = methodItem.method
+        methodName = methodItem.name
     }
 
     private static int opCodeFromLength(int length) {
