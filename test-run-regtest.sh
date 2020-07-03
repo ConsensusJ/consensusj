@@ -28,7 +28,7 @@ ln -sf $OMNILOG $LOGDIR/omnicore.log
 rm -rf $DATADIR/regtest
 
 # Run bitcoind in regtest mode
-$BITCOIND -regtest -datadir=$DATADIR -paytxfee=0.0001 -minrelaytxfee=0.00001 -limitancestorcount=750 -limitdescendantcount=750 -rpcserialversion=0 > $LOGDIR/bitcoin.log &
+$BITCOIND -regtest -datadir=$DATADIR -paytxfee=0.0001 -minrelaytxfee=0.00001 -limitancestorcount=750 -limitdescendantcount=750 -rpcserialversion=0 -omnialertallowsender=any -omniactivationallowsender=any > $LOGDIR/bitcoin.log &
 BTCSTATUS=$?
 BTCPID=$!
 
@@ -39,7 +39,7 @@ echo $BITCOIND started return code $BTCSTATUS pid $BTCPID
 
 # Run integration tests
 echo "Running Bitcoin Core RPC integration tests in RegTest mode..."
-./gradlew regTest
+./gradlew regTest --info
 GRADLESTATUS=$?
 
 exit $GRADLESTATUS
