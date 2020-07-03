@@ -1,23 +1,33 @@
 package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.BaseRegTestSpec
-import com.msgilligan.bitcoinj.json.pojo.NetworkInfo
 import org.bitcoinj.core.Coin
 import org.bitcoinj.core.LegacyAddress
 import org.bitcoinj.core.Sha256Hash
-import org.bitcoinj.params.RegTestParams
 
 class BitcoinSpec extends BaseRegTestSpec {
     static final Coin testAmount = 2.btc
 
-    def "return basic info" () {
-        when: "we request info"
-        def info = client.getNetworkInfo()
+    def "get network info" () {
+        when: "we request network info"
+        def netInfo = client.getNetworkInfo()
 
         then: "we get back some basic information"
-        info != null
-        info.version >= 100000
-        info.protocolVersion >= 70002
+        netInfo != null
+        netInfo.version >= 180000
+        netInfo.protocolVersion >= 70002
+    }
+
+    def "get blockchain info" () {
+        when: "we request blockchain info"
+        def chainInfo = client.getBlockChainInfo()
+
+        then: "we get back some basic information"
+        chainInfo != null
+        chainInfo.chain == "regtest"
+        chainInfo.blocks >= 1
+        chainInfo.headers >= 1
+        chainInfo.bestBlockHash != null
     }
 
     def "Get a list of available commands"() {

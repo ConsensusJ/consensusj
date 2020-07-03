@@ -3,6 +3,7 @@ package org.consensusj.bitcoin.services;
 import com.msgilligan.bitcoinj.json.conversion.HexUtil;
 import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
 import com.msgilligan.bitcoinj.json.pojo.BlockInfo;
+import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
 import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;
 import org.bitcoinj.core.AbstractBlockChain;
@@ -160,6 +161,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     }
 
     @Override
+    @Deprecated
     public ServerInfo getinfo() {
         // Dummy up a response for now.
         // Since ServerInfo is immutable, we have to build it entirely with the constructor.
@@ -195,6 +197,23 @@ public class WalletAppKitService implements BitcoinJsonRpc {
                 difficulty,
                 verificationProgress,
                 chainWork);
+    }
+
+    @Override
+    public NetworkInfo getnetworkinfo() {
+        byte[] localServices = {};
+        Object[] network = {};
+        Object[] address = {};
+        return new NetworkInfo(version,
+                "",
+                protocolVersion,
+                timeOffset,
+                getconnectioncount(),
+                "proxy",
+                0,
+                localServices,
+                network,
+                address);
     }
 
     private Object getBlock(Sha256Hash blockHash) {
