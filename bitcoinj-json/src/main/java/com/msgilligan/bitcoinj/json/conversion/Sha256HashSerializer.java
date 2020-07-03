@@ -9,7 +9,7 @@ import org.bitcoinj.core.Sha256Hash;
 import java.io.IOException;
 
 /**
- *
+ * Serialize a bitcoinj {@link Sha256Hash} type.
  */
 public class Sha256HashSerializer extends JsonSerializer<Sha256Hash> {
     @Override

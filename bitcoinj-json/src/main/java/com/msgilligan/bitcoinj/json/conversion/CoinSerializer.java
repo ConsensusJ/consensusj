@@ -9,7 +9,7 @@ import org.bitcoinj.core.Coin;
 import java.io.IOException;
 
 /**
- *
+ * Serialize a bitcoinj {@link Coin} type.
  */
 public class CoinSerializer  extends JsonSerializer<Coin> {
     @Override

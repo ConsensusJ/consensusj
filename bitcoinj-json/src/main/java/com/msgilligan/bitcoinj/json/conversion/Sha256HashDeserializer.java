@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
- *
+ * Deserialize a hex string to a bitcoinj {@link Sha256Hash} type.
  */
 public class Sha256HashDeserializer  extends JsonDeserializer<Sha256Hash> {
     @Override

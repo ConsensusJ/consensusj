@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
- *
+ * Deserialize a numeric value to a bitcoinj {@link Coin} type.
  */
 public class CoinDeserializer extends JsonDeserializer<Coin> {
     @Override
@@ -26,6 +26,9 @@ public class CoinDeserializer extends JsonDeserializer<Coin> {
             case VALUE_NUMBER_INT:
                 long val = p.getNumberValue().longValue(); // should be optimal, whatever it is
                 return Coin.valueOf(val);
+
+            // TODO: Allow reading a numeric string. There seem to be cases where a BTC decimal balance
+            // is encoded wrapped with quotes.
 
             default:
                 return (Coin) ctxt.handleUnexpectedToken(Coin.class, p);
