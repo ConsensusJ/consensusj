@@ -12,7 +12,8 @@
 . Update `README.adoc` and other documentation as necessary 
 . Commit version bump and changelog.
 . Full build, test
-.. `./gradlew clean buildCI install regTest`
+.. `./gradlew clean buildCI`
+.. `./test-run-regtest.sh`
 .. Recommended: test with *OmniJ* regTests.
 . Tag: `git tag -a v0.x.y -m "Release 0.x.y"`
 . Push: `git push --tags origin master`
