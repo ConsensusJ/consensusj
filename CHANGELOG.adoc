@@ -3,9 +3,22 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
+== v0.5.4
+
+Released: 2020.07.03
+
+=== All Modules
+
+* Built with JDK 9, otherwise the same as v0.5.3.
+
+
 == v0.5.3
 
 Released: 2020.07.03
+
+=== Known Issues
+
+* Built with JDK 8, does not include all modules, v0.5.4 is recommended.
 
 === cj-btc-jsonrpc
 
