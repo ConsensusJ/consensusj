@@ -3,9 +3,40 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.5.3-SNAPSHOT
+== v0.5.3
 
-Released: In progress
+Released: 2020.07.03
+
+=== cj-btc-jsonrpc
+
+* Deprecate `sendRawTransaction(Transaction tx, Boolean allowHighFees)`
+* Replace with `sendRawTransaction(Transaction tx, Coin maxFeeRate)`
+(available in Bitcoin Core 0.19 and later)
+* Create temporary `checkForLegacyBitcoinCore()` method in RegTestFundingSource
+* Remove deprecated `generate()` methods in `BitcoinExtendedClient`
+* Related and semi-related code cleanup in `BitcoinClient`, `BitcoinExtendedClient`,
+and `BitcoinExtendedClientSpec`
+
+=== cj-btc-services
+
+* Add `getnetworkinfo()` implementation
+
+=== cj-btc-daemon-mn
+
+* Add proof-of-concept, partial Bitcoin Core REST API at "/rest" path.
+
+=== bitcoinj-json
+
+* Deprecate `getinfo` method in `BitcoinJsonRpc` (server-side definition)
+* Add `getnetworkinfo` method in `BitcoinJsonRpc`
+* 
+
+=== bitcoinj-rpcclient
+
+* Test updates for `sendRawTransaction(Transaction tx, Coin maxFeeRate)`
+* Disable P2P-mode rpc.tx RegTests for now (due to intermittent Travis failures)
+* Miscellaneous test improvements
+* Restore to correct operation some `@Ignored` tests
 
 == v0.5.2
 
