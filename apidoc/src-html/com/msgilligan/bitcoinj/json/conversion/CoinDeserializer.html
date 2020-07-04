@@ -20,7 +20,7 @@
 <span class="sourceLineNo">011</span><a id="line.11">import java.math.BigDecimal;</a>
 <span class="sourceLineNo">012</span><a id="line.12"></a>
 <span class="sourceLineNo">013</span><a id="line.13">/**</a>
-<span class="sourceLineNo">014</span><a id="line.14"> *</a>
+<span class="sourceLineNo">014</span><a id="line.14"> * Deserialize a numeric value to a bitcoinj {@link Coin} type.</a>
 <span class="sourceLineNo">015</span><a id="line.15"> */</a>
 <span class="sourceLineNo">016</span><a id="line.16">public class CoinDeserializer extends JsonDeserializer&lt;Coin&gt; {</a>
 <span class="sourceLineNo">017</span><a id="line.17">    @Override</a>
@@ -36,11 +36,14 @@
 <span class="sourceLineNo">027</span><a id="line.27">                long val = p.getNumberValue().longValue(); // should be optimal, whatever it is</a>
 <span class="sourceLineNo">028</span><a id="line.28">                return Coin.valueOf(val);</a>
 <span class="sourceLineNo">029</span><a id="line.29"></a>
-<span class="sourceLineNo">030</span><a id="line.30">            default:</a>
-<span class="sourceLineNo">031</span><a id="line.31">                return (Coin) ctxt.handleUnexpectedToken(Coin.class, p);</a>
-<span class="sourceLineNo">032</span><a id="line.32">        }</a>
-<span class="sourceLineNo">033</span><a id="line.33">    }</a>
-<span class="sourceLineNo">034</span><a id="line.34">}</a>
+<span class="sourceLineNo">030</span><a id="line.30">            // TODO: Allow reading a numeric string. There seem to be cases where a BTC decimal balance</a>
+<span class="sourceLineNo">031</span><a id="line.31">            // is encoded wrapped with quotes.</a>
+<span class="sourceLineNo">032</span><a id="line.32"></a>
+<span class="sourceLineNo">033</span><a id="line.33">            default:</a>
+<span class="sourceLineNo">034</span><a id="line.34">                return (Coin) ctxt.handleUnexpectedToken(Coin.class, p);</a>
+<span class="sourceLineNo">035</span><a id="line.35">        }</a>
+<span class="sourceLineNo">036</span><a id="line.36">    }</a>
+<span class="sourceLineNo">037</span><a id="line.37">}</a>
 
 
 
