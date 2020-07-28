@@ -14,11 +14,26 @@ import org.bitcoinj.core.Sha256Hash;
 import java.io.IOException;
 
 /**
- *
+ * Deserialize bitcoinj (family) addresses
  */
 public class AddressDeserializer extends JsonDeserializer<Address> {
-    private NetworkParameters netParams;
+    private final NetworkParameters netParams;
 
+    /**
+     * Construct an address deserializer that will deserialize addresses for any supported network.
+     * See {@link NetworkParameters} to understand what the supported networks are.
+     */
+    public AddressDeserializer() {
+        this(null);
+    }
+
+    /**
+     * Construct an address deserializer that validates addresses for the specified {@link NetworkParameters}.
+     * When deserializing addresses, addresses that are not from the specified network will cause a
+     * {@link InvalidFormatException} to be thrown during deserialization.
+     *
+     * @param netParams Network parameters to specify the only network we will deserialize addresses for.
+     */
     public AddressDeserializer(NetworkParameters netParams) {
         this.netParams = netParams;
     }
