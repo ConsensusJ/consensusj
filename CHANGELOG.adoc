@@ -3,6 +3,10 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
+== v0.5.5-SNAPSHOT
+
+Released: Under development
+
 == v0.5.4
 
 Released: 2020.07.03
