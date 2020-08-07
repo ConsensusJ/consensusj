@@ -163,7 +163,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             }
             if (line.hasOption("?")) {
                 rpcTool.printHelp(this, rpcTool.usage());
-                throw new JsonRpcClientTool.ToolException(1, "Help Option was chosen");
+                throw new JsonRpcClientTool.ToolException(0, "Help Option was chosen");
             }
             verbose = line.hasOption("v");
             if (verbose) {

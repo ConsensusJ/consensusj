@@ -21,7 +21,7 @@ class BitcoinCLIToolIntegrationSpec extends Specification implements CLITestSupp
         def result = command '-?'
 
         then:
-        result.status == 1
+        result.status == 0
         result.output.length() == 0
         result.error.length() > 0
     }
