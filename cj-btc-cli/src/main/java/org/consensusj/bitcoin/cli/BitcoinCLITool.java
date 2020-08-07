@@ -90,10 +90,11 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
             // Not threadsafe
             // This needs work if there are ever going to be multiple clients calling this method
             if (client == null) {
-                System.out.println("Connecting to: " + getRPCConfig().getURI());
                 RpcConfig config = getRPCConfig();
                 client = createClient(config);
                 if (rpcWait) {
+                    // TODO: Add logging here to replace the System.out.println
+                    //System.out.println("Connecting to: " + getRPCConfig().getURI() + " with -rpcWait");
                     boolean available = false;   // Wait up to 1 hour
                     try {
                         available = client.waitForServer(60*60);

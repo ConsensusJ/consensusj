@@ -87,8 +87,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
     protected List<Object> convertParameters(String method, List<String> params) {
         List<Object> converted = new ArrayList<>();
         for (String param : params) {
-            Object convertedParam = convertParam(param);
-            converted.add(convertedParam);
+            converted.add(convertParam(param));
         }
         return converted;
     }
