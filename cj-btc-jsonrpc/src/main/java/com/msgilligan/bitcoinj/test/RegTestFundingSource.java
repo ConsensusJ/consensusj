@@ -105,7 +105,7 @@ public class RegTestFundingSource implements FundingSource {
                 amountGatheredSoFar += txout.getValue().value;
                 inputs.add(new Outpoint(coinbaseTx, 0));
             }
-            log.debug("amountGatheredSoFar = {}", BitcoinMath.satoshiToBtc(amountGatheredSoFar));
+            log.debug("amountGatheredSoFar = {}", BitcoinMath.satoshiToBtc(amountGatheredSoFar).toPlainString());
         }
 
         // Don't care about change, we mine it anyway

@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class JavaLoggingSupport {
     private final static String loggingPropertiesResource = "/logging.properties";
-    private static String loggerName;
+    private static String loggerName = "";
 
     /**
      * Configure logging.
