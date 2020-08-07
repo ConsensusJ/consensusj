@@ -71,34 +71,9 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
      * @param params Params with String type
      * @return Params with correct Java types for JSON
      */
+    @Override
     protected List<Object> convertParameters(String method, List<String> params) {
-        List<Object> typedParams = new ArrayList<>();
-        switch (method) {
-            case "generate":
-            case "setgenerate":
-                typedParams.add(Integer.valueOf(params.get(0)));
-                break;
-
-            case "generatetoaddress":
-                typedParams.add(Integer.valueOf(params.get(0)));
-                typedParams.add(params.get(1));
-                if (params.size() >= 3) {
-                    typedParams.add(Integer.valueOf(params.get(2)));
-                }
-                break;
-
-            case "getblockhash":
-                typedParams.add(Integer.valueOf(params.get(0)));
-                break;
-                
-            default:
-                // Default parameter conversion
-                for (String string : params) {
-                    typedParams.add(convertParam(string));
-                }
-
-        }
-        return typedParams;
+        return super.convertParameters(method, params);
     }
 
     public static class BitcoinCLICall extends BaseJsonRpcTool.CommonsCLICall {
