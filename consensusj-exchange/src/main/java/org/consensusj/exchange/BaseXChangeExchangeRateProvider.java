@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
 /**
  *  Base ExchangeRateProvider using XChange library
  *  Currently supports current DEFERRED rates only
- * @deprecated Don't subclass, will be made final in next release and removed the release after that.
+ * @deprecated Will be removed in the next release.
  */
 @Deprecated
-public class BaseXChangeExchangeRateProvider extends KnowmExchangeRateProvider implements ExchangeRateProvider, ObservableExchangeRateProvider {
+public final class BaseXChangeExchangeRateProvider extends KnowmExchangeRateProvider implements ExchangeRateProvider, ObservableExchangeRateProvider {
     private static final Logger log = LoggerFactory.getLogger(BaseXChangeExchangeRateProvider.class);
     private static final int initialDelay = 0;
     private static final int period = 60;

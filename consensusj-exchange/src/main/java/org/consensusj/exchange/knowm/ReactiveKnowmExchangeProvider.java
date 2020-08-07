@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -40,8 +39,6 @@ public class ReactiveKnowmExchangeProvider implements ReactiveExchange {
     protected final ExchangeSpecification exchangeSpecification;
     
     protected final Map<CurrencyUnitPair, MonitoredCurrency> observablePairs = new HashMap<>();
-
-    Function<CurrencyUnitPair, ExchangeRateUpdate> exchangePollingFunction;
 
     protected String name;
     protected ProviderContext providerContext;
