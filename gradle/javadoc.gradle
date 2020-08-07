@@ -15,9 +15,9 @@ ext.javadocSpec = {
     }
 
     options.links(  'https://docs.oracle.com/javase/8/docs/api/',
-                    "https://bitcoinj.github.io/javadoc/0.15/",
-                    "https://fasterxml.github.io/jackson-core/javadoc/2.9/",
-                    "https://fasterxml.github.io/jackson-databind/javadoc/2.9/")
+                    "https://bitcoinj.github.io/javadoc/${bitcoinjVersion}/",
+                    "https://fasterxml.github.io/jackson-core/javadoc/2.10/",
+                    "https://fasterxml.github.io/jackson-databind/javadoc/2.10/")
 
 }
 
