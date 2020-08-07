@@ -14,6 +14,7 @@ import com.msgilligan.bitcoinj.json.pojo.ReceivedByAddressInfo;
 import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.TxOutInfo;
+import com.msgilligan.bitcoinj.json.pojo.TxOutSetInfo;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
 import com.msgilligan.bitcoinj.json.conversion.RpcClientModule;
 import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo;
@@ -702,6 +703,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
         return getTxOut(txid, vout, null);
     }
 
+
     /**
      * Returns details about an unspent transaction output.
      *
@@ -715,6 +717,18 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     public TxOutInfo getTxOut(Sha256Hash txid, Integer vout, Boolean includeMemoryPool)
             throws JsonRpcStatusException, IOException {
         return send("gettxout", TxOutInfo.class, txid, vout, includeMemoryPool);
+    }
+
+    /**
+     * Returns statistics about the unspent transaction output set.
+     * Note this call may take some time.
+     *
+     * @return statistics about the unspent transaction output set
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public TxOutSetInfo getTxOutSetInfo() throws JsonRpcStatusException, IOException {
+        return send("gettxoutsetinfo", TxOutSetInfo.class);
     }
 
     /**
