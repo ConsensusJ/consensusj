@@ -28,7 +28,7 @@ class BareMultisigSpec extends TxTestBaseSpec {
     private static final ECKey clientKey = new ECKey();
     private static final ECKey serverKey = new ECKey();
     private static final Coin amount = 9.999.btc
-    private static final Coin amount2 = amount - 0.100.btc
+    private static final Coin amount2 = amount - 0.001.btc
 
     @Shared
     Transaction contract

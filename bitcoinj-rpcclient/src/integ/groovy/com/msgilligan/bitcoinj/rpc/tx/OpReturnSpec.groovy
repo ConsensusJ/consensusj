@@ -21,7 +21,7 @@ class OpReturnSpec extends TxTestBaseSpec {
 
         def ingredients = createIngredients(10.btc)
         // We're going to spend a lot of (fake) BTC to write these 80 bytes!
-        Coin amount = 9.900.btc
+        Coin amount = 9.999.btc
 
         when: "we build a transaction"
         Transaction tx = new Transaction(params)

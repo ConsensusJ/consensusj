@@ -19,7 +19,7 @@ class P2PKHSpec extends TxTestBaseSpec {
         // since we're not currently using a change address, RPC calls won't let us
         // spend too much 'absurdly-high-fee' or too little in transaction fees
         // so maybe we should use change addresses in these tests?
-        Coin amount = 9.900.btc
+        Coin amount = 9.999.btc
         def destAddress = client.getNewAddress()
 
         when: "we build a transaction"

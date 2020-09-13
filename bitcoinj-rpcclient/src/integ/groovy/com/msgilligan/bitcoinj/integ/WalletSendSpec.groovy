@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.integ
 
+import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo
 import org.consensusj.jsonrpc.JsonRpcStatusException
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.BlockChain
@@ -146,10 +147,10 @@ class WalletSendSpec extends BaseRegTestSpec {
      * @param txid Transaction ID (hash) of transaction we're waiting for
      */
     void waitForUnconfirmedTransaction(Sha256Hash txid) {
-        Transaction pendingTx = null
+        WalletTransactionInfo pendingTx = null
         while (pendingTx == null) {
             try {
-                pendingTx = getRawTransaction(txid)
+                pendingTx = getTransaction(txid)
             } catch (JsonRpcStatusException e) {
                 if (e.message != "No information available about transaction") {
                     throw e
