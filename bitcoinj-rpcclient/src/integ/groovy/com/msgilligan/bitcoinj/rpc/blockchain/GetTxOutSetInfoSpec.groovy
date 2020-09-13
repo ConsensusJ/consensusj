@@ -27,6 +27,6 @@ class GetTxOutSetInfoSpec extends BaseRegTestSpec
         txOutSetInfo.bogoSize > txOutSetInfo.txOuts * 50
         txOutSetInfo.hashSerialized2 != null
         txOutSetInfo.diskSize >= 0
-        txOutSetInfo.totalAmount > 0 && txOutSetInfo.totalAmount < startHeight * 50
+        txOutSetInfo.totalAmount > 0 && txOutSetInfo.totalAmount <= startHeight * 50
     }
 }
