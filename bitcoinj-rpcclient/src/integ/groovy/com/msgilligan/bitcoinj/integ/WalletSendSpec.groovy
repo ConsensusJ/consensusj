@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.integ
 
+import com.msgilligan.bitcoinj.json.pojo.NetworkInfo
 import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo
 import org.consensusj.jsonrpc.JsonRpcStatusException
 import org.bitcoinj.core.Address
@@ -15,6 +16,7 @@ import org.bitcoinj.store.MemoryBlockStore
 import org.bitcoinj.utils.BriefLogFormatter
 import com.msgilligan.bitcoinj.BaseRegTestSpec
 import org.bitcoinj.wallet.AllowUnconfirmedCoinSelector
+import org.junit.jupiter.api.Assumptions
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -23,13 +25,14 @@ import spock.lang.Stepwise
  */
 @Stepwise
 class WalletSendSpec extends BaseRegTestSpec {
+    static NetworkInfo networkInfo // networkInfo.version for Assumptions (e.g. server version)
+
     @Shared
     NetworkParameters params
     @Shared
     Wallet wallet
     @Shared
     PeerGroup peerGroup
-
 
     void setupSpec() {
         BriefLogFormatter.initWithSilentBitcoinJ()
@@ -42,6 +45,8 @@ class WalletSendSpec extends BaseRegTestSpec {
         peerGroup = new PeerGroup(params, chain)
         peerGroup.addWallet(wallet)
         peerGroup.start()
+
+        networkInfo = client.getNetworkInfo()   // store networkInfo for Assumptions (e.g. server version)
     }
 
     def "Send mined coins to fund a new BitcoinJ wallet"() {
@@ -71,6 +76,9 @@ class WalletSendSpec extends BaseRegTestSpec {
     }
 
     def "Send from BitcoinJ wallet to the Bitcoin Core wallet"() {
+        given: "Assume server version is greater than 20"
+        Assumptions.assumeTrue(networkInfo.version >= 200000)
+
         when: "we send coins from BitcoinJ and write a block"
         Coin startAmount = 10.btc
         Coin amount = 1.btc
@@ -103,6 +111,9 @@ class WalletSendSpec extends BaseRegTestSpec {
     }
 
     def "create and send a transaction from BitcoinJ using wallet.completeTx"() {
+        given: "Assume server version is greater than 20"
+        Assumptions.assumeTrue(networkInfo.version >= 200000)
+
         when:
         Coin amount = 1.btc
         def rpcAddress = getNewAddress()
@@ -120,7 +131,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         getReceivedByAddress(rpcAddress) == amount  // Verify rpcAddress balance
     }
 
-    def "create a raw transaction using BitcoinJ but send with an RPC"() {
+    def "create a raw transaction using BitcoinJ and send with sendRawTransaction RPC"() {
         when:
         Coin amount = 1.btc
         def rpcAddress = getNewAddress()
