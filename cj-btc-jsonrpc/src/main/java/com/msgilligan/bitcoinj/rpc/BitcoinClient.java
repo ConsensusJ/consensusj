@@ -29,7 +29,6 @@ import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
-import org.bitcoinj.params.RegTestParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,19 +76,6 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     private int serverVersion = 0;    // 0 means unknown serverVersion
 
     protected final Context context;
-
-    /**
-     * Construct a BitcoinClient from URI, user name, and password.
-     * @param server URI of the Bitcoin RPC server
-     * @param rpcuser Username (if required)
-     * @param rpcpassword Password (if required)
-     * @deprecated You need to specify NetworkParameters, this constructor defaults to RegTest
-     * @see BitcoinClient#BitcoinClient(NetworkParameters, URI, String, String)
-     */
-    @Deprecated
-    public BitcoinClient(URI server, String rpcuser, String rpcpassword) {
-        this(RegTestParams.get(), server, rpcuser, rpcpassword);
-    }
 
     /**
      * Construct a BitcoinClient from Network Parameters, URI, user name, and password.
@@ -516,7 +502,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     }
 
     /**
-     * Get a "raw" transaction (which we map to a bitcoinj transaction)
+     * Get a "raw" transaction (which we use to construct a bitcoinj {@code Transaction})
      * @param txid Transaction ID/hash
      * @return bitcoinj Transaction
      * @throws JsonRpcStatusException JSON RPC status exception

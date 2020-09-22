@@ -1,7 +1,9 @@
 package com.msgilligan.bitcoinj.rpc
 
+import com.msgilligan.bitcoinj.BaseRegTestSpec
 import com.msgilligan.bitcoinj.test.RegTestEnvironment
 import com.msgilligan.bitcoinj.test.RegTestFundingSource
+import spock.lang.Shared
 import spock.lang.Specification
 
 
@@ -9,9 +11,14 @@ import spock.lang.Specification
  * Component-based test (no base test spec, required)
  */
 class FundingAndBlockChainEnvIntSpec extends Specification {
-    def "test it"() {
+    @Shared BitcoinExtendedClient client
+
+    void setupSpec () {
+        client = BaseRegTestSpec.getClientInstance()  // Use a cached client for regtest mining reasons
+    }
+    
+    def "RegTestEnvironment abstraction allows funding addresses and waiting for blocks"() {
         given: "a client, a source of funds, and a blockchain environment"
-        def client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, "bitcoinrpc", "pass")
         def funder = new RegTestFundingSource(client)
         funder.checkForLegacyBitcoinCore()  // Remove once we're Bitcoin Core 0.19+ only
         RegTestEnvironment chainEnv = new RegTestEnvironment(client)

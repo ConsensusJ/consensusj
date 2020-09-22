@@ -8,5 +8,5 @@ import org.bitcoinj.core.NetworkParameters;
  * Ideally this property is final and set in the constructor.
  */
 public interface NetworkParametersProperty {
-    public NetworkParameters getNetParams();
+    NetworkParameters getNetParams();
 }

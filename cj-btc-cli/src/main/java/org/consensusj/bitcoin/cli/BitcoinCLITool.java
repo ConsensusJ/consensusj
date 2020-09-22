@@ -134,6 +134,7 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
             } else if (line.hasOption(("testnet"))) {
                 netParams = TestNet3Params.get();
             } else {
+                // TODO: Use network params from BitcoinConfFile, before falling back
                 netParams = MainNetParams.get();
             }
             RpcConfig cfg = new RpcConfig(netParams, uri, user, pass);

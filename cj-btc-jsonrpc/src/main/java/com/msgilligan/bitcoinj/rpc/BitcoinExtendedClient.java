@@ -14,7 +14,6 @@ import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.core.TransactionOutput;
-import org.bitcoinj.params.RegTestParams;
 
 import java.io.IOException;
 import java.net.URI;
@@ -51,22 +50,16 @@ public class BitcoinExtendedClient extends BitcoinClient {
         return defaultMaxConf;
     }
 
-
-    @Deprecated
-    public BitcoinExtendedClient(URI server, String rpcuser, String rpcpassword) {
-        this(RegTestParams.get(), server, rpcuser, rpcpassword);
-    }
-
     public BitcoinExtendedClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         super(netParams, server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(RpcConfig config) {
-        this(RegTestParams.get(), config.getURI(), config.getUsername(), config.getPassword());
+        this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());
     }
 
     public Address getRegTestMiningAddress() {
-        if (!context.getParams().getId().equals(RegTestParams.ID_REGTEST)) {
+        if (!context.getParams().getId().equals(NetworkParameters.ID_REGTEST)) {
             throw new UnsupportedOperationException("Operation only supported in RegTest context");
         }
         if (regTestMiningAddress == null) {

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.params.RegTestParams;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,20 +28,23 @@ public class RpcConfig {
         this.password = password;
     }
 
-    @JsonCreator
-    public RpcConfig(@JsonProperty("netid")     String netIdString,
-                     @JsonProperty("uri")       String uri,
-                     @JsonProperty("username")  String username,
-                     @JsonProperty("password")  String password) throws URISyntaxException {
+    public RpcConfig(String netIdString,  URI uri, String username, String password) {
         this(NetworkParameters.fromID(netIdString),
-                new URI(uri),
+                uri,
                 username,
                 password);
     }
 
-    @Deprecated
-    public RpcConfig(URI uri, String username, String password) {
-        this(RegTestParams.get(), uri, username, password);
+
+    @JsonCreator
+    public RpcConfig(@JsonProperty("netid")     String netIdString,
+                     @JsonProperty("uri")       String uri,
+                     @JsonProperty("username")  String username,
+                     @JsonProperty("password")  String password)  {
+        this(NetworkParameters.fromID(netIdString),
+                URI.create(uri),
+                username,
+                password);
     }
 
     @JsonIgnore
