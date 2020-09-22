@@ -6,14 +6,13 @@ import org.consensusj.jsonrpc.groovy.Loggable
 /**
  * Test support functions intended to be mixed-in to Spock test specs
  */
-trait BTCTestSupport implements BitcoinClientDelegate, FundingSourceDelegate, Loggable {
+trait BTCTestSupport implements BitcoinClientDelegate, FundingSourceDelegate {
 
     void serverReady() {
-        Boolean available = client.waitForServer(60)   // Wait up to 1 minute
-        if (!available) {
-            log.error "Timeout error."
+        Boolean ready = client.waitForServer(60)   // Wait up to 1 minute
+        if (!ready) {
+            throw new RuntimeException("Timeout waiting for server")
         }
-        assert available
     }
 
     void consolidateCoins() {
