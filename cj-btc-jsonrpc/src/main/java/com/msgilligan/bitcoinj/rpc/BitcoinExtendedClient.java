@@ -32,8 +32,7 @@ import java.util.stream.Collectors;
  * the ones we ran into while building integration tests.
  */
 public class BitcoinExtendedClient extends BitcoinClient {
-    private final Script.ScriptType defaultScriptType = Script.ScriptType.P2PKH;
-    private final Address regTestMiningAddress;
+    private /* lazy */ Address regTestMiningAddress;
 
     public final Coin stdTxFee = Coin.valueOf(10000);
     public final Coin stdRelayTxFee = Coin.valueOf(1000);
@@ -60,19 +59,6 @@ public class BitcoinExtendedClient extends BitcoinClient {
 
     public BitcoinExtendedClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         super(netParams, server, rpcuser, rpcpassword);
-        if (netParams.getId().equals(RegTestParams.ID_REGTEST)) {
-// TODO: If we want to store mined coins on the client side, we might try this in the future
-//
-//            regTestMiningKey = new ECKey();
-//            regTestMiningAddress = Address.fromKey(RegTestParams.get(), regTestMiningKey, defaultScriptType);
-            try {
-                regTestMiningAddress = this.getNewAddress();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            regTestMiningAddress = null;
-        }
     }
 
     public BitcoinExtendedClient(RpcConfig config) {
@@ -80,6 +66,18 @@ public class BitcoinExtendedClient extends BitcoinClient {
     }
 
     public Address getRegTestMiningAddress() {
+        if (!context.getParams().getId().equals(RegTestParams.ID_REGTEST)) {
+            throw new UnsupportedOperationException("Operation only supported in RegTest context");
+        }
+        if (regTestMiningAddress == null) {
+            // If in the future, we want to manage the keys for mined coins on the client side,
+            // we could initialize regTestMiningKey from a bitcoinj-generated ECKey or HD Keychain.
+            try {
+                regTestMiningAddress = this.getNewAddress();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return regTestMiningAddress;
     }
 
@@ -95,7 +93,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @throws IOException something broke
      */
     public List<Sha256Hash> generateBlocks(int numBlocks) throws JsonRpcStatusException, IOException {
-        return this.generateToAddress(numBlocks, regTestMiningAddress);
+        return this.generateToAddress(numBlocks, getRegTestMiningAddress());
     }
 
     /**
