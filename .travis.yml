@@ -1,26 +1,6 @@
+sudo: false
 dist: xenial
 language: java
-
-env:
-  global:
-  - OMNICORE_HOST=https://bintray.com/artifact/download/omni/OmniBinaries
-  - OMNICORE_RELEASE=omnicore-0.8.1
-  - OMNICORE_FILE=$OMNICORE_RELEASE-x86_64-linux-gnu.tar.gz
-  - OMNICORE_HASH=bfd7486d8cb84f1bd2cd72a1c0f1c993d30ad1bcb8ba16e75d2271872cfe0ce8
-
-install:
-  - wget "$OMNICORE_HOST/$OMNICORE_FILE"
-  - echo "$OMNICORE_HASH  $OMNICORE_FILE" | shasum --algorithm 256 --check
-  - mkdir -p copied-artifacts/src/
-  - tar zxvf $OMNICORE_FILE -C /tmp
-  - mv /tmp/$OMNICORE_RELEASE/bin/omnicored copied-artifacts/src/
-
-script:
- - sudo apt-get update
- - sudo apt-get install graphviz
- - java -version
- - ./gradlew buildCI --scan --stacktrace --info
- - ./test-run-regtest.sh
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -30,8 +10,15 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+install:
+ - sudo apt-get update
+ - sudo apt-get install graphviz
+ - ./test-download-omnicore-ubuntu.sh
+
+script:
+ - ./test-run-regtest.sh
+
 jdk:
   - openjdk8
   - openjdk9
   #- openjdk11 OpenJDK 11 disabled until we upgrade AsciiDoclet
-  #- oraclejdk9 OracleJDK 9 has a certificate issue with jcenter
