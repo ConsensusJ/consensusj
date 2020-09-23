@@ -6,6 +6,7 @@ import io.reactivex.rxjava3.schedulers.TestScheduler
 import org.consensusj.exchange.CurrencyUnitPair
 import org.consensusj.exchange.rx.ExchangeRateUpdate
 import org.knowm.xchange.ExchangeSpecification
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static java.util.concurrent.TimeUnit.SECONDS
@@ -13,6 +14,7 @@ import static java.util.concurrent.TimeUnit.SECONDS
 /**
  *
  */
+@Ignore("Integration tests that talk to exchanges")
 @Slf4j
 class ReactiveKnowmExchangeProviderSpec extends Specification {
     static final CurrencyUnitPair btcUsdPair = new CurrencyUnitPair("BTC/USD")
