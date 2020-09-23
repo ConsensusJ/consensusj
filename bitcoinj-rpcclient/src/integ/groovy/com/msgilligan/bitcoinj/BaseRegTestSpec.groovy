@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient
+import org.bitcoinj.params.RegTestParams
 import org.consensusj.jsonrpc.groovy.Loggable
 import com.msgilligan.bitcoinj.rpc.RpcURI
 import com.msgilligan.bitcoinj.test.BTCTestSupport
@@ -18,14 +19,22 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     static final private TestServers testServers = TestServers.instance
     static final protected String rpcTestUser = testServers.rpcTestUser
     static final protected String rpcTestPassword = testServers.rpcTestPassword;
+    private static BitcoinExtendedClient INSTANCE;
 
+    static BitcoinExtendedClient getClientInstance() {
+        // We use a shared client for RegTest integration tests, because we want a single value for regTestMiningAddress
+        if (INSTANCE == null) {
+            INSTANCE = new BitcoinExtendedClient(RegTestParams.get(), RpcURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
+        }
+        return INSTANCE;
+    }
+    
     // Initializer to set up trait properties, Since Spock doesn't allow constructors
     {
-        client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
+        client = getClientInstance()
         RegTestFundingSource regTestFundingSource = new RegTestFundingSource(client)
         regTestFundingSource.checkForLegacyBitcoinCore()    // Remove once we're Bitcoin Core 0.19+ only
         fundingSource = regTestFundingSource
-
     }
 
     void setupSpec() {

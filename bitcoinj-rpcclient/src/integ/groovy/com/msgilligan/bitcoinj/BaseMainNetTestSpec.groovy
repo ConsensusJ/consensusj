@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient
+import org.bitcoinj.params.MainNetParams
 import org.consensusj.jsonrpc.groovy.Loggable
 import com.msgilligan.bitcoinj.rpc.RpcURI
 import com.msgilligan.bitcoinj.rpc.test.TestServers
@@ -17,7 +18,7 @@ abstract class BaseMainNetTestSpec extends Specification implements BTCTestSuppo
 
     // Initializer to set up trait properties, Since Spock doesn't allow constructors
     {
-        client = new BitcoinExtendedClient(RpcURI.defaultMainNetURI, rpcTestUser, rpcTestPassword)
+        client = new BitcoinExtendedClient(MainNetParams.get(), RpcURI.defaultMainNetURI, rpcTestUser, rpcTestPassword)
         fundingSource = null    // No funding source implementation for MainNet yet.
     }
 

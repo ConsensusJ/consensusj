@@ -14,7 +14,6 @@ import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.core.TransactionOutput;
-import org.bitcoinj.params.RegTestParams;
 
 import java.io.IOException;
 import java.net.URI;
@@ -32,8 +31,7 @@ import java.util.stream.Collectors;
  * the ones we ran into while building integration tests.
  */
 public class BitcoinExtendedClient extends BitcoinClient {
-    private final Script.ScriptType defaultScriptType = Script.ScriptType.P2PKH;
-    private final Address regTestMiningAddress;
+    private /* lazy */ Address regTestMiningAddress;
 
     public final Coin stdTxFee = Coin.valueOf(10000);
     public final Coin stdRelayTxFee = Coin.valueOf(1000);
@@ -52,34 +50,27 @@ public class BitcoinExtendedClient extends BitcoinClient {
         return defaultMaxConf;
     }
 
-
-    @Deprecated
-    public BitcoinExtendedClient(URI server, String rpcuser, String rpcpassword) {
-        this(RegTestParams.get(), server, rpcuser, rpcpassword);
-    }
-
     public BitcoinExtendedClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         super(netParams, server, rpcuser, rpcpassword);
-        if (netParams.getId().equals(RegTestParams.ID_REGTEST)) {
-// TODO: If we want to store mined coins on the client side, we might try this in the future
-//
-//            regTestMiningKey = new ECKey();
-//            regTestMiningAddress = Address.fromKey(RegTestParams.get(), regTestMiningKey, defaultScriptType);
+    }
+
+    public BitcoinExtendedClient(RpcConfig config) {
+        this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());
+    }
+
+    public Address getRegTestMiningAddress() {
+        if (!context.getParams().getId().equals(NetworkParameters.ID_REGTEST)) {
+            throw new UnsupportedOperationException("Operation only supported in RegTest context");
+        }
+        if (regTestMiningAddress == null) {
+            // If in the future, we want to manage the keys for mined coins on the client side,
+            // we could initialize regTestMiningKey from a bitcoinj-generated ECKey or HD Keychain.
             try {
                 regTestMiningAddress = this.getNewAddress();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            regTestMiningAddress = null;
         }
-    }
-
-    public BitcoinExtendedClient(RpcConfig config) {
-        this(RegTestParams.get(), config.getURI(), config.getUsername(), config.getPassword());
-    }
-
-    public Address getRegTestMiningAddress() {
         return regTestMiningAddress;
     }
 
@@ -95,7 +86,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @throws IOException something broke
      */
     public List<Sha256Hash> generateBlocks(int numBlocks) throws JsonRpcStatusException, IOException {
-        return this.generateToAddress(numBlocks, regTestMiningAddress);
+        return this.generateToAddress(numBlocks, getRegTestMiningAddress());
     }
 
     /**

@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Currently focused on just getting connection info
+ * Currently ignores `[Sections]`.
  */
 public class BitcoinConfFile {
     private static final Logger log = LoggerFactory.getLogger(BitcoinConfFile.class);
@@ -45,8 +46,8 @@ public class BitcoinConfFile {
     /**
      * Try to read `.conf` file, fallback to defaults on error
      *
-     * TODO: If any exception occurs we return default values
-     * maybe we should only do this on fileNotFound or accessDenied, etc.
+     * If any exception occurs we return default values
+     * TODO: maybe we should only return defaults on fileNotFound or accessDenied, etc.
      * 
      * @return Configuration read or defaults if read error
      */

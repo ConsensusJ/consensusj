@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.rpc
 
 import com.msgilligan.bitcoinj.rpc.bitcoind.BitcoinConfFile
+import org.bitcoinj.core.NetworkParameters
 import org.consensusj.jsonrpc.groovy.DynamicRpcMethodFallback
 
 /**
@@ -12,5 +13,9 @@ class BitcoinScriptingClient extends BitcoinExtendedClient implements DynamicRpc
 
     BitcoinScriptingClient() {
         super(BitcoinConfFile.readDefaultConfig().getRPCConfig())
+    }
+
+    BitcoinScriptingClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
+        super(netParams, server, rpcuser, rpcpassword);
     }
 }

@@ -1,7 +1,11 @@
 package com.msgilligan.bitcoinj.rpc.bitcoind;
 
 import com.msgilligan.bitcoinj.rpc.RpcConfig;
+import com.msgilligan.bitcoinj.rpc.RpcURI;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
+import org.bitcoinj.params.RegTestParams;
+import org.bitcoinj.params.TestNet3Params;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,7 +19,7 @@ public class BitcoinConf extends HashMap<String, String> {
     public final String rpcconnect = "rpconnect";
     public final String rpcport = "rpcport";
     public final String RPCCONNECT_DEFAULT = "localhost";
-    public final String RPCPORT_DEFAULT = "8332";
+    public final String RPCPORT_DEFAULT = Integer.toString(RpcURI.RPCPORT_MAINNET);
 
     /**
      *  Create a BitcoinConf with a default RPCConfig configuration.
@@ -31,11 +35,30 @@ public class BitcoinConf extends HashMap<String, String> {
         try {
             uri = new URI("http://" + get(rpcconnect) + ":" + get(rpcport));
         } catch (URISyntaxException e) {
-            uri = URI.create("http://127.0.0.1:8332");
+            uri = RpcURI.getDefaultMainNetURI(); // TODO: Throw exception on failure, rather than fall back to default
         }
-        // TODO: Determine MainNet, TestNet, or RegTest from contents of .conf file
-        RpcConfig config = new RpcConfig(MainNetParams.get(), uri,
-                get("rpcuser"), get("rpcpassword"));
+        String netWorkId = getNetworkId();
+
+        RpcConfig config = new RpcConfig(netWorkId, uri, get("rpcuser"), get("rpcpassword"));
         return config;
+    }
+
+    private String getNetworkId() {
+        String isTestNetString = get("testnet");
+        String isRegTestString = get("regtest");
+        boolean isTestNet = (isTestNetString != null && isTestNetString.equals("1"));
+        boolean isRegTest = (isRegTestString != null && isRegTestString.equals("1"));
+
+        if (isRegTest && isTestNet) {
+            throw new RuntimeException("Invalid config file, both 'testnet' and 'regtest' are set!");
+        }
+
+        if (isRegTest) {
+            return NetworkParameters.ID_REGTEST;
+        } else if (isTestNet) {
+            return NetworkParameters.ID_TESTNET;
+        } else {
+            return NetworkParameters.ID_MAINNET;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.rpc
 
+import com.msgilligan.bitcoinj.BaseRegTestSpec
 import com.msgilligan.bitcoinj.test.FundingSource
 import com.msgilligan.bitcoinj.test.RegTestEnvironment
 import com.msgilligan.bitcoinj.test.RegTestFundingSource
@@ -69,7 +70,7 @@ class BitcoinExtendedClientSpec extends Specification {
     }
 
     void setup() {
-        client = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, "bitcoinrpc", "pass")
+        client = BaseRegTestSpec.getClientInstance()
         RegTestFundingSource regTestFundingSource = new RegTestFundingSource(client)
         regTestFundingSource.checkForLegacyBitcoinCore()  // Remove once we're Bitcoin Core 0.19+ only
         funder = regTestFundingSource
