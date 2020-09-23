@@ -2,6 +2,7 @@ package com.msgilligan.bitcoinj.test;
 
 import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
+import org.bitcoinj.core.TransactionOutput;
 import org.consensusj.jsonrpc.JsonRpcException;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
@@ -25,12 +26,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * FundingSource using RegTest mining
+ * FundingSource using RegTest mining, BitcoinExtendedClient (with getRegTestMiningAddress),
+ * and the server's default wallet for accumulating coins.
  */
 public class RegTestFundingSource implements FundingSource {
     final Integer defaultMaxConf = 9999999;
     private static final Logger log = LoggerFactory.getLogger(RegTestFundingSource.class);
     protected BitcoinExtendedClient client;
+    
     /**
      * Prior to Bitcoin Core 0.19, the second parameter of sendRawTransaction
      * was a boolean, not an integer containing maxFees
@@ -76,42 +79,55 @@ public class RegTestFundingSource implements FundingSource {
      */
     @Override
     public Sha256Hash requestBitcoin(Address toAddress, Coin requestedBtc) throws JsonRpcException, IOException {
-        log.debug("requestBitcoin requesting {}", requestedBtc);
+        log.warn("requestBitcoin requesting {}", requestedBtc);
+        NetworkParameters netParams = client.getNetParams(); // Should always be RegTest, but lets be flexible
         if (requestedBtc.value > NetworkParameters.MAX_MONEY.value) {
             throw new IllegalArgumentException("request exceeds MAX_MONEY");
         }
-        long amountGatheredSoFar = 0;
-        ArrayList<Outpoint> inputs = new ArrayList<>();
 
         // Newly mined coins need to mature to be spendable
-        final int minCoinAge = 100;
-
+        final int minCoinAge = netParams.getSpendableCoinbaseDepth(); // 100
         if (client.getBlockCount() < minCoinAge) {
             client.generateBlocks(minCoinAge - client.getBlockCount());
         }
 
+        // Collect CoinBase outputs until we have have gathered enough satoshis
+        // TODO: We may need to return ourselves change and/or keep more of a wallet
+        // to make this more efficient given that RegTest mining reward halves so quickly
+        long amountGatheredSoFar = 0;
+        ArrayList<Outpoint> inputs = new ArrayList<>();
+
         while (amountGatheredSoFar < requestedBtc.value) {
             client.generateBlocks(1);
+
+            // TODO: We may be skipping some coinbaseTxs here from blocks that were generated directly
+            // as part of tests. We either need to save our place in the chain or keep a mining wallet
             int blockIndex = client.getBlockCount() - minCoinAge;
+
+            log.info("Gathering funds from block {}", blockIndex);
             Block block = client.getBlock(blockIndex);
-            List<Transaction> blockTxs = block.getTransactions();
-            Sha256Hash coinbaseTx = blockTxs.get(0).getTxId();
-            TxOutInfo txout = client.getTxOut(coinbaseTx, 0);
+            Sha256Hash coinbaseTx = block.getTransactions().get(0).getTxId();
+
+            Transaction tx = client.getRawTransaction(coinbaseTx);
+            TransactionOutput txOut = tx.getOutput(0);
+
+            Address outAddress = txOut.getScriptPubKey().getToAddress(netParams);
 
             // txout is empty, if output was already spent
-            if (txout != null && txout.getValue().value > 0) {
-                log.debug("txout = {}, value = {}", txout, txout.getValue().value);
+            if (txOut.getValue().value > 0 && outAddress.equals(client.getRegTestMiningAddress())) {
+                log.warn("txout = {}, value = {}", txOut, txOut.getValue().value);
 
-                amountGatheredSoFar += txout.getValue().value;
+                amountGatheredSoFar += txOut.getValue().value;
                 inputs.add(new Outpoint(coinbaseTx, 0));
             }
-            log.debug("amountGatheredSoFar = {}", BitcoinMath.satoshiToBtc(amountGatheredSoFar).toPlainString());
+            log.warn("amountGatheredSoFar = {} ({} inputs)", BitcoinMath.satoshiToBtc(amountGatheredSoFar).toPlainString(), inputs.size());
         }
 
-        // Don't care about change, we mine it anyway
+        // Don't care about change, we mine it anyway (but this is wasteful given regtest halving rate)
         String unsignedTxHex = client.createRawTransaction(inputs, Collections.singletonMap(toAddress, requestedBtc));
         SignedRawTransaction signingResult = client.signRawTransactionWithWallet(unsignedTxHex);
 
+        log.info("SigningResult: {}", signingResult);
         assert signingResult.isComplete();
 
         String signedTxHex = signingResult.getHex();
@@ -126,6 +142,7 @@ public class RegTestFundingSource implements FundingSource {
      * @param amount
      * @return Newly created address with the requested amount of bitcoin
      */
+    @Override
     public Address createFundedAddress(Coin amount) throws Exception {
         Address address = client.getNewAddress();
         requestBitcoin(address, amount);
