@@ -1,0 +1,39 @@
+name: Bitcoin Core RegTest
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        java: [ '9' ]
+      fail-fast: false
+    name: ${{ matrix.os }} JDK ${{ matrix.java }}
+    steps:
+    - uses: actions/checkout@v1
+    - name: Download Omni Core (Bitcoin Core superset)
+      run: ./test-download-omnicore-ubuntu.sh
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java }}
+    - name: Verify Gradle Wrapper
+      uses: gradle/wrapper-validation-action@v1
+    - name: Cache Gradle packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: ${{ runner.os }}-gradle
+    - name: Run RegTests
+      run: ./test-run-regtest.sh
+    - name: Upload RegTest results as artifact
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: regtest-consensusj-jdk${{ matrix.java }}-${{ matrix.os }}-reports
+        path: |
+          bitcoinj-rpcclient/build/reports/tests/regTest
+          cj-btc-cli/build/reports/tests/regTest

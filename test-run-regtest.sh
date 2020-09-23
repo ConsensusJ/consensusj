@@ -8,7 +8,7 @@ trap cleanup EXIT
 
 # We are currently using Omni Core since it a superset of Bitcoin Core
 BITCOIND=copied-artifacts/src/omnicored
-DATADIR=$HOME/bitcoin-data-dir
+DATADIR=build/regtest-datadir
 LOGDIR=logs
 OMNILOG=/tmp/omnicore.log
 
@@ -28,7 +28,8 @@ ln -sf $OMNILOG $LOGDIR/omnicore.log
 rm -rf $DATADIR/regtest
 
 # Run bitcoind in regtest mode
-$BITCOIND -regtest -datadir=$DATADIR -paytxfee=0.0001 -minrelaytxfee=0.00001 -limitancestorcount=750 -limitdescendantcount=750 -rpcserialversion=0 -omnialertallowsender=any -omniactivationallowsender=any > $LOGDIR/bitcoin.log &
+$BITCOIND -regtest -datadir=$DATADIR -paytxfee=0.0001 -minrelaytxfee=0.00001 -rpcserialversion=0 \
+  -limitancestorcount=750 -limitdescendantcount=750 > $LOGDIR/bitcoin.log &
 BTCSTATUS=$?
 BTCPID=$!
 
