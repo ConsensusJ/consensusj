@@ -49,9 +49,9 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
 
         and: "a block is recorded"
         generateBlocks(1)
+        def balance = getBitcoinBalance(fundingAddress)
 
         then: "the address should have that balance"
-        def balance = getBitcoinBalance(fundingAddress)
         balance == fundingAmount
     }
 
