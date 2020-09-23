@@ -1,7 +1,8 @@
 package com.msgilligan.bitcoinj.integ
 
 import com.msgilligan.bitcoinj.json.pojo.NetworkInfo
-import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo
+import org.bitcoinj.core.TransactionBroadcast
+import org.bitcoinj.script.Script
 import org.consensusj.jsonrpc.JsonRpcStatusException
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.BlockChain
@@ -15,8 +16,6 @@ import org.bitcoinj.wallet.SendRequest
 import org.bitcoinj.store.MemoryBlockStore
 import org.bitcoinj.utils.BriefLogFormatter
 import com.msgilligan.bitcoinj.BaseRegTestSpec
-import org.bitcoinj.wallet.AllowUnconfirmedCoinSelector
-import org.junit.jupiter.api.Assumptions
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -26,6 +25,12 @@ import spock.lang.Stepwise
 @Stepwise
 class WalletSendSpec extends BaseRegTestSpec {
     static NetworkInfo networkInfo // networkInfo.version for Assumptions (e.g. server version)
+    /**
+     * See bitcoinj Issue #2050 https://github.com/bitcoinj/bitcoinj/issues/2050
+     * Currently in these tests it seems it's ok to just assume the transaction was sent properly
+     * and rely on waitForUnconfirmedTransaction to tell us it was received by the server.
+     */
+    static final workaroundBitcoinJ_015_8_Issue = true
 
     @Shared
     NetworkParameters params
@@ -38,8 +43,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         BriefLogFormatter.initWithSilentBitcoinJ()
         params = getNetParams()
 
-        wallet = new Wallet(params)
-        wallet.setCoinSelector(new AllowUnconfirmedCoinSelector())
+        wallet = Wallet.createDeterministic(params, Script.ScriptType.P2PKH)
         def store = new MemoryBlockStore(params)
         def chain = new BlockChain(params,wallet,store)
         peerGroup = new PeerGroup(params, chain)
@@ -51,11 +55,9 @@ class WalletSendSpec extends BaseRegTestSpec {
 
     def "Send mined coins to fund a new BitcoinJ wallet"() {
         given:
-        def fundingAmount = 20.btc
+        def fundingAmount = 10.1.btc
         def fundingAddress = createFundedAddress(fundingAmount)
-        def walletAddr = getNewAddress()
-        def walletKey = dumpPrivKey(walletAddr)
-        wallet.importKey(walletKey)
+        def walletAddr = wallet.currentReceiveAddress()
         def amount = 10.btc
 
         when: "we send coins to the wallet and write a block"
@@ -71,14 +73,10 @@ class WalletSendSpec extends BaseRegTestSpec {
         // Is it safe to assume that if walletHeight == rpcHeight then our transaction has been processed?
 
         then: "the coins arrive"
-        client.getReceivedByAddress(walletAddr) == amount
         wallet.getBalance() == amount
     }
 
     def "Send from BitcoinJ wallet to the Bitcoin Core wallet"() {
-        given: "Assume server version is greater than 20"
-        Assumptions.assumeTrue(networkInfo.version >= 200000)
-
         when: "we send coins from BitcoinJ and write a block"
         Coin startAmount = 10.btc
         Coin amount = 1.btc
@@ -87,8 +85,9 @@ class WalletSendSpec extends BaseRegTestSpec {
         log.info("Sending ${amount} coins to ${rpcAddress}")
         Wallet.SendResult sendResult = wallet.sendCoins(peerGroup,rpcAddress,amount)
         // Wait for broadcast complete
-        Transaction sentTx = sendResult.broadcastComplete.get()
-        log.info("Broadcast complete, txid = ${sentTx.txId}")
+        log.info("Waiting for broadcast of {} to complete", sendResult.tx)
+        Transaction sentTx = (workaroundBitcoinJ_015_8_Issue) ? sendResult.tx : sendResult.broadcastComplete.get()
+        log.warn("Broadcast complete, tx = ${sentTx}")
         // Wait for it to show up on server as unconfirmed
         log.info("Waiting for unconfirmed transaction to appear on server...")
         waitForUnconfirmedTransaction(sentTx.getTxId())
@@ -101,7 +100,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         do {
             log.warn("Waiting for bitcoinj wallet to get a confirmation of the transaction...")
             // TODO: I don't think we should have to wait 3 seconds and generate additional blocks here.
-            sleep(3_000)
+            sleep(1_000)
             generateBlocks(1)
         } while (!depthFuture.isDone())
 
@@ -111,9 +110,6 @@ class WalletSendSpec extends BaseRegTestSpec {
     }
 
     def "create and send a transaction from BitcoinJ using wallet.completeTx"() {
-        given: "Assume server version is greater than 20"
-        Assumptions.assumeTrue(networkInfo.version >= 200000)
-
         when:
         Coin amount = 1.btc
         def rpcAddress = getNewAddress()
@@ -122,9 +118,11 @@ class WalletSendSpec extends BaseRegTestSpec {
         SendRequest request = SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
         wallet.commitTx(request.tx)
-        Transaction sentTx = peerGroup.broadcastTransaction(request.tx).future().get()
-        // Wait for it to show up on server as unconfirmed
-        waitForUnconfirmedTransaction(sentTx.txId)
+        log.info("Sending Tx: {}", tx)
+        TransactionBroadcast broadcast = peerGroup.broadcastTransaction(request.tx)
+        log.info("Waiting for completion of broadcast for txid: {}", broadcast.tx.getTxId())
+        Transaction sentTx = (workaroundBitcoinJ_015_8_Issue) ? request.tx : broadcast.future().get()
+        waitForUnconfirmedTransaction(tx.txId)  // Wait for tx to show up on server as unconfirmed
         generateBlocks(1)
 
         then: "the new address has a balance of amount"
@@ -158,12 +156,15 @@ class WalletSendSpec extends BaseRegTestSpec {
      * @param txid Transaction ID (hash) of transaction we're waiting for
      */
     void waitForUnconfirmedTransaction(Sha256Hash txid) {
-        WalletTransactionInfo pendingTx = null
+        Transaction pendingTx = null
         while (pendingTx == null) {
             try {
-                pendingTx = getTransaction(txid)
+                pendingTx = getRawTransaction(txid)
             } catch (JsonRpcStatusException e) {
-                if (e.message != "No information available about transaction") {
+                if (e.message == "No such mempool or blockchain transaction. Use gettransaction for wallet transactions.") {
+                    log.warn("ignoring JsonRpcStatusException: {}, {}", e.jsonRpcCode, e.message)
+                    Thread.sleep(100)
+                } else {
                     throw e
                 }
             }
