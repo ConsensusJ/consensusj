@@ -14,6 +14,8 @@ import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.core.TransactionOutput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
  * the ones we ran into while building integration tests.
  */
 public class BitcoinExtendedClient extends BitcoinClient {
+    private static final Logger log = LoggerFactory.getLogger(BitcoinExtendedClient.class);
     private /* lazy */ Address regTestMiningAddress;
 
     public final Coin stdTxFee = Coin.valueOf(10000);
@@ -67,6 +70,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
             // we could initialize regTestMiningKey from a bitcoinj-generated ECKey or HD Keychain.
             try {
                 regTestMiningAddress = this.getNewAddress();
+                log.warn("Retrieved regTestMiningAddress = {}", regTestMiningAddress);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
