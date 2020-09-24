@@ -20,7 +20,12 @@ import spock.lang.Shared
 import spock.lang.Stepwise
 
 /**
- * Various interoperability tests between RPC server and bitcoinj wallets.
+ * Interoperability tests between a bitcoinj {@link Wallet} and a Bitcoin Core RPC server in RegTest mode.
+ *
+ * This is a {@link Stepwise} Spock {@link spock.lang.Specification} meaning that the tests
+ * are always run in the order they appear in the source file. {@link Shared} variables are initialized
+ * in {@link WalletSendSpec#setupSpec}. Since these are integration tests (not pure unit tests) and
+ * communicate with the stateful Bitcoin blockchain, the {@code Stepwise} approach is helpful.
  */
 @Stepwise
 class WalletSendSpec extends BaseRegTestSpec {
@@ -40,7 +45,7 @@ class WalletSendSpec extends BaseRegTestSpec {
     PeerGroup peerGroup
 
     void setupSpec() {
-        BriefLogFormatter.initWithSilentBitcoinJ()
+        BriefLogFormatter.init()
         params = getNetParams()
 
         wallet = Wallet.createDeterministic(params, Script.ScriptType.P2PKH)
@@ -53,7 +58,22 @@ class WalletSendSpec extends BaseRegTestSpec {
         networkInfo = client.getNetworkInfo()   // store networkInfo for Assumptions (e.g. server version)
     }
 
-    def "Send mined coins to fund a new BitcoinJ wallet"() {
+    def "Wait for bitcoinj wallet to sync with RegTest chain"() {
+        when:
+        client.generateBlocks(1)   // This RPC call is necessary, I don't think it should be
+        Integer walletHeight, rpcHeight
+        while ( (walletHeight = wallet.getLastBlockSeenHeight()) < (rpcHeight = client.getBlockCount()) ) {
+            // TODO: Figure out a way to do this without polling and sleeping
+            println "walletHeight < rpcHeight: ${walletHeight} < ${rpcHeight} -- Waiting..."
+            Thread.sleep(100)
+        }
+        log.warn "walletHeight: ${walletHeight}, rpcHeight: ${rpcHeight}"
+
+        then:
+        walletHeight == rpcHeight
+    }
+
+    def "Send mined coins to fund the bitcoinj wallet"() {
         given:
         def fundingAmount = 10.1.btc
         def fundingAddress = createFundedAddress(fundingAmount)
@@ -65,7 +85,6 @@ class WalletSendSpec extends BaseRegTestSpec {
         client.generateBlocks(1)
         Integer walletHeight, rpcHeight
         while ( (walletHeight = wallet.getLastBlockSeenHeight()) < (rpcHeight = client.getBlockCount()) ) {
-            // TODO: Figure out a way to do this without polling and sleeping
             println "WalletHeight < rpcHeight: ${walletHeight} < ${rpcHeight} -- Waiting..."
             Thread.sleep(100)
         }
@@ -76,7 +95,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         wallet.getBalance() == amount
     }
 
-    def "Send from BitcoinJ wallet to the Bitcoin Core wallet"() {
+    def "Send from bitcoinj wallet to the Bitcoin Core wallet using Wallet::sendCoins"() {
         when: "we send coins from BitcoinJ and write a block"
         Coin startAmount = 10.btc
         Coin amount = 1.btc
@@ -99,7 +118,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         def depthFuture = sentTx.getConfidence().getDepthFuture(1)
         do {
             log.warn("Waiting for bitcoinj wallet to get a confirmation of the transaction...")
-            // TODO: I don't think we should have to wait 3 seconds and generate additional blocks here.
+            // TODO: I don't think we should have to wait 1 second and generate additional blocks here.
             sleep(1_000)
             generateBlocks(1)
         } while (!depthFuture.isDone())
@@ -109,7 +128,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         wallet.getBalance() == startAmount - amount - sentTx.getFee()
     }
 
-    def "create and send a transaction from BitcoinJ using wallet.completeTx"() {
+    def "create and send a transaction from bitcoinj using PeerGroup::broadcastTransaction"() {
         when:
         Coin amount = 1.btc
         def rpcAddress = getNewAddress()
@@ -129,7 +148,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         getReceivedByAddress(rpcAddress) == amount  // Verify rpcAddress balance
     }
 
-    def "create a raw transaction using BitcoinJ and send with sendRawTransaction RPC"() {
+    def "create a raw transaction using bitcoinj and send with sendRawTransaction RPC"() {
         when:
         Coin amount = 1.btc
         def rpcAddress = getNewAddress()
