@@ -60,7 +60,8 @@ class WalletSendSpec extends BaseRegTestSpec {
 
     def "Wait for bitcoinj wallet to sync with RegTest chain"() {
         when:
-        client.generateBlocks(1)   // This RPC call is necessary, I don't think it should be
+        wallet.addWatchedAddress(client.getRegTestMiningAddress()) 
+        client.generateBlocks(1)   // This RPC call is necessary when I run locally, I don't think it should be
         Integer walletHeight, rpcHeight
         while ( (walletHeight = wallet.getLastBlockSeenHeight()) < (rpcHeight = client.getBlockCount()) ) {
             // TODO: Figure out a way to do this without polling and sleeping
@@ -92,7 +93,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         // Is it safe to assume that if walletHeight == rpcHeight then our transaction has been processed?
 
         then: "the coins arrive"
-        wallet.getBalance() == amount
+        wallet.getBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE) == amount
     }
 
     def "Send from bitcoinj wallet to the Bitcoin Core wallet using Wallet::sendCoins"() {
@@ -125,7 +126,7 @@ class WalletSendSpec extends BaseRegTestSpec {
 
         then: "the new address has a balance of amount"
         getReceivedByAddress(rpcAddress) == amount
-        wallet.getBalance() == startAmount - amount - sentTx.getFee()
+        wallet.getBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE) == startAmount - amount - sentTx.getFee()
     }
 
     def "create and send a transaction from bitcoinj using PeerGroup::broadcastTransaction"() {
