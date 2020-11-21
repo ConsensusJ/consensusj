@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.rpc;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
@@ -109,6 +110,21 @@ public class BitcoinExtendedClient extends BitcoinClient {
     public Block getBlock(int index) throws JsonRpcStatusException, IOException {
         Sha256Hash blockHash = getBlockHash(index);
         return getBlock(blockHash);
+    }
+
+    /**
+     * Clears the memory pool and returns a list of the removed transactions.
+     *
+     * Note: this is a customized command, which is currently not part of Bitcoin Core.
+     * See https://github.com/OmniLayer/OmniJ/pull/72[Pull Request #72] on GitHub
+     *
+     * @return A list of transaction hashes of the removed transactions
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public List<Sha256Hash> clearMemPool() throws JsonRpcStatusException, IOException {
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
+        return send("clearmempool", resultType);
     }
 
     /**

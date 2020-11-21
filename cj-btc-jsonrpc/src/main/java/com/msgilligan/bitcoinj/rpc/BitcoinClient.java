@@ -982,19 +982,4 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     public JsonNode getAddedNodeInfo(boolean details) throws JsonRpcStatusException, IOException  {
         return getAddedNodeInfo(details, null);
     }
-
-    /**
-     * Clears the memory pool and returns a list of the removed transactions.
-     *
-     * Note: this is a customized command, which is currently not part of Bitcoin Core.
-     * See https://github.com/OmniLayer/OmniJ/pull/72[Pull Request #72] on GitHub
-     *
-     * @return A list of transaction hashes of the removed transactions
-     * @throws JsonRpcStatusException JSON RPC status exception
-     * @throws IOException network error
-     */
-    public List<Sha256Hash> clearMemPool() throws JsonRpcStatusException, IOException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
-        return send("clearmempool", resultType);
-    }
 }
