@@ -10,8 +10,10 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'consensusj-jsonrpc-daemon',            // JSON-RPC sample server
         'cj-btc-jsonrpc',                       // Bitcoin JSON-RPC client using bitcoinj-based types
         'cj-btc-jsonrpc-gvy',                   // Bitcoin JSON-RPC client with Groovy dynamic method support
+        'cj-btc-rx',                            // bitcoinj-based RxJava interfaces and implementations
         'cj-btc-services',                      // bitcoinj-based service objects
         'cj-btc-daemon-mn',                     // Prototype Micronaut version of daemon
+        'cj-btc-zeromq',                        // bitcoind ZeroMQ client
         'cj-eth-jsonrpc',
         'cj-eth-jsonrpc-gvy',
         'cj-nmc-jsonrpc',

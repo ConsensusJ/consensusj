@@ -18,6 +18,7 @@ import com.msgilligan.bitcoinj.json.pojo.TxOutSetInfo;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
 import com.msgilligan.bitcoinj.json.conversion.RpcClientModule;
 import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo;
+import com.msgilligan.bitcoinj.json.pojo.ZmqNotification;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.jsonrpc.RpcClient;
@@ -821,6 +822,19 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      */
     public NetworkInfo getNetworkInfo() throws JsonRpcStatusException, IOException  {
         return send("getnetworkinfo", NetworkInfo.class);
+    }
+
+    /**
+     * The getzmqnotifications RPC returns information about which configured ZMQ notifications are enabled
+     * and on which ports.
+     * 
+     * @return A List of ZMQ Notification info records
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public List<ZmqNotification> getZmqNotifications() throws JsonRpcStatusException, IOException  {
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ZmqNotification.class);
+        return send("getzmqnotifications", resultType);
     }
 
     /**

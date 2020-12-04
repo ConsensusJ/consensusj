@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+}
+
+sourceCompatibility = 9
+targetCompatibility = 9
+
+ext.moduleName = 'org.consensusj.bitcoin.rx'
+
+dependencies {
+    api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
+    implementation "com.google.guava:guava:28.2-android"
+}
+
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ Bitcoin Rx support',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
+    }
+}
+
