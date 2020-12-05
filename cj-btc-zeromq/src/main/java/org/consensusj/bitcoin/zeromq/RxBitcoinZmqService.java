@@ -39,8 +39,14 @@ public class RxBitcoinZmqService implements RxBlockchainService, BitcoinZmqServi
             throw new RuntimeException("Bitcoin Core configuration error");
         }
 
-        blockService = new RxBitcoinSinglePortZmqService(networkParameters, blockServiceURI.get());
-        txService = new RxBitcoinSinglePortZmqService(networkParameters, txServiceURI.get());
+        if (blockServiceURI.get().equals(txServiceURI.get())) {
+            // URIs are the same we can use a single connection
+            blockService = new RxBitcoinSinglePortZmqService(networkParameters, blockServiceURI.get(), rawblock, rawtx);
+            txService = blockService;
+        } else {
+            blockService = new RxBitcoinSinglePortZmqService(networkParameters, blockServiceURI.get(), rawblock);
+            txService = new RxBitcoinSinglePortZmqService(networkParameters, txServiceURI.get(), rawtx);
+        }
 
         observableRawBlock = blockService.observableBlock();
         observableRawTx = txService.observableTransaction();

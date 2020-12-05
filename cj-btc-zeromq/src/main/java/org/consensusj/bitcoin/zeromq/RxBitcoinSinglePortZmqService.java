@@ -44,9 +44,9 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainService, Bitco
     private long hashTxSeq = -1;
     private long rawBlockSeq = -1;
     private long rawTxSeq = -1;
-
-    public RxBitcoinSinglePortZmqService(NetworkParameters netParams, URI tcpAddress) {
-        this(netParams, tcpAddress, Set.of(BitcoinZmqMessage.Topic.rawtx, BitcoinZmqMessage.Topic.rawblock));
+    
+    public RxBitcoinSinglePortZmqService(NetworkParameters netParams, URI tcpAddress, BitcoinZmqMessage.Topic... topics) {
+        this(netParams, tcpAddress, Set.of(topics));
     }
 
     private RxBitcoinSinglePortZmqService(NetworkParameters netParams, URI tcpAddress, Collection<BitcoinZmqMessage.Topic> topics) {
@@ -56,8 +56,10 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainService, Bitco
         bitcoinSerializer = netParams.getSerializer(false);
         List<String> stringTopics = topics.stream().map(BitcoinZmqMessage.Topic::toString).collect(Collectors.toList());
         zmqSubscriber = new ZmqSubscriber(tcpAddress, stringTopics);
-        zmqSubscriber.observableTopic(BitcoinZmqMessage.Topic.rawtx.toString())
-                .subscribe(this::processMessage);
+        for (BitcoinZmqMessage.Topic topic : topics) {
+            zmqSubscriber.observableTopic(topic.toString())
+                    .subscribe(this::processMessage);
+        }
     }
 
     @Override
@@ -100,7 +102,7 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainService, Bitco
 
         if (message.size() >= 2) {
             BitcoinZmqMessage.Topic topic = BitcoinZmqMessage.Topic.valueOf(new String(message.remove().getData()));
-            log.info("Received {} message.", topic);
+            log.debug("Received {} message.", topic);
             byte[] dataBytes = message.remove().getData();
             long seqNumber = 0;
             if (topic != BitcoinZmqMessage.Topic.sequence)

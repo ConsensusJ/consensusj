@@ -74,7 +74,7 @@ public class ZmqSubscriber implements AutoCloseable {
 
     public Observable<ZMsg> observableTopic(String topic) {
         PublishProcessor<ZMsg> processor = processors.get(topic);
-        if (topic == null) {
+        if (processor == null) {
             throw new IllegalArgumentException("topic unavailable -- must be passed to constructor");
         }
         return processor.toObservable();
