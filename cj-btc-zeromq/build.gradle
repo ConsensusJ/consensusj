@@ -8,11 +8,8 @@ targetCompatibility = 9
 ext.moduleName = 'org.consensusj.bitcoin.zeromq'
 
 dependencies {
-    api project(':cj-btc-jsonrpc')
     api project(':cj-btc-rx')
-    implementation project(':cj-btc-services')
-    api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
-    api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
+    implementation project(':cj-btc-jsonrpc')
     implementation "org.zeromq:jeromq:0.5.2"
 
     runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"

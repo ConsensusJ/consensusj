@@ -1,7 +1,9 @@
 package org.consensusj.bitcoin.zeromq;
 
+import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
 import com.msgilligan.bitcoinj.rpc.BitcoinClient;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
@@ -11,6 +13,7 @@ import org.consensusj.bitcoin.rx.RxBlockchainService;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import static org.consensusj.bitcoin.zeromq.BitcoinZmqMessage.Topic.*;
 
@@ -27,7 +30,7 @@ public class RxBitcoinZmqService implements RxBlockchainService, BitcoinZmqServi
     private final Observable<Transaction> observableRawTx;
     private final Observable<Block> observableRawBlock;
 
-    public RxBitcoinZmqService(NetworkParameters networkParameters, URI rpcUri, String rpcUser, String rpcPassword) throws Exception {
+    public RxBitcoinZmqService(NetworkParameters networkParameters, URI rpcUri, String rpcUser, String rpcPassword) {
         client = new BitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword);
 
         BitcoinZmqPortFinder portFinder = new BitcoinZmqPortFinder(client);
@@ -48,7 +51,7 @@ public class RxBitcoinZmqService implements RxBlockchainService, BitcoinZmqServi
             txService = new RxBitcoinSinglePortZmqService(networkParameters, txServiceURI.get(), rawtx);
         }
 
-        observableRawBlock = blockService.observableBlock();
+        observableRawBlock = blockService.observableBlock().startWith(getInitialBlock());
         observableRawTx = txService.observableTransaction();
     }
 
@@ -86,5 +89,21 @@ public class RxBitcoinZmqService implements RxBlockchainService, BitcoinZmqServi
     public void close() throws Exception {
         blockService.close();
         txService.close();
+    }
+
+    private Single<Block> getInitialBlock() {
+        return Single.fromCompletionStage(getInitialBlockViaRPC());
+    }
+
+    private CompletableFuture<Block> getInitialBlockViaRPC() {
+        return getBlockChainInfoAsync().thenCompose(info -> getBlockAsync(info.getBestBlockHash()));
+    }
+
+    private CompletableFuture<Block> getBlockAsync(Sha256Hash blockHash) {
+        return client.supplyAsync(() -> client.getBlock(blockHash));
+    }
+
+    private CompletableFuture<BlockChainInfo> getBlockChainInfoAsync() {
+        return client.supplyAsync(client::getBlockChainInfo);
     }
 }

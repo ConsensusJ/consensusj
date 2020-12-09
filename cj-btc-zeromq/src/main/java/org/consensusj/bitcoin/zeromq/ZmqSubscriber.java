@@ -7,12 +7,15 @@ import org.slf4j.LoggerFactory;
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
+import org.zeromq.ZMQException;
 import org.zeromq.ZMsg;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * ZMQ Subscriber that listens to one or more topics.
@@ -27,12 +30,16 @@ public class ZmqSubscriber implements AutoCloseable {
     private final Thread thread;
 
     private final ConcurrentHashMap<String, PublishProcessor<ZMsg>> processors = new ConcurrentHashMap<>();
-
+    
     public ZmqSubscriber(URI tcpAddress, List<String> topics) {
+        this(tcpAddress, topics, (Runnable r) -> new Thread(r, "ZeroMQ Subscriber"));
+    }
+
+    public ZmqSubscriber(URI tcpAddress, List<String> topics, ThreadFactory threadFactory) {
         this.tcpAddress = tcpAddress;
         this.topics = topics;
         topics.forEach(this::addTopic);
-        thread = new Thread(new ReceivingThread(), "ZeroMQ Subscriber");
+        thread = threadFactory.newThread(new ReceivingThread());
         thread.start();
     }
 
@@ -44,6 +51,7 @@ public class ZmqSubscriber implements AutoCloseable {
                 log.info("Connecting to Zmq server");
 
                 ZMQ.Socket socket = context.createSocket(SocketType.SUB);
+                socket.setReceiveTimeOut(500); // 500 ms
                 socket.connect(tcpAddress.toString());
 
                 topics.forEach(topic -> {
@@ -54,11 +62,19 @@ public class ZmqSubscriber implements AutoCloseable {
                 log.info("Connected.. Waiting for subscribers.");
 
                 while (!Thread.currentThread().isInterrupted()) {
-                    ZMsg message = ZMsg.recvMsg(socket);
-                    String topic = message.getFirst().getString(StandardCharsets.UTF_8);
-                    PublishProcessor<ZMsg> processor = processors.get(topic);
-                    processor.onNext(message);
+                    try {
+                        ZMsg message = ZMsg.recvMsg(socket);
+                        if (message != null) {
+                            String topic = message.getFirst().getString(StandardCharsets.UTF_8);
+                            PublishProcessor<ZMsg> processor = processors.get(topic);
+                            processor.onNext(message);
+                        }
+                    } catch (ZMQException zmqe) {
+                        log.error("Exception: ", zmqe);
+                    }
                 }
+            } catch (IllegalStateException ie) {
+                //log.error("IllegalStateException: ", ie);
             }
         }
     }

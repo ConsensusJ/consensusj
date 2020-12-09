@@ -19,6 +19,7 @@ import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
 import com.msgilligan.bitcoinj.json.conversion.RpcClientModule;
 import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo;
 import com.msgilligan.bitcoinj.json.pojo.ZmqNotification;
+import org.bitcoinj.utils.ContextPropagatingThreadFactory;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.jsonrpc.RpcClient;
@@ -40,6 +41,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 /**
  * = JSON-RPC Client for *Bitcoin Core*
@@ -77,6 +79,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     private int serverVersion = 0;    // 0 means unknown serverVersion
 
     protected final Context context;
+    protected final Executor contextAwareExecutor;
 
     /**
      * Construct a BitcoinClient from Network Parameters, URI, user name, and password.
@@ -89,6 +92,8 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
         super(server, rpcuser, rpcpassword);
         this.context = new Context(netParams);
         mapper.registerModule(new RpcClientModule(context.getParams()));
+        // TODO: We might want to create an actual thread pool here.
+        contextAwareExecutor = (Runnable r) -> newContextThread(r).start();
     }
 
     /**
@@ -106,6 +111,18 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     @Override
     public NetworkParameters getNetParams() {
         return context.getParams();
+    }
+
+    @Override
+    public Executor getDefaultAsyncExecutor() {
+        return contextAwareExecutor;
+    }
+
+    private Thread newContextThread(Runnable runnable) {
+        return new Thread(() -> {
+            Context.propagate(this.context);
+            runnable.run();
+        });
     }
 
     /**
