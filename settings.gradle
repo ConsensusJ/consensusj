@@ -8,6 +8,7 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'consensusj-jsonrpc',                   // JSON-RPC Java client
         'consensusj-jsonrpc-gvy',               // JSON-RPC Groovy client
         'consensusj-jsonrpc-daemon',            // JSON-RPC sample server
+        'consensusj-rx-zeromq',                 // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
         'cj-btc-jsonrpc',                       // Bitcoin JSON-RPC client using bitcoinj-based types
         'cj-btc-jsonrpc-gvy',                   // Bitcoin JSON-RPC client with Groovy dynamic method support
         'cj-btc-rx',                            // bitcoinj-based RxJava interfaces and implementations

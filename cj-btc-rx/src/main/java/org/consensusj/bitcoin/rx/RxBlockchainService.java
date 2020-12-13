@@ -1,10 +1,13 @@
 package org.consensusj.bitcoin.rx;
 
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
+
+import java.io.Closeable;
 
 /**
  * RxJava 3 interface for subscribing to reactive blockchain data.
@@ -17,11 +20,11 @@ import org.bitcoinj.core.Transaction;
  * Note: Implementations may throw {@link UnsupportedOperationException} if they don't support a particular
  * observable.
  */
-public interface RxBlockchainService extends AutoCloseable {
+public interface RxBlockchainService extends Closeable {
     NetworkParameters getNetworkParameters();
-    Observable<Transaction> observableTransaction();
-    Observable<Sha256Hash> observableTransactionHash();
-    Observable<Block> observableBlock();
-    Observable<Sha256Hash> observableBlockHash();
-    Observable<Integer> observableBlockHeight();
+    Flowable<Transaction> transactionPublisher();
+    Flowable<Sha256Hash> transactionHashPublisher();
+    Flowable<Block> blockPublisher();
+    Flowable<Sha256Hash> blockHashPublisher();
+    Flowable<Integer> blockHeightPublisher();
 }

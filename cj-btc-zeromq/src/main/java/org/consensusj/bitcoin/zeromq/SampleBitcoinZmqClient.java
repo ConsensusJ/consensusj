@@ -1,11 +1,12 @@
 package org.consensusj.bitcoin.zeromq;
 
-import com.msgilligan.bitcoinj.rpc.RpcURI;
 import io.reactivex.rxjava3.disposables.Disposable;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.MainNetParams;
 import org.consensusj.bitcoin.rx.BlockUtil;
+
+import java.net.URI;
 
 import static java.lang.System.out;
 
@@ -18,23 +19,30 @@ public class SampleBitcoinZmqClient {
     public static void main(String[] args) throws Exception {
         String rpcUser = "";
         String rpcPassword = "";
-        
-        RxBitcoinZmqService client = new RxBitcoinZmqService(MainNetParams.get(), RpcURI.getDefaultMainNetURI(), rpcUser, rpcPassword);
+
+        RxBitcoinZmqService client = new RxBitcoinZmqService(MainNetParams.get(), URI.create("http://localhost:8332"), rpcUser, rpcPassword);
 
         try (client) {
-            Disposable dBlock = client.observableBlock()
-                    .subscribe(SampleBitcoinZmqClient::onBlock);
-            Disposable dRawTx = client.observableTransaction()
-                    .subscribe(SampleBitcoinZmqClient::onTx);
+            Disposable dBlock = client.blockPublisher()
+                    .subscribe(SampleBitcoinZmqClient::onBlock, SampleBitcoinZmqClient::onError);
+            Disposable dRawTx = client.transactionPublisher()
+                    .subscribe(SampleBitcoinZmqClient::onTx, SampleBitcoinZmqClient::onError);
             Thread.sleep(duration);
         }
     }
 
     static void onBlock(Block block) {
+        out.println("Raw block");
+        out.printf("Block version: %s\n", block.getVersion());
         out.printf("Raw Block: %s/%s containing %s transactions\n",
                 BlockUtil.blockHeightFromCoinbase(block),
                 block.getHash(),
                 block.getTransactions().size());
+
+    }
+
+    static void onError(Throwable t) {
+        out.println("Error: " + t);
     }
 
     static void onTx(Transaction tx) {

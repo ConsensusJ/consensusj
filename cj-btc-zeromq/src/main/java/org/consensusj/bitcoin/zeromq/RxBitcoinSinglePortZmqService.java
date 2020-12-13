@@ -1,20 +1,15 @@
 package org.consensusj.bitcoin.zeromq;
 
-import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.processors.FlowableProcessor;
 import io.reactivex.rxjava3.processors.PublishProcessor;
-import org.bitcoinj.core.BitcoinSerializer;
-import org.bitcoinj.core.Block;
-import org.bitcoinj.core.Context;
-import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Sha256Hash;
-import org.bitcoinj.core.Transaction;
-import org.consensusj.bitcoin.rx.RxBlockchainBytesService;
-import org.consensusj.bitcoin.rx.RxBlockchainService;
-import org.consensusj.bitcoin.rx.BlockUtil;
+import org.consensusj.bitcoin.rx.RxBlockchainBinaryService;
+import org.consensusj.rx.zeromq.ZmqTopicPublisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zeromq.ZMsg;
 
+import java.io.Closeable;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,123 +19,68 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * BitcoinZmqService that connects to a single port. Use {@link RxBitcoinZmqService} if Bitcoin Core is configured
+ * Bitcoin Zmq binary service that connects to a single port. Use {@link RxBitcoinZmqBinaryService} if Bitcoin Core is configured
  * to run ZMQ on multiple ports.
  */
-public class RxBitcoinSinglePortZmqService implements RxBlockchainService, RxBlockchainBytesService, BitcoinZmqService, AutoCloseable {
+public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService, Closeable {
     private static final Logger log = LoggerFactory.getLogger(RxBitcoinSinglePortZmqService.class);
 
-    private final Context bitcoinContext;
-    private final NetworkParameters netParams;
     private final URI tcpAddress;
     private final Set<BitcoinZmqMessage.Topic> topicSet;
-    private final BitcoinSerializer bitcoinSerializer;
 
-    private final ZmqSubscriber zmqSubscriber;
+    private final ZmqTopicPublisher zmqTopicPublisher;
 
-    private final PublishProcessor<byte[]> rawTxProcessor = PublishProcessor.create();
-    private final PublishProcessor<byte[]> rawBlockProcessor = PublishProcessor.create();
-    private final PublishProcessor<byte[]> hashTxProcessor = PublishProcessor.create();
-    private final PublishProcessor<byte[]> hashBlockProcessor = PublishProcessor.create();
+    private final FlowableProcessor<byte[]> rawTxProcessor = PublishProcessor.create();
+    private final FlowableProcessor<byte[]> rawBlockProcessor = PublishProcessor.create();
+    private final FlowableProcessor<byte[]> hashTxProcessor = PublishProcessor.create();
+    private final FlowableProcessor<byte[]> hashBlockProcessor = PublishProcessor.create();
 
     private long hashBlockSeq = -1;
     private long hashTxSeq = -1;
     private long rawBlockSeq = -1;
     private long rawTxSeq = -1;
     
-    public RxBitcoinSinglePortZmqService(NetworkParameters netParams, URI tcpAddress, BitcoinZmqMessage.Topic... topics) {
-        this(netParams, tcpAddress, Set.of(topics));
+    public RxBitcoinSinglePortZmqService(URI tcpAddress, BitcoinZmqMessage.Topic... topics) {
+        this(tcpAddress, Set.of(topics));
     }
 
-    private RxBitcoinSinglePortZmqService(NetworkParameters netParams, URI tcpAddress, Collection<BitcoinZmqMessage.Topic> topics) {
-        this.netParams = netParams;
+    private RxBitcoinSinglePortZmqService(URI tcpAddress, Collection<BitcoinZmqMessage.Topic> topics) {
         this.tcpAddress = tcpAddress;
-        bitcoinContext = new Context(netParams);
-        bitcoinSerializer = netParams.getSerializer(false);
         topicSet = Collections.unmodifiableSet(new HashSet<>(topics));
         List<String> stringTopics = topics.stream().map(BitcoinZmqMessage.Topic::toString).collect(Collectors.toList());
-        zmqSubscriber = new ZmqSubscriber(tcpAddress, stringTopics, this::createZMQThread);
+        zmqTopicPublisher = new ZmqTopicPublisher(tcpAddress, stringTopics);
         for (BitcoinZmqMessage.Topic topic : topics) {
-            zmqSubscriber.observableTopic(topic.toString())
+            zmqTopicPublisher.topicPublisher(topic.toString())
+                    .toObservable()
                     .subscribe(this::processMessage);
         }
     }
 
-    private Thread createZMQThread(Runnable runnable) {
-        return new Thread(() -> {
-            Context.propagate(this.bitcoinContext);
-            runnable.run();
-        }, "ZMQ Bitcoin Thread (" + this.netParams.getId()  +")");
+
+    @Override
+    public Flowable<byte[]> transactionBinaryPublisher() {
+        return rawTxProcessor;
     }
 
     @Override
-    public NetworkParameters getNetworkParameters() {
-        return netParams;
+    public Flowable<byte[]> transactionHashBinaryPublisher() {
+        return hashTxProcessor;
     }
 
     @Override
-    public Observable<byte[]> observableTransactionBytes() {
-        return rawTxProcessor
-                .toObservable();
+    public Flowable<byte[]> blockBinaryPublisher() {
+        return rawBlockProcessor;
     }
 
     @Override
-    public Observable<byte[]> observableTransactionHashBytes() {
-        return hashTxProcessor
-                .toObservable();
+    public Flowable<byte[]> blockHashBinaryPublisher() {
+        return hashBlockProcessor;
     }
 
-    @Override
-    public Observable<byte[]> observableBlockBytes() {
-        return rawBlockProcessor
-                .toObservable();
-    }
-
-    @Override
-    public Observable<byte[]> observableBlockHashBytes() {
-        return hashBlockProcessor
-                .toObservable();
-    }
-
-    @Override
-    public Observable<Block> observableBlock() {
-        return rawBlockProcessor
-                .map(bitcoinSerializer::makeBlock)
-                .toObservable();
-    }
-
-    @Override
-    public Observable<Sha256Hash> observableBlockHash() {
-        return hashBlockProcessor
-                .map(Sha256Hash::wrap)
-                .toObservable();
-    }
-
-    @Override
-    public Observable<Integer> observableBlockHeight() {
-        return rawBlockProcessor
-                .map(bitcoinSerializer::makeBlock)
-                .map(BlockUtil::blockHeightFromCoinbase)
-                .toObservable();
-    }
-
-    @Override
-    public Observable<Transaction> observableTransaction() {
-        return rawTxProcessor
-                .map(bytes -> new Transaction(netParams, bytes))
-                .toObservable();
-    }
-
-    @Override
-    public Observable<Sha256Hash> observableTransactionHash() {
-        return hashTxProcessor
-                .map(Sha256Hash::wrap)
-                .toObservable();
-    }
 
     @Override
     public void close() {
-        zmqSubscriber.close();
+        zmqTopicPublisher.close();
     }
 
     private void processMessage(ZMsg message) {
@@ -174,32 +114,24 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainService, RxBlo
     private void processHashTx(byte[] dataBytes, long seqNumber) {
         checkSequenceNumber(BitcoinZmqMessage.Topic.hashtx, hashTxSeq, seqNumber);
         hashTxSeq = seqNumber;
-//        Sha256Hash hash = Sha256Hash.wrap(dataBytes);
-//        log.debug("TXID: " + hash);
         hashTxProcessor.onNext(dataBytes);
     }
 
     private void processHashBlock(byte[] dataBytes, long seqNumber) {
         checkSequenceNumber(BitcoinZmqMessage.Topic.hashblock, hashBlockSeq, seqNumber);
         hashBlockSeq = seqNumber;
-//        Sha256Hash hash = Sha256Hash.wrap(dataBytes);
-//        log.debug("Block Hash: " + hash);
         hashBlockProcessor.onNext(dataBytes);
     }
 
     private void processRawTx(byte[] dataBytes, long seqNumber) {
         checkSequenceNumber(BitcoinZmqMessage.Topic.rawtx, rawTxSeq, seqNumber);
         rawTxSeq = seqNumber;
-//        Transaction tx = new Transaction(netParams, dataBytes);
-//        log.debug("Transaction: output: {}, ID: {}", tx.getOutputSum().toFriendlyString(), tx.getTxId());
         rawTxProcessor.onNext(dataBytes);
     }
 
     private void processRawBlock(byte[] dataBytes, long seqNumber) {
         checkSequenceNumber(BitcoinZmqMessage.Topic.rawblock, rawBlockSeq, seqNumber);
         rawBlockSeq = seqNumber;
-//        Block block = bitcoinSerializer.makeBlock(dataBytes);
-//        log.debug("Block: Hash: {}, # Transactions: {} ", block.getHashAsString(), block.getTransactions().size());
         rawBlockProcessor.onNext(dataBytes);
     }
 
