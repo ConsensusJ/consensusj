@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.zeromq;
 
 import io.reactivex.rxjava3.disposables.Disposable;
 import org.bitcoinj.core.Block;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.MainNetParams;
 import org.consensusj.bitcoin.rx.BlockUtil;
@@ -14,20 +15,24 @@ import static java.lang.System.out;
  * Sample Bitcoin ZMQ client
  */
 public class SampleBitcoinZmqClient {
-    static final int duration = 24 * 60 * 60 * 1000; // 1 day
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        NetworkParameters networkParameters = MainNetParams.get();
         String rpcUser = "";
         String rpcPassword = "";
+        URI rpcUri = URI.create("http://localhost:8332");
 
-        RxBitcoinZmqService client = new RxBitcoinZmqService(MainNetParams.get(), URI.create("http://localhost:8332"), rpcUser, rpcPassword);
-
-        try (client) {
-            Disposable dBlock = client.blockPublisher()
+        try (RxBitcoinZmqService client = new RxBitcoinZmqService(networkParameters, rpcUri, rpcUser, rpcPassword)) {
+            // Subscribe to Blocks
+            Disposable disposable = client.blockPublisher()
                     .subscribe(SampleBitcoinZmqClient::onBlock, SampleBitcoinZmqClient::onError);
-            Disposable dRawTx = client.transactionPublisher()
-                    .subscribe(SampleBitcoinZmqClient::onTx, SampleBitcoinZmqClient::onError);
-            Thread.sleep(duration);
+
+
+            // Blocking subscribe to Transactions (so main() doesn't finish)
+            client.transactionPublisher()
+                    .blockingSubscribe(SampleBitcoinZmqClient::onTx, SampleBitcoinZmqClient::onError);
+
+            disposable.dispose();
         }
     }
 
