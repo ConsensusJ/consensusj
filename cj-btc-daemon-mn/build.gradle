@@ -48,10 +48,7 @@ test.classpath += configurations.developmentOnly
 run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
 
 mainClassName = "org.consensusj.daemon.micronaut.Application"
-// use JUnit 5 platform
-test {
-    useJUnitPlatform()
-}
+
 tasks.withType(JavaCompile){
     options.encoding = "UTF-8"
     options.compilerArgs.add('-parameters')
