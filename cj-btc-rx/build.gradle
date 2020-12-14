@@ -9,7 +9,7 @@ ext.moduleName = 'org.consensusj.bitcoin.rx'
 
 dependencies {
     api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
-    api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
+    api "org.reactivestreams:reactive-streams:1.0.3"
     implementation "com.google.guava:guava:28.2-android"
 }
 
