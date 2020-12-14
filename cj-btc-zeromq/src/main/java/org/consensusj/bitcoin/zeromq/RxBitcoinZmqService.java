@@ -53,7 +53,7 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
     public Flowable<Block> blockPublisher() {
         return blockBinaryPublisher()
                 .map(bitcoinSerializer::makeBlock)  // Deserialize to bitcoinj Block
-                .startWith(getInitialBlock());      // Use JSON-RPC client to fetch an initial block
+                .startWith(getLatestBlockViaRpc()); // Use JSON-RPC client to fetch an initial block
     }
     
     @Override
@@ -73,11 +73,16 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
         super.close();
     }
 
-    private Single<Block> getInitialBlock() {
-        return Single.fromCompletionStage(getInitialBlockViaRPC());
+    /**
+     * Get the latest (aka "best") {@link Block} via JSON-RPC.
+     * 
+     * @return A "hot" {@code Single} that will fetch the "best" block via JSON-RPC
+     */
+    private Single<Block> getLatestBlockViaRpc() {
+        return Single.defer(() -> Single.fromCompletionStage(getBestBlock()));
     }
 
-    private CompletableFuture<Block> getInitialBlockViaRPC() {
+    private CompletableFuture<Block> getBestBlock() {
         return getBlockChainInfoAsync().thenCompose(info -> getBlockAsync(info.getBestBlockHash()));
     }
 
