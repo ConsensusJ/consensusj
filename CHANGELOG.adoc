@@ -7,6 +7,10 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
+=== All Modules
+
+* Update to Jackson 2.12.0
+
 == v0.5.4
 
 Released: 2020.07.03
