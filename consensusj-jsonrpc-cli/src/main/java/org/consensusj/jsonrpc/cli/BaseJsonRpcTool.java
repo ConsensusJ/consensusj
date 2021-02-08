@@ -15,6 +15,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * An abstract base class for JsonRpcClientTool that uses Apache Commons CLI
@@ -101,10 +102,10 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
      */
     protected Object convertParam(String param) {
         Object result;
-        Long l = toLong(param);
-        if (l != null) {
-            // If the param is a valid Long, return a Long
-            result = l;
+        Optional<Long> l = toLong(param);
+        if (l.isPresent()) {
+            // If the param was a valid Long, return a Long
+            result = l.get();
         } else {
             // Else, return a Boolean or String
             switch (param) {
@@ -121,13 +122,12 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         return result;
     }
 
-    // Convert to Long (if possible), else return null
-    protected static Long toLong(String strNum) {
+    // Convert to Long (if possible)
+    protected static Optional<Long> toLong(String strNum) {
         try {
-            Long l = Long.parseLong(strNum);
-            return l;
+            return Optional.of(Long.parseLong(strNum));
         } catch (NumberFormatException nfe) {
-            return null;
+            return Optional.empty();
         }
     }
 
