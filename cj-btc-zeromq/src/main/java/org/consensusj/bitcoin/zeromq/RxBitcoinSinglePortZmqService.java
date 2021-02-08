@@ -19,8 +19,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Bitcoin Zmq binary service that connects to a single port. Use {@link RxBitcoinZmqBinaryService} if Bitcoin Core is configured
- * to run ZMQ on multiple ports.
+ * Bitcoin Zmq <b>binary</b> service that connects to a single port.
+ * Use {@link RxBitcoinZmqBinaryService} if Bitcoin Core is configured to run ZMQ on multiple ports.
+ * See: <a href="https://github.com/bitcoin/bitcoin/pull/19572">PR 19752</a> for sequence topic information
  */
 public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService, Closeable {
     private static final Logger log = LoggerFactory.getLogger(RxBitcoinSinglePortZmqService.class);
@@ -135,6 +136,7 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
         rawBlockProcessor.onNext(dataBytes);
     }
 
+    // See: https://github.com/bitcoin/bitcoin/pull/19572
     private static void processSequence(ZMsg message) {
         //checkSequenceNumber(Topic.sequence, sequenceSeq, seqNumber);
         log.warn("Got sequence: {}", message);
