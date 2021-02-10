@@ -6,6 +6,7 @@ configurations {
 dependencies {
     testImplementation project(':cj-btc-jsonrpc-gvy')
     testImplementation project(':bitcoinj-json')
+    testImplementation project(':cj-bitcoinj-util')     // For BlockUtils
     testImplementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     testImplementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 

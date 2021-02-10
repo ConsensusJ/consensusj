@@ -9,6 +9,7 @@ ext.moduleName = 'org.consensusj.bitcoin.zeromq'
 
 dependencies {
     api project(':cj-btc-rx')
+    implementation project(':cj-bitcoinj-util')
     implementation project(':cj-btc-jsonrpc')
     implementation project(':consensusj-rx-zeromq')
     implementation "org.zeromq:jeromq:0.5.2"

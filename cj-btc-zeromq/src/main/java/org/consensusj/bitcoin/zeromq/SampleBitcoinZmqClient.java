@@ -5,7 +5,7 @@ import org.bitcoinj.core.Block;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.MainNetParams;
-import org.consensusj.bitcoin.rx.BlockUtil;
+import org.consensusj.bitcoinj.util.BlockUtil;
 
 import java.net.URI;
 

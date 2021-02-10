@@ -9,7 +9,7 @@ import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
-import org.consensusj.bitcoin.rx.BlockUtil;
+import org.consensusj.bitcoinj.util.BlockUtil;
 import org.consensusj.bitcoin.rx.RxBlockchainService;
 
 import java.io.Closeable;

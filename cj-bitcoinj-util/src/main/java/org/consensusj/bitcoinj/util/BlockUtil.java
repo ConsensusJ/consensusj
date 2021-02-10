@@ -1,4 +1,4 @@
-package org.consensusj.bitcoin.rx;
+package org.consensusj.bitcoinj.util;
 
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Transaction;
@@ -10,14 +10,14 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
- * Utility class containing {@link #blockHeightFromCoinbase(Block)} 
+ * Utility class containing {@link #blockHeightFromCoinbase(Block)}
  */
 public class BlockUtil {
 
     /**
      * Return the block height contained in a standalone BIP34-compatible
      * Bitcoin block (or -1 if it's a pre-BIP34 block)
-     * 
+     *
      * @param block A Bitcoin block (need not be attached to a chain)
      * @return The block height if available (BIP 34) or -1.
      */

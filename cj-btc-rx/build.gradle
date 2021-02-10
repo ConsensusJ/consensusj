@@ -8,11 +8,10 @@ targetCompatibility = 8
 ext.moduleName = 'org.consensusj.bitcoin.rx'
 
 dependencies {
-    api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
     api "org.reactivestreams:reactive-streams:1.0.3"
+    api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
     implementation "com.google.guava:guava:28.2-android"
 }
-
 
 jar {
     inputs.property("moduleName", moduleName)
@@ -22,4 +21,3 @@ jar {
                 'Implementation-Version': archiveVersion.get()
     }
 }
-
