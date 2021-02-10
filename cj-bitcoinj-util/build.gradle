@@ -1,0 +1,22 @@
+plugins {
+    id 'java-library'
+}
+
+sourceCompatibility = 8
+targetCompatibility = 8
+
+ext.moduleName = 'org.consensusj.bitcoinj.util'
+
+dependencies {
+    api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    implementation "com.google.guava:guava:28.2-android"
+}
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ bitcoinj utilities',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
+    }
+}
