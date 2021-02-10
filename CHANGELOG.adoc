@@ -7,9 +7,16 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
-=== All Modules
+=== Dependency Updates
 
-* Update to Jackson 2.12.0
+* Jackson 2.12.0
+* RxJava 3.0.10
+* Micronaut 2.3.1
+* Groovy 3.0.7
+
+=== Build Dependency Updates
+
+* Spock 2.0-M4-groovy-3.0
 
 == v0.5.4
 
