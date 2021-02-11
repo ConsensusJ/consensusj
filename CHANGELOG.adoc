@@ -7,15 +7,42 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
+=== Reactive (RxJava) Bitcoin ZeroMQ support (Experimental)
+
+* New `cj-btc-rx` module with RxJava interfaces for receiving Block and Transaction updates
+* New `cj-btc-zeromq` module for receiving Block and Transaction updates via ZeroMQ
+* New `consensusj-rx-zeromq` module with generic RxJava ZeroMQ PubSub client
+* New `cj-bitcoinj-util` module with utility to compute block height from raw Block data
+
+=== Json-RPC CLI tools
+
+* miscellaneous improvements
+
+=== Bitcoin JSON-RPC
+
+* Add `gettxoutsetinfo` RPC (`BitcoinClient::getTxOutSetInfo`) and `TxOutSetInfo` type
+
+=== bitcoinj-json
+
+* `AddressDeserializer` and `AddressKeyDeserializer` have no-arg constructors that will allow deserialization for multiple networks (eg. mainnet, testnet, etc)
+
+=== Bitcoin RegTest Functional Testing
+
+* Make RegTests compatible with Bitcoin Core 0.20.1
+* some `WalletSendSpec` fixes for bitcoinj testing but also `@Ignore` `WalletSendSpec` (for now)
+
 === Dependency Updates
 
+* bitcoinj 0.15.9
 * Jackson 2.12.0
 * RxJava 3.0.10
 * Micronaut 2.3.1
 * Groovy 3.0.7
 
-=== Build Dependency Updates
+=== Build
 
+* Add Github Actions "Gradle Build": `gradle.yml`
+* Add Github Actions "Bitcoin Core RegTest": `regtest.yml`
 * Spock 2.0-M4-groovy-3.0
 
 == v0.5.4
