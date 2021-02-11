@@ -13,7 +13,7 @@ import zmq.ZError;
 import java.util.concurrent.ThreadFactory;
 
 /**
- *  Factory class for creating {@link Flowable<ZMsg>} from a {@link ZMQ.Socket}.
+ *  Factory class for creating {@link Flowable} from a {@link ZMQ.Socket}.
  *  TODO: Write some tests!!
  */
 public class ZmqFlowable {

@@ -113,8 +113,8 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
 
         /**
          * Override this method to customize the client implementation subclass
-         * @param config
-         * @return
+         * @param config Configuration information for connecting to server
+         * @return a newly constructed BitcoinClient with specified config
          */
         protected BitcoinClient createClient(RpcConfig config) {
             return new BitcoinClient( config.getNetParams(),
@@ -137,8 +137,7 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
                 // TODO: Use network params from BitcoinConfFile, before falling back
                 netParams = MainNetParams.get();
             }
-            RpcConfig cfg = new RpcConfig(netParams, uri, user, pass);
-            return cfg;
+            return new RpcConfig(netParams, uri, user, pass);
         }
 
         private URI getServerURI(URI confFileURI) {
