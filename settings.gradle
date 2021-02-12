@@ -13,7 +13,6 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'cj-btc-jsonrpc-gvy',                   // Bitcoin JSON-RPC client with Groovy dynamic method support
         'cj-btc-services',                      // bitcoinj-based service objects
         'cj-btc-daemon-mn',                     // Prototype Micronaut version of daemon
-        'cj-btc-zeromq',                        // bitcoind ZeroMQ client
         'cj-eth-jsonrpc',
         'cj-eth-jsonrpc-gvy',
         'cj-nmc-jsonrpc',
@@ -32,9 +31,10 @@ if (JavaVersion.current().isJava9Compatible()) {
     System.err.println "Including JDK 9 modules because Java ${JavaVersion.current()} is JDK 9+"
     include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
     include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
-    include 'cj-btc-rx'                            // bitcoinj-based RxJava interfaces
-    include 'cj-btc-rx-peergroup'
-    include 'consensusj-rx-zeromq'                 // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
+    include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
+    include 'cj-btc-zeromq'                     // bitcoind ZeroMQ client
+    include 'cj-btc-rx-peergroup'               // bitcoinj-based RxJava (Transaction) implementation
+    include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
 } else {
     System.err.println "Skipping JDK 9 CLI modules, requires Java 9+, currently running Java ${JavaVersion.current()}"
 }
