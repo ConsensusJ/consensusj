@@ -5,17 +5,18 @@ plugins {
 sourceCompatibility = 9
 targetCompatibility = 9
 
-ext.moduleName = 'org.consensusj.bitcoin.rx'
+ext.moduleName = 'org.consensusj.bitcoin.rx.peergroup'
 
 dependencies {
-    api "org.reactivestreams:reactive-streams:1.0.3"
-    api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    api project(':cj-btc-rx')
+    implementation "com.google.guava:guava:28.2-android"
+    implementation "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
 }
 
 jar {
     inputs.property("moduleName", moduleName)
     manifest {
-        attributes  'Implementation-Title': 'ConsensusJ Bitcoin Rx support',
+        attributes  'Implementation-Title': 'ConsensusJ Bitcoin Reactive Peergroup',
                 'Automatic-Module-Name': moduleName,
                 'Implementation-Version': archiveVersion.get()
     }

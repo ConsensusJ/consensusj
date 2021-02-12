@@ -11,8 +11,9 @@ Released: Under development
 
 * New `cj-btc-rx` module with RxJava interfaces for receiving Block and Transaction updates
 * New `cj-btc-zeromq` module for receiving Block and Transaction updates via ZeroMQ
-* New `consensusj-rx-zeromq` module with generic RxJava ZeroMQ PubSub client
+* New `cj-btc-rx-peergroup` module for receiving Transactions (not Blocks currently) via RxJava
 * New `cj-bitcoinj-util` module with utility to compute block height from raw Block data
+* New `consensusj-rx-zeromq` module with generic RxJava ZeroMQ PubSub client
 
 === Json-RPC CLI tools
 
