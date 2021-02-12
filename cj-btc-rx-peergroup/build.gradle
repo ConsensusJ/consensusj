@@ -9,7 +9,7 @@ ext.moduleName = 'org.consensusj.bitcoin.rx.peergroup'
 
 dependencies {
     api project(':cj-btc-rx')
-    implementation "com.google.guava:guava:28.2-android"
+    implementation "com.google.guava:guava:${guavaVersion}"
     implementation "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
 }
 
