@@ -43,10 +43,10 @@ test {
 }
 
 // Compile a native image of the MathService tool sample using Graal's native-image tool
-// Graal must be installed at $GRAAL_HOME
-task graalNativeImage(type:Exec, dependsOn: jar) {
+// Graal must be installed at $GRAALVM_HOME
+task nativeImage(type:Exec, dependsOn: jar) {
     workingDir = projectDir
-    executable = "${System.env.GRAAL_HOME}/bin/native-image"
+    executable = "${System.env.GRAALVM_HOME}/bin/native-image"
     args = [ '--verbose',
              '--no-fallback',
              '-cp', "${-> configurations.nativeSampleImplementation.asPath}", // Lazy configuration resolution
@@ -55,9 +55,7 @@ task graalNativeImage(type:Exec, dependsOn: jar) {
              '-H:Name=MathTool',
              '--initialize-at-build-time=org.consensusj.jsonrpc.introspection.sample.MathService,org.slf4j.helpers.NamedLoggerBase,org.slf4j.impl.JDK14LoggerAdapter,org.slf4j.helpers.MarkerIgnoringBase,org.slf4j.helpers.Util',
              '-H:+AllowIncompleteClasspath',
-             '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
              '-H:+ReportUnsupportedElementsAtRuntime',
-             '-H:+ReportExceptionStackTraces',
-             '-H:+TraceClassInitialization'
+             '-H:+ReportExceptionStackTraces'
     ]
 }

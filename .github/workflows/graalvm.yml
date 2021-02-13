@@ -1,0 +1,37 @@
+name: GraalVM Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest]
+        graalvm: [ '21.0.0.java11' ]
+      fail-fast: false
+    name: ${{ matrix.os }} JDK ${{ matrix.graalvm }}
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v1
+      - name: Set up GraalVM
+        uses: DeLaGuardo/setup-graalvm@3.1
+        with:
+          graalvm-version: ${{ matrix.graalvm }}
+      - name: Install native-image plugin
+        run: gu install native-image
+      - name: Verify Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Build with Gradle
+        run: ./gradlew nativeImage --scan --info --stacktrace
+      - name: Upload jsonrpc tool as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: jsonrpc-tool-${{ matrix.os }}
+          path: consensusj-jsonrpc-cli/build/jsonrpc

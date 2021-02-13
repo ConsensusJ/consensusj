@@ -39,17 +39,16 @@ jar {
 
 
 // Compile a native image using GraalVM's native-image tool
-// Graal must be installed at $GRAAL_HOME
-task graalNativeImage(type:Exec, dependsOn: jar) {
+// Graal must be installed at $GRAALVM_HOME
+task nativeImage(type:Exec, dependsOn: jar) {
     workingDir = projectDir
-    executable = "${System.env.GRAAL_HOME}/bin/native-image"
+    executable = "${System.env.GRAALVM_HOME}/bin/native-image"
     args = [ '--verbose',
              '--no-fallback',
              '-cp', "${-> configurations.nativeToolImplementation.asPath}", // Lazy configuration resolution
              '-jar', jar.archiveFile.get(),
              '-H:Path=build',
              '-H:Name=cj-bitcoin-cli',
-             '-H:ReflectionConfigurationFiles=graal-reflection-config.json',
              '-H:EnableURLProtocols=http,https',
              '-H:+ReportUnsupportedElementsAtRuntime'
     ]
