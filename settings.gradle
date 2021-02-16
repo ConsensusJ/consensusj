@@ -24,7 +24,6 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'bitcoinj-peerserver',                  // Spring-based P2P transaction viewer
         'cj-bitcoinj-dsl-gvy',                  // Groovy DSL for bitcoinj
         'cj-bitcoinj-spock',                    // Spock tests/demos of basic bitcoinj capabilities
-        'cj-bitcoinj-dsl-js',
         'bitcoinj-proxy'
 
 if (JavaVersion.current().isJava9Compatible()) {
@@ -37,4 +36,10 @@ if (JavaVersion.current().isJava9Compatible()) {
     include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
 } else {
     System.err.println "Skipping JDK 9 CLI modules, requires Java 9+, currently running Java ${JavaVersion.current()}"
+}
+
+if (JavaVersion.current().compareTo(JavaVersion.VERSION_15) < 0) {
+    include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
+} else {
+    System.err.println "Skipping 'cj-bitcoinj-dsl-js', because Nashorn is no longer present in Java ${JavaVersion.current()}"
 }
