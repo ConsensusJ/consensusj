@@ -1,7 +1,6 @@
 package org.consensusj.jsonrpc.daemon;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import io.micronaut.context.annotation.Context;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.micronaut.core.annotation.TypeHint;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -25,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @TypeHint(
         value = {
-                PropertyNamingStrategy.UpperCamelCaseStrategy.class,
+                PropertyNamingStrategies.UpperCamelCaseStrategy.class,
                 ArrayList.class,
                 LinkedHashMap.class,
                 HashSet.class,

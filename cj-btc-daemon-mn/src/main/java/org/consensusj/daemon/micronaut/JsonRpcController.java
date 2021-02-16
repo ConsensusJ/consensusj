@@ -1,6 +1,6 @@
 package org.consensusj.daemon.micronaut;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
 import com.msgilligan.bitcoinj.json.pojo.BlockInfo;
 import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @TypeHint(
         value = {
-                PropertyNamingStrategy.UpperCamelCaseStrategy.class,
+                PropertyNamingStrategies.UpperCamelCaseStrategy.class,
                 ArrayList.class,
                 LinkedHashMap.class,
                 HashSet.class,

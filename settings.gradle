@@ -7,33 +7,34 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'consensusj-exchange',                  // JavaMoney Exchange Providers
         'consensusj-jsonrpc',                   // JSON-RPC Java client
         'consensusj-jsonrpc-gvy',               // JSON-RPC Groovy client
-        'consensusj-jsonrpc-daemon',            // JSON-RPC sample server
         'cj-bitcoinj-util',                     // BlockUtil (and future stuff depending on only bitcoinj)
-        'cj-btc-jsonrpc',                       // Bitcoin JSON-RPC client using bitcoinj-based types
-        'cj-btc-jsonrpc-gvy',                   // Bitcoin JSON-RPC client with Groovy dynamic method support
-        'cj-btc-services',                      // bitcoinj-based service objects
-        'cj-btc-daemon-mn',                     // Prototype Micronaut version of daemon
-        'cj-eth-jsonrpc',
-        'cj-eth-jsonrpc-gvy',
-        'cj-nmc-jsonrpc',
-        'cj-nmc-jsonrpc-gvy',
-        'cj-nmc-daemon',
-        'cj-btc-json',                          // JSON <-> Java Object mapping
-        'cj-btc-jsonrpc-integ-test',            // RPC-based integration tests of bitcoind
-        'bitcoinj-daemon',                      // Spring-based bitcoind proof-of-concept
-        'bitcoinj-peerserver',                  // Spring-based P2P transaction viewer
         'cj-bitcoinj-dsl-gvy',                  // Groovy DSL for bitcoinj
         'cj-bitcoinj-spock',                    // Spock tests/demos of basic bitcoinj capabilities
-        'bitcoinj-proxy'
+        'cj-btc-json',                          // JSON <-> Java Object mapping
+        'cj-btc-jsonrpc',                       // Bitcoin JSON-RPC client using bitcoinj-based types
+        'cj-btc-jsonrpc-gvy',                   // Bitcoin JSON-RPC client with Groovy dynamic method support
+        'cj-btc-jsonrpc-integ-test',            // RPC-based integration tests of bitcoind
+        'cj-btc-services',                      // bitcoinj-based service objects
+        'cj-eth-jsonrpc',                       // Ethereum JSON-RPC client (experimental)
+        'cj-eth-jsonrpc-gvy',                   // Ethereum JSON-RPC client w/Groovy extensions (experimental)
+        'cj-nmc-jsonrpc',                       // Namecoin JSON-RPC client (experimental)
+        'cj-nmc-jsonrpc-gvy',                   // Namecoin JSON-RPC client w/Groovy extensions (experimental)
+        'cj-nmc-daemon',                        // Namecoin Daemon (experimental, Deprecated)
+
+        'bitcoinj-daemon',                      // Spring-based bitcoind proof-of-concept (Deprecated)
+        'bitcoinj-peerserver',                  // Spring-based P2P transaction viewer (Deprecated)
+        'bitcoinj-proxy'                        // Ratpack-based bitcoinj JSON-RPC Proxy Server (Deprecated)
 
 if (JavaVersion.current().isJava9Compatible()) {
     System.err.println "Including JDK 9 modules because Java ${JavaVersion.current()} is JDK 9+"
     include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
-    include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
-    include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
-    include 'cj-btc-zeromq'                     // bitcoind ZeroMQ client
-    include 'cj-btc-rx-peergroup'               // bitcoinj-based RxJava (Transaction) implementation
+    include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
     include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
+    include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
+    include 'cj-btc-daemon-mn'                  // Prototype Micronaut version of Bitcoin daemon
+    include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
+    include 'cj-btc-rx-peergroup'               // bitcoinj-based RxJava (Transaction) implementation
+    include 'cj-btc-zeromq'                     // bitcoind ZeroMQ client
 } else {
     System.err.println "Skipping JDK 9 CLI modules, requires Java 9+, currently running Java ${JavaVersion.current()}"
 }

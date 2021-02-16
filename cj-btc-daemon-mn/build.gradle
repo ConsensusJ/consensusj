@@ -1,25 +1,21 @@
 plugins {
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
-    id "com.github.johnrengelman.shadow" version "4.0.4"
-    id "application"
-    id "net.ltgt.apt-eclipse" version "0.21"
-    id "net.ltgt.apt-idea" version "0.21"
+    id("groovy")
+    id("com.github.johnrengelman.shadow") version "${micronautShadowVersion}"
+    id("io.micronaut.application") version "${micronautAppGradlePluginVersion}"
 }
 
-dependencyManagement {
-    imports {
-        mavenBom "io.micronaut:micronaut-bom:${micronautVersion}"
+micronaut {
+    runtime("netty")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("org.consensusj.daemon.micronaut.*")
     }
 }
 
-configurations {
-    // for dependencies that are needed for development only
-    developmentOnly 
-}
-
 dependencies {
-    annotationProcessor "io.micronaut:micronaut-graal"
-    annotationProcessor "io.micronaut:micronaut-inject-java"
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("javax.annotation:javax.annotation-api")
 
     implementation project(':consensusj-jsonrpc')
     implementation project(':cj-btc-json')
@@ -27,29 +23,24 @@ dependencies {
 
     implementation "com.google.guava:guava:${guavaVersion}"
 
-    implementation "io.micronaut:micronaut-http-server-netty"
-    implementation "io.micronaut:micronaut-inject"
-    implementation "io.micronaut:micronaut-runtime"
+    compileOnly("org.graalvm.nativeimage:svm")
 
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
-
-    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
-    testImplementation "org.junit.jupiter:junit-jupiter-api"
-    testImplementation "io.micronaut.test:micronaut-test-junit5"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 }
 
-shadowJar {
-    mergeServiceFiles()
+application {
+    mainClass.set("org.consensusj.daemon.micronaut.Application")
 }
 
-run.classpath += configurations.developmentOnly
-test.classpath += configurations.developmentOnly
-run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
+java {
+    sourceCompatibility = JavaVersion.toVersion("9")
+    targetCompatibility = JavaVersion.toVersion("9")
+}
 
-mainClassName = "org.consensusj.daemon.micronaut.Application"
+dockerBuild {
+    images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
+}
 
-tasks.withType(JavaCompile){
-    options.encoding = "UTF-8"
-    options.compilerArgs.add('-parameters')
+dockerBuildNative {
+    images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
 }
