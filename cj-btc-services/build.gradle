@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    api project(':bitcoinj-json')
+    api project(':cj-btc-json')
     api "javax.inject:javax.inject:1"
     implementation "com.google.guava:guava:${guavaVersion}"
     implementation 'javax.annotation:javax.annotation-api:1.3.2'

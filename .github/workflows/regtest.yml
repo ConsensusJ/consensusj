@@ -35,5 +35,5 @@ jobs:
       with:
         name: regtest-consensusj-jdk${{ matrix.java }}-${{ matrix.os }}-reports
         path: |
-          bitcoinj-rpcclient/build/reports/tests/regTest
+          cj-btc-jsonrpc-integ-test/build/reports/tests/regTest
           cj-btc-cli/build/reports/tests/regTest

@@ -18,13 +18,13 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'cj-nmc-jsonrpc',
         'cj-nmc-jsonrpc-gvy',
         'cj-nmc-daemon',
-        'bitcoinj-json',                        // JSON <-> Java Object mapping
-        'bitcoinj-rpcclient',                   // RPC-based integration tests of bitcoind
+        'cj-btc-json',                          // JSON <-> Java Object mapping
+        'cj-btc-jsonrpc-integ-test',            // RPC-based integration tests of bitcoind
         'bitcoinj-daemon',                      // Spring-based bitcoind proof-of-concept
         'bitcoinj-peerserver',                  // Spring-based P2P transaction viewer
-        'bitcoinj-dsl',                         // Groovy DSL for bitcoinj
-        'bitcoinj-spock',                       // Spock tests/demos of basic bitcoinj capabilities 
-        'bitcoinj-dsljs',
+        'cj-bitcoinj-dsl-gvy',                  // Groovy DSL for bitcoinj
+        'cj-bitcoinj-spock',                    // Spock tests/demos of basic bitcoinj capabilities
+        'cj-bitcoinj-dsl-js',
         'bitcoinj-proxy'
 
 if (JavaVersion.current().isJava9Compatible()) {

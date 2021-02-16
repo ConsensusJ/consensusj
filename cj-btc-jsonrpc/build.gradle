@@ -4,14 +4,14 @@ plugins {
 
 dependencies {
     api project(':consensusj-jsonrpc')
-    api project(':bitcoinj-json')
+    api project(':cj-btc-json')
 
     testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
     testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
         transitive = false
     }
 
-    testImplementation project(':bitcoinj-dsl')                // Use Groovy extensions in tests
+    testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy extensions in tests
 }
 
 

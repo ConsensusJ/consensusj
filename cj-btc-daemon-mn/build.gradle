@@ -22,7 +22,7 @@ dependencies {
     annotationProcessor "io.micronaut:micronaut-inject-java"
 
     implementation project(':consensusj-jsonrpc')
-    implementation project(':bitcoinj-json')
+    implementation project(':cj-btc-json')
     implementation project(':cj-btc-services')
 
     implementation "com.google.guava:guava:${guavaVersion}"

@@ -1,5 +1,5 @@
 dependencies {
     testImplementation "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
     testImplementation "com.google.guava:guava:${guavaVersion}"
-    testImplementation project(':bitcoinj-dsl')                // Use Groovy extensions in tests
+    testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy extensions in tests
 }
