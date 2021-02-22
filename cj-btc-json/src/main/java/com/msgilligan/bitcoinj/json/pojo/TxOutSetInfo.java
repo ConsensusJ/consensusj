@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.json.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Sha256Hash;
 
 /**
@@ -14,7 +15,7 @@ public class TxOutSetInfo {
     private final long bogoSize;
     private final Sha256Hash hashSerialized2;
     private final long diskSize;
-    private final int totalAmount;
+    private final Coin totalAmount;
 
 
     public TxOutSetInfo(@JsonProperty("height")             int         height,
@@ -24,7 +25,7 @@ public class TxOutSetInfo {
                         @JsonProperty("bogosize")           long        bogoSize,
                         @JsonProperty("hash_serialized_2")  Sha256Hash  hashSerialized2,
                         @JsonProperty("disk_size")          long        diskSize,
-                        @JsonProperty("total_amount")       int         totalAmount) {
+                        @JsonProperty("total_amount")       Coin        totalAmount) {
         this.height = height;
         this.bestBlock = bestBlock;
         this.transactions = transactions;
@@ -63,7 +64,7 @@ public class TxOutSetInfo {
         return diskSize;
     }
 
-    public int getTotalAmount() {
+    public Coin getTotalAmount() {
         return totalAmount;
     }
 }
