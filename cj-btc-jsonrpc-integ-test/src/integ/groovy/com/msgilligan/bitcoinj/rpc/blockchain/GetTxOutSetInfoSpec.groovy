@@ -1,6 +1,7 @@
 package com.msgilligan.bitcoinj.rpc.blockchain
 
 import com.msgilligan.bitcoinj.BaseRegTestSpec
+import org.bitcoinj.core.Coin
 
 /**
  * Functional test of `gettxoutsetinfo` via {@link BitcoinClient#getTxOutSetInfo}
@@ -27,6 +28,6 @@ class GetTxOutSetInfoSpec extends BaseRegTestSpec
         txOutSetInfo.bogoSize > txOutSetInfo.txOuts * 50
         txOutSetInfo.hashSerialized2 != null
         txOutSetInfo.diskSize >= 0
-        txOutSetInfo.totalAmount > 0 && txOutSetInfo.totalAmount <= startHeight * 50
+        txOutSetInfo.totalAmount > Coin.ZERO && txOutSetInfo.totalAmount <= Coin.valueOf(startHeight * 50, 0)
     }
 }
