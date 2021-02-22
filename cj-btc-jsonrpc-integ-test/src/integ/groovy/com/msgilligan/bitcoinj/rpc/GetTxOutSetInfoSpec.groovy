@@ -16,7 +16,7 @@ class GetTxOutSetInfoSpec extends BaseRegTestSpec {
         then:
         info.height > 0
         info.bogoSize > 0
-        info.diskSize > 0
+        info.diskSize >= 0
         info.transactions > 0
         info.txOuts > 0
         info.bestBlock instanceof Sha256Hash
