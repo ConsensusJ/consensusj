@@ -5,22 +5,22 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
 /**
- *
+ * Command-line options for JSON-RPC tool
  */
 public class JsonRpcToolOptions extends Options {
     public JsonRpcToolOptions() {
         super();
-        this.addOption("?", null, false, "This help message")
+        this.addOption("?", "help", false, "This help message")
+            .addOption((Option.builder("v")
+                        .longOpt("verbose")
+                        .desc("Print verbose output")
+                        .build()))
             .addOption(Option.builder()
                     .longOpt("url")
                     .desc("URL for the JSON-RPC endpoint")
                     .hasArg()
                     .argName("url")
                     .build())
-            .addOption((Option.builder("v")
-                    .longOpt("verbose")
-                    .desc("Print verbose output")
-                    .build()))
             // Bitcoin-CLI style options
             .addOption(Option.builder()
                     .longOpt("rpcconnect")
@@ -40,8 +40,8 @@ public class JsonRpcToolOptions extends Options {
                     .hasArg()
                     .argName("user")
                     .build())
-            .addOption(Option.builder().
-                    longOpt("rpcpassword")
+            .addOption(Option.builder()
+                    .longOpt("rpcpassword")
                     .desc("Password for JSON-RPC connections")
                     .hasArg()
                     .argName("pw")
