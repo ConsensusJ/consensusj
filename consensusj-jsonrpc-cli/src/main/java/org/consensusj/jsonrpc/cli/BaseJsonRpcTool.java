@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc.cli;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -8,6 +9,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.RpcClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,6 +24,7 @@ import java.util.Optional;
  * An abstract base class for JsonRpcClientTool that uses Apache Commons CLI
  */
 public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
+    private static final Logger log = LoggerFactory.getLogger(BaseJsonRpcTool.class);
     private final static String name = "jsonrpc";
     protected final String usage ="usage string";
     protected final HelpFormatter formatter = new HelpFormatter();
@@ -71,9 +75,23 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             e.printStackTrace();
             throw new ToolException(1, e.getMessage());
         }
-        if (result != null) {
-            call.out.println(result.toString());
+        String resultForPrinting = formatResult(result);
+        call.out.println(resultForPrinting);
+    }
+
+    private String formatResult(Object result) {
+        String string;
+        if (result == null) {
+            log.info("result is null");
+            string = "null";
+        } else if (result instanceof JsonNode) {
+            log.info("result instanceof JsonNode");
+            string = ((JsonNode) result).toPrettyString();
+        } else {
+            log.info("result class is: {}", result.getClass());
+            string = result.toString();
         }
+        return string;
     }
 
     /**
