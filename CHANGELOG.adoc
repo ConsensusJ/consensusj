@@ -7,7 +7,15 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
-=== Reactive (RxJava) Bitcoin ZeroMQ support (Experimental)
+=== Artifact Renames
+
+* bitcoinj-json      -> cj-btc-json
+* bitcoinj-rpcclient -> cj-btc-jsonrpc-integ-test
+* bitcoinj-dsl       -> cj-bitcoinj-dsl-gvy
+* bitcoinj-spock     -> cj-bitcoinj-spock
+* bitcoinj-dsljs     —> cj-bitcoinj-dsl-js
+
+=== Reactive (RxJava) bitcoinj and Bitcoin ZeroMQ support (Experimental)
 
 * New `cj-btc-rx` module with RxJava interfaces for receiving Block and Transaction updates
 * New `cj-btc-zeromq` module for receiving Block and Transaction updates via ZeroMQ
