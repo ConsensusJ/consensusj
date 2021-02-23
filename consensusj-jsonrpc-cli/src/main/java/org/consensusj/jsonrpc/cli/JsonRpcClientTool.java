@@ -61,4 +61,19 @@ interface JsonRpcClientTool extends ToolProvider {
             this.resultCode = resultCode;
         }
     }
+
+    enum OutputObject {
+        RESPONSE,
+        RESULT
+    }
+
+    enum OutputFormat {
+        JSON,
+        JAVA
+    }
+
+    enum OutputStyle {
+        DEFAULT,
+        PRETTY
+    }
 }

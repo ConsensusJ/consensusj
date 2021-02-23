@@ -85,7 +85,7 @@ public class RpcClient extends AbstractRpcClient {
      * @throws JsonRpcStatusException when the HTTP response code is other than 200
      */
     @Override
-    protected <R> JsonRpcResponse<R> sendRequestForResponse(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException {
+    public <R> JsonRpcResponse<R> sendRequestForResponse(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException {
         HttpURLConnection connection = openConnection();
 
         // TODO: Make sure HTTP keep-alive will work

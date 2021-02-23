@@ -25,11 +25,16 @@ public class JsonRpcRequest {
     private final String  id;
 
     /**
-     * For use by Jackson deserialization
+     * Constructor for use by (Jackson) deserialization. Deserialization will typically
+     * be used on the server-side. To create a request on the client side, it
+     * is generally recommended to use the methods in {@link JsonRpcClient}.
+     *
      * @param jsonrpc filled from the JSON object
      * @param method filled from the JSON object
      * @param id filled from the JSON object
      * @param params filled from the JSON object
+     * @see JsonRpcClient#buildJsonRequest(String, List)
+     * @see JsonRpcClient#buildJsonRequest(String, Object...)
      */
     @JsonCreator
     public JsonRpcRequest(@JsonProperty("method")   String method,
@@ -43,9 +48,12 @@ public class JsonRpcRequest {
     }
 
     /**
-     * Create a JSON RPC request (for serialization.)
+     * Create a JSON RPC request (for serialization.) To create a request on the client side, it
+     * is generally recommended to use the methods in {@link JsonRpcClient}.
      * @param method Method of remote procedure to call
      * @param params Parameters to serialize
+     * @see JsonRpcClient#buildJsonRequest(String, List)
+     * @see JsonRpcClient#buildJsonRequest(String, Object...)
      */
     public JsonRpcRequest(String method, List<Object> params) {
         this(method, params, DEFAULT_JSON_RPC_VERSION);
@@ -53,10 +61,13 @@ public class JsonRpcRequest {
 
     /**
      * Create a JSON RPC request (for serialization.)
-     * Can be used to override default JSON RPC version.
+     * Can be used to override default JSON RPC version. To create a request on the client side, it
+     * is generally recommended to use the methods in {@link JsonRpcClient}.
      * @param method Method of remote procedure to call
      * @param params Parameters to serialize
      * @param jsonRpcVersion JSON-RPC version string
+     * @see JsonRpcClient#buildJsonRequest(String, List)
+     * @see JsonRpcClient#buildJsonRequest(String, Object...)
      */
     public JsonRpcRequest(String method, List<Object> params, String jsonRpcVersion) {
         this(method, removeTrailingNulls(params), jsonRpcVersion, Long.toString(JsonRpcRequest.nextRequestId.incrementAndGet()));

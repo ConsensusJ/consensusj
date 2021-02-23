@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc.cli;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -8,6 +9,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.consensusj.jsonrpc.JsonRpcException;
+import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.RpcClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,9 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
     private final static String name = "jsonrpc";
     protected final String usage ="usage string";
     protected final HelpFormatter formatter = new HelpFormatter();
+    protected JsonRpcClientTool.OutputObject outputObject = OutputObject.RESULT;
+    protected JsonRpcClientTool.OutputFormat outputFormat = OutputFormat.JSON;
+    protected JsonRpcClientTool.OutputStyle outputStyle = OutputStyle.PRETTY;
 
 
     public BaseJsonRpcTool() {
@@ -62,12 +67,33 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             printHelp(call, usage);
             throw new ToolException(1, "jsonrpc method required");
         }
+        if (call.line.hasOption("response")) {
+            // Print full JsonRpcResponse as output
+            outputObject = OutputObject.RESPONSE;
+        }
+        RpcClient client = call.rpcClient();
         String method = args.get(0);
         args.remove(0); // remove method from list
         List<Object> typedArgs = convertParameters(method, args);
         Object result;
         try {
-            result = call.rpcClient().send(method, typedArgs);
+            if (outputObject == OutputObject.RESULT) {
+                if (outputFormat == OutputFormat.JSON) {
+                    // Use Jackson JsonNode type so we can output in JSON format
+                    result = client.send(method, JsonNode.class, typedArgs);
+                } else {
+                    // Use Java Object so we can output in "Java" format (i.e.). via .toString)
+                    result = client.send(method, Object.class, typedArgs);
+                }
+            } else {
+                if (outputFormat == OutputFormat.JSON) {
+                    // Use Jackson JsonNode type so we can output in JSON format
+                    result = client.sendRequestForResponse(client.buildJsonRequest(method, typedArgs), client.responseTypeFor(JsonNode.class));
+                } else {
+                    // Use Java Object so we can output in "Java" format (i.e.). via .toString)
+                    result = client.sendRequestForResponse(client.buildJsonRequest(method, typedArgs), client.responseTypeFor(Object.class));
+                }
+            }
         } catch (JsonRpcException e) {
             e.printStackTrace();
             throw new ToolException(1, e.getMessage());
@@ -86,7 +112,14 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             string = "null";
         } else if (result instanceof JsonNode) {
             log.info("result instanceof JsonNode");
-            string = ((JsonNode) result).toPrettyString();
+            if (outputStyle == OutputStyle.PRETTY) {
+                string = ((JsonNode) result).toPrettyString();
+            } else {
+                string = result.toString();
+            }
+        } else if (result instanceof JsonRpcResponse) {
+            JsonRpcResponse<JsonNode> response = (JsonRpcResponse<JsonNode>) result;
+            string = "Response + \n" + response.getResult().toPrettyString();
         } else {
             log.info("result class is: {}", result.getClass());
             string = result.toString();
@@ -201,7 +234,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    uri = URI.create("http://localhost:8080/");  // Hardcoded for now
+                    uri = URI.create("http://localhost:8080/jsonrpc");  // Default is hardcoded for now
                 }
                 String rpcUser = null;
                 String rpcPassword = null;

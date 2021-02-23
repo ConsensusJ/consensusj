@@ -41,7 +41,7 @@ public class EthereumClient extends RpcClient {
      *
      */
     @Override
-    protected JsonRpcRequest buildJsonRequest(String method, List<Object> params) {
+    public JsonRpcRequest buildJsonRequest(String method, List<Object> params) {
         return new JsonRpcRequest(method, params, JsonRpcRequest.JSON_RPC_VERSION_2);
     }
 

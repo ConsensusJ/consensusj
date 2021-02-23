@@ -21,6 +21,10 @@ public class JsonRpcToolOptions extends Options {
                     .hasArg()
                     .argName("url")
                     .build())
+            .addOption(Option.builder()
+                .longOpt("response")
+                .desc("Output entire JsonRpcResponse, not just the result")
+                .build())
             // Bitcoin-CLI style options
             .addOption(Option.builder()
                     .longOpt("rpcconnect")

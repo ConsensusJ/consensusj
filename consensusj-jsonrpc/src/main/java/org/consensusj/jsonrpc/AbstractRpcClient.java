@@ -5,17 +5,16 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Abstract Base class for a strongly-typed JSON-RPC client. This abstract class handles
- * the use of Jackson to map from JSON to Java Objects, but leaves the core `sendRequestForResponse` method as
- * `abstract` to be implemented by subclasses allowing implementation with alternative
+ * the use of Jackson to map from JSON to Java Objects, but leaves the core {@code sendRequestForResponse} method as
+ * {@code abstract} to be implemented by subclasses allowing implementation with alternative
  * HTTP client libraries.
+ * Note: We may be able to pull more <i>or all</i> of this functionality into {@link JacksonRpcClient}
  */
-public abstract class AbstractRpcClient implements AsyncSupport, DynamicRpcMethodSupport {
+public abstract class AbstractRpcClient implements JsonRpcClient, JacksonRpcClient {
     protected final ObjectMapper mapper;
     private final JavaType defaultType;
 
@@ -27,7 +26,10 @@ public abstract class AbstractRpcClient implements AsyncSupport, DynamicRpcMetho
         defaultType = mapper.getTypeFactory().constructType(Object.class);
     }
 
-    public abstract URI getServerURI();
+    @Override
+    public ObjectMapper getMapper() {
+        return mapper;
+    }
 
     /**
      * Subclasses must implement this method to actually send the request
@@ -38,24 +40,10 @@ public abstract class AbstractRpcClient implements AsyncSupport, DynamicRpcMetho
      * @throws IOException network error
      * @throws JsonRpcStatusException JSON RPC status error
      */
-    protected abstract <R> JsonRpcResponse<R> sendRequestForResponse(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException;
+    public abstract <R> JsonRpcResponse<R> sendRequestForResponse(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException;
 
-    /**
-     * Create a JsonRpcRequest from method and parameters
-     *
-     * Currently builds JSON-RPC 1.0 request, this method can be overridden for clients
-     * that need JSON-RPC 2.0 (e.g. Ethereum)
-     *
-     * @param method name of method to call
-     * @param params parameter Java objects
-     * @return A ready-to-send JsonRpcRequest
-     */
-    protected JsonRpcRequest buildJsonRequest(String method, List<Object> params) {
-        return new JsonRpcRequest(method, params);
-    }
 
-    private <R> R sendForResult(String method, JavaType responseType, List<Object> params) throws IOException, JsonRpcStatusException {
-        JsonRpcRequest request = buildJsonRequest(method, params);
+    private <R> R sendRequestForResult(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException {
         JsonRpcResponse<R> response = sendRequestForResponse(request, responseType);
 
 //        assert response != null;
@@ -85,22 +73,15 @@ public abstract class AbstractRpcClient implements AsyncSupport, DynamicRpcMetho
      * @param params JSON RPC params
      * @return the 'response.result' field of the JSON RPC response converted to type R
      */
-    protected <R> R send(String method, Class<R> resultType, List<Object> params) throws IOException, JsonRpcStatusException {
+    @Override
+    public <R> R send(String method, Class<R> resultType, List<Object> params) throws IOException, JsonRpcStatusException {
         // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
         // (We can't use R because of type erasure)
-        JavaType responseType = mapper.getTypeFactory().
-                constructParametricType(JsonRpcResponse.class, resultType);
-        return sendForResult(method, responseType, params);
+//        JavaType responseType = mapper.getTypeFactory().
+//                constructParametricType(JsonRpcResponse.class, resultType);
+        return sendRequestForResult(buildJsonRequest(method, params), responseTypeFor(resultType));
     }
-
-    /**
-     * Varargs version
-     */
-    protected <R> R send(String method, Class<R> resultType, Object... params) throws IOException, JsonRpcStatusException {
-        return send(method, resultType, Arrays.asList(params));
-    }
-
-
+    
     /**
      * JSON-RPC remote method call that returns 'response.result`
      *
@@ -113,16 +94,16 @@ public abstract class AbstractRpcClient implements AsyncSupport, DynamicRpcMetho
     protected <R> R send(String method, JavaType resultType, List<Object> params) throws IOException, JsonRpcStatusException {
         // Construct a JavaType object so we can tell Jackson what type of result we are expecting.
         // (We can't use R because of type erasure)
-        JavaType responseType = mapper.getTypeFactory().
-                constructParametricType(JsonRpcResponse.class, resultType);
-        return sendForResult(method, responseType, params);
+        //JavaType responseType = mapper.getTypeFactory().
+        //        constructParametricType(JsonRpcResponse.class, resultType);
+        return sendRequestForResult(buildJsonRequest(method, params), responseTypeFor(resultType));
     }
 
     /**
      * Varargs version
      */
     protected <R> R send(String method, JavaType resultType, Object... params) throws IOException, JsonRpcStatusException {
-        return send(method, resultType, Arrays.asList(params));
+        return sendRequestForResult(buildJsonRequest(method, params), responseTypeFor(resultType));
     }
 
     /**
@@ -146,21 +127,4 @@ public abstract class AbstractRpcClient implements AsyncSupport, DynamicRpcMetho
     public <R> R send(String method, List<Object> params) throws IOException, JsonRpcStatusException {
         return send(method, defaultType, params);
     }
-
-    /**
-     * Call an RPC method and return default object type.
-     *
-     * Convenience version that takes `params` as array/varargs.
-     *
-     * @param pass:[<R>] Type of result object
-     * @param method JSON RPC method call to send
-     * @param params JSON RPC parameters as array or varargs
-     * @return the 'response.result' field of the JSON RPC response cast to type R
-     * @throws IOException network error
-     * @throws JsonRpcStatusException JSON RPC status error
-     */
-    public <R> R send(String method, Object... params) throws IOException, JsonRpcStatusException {
-        return send(method, Arrays.asList(params));
-    }
-
 }
