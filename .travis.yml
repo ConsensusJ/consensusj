@@ -11,12 +11,13 @@ cache:
     - $HOME/.gradle/wrapper/
 
 install:
- - sudo apt-get update
- - sudo apt-get install graphviz
- - ./test-download-omnicore-ubuntu.sh
+  - sudo apt-get update
+  - sudo apt-get install graphviz
+  - ./test-download-omnicore-ubuntu.sh
 
 script:
- - ./test-run-regtest.sh
+  - ./gradlew build
+  - ./test-run-regtest.sh
 
 jdk:
   - openjdk8
