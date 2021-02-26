@@ -46,7 +46,7 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
      * main method for bitcoinj-cli tool.
      *
      * See {@link BitcoinRpcCliOptions} for options and https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core JSON-RPC API]
-     * for the methods and parameters. Users can use `-?` to get general help or `help <command>` to get help
+     * for the methods and parameters. Users can use `-?` to get general help or {@code help _command_} to get help
      * on a specific command.
      *
      * @param args options, JSON-RPC method, JSON-RPC parameters

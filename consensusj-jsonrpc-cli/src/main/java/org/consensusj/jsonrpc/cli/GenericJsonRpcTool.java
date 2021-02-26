@@ -21,7 +21,7 @@ public class GenericJsonRpcTool extends BaseJsonRpcTool {
      * main method for jsonrpc tool.
      *
      * See {@link JsonRpcToolOptions} for options and https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core JSON-RPC API]
-     * for the methods and parameters. Users can use `-?` to get general help or `help <command>` to get help
+     * for the methods and parameters. Users can use `-?` to get general help or {@code help <command>} to get help
      * on a specific command.
      *
      * @param args options, JSON-RPC method, JSON-RPC parameters

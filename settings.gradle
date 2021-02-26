@@ -27,6 +27,7 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
 
 if (JavaVersion.current().isJava9Compatible()) {
     System.err.println "Including JDK 9 modules because Java ${JavaVersion.current()} is JDK 9+"
+    include 'consensusj-analytics'              // Reactive analytics libraries
     include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
     include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
     include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
@@ -36,7 +37,13 @@ if (JavaVersion.current().isJava9Compatible()) {
     include 'cj-btc-rx-peergroup'               // bitcoinj-based RxJava (Transaction) implementation
     include 'cj-btc-zeromq'                     // bitcoind ZeroMQ client
 } else {
-    System.err.println "Skipping JDK 9 CLI modules, requires Java 9+, currently running Java ${JavaVersion.current()}"
+    System.err.println "Skipping JDK 9 modules, requires Java 9+, currently running Java ${JavaVersion.current()}"
+}
+
+if (JavaVersion.current().isJava11Compatible()) {
+    include 'consensusj-analytics'
+} else {
+    System.err.println "Skipping JDK 11 modules, requires Java 11+, currently running Java ${JavaVersion.current()}"
 }
 
 if (JavaVersion.current().compareTo(JavaVersion.VERSION_15) < 0) {
@@ -44,3 +51,4 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_15) < 0) {
 } else {
     System.err.println "Skipping 'cj-bitcoinj-dsl-js', because Nashorn is no longer present in Java ${JavaVersion.current()}"
 }
+

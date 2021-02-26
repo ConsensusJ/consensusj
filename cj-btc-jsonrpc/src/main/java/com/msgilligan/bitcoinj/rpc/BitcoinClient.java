@@ -319,7 +319,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      *
      * @param generate        turn generation on or off
      * @param genproclimit    Generation is limited to [genproclimit] processors, -1 is unlimited
-     * @return List<Sha256Hash>  list containing  block header hashes of the generated blocks or empty list
+     * @return list containing {@link Sha256Hash} block header hashes of the generated blocks or empty list
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      *
@@ -500,7 +500,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     }
 
     /**
-     * Get raw transaction info as hex->bitcoinj or verbose (json->POJO)
+     * Get raw transaction info as hex (conv to bitcoinj) or verbose (json POJO)
      * @param txid Transaction ID/hash
      * @param verbose `true` to return JSON transaction
      * @return  RawTransactionInfo if verbose, otherwise Transaction
@@ -980,7 +980,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     /**
      * Attempt to add or remove a node from the addnode list, or to try a connection to a node once.
      *
-     * @param node node to add as a string in the form of <IP address>:<port>
+     * @param node node to add as a string in the form of {@code IP_address:port}
      * @param command `add`, `remove`, or `onetry`
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error

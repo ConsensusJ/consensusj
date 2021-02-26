@@ -34,7 +34,7 @@ public interface JsonRpcClient extends AsyncSupport {
      *
      * @param method JSON RPC method call to send
      * @param params JSON RPC parameters using types that are convertible to JSON
-     * @param pass:[<R>] Type of result object
+     * @param <R> Type of result object
      * @return the `response.result` field of the JSON-RPC response cast to type R
      * @throws IOException network error
      * @throws JsonRpcStatusException JSON RPC status error
@@ -46,7 +46,7 @@ public interface JsonRpcClient extends AsyncSupport {
      *
      * Convenience version that takes `params` as array/varargs.
      *
-     * @param pass:[<R>] Type of result object
+     * @param <R> Type of result object
      * @param method JSON RPC method call to send
      * @param params JSON RPC parameters as array or varargs
      * @return the 'response.result' field of the JSON RPC response cast to type R

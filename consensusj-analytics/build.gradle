@@ -1,0 +1,30 @@
+plugins {
+    id 'java-library'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+dependencies {
+    api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
+    api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+
+    // For annotations on TokenRichList
+    //api "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    //api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+
+}
+
+ext.moduleName = 'org.consensusj.analytics'
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-parameters'   // Required for Jackson ParameterNamesModule
+}
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Automatic-Module-Name': moduleName,
+                    'Implementation-Version': archiveVersion.get()
+    }
+}

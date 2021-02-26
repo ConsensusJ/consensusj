@@ -33,7 +33,7 @@ public abstract class AbstractRpcClient implements JsonRpcClient, JacksonRpcClie
 
     /**
      * Subclasses must implement this method to actually send the request
-     * @param pass:[<R>] Type of result object
+     * @param <R> Type of result object
      * @param request The request to send
      * @param responseType The response to expected (used by Jackson for conversion)
      * @return A JSON RPC Response with `result` of type `R`
@@ -67,7 +67,7 @@ public abstract class AbstractRpcClient implements JsonRpcClient, JacksonRpcClie
     /**
      * JSON-RPC remote method call that returns 'response.result`
      *
-     * @param pass:[<R>] Type of result object
+     * @param <R> Type of result object
      * @param method JSON RPC method call to send
      * @param resultType desired result type as a Java class object
      * @param params JSON RPC params
@@ -85,7 +85,7 @@ public abstract class AbstractRpcClient implements JsonRpcClient, JacksonRpcClie
     /**
      * JSON-RPC remote method call that returns 'response.result`
      *
-     * @param pass:[<R>] Type of result object
+     * @param <R> Type of result object
      * @param method JSON RPC method call to send
      * @param resultType desired result type as a Jackson JavaType object
      * @param params JSON RPC params
@@ -116,7 +116,7 @@ public abstract class AbstractRpcClient implements JsonRpcClient, JacksonRpcClie
      * * Simple (not client-side validated) command line utilities
      * * Functional tests that need to send incorrect types to the server to test error handling
      *
-     * @param pass:[<R>] Type of result object
+     * @param <R> Type of result object
      * @param method JSON RPC method call to send
      * @param params JSON RPC parameters as a `List`
      * @return the 'response.result' field of the JSON RPC response cast to type R

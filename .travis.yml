@@ -21,4 +21,4 @@ script:
 jdk:
   - openjdk8
   - openjdk9
-  #- openjdk11 OpenJDK 11 disabled until we upgrade AsciiDoclet
+  - openjdk11
