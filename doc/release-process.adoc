@@ -2,13 +2,13 @@
 
 == Main Release Process
 
-. Use Java 9 for official builds
-.. `sdk use java 9.0.7-zulu` (or later version)
+. Use Java 11 for official builds
+.. `sdk use 11.0.10.hs-adpt`
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`
 .. `README.adoc` (check/set bitcoinj version variable, too)
-.. bitcoinj-dsl `ExtensionModule`
+.. cj-bitcoinj-dsl-gvy `ExtensionModule`
 . Update `README.adoc` and other documentation as necessary 
 . Commit version bump and changelog.
 . Full build, test

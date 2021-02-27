@@ -3,9 +3,9 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.5.5-SNAPSHOT
+== v0.5.5
 
-Released: Under development
+Released: 2021.02.26
 
 === Artifact Renames
 
@@ -23,8 +23,15 @@ Released: Under development
 * New `cj-bitcoinj-util` module with utility to compute block height from raw Block data
 * New `consensusj-rx-zeromq` module with generic RxJava ZeroMQ PubSub client
 
+=== New consensusj-analytics module
+
+* Support for dynamic rich list generation (used by **OmniJ**)
+
 === Json-RPC CLI tools
 
+* New `JsonRpcClient` interface
+* Deprecate `DynamicRpcMethodSupport` (use `JsonRpcClient` instead)
+* Output is now in JSON format
 * miscellaneous improvements
 
 === Bitcoin JSON-RPC
@@ -43,15 +50,23 @@ Released: Under development
 === Dependency Updates
 
 * bitcoinj 0.15.9
-* Jackson 2.12.0
+* Jackson 2.12.1
 * RxJava 3.0.10
 * Micronaut 2.3.1
 * Groovy 3.0.7
 
 === Build
 
+* Official build now uses JDK 11 - Github Actions and Travis CI updated accordingly
+* TravisCI -- add `build` target (which was surprisingly missing)
+* Add `buildDeprecatedModules` in `settings.gradle`, set to `"true"` for now (see https://github.com/ConsensusJ/consensusj/issues/69[Issue 69])
+* Asciidoclet is temporarily disabled (sadly)
+* Gradle 6.8.2
+* Update Micronaut daemon build scripts to latest Micronaut Gradle Plugin, etc.
 * Add Github Actions "Gradle Build": `gradle.yml`
+* Add Github Actions "GraalVM Build": `graalvm.yml`
 * Add Github Actions "Bitcoin Core RegTest": `regtest.yml`
+* Only build `cj-bitcoinj-dsl-js` if JDK < 15
 * Spock 2.0-M4-groovy-3.0
 
 == v0.5.4
