@@ -297,21 +297,6 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     }
 
     /**
-     * Returns information about a block at index provided.
-     *
-     * @param index The block index
-     * @return The information about the block
-     * @throws JsonRpcStatusException JSON RPC status exception
-     * @throws IOException network error
-     * @deprecated Use {@link BitcoinExtendedClient#getBlock(Integer)} if you need this.
-     */
-    @Deprecated
-    public Block getBlock(Integer index) throws JsonRpcStatusException, IOException {
-        Sha256Hash blockHash = getBlockHash(index);
-        return getBlock(blockHash);
-    }
-
-    /**
      * Turn generation on/off
      *
      * Note: `setgenerate` has been removed from regtest mode in Bitcoin Core, as `generateToAddress`
@@ -327,33 +312,6 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     public List<Sha256Hash> setGenerate(Boolean generate, Long genproclimit) throws JsonRpcStatusException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
         return send("setgenerate", resultType, generate, genproclimit);
-    }
-
-
-    /**
-     * generate blocks (RegTest mode only)
-     * @since Bitcoin Core 0.11.0
-     * @deprecated Use BitcoinClient#generateToAddress
-     *
-     * @param numBlocks number of blocks to generate
-     * @return list containing block header hashes of the generated blocks
-     * @throws JsonRpcStatusException JSON RPC status exception
-     * @throws IOException network error
-     */
-    @Deprecated
-    public List<Sha256Hash> generate(int numBlocks) throws JsonRpcStatusException, IOException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
-        return send("generate", resultType, numBlocks);
-    }
-
-    /**
-     * Convenience method for generating a single block when in RegTest mode
-     * @deprecated Use BitcoinClient#generateToAddress
-     * @see BitcoinClient#generate(int numBlocks)
-     */
-    @Deprecated
-    public List<Sha256Hash> generate() throws IOException, JsonRpcStatusException {
-        return generate(1);
     }
 
     /**
@@ -471,20 +429,6 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     }
 
     /**
-     * Signs inputs of a raw transaction.
-     *
-     * @param unsignedTransaction The hex-encoded raw transaction
-     * @return The signed transaction and information whether it has a complete set of signature
-     * @throws JsonRpcStatusException JSON RPC status exception
-     * @throws IOException network error
-     * @deprecated Deprecated in Bitcoin Core v0.17 and removed in Bitcoin Core v0.18
-     */
-    @Deprecated
-    public SignedRawTransaction signRawTransaction(String unsignedTransaction) throws JsonRpcStatusException, IOException {
-        return send("signrawtransaction", SignedRawTransaction.class, unsignedTransaction);
-    }
-
-    /**
      * Signs inputs of a raw transaction using the wallet. Arguments 2 and 3 of the RPC are currently
      * not supported, which means UTXOs not currently in the blockchain can't be used and `sighashtype`
      * defaults to `ALL`.
@@ -497,26 +441,6 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      */
     public SignedRawTransaction signRawTransactionWithWallet(String unsignedTransaction) throws JsonRpcStatusException, IOException {
         return send("signrawtransactionwithwallet", SignedRawTransaction.class, unsignedTransaction);
-    }
-
-    /**
-     * Get raw transaction info as hex (conv to bitcoinj) or verbose (json POJO)
-     * @param txid Transaction ID/hash
-     * @param verbose `true` to return JSON transaction
-     * @return  RawTransactionInfo if verbose, otherwise Transaction
-     * @throws JsonRpcStatusException JSON RPC status exception
-     * @throws IOException network error
-     * @deprecated Use getRawTransaction or getRawTransactionInfo as appropriate
-     */
-    @Deprecated
-    public Object getRawTransaction(Sha256Hash txid, Boolean verbose) throws JsonRpcStatusException, IOException {
-        Object result;
-        if (verbose) {
-            result = getRawTransactionInfo(txid);    // Verbose means JSON
-        } else {
-            result = getRawTransaction(txid);  // Not-verbose is bitcoinj Transaction
-        }
-        return result;
     }
 
     /**
@@ -803,20 +727,6 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
 
     public WalletTransactionInfo getTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {
         return send("gettransaction", WalletTransactionInfo.class, txid);
-    }
-
-    /**
-     * Deprecated getinfo function
-     *
-     * Use GetBlockChainInfo and other alternatives instead
-     *
-     * @return Structure with various info fields
-     * @throws JsonRpcStatusException JSON RPC status exception
-     * @throws IOException network error
-     */
-    @Deprecated
-    public ServerInfo getInfo() throws JsonRpcStatusException, IOException {
-        return send("getinfo", ServerInfo.class);
     }
 
     /**
