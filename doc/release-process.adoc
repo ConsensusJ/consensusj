@@ -32,7 +32,7 @@
 
 . Set versions back to -SNAPSHOT
 .. `gradle.properties`
-.. bitcoinj-dsl `ExtensionModule`
+.. cj-bitcoinj-dsl-gvy `ExtensionModule`
 .. `CHANGELOG.adoc`
 .. *Not* `README.adoc` -- it should match release version
 . Commit and push to master
