@@ -297,24 +297,6 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     }
 
     /**
-     * Turn generation on/off
-     *
-     * Note: `setgenerate` has been removed from regtest mode in Bitcoin Core, as `generateToAddress`
-     * should be used instead)
-     *
-     * @param generate        turn generation on or off
-     * @param genproclimit    Generation is limited to [genproclimit] processors, -1 is unlimited
-     * @return list containing {@link Sha256Hash} block header hashes of the generated blocks or empty list
-     * @throws JsonRpcStatusException JSON RPC status exception
-     * @throws IOException network error
-     *
-     */
-    public List<Sha256Hash> setGenerate(Boolean generate, Long genproclimit) throws JsonRpcStatusException, IOException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
-        return send("setgenerate", resultType, generate, genproclimit);
-    }
-
-    /**
      * Mine blocks immediately (RegTest mode)
      * @since Bitcoin Core 0.13.0
      *

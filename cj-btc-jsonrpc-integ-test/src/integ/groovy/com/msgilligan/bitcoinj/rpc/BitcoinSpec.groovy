@@ -40,8 +40,6 @@ class BitcoinSpec extends BaseRegTestSpec {
         commands.contains('getnetworkinfo')
         commands.contains('help')
         commands.contains('stop')
-        //commands.contains('setgenerate')
-        //commands.contains('generate')
     }
 
     def "Use RegTest mode to generate a block upon request"() {
