@@ -23,8 +23,7 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
  if (buildDeprecatedModules == 'true') {
     include 'cj-nmc-daemon',                    // Spring-based Namecoin Daemon (experimental, Deprecated)
             'bitcoinj-daemon',                  // Spring-based bitcoind proof-of-concept (Deprecated)
-            'bitcoinj-peerserver',              // Spring-based P2P transaction viewer (Deprecated)
-            'bitcoinj-proxy'                    // Ratpack-based bitcoinj JSON-RPC Proxy Server (Deprecated)
+            'bitcoinj-peerserver'               // Spring-based P2P transaction viewer (Deprecated)
  }
 
 if (JavaVersion.current().isJava9Compatible()) {
