@@ -17,8 +17,6 @@ public interface BitcoinJsonRpc {
     Object getblock(String blockHashString, Integer verbosity);
     Sha256Hash getblockhash(Integer blockNumber);
     Integer getconnectioncount();
-    @Deprecated
-    ServerInfo getinfo();
     BlockChainInfo getblockchaininfo();
     NetworkInfo getnetworkinfo();
 }

@@ -160,7 +160,6 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         }
     }
 
-    @Override
     @Deprecated
     public ServerInfo getinfo() {
         // Dummy up a response for now.

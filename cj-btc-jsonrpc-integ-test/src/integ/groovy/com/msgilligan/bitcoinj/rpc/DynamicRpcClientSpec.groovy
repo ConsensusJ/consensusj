@@ -60,7 +60,7 @@ class DynamicRpcClientSpec extends Specification {
         result != null /* Bitcoin 0.10.x or later */
     }
 
-    def "getinfo" () {
+    def "getnetworkinfo" () {
         when:
         def info = client.getnetworkinfo()
 
