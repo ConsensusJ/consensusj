@@ -23,7 +23,6 @@ Modular cryptocurrency libraries for Java, JVM languages, and Android. Including
 ** *bitcoinj* types <--> JSON (e.g. {bitcoinj-apidoc}/org/bitcoinj/core/Address.html[Address], {bitcoinj-apidoc}/org/bitcoinj/core/Sha256Hash.html[Sha256Hash], {bitcoinj-apidoc}/org/bitcoinj/core/Transaction.html[Transaction])
 ** Strongly-typed {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/package-summary.html[Java POJOs] <--> Bitcoin Core standard JSON (e.g. {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/BlockChainInfo.html[BlockChainInfo], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/UnspentOutput.html[UnspentOutput], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/ChainTip.html[ChainTip])
 * https://spring.io[Spring] and https://github.com/google/guice[Guice]-compatible Bitcoin server components for *server-side JSON-RPC*.
-* **bitcoinj-proxy** - A high-performance, non-blocking https://ratpack.io[Ratpack] server for proxying access to *bitcoind* or building Bitcoin-based microservices.
 * **bitcoinj-daemon** - A *Spring Boot*-based framework for a Java-based implementation of *bitcoind*.
 * **bitcoinj-peerserver** -  A *Spring Boot*-based web application that connects to the Bitcoin P2P network and streams events to a browser using the *STOMP* protocol over *WebSocket*.
 * Bitcoin currency and exchange implementations for http://javamoney.github.io[JavaMoney].
@@ -262,11 +261,6 @@ The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groo
 |Tests only (TBD)
 |Jackson serializers, deserializers & POJOs for Bitcoin JSON-RPC
 
-|<<bitcoinj-proxy,bitcoinj-proxy>>
-|8
-|Tests only (TBD)
-|Ratpack-based server for proxying *bitcoind* and/or building microservices.
-
 |<<bitcoinj-daemon,bitcoinj-daemon>>
 |8
 |Tests only (TBD)
@@ -371,13 +365,6 @@ PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring B
 .. The `peers.html' page is currently unstyled HTML.
 
 No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/{bitcoinj-version}/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-{consensusj-version}.jar` command.
-
-[#bitcoinj-proxy]
-==== bitcoinj-proxy
-
-A https://ratpack.io[Ratpack]-based proxy server that can proxy JSON-RPC commands to a connected *bitcoind* (or *Omni Core*) server. It can also be used as a starting point for JSON-RPC interoperable microservices.
-
-
 
 [#bitcoinj-dsl]
 ==== bitcoinj-dsl
