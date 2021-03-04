@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.msgilligan.bitcoinj.json.conversion.HexUtil;
 import com.msgilligan.bitcoinj.json.pojo.AddressGroupingItem;
+import com.msgilligan.bitcoinj.json.pojo.AddressInfo;
 import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
 import com.msgilligan.bitcoinj.json.pojo.BlockInfo;
 import com.msgilligan.bitcoinj.json.pojo.ChainTip;
@@ -340,27 +341,15 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     /**
      * Creates a new Bitcoin address for receiving payments.
      *
-     * @param account The account name for the address to be linked to.
+     * @param label The label name for the address to be linked to.
      * @return A new Bitcoin address
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Address getNewAddress(String account) throws JsonRpcStatusException, IOException {
-        return send("getnewaddress", Address.class, account);
+    public Address getNewAddress(String label) throws JsonRpcStatusException, IOException {
+        return send("getnewaddress", Address.class, label);
     }
-
-    /**
-     * Returns the Bitcoin address linked to the given account.
-     *
-     * @param account The account name linked to the address.
-     * @return The Bitcoin address
-     * @throws JsonRpcStatusException JSON RPC status exception
-     * @throws IOException network error
-     */
-    public Address getAccountAddress(String account) throws JsonRpcStatusException, IOException {
-        return send("getaccountaddress", Address.class, account);
-    }
-
+    
     /**
      * Return the private key from the server.
      *
@@ -376,23 +365,18 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     }
 
     /**
-     * Move a specified amount from one account in your wallet to another.
+     * Import a private key into the server's wallet
      *
-     * @param fromaccount The name of the account to move funds from, which may be the default account using ""
-     * @param toaccount   The name of the account to move funds to, which may be the default account using ""
-     * @param amount      The amount to move
-     * @param minconf     Only use funds with at least this many confirmations
-     * @param comment     An optional comment, stored in the wallet only
-     * @return True, if successful, and false otherwise
+     * @param privateKey An ECKey (containing a private key)
+     * @param label The server-side label for the key
+     * @param rescan Rescan the blockchain to find transactions for this key
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Boolean moveFunds(Address fromaccount, Address toaccount, Coin amount, Integer minconf, String comment)
-            throws JsonRpcStatusException,
-            IOException {
-        return send("move", fromaccount, toaccount, amount, minconf, comment);
+    public void importPrivKey(ECKey privateKey, String label, boolean rescan) throws JsonRpcStatusException, IOException {
+        send("importprivkey", Void.class, privateKey.getPrivateKeyEncoded(this.getNetParams()).toBase58(), label, rescan);
     }
-
+    
     /**
      * Creates a raw transaction spending the given inputs to the given destinations.
      *
@@ -532,6 +516,10 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     @Deprecated
     public Sha256Hash sendRawTransaction(String hexTx, Boolean allowHighFees) throws JsonRpcStatusException, IOException {
         return send("sendrawtransaction", Sha256Hash.class, hexTx, allowHighFees);
+    }
+
+    public AddressInfo getAddressInfo(Address address) throws JsonRpcStatusException, IOException {
+        return send("getaddressinfo", AddressInfo.class, address);
     }
 
     public Coin getReceivedByAddress(Address address) throws JsonRpcStatusException, IOException {
