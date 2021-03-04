@@ -1,11 +1,14 @@
 package com.msgilligan.bitcoinj.rpc;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.msgilligan.bitcoinj.json.pojo.AddressInfo;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
 import org.bitcoinj.core.Block;
+import org.bitcoinj.params.RegTestParams;
 import org.bitcoinj.script.Script;
+import org.bouncycastle.util.encoders.Hex;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
@@ -19,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,6 +39,9 @@ import java.util.stream.Collectors;
  */
 public class BitcoinExtendedClient extends BitcoinClient {
     private static final Logger log = LoggerFactory.getLogger(BitcoinExtendedClient.class);
+
+    private static final BigInteger NotSoPrivatePrivateInt = new BigInteger(1, Hex.decode("180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19"));
+    private static final String RegTestMiningAddressLabel = "RegTestMiningAddress";
     private /* lazy */ Address regTestMiningAddress;
 
     public final Coin stdTxFee = Coin.valueOf(10000);
@@ -62,7 +69,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
         this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());
     }
 
-    public Address getRegTestMiningAddress() {
+    public synchronized Address getRegTestMiningAddress() {
         if (!context.getParams().getId().equals(NetworkParameters.ID_REGTEST)) {
             throw new UnsupportedOperationException("Operation only supported in RegTest context");
         }
@@ -70,9 +77,22 @@ public class BitcoinExtendedClient extends BitcoinClient {
             // If in the future, we want to manage the keys for mined coins on the client side,
             // we could initialize regTestMiningKey from a bitcoinj-generated ECKey or HD Keychain.
             try {
-                regTestMiningAddress = this.getNewAddress();
+                ECKey notSoPrivatePrivateKey = ECKey.fromPrivate(NotSoPrivatePrivateInt, false);
+                Address address = Address.fromKey(RegTestParams.get(), notSoPrivatePrivateKey, Script.ScriptType.P2PKH);
+                AddressInfo addressInfo = getAddressInfo(address);
+                if (addressInfo.getIsmine() && !addressInfo.getIswatchonly() && addressInfo.getSolvable()) {
+                    log.warn("Address with label {} is present in server-side wallet", RegTestMiningAddressLabel);
+                    regTestMiningAddress = address;
+                } else {
+                    // Import known private key with label and rescan the blockchain for any transactions from
+                    // previous test runs, rescan shouldn't take too long on a typical RegTest chain
+                    log.warn("Adding private key for {} and rescanning chain", RegTestMiningAddressLabel);
+                    importPrivKey(notSoPrivatePrivateKey, RegTestMiningAddressLabel, true);
+                    regTestMiningAddress = address;
+                }
                 log.warn("Retrieved regTestMiningAddress = {}", regTestMiningAddress);
             } catch (IOException e) {
+                log.error("Exception while checking/importing regTestMiningAddress", e);
                 throw new RuntimeException(e);
             }
         }

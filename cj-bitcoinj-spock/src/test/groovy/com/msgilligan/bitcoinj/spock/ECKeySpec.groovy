@@ -15,7 +15,7 @@ class ECKeySpec extends Specification {
     static final mainNetParams = MainNetParams.get()
     static final testNetParams = TestNet3Params.get()
     static final regTestParams = RegTestParams.get()
-    final static BigInteger NotSoPrivatePrivateKey = new BigInteger(1, Hex.decode("180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19"));
+    static final BigInteger NotSoPrivatePrivateKey = new BigInteger(1, Hex.decode("180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19"))
 
     def "Generate a new, random valid Elliptic Curve Keypair"() {
         when: "We randomly generate a 256-bit private key and paired public key"
