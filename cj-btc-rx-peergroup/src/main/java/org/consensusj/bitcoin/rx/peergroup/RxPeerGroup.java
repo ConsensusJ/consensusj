@@ -1,6 +1,7 @@
 package org.consensusj.bitcoin.rx.peergroup;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.msgilligan.bitcoinj.json.pojo.ChainTip;
 import io.reactivex.rxjava3.processors.PublishProcessor;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.NetworkParameters;
@@ -111,6 +112,11 @@ public class RxPeerGroup implements RxBlockchainService {
     @Override
     public Publisher<Integer> blockHeightPublisher() {
         return blockHeightProcessor;
+    }
+
+    @Override
+    public Publisher<ChainTip> chainTipPublisher() {
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     private static void peerGroupStartedListener() {

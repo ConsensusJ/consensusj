@@ -1,5 +1,6 @@
 package org.consensusj.bitcoin.rx;
 
+import com.msgilligan.bitcoinj.json.pojo.ChainTip;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
@@ -26,4 +27,5 @@ public interface RxBlockchainService extends Closeable {
     Publisher<Block> blockPublisher();
     Publisher<Sha256Hash> blockHashPublisher();
     Publisher<Integer> blockHeightPublisher();
+    Publisher<ChainTip> chainTipPublisher();
 }

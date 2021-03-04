@@ -1,10 +1,12 @@
 package org.consensusj.bitcoin.zeromq;
 
+import com.msgilligan.bitcoinj.json.pojo.ChainTip;
 import io.reactivex.rxjava3.disposables.Disposable;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.MainNetParams;
+import org.bitcoinj.params.RegTestParams;
 import org.consensusj.bitcoinj.util.BlockUtil;
 
 import java.net.URI;
@@ -27,6 +29,10 @@ public class SampleBitcoinZmqClient {
             Disposable disposable = client.blockPublisher()
                     .subscribe(SampleBitcoinZmqClient::onBlock, SampleBitcoinZmqClient::onError);
 
+            // Subscribe to ChainTips
+            Disposable disposable2 = client.chainTipPublisher()
+                    .subscribe(SampleBitcoinZmqClient::onChainTip, SampleBitcoinZmqClient::onError);
+
 
             // Blocking subscribe to Transactions (so main() doesn't finish)
             client.transactionPublisher()
@@ -46,8 +52,8 @@ public class SampleBitcoinZmqClient {
 
     }
 
-    static void onError(Throwable t) {
-        out.println("Error: " + t);
+    static void onChainTip(ChainTip tip) {
+        out.printf("Chain tip: %s/%s\n", tip.getHeight(), tip.getHash());
     }
 
     static void onTx(Transaction tx) {
@@ -55,4 +61,9 @@ public class SampleBitcoinZmqClient {
                 tx.getTxId(),
                 tx.getOutputSum().toPlainString());
     }
+
+    static void onError(Throwable t) {
+        out.println("Error: " + t);
+    }
+
 }

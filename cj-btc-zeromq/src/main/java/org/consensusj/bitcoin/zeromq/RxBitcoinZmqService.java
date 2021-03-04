@@ -1,8 +1,11 @@
 package org.consensusj.bitcoin.zeromq;
 
-import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
+import com.msgilligan.bitcoinj.json.pojo.ChainTip;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.processors.BehaviorProcessor;
+import io.reactivex.rxjava3.processors.FlowableProcessor;
 import org.bitcoinj.core.BitcoinSerializer;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Context;
@@ -25,11 +28,18 @@ import java.util.concurrent.CompletableFuture;
 public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements RxBlockchainService, Closeable {
     private final Context bitcoinContext;
     private final BitcoinSerializer bitcoinSerializer;
-    
+
+    private final FlowableProcessor<ChainTip> flowableChainTip = BehaviorProcessor.create();
+    private final Disposable blockSubscription;
+
     public RxBitcoinZmqService(NetworkParameters networkParameters, URI rpcUri, String rpcUser, String rpcPassword) {
         super(networkParameters, rpcUri, rpcUser, rpcPassword);
         bitcoinContext = new Context(networkParameters);
         bitcoinSerializer = networkParameters.getSerializer(false);
+        blockSubscription = blockPublisher()
+                .flatMapSingle(this::chainTipFromBlock)
+                .distinctUntilChanged(ChainTip::getHash)
+                .subscribe(flowableChainTip::onNext);
     }
 
     @Override
@@ -64,13 +74,32 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
 
     @Override
     public Flowable<Integer> blockHeightPublisher() {
-        return blockPublisher()
-                .map(BlockUtil::blockHeightFromCoinbase);   // Extract block height
+        return chainTipPublisher()
+                .map(ChainTip::getHeight);          // Extract block height
+    }
+
+    @Override
+    public Flowable<ChainTip> chainTipPublisher() {
+        return flowableChainTip;
     }
 
     @Override
     public void close()  {
         super.close();
+        blockSubscription.dispose();
+    }
+
+    private Single<ChainTip> chainTipFromBlock(Block block) {
+        int height = BlockUtil.blockHeightFromCoinbase(block);
+        if (height != -1) {
+            return Single.just(new ChainTip(height, block.getHash(), 0, "active"));
+        } else {
+            return getLatestChainTipViaRpc();
+        }
+    }
+
+    private Single<ChainTip> getLatestChainTipViaRpc() {
+        return Single.defer(() -> Single.fromCompletionStage(getChainTipAsync()));
     }
 
     /**
@@ -83,15 +112,17 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
     }
 
     private CompletableFuture<Block> getBestBlock() {
-        return getBlockChainInfoAsync().thenCompose(info -> getBlockAsync(info.getBestBlockHash()));
+        return getChainTipAsync().thenCompose(tip -> getBlockAsync(tip.getHash()));
     }
 
     private CompletableFuture<Block> getBlockAsync(Sha256Hash blockHash) {
         return client.supplyAsync(() -> client.getBlock(blockHash));
     }
 
-    private CompletableFuture<BlockChainInfo> getBlockChainInfoAsync() {
-        return client.supplyAsync(client::getBlockChainInfo);
+    private CompletableFuture<ChainTip> getChainTipAsync() {
+        return client.supplyAsync(client::getChainTips)
+                .thenApply(tips -> tips.get(0))
+                .whenComplete((tip, error) -> flowableChainTip.onNext(tip));
     }
 
     /**

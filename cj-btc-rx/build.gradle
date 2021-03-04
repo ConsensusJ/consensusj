@@ -10,6 +10,7 @@ ext.moduleName = 'org.consensusj.bitcoin.rx'
 dependencies {
     api "org.reactivestreams:reactive-streams:1.0.3"
     api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    api project(':cj-btc-json')
 }
 
 jar {
