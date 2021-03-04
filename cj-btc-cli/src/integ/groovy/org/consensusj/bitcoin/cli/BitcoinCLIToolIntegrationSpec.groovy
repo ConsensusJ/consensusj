@@ -13,8 +13,8 @@ import spock.lang.Specification
  * TODO: We should probably check the command output (eventually)
  */
 class BitcoinCLIToolIntegrationSpec extends Specification implements CLITestSupport {
-    final String rpcUser = TestServers.getInstance().getRpcTestUser();
-    final String rpcPassword = TestServers.getInstance().getRpcTestPassword();
+    static final String rpcUser = TestServers.getInstance().getRpcTestUser();
+    static final String rpcPassword = TestServers.getInstance().getRpcTestPassword();
 
     def "help option"() {
         when:
