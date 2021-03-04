@@ -28,10 +28,8 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
 
 if (JavaVersion.current().isJava9Compatible()) {
     System.err.println "Including JDK 9 modules because Java ${JavaVersion.current()} is JDK 9+"
-    include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
     include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
     include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
-    include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
     include 'cj-btc-daemon-mn'                  // Prototype Micronaut version of Bitcoin daemon
     include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
     include 'cj-btc-rx-peergroup'               // bitcoinj-based RxJava (Transaction) implementation
@@ -42,6 +40,8 @@ if (JavaVersion.current().isJava9Compatible()) {
 
 if (JavaVersion.current().isJava11Compatible()) {
     include 'consensusj-analytics'              // Reactive analytics libraries
+    include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
+    include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
 } else {
     System.err.println "Skipping JDK 11 modules, requires Java 11+, currently running Java ${JavaVersion.current()}"
 }
