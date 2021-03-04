@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Sha256Hash;
 
 import java.io.IOException;
 
