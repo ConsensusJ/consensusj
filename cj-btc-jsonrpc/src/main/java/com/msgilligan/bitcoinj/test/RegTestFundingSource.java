@@ -3,6 +3,7 @@ package com.msgilligan.bitcoinj.test;
 import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
 import org.bitcoinj.core.TransactionOutput;
+import org.bitcoinj.script.ScriptException;
 import org.consensusj.jsonrpc.JsonRpcException;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
@@ -111,10 +112,16 @@ public class RegTestFundingSource implements FundingSource {
             Transaction tx = client.getRawTransaction(coinbaseTx);
             TransactionOutput txOut = tx.getOutput(0);
 
-            Address outAddress = txOut.getScriptPubKey().getToAddress(netParams);
+            Address outAddress;
+            try {
+                outAddress = txOut.getScriptPubKey().getToAddress(netParams);
+            } catch (ScriptException se) {
+                log.warn("Can't get address for txOut: {}", txOut);
+                outAddress = null;
+            }
 
             // txout is empty, if output was already spent
-            if (txOut.getValue().value > 0 && outAddress.equals(client.getRegTestMiningAddress())) {
+            if (txOut.getValue().value > 0 && outAddress != null && outAddress.equals(client.getRegTestMiningAddress())) {
                 log.warn("txout = {}, value = {}", txOut, txOut.getValue().value);
 
                 amountGatheredSoFar += txOut.getValue().value;
