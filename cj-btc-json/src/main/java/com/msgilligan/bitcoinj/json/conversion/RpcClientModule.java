@@ -17,7 +17,7 @@ public class RpcClientModule extends SimpleModule {
     public RpcClientModule(NetworkParameters netParams) {
         super("BitcoinJMappingClient", new Version(1, 0, 0, null, null, null));
 
-        this.addDeserializer(Address.class, new AddressDeserializer())
+        this.addDeserializer(Address.class, new AddressDeserializer(netParams))
             .addDeserializer(Block.class, new BlockHexDeserializer(netParams))
             .addDeserializer(Coin.class, new CoinDeserializer())
             .addDeserializer(ECKey.class, new ECKeyDeserializer())
