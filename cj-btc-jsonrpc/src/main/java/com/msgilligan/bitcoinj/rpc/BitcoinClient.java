@@ -43,6 +43,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 /**
  * = JSON-RPC Client for *Bitcoin Core*
@@ -73,14 +77,16 @@ import java.util.concurrent.Executor;
 public class BitcoinClient extends RpcClient implements NetworkParametersProperty {
     private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);
 
+    private static final int THREAD_POOL_SIZE = 5;
+
     private static final int SECOND_IN_MSEC = 1000;
     private static final int RETRY_SECONDS = 5;
     private static final int MESSAGE_SECONDS = 30;
+    
+    protected final Context context;
+    protected final ExecutorService contextAwareExecutor;
 
     private int serverVersion = 0;    // 0 means unknown serverVersion
-
-    protected final Context context;
-    protected final Executor contextAwareExecutor;
 
     /**
      * Construct a BitcoinClient from Network Parameters, URI, user name, and password.
@@ -93,8 +99,8 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
         super(server, rpcuser, rpcpassword);
         this.context = new Context(netParams);
         mapper.registerModule(new RpcClientModule(context.getParams()));
-        // TODO: We might want to create an actual thread pool here.
-        contextAwareExecutor = (Runnable r) -> newContextThread(r).start();
+        // TODO: Tune and/or make configurable the thread pool size.
+        contextAwareExecutor = Executors.newFixedThreadPool(THREAD_POOL_SIZE, this::newContextThread);
     }
 
     /**
@@ -119,11 +125,24 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
         return contextAwareExecutor;
     }
 
+    /**
+     * {@link java.util.concurrent.ThreadFactory} for bitcoinj-context-aware threads
+     * @param runnable Runnable that needs a thread
+     * @return A bitcoinj context-aware thread
+     */
     private Thread newContextThread(Runnable runnable) {
         return new Thread(() -> {
             Context.propagate(this.context);
             runnable.run();
         });
+    }
+
+    @Override
+    public void close() throws InterruptedException {
+        boolean successfullyTerminated = contextAwareExecutor.awaitTermination(10, TimeUnit.SECONDS);
+        if (!successfullyTerminated) {
+            log.warn("timeout while closing");
+        }
     }
 
     /**
@@ -132,7 +151,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    private int getServerVersion() throws IOException, JsonRpcStatusException {
+    private synchronized int getServerVersion() throws IOException, JsonRpcStatusException {
         if (serverVersion == 0) {
             serverVersion = getNetworkInfo().getVersion();
         }

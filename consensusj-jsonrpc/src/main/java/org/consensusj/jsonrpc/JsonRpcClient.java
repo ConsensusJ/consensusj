@@ -13,7 +13,7 @@ import java.util.List;
  *  to add use of {@link java.util.concurrent.CompletableFuture} for special cases. In the future
  *  this interface may change to natively asynchronous.
  */
-public interface JsonRpcClient extends AsyncSupport {
+public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
 
     /**
      * Get the URI of the remote server
@@ -79,5 +79,14 @@ public interface JsonRpcClient extends AsyncSupport {
 
     default JsonRpcRequest buildJsonRequest(String method, Object... params) {
         return new JsonRpcRequest(method, Arrays.asList(params));
+    }
+
+    /**
+     * Default no-op implementation of close. Classes should override when
+     * they have something they need to close properly.
+     *
+     * @throws IOException if something happens during close
+     */
+    default void close() throws Exception {
     }
 }
