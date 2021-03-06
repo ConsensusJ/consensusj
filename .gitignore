@@ -8,5 +8,7 @@ bitcoinj-*/out
 consensusj-*/out
 cj-*/out
 .asciidoctor/
+regtest-data/
+logs/
 
 
