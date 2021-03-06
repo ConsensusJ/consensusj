@@ -16,6 +16,13 @@ import java.util.List;
 public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
 
     /**
+     * Return the JSON-RPC version used by the implementation
+     *
+     * @return JSON-RPC version
+     */
+    JsonRpcMessage.Version getJsonRpcVersion();
+
+    /**
      * Get the URI of the remote server
      * @return URI of remote server
      */
@@ -66,19 +73,16 @@ public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
     /**
      * Create a JsonRpcRequest from method and parameters
      *
-     * Currently builds JSON-RPC 1.0 request, this method can be overridden for clients
-     * that need JSON-RPC 2.0 (e.g. Ethereum)
-     *
      * @param method name of method to call
      * @param params parameter Java objects
      * @return A ready-to-send JsonRpcRequest
      */
     default JsonRpcRequest buildJsonRequest(String method, List<Object> params) {
-        return new JsonRpcRequest(method, params);
+        return new JsonRpcRequest(getJsonRpcVersion(), method, params);
     }
 
     default JsonRpcRequest buildJsonRequest(String method, Object... params) {
-        return new JsonRpcRequest(method, Arrays.asList(params));
+        return new JsonRpcRequest(getJsonRpcVersion(), method, Arrays.asList(params));
     }
 
     /**

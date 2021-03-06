@@ -125,10 +125,10 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @return A valid JsonRpcResponse
      */
     static <T> JsonRpcResponse<T> wrapResult(JsonRpcRequest req, T result) {
-        return new JsonRpcResponse<>(result, null, req.getJsonrpc(), req.getId());
+        return new JsonRpcResponse<>(req, result);
     }
 
     static <T> JsonRpcResponse<T> wrapError(JsonRpcRequest req, JsonRpcError error) {
-        return new JsonRpcResponse<>(null, error, req.getJsonrpc(), req.getId());
+        return new JsonRpcResponse<>(req, error);
     }
 }

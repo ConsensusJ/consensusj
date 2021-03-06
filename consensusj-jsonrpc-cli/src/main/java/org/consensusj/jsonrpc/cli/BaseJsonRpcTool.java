@@ -1,6 +1,5 @@
 package org.consensusj.jsonrpc.cli;
 
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -9,6 +8,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.consensusj.jsonrpc.JsonRpcException;
+import org.consensusj.jsonrpc.JsonRpcMessage;
+import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.RpcClient;
 import org.slf4j.Logger;
@@ -30,10 +31,10 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
     private final static String name = "jsonrpc";
     protected final String usage ="usage string";
     protected final HelpFormatter formatter = new HelpFormatter();
+    protected JsonRpcMessage.Version jsonRpcVersion = JsonRpcMessage.Version.V2;
     protected JsonRpcClientTool.OutputObject outputObject = OutputObject.RESULT;
     protected JsonRpcClientTool.OutputFormat outputFormat = OutputFormat.JSON;
     protected JsonRpcClientTool.OutputStyle outputStyle = OutputStyle.PRETTY;
-
 
     public BaseJsonRpcTool() {
         formatter.setLongOptPrefix("-");
@@ -71,6 +72,9 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             // Print full JsonRpcResponse as output
             outputObject = OutputObject.RESPONSE;
         }
+        if (call.line.hasOption("V1")) {
+            jsonRpcVersion = JsonRpcMessage.Version.V1;
+        }
         RpcClient client = call.rpcClient();
         String method = args.get(0);
         args.remove(0); // remove method from list
@@ -86,12 +90,13 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                     result = client.send(method, Object.class, typedArgs);
                 }
             } else {
+                JsonRpcRequest request = new JsonRpcRequest(jsonRpcVersion, method, typedArgs);
                 if (outputFormat == OutputFormat.JSON) {
                     // Use Jackson JsonNode type so we can output in JSON format
-                    result = client.sendRequestForResponse(client.buildJsonRequest(method, typedArgs), client.responseTypeFor(JsonNode.class));
+                    result = client.sendRequestForResponse(request, client.responseTypeFor(JsonNode.class));
                 } else {
                     // Use Java Object so we can output in "Java" format (i.e.). via .toString)
-                    result = client.sendRequestForResponse(client.buildJsonRequest(method, typedArgs), client.responseTypeFor(Object.class));
+                    result = client.sendRequestForResponse(request, client.responseTypeFor(Object.class));
                 }
             }
         } catch (JsonRpcException e) {
@@ -101,11 +106,11 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             e.printStackTrace();
             throw new ToolException(1, e.getMessage());
         }
-        String resultForPrinting = formatResult(result);
+        String resultForPrinting = formatResult(call, result);
         call.out.println(resultForPrinting);
     }
 
-    private String formatResult(Object result) {
+    private String formatResult(CommonsCLICall call, Object result) {
         String string;
         if (result == null) {
             log.info("result is null");
@@ -119,7 +124,8 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             }
         } else if (result instanceof JsonRpcResponse) {
             JsonRpcResponse<JsonNode> response = (JsonRpcResponse<JsonNode>) result;
-            string = "Response + \n" + response.getResult().toPrettyString();
+            JsonNode reponseAsNode = call.client.getMapper().valueToTree(response);
+            string = reponseAsNode.toPrettyString();
         } else {
             log.info("result class is: {}", result.getClass());
             string = result.toString();
@@ -209,6 +215,8 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             try {
                 this.line = parser.parse(rpcTool.options(), args);
             } catch (ParseException e) {
+                rpcTool.printError(this, e.getMessage());
+                rpcTool.printHelp(this, rpcTool.usage());
                 throw new JsonRpcClientTool.ToolException(1, "Parser error");
             }
             if (line.hasOption("?")) {
@@ -244,7 +252,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                     rpcUser = split[0];
                     rpcPassword = split[1];
                 }
-                client = new RpcClient(uri, rpcUser, rpcPassword);
+                client = new RpcClient(rpcTool.jsonRpcVersion, uri, rpcUser, rpcPassword);
             }
             return client;
         }

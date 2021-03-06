@@ -15,15 +15,37 @@ import java.util.List;
  * Note: We may be able to pull more <i>or all</i> of this functionality into {@link JacksonRpcClient}
  */
 public abstract class AbstractRpcClient implements JsonRpcClient, JacksonRpcClient {
+    /**
+     * The default JSON-RPC version in JsonRpcRequest is now '2.0', but since most
+     * requests are created inside {@code RpcClient} subclasses, we'll continue to default
+     * to '1.0' in this base class.
+     */
+    private static final JsonRpcMessage.Version DEFAULT_JSON_RPC_VERSION = JsonRpcMessage.Version.V1;
+
+    protected final JsonRpcMessage.Version jsonRpcVersion;
     protected final ObjectMapper mapper;
     private final JavaType defaultType;
 
+    /**
+     * @deprecated Specify JSON-RPC version and use {@link AbstractRpcClient#AbstractRpcClient(JsonRpcMessage.Version)}
+     */
+    @Deprecated
     public AbstractRpcClient() {
+        this(DEFAULT_JSON_RPC_VERSION);
+    }
+
+    public AbstractRpcClient(JsonRpcMessage.Version jsonRpcVersion) {
+        this.jsonRpcVersion = jsonRpcVersion;
         mapper = new ObjectMapper();
         // TODO: Provide external API to configure FAIL_ON_UNKNOWN_PROPERTIES
         // TODO: Remove "ignore unknown" annotations on various POJOs that we've defined.
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         defaultType = mapper.getTypeFactory().constructType(Object.class);
+    }
+
+    @Override
+    public JsonRpcMessage.Version getJsonRpcVersion() {
+        return jsonRpcVersion;
     }
 
     @Override

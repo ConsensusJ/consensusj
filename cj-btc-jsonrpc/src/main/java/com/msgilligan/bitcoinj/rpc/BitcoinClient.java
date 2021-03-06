@@ -22,6 +22,7 @@ import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo;
 import com.msgilligan.bitcoinj.json.pojo.ZmqNotification;
 import org.bitcoinj.utils.ContextPropagatingThreadFactory;
 import org.consensusj.jsonrpc.JsonRpcException;
+import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.jsonrpc.RpcClient;
 import org.bitcoinj.core.Address;
@@ -96,7 +97,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      * @param rpcpassword Password (if required)
      */
     public BitcoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        super(server, rpcuser, rpcpassword);
+        super(JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
         this.context = new Context(netParams);
         mapper.registerModule(new RpcClientModule(context.getParams()));
         // TODO: Tune and/or make configurable the thread pool size.

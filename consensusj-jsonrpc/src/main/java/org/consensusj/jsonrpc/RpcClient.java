@@ -23,6 +23,8 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
+import static org.consensusj.jsonrpc.JsonRpcMessage.Version.V2;
+
 /**
  * = JSON-RPC Client using {@link HttpURLConnection}.
  *
@@ -54,17 +56,32 @@ public class RpcClient extends AbstractRpcClient {
     /**
      * Construct a JSON-RPC client from URI, username, and password
      *
+     * @param jsonRpcVersion version for {@code jsonrpc} field in messages
      * @param server server URI should not contain username/password
      * @param rpcUser username for the RPC HTTP connection
      * @param rpcPassword password for the RPC HTTP connection
      */
-    public RpcClient(URI server, final String rpcUser, final String rpcPassword) {
-        super();
+    public RpcClient(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
+        super(jsonRpcVersion);
         log.debug("Constructing JSON-RPC client for: {}", server);
         this.serverURI = server;
         this.username = rpcUser;
         this.password = rpcPassword;
     }
+
+    /**
+     * Construct a JSON-RPC client from URI, username, and password
+     *
+     * @param server server URI should not contain username/password
+     * @param rpcUser username for the RPC HTTP connection
+     * @param rpcPassword password for the RPC HTTP connection
+     * @deprecated Specify JSON-RPC version and use {@link RpcClient#RpcClient(JsonRpcMessage.Version, URI, String, String)}
+     */
+    @Deprecated
+    public RpcClient(URI server, final String rpcUser, final String rpcPassword) {
+        this(JsonRpcMessage.Version.V1, server, rpcUser, rpcPassword);
+    }
+
 
     /**
      * Get the URI of the server this client connects to

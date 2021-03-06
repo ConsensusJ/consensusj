@@ -23,7 +23,7 @@ public class EchoJsonRpcService extends AbstractJsonRpcService {
     }
 
     public String echo(String message) {
-        log.debug("EchoJsonRpcService: echo {}",message);
+        log.debug("EchoJsonRpcService: echo {}", message);
         return message;
     }
 

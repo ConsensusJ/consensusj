@@ -1,5 +1,6 @@
 package org.consensusj.ethereum.jsonrpc;
 
+import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.RpcClient;
@@ -7,7 +8,6 @@ import org.consensusj.jsonrpc.RpcClient;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -29,22 +29,13 @@ public class EthereumClient extends RpcClient {
      * @param rpcpassword password for the RPC HTTP connection
      */
     public EthereumClient(URI server, String rpcuser, String rpcpassword) {
-        super(server, rpcuser, rpcpassword);
+        super(JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
     }
 
     public EthereumClient() {
-        super(DEFAULT_LOCALHOST, null, null);
+        this(DEFAULT_LOCALHOST, null, null);
     }
-
-    /**
-     * Override to send JSON RPC version "2.0"
-     *
-     */
-    @Override
-    public JsonRpcRequest buildJsonRequest(String method, List<Object> params) {
-        return new JsonRpcRequest(method, params, JsonRpcRequest.JSON_RPC_VERSION_2);
-    }
-
+    
     public String ethProtocolVersion() throws IOException, JsonRpcStatusException {
         return this.send("eth_protocolVersion");
     }

@@ -12,10 +12,11 @@ class RpcClientSpec extends Specification {
 
     def "constructor works correctly" () {
         when:
-        def client = new RpcClient("http://localhost:8080".toURI(), "user", "pass")
+        def client = new RpcClient(JsonRpcMessage.Version.V2, "http://localhost:8080".toURI(), "user", "pass")
 
         then:
         client.serverURI == "http://localhost:8080".toURI()
+        client.getJsonRpcVersion() == JsonRpcMessage.Version.V2
     }
 
     @Unroll

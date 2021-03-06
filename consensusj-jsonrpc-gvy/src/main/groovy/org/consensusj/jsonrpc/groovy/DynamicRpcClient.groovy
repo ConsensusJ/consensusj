@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc.groovy
 
+import org.consensusj.jsonrpc.JsonRpcMessage
 import org.consensusj.jsonrpc.RpcClient
 
 /**
@@ -16,6 +17,10 @@ import org.consensusj.jsonrpc.RpcClient
 class DynamicRpcClient extends RpcClient implements DynamicRpcMethodFallback {
 
     DynamicRpcClient(URI server, String rpcuser, String rpcpassword) {
-        super(server, rpcuser, rpcpassword)
+        this(JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword)
+    }
+
+    DynamicRpcClient(JsonRpcMessage.Version jsonRpcVersion, URI server, String rpcuser, String rpcpassword) {
+        super(jsonRpcVersion, server, rpcuser, rpcpassword)
     }
 }
