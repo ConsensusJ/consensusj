@@ -6,10 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.consensusj.jsonrpc.internal.NumberStringSerializer;
 
-import java.util.Optional;
-
-import static org.consensusj.jsonrpc.JsonRpcMessage.Version.*;
-
 /**
  * JSON-RPC Response POJO
  *
