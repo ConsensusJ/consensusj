@@ -27,8 +27,12 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
     private final Flowable<byte[]> observableRawBlock;
 
     public RxBitcoinZmqBinaryService(NetworkParameters networkParameters, URI rpcUri, String rpcUser, String rpcPassword) {
-        this.networkParameters = networkParameters;
-        client = new BitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword);
+        this(new BitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword));
+    }
+
+    public RxBitcoinZmqBinaryService(BitcoinClient client) {
+        this.client = client;
+        this.networkParameters = client.getNetParams();
 
         BitcoinZmqPortFinder portFinder = new BitcoinZmqPortFinder(client);
 

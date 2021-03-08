@@ -1,6 +1,7 @@
 package org.consensusj.bitcoin.zeromq;
 
 import com.msgilligan.bitcoinj.json.pojo.ChainTip;
+import com.msgilligan.bitcoinj.rpc.BitcoinClient;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -33,7 +34,11 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
     private final Disposable blockSubscription;
 
     public RxBitcoinZmqService(NetworkParameters networkParameters, URI rpcUri, String rpcUser, String rpcPassword) {
-        super(networkParameters, rpcUri, rpcUser, rpcPassword);
+        this(new BitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword));
+    }
+
+    public RxBitcoinZmqService(BitcoinClient client) {
+        super(client);
         bitcoinContext = new Context(networkParameters);
         bitcoinSerializer = networkParameters.getSerializer(false);
         blockSubscription = blockPublisher()
