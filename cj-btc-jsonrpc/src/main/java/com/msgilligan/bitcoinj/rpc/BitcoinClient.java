@@ -12,7 +12,6 @@ import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.RawTransactionInfo;
 import com.msgilligan.bitcoinj.json.pojo.ReceivedByAddressInfo;
-import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.TxOutInfo;
 import com.msgilligan.bitcoinj.json.pojo.TxOutSetInfo;
@@ -20,7 +19,7 @@ import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
 import com.msgilligan.bitcoinj.json.conversion.RpcClientModule;
 import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo;
 import com.msgilligan.bitcoinj.json.pojo.ZmqNotification;
-import org.bitcoinj.utils.ContextPropagatingThreadFactory;
+import com.msgilligan.bitcoinj.rpc.internal.BitcoinClientThreadFactory;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
@@ -43,36 +42,33 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
- * = JSON-RPC Client for *Bitcoin Core*
- *
- * A strongly-typed wrapper for a {@index Bitcoin} RPC client using the
- * https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core JSON-RPC API].
- * https://bitcoinj.github.io[bitcoinj] types are used where appropriate.
+ * JSON-RPC Client for <b>Bitcoin Core</b>.
+ * <p>
+ * A strongly-typed wrapper for a Bitcoin RPC client using the
+ * <a href="https://developer.bitcoin.org/reference/rpc/index.html">Bitcoin Core JSON-RPC API</a> and
+ * <a href="https://bitcoinj.github.io">bitcoinj</a> types are used where appropriate.
  * For example, requesting a block hash will return a {@link org.bitcoinj.core.Sha256Hash}:
  *
- * [source,java]
- * --
+ * <pre> {@code
  * Sha256Hash hash = client.getBlockHash(342650);
- * --
+ * }</pre>
  *
  * Requesting a Bitcoin balance will return the amount as a {@link org.bitcoinj.core.Coin}:
- * [source,java]
- * --
+ *
+ * <pre> {@code
  * Coin balance = client.getBalance();
- * --
+ * }</pre>
  *
- * This version is written to be compatible with Bitcoin Core 0.10.4 and later. If used with
- * Omni Core (an enhanced Bitcoin Core with Omni Protocol support) Omni Core 0.0.11.1
- * or later is required.
- *
- * NOTE: This is still a work-in-progress and the API will change.
+ * This version is written to be compatible with Bitcoin Core 0.19 and later. If used with
+ * Omni Core (an enhanced Bitcoin Core with Omni Protocol support) Omni Core 0.9.0 or later is required.
+ * <p>
+ * <b>This is still a work-in-progress and the API will change.</b>
  *
  */
 public class BitcoinClient extends RpcClient implements NetworkParametersProperty {
@@ -85,7 +81,8 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     private static final int MESSAGE_SECONDS = 30;
     
     protected final Context context;
-    protected final ExecutorService contextAwareExecutor;
+    protected final ThreadFactory threadFactory;
+    protected final ExecutorService executorService;
 
     private int serverVersion = 0;    // 0 means unknown serverVersion
 
@@ -98,10 +95,13 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      */
     public BitcoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         super(JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
-        this.context = new Context(netParams);
+        context = new Context(netParams);
         mapper.registerModule(new RpcClientModule(context.getParams()));
+        threadFactory = new BitcoinClientThreadFactory(context, "Bitcoin RPC Client");
         // TODO: Tune and/or make configurable the thread pool size.
-        contextAwareExecutor = Executors.newFixedThreadPool(THREAD_POOL_SIZE, this::newContextThread);
+        // Current pool size of 5 is chosen to minimize simultaneous active RPC
+        // calls in `bitcoind` -- which is not designed for serving multiple clients.
+        executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
     }
 
     /**
@@ -122,25 +122,21 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
     }
 
     @Override
-    public Executor getDefaultAsyncExecutor() {
-        return contextAwareExecutor;
+    public ExecutorService getDefaultAsyncExecutor() {
+        return executorService;
     }
-
+    
     /**
-     * {@link java.util.concurrent.ThreadFactory} for bitcoinj-context-aware threads
-     * @param runnable Runnable that needs a thread
-     * @return A bitcoinj context-aware thread
+     * Shutdown our thread pool, etc.
+     *
+     * @throws InterruptedException if one happens
      */
-    private Thread newContextThread(Runnable runnable) {
-        return new Thread(() -> {
-            Context.propagate(this.context);
-            runnable.run();
-        });
-    }
-
     @Override
     public void close() throws InterruptedException {
-        boolean successfullyTerminated = contextAwareExecutor.awaitTermination(10, TimeUnit.SECONDS);
+        // TODO: See shutdownAndAwaitTermination method in the ExecutorService JavaDoc for
+        // how to correctly implement this.
+        executorService.shutdown();
+        boolean successfullyTerminated = executorService.awaitTermination(10, TimeUnit.SECONDS);
         if (!successfullyTerminated) {
             log.warn("timeout while closing");
         }
