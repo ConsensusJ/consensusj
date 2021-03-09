@@ -1,5 +1,6 @@
 package com.msgilligan.bitcoinj.test;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
 import org.bitcoinj.core.TransactionOutput;
@@ -7,7 +8,6 @@ import org.bitcoinj.script.ScriptException;
 import org.consensusj.jsonrpc.JsonRpcException;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
-import com.msgilligan.bitcoinj.json.pojo.TxOutInfo;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
 import com.msgilligan.bitcoinj.json.conversion.BitcoinMath;
 import org.bitcoinj.core.Address;
@@ -22,9 +22,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * FundingSource using RegTest mining, BitcoinExtendedClient (with getRegTestMiningAddress),
@@ -178,10 +178,10 @@ public class RegTestFundingSource implements FundingSource {
         try {
             consolidateCoins();
         } catch (JsonRpcException e) {
-            e.printStackTrace();
+            log.error("exception: ", e);
             throw new RuntimeException(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("exception: ", e);
             throw new RuntimeException(e);
         }
     }
@@ -194,40 +194,48 @@ public class RegTestFundingSource implements FundingSource {
      * Can be used in cleanupSpec() methods of integration tests.
      *
      * @see <a href="https://github.com/OmniLayer/OmniJ/issues/50">Issue #50 on GitHub</a>
-     *
-     * @return True, if enough outputs with a value of at least {@code stdRelayTxFee} were spent
      */
-     void consolidateCoins() throws JsonRpcException, IOException {
-        long amountIn = 0;
-        List<Outpoint> inputs = new ArrayList<Outpoint>();
-        List<UnspentOutput> unspentOutputs = client.listUnspent(1,defaultMaxConf);
+    void consolidateCoins() throws JsonRpcException, IOException {
+        // Get all UTXOs in the servers wallet
+        List<UnspentOutput> unspentOutputs = client.listUnspent(1, defaultMaxConf);
+
+        // Check if the amount is large enough to be worth consolidating
+        Coin amountIn = sumUnspentOutputs(unspentOutputs);
+        if (amountIn.value < client.stdRelayTxFee.value) {
+            log.debug("Amount not enough to consolidate");
+            return;
+        }
 
         // Gather inputs
-        for (UnspentOutput unspentOutput : unspentOutputs) {
-            amountIn += unspentOutput.getAmount().value;
-            inputs.add(new Outpoint(unspentOutput.getTxid(), unspentOutput.getVout()));
-
-        }
-
-        // Check if there is a sufficient high amount to sweep at all
-        if (amountIn < client.stdRelayTxFee.value) {
-            return; //false;
-        }
+        List<Outpoint> inputs = unspentOutputsToOutpoints(unspentOutputs);
 
         // No receiver, just spend most of it as fee (!)
-        Map<Address,Coin> outputs = new HashMap<>();
-        outputs.put(client.getNewAddress(), client.stdRelayTxFee);
+        Map<Address,Coin> outputs = Collections.singletonMap(client.getNewAddress(), client.stdRelayTxFee);
 
         String unsignedTxHex = client.createRawTransaction(inputs, outputs);
         SignedRawTransaction signingResult = client.signRawTransactionWithWallet(unsignedTxHex);
 
         boolean complete = signingResult.isComplete();
+        if (!complete) {
+            log.error("Unable to complete signing on consolidate coins transaction.");
+            JsonNode signingResultJson = client.getMapper().valueToTree(signingResult);
+            log.error("SigningResult: {}", signingResultJson.toPrettyString());
+        }
         assert complete;
 
         String signedTxHex = signingResult.getHex();
         Sha256Hash txid = sendRawTransactionUnlimitedFees(signedTxHex);
+        log.info("Consolidating transaction sent, txid = {}", txid);
+    }
 
-        return; //true;
+    private List<Outpoint> unspentOutputsToOutpoints(List<UnspentOutput> unspentOutputs) {
+        return unspentOutputs.stream()
+                .map(output -> new Outpoint(output.getTxid(), output.getVout()))   // map from UnspentOutput to Outpoint
+                .collect(Collectors.toList());
+    }
+
+    private Coin sumUnspentOutputs(List<UnspentOutput> unspentOutputs) {
+        return Coin.valueOf(unspentOutputs.stream().mapToLong(output -> output.getAmount().value).sum());
     }
 
     private Sha256Hash sendRawTransactionUnlimitedFees(String hexTx) throws IOException {
