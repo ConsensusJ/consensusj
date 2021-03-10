@@ -587,6 +587,11 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
         return listUnspent(minConf, maxConf, null);
     }
 
+    public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, Iterable<Address> filter)
+            throws JsonRpcStatusException, IOException {
+        return listUnspent(minConf, maxConf, filter, true);
+    }
+
     /**
      * Returns a list of unspent transaction outputs with at least {@code minConf} and not more than {@code maxConf}
      * confirmations, filtered by a list of addresses.
@@ -598,10 +603,10 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, Iterable<Address> filter)
+    public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, Iterable<Address> filter, boolean includeUnsafe)
             throws JsonRpcStatusException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, UnspentOutput.class);
-        return send("listunspent", resultType, minConf, maxConf, filter);
+        return send("listunspent", resultType, minConf, maxConf, filter, includeUnsafe);
     }
 
     /**

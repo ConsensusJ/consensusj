@@ -16,32 +16,46 @@ public class UnspentOutput {
     private final Sha256Hash  txid;
     private final int         vout;
     private final Address     address;
-    private final String      account;
+    private final String      label;
     private final String      scriptPubKey;
     private final Coin        amount;
     private final int         confirmations;
+
+
+    private final String      redeemScript;
+    private final String      witnessScript;
     private final boolean     spendable;
-    private final Boolean     solvable;
+    private final boolean     solvable;
+    private final String      desc;
+    private final boolean     safe;
 
     @JsonCreator
     public UnspentOutput(@JsonProperty("txid")          Sha256Hash  txid,
                          @JsonProperty("vout")          int         vout,
                          @JsonProperty("address")       Address     address,
-                         @JsonProperty("account")       String      account,
+                         @JsonProperty("label")         String      label,
                          @JsonProperty("scriptPubKey")  String      scriptPubKey,
                          @JsonProperty("amount")        Coin        amount,
                          @JsonProperty("confirmations") int         confirmations,
+                         @JsonProperty("redeemScript")  String      redeemScript,
+                         @JsonProperty("witnessScript") String      witnessScript,
                          @JsonProperty("spendable")     boolean     spendable,
-                         @JsonProperty("solvable")      Boolean     solvable) {
+                         @JsonProperty("solvable")      boolean     solvable,
+                         @JsonProperty("desc")          String      desc,
+                         @JsonProperty("safe")          boolean     safe) {
         this.txid = txid;
         this.vout = vout;
         this.address = address;
-        this.account = account;
+        this.label = label;
         this.scriptPubKey = scriptPubKey;
         this.amount = amount;
         this.confirmations = confirmations;
+        this.redeemScript = redeemScript;
+        this.witnessScript = witnessScript;
         this.spendable = spendable;
         this.solvable = solvable;
+        this.desc = desc;
+        this.safe = safe;
     }
 
     public Sha256Hash getTxid() {
@@ -56,8 +70,8 @@ public class UnspentOutput {
         return address;
     }
 
-    public String getAccount() {
-        return account;
+    public String getLabel() {
+        return label;
     }
 
     public String getScriptPubKey() {
@@ -72,5 +86,27 @@ public class UnspentOutput {
         return confirmations;
     }
 
-    public boolean getSpendable() { return spendable; }
+    public String getRedeemScript() {
+        return redeemScript;
+    }
+
+    public String getWitnessScript() {
+        return witnessScript;
+    }
+
+    public boolean isSpendable() {
+        return spendable;
+    }
+
+    public boolean isSolvable() {
+        return solvable;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public boolean isSafe() {
+        return safe;
+    }
 }
