@@ -70,10 +70,12 @@ subprojects {
 
     compileJava {
         options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
+        options.encoding = 'UTF-8'
     }
 
     tasks.withType(GroovyCompile) {
         groovyOptions.optimizationOptions.indy = true
+        options.encoding = 'UTF-8'
     }
 
     tasks.withType(AbstractArchiveTask) {

@@ -1,4 +1,5 @@
 ext.javadocSpec = {
+    options.encoding = 'UTF-8'
     if (JavaVersion.current().isJava9()) {
         // AsciiDoclet only works with Java 9 (and earlier, but we want html5)
         options.docletpath = configurations.asciidoclet.files.asType(List)
