@@ -7,6 +7,36 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: 2021.03.??
 
+=== Remove Deprecated Server App Modules
+
+* Remove `bitcoinj-daemon' (SpringBoot-based Bitcoin JSON-RPC Server)
+* Remove `bitcoinj-peerserver' (SpringBoot-based Bitcoin JSON-RPC Server & WebSocket/STOMP server)
+* Remove `bitcoinj-proxy` (Ratpack-based Bitcoin JSON-RPC Proxy)
+* Remove `cj-nmc-daemon` (Ratpack-based Namecoin JSON-RPC Server)
+
+=== Bitcoin JSON-RPC
+
+* Use `ThreadPool` for `.provideAsync`
+* Upgrade to JSON-RPC 2.0 (send `"2.0"` in requests)
+* Update `listUnspent` and `UnspentOutput`
+* Remove some deprecated and obsolete methods
+* Refactor and make `RegTestFundingSource` much more robust
+
+=== jsonrpc tool (consensusj-jsonrpc-cli)
+
+* default to using version 2.0
+* -V1 option for using version 1.0
+* finish implementing -response option
+* print helpful error and help message when invalid option given
+
+=== Rx/ZeroMQ modules
+
+* Refactoring and improvements for (Micronaut-based) `btcproxyd` (separate repo)
+
+=== CLI Modules
+
+* Are now JDK11-based
+
 === Dependency Updates
 
 * Jackson 2.12.2

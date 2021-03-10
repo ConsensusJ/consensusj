@@ -20,12 +20,6 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'cj-nmc-jsonrpc',                       // Namecoin JSON-RPC client (experimental)
         'cj-nmc-jsonrpc-gvy'                    // Namecoin JSON-RPC client w/Groovy extensions (experimental)
 
- if (buildDeprecatedModules == 'true') {
-    include 'cj-nmc-daemon',                    // Spring-based Namecoin Daemon (experimental, Deprecated)
-            'bitcoinj-daemon',                  // Spring-based bitcoind proof-of-concept (Deprecated)
-            'bitcoinj-peerserver'               // Spring-based P2P transaction viewer (Deprecated)
- }
-
 if (JavaVersion.current().isJava9Compatible()) {
     System.err.println "Including JDK 9 modules because Java ${JavaVersion.current()} is JDK 9+"
     include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
