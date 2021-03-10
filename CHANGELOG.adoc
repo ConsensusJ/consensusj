@@ -7,6 +7,10 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: 2021.03.??
 
+=== Dependency Updates
+
+* Jackson 2.12.2
+* Micronaut 2.4.0
 
 == v0.5.5
 
