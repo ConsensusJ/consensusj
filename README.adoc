@@ -12,29 +12,48 @@ v0.5.5
 :caution-caption: :fire:
 :warning-caption: :warning:
 
-image:https://github.com/ConsensusJ/consensusj/workflows/Gradle%20Build/badge.svg?branch=master["Github Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Gradle+Build%22"] image:https://github.com/ConsensusJ/consensusj/workflows/Bitcoin%20Core%20RegTest/badge.svg?branch=master["Github Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Bitcoin+Core+RegTest%22"]image:https://travis-ci.com/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.com/github/ConsensusJ/consensusj"] image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"] image:https://api.bintray.com/packages/msgilligan/maven/consensusj/images/download.svg[link="https://bintray.com/msgilligan/maven/consensusj/_latestVersion"]
+image:https://github.com/ConsensusJ/consensusj/workflows/Gradle%20Build/badge.svg?branch=master["Github Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Gradle+Build%22"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml/badge.svg?branch=master["Github Actions GraalVM Builds", link="https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml"] image:https://github.com/ConsensusJ/consensusj/workflows/Bitcoin%20Core%20RegTest/badge.svg?branch=master["Github Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Bitcoin+Core+RegTest%22"] image:https://travis-ci.com/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.com/github/ConsensusJ/consensusj"] image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"] image:https://api.bintray.com/packages/msgilligan/maven/consensusj/images/download.svg[link="https://bintray.com/msgilligan/maven/consensusj/_latestVersion"]
 
-Modular cryptocurrency libraries for Java, JVM languages, and Android. Including:
 
-* A *Java JSON-RPC client* that serves as a base class for _any_ cryptocurrency platform that uses JSON-RPC for communication.
-* A *Groovy JSON-RPC client* that can use _dynamic_ methods for scripting, experimentation and functional tests of _any_ JSON-RPC server.
+Modular cryptocurrency libraries for Java, JVM languages, and Android.
+
+== Features
+
+=== Core JSON-RPC Features
+* A *Java* JSON-RPC client that serves as a base class for _any_ cryptocurrency platform that uses JSON-RPC for communication.
+* A *Groovy* JSON-RPC client that can use _dynamic_ methods for scripting, experimentation and functional tests of _any_ JSON-RPC server.
+* A JSON-RPC *command-line* client, `jsonrpc`, for testing and debugging JSON-RPC servers and applications. It can be natively compiled with https://www.graalvm.org[GraalVM]. It can launch, call the server and print output in under 50 milliseconds.
+* **consensusj-jsonrpc-daemon** - A *Micronaut*-based JSON-RPC "echo" *server*. It can be natively compiled using https://www.graalvm.org[GraalVM].
+
+=== Bitcoin Features
+
 * A *JSON-RPC Java client* for the https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core API] with strong, static types.
 * JSON library using https://github.com/FasterXML/jackson[Jackson] to convert between Bitcoin types and JSON
 ** *bitcoinj* types <--> JSON (e.g. {bitcoinj-apidoc}/org/bitcoinj/core/Address.html[Address], {bitcoinj-apidoc}/org/bitcoinj/core/Sha256Hash.html[Sha256Hash], {bitcoinj-apidoc}/org/bitcoinj/core/Transaction.html[Transaction])
 ** Strongly-typed {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/package-summary.html[Java POJOs] <--> Bitcoin Core standard JSON (e.g. {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/BlockChainInfo.html[BlockChainInfo], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/UnspentOutput.html[UnspentOutput], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/ChainTip.html[ChainTip])
-* https://spring.io[Spring] and https://github.com/google/guice[Guice]-compatible Bitcoin server components for *server-side JSON-RPC*.
-* **bitcoinj-daemon** - A *Spring Boot*-based framework for a Java-based implementation of *bitcoind*.
-* **bitcoinj-peerserver** -  A *Spring Boot*-based web application that connects to the Bitcoin P2P network and streams events to a browser using the *STOMP* protocol over *WebSocket*.
-* Bitcoin currency and exchange implementations for http://javamoney.github.io[JavaMoney].
-* *bitcoinj-cli* - a command line tool and supporting libraries for accessing the JSON-RPC API.
+* `jakarta.inject`-compatible Bitcoin server components for *server-side JSON-RPC*.
+* **cj-btc-daemon** - A *Micronaut*-based framework for a Java-based implementation of *bitcoind*. It can be natively compiled using https://www.graalvm.org[GraalVM].
+* *cj-btc-cli* - a command line tool and supporting libraries for accessing the JSON-RPC API.
 * A Groovy-language *Domain Specific Language* for scripting and testing with *bitcoinj*
 * Functional tests of bitcoind (and bitcoinj-daemon) JSON-RPC services, that run in https://bitcoinj.github.io/testing#regression-test-mode[regression test mode].
 
+== JavaMoney and Exchange Support
+
+* Bitcoin currency provider implementation for http://javamoney.github.io[JavaMoney].
+* Multi-currency exchange "ticker" implementations using http://javamoney.github.io[JavaMoney] and http://knowm.org/open-source/xchange/[XChange].
+
+=== JSON-RPC for Ethereum and Namecoin
+
+* Proof-of-concept Java and Groovy JSON-RPC clients for Ethereum (ETH)
+* Proof-of-concept Java and Groovy JSON-RPC clients for Namecoin (NMC)
+
 WARNING: Do not use this software with your private keys without doing a rigorous audit of the code first. (Feedback welcome.)
 
-WARNING: The API is not final and prior to a 1.0 release *may* change without warning. Most of the API changes are fairly manageable though, and we try to deprecate first.
+WARNING: The API is not final and prior to a 1.0 release *may* change without warning. Most of the API changes are fairly manageable though, and we try to deprecate before making significant changes.
 
-This project is a mono-repo with a large number of submodules/components that are published as independent binary libraries. Since it is easy to pull in just the modules you need via Maven coordinates, this allows you to manage your transitive dependencies and build small, tight applications and servers. Most of these components are fairly new, but all are useful and ready for pull requests.
+=== Many small modules to help you manage dependencies
+
+This project is a mono-repo with many submodules/components that are published as independent binary libraries. Since it is easy to pull in just the modules you need via Maven coordinates, this allows you to manage your transitive dependencies and build lightweight, fast-starting, applications and servers. Fewer dependencies also helps with natively-compiled, Java Module System-based (including `jlink`) applications.
 
 == Overview
 
@@ -49,18 +68,19 @@ We have published {cj-apidoc}/index.html[preliminary JavaDoc] to our Github page
 
 === Continuous Integration 
 
-ConsensusJ is used by https://github.com/OmniLayer/OmniJ#omnij-project[OmniJ] and is tested by the https://ci.omni.foundation/[Omni Foundation Continuous Integration Server]. There are also Travis CI and GitLab CI builds.
+* Github Actions: image:https://github.com/ConsensusJ/consensusj/workflows/Gradle%20Build/badge.svg?branch=master["Github Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Gradle+Build%22"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml/badge.svg?branch=master["Github Actions GraalVM Builds", link="https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml"] image:https://github.com/ConsensusJ/consensusj/workflows/Bitcoin%20Core%20RegTest/badge.svg?branch=master["Github Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Bitcoin+Core+RegTest%22"]
+
+* Travis CI build:
+image:https://travis-ci.com/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.com/ConsensusJ/consensusj"]
+
+* GitLab CI build: image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
 
 
 // Jenkins Widget doesn't display correctly because of ci.omni.foundation self-signed SSL
 // image:https://ci.omni.foundation/buildStatus/icon?job=consensusj[link="https://ci.omni.foundation/job/consensusj/"]
 
-* Omni Foundation Jenkins build: https://ci.omni.foundation/job/consensusj/[consensusj job] (note: self-signed SSL certificate)
+//* Omni Foundation Jenkins build: https://ci.omni.foundation/job/consensusj/[consensusj job] (note: self-signed SSL certificate)
 
-* Travis CI build:
-image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.org/ConsensusJ/consensusj"]
-
-* GitLab CI build: image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
 
 
 === Requirements
@@ -72,59 +92,44 @@ image:https://travis-ci.org/ConsensusJ/consensusj.svg?branch=master["Build Statu
 
 We are in the process of refactoring all modules into the new `org.consensusj` namespace. As part of this process, once all the packages in a module are under `org.consensusj` and there are no split packages, we are assigning JPMS module names via the "Automatic Module" mechanism. This results in a consistent package structure, easier usage by Java 9+, and a smooth migration to JPMS module descriptors.
 
-The new modules also more clearly separate Java from Groovy, so the core Java modules have zero dependencies on Groovy JARs.
-
 NOTE:: This module table is slightly out-of-date and will be updated shortly. See the `CHANGELOG` for relevant changes.
 
-.ConsensusJ Modules
+.Core JSON-RPC Modules
 [cols="3,1,3,5"]
 |===
 |Name |Min JDK |Java module name |Description
-
-|<<consensusj-currency,consensusj-currency>>
-| 8
-| `org.consensusj.currency`
-| http://javamoney.github.io[JavaMoney] Currency Provider(s)
-
-|<<consensusj-decentralizedid,consensusj-decentralizedid>>
-| 8
-| `org.consensusj.decentralizedid`
-| Preliminary, experimental, W3C DID and BTCR DID Method support
-
-|<<consensusj-exchange,consensusj-exchange>>
-| 8
-| `org.consensusj.exchange`
-| http://javamoney.github.io[JavaMoney] Exchange Providers. Adapter to use http://knowm.org/open-source/xchange/[XChange] `Exchange` implementations as JavaMoney `ExchangeRateProvider`s.
 
 |<<consensusj-jsonrpc,consensusj-jsonrpc>>
 | 8
 | `org.consensusj.jsonrpc`
 | JSON-RPC client
 
-|<<consensusj-jsonrpc-cli,consensusj-jsonrpc-cli>>
-| *9*
-| `org.consensusj.jsonrpc.cli`
-| JSON-RPC command-line interface (CLI) libraries and tool
-
-|consensusj-jsonrpc-daemon
-| 8
-| `org.consensusj.jsonrpc.daemon`
-| JSON-RPC Sample Server
-
 |<<consensusj-jsonrpc-gvy,consensusj-jsonrpc-gvy>>
 | 8
 | `org.consensusj.jsonrpc.groovy`
 | Groovy JSON-RPC client (dynamic RPC methods)
 
-|<<cj-btc-cli,cj-btc-cli>>
-| *9*
-| not yet
-| Command-line JSON-RPC client for Bitcoin
+|<<consensusj-jsonrpc-cli,consensusj-jsonrpc-cli>>
+| *11*
+| `org.consensusj.jsonrpc.cli`
+| JSON-RPC command-line interface (CLI) libraries and tool
 
-|<<cj-btc-daemon-mn,cj-btc-daemon-mn>>
-| 8
-| not yet
-|JSON-RPC Bitcoin server daemon prototype, using Micronaut.
+|<<consensusj-jsonrpc-daemon, consensusj-jsonrpc-daemon>>
+| *11*
+| `org.consensusj.jsonrpc.daemon`
+| JSON-RPC Sample Server
+
+|===
+
+.Bitcoin Modules
+[cols="3,1,3,5"]
+|===
+|Name |Min JDK |Java module name |Description
+
+|<<cj-btc-json,cj-btc-json>>
+|8
+|not yet
+|Jackson serializers, deserializers & POJOs for Bitcoin JSON-RPC
 
 |<<cj-btc-jsonrpc,cj-btc-jsonrpc>>
 | 8
@@ -136,10 +141,59 @@ NOTE:: This module table is slightly out-of-date and will be updated shortly. Se
 | not yet
 | Groovy JSON-RPC Bitcoin client  (dynamic RPC methods)
 
-|<<cj-btc-services,cj-btc-services>>
-| 8
+|<<cj-btc-cli,cj-btc-cli>>
+| *11*
 | not yet
-| Bitcoin Service-Layer objects - compatible with `javax.inject` (https://jcp.org/en/jsr/detail?id=330[JSR-330])
+| Command-line JSON-RPC client for Bitcoin
+
+|<<cj-btc-daemon,cj-btc-daemon>>
+| *11*
+| not yet
+|JSON-RPC Bitcoin server daemon prototype, using Micronaut.
+
+|<<cj-btc-services,cj-btc-services>>
+| *11*
+| not yet
+| Bitcoin Service-Layer objects - compatible with `jakarta.inject` (https://jcp.org/en/jsr/detail?id=330[JSR-330])
+
+|<<cj-btc-jsonrpc-integ-test,cj-btc-jsonrpc-integ-test>>
+|8
+|not yet
+|Bitcoin JSON-RPC integration tests (RegTest)
+
+
+|<<cj-bitcoinj-dsl-gvy,cj-bitcoinj-dsl-gvy>>
+|8
+|not yet
+|Groovy DSL support.
+
+|<<cj-bitcoinj-spock,cj-bitcoinj-spock>>
+|8
+|not yet
+|https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes.
+|===
+
+.JavaMoney and Exchange Rate Support
+[cols="3,1,3,5"]
+|===
+|Name |Min JDK |Java module name |Description
+
+|<<consensusj-currency,consensusj-currency>>
+| 8
+| `org.consensusj.currency`
+| http://javamoney.github.io[JavaMoney] Currency Provider(s)
+
+|<<consensusj-exchange,consensusj-exchange>>
+| 8
+| `org.consensusj.exchange`
+| http://javamoney.github.io[JavaMoney] Exchange Providers. Adapter to use http://knowm.org/open-source/xchange/[XChange] `Exchange` implementations as JavaMoney `ExchangeRateProvider`s.
+
+|===
+
+.Miscellaneous Modules
+[cols="3,1,3,5"]
+|===
+|Name |Min JDK |Java module name |Description
 
 |<<cj-eth-jsonrpc,cj-eth-jsonrpc>>
 | 8
@@ -151,11 +205,6 @@ NOTE:: This module table is slightly out-of-date and will be updated shortly. Se
 | not yet
 | Groovy JSON-RPC Ethereum client (dynamic RPC methods)
 
-|<<cj-nmc-daemon,cj-nmc-daemon>>
-| 8
-| not yet
-| Namecoin daemon work-in-progress
-
 |<<cj-nmc-jsonrpc,cj-nmc-jsonrpc>>
 | 8
 | not yet
@@ -166,31 +215,12 @@ NOTE:: This module table is slightly out-of-date and will be updated shortly. Se
 | not yet
 | Groovy JSON-RPC Namecoin client (dynamic RPC methods)
 
-
+|<<consensusj-decentralizedid, consensusj-decentralizedid>>
+| 8
+| `org.consensusj.decentralizedid`
+| Preliminary, experimental, W3C DID and BTCR DID Method support
 
 |===
-
-[#consensusj-currency]
-==== consensusj-currency
-
-http://javamoney.github.io[JavaMoney] (also known as http://javamoney.github.io/api.html[JSR 354]) is the new Java Standard for advanced and flexible currency handling on the Java platform.
-
-[quote, JavaMoney Web Site]
-JSR 354 provides a portable and extensible framework for handling of Money & Currency. The API models monetary amounts and currencies in a platform independent and portable way, including well defined extension points.
-
-Support for virtual currencies is one of the key design goals in the specification. The `consensusj-currency` module allows Bitcoin to
-be used by standard Java APIs in the same ways as fiat currencies.
-
-`consensusj-currency` contains `BitcoinCurrencyProvider` which will add `"BTC"` as a standard currency code to any applications that includes the `consensusj-currency` JAR in its classpath.
-
-[#consensusj-exchange]
-==== consensusj-exchange
-
-The JavaMoney Reference Implementation (aka "Moneta") contains implementations of `ExchangeRateProvider` for ECB (European Central Bank) and IMF (International Monetary Fund).
-There is also U.S. FRB (Federal Reserve Bank) and Yahoo Finance `ExchangeRateProvider` in the JavaMoney financial library add-on module.
-
-
-The `#consensusj-exchange` module includes an adapter class `BaseXChangeExchangeRateProvider` that adapts implementations of the `Exchange` interface in the popular and complete http://knowm.org/open-source/xchange/[XChange] library to be used by JavaMoney-compatible applications.
 
 [#consensusj-jsonrpc]
 ==== consensusj-jsonrpc
@@ -218,6 +248,7 @@ See the JavaDoc for {cj-apidoc}/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[B
 Subclass of Bitcoin JSON-RPC client with fallback to dynamic methods (using `DynamicRPCFallback`). This is useful when new methods are added to the server/protocol and static methods and types haven't been written for them yet.
 
 
+
 [#cj-btc-cli]
 ==== cj-btc-cli: An Bitcoin RPC command-line client
 
@@ -240,60 +271,51 @@ java -jar bitcoinj-cli-{consensusj-version}.jar -?
 
 or read the https://consensusj.github.io/consensusj/manpage-cj-bitcoin-cli.html[manual page].
 
-=== Legacy Modules
-
-See the table below for an overview of the modules in the old `com.msgilligan` namespace.
-The *JDK* column indicates the version of Java required.
-The *Grooviness* column describes the use of the http://www.groovy-lang.org[Groovy Programming Language] within that module.
-
-.Legacy Modules
-[cols="3,1,3,5"]
-|===
-|Name |JDK |Grooviness |Description
-
-|<<bitcoinj-rpcclient,bitcoinj-rpcclient>>
-|8
-|Optional + tests
-|Bitcoin JSON-RPC integration tests
-
-|<<bitcoinj-json,bitcoinj-json>>
-|8
-|Tests only (TBD)
-|Jackson serializers, deserializers & POJOs for Bitcoin JSON-RPC
-
-|<<bitcoinj-daemon,bitcoinj-daemon>>
-|8
-|Tests only (TBD)
-|JSON-RPC Bitcoin server daemon -- equivalent to `bitcoind` when/if finished.
-
-|<<bitcoinj-peerserver,bitcoinj-peerserver>>
-|8
-|Tests only (TBD)
-|Peer and transaction info over HTTP + WebSocket/STOMP. JSON-RPC server, too.
-
-|<<bitcoinj-dsl,bitcoinj-dsl>>
-|8
-|Uses Groovy
-|Groovy DSL support.
-
-|<<bitcoinj-spock,bitcoinj-spock>>
-|8
-|Spock is a Groovy DSL for unit tests
-|https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes.
-|===
 
 
 
-[#bitcoinj-rpcclient]
-==== bitcoinj-rpcclient: A Bitcoin JSON-RPC client using bitcoinj types
+[#cj-btc-json]
+==== cj-btc-json
 
-Most of the previous functionality of this module has been moved to the new `org.consensusj` modules. What remains is:
+https://github.com/FasterXML/jackson/wiki[Jackson] serializers, deserializers & POJOs used to create and parse JSON by both client and server implementations of Bitcoin JSON-RPC.
 
-* Bitcoin Core integration test framework and tests (Regression Tests using Spock)
-* A Namecoin (NMC) JSON-RPC Client
-* An Ethereum (ETH) JSON-RPC Client
+[#cj-btc-services]
+==== cj-btc-services
 
-The remaining classes will be refactored into 3 new `org.consensusj` modules.
+Service-Layer object(s) that power the Daemon. These objects rely solely on https://docs.oracle.com/javase/8/docs/api/javax/annotation/package-summary.html[javax.annotation] and https://jakarta.ee/specifications/dependency-injection/2.0/apidocs/jakarta/inject/package-summary.html[jakarta.inject] for configuration and can be wired with Spring, https://docs.micronaut.io/latest/guide/index.html#ioc[Micronaut IOC], or https://github.com/google/guice[Guice].
+
+Built as a fat, executable jar, so it can be run with `java -jar`.
+
+[#cj-btc-daemon]
+==== Experimental Micronaut-based Bitcoin daemon
+
+An experimental port of `bitcoinj-daemon` to https://micronaut.io[Micronaut].
+
+A starting point for building a complete `bitcoind` equivalent using **bitcoinj**. It currently serves a small subset of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
+
+It builds as a native binary using GraalVM.
+
+
+[#cj-bitcoinj-dsl-gvy]
+==== cj-bitcoinj-dsl-gvy
+
+Groovy DSL support to write things like:
+
+    assert 1.btc == 100_000_000.satoshi
+
+ and
+
+    assert 100.satoshi == Coin.MICROCOIN
+
+[#cj-bitcoinj-spock]
+=== cj-bitcoinj-spock
+
+https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes. Initial focus is learning and documentation, not test coverage.
+
+[#cj-btc-jsonrpc-integ-test]
+==== cj-btc-jsonrpc-integ-test: RegTest mode integration tests using JSON-RPC
+
+Bitcoin Core integration test framework and tests (Regression Tests using Spock)
 
 ===== Sample Spock Integration Tests
 
@@ -321,73 +343,39 @@ These sample Spock "feature tests" show the RPC client in action and are from th
 
         and: "we generate 1 new block"
         generateBlock()
- 
+
         then: "the new address has a balance of testAmount"
         testAmount == getReceivedByAddress(destinationAddress)
     }
 ----
 
+[#consensusj-currency]
+==== consensusj-currency
 
-[#bitcoinj-json]
-==== bitcoinj-json
+http://javamoney.github.io[JavaMoney] (also known as http://javamoney.github.io/api.html[JSR 354]) is the new Java Standard for advanced and flexible currency handling on the Java platform.
 
-https://github.com/FasterXML/jackson/wiki[Jackson] serializers, deserializers & POJOs used to create and parse JSON by both client and server implementations of Bitcoin JSON-RPC.
+[quote, JavaMoney Web Site]
+JSR 354 provides a portable and extensible framework for handling of Money & Currency. The API models monetary amounts and currencies in a platform independent and portable way, including well defined extension points.
 
-[#cj-btc-services]
-==== cj-btc-services
+Support for virtual currencies is one of the key design goals in the specification. The `consensusj-currency` module allows Bitcoin to
+be used by standard Java APIs in the same ways as fiat currencies.
 
-Service-Layer objects that power the Daemon(s) and PeerServer. These objects rely solely on http://docs.oracle.com/javase/7/docs/api/javax/annotation/package-summary.html[javax.annotation] and https://docs.oracle.com/javaee/6/api/javax/inject/package-summary.html[javax.inject] for configuration and can be wired with either Spring, https://docs.micronaut.io/latest/guide/index.html#ioc[Micronaut IOC], or https://github.com/google/guice[Guice].
+`consensusj-currency` contains `BitcoinCurrencyProvider` which will add `"BTC"` as a standard currency code to any applications that includes the `consensusj-currency` JAR in its classpath.
 
-[#bitcoinj-daemon]
-==== bitcoinj-daemon
+[#consensusj-exchange]
+==== consensusj-exchange
 
-A starting point for building a complete `bitcoind` equivalent using **bitcoinj**. Currently serves a very https://github.com/ConsensusJ/consensusj/blob/master/bitcoinj-json/src/main/java/com/msgilligan/bitcoinj/rpcserver/BitcoinJsonRpc.java[small subset] of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
+The JavaMoney Reference Implementation (aka "Moneta") contains implementations of `ExchangeRateProvider` for ECB (European Central Bank) and IMF (International Monetary Fund).
+There is also U.S. FRB (Federal Reserve Bank) and Yahoo Finance `ExchangeRateProvider` in the JavaMoney financial library add-on module.
 
-Built as a fat, executable jar, so it can be run with `java -jar`.
 
-[#cj-btc-daemon-mn]
-==== Experimental Micronaut-based Bitcoin daemon
+The `#consensusj-exchange` module includes an adapter class `BaseXChangeExchangeRateProvider` that adapts implementations of the `Exchange` interface in the popular and complete http://knowm.org/open-source/xchange/[XChange] library to be used by JavaMoney-compatible applications.
 
-An experimental port of `bitcoinj-daemon` to https://micronaut.io[Micronaut].
-
-[#bitcoinj-peerserver]
-==== bitcoinj-peerserver
-
-PeerServer is a bitcoinj-powered http://projects.spring.io/spring-boot/[Spring Boot] application that provides the following functions:
-
-. A *Bitcoin JSON-RPC service* at `http://[host]:[port]/bitcoinrpc`
-.. This is hard to connect to using `bitcoin-cli` as it expects the RPCs to be accessible at the root path ('/'), but you can use the Java RPC client or CLI tool to talk to it.
-.. There may be issues with the security configuration on this URL. We're currently investigating.
-
-. A https://stomp.github.io[STOMP protocol] *WebSocket* service that live-streams pending Bitcoin transactions from the P2P network.
-.. The page at `/peers.html` lists connected peers and streams Transactions from the P2P network.
-.. You must login using username: `admin`, password: `admin` to view this page.
-.. The `peers.html' page is currently unstyled HTML.
-
-No `bitcoind` is required. The server uses a bitcoinj https://bitcoinj.github.io/javadoc/{bitcoinj-version}/org/bitcoinj/core/PeerGroup.html[PeerGroup] to connect directly to the Bitcoin network. I'm considering renaming it to `PeerGroupServer` for this reason. The JAR is entirely self-contained and can be run on any system with Java 8 with the `java -jar peerserver-{consensusj-version}.jar` command.
-
-[#bitcoinj-dsl]
-==== bitcoinj-dsl
-
-Groovy DSL support to write things like:
-
-    assert 1.btc == 100_000_000.satoshi
-
- and
-
-    assert 100.satoshi == Coin.MICROCOIN
-
-[#bitcoinj-spock]
-=== bitcoinj-spock
-
-https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes. Initial focus is learning and documentation, not test coverage.
 
 
 == Building and Running
 
-Before running `./gradlew` wrapper script you must have JDK 8 installed and your `JAVA_HOME` set correctly. For example:
-
-    export JAVA_HOME=`/usr/libexec/java_home -v1.8`
+Before running `./gradlew` wrapper script you must have JDK 11 installed and your `JAVA_HOME` set correctly. To build native images you'll need a GraalVM JDK 11 with the `native-image` tool installed via `gu install native-image`.
 
 NOTE: The first time you run the build all dependency JARS will be downloaded.
 
@@ -399,40 +387,47 @@ NOTE: The first time you run the build all dependency JARS will be downloaded.
 
 To build the CLI executable jar:
 
-    ./gradlew :consensusj-jsonrpc-cli:shadowJar
+    ./gradlew :consensusj-jsonrpc-cli:nativeImage
 
 To run it and display a list of command line options:
 
-[subs="attributes"]
-    java -jar consensusj-jsonrpc-cli/build/libs/consensusj-jsonrpc-cli-{consensusj-version}.jar -?
+    consensusj-jsonrpc-cli/build/jsonrpc -?
 
+[#consensusj-jsonrpc-cli]
 === Build Bitcoin CLI tool
 
 To build the CLI executable jar:
 
-    ./gradlew :cj-btc-cli:shadowJar
+    ./gradlew :cj-btc-cli:nativeImage
 
 To run it and display a list of command line options:
 
-[subs="attributes"]
-    java -jar cj-btc-cli/build/libs/cj-btc-cli-{consensusj-version}.jar -?
+    cj-btc-cli/build/cj-btc-cli -?
 
-=== Build and Run PeerServer Locally Using Gradle
+[#consensusj-jsonrpc-daemon]
+=== Build and Run JSON-RPC Echo daemon
 
-. Build and Run with Gradle Wrapper
+To build and run from Gradle:
     
-    ./gradlew :bitcoinj-peerserver:bootRun
+    ./gradlew :consensusj-jsonrpc-daemon:run
 
-NOTE: This will connect to the Bitcoin P2P network
+To build a native image and run:
 
-=== Build an Executable JAR
+    ./gradlew :consensusj-jsonrpc-daemon:nativeImage
+    consensusj-jsonrpc-daemon/build/jsonrpc-echod
 
-    ./gradlew :bitcoinj-peerserver:assemble
+=== Build and Run JSON-RPC Bitcoin daemon
 
-The JAR will be built at `build/libs/peerserver-{consensusj-version}.jar` and can be run with:
+To build and run from Gradle:
 
-[subs="attributes"]
-    java -jar bitcoinj-peerserver/build/libs/peerserver-{consensusj-version}.jar
+    ./gradlew :cj-btc-daemon:run
+
+To build a native image and run:
+
+    ./gradlew :cj-btc-daemon:nativeImage
+    cj-btc-daemon/build/jbitcoind
+
+
 
 
 

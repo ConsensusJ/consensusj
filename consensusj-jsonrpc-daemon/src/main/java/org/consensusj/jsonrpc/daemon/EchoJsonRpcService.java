@@ -12,6 +12,7 @@ import java.util.Map;
 
 /**
  * Simple Echo JSON-RPC Service
+ * TODO: For some reason we must use javax.inject.Singleton for Micronaut to load this service
  */
 @Singleton
 public class EchoJsonRpcService extends AbstractJsonRpcService {

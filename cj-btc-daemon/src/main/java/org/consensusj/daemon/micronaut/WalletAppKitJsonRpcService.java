@@ -12,6 +12,7 @@ import java.util.Map;
 
 /**
  * JSON-RPC wrapper for WalletAppKitService
+ * TODO: For some reason we must use javax.inject.Singleton for Micronaut to load this service
  */
 @Singleton
 public class WalletAppKitJsonRpcService extends DelegatingJsonRpcService {

@@ -11,12 +11,16 @@ micronaut {
         incremental(true)
         annotations("org.consensusj.jsonrpc.daemon.*")
     }
+    nativeImage {
+        imageName('jsonrpc-echod')
+    }
 }
 
 dependencies {
+    implementation project(':consensusj-jsonrpc')
     implementation("io.micronaut:micronaut-runtime")
     implementation("javax.annotation:javax.annotation-api")
-    implementation project(':consensusj-jsonrpc')
+    implementation 'jakarta.inject:jakarta.inject-api:2.0.0'
 
     compileOnly("org.graalvm.nativeimage:svm")
 
@@ -28,8 +32,8 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.toVersion("9")
-    targetCompatibility = JavaVersion.toVersion("9")
+    sourceCompatibility = JavaVersion.toVersion("11")
+    targetCompatibility = JavaVersion.toVersion("11")
 }
 
 dockerBuild {

@@ -5,7 +5,14 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 == v0.5.6-SNAPSHOT
 
-Released: 2021.03.??
+Released: 2021.03.10
+
+=== Upgrade a few more modules to JDK 11
+
+* `consensusj-jsonrpc-daemon`
+* `cj-btc-daemon` (also renamed from `cj-btc-daemon-mn`)
+* `cj-btc-services`
+* CLI tools
 
 === Remove Deprecated Server App Modules
 
@@ -22,24 +29,25 @@ Released: 2021.03.??
 * Remove some deprecated and obsolete methods
 * Refactor and make `RegTestFundingSource` much more robust
 
+=== CLI tools
+
+* Are now JDK11-based
+
 === jsonrpc tool (consensusj-jsonrpc-cli)
 
-* default to using version 2.0
-* -V1 option for using version 1.0
-* finish implementing -response option
-* print helpful error and help message when invalid option given
+* default to using `jsonrpc` version 2.0
+* -V1 option for using `jsonrpc` version 1.0
+* finish implementing `-response` option
+* print error message and "usage" when unrecognized command-line option(s) are given
 
 === Rx/ZeroMQ modules
 
 * Refactoring and improvements for (Micronaut-based) `btcproxyd` (separate repo)
 
-=== CLI Modules
-
-* Are now JDK11-based
-
 === Dependency Updates
 
 * Jackson 2.12.2
+* javax.inject to jakarta-inject 2.0.0
 * Micronaut 2.4.0
 
 == v0.5.5
