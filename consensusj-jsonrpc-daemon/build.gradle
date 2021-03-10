@@ -25,6 +25,8 @@ dependencies {
     compileOnly("org.graalvm.nativeimage:svm")
 
     runtimeOnly("ch.qos.logback:logback-classic")
+
+    testImplementation project(':consensusj-jsonrpc-gvy')
 }
 
 application {
