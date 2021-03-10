@@ -1,27 +1,21 @@
 package com.msgilligan.bitcoinj.test;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
-import org.bitcoinj.core.TransactionOutput;
-import org.bitcoinj.script.ScriptException;
 import org.consensusj.jsonrpc.JsonRpcException;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
 import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
 import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
-import com.msgilligan.bitcoinj.json.conversion.BitcoinMath;
 import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
-import org.bitcoinj.core.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,7 +25,8 @@ import java.util.stream.Collectors;
  * and the server's default wallet for accumulating coins.
  */
 public class RegTestFundingSource implements FundingSource {
-    final Integer defaultMaxConf = 9999999;
+    private final Coin txFee = Coin.valueOf(200_000);
+    private final Integer defaultMaxConf = 9999999;
     private static final Logger log = LoggerFactory.getLogger(RegTestFundingSource.class);
     protected BitcoinExtendedClient client;
     
@@ -52,15 +47,16 @@ public class RegTestFundingSource implements FundingSource {
      * @deprecated This method will be removed in a future release and Bitcoin Core 0.19+ will be required
      */
     @Deprecated
-    public Boolean checkForLegacyBitcoinCore() {
-        Boolean isLegacy = null;
+    public boolean checkForLegacyBitcoinCore() {
+        boolean isLegacy;
         try {
             NetworkInfo networkInfo = client.getNetworkInfo();
             isLegacy = networkInfo.getVersion() < 190000;
         } catch (IOException e) {
             log.error("Exception: ", e);
+            throw new RuntimeException(e);
         }
-        if (isLegacy != null && isLegacy) {
+        if (isLegacy) {
             serverHasSendRawWithMaxFees = false;
         }
         return isLegacy;
@@ -69,84 +65,101 @@ public class RegTestFundingSource implements FundingSource {
     /**
      * Generate blocks and fund an address with requested amount of BTC
      *
-     * TODO: Improve performance. Can we mine multiple blocks with a single RPC?
-     * TODO: Use client.generateToAddress() directly rather than through client.generateBlocks()
-     * If we use `toAddress` as the destination of generateToAddress(), we
-     * can skip the generation and sending of the the raw transaction below.
+     * TODO: test new logic and delete "old logic"
      *
      * @param toAddress Address to fund with BTC
-     * @param requestedBtc Amount of BTC to "mine" and send (minimum ending balance of toAddress?)
+     * @param requestAmount Amount of BTC to "mine" and send (minimum ending balance of toAddress?)
      * @return The hash of transaction that provided the funds.
      */
     @Override
-    public Sha256Hash requestBitcoin(Address toAddress, Coin requestedBtc) throws JsonRpcException, IOException {
-        log.warn("requestBitcoin requesting {}", requestedBtc);
-        NetworkParameters netParams = client.getNetParams(); // Should always be RegTest, but lets be flexible
-        if (requestedBtc.value > NetworkParameters.MAX_MONEY.value) {
+    public Sha256Hash requestBitcoin(Address toAddress, Coin requestAmount) throws JsonRpcException, IOException {
+        log.info("requestBitcoin requesting {} for {}", requestAmount.toPlainString(), toAddress);
+        if (requestAmount.value > NetworkParameters.MAX_MONEY.value) {
             throw new IllegalArgumentException("request exceeds MAX_MONEY");
         }
 
-        // Newly mined coins need to mature to be spendable
-        final int minCoinAge = netParams.getSpendableCoinbaseDepth(); // 100
-        if (client.getBlockCount() < minCoinAge) {
-            client.generateBlocks(minCoinAge - client.getBlockCount());
-        }
+        // Generate blocks until regTestMiningAddress has enough funds
+        List<UnspentOutput> unspent = mineEnoughFunds(requestAmount);
+        List<Outpoint> inputs = unspentOutputsToOutpoints(unspent);
+        Coin availableToSpend = sumUnspentOutputs(unspent);
 
-        // Collect CoinBase outputs until we have have gathered enough satoshis
-        // TODO: We may need to return ourselves change and/or keep more of a wallet
-        // to make this more efficient given that RegTest mining reward halves so quickly
-        long amountGatheredSoFar = 0;
-        ArrayList<Outpoint> inputs = new ArrayList<>();
+        // Create the funding transaction
+        Map<Address, Coin> outputs = calcChange(availableToSpend, requestAmount, toAddress, client.getRegTestMiningAddress());
+        String unsignedTxHex = client.createRawTransaction(inputs, outputs);
 
-        while (amountGatheredSoFar < requestedBtc.value) {
-            client.generateBlocks(1);
-
-            // TODO: We may be skipping some coinbaseTxs here from blocks that were generated directly
-            // as part of tests. We either need to save our place in the chain or keep a mining wallet
-            int blockIndex = client.getBlockCount() - minCoinAge;
-
-            log.info("Gathering funds from block {}", blockIndex);
-            Block block = client.getBlock(blockIndex);
-            Sha256Hash coinbaseTx = block.getTransactions().get(0).getTxId();
-
-            Transaction tx = client.getRawTransaction(coinbaseTx);
-            TransactionOutput txOut = tx.getOutput(0);
-
-            Address outAddress;
-            try {
-                outAddress = txOut.getScriptPubKey().getToAddress(netParams);
-            } catch (ScriptException se) {
-                log.warn("Can't get address for txOut: {}", txOut);
-                outAddress = null;
-            }
-
-            // txout is empty, if output was already spent
-            if (txOut.getValue().value > 0 && outAddress != null && outAddress.equals(client.getRegTestMiningAddress())) {
-                log.warn("txout = {}, value = {}", txOut, txOut.getValue().value);
-
-                amountGatheredSoFar += txOut.getValue().value;
-                inputs.add(new Outpoint(coinbaseTx, 0));
-            }
-            log.warn("amountGatheredSoFar = {} ({} inputs)", BitcoinMath.satoshiToBtc(amountGatheredSoFar).toPlainString(), inputs.size());
-        }
-
-        // Don't care about change, we mine it anyway (but this is wasteful given regtest halving rate)
-        String unsignedTxHex = client.createRawTransaction(inputs, Collections.singletonMap(toAddress, requestedBtc));
+        // Sign the funding transaction
         SignedRawTransaction signingResult = client.signRawTransactionWithWallet(unsignedTxHex);
-
-        log.info("SigningResult: {}", signingResult);
+        if (!signingResult.isComplete()) {
+            log.error("Unable to complete signing!");
+            log.error("SigningResult: {}", toJson(signingResult));
+        }
         assert signingResult.isComplete();
 
-        String signedTxHex = signingResult.getHex();
-        Sha256Hash txid = sendRawTransactionUnlimitedFees(signedTxHex);
+        // Send the funding transaction
+        Sha256Hash txid = sendRawTransactionUnlimitedFees(signingResult.getHex());
+        log.info("Funding transaction sent: {}", txid);
 
         return txid;
     }
 
     /**
+     * Mine zero or more blocks until {@code availableFunds >= requestedAmount}
+     *
+     * @param requestAmount Funds requested
+     * @return A list of unspent outputs
+     * @throws IOException ISH
+     */
+    private List<UnspentOutput> mineEnoughFunds(Coin requestAmount) throws IOException {
+        List<UnspentOutput> unspent = availableFunds();
+        Coin availableAmount = sumUnspentOutputs(unspent);
+        log.info("mineEnoughFunds: Available: {} Requested: {}", availableAmount.toPlainString(), requestAmount.toPlainString());
+
+        while (availableAmount.isLessThan(requestAmount.plus(txFee))) {
+            client.generateToAddress(1, client.getRegTestMiningAddress());
+            unspent = availableFunds();
+            availableAmount = sumUnspentOutputs(unspent);
+            int height = client.getBlockCount();
+            log.warn("⛏⛏⛏⛏⛏ Mined {} (blk#{}): Available: {} Requested: {} ⛏⛏⛏⛏⛏",
+                    rewardFromRegTestHeight(height).toPlainString(),
+                    height,
+                    availableAmount.toPlainString(),
+                    requestAmount.toPlainString());
+        }
+        return unspent;
+    }
+
+    private Coin rewardFromRegTestHeight(int height) {
+        int halvings = height / 150;
+        return Coin.valueOf(Coin.FIFTY_COINS.value >> halvings);
+    }
+
+    private Map<Address, Coin> calcChange(Coin availableFunds, Coin amountToSend, Address destAddress, Address changeAddress) {
+        Coin change;
+        if (availableFunds.value - (amountToSend.value + txFee.value) > 0) {
+            change = Coin.valueOf(availableFunds.value - (amountToSend.value + txFee.value));
+        } else {
+            change = Coin.ZERO;
+        }
+        Map<Address, Coin> outputs = change.value > 0 ?
+                // Send change to regTestMiningAddress
+                mapOf(destAddress, amountToSend, client.getRegTestMiningAddress(), change) :
+                // No change, send everything
+                Collections.singletonMap(destAddress, amountToSend);
+        return outputs;
+    }
+
+    // This can be eliminated when we upgrade this file to Java 9
+    private <K,V> Map<K, V> mapOf(K k1, V v1, K k2, V v2) {
+        Map<K, V>  outputs = new HashMap<>();
+        outputs.put(k1, v1);
+        outputs.put(k2, v2);
+        return outputs;
+    }
+
+    /**
      * Create an address and fund it with bitcoin
      *
-     * @param amount
+     * @param amount requested amount
      * @return Newly created address with the requested amount of bitcoin
      */
     @Override
@@ -187,9 +200,10 @@ public class RegTestFundingSource implements FundingSource {
     }
 
     /**
-     * Collects *all* unspent outputs and spends the whole amount minus `stdRelayTxFee`, which is sent
-     * to a new address, as fee, to sweep dust and to minimize the number of unspent outputs, to avoid creating too
-     * large transactions. No new block is generated afterwards.
+     * Collects *all* unspent outputs and sends to the RegTestMiningAddress. No new block is generated afterwards.
+     *
+     * NOTE: This consolidates all coins in the wallet to the RegTestMiningAddress and should only be run
+     * at the end of a test (if you are using wallet addresses in your test)
      *
      * Can be used in cleanupSpec() methods of integration tests.
      *
@@ -197,20 +211,21 @@ public class RegTestFundingSource implements FundingSource {
      */
     void consolidateCoins() throws JsonRpcException, IOException {
         // Get all UTXOs in the servers wallet
-        List<UnspentOutput> unspentOutputs = client.listUnspent(1, defaultMaxConf);
+        List<UnspentOutput> unspentOutputs = getSpendable();
 
         // Check if the amount is large enough to be worth consolidating
         Coin amountIn = sumUnspentOutputs(unspentOutputs);
-        if (amountIn.value < client.stdRelayTxFee.value) {
-            log.debug("Amount not enough to consolidate");
+        log.info("We have {} in {} utxos.", amountIn.toPlainString(), unspentOutputs.size());
+        if (unspentOutputs.size() < 10 || amountIn.value <= 10 * txFee.value) {
+            log.info("Not consolidating.");
             return;
         }
 
         // Gather inputs
         List<Outpoint> inputs = unspentOutputsToOutpoints(unspentOutputs);
 
-        // No receiver, just spend most of it as fee (!)
-        Map<Address,Coin> outputs = Collections.singletonMap(client.getNewAddress(), client.stdRelayTxFee);
+        // Send it all to the RegTestMiningAddress
+        Map<Address,Coin> outputs = Collections.singletonMap(client.getRegTestMiningAddress(), amountIn.subtract(txFee));
 
         String unsignedTxHex = client.createRawTransaction(inputs, outputs);
         SignedRawTransaction signingResult = client.signRawTransactionWithWallet(unsignedTxHex);
@@ -218,14 +233,41 @@ public class RegTestFundingSource implements FundingSource {
         boolean complete = signingResult.isComplete();
         if (!complete) {
             log.error("Unable to complete signing on consolidate coins transaction.");
-            JsonNode signingResultJson = client.getMapper().valueToTree(signingResult);
-            log.error("SigningResult: {}", signingResultJson.toPrettyString());
+            log.error("SigningResult: {}", toJson(signingResult));
         }
         assert complete;
 
         String signedTxHex = signingResult.getHex();
         Sha256Hash txid = sendRawTransactionUnlimitedFees(signedTxHex);
-        log.info("Consolidating transaction sent, txid = {}", txid);
+        log.warn("⭄⭄⭄⭄⭄⭄⭄ Consolidating transaction sent, txid = {}", txid);
+    }
+
+    private String toJson(SignedRawTransaction signingResult) {
+        return client.getMapper().valueToTree(signingResult).toPrettyString();
+    }
+
+    /**
+     * Get available funds in the RegTestMiningAddress
+     */
+    private List<UnspentOutput> availableFunds() throws IOException {
+        return getSpendable(client.getRegTestMiningAddress());
+    }
+
+    /**
+     * Get all available funds in the server-side wallet
+     */
+    private List<UnspentOutput> getSpendable() throws  JsonRpcException, IOException {
+        return client.listUnspent(1, defaultMaxConf, null);
+    }
+
+    /**
+     * Get all available funds in a specific address in the server-side wallet
+     */
+    private List<UnspentOutput> getSpendable(Address address) throws  JsonRpcException, IOException {
+        return client.listUnspent(1, defaultMaxConf, Collections.singletonList(address))
+                .stream()
+                .filter(out -> out.isSpendable() && out.isSafe())
+                .collect(Collectors.toList());
     }
 
     private List<Outpoint> unspentOutputsToOutpoints(List<UnspentOutput> unspentOutputs) {
