@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
         },
         accessType = {TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS, TypeHint.AccessType.ALL_DECLARED_METHODS}
 )
-@Controller("/rpc")
+@Controller("/jsonrpc")
 public class JsonRpcController {
     private static Logger log = LoggerFactory.getLogger(JsonRpcController.class);
     private final JsonRpcService jsonRpcService;
