@@ -4,7 +4,6 @@ import org.bitcoinj.core.Coin
 import org.bitcoinj.core.NetworkParameters
 import spock.lang.Unroll
 
-
 /**
  * Spock Spec to test CoinDeserializer
  */
@@ -26,7 +25,8 @@ class CoinDeserializerSpec extends BaseObjectMapperSpec {
         '0.00000001' | Coin.SATOSHI
     }
 
-    def configureModule(module) {
+    @Override
+    void configureModule(module) {
         module.addDeserializer(Coin.class, new CoinDeserializer())
     }
 }
