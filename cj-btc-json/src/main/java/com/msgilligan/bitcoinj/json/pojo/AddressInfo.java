@@ -18,7 +18,7 @@ public class AddressInfo {
     private final String label;
     private final boolean ischange;
     private final Long timestamp;
-    private final List<Label> labels;
+    private final List<Object> labels;
 
     /**
      *
@@ -50,7 +50,7 @@ public class AddressInfo {
                        @JsonProperty("label") String label,
                        @JsonProperty("ischange") boolean ischange,
                        @JsonProperty("timestamp") Long timestamp,
-                       @JsonProperty("labels") List<Label> labels) {
+                       @JsonProperty("labels") List<Object> labels) {
         super();
         this.address = address;
         this.scriptPubKey = scriptPubKey;
@@ -120,10 +120,11 @@ public class AddressInfo {
         return timestamp;
     }
 
-    public List<Label> getLabels() {
+    public List<Object> getLabels() {
         return labels;
     }
 
+    @Deprecated
     public static class Label {
 
         private final String name;

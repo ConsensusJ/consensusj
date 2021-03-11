@@ -7,6 +7,10 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Not yet
 
+=== cj-btc-json (Bitcoin JSON types)
+
+* Make `AddressInfo` `labels` property a `List<Object>` so it can accept both the Bitcoin Core 0.19 (`List<Label>`) and 0.20 formats (`List<String>`).
+
 == v0.5.6
 
 Released: 2021.03.10
