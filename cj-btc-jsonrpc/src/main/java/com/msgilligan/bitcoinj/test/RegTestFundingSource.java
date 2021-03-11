@@ -28,38 +28,39 @@ public class RegTestFundingSource implements FundingSource {
     private final Coin txFee = Coin.valueOf(200_000);
     private final Integer defaultMaxConf = 9999999;
     private static final Logger log = LoggerFactory.getLogger(RegTestFundingSource.class);
-    protected BitcoinExtendedClient client;
+    protected final BitcoinExtendedClient client;
+    protected final int bitcoinCoreVersion;
     
     /**
      * Prior to Bitcoin Core 0.19, the second parameter of sendRawTransaction
-     * was a boolean, not an integer containing maxFees
+     * was a boolean, not an integer containing maxFees.
+     * @deprecated We can remove this boolean once we require Bitcoin Core 0.19+
      */
+    @Deprecated
     private boolean serverHasSendRawWithMaxFees = true;
 
     public RegTestFundingSource(BitcoinExtendedClient client) {
         this.client = client;
-    }
-
-    /**
-     * Check for and internally handle Bitcoin Core pre 0.19
-     * (Note that Omni Core 0.8.x is based on Bitcoin Core 0.18)
-     * @return `true` (if legacy), `false` (if modern), `null` (if error)
-     * @deprecated This method will be removed in a future release and Bitcoin Core 0.19+ will be required
-     */
-    @Deprecated
-    public boolean checkForLegacyBitcoinCore() {
-        boolean isLegacy;
         try {
-            NetworkInfo networkInfo = client.getNetworkInfo();
-            isLegacy = networkInfo.getVersion() < 190000;
-        } catch (IOException e) {
-            log.error("Exception: ", e);
-            throw new RuntimeException(e);
+            bitcoinCoreVersion = client.getNetworkInfo().getVersion();
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
         }
-        if (isLegacy) {
-            serverHasSendRawWithMaxFees = false;
+        serverHasSendRawWithMaxFees = bitcoinCoreVersion >= 190000;
+
+        // Bitcoin Core 0.21+ will not create default wallet (named "") if it doesn't exist
+        // so we have to do it ourselves
+        if (bitcoinCoreVersion >= 210000) {
+            try {
+                List<String> walletList = client.listWallets();
+                if (!walletList.contains("")) {
+                    Map<String, String> result = client.createWallet("", false, false);
+                    log.warn("Created default wallet: {}", result);
+                }
+            } catch (IOException ioe) {
+                throw new RuntimeException(ioe);
+            }
         }
-        return isLegacy;
     }
 
     /**
@@ -282,6 +283,7 @@ public class RegTestFundingSource implements FundingSource {
 
     private Sha256Hash sendRawTransactionUnlimitedFees(String hexTx) throws IOException {
         Sha256Hash txid;
+        // We can remove this conditional once we require Bitcoin Core 0.19+
         if (serverHasSendRawWithMaxFees) {
             txid = client.sendRawTransaction(hexTx, Coin.ZERO);
         } else {

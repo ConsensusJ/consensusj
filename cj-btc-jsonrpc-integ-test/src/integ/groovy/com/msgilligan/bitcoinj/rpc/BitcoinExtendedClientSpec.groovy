@@ -71,8 +71,6 @@ class BitcoinExtendedClientSpec extends Specification {
 
     void setup() {
         client = BaseRegTestSpec.getClientInstance()
-        RegTestFundingSource regTestFundingSource = new RegTestFundingSource(client)
-        regTestFundingSource.checkForLegacyBitcoinCore()  // Remove once we're Bitcoin Core 0.19+ only
-        funder = regTestFundingSource
+        funder = new RegTestFundingSource(client)
     }
 }

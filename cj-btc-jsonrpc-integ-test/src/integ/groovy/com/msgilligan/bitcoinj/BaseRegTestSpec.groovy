@@ -33,9 +33,7 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     {
         client = getClientInstance()
         serverReady()
-        RegTestFundingSource regTestFundingSource = new RegTestFundingSource(client)
-        regTestFundingSource.checkForLegacyBitcoinCore()    // Remove once we're Bitcoin Core 0.19+ only
-        fundingSource = regTestFundingSource
+        fundingSource = new RegTestFundingSource(client)
     }
 
     void setupSpec() {

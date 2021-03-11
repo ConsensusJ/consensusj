@@ -343,6 +343,15 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
         return generateToAddress(numBlocks,address, null);
     }
 
+    public List<String> listWallets() throws JsonRpcStatusException, IOException {
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, String.class);
+        return send("listwallets", resultType);
+    }
+
+    public Map<String, String> createWallet(String name, Boolean disablePrivateKeys, Boolean blank) throws JsonRpcStatusException, IOException {
+        return send("createwallet", name, disablePrivateKeys, blank);
+    }
+
     /**
      * Creates a new Bitcoin address for receiving payments, linked to the default account "".
      *

@@ -18,18 +18,6 @@ class RegTestFundingSourceSpec extends BaseRegTestSpec {
         source != null
     }
 
-    /**
-     * We can remove this test (and method) once we've migrated to OmniCore with Bitcoin Core > 0.19
-     */
-    def "can test for legacy Bitcoin Core version"() {
-        when:
-        boolean legacy = source.checkForLegacyBitcoinCore()
-        log.warn("Legacy Bitcoin Core = {}", legacy)
-
-        then:
-        noExceptionThrown()
-    }
-
     def "we can consolidate coins"() {
         when:
         source.consolidateCoins()
