@@ -1,8 +1,8 @@
 = ConsensusJ
 Sean Gilligan <https://github.com/msgilligan>
-v0.5.5
+v0.5.6
 :description: ConsensusJ README document.
-:consensusj-version: 0.5.5
+:consensusj-version: 0.5.6
 :bitcoinj-version: 0.15.9
 :bitcoinj-apidoc: https://bitcoinj.github.io/javadoc/{bitcoinj-version}/
 :cj-apidoc: https://consensusj.github.io/consensusj/apidoc
@@ -92,7 +92,7 @@ image:https://travis-ci.com/ConsensusJ/consensusj.svg?branch=master["Build Statu
 
 We are in the process of refactoring all modules into the new `org.consensusj` namespace. As part of this process, once all the packages in a module are under `org.consensusj` and there are no split packages, we are assigning JPMS module names via the "Automatic Module" mechanism. This results in a consistent package structure, easier usage by Java 9+, and a smooth migration to JPMS module descriptors.
 
-NOTE:: This module table is slightly out-of-date and will be updated shortly. See the `CHANGELOG` for relevant changes.
+NOTE:: This module table is slightly out-of-date and will be updated shortly (there are some new "incubating" modules that are not listed.) See the `CHANGELOG` for relevant changes.
 
 .Core JSON-RPC Modules
 [cols="3,1,3,5"]
