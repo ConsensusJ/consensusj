@@ -22,7 +22,7 @@
 .. Confirm publish of artifacts in Bintray Web UI.
 . Update Github-pages site (including JavaDoc)
 .. `./gradlew javadocAll publishSite`
-
+.. Add Release on Github
 
 == Announcements
 

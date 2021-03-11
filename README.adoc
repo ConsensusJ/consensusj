@@ -37,7 +37,7 @@ Modular cryptocurrency libraries for Java, JVM languages, and Android.
 * A Groovy-language *Domain Specific Language* for scripting and testing with *bitcoinj*
 * Functional tests of bitcoind (and bitcoinj-daemon) JSON-RPC services, that run in https://bitcoinj.github.io/testing#regression-test-mode[regression test mode].
 
-== JavaMoney and Exchange Support
+=== JavaMoney and Exchange Support
 
 * Bitcoin currency provider implementation for http://javamoney.github.io[JavaMoney].
 * Multi-currency exchange "ticker" implementations using http://javamoney.github.io[JavaMoney] and http://knowm.org/open-source/xchange/[XChange].
@@ -85,8 +85,8 @@ image:https://travis-ci.com/ConsensusJ/consensusj.svg?branch=master["Build Statu
 
 === Requirements
 
-* All modules now require *Java 8* (Android 7) or later.
-* The command-line tools/libraries now require *Java 9* or later (and will require Java 11 or later after https://github.com/ConsensusJ/consensusj/issues/55[Issue #55: JavaDoc won't build on JDK 11] is resolved.)
+* Most modules now require *Java 8* (Android 7) or later.
+* The server and command-line tools/libraries now require *Java 11* or later (and will require Java 11 or later after https://github.com/ConsensusJ/consensusj/issues/55[Issue #55: JavaDoc won't build on JDK 11] is resolved.)
 
 === ConsensusJ Modules
 
