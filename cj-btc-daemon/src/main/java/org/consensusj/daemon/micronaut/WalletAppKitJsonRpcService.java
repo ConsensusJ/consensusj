@@ -6,13 +6,12 @@ import org.consensusj.jsonrpc.introspection.JsonRpcServiceWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
  * JSON-RPC wrapper for WalletAppKitService
- * TODO: For some reason we must use javax.inject.Singleton for Micronaut to load this service
  */
 @Singleton
 public class WalletAppKitJsonRpcService extends DelegatingJsonRpcService {
