@@ -18,6 +18,7 @@ import org.consensusj.bitcoin.rx.RxBlockchainService;
 
 import java.io.Closeable;
 import java.net.URI;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -126,8 +127,12 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
 
     private CompletableFuture<ChainTip> getChainTipAsync() {
         return client.supplyAsync(client::getChainTips)
-                .thenApply(tips -> tips.get(0))
+                .thenApply(this::getActiveChainTip)
                 .whenComplete((tip, error) -> flowableChainTip.onNext(tip));
+    }
+
+    private ChainTip getActiveChainTip(List<ChainTip> chainTips) {
+        return chainTips.stream().filter(tip -> tip.getStatus().equals("active")).findFirst().orElseThrow(() -> new RuntimeException("No active chaintip"));
     }
 
     /**
