@@ -52,7 +52,7 @@ PlantUML version 1.2018.01(Sun Jan 28 10:08:22 PST 2018)
 (APACHE source distribution)
 Java Runtime: OpenJDK Runtime Environment
 JVM: OpenJDK 64-Bit Server VM
-Java Version: 11.0.10+9
+Java Version: 11.0.10+8-jvmci-21.0-b06
 Operating System: Mac OS X
 OS Version: 10.14.6
 Default Encoding: UTF-8
