@@ -28,7 +28,8 @@ import java.util.Optional;
  */
 public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
     private static final Logger log = LoggerFactory.getLogger(BaseJsonRpcTool.class);
-    private final static String name = "jsonrpc";
+    private static final String name = "jsonrpc";
+    protected static final URI defaultUri = URI.create("http://localhost:8080/");
     protected final String usage ="usage string";
     protected final HelpFormatter formatter = new HelpFormatter();
     protected JsonRpcMessage.Version jsonRpcVersion = JsonRpcMessage.Version.V2;
@@ -242,7 +243,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                         throw new RuntimeException(e);
                     }
                 } else {
-                    uri = URI.create("http://localhost:8080/jsonrpc");  // Default is hardcoded for now
+                    uri = defaultUri;
                 }
                 String rpcUser = null;
                 String rpcPassword = null;

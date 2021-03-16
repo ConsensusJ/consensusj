@@ -28,7 +28,7 @@ class ApplicationSpec extends Specification {
     void 'hit it with a JSON-RPC request'() {
         given:
         def testString = 'Hello jsonrpc-echod!'
-        def endpoint = URI.create(server.URI.toString()+"/jsonrpc")
+        def endpoint = URI.create(server.URI.toString()+"/")
         def client = new DynamicRpcClient(JsonRpcMessage.Version.V2, endpoint, "", "")
 
         when:

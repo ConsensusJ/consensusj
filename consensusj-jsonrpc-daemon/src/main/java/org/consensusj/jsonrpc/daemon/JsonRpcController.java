@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
         },
         accessType = {TypeHint.AccessType.ALL_DECLARED_CONSTRUCTORS, TypeHint.AccessType.ALL_DECLARED_METHODS}
 )
-@Controller("/jsonrpc")
+@Controller("/")
 public class JsonRpcController {
     private static Logger log = LoggerFactory.getLogger(JsonRpcController.class);
     private final JsonRpcService jsonRpcService;
@@ -45,8 +45,8 @@ public class JsonRpcController {
     }
 
     @Post(produces = MediaType.APPLICATION_JSON)
-    public CompletableFuture<JsonRpcResponse<Object>> index(@Body JsonRpcRequest req) {
-        log.debug("JSON-RPC call: {}", req.getMethod());
-        return jsonRpcService.call(req);
+    public CompletableFuture<JsonRpcResponse<Object>> index(@Body JsonRpcRequest request) {
+        log.debug("JSON-RPC call: {}", request.getMethod());
+        return jsonRpcService.call(request);
     }
 }
