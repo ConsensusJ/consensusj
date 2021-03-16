@@ -3,13 +3,29 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.5.7-SNAPSHOT
+== v0.5.7
 
-Released: Not yet
+Released: 2021.03.16
 
 === cj-btc-json (Bitcoin JSON types)
 
 * Make `AddressInfo` `labels` property a `List<Object>` so it can accept both the Bitcoin Core 0.19 (`List<Label>`) and 0.20 formats (`List<String>`).
+
+=== cj-btc-jsonrpc
+
+* Add RegTest support for Bitcoin Core 0.21 by creating default wallet (`""`) if it doesn't exist.
+* Add basic `listWallets()` and `createWallet()` RPC methods.
+
+=== cj-btc-zeromq
+
+* Fix issues when connecting to an uninitialized or syncing `bitcoind`
+** Find `"active"` ChainTip, not 0th ChainTip
+** Call `waitForServer(120)` when connecting
+* Better handling/logging of `onError` in a few places
+
+=== consensusj-json-rpc-daemon cj-btc-daemon
+
+* Remove last usages of `javax.inject.Singleton` by temporarily disabling incremental annotation processing.  (We can re-enable when Micronaut 2.4.1 is released.)
 
 == v0.5.6
 
