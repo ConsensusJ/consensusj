@@ -164,6 +164,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      *
      * @param timeout Timeout in seconds
      * @return true if ready, false if timeout or interrupted
+     * @throws JsonRpcException if an "unexpected" exception happens (i.e. an error other than what happens during normal server startup)
      */
     public Boolean waitForServer(int timeout) throws JsonRpcException {
 
@@ -201,6 +202,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
                     // ...then grab text message for status logging
                     status = e.getMessage();
                 } else {
+                    log.error("Rethrowing JsonRpcStatusException: ", e);
                     throw e;
                 }
             } catch (IOException e) {

@@ -45,7 +45,7 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
         blockSubscription = blockPublisher()
                 .flatMapSingle(this::chainTipFromBlock)
                 .distinctUntilChanged(ChainTip::getHash)
-                .subscribe(flowableChainTip::onNext);
+                .subscribe(flowableChainTip::onNext, flowableChainTip::onError);
     }
 
     @Override

@@ -51,9 +51,9 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
         List<String> stringTopics = topics.stream().map(BitcoinZmqMessage.Topic::toString).collect(Collectors.toList());
         zmqTopicPublisher = new ZmqTopicPublisher(tcpAddress, stringTopics);
         for (BitcoinZmqMessage.Topic topic : topics) {
+            // Subscribe to each topic
             zmqTopicPublisher.topicPublisher(topic.toString())
-                    .toObservable()
-                    .subscribe(this::processMessage);
+                    .subscribe(this::onNextMessage, this::onError);
         }
     }
 
@@ -84,7 +84,7 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
         zmqTopicPublisher.close();
     }
 
-    private void processMessage(ZMsg message) {
+    private void onNextMessage(ZMsg message) {
         log.debug("New message received.");
 
         if (message.size() >= 2) {
@@ -109,6 +109,10 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
         } else {
             log.warn("Ignoring message with less than 3 frames");
         }
+    }
+
+    private void onError(Throwable error) {
+        log.error("Error: ", error);
     }
 
 
