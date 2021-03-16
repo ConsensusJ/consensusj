@@ -212,7 +212,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
             try {
                 // Log status messages only once, if new or updated
                 if (!status.equals(statusLast)) {
-                    log.info("RPC Status: " + status);
+                    log.info("Waiting for server: RPC Status: " + status);
                     statusLast = status;
                 }
                 Thread.sleep(RETRY_SECONDS * SECOND_IN_MSEC);
