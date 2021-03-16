@@ -3,6 +3,14 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
+== v0.5.8-SNAPSHOT
+
+Released: 2021.03.??
+
+=== JSON-RPC
+
+* Change default path for clients and servers from `/jsonrpc` to `/` (to match `bitcoind` and to be compatible with the `bitcoin-cli` command-line tool)
+
 == v0.5.7
 
 Released: 2021.03.16
