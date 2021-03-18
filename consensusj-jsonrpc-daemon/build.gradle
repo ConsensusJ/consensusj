@@ -8,10 +8,7 @@ micronaut {
     runtime("netty")
     testRuntime("spock2")
     processing {
-        // temporarily set `incremental(false)`  as a workaround, see:
-        // https://github.com/ConsensusJ/consensusj/issues/70
-        // https://github.com/micronaut-projects/micronaut-core/issues/5103
-        incremental(false)
+        incremental(true)
         annotations("org.consensusj.jsonrpc.daemon.*")
     }
     nativeImage {

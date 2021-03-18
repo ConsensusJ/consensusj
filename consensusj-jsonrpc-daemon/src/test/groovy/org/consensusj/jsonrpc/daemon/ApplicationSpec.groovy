@@ -1,17 +1,15 @@
 package org.consensusj.jsonrpc.daemon
 
-import io.micronaut.runtime.EmbeddedApplication
 import io.micronaut.runtime.server.EmbeddedServer
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import org.consensusj.jsonrpc.JsonRpcMessage
-import org.consensusj.jsonrpc.JsonRpcResponse
 import org.consensusj.jsonrpc.groovy.DynamicRpcClient
 import spock.lang.Specification
 
 import jakarta.inject.Inject
 
 /**
- *
+ * Basic Integration test of the JsonRpc echo daemon
  */
 @MicronautTest
 class ApplicationSpec extends Specification {
