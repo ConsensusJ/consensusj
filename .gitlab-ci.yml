@@ -1,30 +1,31 @@
-image: ubuntu:bionic
+image: ubuntu:focal
+
+# Note: You can test changes to this file locally with:
+# gitlab-runner exec docker --docker-privileged build
 
 cache:
   paths:
   - .m2/
   - .gradle/
 
-before_script:
-- apt-get --quiet update --yes
-- apt-get install --yes gnupg2 apt-utils software-properties-common
-- apt-get install --yes locales >/dev/null
-- echo "en_US UTF-8" > /etc/locale.gen
-- locale-gen en_US.UTF-8
-- export LANG=en_US.UTF-8
-- export LANGUAGE=en_US:en
-- export LC_ALL=en_US.UTF-8
-- apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9
-- apt-add-repository 'deb http://repos.azulsystems.com/ubuntu stable main'
-- apt-get --quiet update --yes
-- apt-get --quiet install --yes zulu-9
-- apt-get --quiet install --yes graphviz
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  UBUNTU_CODENAME: "focal"
+  JDK_PACKAGE: "adoptopenjdk-11-hotspot"
 
-- chmod +x ./gradlew
+before_script:
+  - apt-get update
+  - apt-get -y upgrade
+  - DEBIAN_FRONTEND=noninteractive apt-get -y install wget apt-transport-https gnupg curl graphviz
+  - wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add -
+  - echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb $UBUNTU_CODENAME main" | tee /etc/apt/sources.list.d/adoptopenjdk.list
+  - apt-get update
+  - apt-get -y install $JDK_PACKAGE
+  - java -version
 
 build:
   script:
-  - ./gradlew buildCI --scan
+  - ./gradlew buildCI --scan --info --stacktrace
   artifacts:
     when: always
     paths:
