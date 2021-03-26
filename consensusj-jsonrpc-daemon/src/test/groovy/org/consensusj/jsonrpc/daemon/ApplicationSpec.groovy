@@ -20,7 +20,7 @@ class ApplicationSpec extends Specification {
         expect:
         server.running
         server.URI.getScheme() == "http"
-        server.URI.getHost() == "localhost"
+        server.URI.getHost() == "localhost" || server.URI.getHost().startsWith("runner") // "runner" is GitlabCI
     }
 
     void 'hit it with a JSON-RPC request'() {
