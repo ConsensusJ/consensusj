@@ -1,6 +1,5 @@
 package com.msgilligan.bitcoinj.test;
 
-import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
 import org.consensusj.jsonrpc.JsonRpcException;
 import com.msgilligan.bitcoinj.json.pojo.Outpoint;
@@ -30,14 +29,6 @@ public class RegTestFundingSource implements FundingSource {
     private static final Logger log = LoggerFactory.getLogger(RegTestFundingSource.class);
     protected final BitcoinExtendedClient client;
     protected final int bitcoinCoreVersion;
-    
-    /**
-     * Prior to Bitcoin Core 0.19, the second parameter of sendRawTransaction
-     * was a boolean, not an integer containing maxFees.
-     * @deprecated We can remove this boolean once we require Bitcoin Core 0.19+
-     */
-    @Deprecated
-    private boolean serverHasSendRawWithMaxFees = true;
 
     public RegTestFundingSource(BitcoinExtendedClient client) {
         this.client = client;
@@ -46,7 +37,6 @@ public class RegTestFundingSource implements FundingSource {
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
         }
-        serverHasSendRawWithMaxFees = bitcoinCoreVersion >= 190000;
 
         // Bitcoin Core 0.21+ will not create default wallet (named "") if it doesn't exist
         // so we have to do it ourselves
@@ -282,13 +272,6 @@ public class RegTestFundingSource implements FundingSource {
     }
 
     private Sha256Hash sendRawTransactionUnlimitedFees(String hexTx) throws IOException {
-        Sha256Hash txid;
-        // We can remove this conditional once we require Bitcoin Core 0.19+
-        if (serverHasSendRawWithMaxFees) {
-            txid = client.sendRawTransaction(hexTx, Coin.ZERO);
-        } else {
-            txid = client.sendRawTransaction(hexTx, true);
-        }
-        return txid;
+        return client.sendRawTransaction(hexTx, Coin.ZERO);
     }
 }
