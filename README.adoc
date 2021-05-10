@@ -12,7 +12,7 @@ v0.5.7
 :caution-caption: :fire:
 :warning-caption: :warning:
 
-image:https://github.com/ConsensusJ/consensusj/workflows/Gradle%20Build/badge.svg?branch=master["Github Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Gradle+Build%22"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml/badge.svg?branch=master["Github Actions GraalVM Builds", link="https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml"] image:https://github.com/ConsensusJ/consensusj/workflows/Bitcoin%20Core%20RegTest/badge.svg?branch=master["Github Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Bitcoin+Core+RegTest%22"] image:https://travis-ci.com/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.com/github/ConsensusJ/consensusj"] image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"] image:https://api.bintray.com/packages/msgilligan/maven/consensusj/images/download.svg[link="https://bintray.com/msgilligan/maven/consensusj/_latestVersion"]
+image:https://github.com/ConsensusJ/consensusj/workflows/Gradle%20Build/badge.svg?branch=master["Github Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Gradle+Build%22"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml/badge.svg?branch=master["Github Actions GraalVM Builds", link="https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml"] image:https://github.com/ConsensusJ/consensusj/workflows/Bitcoin%20Core%20RegTest/badge.svg?branch=master["Github Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Bitcoin+Core+RegTest%22"] image:https://travis-ci.com/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.com/github/ConsensusJ/consensusj"] image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
 
 
 Modular cryptocurrency libraries for Java, JVM languages, and Android.
@@ -57,9 +57,32 @@ This project is a mono-repo with many submodules/components that are published a
 
 == Overview
 
-=== Binaries image:https://api.bintray.com/packages/msgilligan/maven/consensusj/images/download.svg[link="https://bintray.com/msgilligan/maven/consensusj/_latestVersion"]
+=== Binaries
 
-Although the API is changing, binary releases are available on https://bintray.com/msgilligan/maven/consensusj/view[Bintray]. You can download JARs or use the provided Maven coordinates to link to them directly from your `pom.xml` or `build.gradle`.
+Although the API is changing, binary packages are available on https://gitlab.com/ConsensusJ/consensusj/-/packages[Gitlab.com]. You can download JARs or use the provided Maven coordinates to link to them directly from your `pom.xml` or `build.gradle`.
+
+==== Maven
+
+Add the following to your `pom.xml`:
+
+[source]
+----
+<repositories>
+  <repository>
+    <id>gitlab-maven</id>
+    <url>https://gitlab.com/api/v4/projects/8482916/packages/maven</url>
+  </repository>
+</repositories>
+----
+
+==== Gradle
+
+Add the following to the `repositories` section of your `build.gradle`:
+
+[source]
+----
+    maven { url 'https://gitlab.com/api/v4/projects/8482916/packages/maven' }
+----
 
 
 === API Documentation
