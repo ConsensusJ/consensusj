@@ -1,13 +1,11 @@
 asciidoctorj {
-    // We can separately change the AsciidoctorJ dependency version.
-    version = asciidoctorjVersion
+    modules {
+        diagram.use()
+        diagram.version '2.0.1'
+    }
 }
 
 asciidoctor {
-    sourceDir = file('doc')
-    outputDir = file("$buildDir/site")
-    separateOutputDirs = false
-    logDocuments = true
-
-    requires  'asciidoctor-diagram'
+    sourceDir file('doc')
+    outputDir file("$buildDir/site")
 }
