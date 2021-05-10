@@ -124,8 +124,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                 string = result.toString();
             }
         } else if (result instanceof JsonRpcResponse) {
-            JsonRpcResponse<JsonNode> response = (JsonRpcResponse<JsonNode>) result;
-            JsonNode reponseAsNode = call.client.getMapper().valueToTree(response);
+            JsonNode reponseAsNode = call.client.getMapper().valueToTree(result);
             string = reponseAsNode.toPrettyString();
         } else {
             log.info("result class is: {}", result.getClass());
