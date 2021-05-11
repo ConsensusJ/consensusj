@@ -115,10 +115,16 @@ class BitcoinSpec extends BaseRegTestSpec {
         then:
         tips != null
         tips.size() >= 1
-        tips[0].branchlen == 0
-        tips[0].hash instanceof Sha256Hash
-        tips[0].height > 0
-        tips[0].status == "active"
+
+        when:
+        def activeTip = tips.find {it.status == "active"}
+
+        then:
+        activeTip != null
+        activeTip.branchlen == 0
+        activeTip.hash instanceof Sha256Hash
+        activeTip.height > 0
+        activeTip.status == "active"
     }
 
     def "We can get a list of address groupings"() {
