@@ -1,11 +1,7 @@
 ext.javadocSpec = {
     options.encoding = 'UTF-8'
     if (JavaVersion.current().isJava9()) {
-        // AsciiDoclet only works with Java 9 (and earlier, but we want html5)
-        options.docletpath = configurations.asciidoclet.files.asType(List)
-        options.doclet = 'org.asciidoctor.Asciidoclet'
-        options.addStringOption '-require', 'asciidoctor-diagram'
-        options.addStringOption '-gem-path', 'build/vendor'
+        // TODO: Are these options Asciidoclet or Java 9 specific? If not, move out of this conditional
         options.addStringOption '-base-dir', "${projectDir}"
         options.addStringOption '-attribute',
                 "name=${project.name}," +
@@ -15,7 +11,7 @@ ext.javadocSpec = {
         options.addBooleanOption 'linksource', true             // include link to HTML source file
     }
     if (JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption 'html5', true              // Requires JDK 9+ and Asciidoclet 1.5.6
+        options.addBooleanOption 'html5', true              // Requires JDK 9+
     }
 
     options.links(  // TODO: Restore JDK link: 'https://docs.oracle.com/javase/8/docs/api/',
@@ -26,16 +22,6 @@ ext.javadocSpec = {
 }
 
 allprojects {
-    configurations {
-        asciidoclet
-    }
-
-    dependencies {
-        asciidoclet "org.asciidoctor:asciidoclet:${asciidocletVersion}"
-        asciidoclet "org.asciidoctor:asciidoctorj:${asciidoctorjVersion}"
-        asciidoclet "org.asciidoctor:asciidoctorj-diagram:${asciidoctorjDiagramVersion}"
-    }
-
     javadoc javadocSpec
 }
 
@@ -45,6 +31,7 @@ task javadocAll(type: Javadoc) {
 }
 javadocAll javadocSpec << {
     if (JavaVersion.current().isJava9()) {
+        // TODO: Convert this back to HTML
         options.overview = "doc/javadoc-overview.adoc"
         inputs.file(options.overview)
     }
