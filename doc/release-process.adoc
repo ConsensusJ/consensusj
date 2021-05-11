@@ -17,9 +17,8 @@
 .. Recommended: test with *OmniJ* regTests.
 . Tag: `git tag -a v0.x.y -m "Release 0.x.y"`
 . Push: `git push --tags origin master`
-. Publish to Bintray:
-.. `./gradlew bintrayUpload`
-.. Confirm publish of artifacts in Bintray Web UI.
+. Publish to Maven Repo (currently on Gitlab):
+.. `./gradlew publish`
 . Update Github-pages site (including JavaDoc)
 .. `./gradlew javadocAll publishSite`
 .. Add Release on Github
@@ -36,6 +35,10 @@
 .. `CHANGELOG.adoc`
 .. *Not* `README.adoc` -- it should match release version
 . Commit and push to master
+
+== Publish Snapshot to public Maven Repo on Gitlab
+
+. `./gradlew publish`
 
 == Install Snapshot to local maven repo
 
