@@ -13,6 +13,8 @@ Released: 2021.03.??
 
 === Dependency Updates
 
+* RxJava 3.0.12
+* Micronaut 2.5.1
 * Groovy 3.0.8
 
 === Build/Test Updates
