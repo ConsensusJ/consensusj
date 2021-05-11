@@ -13,6 +13,7 @@ Released: 2021.03.??
 
 === Dependency Updates
 
+* bitcoinj 0.5.10
 * RxJava 3.0.12
 * Micronaut 2.5.1
 * Groovy 3.0.8
@@ -24,6 +25,7 @@ Released: 2021.03.??
 * Publish JARs to Gitlab using `maven-publish` plugin
 * Remove Bintray plugin
 * Remove `maven’ plugin, use ‘maven-publish’ only
+* Update GraalVM build to GraalVM 21.1.0.r11
 * Upgrade to Asciidoctor 3.2.0 plugin
 * Update javadoc Jackson links to 2.12
 * Temporarily remove Javadoc JDK links (and mark with TODO)
