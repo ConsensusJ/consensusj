@@ -11,10 +11,20 @@ Released: 2021.03.??
 
 * Change default path for clients and servers from `/jsonrpc` to `/` (to match `bitcoind` and to be compatible with the `bitcoin-cli` command-line tool)
 
+=== Dependency Updates
+
+* Groovy 3.0.8
+
 === Build/Test Updates
 
+* Update RegTest to use Omni Core 0.10.0 (Bitcoin Core 20.x)
 * Gradle 7.0.1
-
+* Publish JARs to Gitlab using `maven-publish` plugin
+* Remove Bintray plugin
+* Remove `maven’ plugin, use ‘maven-publish’ only
+* Upgrade to Asciidoctor 3.2.0 plugin
+* Update javadoc Jackson links to 2.12
+* Temporarily remove Javadoc JDK links (and mark with TODO)
 
 == v0.5.7
 
