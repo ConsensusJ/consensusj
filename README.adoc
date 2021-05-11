@@ -109,7 +109,7 @@ image:https://travis-ci.com/ConsensusJ/consensusj.svg?branch=master["Build Statu
 === Requirements
 
 * Most modules now require *Java 8* (Android 7) or later.
-* The server and command-line tools/libraries now require *Java 11* or later (and will require Java 11 or later after https://github.com/ConsensusJ/consensusj/issues/55[Issue #55: JavaDoc won't build on JDK 11] is resolved.)
+* The server and command-line tools/libraries now require *Java 11* or later.
 
 === ConsensusJ Modules
 
