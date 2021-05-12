@@ -29,7 +29,7 @@ import spock.lang.Stepwise
  * communicate with the stateful Bitcoin blockchain, the {@code Stepwise} approach is helpful.
  */
 @Stepwise
-@Ignore("Hangs on Github Actions and likely elsewhere")
+//@Ignore("Hangs on Github Actions and likely elsewhere")
 class WalletSendSpec extends BaseRegTestSpec {
     static NetworkInfo networkInfo // networkInfo.version for Assumptions (e.g. server version)
     /**
@@ -54,7 +54,6 @@ class WalletSendSpec extends BaseRegTestSpec {
         def store = new MemoryBlockStore(params)
         def chain = new BlockChain(params,wallet,store)
         peerGroup = new PeerGroup(params, chain)
-        peerGroup.addWallet(wallet)
         peerGroup.start()
 
         networkInfo = client.getNetworkInfo()   // store networkInfo for Assumptions (e.g. server version)
