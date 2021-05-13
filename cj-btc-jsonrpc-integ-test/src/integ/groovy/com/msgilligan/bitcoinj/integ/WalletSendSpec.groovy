@@ -1,7 +1,9 @@
 package com.msgilligan.bitcoinj.integ
 
-import com.msgilligan.bitcoinj.json.pojo.NetworkInfo
+import com.google.common.util.concurrent.ListenableFuture
+import com.msgilligan.bitcoinj.json.pojo.WalletTransactionInfo
 import org.bitcoinj.core.TransactionBroadcast
+import org.bitcoinj.core.TransactionConfidence
 import org.bitcoinj.script.Script
 import org.consensusj.jsonrpc.JsonRpcStatusException
 import org.bitcoinj.core.Address
@@ -16,9 +18,11 @@ import org.bitcoinj.wallet.SendRequest
 import org.bitcoinj.store.MemoryBlockStore
 import org.bitcoinj.utils.BriefLogFormatter
 import com.msgilligan.bitcoinj.BaseRegTestSpec
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Stepwise
+
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 /**
  * Interoperability tests between a bitcoinj {@link Wallet} and a Bitcoin Core RPC server in RegTest mode.
@@ -29,9 +33,7 @@ import spock.lang.Stepwise
  * communicate with the stateful Bitcoin blockchain, the {@code Stepwise} approach is helpful.
  */
 @Stepwise
-//@Ignore("Hangs on Github Actions and likely elsewhere")
 class WalletSendSpec extends BaseRegTestSpec {
-    static NetworkInfo networkInfo // networkInfo.version for Assumptions (e.g. server version)
     /**
      * See bitcoinj Issue #2050 https://github.com/bitcoinj/bitcoinj/issues/2050
      * Currently in these tests it seems it's ok to just assume the transaction was sent properly
@@ -55,119 +57,121 @@ class WalletSendSpec extends BaseRegTestSpec {
         def chain = new BlockChain(params,wallet,store)
         peerGroup = new PeerGroup(params, chain)
         peerGroup.start()
-
-        networkInfo = client.getNetworkInfo()   // store networkInfo for Assumptions (e.g. server version)
+        peerGroup.downloadBlockChain()
     }
 
     def "Wait for bitcoinj wallet to sync with RegTest chain"() {
-        when:
-        wallet.addWatchedAddress(client.getRegTestMiningAddress()) 
-        client.generateBlocks(1)   // This RPC call is necessary when I run locally, I don't think it should be
-        Integer walletHeight, rpcHeight
-        while ( (walletHeight = wallet.getLastBlockSeenHeight()) < (rpcHeight = client.getBlockCount()) ) {
-            // TODO: Figure out a way to do this without polling and sleeping
-            println "walletHeight < rpcHeight: ${walletHeight} < ${rpcHeight} -- Waiting..."
-            Thread.sleep(100)
-        }
-        log.warn "walletHeight: ${walletHeight}, rpcHeight: ${rpcHeight}"
+        when: "we wait for the bitcoinj wallet to sync"
+        //client.generateBlocks(1)   // This RPC call is necessary when I run locally, though I don't think it should be
+        waitForWalletSync()
 
-        then:
-        walletHeight == rpcHeight
+        then: "the bitcoinj wallet has the same height as the RPC server"
+        noExceptionThrown()
     }
 
-    def "Send mined coins to fund the bitcoinj wallet"() {
-        given:
-        def fundingAmount = 10.1.btc
-        def fundingAddress = createFundedAddress(fundingAmount)
-        def walletAddr = wallet.currentReceiveAddress()
-        def amount = 10.btc
+    def "Send mined coins from the Bitcoin Core (server) wallet to fund the bitcoinj wallet"() {
+        when: "we mine coins with createFundedAddress()"
+        Coin amount = 10.btc
+        Coin extra = 0.1.btc
+        Coin fundingAmount = amount + extra
+        Address fundingAddress = createFundedAddress(fundingAmount)
 
-        when: "we send coins to the wallet and write a block"
-        client.sendToAddress(walletAddr, amount)
+        and: "we send coins from the Bitcoin Core wallet to an address in the bitcoinj wallet"
+        Address bitcoinjWalletAddress = wallet.currentReceiveAddress()
+        client.sendToAddress(bitcoinjWalletAddress, amount)
+
+        and: "a block is generated"
         client.generateBlocks(1)
-        Integer walletHeight, rpcHeight
-        while ( (walletHeight = wallet.getLastBlockSeenHeight()) < (rpcHeight = client.getBlockCount()) ) {
-            println "WalletHeight < rpcHeight: ${walletHeight} < ${rpcHeight} -- Waiting..."
-            Thread.sleep(100)
-        }
-        println "WalletHeight: ${walletHeight} == RPC Height: ${rpcHeight}"
-        // Is it safe to assume that if walletHeight == rpcHeight then our transaction has been processed?
+
+        and: "the bitcoinj wallet sees the new block"
+        waitForWalletSync()
 
         then: "the coins arrive"
         wallet.getBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE) == amount
     }
 
-    def "Send from bitcoinj wallet to the Bitcoin Core wallet using Wallet::sendCoins"() {
-        when: "we send coins from BitcoinJ and write a block"
+    def "Send from bitcoinj wallet back to the Bitcoin Core wallet using Wallet::sendCoins"() {
+        when: "we send coins from bitcoinj"
         Coin startAmount = 10.btc
         Coin amount = 1.btc
-        Address rpcAddress = getNewAddress()
-        // Send it with BitcoinJ
-        log.info("Sending ${amount} coins to ${rpcAddress}")
-        Wallet.SendResult sendResult = wallet.sendCoins(peerGroup,rpcAddress,amount)
+        Address serverWalletAddress = client.getNewAddress()
+        log.info("Sending ${amount} coins to ${serverWalletAddress}")
+        Wallet.SendResult sendResult = wallet.sendCoins(peerGroup, serverWalletAddress, amount)
         // Wait for broadcast complete
         log.info("Waiting for broadcast of {} to complete", sendResult.tx)
         Transaction sentTx = (workaroundBitcoinJ_015_8_Issue) ? sendResult.tx : sendResult.broadcastComplete.get()
         log.warn("Broadcast complete, tx = ${sentTx}")
-        // Wait for it to show up on server as unconfirmed
+
+        and: "wait for the unconfirmed transaction to be received by the server"
         log.info("Waiting for unconfirmed transaction to appear on server...")
         waitForUnconfirmedTransaction(sentTx.getTxId())
         log.info("... unconfirmed transaction found on server.")
-        // Once server has pending transaction, generate a block
+
+        and: "a block is generated"
         log.info("Generating a block")
-        generateBlocks(1)
+        client.generateBlocks(1)
+
+        and: "Wait for the bitcoinj wallet to get confirmation of the transaction"
         // Wait for wallet to get confirmation of the transaction
-        def depthFuture = sentTx.getConfidence().getDepthFuture(1)
+        ListenableFuture<TransactionConfidence> depthFuture = sentTx.getConfidence().getDepthFuture(1)
         do {
             log.warn("Waiting for bitcoinj wallet to get a confirmation of the transaction...")
-            // TODO: I don't think we should have to wait 1 second and generate additional blocks here.
-            sleep(1_000)
-            generateBlocks(1)
+            sleep(100)
         } while (!depthFuture.isDone())
 
-        then: "the new address has a balance of amount"
-        getReceivedByAddress(rpcAddress) == amount
+        then: "the server address has a balance of amount"
+        client.getReceivedByAddress(serverWalletAddress) == amount
+
+        and: "the bitcoinj wallet's balance has decreased by amount + fee"
         wallet.getBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE) == startAmount - amount - sentTx.getFee()
     }
 
-    def "create and send a transaction from bitcoinj using PeerGroup::broadcastTransaction"() {
-        when:
+    def "Send from bitcoinj wallet back to the Bitcoin Core wallet using PeerGroup::broadcastTransaction"() {
+        when: "we create a transaction using bitcoinj"
         Coin amount = 1.btc
-        def rpcAddress = getNewAddress()
+        Address serverWalletAddress = client.getNewAddress()
         Transaction tx = new Transaction(params)
-        tx.addOutput(amount, rpcAddress)
+        tx.addOutput(amount, serverWalletAddress)
         SendRequest request = SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
         wallet.commitTx(request.tx)
+
+        and: "we send it using the PeerGroup"
         log.info("Sending Tx: {}", tx)
         TransactionBroadcast broadcast = peerGroup.broadcastTransaction(request.tx)
         log.info("Waiting for completion of broadcast for txid: {}", broadcast.tx.getTxId())
         Transaction sentTx = (workaroundBitcoinJ_015_8_Issue) ? request.tx : broadcast.future().get()
         waitForUnconfirmedTransaction(tx.txId)  // Wait for tx to show up on server as unconfirmed
-        generateBlocks(1)
+
+        and: "a block is generated"
+        client.generateBlocks(1)
 
         then: "the new address has a balance of amount"
-        getReceivedByAddress(rpcAddress) == amount  // Verify rpcAddress balance
+        getReceivedByAddress(serverWalletAddress) == amount  // Verify serverWalletAddress balance
     }
 
-    def "create a raw transaction using bitcoinj and send with sendRawTransaction RPC"() {
-        when:
+    def "Create a raw transaction using bitcoinj and send with `sendrawtransaction` RPC"() {
+        when: "we create a transaction using the bitcoinj wallet"
         Coin amount = 1.btc
-        def rpcAddress = getNewAddress()
+        Address rpcAddress = client.getNewAddress()
         Transaction tx = new Transaction(params)
         tx.addOutput(amount, rpcAddress)
         SendRequest request = SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
         wallet.commitTx(request.tx)
-        def txid = client.sendRawTransaction(tx)
-        generateBlocks(1)
-        def confirmedTx = getTransaction(txid)
+
+        and: "we send it to the server with the `sendrawtransaction` RPC"
+        Sha256Hash txid = client.sendRawTransaction(tx)
+
+        and: "we generate a block"
+        client.generateBlocks(1)
+        WalletTransactionInfo confirmedTx = client.getTransaction(txid)
 
         then: "the transaction is confirmed"
         confirmedTx.confirmations == 1
 
-        then: "the new address has a balance of amount"
-        getReceivedByAddress(rpcAddress) == amount  // Verify rpcAddress balance
+        and: "the new address has the correct balance"
+        client.getReceivedByAddress(rpcAddress) == amount  // Verify rpcAddress balance
     }
 
     /**
@@ -180,7 +184,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         Transaction pendingTx = null
         while (pendingTx == null) {
             try {
-                pendingTx = getRawTransaction(txid)
+                pendingTx = client.getRawTransaction(txid)
             } catch (JsonRpcStatusException e) {
                 if (e.message == "No such mempool or blockchain transaction. Use gettransaction for wallet transactions.") {
                     log.warn("ignoring JsonRpcStatusException: {}, {}", e.jsonRpcCode, e.message)
@@ -190,5 +194,18 @@ class WalletSendSpec extends BaseRegTestSpec {
                 }
             }
         }
+    }
+
+    /**
+     * Wait for the bitcoinj wallet to sync with the Bitcoin Core blockchain
+     */
+    void waitForWalletSync() {
+        int walletHeight, serverHeight
+        while ( (walletHeight = wallet.getLastBlockSeenHeight()) < (serverHeight = client.getBlockCount()) ) {
+            // TODO: Figure out a way to do this without polling and sleeping
+            println "walletHeight < serverHeight: ${walletHeight} < ${serverHeight} -- Waiting..."
+            Thread.sleep(100)
+        }
+        log.warn "walletHeight: ${walletHeight}, serverHeight: ${serverHeight}"
     }
 }
