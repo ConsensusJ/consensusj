@@ -46,6 +46,13 @@ public class BitcoinZmqPortFinder {
         return zmqPort(rpcUri, configuredZmqUri);
     }
 
+    /**
+     * Create tcp URI for ZMQ using host of JSON-RPC client and port of URI returned with zmqnotifications
+     *
+     * @param client http URI of JSON-RPC server
+     * @param zmqPubURI ZMQ tcp URI returned with getzmqnotifications
+     * @return A tcp URI for ZMQ using host from client port from zmqPubURI
+     */
     private static URI zmqPort(URI client, URI zmqPubURI) {
         URI updated;
         try {

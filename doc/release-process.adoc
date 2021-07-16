@@ -11,7 +11,7 @@
 .. cj-bitcoinj-dsl-gvy `ExtensionModule`
 . Update `README.adoc` and other documentation as necessary 
 . Commit version bump and changelog.
-. Make project directory is a clean checkout
+. Make sure project directory is a clean checkout.
 . Full build, test
 .. `./gradlew clean buildCI`
 .. `./test-run-regtest.sh`
