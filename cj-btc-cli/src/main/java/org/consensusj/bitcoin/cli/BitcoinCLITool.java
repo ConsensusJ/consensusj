@@ -11,6 +11,7 @@ import org.bitcoinj.params.TestNet3Params;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.cli.BaseJsonRpcTool;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -86,12 +87,12 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
         }
 
         @Override
-        public BitcoinClient rpcClient() {
+        public BitcoinClient rpcClient(SSLSocketFactory sslSocketFactory) {
             // Not threadsafe
             // This needs work if there are ever going to be multiple clients calling this method
             if (client == null) {
                 RpcConfig config = getRPCConfig();
-                client = createClient(config);
+                client = createClient(sslSocketFactory, config);
                 if (rpcWait) {
                     // TODO: Add logging here to replace the System.out.println
                     //System.out.println("Connecting to: " + getRPCConfig().getURI() + " with -rpcWait");
@@ -111,13 +112,18 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
             return client;
         }
 
+        @Override
+        public BitcoinClient rpcClient() {
+            return rpcClient((SSLSocketFactory) SSLSocketFactory.getDefault());
+        }
+
         /**
          * Override this method to customize the client implementation subclass
          * @param config Configuration information for connecting to server
          * @return a newly constructed BitcoinClient with specified config
          */
-        protected BitcoinClient createClient(RpcConfig config) {
-            return new BitcoinClient( config.getNetParams(),
+        protected BitcoinClient createClient(SSLSocketFactory sslSocketFactory, RpcConfig config) {
+            return new BitcoinClient( sslSocketFactory, config.getNetParams(),
                     config.getURI(),
                     config.getUsername(),
                     config.getPassword());
