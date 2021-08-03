@@ -35,6 +35,7 @@ import org.bitcoinj.core.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
@@ -86,6 +87,17 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
 
     private int serverVersion = 0;    // 0 means unknown serverVersion
 
+    public BitcoinClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
+        super(sslSocketFactory, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
+        context = new Context(netParams);
+        mapper.registerModule(new RpcClientModule(context.getParams()));
+        threadFactory = new BitcoinClientThreadFactory(context, "Bitcoin RPC Client");
+        // TODO: Tune and/or make configurable the thread pool size.
+        // Current pool size of 5 is chosen to minimize simultaneous active RPC
+        // calls in `bitcoind` -- which is not designed for serving multiple clients.
+        executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
+    }
+
     /**
      * Construct a BitcoinClient from Network Parameters, URI, user name, and password.
      * @param netParams Correct Network Parameters for destination server
@@ -94,14 +106,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      * @param rpcpassword Password (if required)
      */
     public BitcoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        super(JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
-        context = new Context(netParams);
-        mapper.registerModule(new RpcClientModule(context.getParams()));
-        threadFactory = new BitcoinClientThreadFactory(context, "Bitcoin RPC Client");
-        // TODO: Tune and/or make configurable the thread pool size.
-        // Current pool size of 5 is chosen to minimize simultaneous active RPC
-        // calls in `bitcoind` -- which is not designed for serving multiple clients.
-        executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
+        this((SSLSocketFactory) SSLSocketFactory.getDefault(), netParams, server, rpcuser, rpcpassword);
     }
 
     /**

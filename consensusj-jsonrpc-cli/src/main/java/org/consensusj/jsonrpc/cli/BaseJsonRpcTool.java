@@ -7,6 +7,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.consensusj.jsonrpc.CompositeTrustManager;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcRequest;
@@ -15,10 +16,17 @@ import org.consensusj.jsonrpc.RpcClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLSocketFactory;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,7 +73,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
     public void run(CommonsCLICall call) {
         List<String> args = call.line.getArgList();
         if (args.size() == 0) {
-            printError(call,"jsonrpc method required");
+            printError(call, "jsonrpc method required");
             printHelp(call, usage);
             throw new ToolException(1, "jsonrpc method required");
         }
@@ -76,7 +84,30 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         if (call.line.hasOption("V1")) {
             jsonRpcVersion = JsonRpcMessage.Version.V1;
         }
-        RpcClient client = call.rpcClient();
+        SSLSocketFactory sslSocketFactory;
+        if (call.line.hasOption("add-truststore")) {
+            // Create SSL sockets using additional truststore and CompositeTrustManager
+            String trustStorePathString = call.line.getOptionValue("add-truststore");
+            Path trustStorePath = Path.of(trustStorePathString);
+            try {
+                sslSocketFactory = CompositeTrustManager.getCompositeSSLSocketFactory(trustStorePath);
+            } catch (NoSuchAlgorithmException | KeyManagementException | FileNotFoundException e) {
+                throw new ToolException(1, e.getMessage());
+            }
+        } else if (call.line.hasOption("alt-truststore")) {
+            // Create SSL sockets using alternate truststore
+            String trustStorePathString = call.line.getOptionValue("alt-truststore");
+            Path trustStorePath = Path.of(trustStorePathString);
+            try {
+                sslSocketFactory = CompositeTrustManager.getAlternateSSLSocketFactory(trustStorePath);
+            } catch (NoSuchAlgorithmException | KeyManagementException | CertificateException | KeyStoreException | IOException e) {
+                throw new ToolException(1, e.getMessage());
+            }
+        } else {
+                // Otherwise, use the default SSLSocketFactory
+                sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+        }
+        RpcClient client = call.rpcClient(sslSocketFactory);
         String method = args.get(0);
         args.remove(0); // remove method from list
         List<Object> typedArgs = convertParameters(method, args);
@@ -231,7 +262,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         }
 
         @Override
-        public RpcClient rpcClient() {
+        public RpcClient rpcClient(SSLSocketFactory sslSocketFactory) {
             if (client == null) {
                 URI uri;
                 String urlString;
@@ -252,9 +283,14 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                     rpcUser = split[0];
                     rpcPassword = split[1];
                 }
-                client = new RpcClient(rpcTool.jsonRpcVersion, uri, rpcUser, rpcPassword);
+                client = new RpcClient(sslSocketFactory, rpcTool.jsonRpcVersion, uri, rpcUser, rpcPassword);
             }
             return client;
+        }
+
+        @Override
+        public RpcClient rpcClient() {
+            return rpcClient((SSLSocketFactory) SSLSocketFactory.getDefault());
         }
     }
 }

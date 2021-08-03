@@ -7,30 +7,21 @@ import org.consensusj.jsonrpc.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
-
-import static org.consensusj.jsonrpc.JsonRpcMessage.Version.V2;
 
 /**
- * = JSON-RPC Client using {@link HttpURLConnection}.
- *
- * This is a concrete class with generic JSON-RPC functionality. Abstract {@link AbstractRpcClient#sendRequestForResponse}
- * is implemented using {@link HttpURLConnection}.
- *
+ * JSON-RPC Client using {@link HttpURLConnection}.
+ * <p>
+ * This is a concrete class with generic JSON-RPC functionality, it implements the abstract
+ * method {@link AbstractRpcClient#sendRequestForResponse} using {@link HttpURLConnection}.
+ * <p>
  * Uses strongly-typed POJOs representing {@link JsonRpcRequest} and {@link JsonRpcResponse}. The
  * response object uses a parameterized type for the object that is the actual JSON-RPC `result`.
  * Using strong types and Jackson to serialize/deserialize to/from strongly-typed POJO's without
@@ -39,18 +30,19 @@ import static org.consensusj.jsonrpc.JsonRpcMessage.Version.V2;
  */
 public class RpcClient extends AbstractRpcClient {
     private static final Logger log = LoggerFactory.getLogger(RpcClient.class);
-    private URI serverURI;
-    private String username;
-    private String password;
-    private static final boolean disableSslVerification = false;
+    private final URI serverURI;
+    private final String username;
+    private final String password;
     private static final String UTF8 = StandardCharsets.UTF_8.name();
-
-    static {
-        if (disableSslVerification) {
-            // Disable checks that prevent using a self-signed SSL certificate
-            // TODO: Should checks be enabled by default for security reasons?
-            disableSslVerification();
-        }
+    private final SSLSocketFactory sslSocketFactory;
+    
+    public RpcClient(SSLSocketFactory socketFactory, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
+        super(jsonRpcVersion);
+        this.sslSocketFactory = socketFactory;
+        log.debug("Constructing JSON-RPC client for: {}", server);
+        this.serverURI = server;
+        this.username = rpcUser;
+        this.password = rpcPassword;
     }
 
     /**
@@ -62,11 +54,7 @@ public class RpcClient extends AbstractRpcClient {
      * @param rpcPassword password for the RPC HTTP connection
      */
     public RpcClient(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
-        super(jsonRpcVersion);
-        log.debug("Constructing JSON-RPC client for: {}", server);
-        this.serverURI = server;
-        this.username = rpcUser;
-        this.password = rpcPassword;
+        this((SSLSocketFactory) SSLSocketFactory.getDefault(), jsonRpcVersion, server, rpcUser, rpcPassword);
     }
 
     /**
@@ -201,6 +189,9 @@ public class RpcClient extends AbstractRpcClient {
 
     private HttpURLConnection openConnection() throws IOException {
         HttpURLConnection connection =  (HttpURLConnection) serverURI.toURL().openConnection();
+        if (connection instanceof HttpsURLConnection) {
+            ((HttpsURLConnection) connection).setSSLSocketFactory(this.sslSocketFactory);
+        }
         connection.setDoOutput(true); // For writes
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Accept-Charset", UTF8);
@@ -226,41 +217,5 @@ public class RpcClient extends AbstractRpcClient {
      */
     protected static String base64Encode(String authString) {
         return Base64.encodeToString(authString.getBytes(),Base64.NO_WRAP).trim();
-    }
-
-    // TODO: Allow for self-signed certificates without disabling all verification
-    private static void disableSslVerification() {
-        try
-        {
-            // Create a trust manager that does not validate certificate chains
-            TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
-                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-                public void checkClientTrusted(X509Certificate[] certs, String authType) {
-                }
-                public void checkServerTrusted(X509Certificate[] certs, String authType) {
-                }
-            }
-            };
-
-            // Install the all-trusting trust manager
-            SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
-            // Create all-trusting host name verifier
-            HostnameVerifier allHostsValid = new HostnameVerifier() {
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            };
-
-            // Install the all-trusting host verifier
-            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-        } catch (NoSuchAlgorithmException | KeyManagementException e ) {
-            log.error("Exception in disableSslVerification{}", e);
-            e.printStackTrace();
-        }
     }
 }

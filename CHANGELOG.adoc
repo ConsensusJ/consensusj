@@ -7,6 +7,20 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: In progress
 
+=== JSON-RPC
+
+* Add support in RpcClient and subclasses for adding to or replacing the default (Java) trust
+store used for validating certificates on JSON-RP servers. Support is added via new constructors that take an SSLSocketFactory. See the public static methods on the class `CompositeTrustManager` that can be used to create
+SSLSocketFactories (factory factories cough.)
+
+=== jsonrpc tool (consensusj-jsonrpc-cli)
+
+* Add support for additional/alternative trust stores with the `--add-truststore <keystore>` and `--alt-truststore <keystore>` command-line options.
+
+=== Build/Test Updates
+
+* Fix, re-enable, and improve `WalletSendSpec` integration test
+
 == v0.5.8
 
 Released: 2021.05.11

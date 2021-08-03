@@ -2,6 +2,7 @@ package org.consensusj.jsonrpc.cli;
 
 import org.consensusj.jsonrpc.RpcClient;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -51,6 +52,7 @@ interface JsonRpcClientTool extends ToolProvider {
         }
         
         abstract public RpcClient rpcClient();
+        abstract public RpcClient rpcClient(SSLSocketFactory sslSocketFactory);
     }
     
     class ToolException extends RuntimeException {

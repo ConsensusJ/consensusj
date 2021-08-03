@@ -21,6 +21,7 @@ import org.bitcoinj.core.TransactionOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
@@ -61,8 +62,12 @@ public class BitcoinExtendedClient extends BitcoinClient {
         return defaultMaxConf;
     }
 
+    public BitcoinExtendedClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
+        super(sslSocketFactory, netParams, server, rpcuser, rpcpassword);
+    }
+
     public BitcoinExtendedClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        super(netParams, server, rpcuser, rpcpassword);
+        this((SSLSocketFactory) SSLSocketFactory.getDefault(), netParams, server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(RpcConfig config) {
