@@ -17,9 +17,18 @@ SSLSocketFactories (factory factories cough.)
 
 * Add support for additional/alternative trust stores with the `--add-truststore <keystore>` and `--alt-truststore <keystore>` command-line options.
 
+
+=== Dependency Updates
+
+* RxJava 3.0.13
+* Jackson 2.12.4
+* SLF4J 1.7.32
+* Micronaut 2.5.11
+
 === Build/Test Updates
 
 * Fix, re-enable, and improve `WalletSendSpec` integration test
+* Spock 2.0-groovy-3.0 (released version)
 
 == v0.5.8
 
