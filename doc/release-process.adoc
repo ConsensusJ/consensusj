@@ -3,7 +3,8 @@
 == Main Release Process
 
 . Use Java 11 for official builds
-.. `sdk use 11.0.10.hs-adpt`
+.. `sdk use 11.0.12-tem`
+.. `sdk use 21.2.0.r11-grl` (for GraalVM build)
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`
@@ -43,7 +44,7 @@
 
 == Install Snapshot to local maven repo
 
-. `./gradlew clean buildCI install`
+. `./gradlew clean buildCI publishToMavenLocal`
 
 
 

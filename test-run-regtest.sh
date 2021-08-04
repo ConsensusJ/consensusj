@@ -40,7 +40,7 @@ echo $BITCOIND started return code $BTCSTATUS pid $BTCPID
 
 # Run integration tests
 echo "Running Bitcoin Core RPC integration tests in RegTest mode..."
-./gradlew regTest --info
+./gradlew regTest --scan --info --stacktrace
 GRADLESTATUS=$?
 
 exit $GRADLESTATUS
