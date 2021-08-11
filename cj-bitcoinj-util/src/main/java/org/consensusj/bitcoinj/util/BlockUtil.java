@@ -29,14 +29,14 @@ public class BlockUtil {
         Transaction coinbase = block.getTransactions().get(0);
         byte[] scriptBytes = coinbase.getInput(0).getScriptBytes();
         // There appears to be a bug in bitcoinj 0.15.8 for recent blocks where the input[0] script of the coinbase tx can't be parsed
-// The below code works for block 324140 but seems to fail on SegWit blocks
+        // The below code works for block 324140 but seems to fail on SegWit blocks, due to https://github.com/bitcoinj/bitcoinj/issues/1595
 //        Script script = new Script(scriptBytes);
 //        ScriptChunk chunk = script.getChunks().get(0);
 //        BigInteger height = new BigInteger(Utils.reverseBytes(chunk.data));
-        // We'll parse just the bytes we need as a work-around
+        // Workaround: We'll parse just the bytes we need
         BigInteger height;
-        byte[] blockNumBytes = Arrays.copyOfRange(scriptBytes, 1, 4);
         if (scriptBytes[0] == 3) {
+            byte[] blockNumBytes = Arrays.copyOfRange(scriptBytes, 1, 4);
             height = new BigInteger(Utils.reverseBytes(blockNumBytes));
         } else {
             height = BigInteger.valueOf(-1);
