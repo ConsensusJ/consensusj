@@ -4,7 +4,7 @@ v0.5.9
 :description: ConsensusJ README document.
 :consensusj-version: 0.5.9
 :bitcoinj-version: 0.15.10
-:bitcoinj-apidoc: https://bitcoinj.github.io/javadoc/{bitcoinj-version}/
+:bitcoinj-apidoc: https://bitcoinj.org/javadoc/{bitcoinj-version}/
 :cj-apidoc: https://consensusj.github.io/consensusj/apidoc
 :tip-caption: :bulb:
 :note-caption: :information_source:
@@ -35,7 +35,7 @@ Modular cryptocurrency libraries for Java, JVM languages, and Android.
 * **cj-btc-daemon** - A *Micronaut*-based framework for a Java-based implementation of *bitcoind*. It can be natively compiled using https://www.graalvm.org[GraalVM].
 * *cj-btc-cli* - a command line tool and supporting libraries for accessing the JSON-RPC API.
 * A Groovy-language *Domain Specific Language* for scripting and testing with *bitcoinj*
-* Functional tests of bitcoind (and bitcoinj-daemon) JSON-RPC services, that run in https://bitcoinj.github.io/testing#regression-test-mode[regression test mode].
+* Functional tests of bitcoind (and bitcoinj-daemon) JSON-RPC services, that run in https://bitcoinj.org/testing#regression-test-mode[regression test mode].
 
 === JavaMoney and Exchange Support
 

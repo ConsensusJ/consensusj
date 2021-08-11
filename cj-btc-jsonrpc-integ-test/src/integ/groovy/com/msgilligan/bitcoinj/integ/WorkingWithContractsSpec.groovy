@@ -23,7 +23,7 @@ import spock.lang.Stepwise
 
 
 /**
- * Integration test spec based on https://bitcoinj.github.io/working-with-contracts
+ * Integration test spec based on https://bitcoinj.org/working-with-contracts
  */
 @Ignore("not working yet")
 @Stepwise

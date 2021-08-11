@@ -406,7 +406,7 @@ Released: 2019.03.26
 
 === Breaking Changes
 
-Release 0.4.0 upgrades to https://bitcoinj.github.io[*bitcoinj*] 0.15.1 for all modules with *bitcoinj* dependencies. *bitcoinj* 0.15.x adds support for Segregated Witness and contains https://bitcoinj.github.io/release-notes#version-015[breaking changes].
+Release 0.4.0 upgrades to https://bitcoinj.org[*bitcoinj*] 0.15.1 for all modules with *bitcoinj* dependencies. *bitcoinj* 0.15.x adds support for Segregated Witness and contains https://bitcoinj.org/release-notes#version-015[breaking changes].
 
 Release 0.4.0 is also the first release where all modules requires JDK 8 or later.
 

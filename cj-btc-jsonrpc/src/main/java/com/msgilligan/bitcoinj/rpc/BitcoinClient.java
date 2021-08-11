@@ -53,7 +53,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * A strongly-typed wrapper for a Bitcoin RPC client using the
  * <a href="https://developer.bitcoin.org/reference/rpc/index.html">Bitcoin Core JSON-RPC API</a> and
- * <a href="https://bitcoinj.github.io">bitcoinj</a> types are used where appropriate.
+ * <a href="https://bitcoinj.org">bitcoinj</a> types are used where appropriate.
  * For example, requesting a block hash will return a {@link org.bitcoinj.core.Sha256Hash}:
  *
  * <pre> {@code

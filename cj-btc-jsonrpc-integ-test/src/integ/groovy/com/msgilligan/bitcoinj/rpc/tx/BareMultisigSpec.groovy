@@ -14,7 +14,7 @@ import spock.lang.Stepwise
 
 /**
  * Non-P2SH multisig - Fund and redeem a bare multisig output
- * Based on https://bitcoinj.github.io/working-with-contracts
+ * Based on https://bitcoinj.org/working-with-contracts
  * We have modified the example slightly to adapt it into a @Stepwise Spock test.
  * Each "feature" test corresponds to a section of the example. The example does not
  * specify the exact communication between the 'client' and 'server' and in some cases
