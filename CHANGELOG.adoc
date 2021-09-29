@@ -7,6 +7,11 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
+=== Dependency Updates
+
+* Groovy 3.0.9
+* Micronaut 2.5.13
+
 === Build/Test Updates
 
 * Github Actions: Use **Temurin** JDK
