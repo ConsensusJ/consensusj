@@ -14,6 +14,8 @@ Released: Under development
 
 === Build/Test Updates
 
+* Gradle 7.2
+* Asciidoctor Gradle Plugin 3.3.2
 * Github Actions: Use **Temurin** JDK
 * Github Actions: Upgrade to `setup-java@v2.2.0` action
 * Github Actions: Upgrade to `setup-graalvm@4.0` action
