@@ -1,9 +1,7 @@
-package org.consensusj.bitcoin.zeromq;
-
-import org.zeromq.ZMQ;
+package org.consensusj.bitcoin.rx.zeromq;
 
 /**
- * User record-style naming, rather than JavaBean naming, just for fun. (Maybe this will migrate to a record
+ * Use record-style naming, rather than JavaBean naming, just for fun. (Maybe this will migrate to a record
  * some day.)
  *
  * @param <T>
@@ -33,7 +31,7 @@ public class BitcoinZmqMessage<T> {
 
     /**
      * Bitcoin ZeroMQ topic names. The {@code toString()} values of these enums are
-     * the values used in the wire-protocol (i.e. they are passed to {@link ZMQ.Socket#subscribe}.
+     * the values used in the wire-protocol (i.e. they are passed to {@link org.zeromq.ZMQ.Socket#subscribe}.
      */
     public enum Topic {
         hashblock,

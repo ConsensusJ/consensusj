@@ -1,4 +1,4 @@
-package org.consensusj.bitcoin.zeromq;
+package org.consensusj.rx.jsonrpc;
 
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
@@ -10,10 +10,21 @@ import org.slf4j.LoggerFactory;
 import java.io.IOError;
 
 /**
- * RxJava methods for calling JSON-RPC clients
+ * RxJava support for calling JSON-RPC clients.
  */
 public interface RxJsonRpcClient extends JsonRpcClient {
-    Logger log = LoggerFactory.getLogger(RxBitcoinJsonRpcClient.class);
+    Logger log = LoggerFactory.getLogger(RxJsonRpcClient.class);
+
+    /**
+     * Return a "hot" {@link Single} for calling a JSON-RPC method.
+     *
+     * @param method A {@link org.consensusj.jsonrpc.AsyncSupport.ThrowingSupplier} wrapper for a method call.
+     * @param <RSLT> The type of the expected result
+     * @return A "hot" {@link Single} for calling the method.
+     */
+    default <RSLT> Single<RSLT> call(AsyncSupport.ThrowingSupplier<RSLT> method) {
+        return Single.defer(() -> Single.fromCompletionStage(this.supplyAsync(method)));
+    }
 
     /**
      * Poll a method, ignoring {@link IOError}.
@@ -36,6 +47,7 @@ public interface RxJsonRpcClient extends JsonRpcClient {
                 .onErrorComplete(this::isTransientError);    // Empty completion if IOError
     }
 
+
     /**
      * Determine if error is transient and should be ignored
      *
@@ -47,11 +59,7 @@ public interface RxJsonRpcClient extends JsonRpcClient {
     default boolean isTransientError(Throwable t) {
         return t instanceof IOError;
     }
-
-    default <RSLT> Single<RSLT> call(AsyncSupport.ThrowingSupplier<RSLT> method) {
-        return Single.defer(() -> Single.fromCompletionStage(this.supplyAsync(method)));
-    }
-
+    
     private <RSLT> void logSuccess(RSLT result) {
         log.debug("RPC call returned: {}", result);
     }

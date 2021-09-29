@@ -1,8 +1,11 @@
-package org.consensusj.bitcoin.zeromq;
+package org.consensusj.bitcoin.rx.zeromq;
 
+import com.msgilligan.bitcoinj.rpc.internal.BitcoinClientThreadFactory;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.processors.FlowableProcessor;
 import io.reactivex.rxjava3.processors.PublishProcessor;
+import org.bitcoinj.core.Context;
+import org.bitcoinj.params.MainNetParams;
 import org.consensusj.bitcoin.rx.RxBlockchainBinaryService;
 import org.consensusj.rx.zeromq.ZmqTopicPublisher;
 import org.slf4j.Logger;
@@ -16,11 +19,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ThreadFactory;
 import java.util.stream.Collectors;
 
 /**
  * Bitcoin Zmq <b>binary</b> service that connects to a single port.
- * Use {@link RxBitcoinZmqBinaryService} if Bitcoin Core is configured to run ZMQ on multiple ports.
+ * Use {@code RxBitcoinZmqBinaryService} if Bitcoin Core is configured to run ZMQ on multiple ports.
  * See: <a href="https://github.com/bitcoin/bitcoin/pull/19572">PR 19752</a> for sequence topic information
  */
 public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService, Closeable {
@@ -40,16 +44,17 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
     private long hashTxSeq = -1;
     private long rawBlockSeq = -1;
     private long rawTxSeq = -1;
-    
-    public RxBitcoinSinglePortZmqService(URI tcpAddress, BitcoinZmqMessage.Topic... topics) {
-        this(tcpAddress, Set.of(topics));
+
+
+    public RxBitcoinSinglePortZmqService(URI tcpAddress, ThreadFactory threadFactory, BitcoinZmqMessage.Topic... topics) {
+        this(tcpAddress, threadFactory, Set.of(topics));
     }
 
-    private RxBitcoinSinglePortZmqService(URI tcpAddress, Collection<BitcoinZmqMessage.Topic> topics) {
+    private RxBitcoinSinglePortZmqService(URI tcpAddress, ThreadFactory threadFactory, Collection<BitcoinZmqMessage.Topic> topics) {
         this.tcpAddress = tcpAddress;
         topicSet = Collections.unmodifiableSet(new HashSet<>(topics));
         List<String> stringTopics = topics.stream().map(BitcoinZmqMessage.Topic::toString).collect(Collectors.toList());
-        zmqTopicPublisher = new ZmqTopicPublisher(tcpAddress, stringTopics);
+        zmqTopicPublisher = new ZmqTopicPublisher(tcpAddress, stringTopics, threadFactory);
         for (BitcoinZmqMessage.Topic topic : topics) {
             // Subscribe to each topic
             zmqTopicPublisher.topicPublisher(topic.toString())

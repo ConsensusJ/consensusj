@@ -1,15 +1,18 @@
-package org.consensusj.bitcoin.zeromq;
+package org.consensusj.bitcoin.rx.zeromq;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinClient;
+import com.msgilligan.bitcoinj.rpc.internal.BitcoinClientThreadFactory;
 import io.reactivex.rxjava3.core.Flowable;
+import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.params.MainNetParams;
 import org.consensusj.bitcoin.rx.RxBlockchainBinaryService;
 
 import java.io.Closeable;
 import java.net.URI;
 import java.util.Optional;
 
-import static org.consensusj.bitcoin.zeromq.BitcoinZmqMessage.Topic.*;
+import static org.consensusj.bitcoin.rx.zeromq.BitcoinZmqMessage.Topic.*;
 
 /**
  * Service to listen for ZMQ messages from multiple TCP ports. Uses Bitcoin Core JSON-RPC to find
@@ -26,6 +29,8 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
     private final Flowable<byte[]> observableRawTx;
     private final Flowable<byte[]> observableRawBlock;
 
+    private final BitcoinClientThreadFactory threadFactory;
+
     public RxBitcoinZmqBinaryService(NetworkParameters networkParameters, URI rpcUri, String rpcUser, String rpcPassword) {
         this(new BitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword));
     }
@@ -33,6 +38,7 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
     public RxBitcoinZmqBinaryService(BitcoinClient client) {
         this.client = client;
         this.networkParameters = client.getNetParams();
+        threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(MainNetParams.get()), "RxBitcoinZmq Thread");
 
         BitcoinZmqPortFinder portFinder = new BitcoinZmqPortFinder(client);
 
@@ -45,11 +51,11 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
 
         if (blockServiceURI.get().equals(txServiceURI.get())) {
             // URIs are the same we can use a single connection
-            blockService = new RxBitcoinSinglePortZmqService(blockServiceURI.get(), rawblock, rawtx);
+            blockService = new RxBitcoinSinglePortZmqService(blockServiceURI.get(), threadFactory, rawblock, rawtx);
             txService = blockService;
         } else {
-            blockService = new RxBitcoinSinglePortZmqService(blockServiceURI.get(), rawblock);
-            txService = new RxBitcoinSinglePortZmqService(txServiceURI.get(), rawtx);
+            blockService = new RxBitcoinSinglePortZmqService(blockServiceURI.get(), threadFactory, rawblock);
+            txService = new RxBitcoinSinglePortZmqService(txServiceURI.get(), threadFactory, rawtx);
         }
 
         observableRawBlock = blockService.blockBinaryPublisher();

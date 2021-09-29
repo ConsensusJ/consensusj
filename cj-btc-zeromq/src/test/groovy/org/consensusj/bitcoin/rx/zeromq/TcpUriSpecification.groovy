@@ -1,4 +1,4 @@
-package org.consensusj.bitcoin.zeromq
+package org.consensusj.bitcoin.rx.zeromq
 
 import spock.lang.Specification
 

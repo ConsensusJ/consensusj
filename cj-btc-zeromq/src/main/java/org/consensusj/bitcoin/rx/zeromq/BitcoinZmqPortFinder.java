@@ -1,4 +1,4 @@
-package org.consensusj.bitcoin.zeromq;
+package org.consensusj.bitcoin.rx.zeromq;
 
 import com.msgilligan.bitcoinj.json.pojo.ZmqNotification;
 import com.msgilligan.bitcoinj.rpc.BitcoinClient;
