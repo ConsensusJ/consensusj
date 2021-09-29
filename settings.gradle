@@ -32,6 +32,7 @@ if (JavaVersion.current().isJava9Compatible()) {
 }
 
 if (JavaVersion.current().isJava11Compatible()) {
+    System.err.println "Including JDK 11 modules because Java ${JavaVersion.current()} is JDK 11+"
     include 'consensusj-analytics'              // Reactive analytics libraries
     include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
     include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
@@ -42,9 +43,10 @@ if (JavaVersion.current().isJava11Compatible()) {
     System.err.println "Skipping JDK 11 modules, requires Java 11+, currently running Java ${JavaVersion.current()}"
 }
 
-if (JavaVersion.current().compareTo(JavaVersion.VERSION_15) < 0) {
+if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
+    System.err.println "Including JDK 17 module because Java ${JavaVersion.current()} is JDK 17+"
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
 } else {
-    System.err.println "Skipping 'cj-bitcoinj-dsl-js', because Nashorn is no longer present in Java ${JavaVersion.current()}"
+    System.err.println "Skipping 'cj-bitcoinj-dsl-js', requires Java 17+, currently running Java ${JavaVersion.current()}"
 }
 

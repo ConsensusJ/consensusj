@@ -5,7 +5,7 @@ import com.msgilligan.bitcoinj.rpc.RpcURI;
 import com.msgilligan.bitcoinj.rpc.test.TestServers;
 import com.msgilligan.bitcoinj.test.RegTestEnvironment;
 import com.msgilligan.bitcoinj.test.RegTestFundingSource;
-import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.params.MainNetParams;
 import org.slf4j.Logger;
