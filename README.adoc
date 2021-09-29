@@ -69,7 +69,7 @@ Add the following to your `pom.xml`:
 ----
 <repositories>
   <repository>
-    <id>gitlab-maven</id>
+    <id>consensusj-gitlab-maven</id>
     <url>https://gitlab.com/api/v4/projects/8482916/packages/maven</url>
   </repository>
 </repositories>
