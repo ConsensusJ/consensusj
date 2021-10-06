@@ -44,8 +44,8 @@ if (JavaVersion.current().isJava11Compatible()) {
     System.err.println "Skipping JDK 11 modules, requires Java 11+, currently running Java ${JavaVersion.current()}"
 }
 
-if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
-    System.err.println "Including JDK 17 module because Java ${JavaVersion.current()} is JDK 17+"
+if (JavaVersion.current().compareTo(JavaVersion.VERSION_16) >= 0) {
+    System.err.println "Including JDK 16 module because Java ${JavaVersion.current()} is JDK 16+"
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
 } else {
     System.err.println "Skipping 'cj-bitcoinj-dsl-js', requires Java 17+, currently running Java ${JavaVersion.current()}"
