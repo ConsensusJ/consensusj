@@ -11,7 +11,7 @@ jobs:
         graalvm: [ '21.2.0' ]
         java: [ 'java11', 'java16' ]
       fail-fast: false
-    name: ${{ matrix.os }} JDK ${{ matrix.graalvm }}
+    name: ${{ matrix.os }} JDK ${{ matrix.graalvm }}.${{ matrix.java }}
     steps:
       - name: Git checkout
         uses: actions/checkout@v1
