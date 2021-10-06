@@ -1,10 +1,12 @@
 package com.msgilligan.bitcoinj.dsljs;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
+import com.msgilligan.bitcoinj.rpc.RpcConfig;
 import com.msgilligan.bitcoinj.rpc.RpcURI;
 import com.msgilligan.bitcoinj.rpc.test.TestServers;
 import com.msgilligan.bitcoinj.test.RegTestEnvironment;
 import com.msgilligan.bitcoinj.test.RegTestFundingSource;
+import org.consensusj.jsonrpc.AsyncSupport;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.params.MainNetParams;
@@ -17,7 +19,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 
 /**
@@ -29,31 +30,28 @@ public class ScriptRunner {
     private static final Logger log = LoggerFactory.getLogger(ScriptRunner.class);
     private final ScriptEngine engine;
 
-    public ScriptRunner() throws ScriptException {
-        NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
-        engine = factory.getScriptEngine("-scripting");
-        BitcoinExtendedClient client = new BitcoinExtendedClient(MainNetParams.get(),
-                RpcURI.getDefaultMainNetURI(),
-                TestServers.getInstance().getRpcTestUser(),
-                TestServers.getInstance().getRpcTestPassword());
-        RegTestEnvironment env = new RegTestEnvironment(client);
-        RegTestFundingSource funder = new RegTestFundingSource(client);
+    public ScriptRunner(RpcConfig rpcConfig) {
+        engine = new NashornScriptEngineFactory().getScriptEngine("-scripting");
+        var client = new BitcoinExtendedClient(rpcConfig);
+        var env = new RegTestEnvironment(client);
+        var funder = new RegTestFundingSource(client);
         engine.put("client", client);
         engine.put("env", env);
         engine.put("funder", funder);
         engine.put("satoshi", (Function<Number, Coin>) satoshis -> Coin.valueOf(satoshis.longValue()));
         engine.put("btc", (Function<Number, Coin>) btc -> Coin.valueOf(btc.longValue() * Coin.COIN.longValue()));
         engine.put("coin", (BiFunction<Number, Number, Coin>) (btc, cents) -> Coin.valueOf(btc.intValue(), cents.intValue()));
-        engine.put("getBlockCount", (Supplier<Integer>)() -> {
-            try { return client.getBlockCount(); }
-            catch (Exception e) { log.error("Exception: ", e); throw new RuntimeException(e); }
-        });
+        engine.put("getBlockCount", (AsyncSupport.ThrowingSupplier<Integer>) client::getBlockCount);
+    }
+
+    public ScriptRunner() {
+        this(new RpcConfig(MainNetParams.get(), RpcURI.getDefaultMainNetURI(),
+                TestServers.getInstance().getRpcTestUser(), TestServers.getInstance().getRpcTestPassword()));
     }
 
     public Object evalResource(String resourcePath) throws ScriptException {
         log.info("Running resource: {}", resourcePath);
-        InputStreamReader reader =
-                new InputStreamReader(getClass().getResourceAsStream(resourcePath), StandardCharsets.UTF_8);
+        var reader = new InputStreamReader(getClass().getResourceAsStream(resourcePath), StandardCharsets.UTF_8);
         return engine.eval(reader);
     }
 }

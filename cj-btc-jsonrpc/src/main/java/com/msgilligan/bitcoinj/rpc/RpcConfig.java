@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.NetworkParameters;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * Configuration class for JSON-RPC client
