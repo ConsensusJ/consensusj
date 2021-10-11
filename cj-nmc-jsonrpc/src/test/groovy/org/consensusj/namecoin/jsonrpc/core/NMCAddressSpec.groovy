@@ -36,7 +36,7 @@ class NMCAddressSpec extends Specification {
         def key = new ECKey()
 
         when: "We construct an NMC address from it"
-        def nmcAddress = new LegacyAddress(nmcNetParams, key.pubKeyHash)
+        def nmcAddress = LegacyAddress.fromPubKeyHash(nmcNetParams, key.pubKeyHash)
         def firstChar = nmcAddress.toString().charAt(0)
 
         then: "It begins with an 'M' or 'N'"
@@ -45,10 +45,10 @@ class NMCAddressSpec extends Specification {
 
     def "We can create a BTC address from an NMC address"() {
         given: "An NMC address"
-        def nmcAddress = new LegacyAddress(nmcNetParams, new ECKey().pubKeyHash)
+        def nmcAddress = LegacyAddress.fromPubKeyHash(nmcNetParams, new ECKey().pubKeyHash)
 
         when: "We generate a BTC address from it"
-        def btcAddress = new LegacyAddress(mainNetParams, nmcAddress.hash160)
+        def btcAddress = LegacyAddress.fromPubKeyHash(mainNetParams, nmcAddress.hash)
 
         then: "It begins with a '1'"
         btcAddress.toString().charAt(0) == '1' as char
@@ -69,10 +69,10 @@ class NMCAddressSpec extends Specification {
 
     def "We can create a BTC address from a known NMC address"() {
         given: "An NMC address"
-        def nmcAddress = new LegacyAddress(nmcNetParams, ECKey.fromPrivate(NotSoPrivatePrivateKey).pubKeyHash)
+        def nmcAddress = LegacyAddress.fromPubKeyHash(nmcNetParams, ECKey.fromPrivate(NotSoPrivatePrivateKey).pubKeyHash)
 
         when: "We generate a BTC address from it"
-        def btcAddress = new LegacyAddress(mainNetParams, nmcAddress.hash160)
+        def btcAddress = LegacyAddress.fromPubKeyHash(mainNetParams, nmcAddress.hash)
 
         then: "It begins with a '1'"
         btcAddress.toString().charAt(0) == '1' as char
