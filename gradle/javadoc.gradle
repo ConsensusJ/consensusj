@@ -14,10 +14,19 @@ ext.javadocSpec = {
         options.addBooleanOption 'html5', true              // Requires JDK 9+
     }
 
-    options.links(  // TODO: Restore JDK link: 'https://docs.oracle.com/javase/8/docs/api/',
-                    "https://bitcoinj.org/javadoc/${bitcoinjVersion}/",
-                    "https://fasterxml.github.io/jackson-core/javadoc/2.12/",
-                    "https://fasterxml.github.io/jackson-databind/javadoc/2.12/")
+    def javaDocLinks = [
+            "https://docs.oracle.com/en/java/javase/17/docs/api",
+            "https://fasterxml.github.io/jackson-core/javadoc/2.12/",
+            "https://fasterxml.github.io/jackson-databind/javadoc/2.12/"
+    ]
+
+    if (!bitcoinjVersion.contains("beta")) {
+        javaDocLinks.add("https://bitcoinj.org/javadoc/${bitcoinjVersion}/".toString())
+    }
+
+    String[] linksArray = javaDocLinks.toArray(new String[]{})
+
+    options.links(linksArray)
 
 }
 
