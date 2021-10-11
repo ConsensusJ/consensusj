@@ -13,3 +13,5 @@ print("btcAmount = ${btcAmount.toFriendlyString()}");
 
 var coinAmount = coin(2, 50);
 print("coinAmount = ${coinAmount.toFriendlyString()}");
+
+print("blockheight (via lambda) = ${getBlockCount()}");
