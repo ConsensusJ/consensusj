@@ -4,6 +4,7 @@ import org.bitcoinj.core.Address
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.LegacyAddress
 import org.bitcoinj.core.NetworkParameters
+import org.bitcoinj.script.Script
 import org.bitcoinj.wallet.Wallet
 import org.bitcoinj.params.MainNetParams
 import org.bitcoinj.utils.BriefLogFormatter
@@ -69,6 +70,6 @@ class WalletSpec  extends Specification {
     }
 
     Wallet newEmptyWallet() {
-        wallet = new Wallet(mainNetParams)
+        wallet = Wallet.createDeterministic(mainNetParams, Script.ScriptType.P2PKH)
     }
 }
