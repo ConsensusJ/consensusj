@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.function.BiFunction;
@@ -52,6 +55,12 @@ public class ScriptRunner {
     public Object evalResource(String resourcePath) throws ScriptException {
         log.info("Running resource: {}", resourcePath);
         var reader = new InputStreamReader(getClass().getResourceAsStream(resourcePath), StandardCharsets.UTF_8);
+        return engine.eval(reader);
+    }
+
+    public Object evalFile(File scriptFile) throws ScriptException, FileNotFoundException {
+        log.info("Running file: {}", scriptFile);
+        var reader = new InputStreamReader(new FileInputStream(scriptFile), StandardCharsets.UTF_8);
         return engine.eval(reader);
     }
 }
