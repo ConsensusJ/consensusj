@@ -10,7 +10,7 @@ Released: Under development
 === Dependency Updates
 
 * Groovy 3.0.9
-* Micronaut 2.5.13
+* Micronaut 3.1.0
 
 === Build/Test Updates
 
