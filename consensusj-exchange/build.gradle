@@ -5,9 +5,11 @@ plugins {
 def xChangeVersion = '4.4.2'
 
 dependencies {
-    api "org.javamoney:moneta-bp:${javaMoneyMonetaVersion}"
+    api "javax.money:money-api:${javaMoneyApiVersion}"
     api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
     api "org.knowm.xchange:xchange-core:${xChangeVersion}"
+
+    implementation "org.javamoney:moneta:${javaMoneyMonetaVersion}"
 
     testImplementation project(':consensusj-currency')  // For BTC Currency Code
     testRuntimeOnly "org.knowm.xchange:xchange-bitfinex:${xChangeVersion}"
