@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.rx.zeromq;
 
-import com.msgilligan.bitcoinj.rpc.BitcoinClient;
-import com.msgilligan.bitcoinj.rpc.internal.BitcoinClientThreadFactory;
+import org.consensusj.bitcoin.rpc.BitcoinClient;
+import org.consensusj.bitcoin.rpc.internal.BitcoinClientThreadFactory;
 import io.reactivex.rxjava3.core.Flowable;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;

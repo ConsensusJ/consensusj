@@ -1,10 +1,10 @@
 package org.consensusj.namecoin.jsonrpc;
 
-import com.msgilligan.bitcoinj.rpc.BitcoinClient;
+import org.consensusj.bitcoin.rpc.BitcoinClient;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
-import com.msgilligan.bitcoinj.rpc.RpcConfig;
-import com.msgilligan.bitcoinj.rpc.bitcoind.AppDataDirectory;
-import com.msgilligan.bitcoinj.rpc.bitcoind.BitcoinConfFile;
+import org.consensusj.bitcoin.rpc.RpcConfig;
+import org.consensusj.bitcoin.rpc.bitcoind.AppDataDirectory;
+import org.consensusj.bitcoin.rpc.bitcoind.BitcoinConfFile;
 import org.consensusj.namecoin.jsonrpc.core.NMCMainNetParams;
 import org.consensusj.namecoin.jsonrpc.pojo.NameData;
 import org.bitcoinj.core.NetworkParameters;
