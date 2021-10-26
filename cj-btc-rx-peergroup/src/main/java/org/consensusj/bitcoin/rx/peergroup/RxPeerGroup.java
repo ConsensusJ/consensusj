@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.rx.peergroup;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.msgilligan.bitcoinj.json.pojo.ChainTip;
+import org.consensusj.bitcoin.json.pojo.ChainTip;
 import io.reactivex.rxjava3.processors.PublishProcessor;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.NetworkParameters;

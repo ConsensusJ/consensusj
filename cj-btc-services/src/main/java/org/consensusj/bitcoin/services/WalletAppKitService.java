@@ -1,11 +1,11 @@
 package org.consensusj.bitcoin.services;
 
-import com.msgilligan.bitcoinj.json.conversion.HexUtil;
-import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
-import com.msgilligan.bitcoinj.json.pojo.BlockInfo;
-import com.msgilligan.bitcoinj.json.pojo.NetworkInfo;
-import com.msgilligan.bitcoinj.json.pojo.ServerInfo;
-import com.msgilligan.bitcoinj.rpcserver.BitcoinJsonRpc;
+import org.consensusj.bitcoin.json.conversion.HexUtil;
+import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
+import org.consensusj.bitcoin.json.pojo.BlockInfo;
+import org.consensusj.bitcoin.json.pojo.NetworkInfo;
+import org.consensusj.bitcoin.json.pojo.ServerInfo;
+import org.consensusj.bitcoin.rpcserver.BitcoinJsonRpc;
 import org.bitcoinj.core.AbstractBlockChain;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;

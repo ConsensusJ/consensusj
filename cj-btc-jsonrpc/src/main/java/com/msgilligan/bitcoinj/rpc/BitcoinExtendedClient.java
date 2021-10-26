@@ -1,10 +1,10 @@
 package com.msgilligan.bitcoinj.rpc;
 
 import com.fasterxml.jackson.databind.JavaType;
-import com.msgilligan.bitcoinj.json.pojo.AddressInfo;
-import com.msgilligan.bitcoinj.json.pojo.Outpoint;
-import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
-import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
+import org.consensusj.bitcoin.json.pojo.AddressInfo;
+import org.consensusj.bitcoin.json.pojo.Outpoint;
+import org.consensusj.bitcoin.json.pojo.SignedRawTransaction;
+import org.consensusj.bitcoin.json.pojo.UnspentOutput;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.params.RegTestParams;
 import org.bitcoinj.script.Script;

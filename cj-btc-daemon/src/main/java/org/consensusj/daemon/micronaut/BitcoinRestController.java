@@ -1,7 +1,7 @@
 package org.consensusj.daemon.micronaut;
 
-import com.msgilligan.bitcoinj.json.pojo.BlockChainInfo;
-import com.msgilligan.bitcoinj.json.pojo.BlockInfo;
+import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
+import org.consensusj.bitcoin.json.pojo.BlockInfo;
 import io.micronaut.context.annotation.Context;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;

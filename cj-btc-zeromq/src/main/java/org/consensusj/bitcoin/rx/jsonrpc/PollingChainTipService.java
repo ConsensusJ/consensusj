@@ -1,6 +1,6 @@
 package org.consensusj.bitcoin.rx.jsonrpc;
 
-import com.msgilligan.bitcoinj.json.pojo.ChainTip;
+import org.consensusj.bitcoin.json.pojo.ChainTip;
 import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
