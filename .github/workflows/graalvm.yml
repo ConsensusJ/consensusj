@@ -8,8 +8,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest]
-        graalvm: [ '21.2.0' ]
-        java: [ 'java11', 'java16' ]
+        graalvm: [ '21.3.0' ]
+        java: [ 'java11', 'java17' ]
       fail-fast: false
     name: ${{ matrix.os }} JDK ${{ matrix.graalvm }}.${{ matrix.java }}
     steps:
