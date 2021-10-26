@@ -1,11 +1,8 @@
 package org.consensusj.bitcoin.rx.zeromq;
 
-import com.msgilligan.bitcoinj.rpc.internal.BitcoinClientThreadFactory;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.processors.FlowableProcessor;
 import io.reactivex.rxjava3.processors.PublishProcessor;
-import org.bitcoinj.core.Context;
-import org.bitcoinj.params.MainNetParams;
 import org.consensusj.bitcoin.rx.RxBlockchainBinaryService;
 import org.consensusj.rx.zeromq.ZmqTopicPublisher;
 import org.slf4j.Logger;

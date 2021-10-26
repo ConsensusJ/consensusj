@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.rx.jsonrpc;
 
 import org.consensusj.bitcoin.json.pojo.ChainTip;
-import com.msgilligan.bitcoinj.rpc.BitcoinClient;
+import org.consensusj.bitcoin.rpc.BitcoinClient;
 import io.reactivex.rxjava3.core.Flowable;
 import org.bitcoinj.core.NetworkParameters;
 import org.consensusj.bitcoin.rx.zeromq.RxBitcoinZmqService;
