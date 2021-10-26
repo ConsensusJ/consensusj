@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.rx.jsonrpc;
 
-import com.msgilligan.bitcoinj.json.pojo.ChainTip;
-import com.msgilligan.bitcoinj.json.pojo.TxOutSetInfo;
+import org.consensusj.bitcoin.json.pojo.ChainTip;
+import org.consensusj.bitcoin.json.pojo.TxOutSetInfo;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
 

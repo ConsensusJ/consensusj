@@ -1,6 +1,6 @@
 package com.msgilligan.bitcoinj.test
 
-import com.msgilligan.bitcoinj.json.pojo.RawTransactionInfo
+import org.consensusj.bitcoin.json.pojo.RawTransactionInfo
 import org.consensusj.jsonrpc.JsonRpcStatusException
 import org.bitcoinj.core.Coin
 import org.bitcoinj.core.PeerGroup

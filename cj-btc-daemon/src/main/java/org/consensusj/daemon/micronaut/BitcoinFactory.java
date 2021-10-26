@@ -1,7 +1,7 @@
 package org.consensusj.daemon.micronaut;
 
 import com.fasterxml.jackson.databind.Module;
-import com.msgilligan.bitcoinj.json.conversion.RpcServerModule;
+import org.consensusj.bitcoin.json.conversion.RpcServerModule;
 import io.micronaut.context.annotation.Factory;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;

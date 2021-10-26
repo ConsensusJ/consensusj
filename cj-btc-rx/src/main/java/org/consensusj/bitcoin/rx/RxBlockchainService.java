@@ -1,6 +1,6 @@
 package org.consensusj.bitcoin.rx;
 
-import com.msgilligan.bitcoinj.json.pojo.ChainTip;
+import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;

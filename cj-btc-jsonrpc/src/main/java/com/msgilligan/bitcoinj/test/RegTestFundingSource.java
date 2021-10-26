@@ -2,9 +2,9 @@ package com.msgilligan.bitcoinj.test;
 
 import com.msgilligan.bitcoinj.rpc.BitcoinExtendedClient;
 import org.consensusj.jsonrpc.JsonRpcException;
-import com.msgilligan.bitcoinj.json.pojo.Outpoint;
-import com.msgilligan.bitcoinj.json.pojo.SignedRawTransaction;
-import com.msgilligan.bitcoinj.json.pojo.UnspentOutput;
+import org.consensusj.bitcoin.json.pojo.Outpoint;
+import org.consensusj.bitcoin.json.pojo.SignedRawTransaction;
+import org.consensusj.bitcoin.json.pojo.UnspentOutput;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.NetworkParameters;
