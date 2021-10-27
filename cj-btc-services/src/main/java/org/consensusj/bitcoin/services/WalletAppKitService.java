@@ -20,7 +20,7 @@ import org.bitcoinj.store.BlockStoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  */
 @Named
 public class WalletAppKitService implements BitcoinJsonRpc {
-    private static Logger log = LoggerFactory.getLogger(WalletAppKitService.class);
+    private static final Logger log = LoggerFactory.getLogger(WalletAppKitService.class);
     private static final String userAgentName = "PeerList";
     private static final String appVersion = "0.1";
     private static final int version = 1;
