@@ -22,7 +22,7 @@ namespace org.consensusj.jsonrpc.groovy {
   DynamicRPCFallback <|.. DynamicRPCClient
 }
 
-namespace com.msgilligan.bitcoinj.rpc {
+namespace org.consensusj.bitcoin.rpc {
     class BitcoinClient
     class BitcoinExtendedClient
 
@@ -37,11 +37,11 @@ namespace com.msgilligan.bitcoinj.rpc {
     BitcoinClient <|-- BitcoinCLIClient
 }
 
-namespace com.msgilligan.namecoinj.rpc {
+namespace org.consensusj.namecoin.rpc {
     class NamecoinClient
     class NamecoinScriptingClient << Groovy >>
 
-    com.msgilligan.bitcoinj.rpc.BitcoinClient <|-- NamecoinClient
+    org.consensusj.bitcoin.rpc.BitcoinClient <|-- NamecoinClient
     NamecoinClient <|.. NamecoinScriptingClient
     org.consensusj.jsonrpc.groovy.DynamicRPCFallback <|.. NamecoinScriptingClient
 }

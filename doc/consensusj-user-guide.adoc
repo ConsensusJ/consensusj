@@ -55,7 +55,7 @@ namespace org.consensusj.bitcoin.rpc {
     BitcoinClient <|-- BitcoinCLIClient
 }
 
-namespace com.msgilligan.namecoinj.rpc {
+namespace org.consensusj.namecoin.jsonrpc {
     class NamecoinClient
     class NamecoinScriptingClient << Groovy >>
 
