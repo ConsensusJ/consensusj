@@ -27,7 +27,7 @@ if (JavaVersion.current().isJava9Compatible()) {
     include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
     include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
     include 'cj-btc-rx-peergroup'               // bitcoinj-based RxJava (Transaction) implementation
-    include 'cj-btc-zeromq'                     // bitcoind ZeroMQ client
+    include 'cj-btc-rx-jsonrpc'                 // RxJava 3 reactive Bitcoin JSON-RPC bitcoind client (uses ZeroMQ)
 } else {
     System.err.println "Skipping JDK 9 modules, requires Java 9+, currently running Java ${JavaVersion.current()}"
 }

@@ -5,9 +5,7 @@ plugins {
 sourceCompatibility = 9
 targetCompatibility = 9
 
-// TODO: This module should be renamed `cj-btc-rx-jsonrpc`
-// TODO: module name should be org.consensusj.bitcoin.rx.jsonrpc
-ext.moduleName = 'org.consensusj.bitcoin.zeromq'
+ext.moduleName = 'org.consensusj.bitcoin.rx.jsonrpc'
 
 dependencies {
     api project(':cj-btc-rx')

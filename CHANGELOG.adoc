@@ -7,8 +7,37 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
+=== Breaking Changes
+
+* Remaining `com.msgilligan` packages are now in `org.consensusj`
+* Rx-related refactoring: `cj-btc-zeromq` -> `consensusj-rx-jsonrpc` and `cj-btc-rx-jsonrpc`
+
+=== New JAR: cj-btc-rx-jsonrpc (was cj-btc-zeromq)
+
+* `cj-btc-zeromq` renamed to  `cj-btc-rx-jsonrpc`
+* `RxJsonRpcClient` moved to `consensusj-rx-jsonrpc`/`org.consensusj.rx.jsonrpc.RxJsonRpcClient`
+* Package `org.consensusj.bitcoin.rx.jsonrpc`: Reactive Bitcoin JSON-RPC client
+** `RxBitcoinClient` class (replaces `RxBitcoinJsonRpcClient` interface) (TODO: should also be interface?)
+** `ChainTipService` interface
+** `PollingChainTipService`
+* Package `org.consensusj.bitcoin.rx.zeromq`: Reactive ZeroMQ Bitcoin message handling
+** Refactored classes from `org.consensusj.bitcoin.zeromq`
+
+=== New JAR: consensusj-rx-jsonrpc
+
+* Contains `RxJsonRpcClient`, so it can be available with fewer transitive dependencies.
+
+=== cj-bitcoinj-dsl-js
+
+* Now uses standalone Nashorn
+* `ScriptRunner` and `Demo` can now run Javascript from a file
+* Requires JDK 17
+
 === Dependency Updates
 
+* bitcoinj 0.16-beta2
+* JavaMoney API 1.1 (non-backport version)
+* JavaMoney Moneta 1.4.2 (non-backport version)
 * Jackson 2.13.0
 * Jakarta Inject API 2.0.1
 * RxJava 3.1.2
@@ -19,9 +48,11 @@ Released: Under development
 
 * Gradle 7.2
 * Asciidoctor Gradle Plugin 3.3.2
-* Github Actions: Use **Temurin** JDK
+* Github Actions: Use **Temurin** (JDK 11 & 17)
+* Github Actions: Use **GraalVM** 21.2.0 (JDK 11 & 17)
 * Github Actions: Upgrade to `setup-java@v2.2.0` action
 * Github Actions: Upgrade to `setup-graalvm@4.0` action
+* Use Omni Core 0.11.0 in RegTest CI
 
 == v0.5.9
 
