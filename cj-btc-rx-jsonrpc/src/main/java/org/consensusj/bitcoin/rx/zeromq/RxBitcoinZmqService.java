@@ -13,7 +13,7 @@ import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
-import org.consensusj.bitcoin.rx.jsonrpc.ChainTipService;
+import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.bitcoin.util.BlockUtil;
 import org.consensusj.bitcoin.rx.RxBlockchainService;
 

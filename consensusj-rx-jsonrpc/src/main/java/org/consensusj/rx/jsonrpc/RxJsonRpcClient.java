@@ -12,7 +12,7 @@ import java.io.IOError;
 /**
  * RxJava support for calling JSON-RPC clients.
  */
-public interface RxJsonRpcClient extends JsonRpcClient {
+public interface RxJsonRpcClient extends AsyncSupport {
     Logger log = LoggerFactory.getLogger(RxJsonRpcClient.class);
 
     /**

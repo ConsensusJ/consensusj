@@ -1,4 +1,4 @@
-package org.consensusj.bitcoin.rx.jsonrpc;
+package org.consensusj.bitcoin.rx;
 
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.reactivestreams.Publisher;

@@ -72,7 +72,7 @@ import java.util.concurrent.TimeUnit;
  * <b>This is still a work-in-progress and the API will change.</b>
  *
  */
-public class BitcoinClient extends RpcClient implements NetworkParametersProperty {
+public class BitcoinClient extends RpcClient implements ChainTipClient, NetworkParametersProperty {
     private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);
 
     private static final int THREAD_POOL_SIZE = 5;
@@ -889,6 +889,7 @@ public class BitcoinClient extends RpcClient implements NetworkParametersPropert
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
+    @Override
     public List<ChainTip> getChainTips() throws JsonRpcStatusException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ChainTip.class);
         return send("getchaintips",resultType);

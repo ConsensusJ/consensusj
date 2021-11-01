@@ -14,7 +14,7 @@ import java.io.Closeable;
  *
  * There are at least 3 possible implementations
  * 1. A bitcoinj {@link org.bitcoinj.core.PeerGroup}
- * 2. The ZeroMQ service of a  trusted Bitcoin Core node
+ * 2. The ZeroMQ (and JSON-RPC) service of a trusted Bitcoin Core node
  * 3. A Bitcoin web service using WebSocket
  *
  * Note: Implementation instances may throw {@link UnsupportedOperationException} if they don't support a particular
