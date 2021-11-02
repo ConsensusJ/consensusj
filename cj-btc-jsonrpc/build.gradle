@@ -2,6 +2,8 @@ plugins {
     id 'java-library'
 }
 
+ext.moduleName = 'org.consensusj.bitcoin.jsonrpc'
+
 dependencies {
     api project(':consensusj-jsonrpc')
     api project(':cj-btc-json')
@@ -14,7 +16,14 @@ dependencies {
     testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy extensions in tests
 }
 
-
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ Bitcoin JSON-RPC',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
+    }
+}
 
 test {
     testLogging.showStandardStreams = true
@@ -22,5 +31,4 @@ test {
     beforeTest { descriptor ->
         logger.lifecycle('    ' + descriptor.getName())
     }
-
 }
