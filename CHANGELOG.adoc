@@ -3,12 +3,13 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.5.10-SNAPSHOT
+== v0.5.10
 
-Released: Under development
+Released: 2021-11-01
 
 === Breaking Changes
 
+* `org.consensusj.bitcoin.json` and `org.consensusj.bitcoin.jsonrpc` are now automatic modules
 * Remaining `com.msgilligan` packages are now in `org.consensusj`
 * Rx-related refactoring: `cj-btc-zeromq` -> `consensusj-rx-jsonrpc` and `cj-btc-rx-jsonrpc`
 
@@ -18,8 +19,10 @@ Released: Under development
 * `RxJsonRpcClient` moved to `consensusj-rx-jsonrpc`/`org.consensusj.rx.jsonrpc.RxJsonRpcClient`
 * Package `org.consensusj.bitcoin.rx.jsonrpc`: Reactive Bitcoin JSON-RPC client
 ** `RxBitcoinClient` class (replaces `RxBitcoinJsonRpcClient` interface) (TODO: should also be interface?)
+** `RxJsonChainTipClient`
 ** `ChainTipService` interface
 ** `PollingChainTipService`
+** `PollingChainTipServiceImpl`
 * Package `org.consensusj.bitcoin.rx.zeromq`: Reactive ZeroMQ Bitcoin message handling
 ** Refactored classes from `org.consensusj.bitcoin.zeromq`
 
@@ -36,8 +39,9 @@ Released: Under development
 === Dependency Updates
 
 * bitcoinj 0.16-beta2
-* JavaMoney API 1.1 (non-backport version)
-* JavaMoney Moneta 1.4.2 (non-backport version)
+* No longer depend directly on Guava, use transitive dependency from bitcoinj
+* JavaMoney API 1.1 (non-backport, modular version)
+* JavaMoney Moneta 1.4.2 (non-backport, modular version)
 * Jackson 2.13.0
 * Jakarta Inject API 2.0.1
 * Jakarta Annotation API 2.0.0 (in `cj-btc-services`, upgraded from `javax.annotation-api`)
@@ -45,19 +49,20 @@ Released: Under development
 * Groovy 3.0.9
 * Micronaut 3.1.1
 
+
 === Build/Test Updates
 
 * Gradle 7.2
 * Asciidoctor Gradle Plugin 3.3.2
 * Github Actions: Use **Temurin** (JDK 11 & 17)
-* Github Actions: Use **GraalVM** 21.2.0 (JDK 11 & 17)
+* Github Actions: Use **GraalVM** 21.3.0 (JDK 11 & 17)
 * Github Actions: Upgrade to `setup-java@v2.2.0` action
 * Github Actions: Upgrade to `setup-graalvm@4.0` action
 * Use Omni Core 0.11.0 in RegTest CI
 
 == v0.5.9
 
-Released: 2021.08.03
+Released: 2021-08-03
 
 === JSON-RPC
 

@@ -2,9 +2,9 @@
 
 == Main Release Process
 
-. Use Java 11 for official builds
-.. `sdk use 11.0.12-tem`
-.. `sdk use 21.2.0.r11-grl` (for GraalVM build)
+. Use Java 17 for official builds
+.. `sdk use 17.0.1-tem`
+.. `sdk use 21.3.0.r11-grl` (for GraalVM build)
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`

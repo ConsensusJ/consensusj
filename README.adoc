@@ -1,9 +1,9 @@
 = ConsensusJ
 Sean Gilligan <https://github.com/msgilligan>
-v0.5.9
+v0.5.10
 :description: ConsensusJ README document.
-:consensusj-version: 0.5.9
-:bitcoinj-version: 0.15.10
+:consensusj-version: 0.5.10
+:bitcoinj-version: 0.16-beta2
 :bitcoinj-apidoc: https://bitcoinj.org/javadoc/{bitcoinj-version}/
 :cj-apidoc: https://consensusj.github.io/consensusj/apidoc
 :tip-caption: :bulb:
@@ -142,6 +142,16 @@ NOTE:: This module table is slightly out-of-date and will be updated shortly (th
 | `org.consensusj.jsonrpc.daemon`
 | JSON-RPC Sample Server
 
+|<<consensusj-rx-jsonrpc, consensusj-rx-jsonrpc>>
+| *9*
+| `org.consensusj.rx.jsonrpc`
+| RxJava 3 support for JSON-RPC
+
+|<<consensusj-rx-zeromq, consensusj-rx-zeromq>>
+| *9*
+| `org.consensusj.rx.zeromq`
+| RxJava 3 ZeroMQ client
+
 |===
 
 .Bitcoin Modules
@@ -151,12 +161,12 @@ NOTE:: This module table is slightly out-of-date and will be updated shortly (th
 
 |<<cj-btc-json,cj-btc-json>>
 |8
-|not yet
+| `org.consensusj.bitcoin.json`
 |Jackson serializers, deserializers & POJOs for Bitcoin JSON-RPC
 
 |<<cj-btc-jsonrpc,cj-btc-jsonrpc>>
 | 8
-| not yet
+| `org.consensusj.bitcoin.jsonrpc`
 | Java JSON-RPC Bitcoin client
 
 |<<cj-btc-jsonrpc-gvy,cj-btc-jsonrpc-gvy>>
@@ -185,10 +195,25 @@ NOTE:: This module table is slightly out-of-date and will be updated shortly (th
 |Bitcoin JSON-RPC integration tests (RegTest)
 
 
-|<<cj-bitcoinj-dsl-gvy,cj-bitcoinj-dsl-gvy>>
+|<<cj-btc-dsl-gvy,cj-btc-dsl-gvy>>
 |8
 |not yet
 |Groovy DSL support.
+
+|<<cj-btc-rx,cj-btc-rx>>
+|9
+|`org.consensusj.bitcoin.rx`
+|Reactive interfaces for Bitcoin.
+
+|<<cj-btc-rx-jsonrpc,cj-btc-rx-jsonrpc>>
+|9
+|`org.consensusj.bitcoin.rx.jsonrpc`
+|RxJava 3 JSON-RPC/ZeroMQ Client for Bitcoin Core
+
+|<<cj-btc-rx-peergroup,cj-btc-rx-peergroup>>
+|9
+|`org.consensusj.bitcoin.rx.peergroup`
+|RxJava 3 JSON-RPC/ZeroMQ Client using bitcoinj PeerGroup
 
 |<<cj-bitcoinj-spock,cj-bitcoinj-spock>>
 |8
