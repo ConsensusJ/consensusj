@@ -15,7 +15,7 @@ dependencies {
     implementation project(':consensusj-rx-zeromq')
     implementation "org.zeromq:jeromq:0.5.2"
 
-    runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+    testImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 }
 
 jar {
