@@ -12,6 +12,12 @@ Released: Not yet
 * `RpcClient` renamed to `JsonRpcClientHttpUrlConnection`
 * Removed deprecated `DynamicRPCMethodSupport` interface (replacement is `JsonRpcClient`)
 
+=== New module: consensusj-jsonrpc-javanet (incubating)
+
+* uses java.net.http.HttpClient
+* Currently implements synchronous `AbstractRpcClient` API
+* Incubating (e.g. mostly untested)
+
 == v0.5.10
 
 Released: 2021-11-01

@@ -1,0 +1,39 @@
+plugins {
+    id 'java-library'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+dependencies {
+    api project(':consensusj-jsonrpc')
+
+
+    testImplementation project(':cj-btc-jsonrpc')
+
+    testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+        transitive = false
+    }
+
+    testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+}
+
+ext.moduleName = 'org.consensusj.jsonrpc.javanet'
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ JSON-RPC java.net.http client',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
+    }
+}
+
+test {
+    testLogging.showStandardStreams = true
+    systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/test/logging.properties"
+    beforeTest { descriptor ->
+        logger.lifecycle('    ' + descriptor.getName())
+    }
+}

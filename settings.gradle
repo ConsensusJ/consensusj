@@ -34,6 +34,7 @@ if (JavaVersion.current().isJava9Compatible()) {
 
 if (JavaVersion.current().isJava11Compatible()) {
     System.err.println "Including JDK 11 modules because Java ${JavaVersion.current()} is JDK 11+"
+    include 'consensusj-jsonrpc-javanet'        // JSON-RPC client using java.net.http (incubating)
     include 'consensusj-analytics'              // Reactive analytics libraries
     include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
     include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
