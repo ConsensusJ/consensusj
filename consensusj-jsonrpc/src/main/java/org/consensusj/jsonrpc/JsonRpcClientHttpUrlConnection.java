@@ -17,7 +17,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 /**
- * JSON-RPC Client using {@link HttpURLConnection}.
+ * JSON-RPC Client using {@link HttpURLConnection} formerly named{@code RpcClient}.
  * <p>
  * This is a concrete class with generic JSON-RPC functionality, it implements the abstract
  * method {@link AbstractRpcClient#sendRequestForResponse} using {@link HttpURLConnection}.
@@ -28,15 +28,15 @@ import java.nio.charset.StandardCharsets;
  * using intermediate `Map` or `JsonNode` types.
  *
  */
-public class RpcClient extends AbstractRpcClient {
-    private static final Logger log = LoggerFactory.getLogger(RpcClient.class);
+public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
+    private static final Logger log = LoggerFactory.getLogger(JsonRpcClientHttpUrlConnection.class);
     private final URI serverURI;
     private final String username;
     private final String password;
     private static final String UTF8 = StandardCharsets.UTF_8.name();
     private final SSLSocketFactory sslSocketFactory;
     
-    public RpcClient(SSLSocketFactory socketFactory, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
+    public JsonRpcClientHttpUrlConnection(SSLSocketFactory socketFactory, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
         super(jsonRpcVersion);
         this.sslSocketFactory = socketFactory;
         log.debug("Constructing JSON-RPC client for: {}", server);
@@ -53,7 +53,7 @@ public class RpcClient extends AbstractRpcClient {
      * @param rpcUser username for the RPC HTTP connection
      * @param rpcPassword password for the RPC HTTP connection
      */
-    public RpcClient(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
+    public JsonRpcClientHttpUrlConnection(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
         this((SSLSocketFactory) SSLSocketFactory.getDefault(), jsonRpcVersion, server, rpcUser, rpcPassword);
     }
 
@@ -63,10 +63,10 @@ public class RpcClient extends AbstractRpcClient {
      * @param server server URI should not contain username/password
      * @param rpcUser username for the RPC HTTP connection
      * @param rpcPassword password for the RPC HTTP connection
-     * @deprecated Specify JSON-RPC version and use {@link RpcClient#RpcClient(JsonRpcMessage.Version, URI, String, String)}
+     * @deprecated Specify JSON-RPC version and use {@link JsonRpcClientHttpUrlConnection#JsonRpcClientHttpUrlConnection(JsonRpcMessage.Version, URI, String, String)}
      */
     @Deprecated
-    public RpcClient(URI server, final String rpcUser, final String rpcPassword) {
+    public JsonRpcClientHttpUrlConnection(URI server, final String rpcUser, final String rpcPassword) {
         this(JsonRpcMessage.Version.V1, server, rpcUser, rpcPassword);
     }
 

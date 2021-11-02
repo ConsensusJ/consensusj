@@ -12,7 +12,7 @@ import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
-import org.consensusj.jsonrpc.RpcClient;
+import org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,7 +107,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                 // Otherwise, use the default SSLSocketFactory
                 sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
         }
-        RpcClient client = call.rpcClient(sslSocketFactory);
+        JsonRpcClientHttpUrlConnection client = call.rpcClient(sslSocketFactory);
         String method = args.get(0);
         args.remove(0); // remove method from list
         List<Object> typedArgs = convertParameters(method, args);
@@ -237,7 +237,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         protected final BaseJsonRpcTool rpcTool;
         public final CommandLine line;
         public final boolean verbose;
-        private RpcClient client;
+        private JsonRpcClientHttpUrlConnection client;
 
         public CommonsCLICall(BaseJsonRpcTool parentTool, PrintWriter out, PrintWriter err, String[] args) {
             super(out, err, args);
@@ -262,7 +262,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         }
 
         @Override
-        public RpcClient rpcClient(SSLSocketFactory sslSocketFactory) {
+        public JsonRpcClientHttpUrlConnection rpcClient(SSLSocketFactory sslSocketFactory) {
             if (client == null) {
                 URI uri;
                 String urlString;
@@ -283,13 +283,13 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                     rpcUser = split[0];
                     rpcPassword = split[1];
                 }
-                client = new RpcClient(sslSocketFactory, rpcTool.jsonRpcVersion, uri, rpcUser, rpcPassword);
+                client = new JsonRpcClientHttpUrlConnection(sslSocketFactory, rpcTool.jsonRpcVersion, uri, rpcUser, rpcPassword);
             }
             return client;
         }
 
         @Override
-        public RpcClient rpcClient() {
+        public JsonRpcClientHttpUrlConnection rpcClient() {
             return rpcClient((SSLSocketFactory) SSLSocketFactory.getDefault());
         }
     }

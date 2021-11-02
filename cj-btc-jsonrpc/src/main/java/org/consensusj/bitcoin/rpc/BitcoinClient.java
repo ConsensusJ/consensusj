@@ -23,7 +23,7 @@ import org.consensusj.bitcoin.rpc.internal.BitcoinClientThreadFactory;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
-import org.consensusj.jsonrpc.RpcClient;
+import org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;
@@ -72,7 +72,7 @@ import java.util.concurrent.TimeUnit;
  * <b>This is still a work-in-progress and the API will change.</b>
  *
  */
-public class BitcoinClient extends RpcClient implements ChainTipClient, NetworkParametersProperty {
+public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements ChainTipClient, NetworkParametersProperty {
     private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);
 
     private static final int THREAD_POOL_SIZE = 5;

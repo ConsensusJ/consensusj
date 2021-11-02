@@ -9,6 +9,7 @@ Released: Not yet
 
 == consensusj-jsonrpc
 
+* `RpcClient` renamed to `JsonRpcClientHttpUrlConnection`
 * Removed deprecated `DynamicRPCMethodSupport` interface (replacement is `JsonRpcClient`)
 
 == v0.5.10
