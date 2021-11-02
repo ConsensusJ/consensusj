@@ -24,8 +24,6 @@ dependencies {
     implementation project(':cj-btc-json')
     implementation project(':cj-btc-services')
 
-    implementation "com.google.guava:guava:${guavaVersion}"
-
     compileOnly("org.graalvm.nativeimage:svm")
 
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"

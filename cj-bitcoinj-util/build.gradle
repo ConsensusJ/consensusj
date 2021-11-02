@@ -9,7 +9,6 @@ ext.moduleName = 'org.consensusj.bitcoinj.util'
 
 dependencies {
     api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
-    implementation "com.google.guava:guava:${guavaVersion}"
 }
 
 jar {

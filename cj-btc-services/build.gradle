@@ -8,6 +8,5 @@ targetCompatibility = 11
 dependencies {
     api project(':cj-btc-json')
     api 'jakarta.inject:jakarta.inject-api:2.0.1'
-    implementation "com.google.guava:guava:${guavaVersion}"
     implementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
 }
