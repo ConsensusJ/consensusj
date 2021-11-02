@@ -7,7 +7,7 @@ configurations {
 }
 
 dependencies {
-    implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    api "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
     // Add SLF4J runtime adapter for JDK logging for GraalVM native-image build of MathService/Tool
