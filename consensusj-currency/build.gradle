@@ -5,7 +5,7 @@ plugins {
 dependencies {
     api "javax.money:money-api:${javaMoneyApiVersion}"
 
-    implementation "org.javamoney:moneta:${javaMoneyMonetaVersion}"
+    implementation "org.javamoney.moneta:moneta-core:${javaMoneyMonetaVersion}"
 }
 
 

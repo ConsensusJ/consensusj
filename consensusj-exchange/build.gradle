@@ -9,7 +9,8 @@ dependencies {
     api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
     api "org.knowm.xchange:xchange-core:${xChangeVersion}"
 
-    implementation "org.javamoney:moneta:${javaMoneyMonetaVersion}"
+    implementation "org.javamoney.moneta:moneta-core:${javaMoneyMonetaVersion}"
+    implementation "org.javamoney.moneta:moneta-convert:${javaMoneyMonetaVersion}"
 
     testImplementation project(':consensusj-currency')  // For BTC Currency Code
     testRuntimeOnly "org.knowm.xchange:xchange-bitfinex:${xChangeVersion}"
