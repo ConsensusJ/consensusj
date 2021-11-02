@@ -7,6 +7,10 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Not yet
 
+== consensusj-jsonrpc
+
+* Removed deprecated `DynamicRPCMethodSupport` interface (replacement is `JsonRpcClient`)
+
 == v0.5.10
 
 Released: 2021-11-01
