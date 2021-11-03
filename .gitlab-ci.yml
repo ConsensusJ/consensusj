@@ -11,16 +11,13 @@ cache:
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   UBUNTU_CODENAME: "focal"
-  JDK_PACKAGE: "adoptopenjdk-11-hotspot"
+  JDK_PACKAGE: "openjdk-17-jdk"
 
 before_script:
   - apt-get update
   - apt-get -y upgrade
   - DEBIAN_FRONTEND=noninteractive apt-get -y install wget apt-transport-https gnupg curl graphviz
-  - wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add -
-  - echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb $UBUNTU_CODENAME main" | tee /etc/apt/sources.list.d/adoptopenjdk.list
-  - apt-get update
-  - apt-get -y install $JDK_PACKAGE
+  - apt-get -y install binutils $JDK_PACKAGE
   - java -version
 
 build:
