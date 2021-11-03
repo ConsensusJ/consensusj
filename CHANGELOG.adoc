@@ -18,6 +18,10 @@ Released: Not yet
 * Currently implements synchronous `AbstractRpcClient` API
 * Incubating (e.g. mostly untested)
 
+=== Dependency Updates
+
+* bitcoinj 0.16-rc1
+
 == v0.5.10
 
 Released: 2021-11-01
