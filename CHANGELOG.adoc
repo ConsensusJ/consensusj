@@ -7,10 +7,11 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Not yet
 
-== consensusj-jsonrpc
+=== consensusj-jsonrpc
 
 * `RpcClient` renamed to `JsonRpcClientHttpUrlConnection`
 * Removed deprecated `DynamicRPCMethodSupport` interface (replacement is `JsonRpcClient`)
+* Use java.util.Base64 for JSON-RPC auth encoding (requires Android 8.0 or later)
 
 === New module: consensusj-jsonrpc-javanet (incubating)
 
