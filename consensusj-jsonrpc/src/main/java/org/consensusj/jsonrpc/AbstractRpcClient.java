@@ -3,7 +3,7 @@ package org.consensusj.jsonrpc;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.consensusj.jsonrpc.util.Base64;
+import java.util.Base64;
 
 /**
  * Abstract Base class for a strongly-typed, Jackson-based JSON-RPC client. Most of the work is done
@@ -57,15 +57,13 @@ public abstract class AbstractRpcClient implements JacksonRpcClient {
 
     /**
      * Encode username password as Base64 for basic authentication
-     *
-     * We're using an internal `Base64` utility class here (copied from Android) in order
-     * to have working, consistent behavior on JavaSE and Android. Prior to Android 8.0,
-     * Android has its own implementation that differs from the JavaSE version.
+     * <p>
+     * We're using {@link java.util.Base64}, which requires Android 8.0 or later.
      *
      * @param authString An authorization string of the form `username:password`
      * @return A compliant Base64 encoding of `authString`
      */
     protected static String base64Encode(String authString) {
-        return Base64.encodeToString(authString.getBytes(),Base64.NO_WRAP).trim();
+        return Base64.getEncoder().encodeToString(authString.getBytes()).trim();
     }
 }

@@ -1,4 +1,4 @@
-package org.consensusj.jsonrpc.util
+package org.consensusj.jsonrpc
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -6,15 +6,15 @@ import spock.lang.Unroll
 /**
  * Basic test of our copied Base64 class.
  */
-class Base64Spec extends Specification {
+class AbstractRpcClientSpec extends Specification {
 
     @Unroll
-    def "Basic Auth Test #myInt" (myInt, expectedResult) {
+    def "Base64 Basic Auth Test #myInt" (myInt, expectedResult) {
         given:
         def auth = "myuser" + ":" + "mypass" + myInt;
 
         when:
-        def basicAuth = "Basic " + Base64.encodeToString(auth.getBytes(),Base64.NO_WRAP).trim();
+        def basicAuth = "Basic " + AbstractRpcClient.base64Encode(auth);
 
         then:
         basicAuth == expectedResult
