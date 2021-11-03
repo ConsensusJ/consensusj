@@ -8,7 +8,6 @@ import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
-import org.consensusj.jsonrpc.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -176,21 +175,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
          */
         R applyThrows(T t) throws Exception;
     }
-
-    /**
-     * Encode username password as Base64 for basic authentication
-     *
-     * We're using an internal `Base64` utility class here (copied from Android) in order
-     * to have working, consistent behavior on JavaSE and Android. Prior to Android 8.0,
-     * Android has it's own implementation that differs from the JavaSE version.
-     *
-     * @param authString An authorization string of the form `username:password`
-     * @return A compliant Base64 encoding of `authString`
-     */
-    protected static String base64Encode(String authString) {
-        return Base64.encodeToString(authString.getBytes(),Base64.NO_WRAP).trim();
-    }
-
+    
     private static void log(HttpResponse<String> httpResponse, Throwable t) {
         if ((httpResponse != null)) {
             log.info("log data string: {}", httpResponse);
