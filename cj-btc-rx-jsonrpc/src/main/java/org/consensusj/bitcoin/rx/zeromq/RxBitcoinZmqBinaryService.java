@@ -38,7 +38,7 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
     public RxBitcoinZmqBinaryService(BitcoinClient client) {
         this.client = client;
         this.networkParameters = client.getNetParams();
-        threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(MainNetParams.get()), "RxBitcoinZmq Thread");
+        threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(client.getNetParams()), "RxBitcoinZmq Thread");
 
         BitcoinZmqPortFinder portFinder = new BitcoinZmqPortFinder(client);
 
