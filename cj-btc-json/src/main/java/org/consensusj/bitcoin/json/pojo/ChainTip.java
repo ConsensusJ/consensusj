@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.Sha256Hash;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  *
  */
@@ -40,5 +43,9 @@ public class ChainTip {
 
     public String getStatus() {
         return status;
+    }
+
+    public static Optional<ChainTip> getActiveChainTip(List<ChainTip> chainTips) {
+        return chainTips.stream().filter(tip -> tip.getStatus().equals("active")).findFirst();
     }
 }

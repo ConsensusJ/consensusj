@@ -34,10 +34,6 @@ public interface RxJsonChainTipClient extends ChainTipService, ChainTipClient, R
      */
     default Maybe<ChainTip> currentChainTipMaybe() {
         return pollOnce(this::getChainTips)
-                .mapOptional(RxJsonChainTipClient::getActiveChainTip);
-    }
-
-    private static Optional<ChainTip> getActiveChainTip(List<ChainTip> chainTips) {
-        return chainTips.stream().filter(tip -> tip.getStatus().equals("active")).findFirst();
+                .mapOptional(ChainTip::getActiveChainTip);
     }
 }
