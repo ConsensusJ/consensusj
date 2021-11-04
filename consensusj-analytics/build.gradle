@@ -2,8 +2,8 @@ plugins {
     id 'java-library'
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 8
+targetCompatibility = 8
 
 dependencies {
     api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
