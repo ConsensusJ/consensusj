@@ -5,23 +5,45 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 == v0.5.11-SNAPSHOT
 
-Released: Not yet
+Released: 2021-11-04
 
 === consensusj-jsonrpc
 
 * `RpcClient` renamed to `JsonRpcClientHttpUrlConnection`
 * Removed deprecated `DynamicRPCMethodSupport` interface (replacement is `JsonRpcClient`)
-* Use java.util.Base64 for JSON-RPC auth encoding (requires Android 8.0 or later)
+* Use `java.util.Base64` for JSON-RPC auth encoding (requires Android 8.0 or later)
 
 === New module: consensusj-jsonrpc-javanet (incubating)
 
-* uses java.net.http.HttpClient
+* uses `java.net.http.HttpClient`
 * Currently implements synchronous `AbstractRpcClient` API
 * Incubating (e.g. mostly untested)
+
+=== consensusj-jsonrpc-cli
+
+* Add `Automatic-Module-Name` header to the JAR.
+
+=== consensusj-analytics
+
+* Make JAR compatible with JDK 8 (was JDK 11)
+
+=== cj-btc-json
+
+* Add `ChainTip::getActiveChainTip` method
+
+=== cj-btc-rx-jsonrpc
+
+* Fix hardcoded `MainNetParams` in `RxBitcoinZmqBinaryService`
 
 === Dependency Updates
 
 * bitcoinj 0.16-rc1
+
+=== Build/Test Updates
+
+* Update GitLab CI to use `openjdk-17-jdk`
+* Remove TravisCI build
+
 
 == v0.5.10
 
