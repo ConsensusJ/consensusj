@@ -3,6 +3,13 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
+== v0.5.12-SNAPSHOT
+
+Released: Not yet
+
+=== cj-btc-rx-jsonrpc
+
+
 == v0.5.11
 
 Released: 2021-11-04
