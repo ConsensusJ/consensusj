@@ -9,6 +9,7 @@ Released: Not yet
 
 === cj-btc-rx-jsonrpc
 
+* Replace usage of RxJava 3 internal class (`ObservableInterval`)
 
 == v0.5.11
 

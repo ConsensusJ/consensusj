@@ -4,7 +4,6 @@ import org.consensusj.bitcoin.json.pojo.ChainTip;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.internal.operators.observable.ObservableInterval;
 import io.reactivex.rxjava3.processors.BehaviorProcessor;
 import io.reactivex.rxjava3.processors.FlowableProcessor;
 import org.consensusj.bitcoin.rpc.BitcoinClient;
@@ -44,7 +43,7 @@ public class PollingChainTipServiceImpl implements Closeable, PollingChainTipSer
     }
 
     public PollingChainTipServiceImpl(BitcoinClient bitcoinClient) {
-        this(bitcoinClient, ObservableInterval.interval(2,10, TimeUnit.SECONDS));
+        this(bitcoinClient, Observable.interval(2,10, TimeUnit.SECONDS));
     }
 
     public synchronized void start() {
