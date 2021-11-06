@@ -3,6 +3,7 @@ package org.consensusj.analytics.service;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Sha256Hash;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class TokenRichList<N extends Number & Comparable<? super N>, ID> {
         this.blockHash = blockHash;
         this.timestamp = timestamp;
         this.currencyID = currencyID;
-        this.richList = Collections.unmodifiableList(richList);
+        this.richList = Collections.unmodifiableList(new ArrayList<>(richList));
         this.otherBalanceTotal = otherBalanceTotal;
     }
 
