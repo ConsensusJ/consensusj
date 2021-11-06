@@ -1,5 +1,6 @@
 package org.consensusj.analytics.util.collector;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ public final class LargestSliceListImpl<E, N extends Number & Comparable<? super
     private final N totalOther;
 
     public LargestSliceListImpl(List<E> list, N totalOther) {
-        this.list = List.copyOf(list);
+        this.list = Collections.unmodifiableList(list);
         this.totalOther = totalOther;
     }
     

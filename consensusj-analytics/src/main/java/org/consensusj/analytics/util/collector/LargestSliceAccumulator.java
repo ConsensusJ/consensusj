@@ -100,12 +100,9 @@ public final class LargestSliceAccumulator<E, N extends Number & Comparable<? su
      * @return List of slices sorted by their slice size (based on extractor)
      */
     List<E> getSortedSliceList() {
-//        E[] tmp = (E[]) sliceQueue.toArray();   // Copies to an array
-//        Arrays.sort(tmp, comparator);           // Sorts the array
-//        return List.of(tmp);                    // Copy into a list
         return sliceQueue.stream()
                 .sorted(comparator)
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList());
     }
 
     /**
