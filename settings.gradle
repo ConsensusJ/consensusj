@@ -4,6 +4,10 @@ plugins {
 
 rootProject.name = 'consensusj'
 
+if (!JavaVersion.current().isJava11Compatible()) {
+    throw new RuntimeException("JDK 11 Required to compile ConsensusJ")
+}
+
 include 'consensusj-currency',                  // JavaMoney Currency Provider(s)
         'consensusj-decentralized-id',          // W3C Decentralized ID library (in-process)
         'consensusj-exchange',                  // JavaMoney Exchange Providers
@@ -21,19 +25,14 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'cj-nmc-jsonrpc',                       // Namecoin JSON-RPC client (experimental)
         'cj-nmc-jsonrpc-gvy'                    // Namecoin JSON-RPC client w/Groovy extensions (experimental)
 
-if (JavaVersion.current().isJava9Compatible()) {
-    System.err.println "Including JDK 9 modules because Java ${JavaVersion.current()} is JDK 9+"
+// JDK 9+
     include 'consensusj-rx-jsonrpc'             // RxJava 3 adapter for JSON-RPC
     include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
     include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
     include 'cj-btc-rx-peergroup'               // bitcoinj-based RxJava (Transaction) implementation
     include 'cj-btc-rx-jsonrpc'                 // RxJava 3 reactive Bitcoin JSON-RPC bitcoind client (uses ZeroMQ)
-} else {
-    System.err.println "Skipping JDK 9 modules, requires Java 9+, currently running Java ${JavaVersion.current()}"
-}
 
-if (JavaVersion.current().isJava11Compatible()) {
-    System.err.println "Including JDK 11 modules because Java ${JavaVersion.current()} is JDK 11+"
+// JDK 11+
     include 'consensusj-jsonrpc-javanet'        // JSON-RPC client using java.net.http (incubating)
     include 'consensusj-analytics'              // Reactive analytics libraries
     include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
@@ -41,12 +40,9 @@ if (JavaVersion.current().isJava11Compatible()) {
     include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
     include 'cj-btc-daemon'                     // Prototype Micronaut version of Bitcoin daemon
     include 'cj-btc-services'                   // bitcoinj-based service objects
-} else {
-    System.err.println "Skipping JDK 11 modules, requires Java 11+, currently running Java ${JavaVersion.current()}"
-}
 
-if (JavaVersion.current().compareTo(JavaVersion.VERSION_16) >= 0) {
-    System.err.println "Including JDK 16 module because Java ${JavaVersion.current()} is JDK 16+"
+if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
+    System.err.println "Including JDK 17 module because Java ${JavaVersion.current()} is JDK 17+"
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
 } else {
     System.err.println "Skipping 'cj-bitcoinj-dsl-js', requires Java 17+, currently running Java ${JavaVersion.current()}"
