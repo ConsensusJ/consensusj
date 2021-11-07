@@ -10,7 +10,7 @@ import java.net.URI;
 import static java.lang.System.out;
 
 /**
- *
+ * Sample command-line tool that subscribes to ChainTip and TxOutSetInfo
  */
 public class TxOutSetWatcherSample {
     public static void main(String[] args) throws InterruptedException {
@@ -19,8 +19,9 @@ public class TxOutSetWatcherSample {
         String rpcPassword = "pass";
 //        URI rpcUri = URI.create("http://192.168.8.50:8332");
         URI rpcUri = URI.create("http://localhost:8332");
+        boolean useZmq = true;
 
-        try (RxBitcoinClient client = new RxBitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword)) {
+        try (RxBitcoinClient client = new RxBitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword, useZmq)) {
 
             // Subscribe to ChainTips
             client.chainTipPublisher()
