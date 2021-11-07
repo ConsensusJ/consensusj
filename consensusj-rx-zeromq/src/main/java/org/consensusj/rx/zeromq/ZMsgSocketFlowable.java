@@ -13,11 +13,14 @@ import zmq.ZError;
 import java.util.concurrent.ThreadFactory;
 
 /**
- *  Factory class for creating {@link Flowable} from a {@link ZMQ.Socket}.
+ *  Factory class for creating {@code Flowable<ZMsg>} from a {@link ZMQ.Socket}. The created {@link Flowable}
+ *  will receive a multiplexed stream of {@link ZMsg} (i.e. {@code ZMsg} for all topics.) Typically
+ *  these multiplexed {@code Flowable<ZMsg>} are created by a {@link RxZmqContext} which also de-multiplexes them.
+ *  <p>
  *  TODO: Write some tests!!
  */
-public class ZmqFlowable {
-    private static final Logger log = LoggerFactory.getLogger(ZmqFlowable.class);
+public class ZMsgSocketFlowable {
+    private static final Logger log = LoggerFactory.getLogger(ZMsgSocketFlowable.class);
     private static final ThreadFactory defaultThreadFactory = runnable -> new Thread(runnable, "ZeroMQ Receiver");
 
     static Flowable<ZMsg> createFromSocket(ZMQ.Socket socket, BackpressureStrategy backpressureStrategy) {

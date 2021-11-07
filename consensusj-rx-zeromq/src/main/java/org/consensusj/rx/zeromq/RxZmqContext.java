@@ -21,26 +21,29 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadFactory;
 
 /**
- * ZMQ Publisher that subscribes {@code SUB} to one or more topics using ZMQ and publishes those
- * topics as RxJava3 {@link Flowable}s.
+ * ZMQ Context with a single socket and one {@code FlowableProcessor<ZMsg>} per topic.
+ * It subscribes {@code SUB} to one or more topics using ZMQ and receives a multiplexed
+ * stream of {@link ZMsg} from the ZMsgSocketFlowable. In {@link RxZmqContext#onNext} the ZMsg
+ * are de-multiplexed by the {@code topic} {@code String} and placed in a per-topic
+ * {@code FlowableProcessor<ZMsg>}.
+ * <p>
  * Topics (at least for now) must be passed to the constructor.
  * It would be nice to be able to subscribe to topics at the ZMQ level when we first get
- * subscriptions at the Rx level. This will require using a ZPoller or something like that.
+ * subscriptions at the Rx level. This will probably require using a ZPoller or something like that.
  */
-public class ZmqTopicPublisher implements Closeable {
-    private static final Logger log = LoggerFactory.getLogger(ZmqTopicPublisher.class);
+public class RxZmqContext implements Closeable {
+    private static final Logger log = LoggerFactory.getLogger(RxZmqContext.class);
     private final ZContext zContext;
     private final Disposable disposable;
 
-    // Map of topic names to processors
+    // Map of topic names to per-topic FlowableProcessor
     private final ConcurrentHashMap<String, FlowableProcessor<ZMsg>> processors = new ConcurrentHashMap<>();
 
-    public ZmqTopicPublisher(URI tcpAddress, List<String> topics) {
+    public RxZmqContext(URI tcpAddress, List<String> topics) {
         this(tcpAddress, topics, (Runnable r) -> new Thread(r, "ZeroMQ Subscriber"));
     }
 
-    public ZmqTopicPublisher(URI tcpAddress, List<String> topics, ThreadFactory threadFactory) {
-        topics.forEach(this::addTopic);
+    public RxZmqContext(URI tcpAddress, List<String> topics, ThreadFactory threadFactory) {
         zContext = new ZContext();
         //  Socket to talk to server
         log.info("Connecting to Zmq server at: {}", tcpAddress);
@@ -50,10 +53,11 @@ public class ZmqTopicPublisher implements Closeable {
 
         topics.forEach(topic -> {
             log.info("Subscribing to topic: {}", topic);
+            this.addTopic(topic);
             socket.subscribe(topic);
         });
 
-        disposable = ZmqFlowable.createFromSocket(socket, BackpressureStrategy.LATEST, threadFactory)
+        disposable = ZMsgSocketFlowable.createFromSocket(socket, BackpressureStrategy.LATEST, threadFactory)
                 .subscribe(this::onNext, this::onError, this::onComplete);
         log.info("Connected.. Waiting for subscribers.");
     }
