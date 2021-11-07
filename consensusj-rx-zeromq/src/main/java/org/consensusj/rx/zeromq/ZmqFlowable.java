@@ -26,7 +26,7 @@ public class ZmqFlowable {
 
     /**
      * The created {@link Flowable} will create a new receiving loop thread per subscriber, which may
-     * not be what you want. To support multiple subscribers use {@link ZmqTopicPublisher}, or something
+     * not be what you want. To support multiple subscribers use {@link RxZmqContext}, or something
      * similar, or directly use a {@link io.reactivex.rxjava3.processors.FlowableProcessor}.
      * 
      * @param socket A connected socket, ready to receive messages with {@link ZMsg#recvMsg(ZMQ.Socket)}

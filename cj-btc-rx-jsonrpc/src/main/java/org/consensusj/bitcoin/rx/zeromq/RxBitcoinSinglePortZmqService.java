@@ -4,7 +4,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.processors.FlowableProcessor;
 import io.reactivex.rxjava3.processors.PublishProcessor;
 import org.consensusj.bitcoin.rx.RxBlockchainBinaryService;
-import org.consensusj.rx.zeromq.ZmqTopicPublisher;
+import org.consensusj.rx.zeromq.RxZmqContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zeromq.ZMsg;
@@ -30,7 +30,7 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
     private final URI tcpAddress;
     private final Set<BitcoinZmqMessage.Topic> topicSet;
 
-    private final ZmqTopicPublisher zmqTopicPublisher;
+    private final RxZmqContext zmqContext;
 
     private final FlowableProcessor<byte[]> rawTxProcessor = PublishProcessor.create();
     private final FlowableProcessor<byte[]> rawBlockProcessor = PublishProcessor.create();
@@ -51,10 +51,11 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
         this.tcpAddress = tcpAddress;
         topicSet = Collections.unmodifiableSet(new HashSet<>(topics));
         List<String> stringTopics = topics.stream().map(BitcoinZmqMessage.Topic::toString).collect(Collectors.toList());
-        zmqTopicPublisher = new ZmqTopicPublisher(tcpAddress, stringTopics, threadFactory);
+        zmqContext = new RxZmqContext(tcpAddress, stringTopics, threadFactory);
         for (BitcoinZmqMessage.Topic topic : topics) {
             // Subscribe to each topic
-            zmqTopicPublisher.topicPublisher(topic.toString())
+            // TODO: Propagate onError and onComplete to the correct processor
+            zmqContext.topicPublisher(topic.toString())
                     .subscribe(this::onNextMessage, this::onError);
         }
     }
@@ -83,7 +84,7 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
 
     @Override
     public void close() {
-        zmqTopicPublisher.close();
+        zmqContext.close();
     }
 
     private void onNextMessage(ZMsg message) {
