@@ -24,16 +24,15 @@ import java.util.concurrent.ThreadFactory;
  * ZMQ Publisher that subscribes {@code SUB} to one or more topics using ZMQ and publishes those
  * topics as RxJava3 {@link Flowable}s.
  * Topics (at least for now) must be passed to the constructor.
- * It would be nice to be able subscribe to topics at the ZMQ level when we first get
+ * It would be nice to be able to subscribe to topics at the ZMQ level when we first get
  * subscriptions at the Rx level. This will require using a ZPoller or something like that.
  */
 public class ZmqTopicPublisher implements Closeable {
     private static final Logger log = LoggerFactory.getLogger(ZmqTopicPublisher.class);
-    private final URI tcpAddress;
-    private final List<String> topics;
     private final ZContext zContext;
     private final Disposable disposable;
 
+    // Map of topic names to processors
     private final ConcurrentHashMap<String, FlowableProcessor<ZMsg>> processors = new ConcurrentHashMap<>();
 
     public ZmqTopicPublisher(URI tcpAddress, List<String> topics) {
@@ -41,12 +40,10 @@ public class ZmqTopicPublisher implements Closeable {
     }
 
     public ZmqTopicPublisher(URI tcpAddress, List<String> topics, ThreadFactory threadFactory) {
-        this.tcpAddress = tcpAddress;
-        this.topics = topics;
         topics.forEach(this::addTopic);
         zContext = new ZContext();
         //  Socket to talk to server
-        log.info("Connecting to Zmq server");
+        log.info("Connecting to Zmq server at: {}", tcpAddress);
 
         ZMQ.Socket socket = zContext.createSocket(SocketType.SUB);
         socket.connect(tcpAddress.toString());
