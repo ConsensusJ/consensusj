@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ThreadFactory;
 import java.util.stream.Collectors;
@@ -54,12 +55,27 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
         zmqContext = new RxZmqContext(tcpAddress, stringTopics, threadFactory);
         for (BitcoinZmqMessage.Topic topic : topics) {
             // Subscribe to each topic
-            // TODO: Propagate onError and onComplete to the correct processor
-            zmqContext.topicPublisher(topic.toString())
-                    .subscribe(this::onNextMessage, this::onError);
+            switch (topic) {
+                case hashblock:
+                    zmqContext.topicPublisher(topic.toString()).subscribe(this::onNextHashBlock, hashBlockProcessor::onError, hashBlockProcessor::onComplete);
+                    break;
+                case hashtx:
+                    zmqContext.topicPublisher(topic.toString()).subscribe(this::onNextHashTx, hashTxProcessor::onError, hashTxProcessor::onComplete);
+                    break;
+                case rawblock:
+                    zmqContext.topicPublisher(topic.toString()).subscribe(this::onNextRawBlock, rawBlockProcessor::onError, rawBlockProcessor::onComplete);
+                    break;
+                case rawtx:
+                    zmqContext.topicPublisher(topic.toString()).subscribe(this::onNextRawTx, rawTxProcessor::onError, rawTxProcessor::onComplete);
+                    break;
+                case sequence:
+                    zmqContext.topicPublisher(topic.toString()).subscribe(this::onNextSequence, this::onError, this::onComplete);
+                    break;
+                default:
+                    throw new RuntimeException("Unknown topic");
+            }
         }
     }
-
 
     @Override
     public Flowable<byte[]> transactionBinaryPublisher() {
@@ -86,38 +102,89 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
     public void close() {
         zmqContext.close();
     }
-
-    private void onNextMessage(ZMsg message) {
+    
+    private Optional<ParsedMessage> parseMessage(ZMsg message) {
         log.debug("New message received.");
 
+        Optional<ParsedMessage> parsedMessage;
         if (message.size() >= 2) {
             BitcoinZmqMessage.Topic topic = BitcoinZmqMessage.Topic.valueOf(new String(message.remove().getData()));
             log.debug("Received {} message.", topic);
             byte[] dataBytes = message.remove().getData();
-            long seqNumber = 0;
             if (topic != BitcoinZmqMessage.Topic.sequence)
             {
-                seqNumber = fromByteArray(message.remove().getData());
+                long seqNumber = fromByteArray(message.remove().getData());
                 log.trace("sequence number {}:{}", topic, seqNumber);
-            }
-            switch (topic) {
-                case hashtx: processHashTx(dataBytes, seqNumber); break;
-                case hashblock: processHashBlock(dataBytes, seqNumber); break;
-                case rawtx: processRawTx(dataBytes, seqNumber); break;
-                case rawblock: processRawBlock(dataBytes, seqNumber); break;
-                case sequence: processSequence(message); break; // Ignore for now
-                default:
-                    log.warn("Unknown topic: {}", topic);
+                parsedMessage = Optional.of(new ParsedMessage(topic, dataBytes, seqNumber));
+            } else {
+                // TODO: Additional sequence parsing?
+                parsedMessage = Optional.of(new ParsedMessage(topic, dataBytes, -1));
             }
         } else {
             log.warn("Ignoring message with less than 3 frames");
+            parsedMessage = Optional.empty();
         }
+        return parsedMessage;
     }
 
     private void onError(Throwable error) {
-        log.error("Error: ", error);
+        log.error("Seq Error: ", error);
     }
 
+    private void onComplete() {
+        log.error("Seq Complete");
+    }
+
+    private static class ParsedMessage {
+        final BitcoinZmqMessage.Topic topic;
+        final byte[] dataBytes;
+        final long seqNumber;
+
+        private ParsedMessage(BitcoinZmqMessage.Topic topic, byte[] dataBytes, long seqNumber) {
+            this.topic = topic;
+            this.dataBytes = dataBytes;
+            this.seqNumber = seqNumber;
+        }
+    }
+
+    private void onNextHashBlock(ZMsg message) {
+        Optional<ParsedMessage> opt = parseMessage(message);
+        if (opt.isPresent()) {
+            ParsedMessage parsed = opt.get();
+            processHashBlock(parsed.dataBytes, parsed.seqNumber);
+        }
+    }
+
+    private void onNextHashTx(ZMsg message) {
+        Optional<ParsedMessage> opt = parseMessage(message);
+        if (opt.isPresent()) {
+            ParsedMessage parsed = opt.get();
+            processHashTx(parsed.dataBytes, parsed.seqNumber);
+        }
+    }
+
+    private void onNextRawBlock(ZMsg message) {
+        Optional<ParsedMessage> opt = parseMessage(message);
+        if (opt.isPresent()) {
+            ParsedMessage parsed = opt.get();
+            processRawBlock(parsed.dataBytes, parsed.seqNumber);
+        }
+    }
+
+    private void onNextRawTx(ZMsg message) {
+        Optional<ParsedMessage> opt = parseMessage(message);
+        if (opt.isPresent()) {
+            ParsedMessage parsed = opt.get();
+            processRawTx(parsed.dataBytes, parsed.seqNumber);
+        }
+    }
+
+    private void onNextSequence(ZMsg message) {
+        Optional<ParsedMessage> opt = parseMessage(message);
+        if (opt.isPresent()) {
+            processSequence(message);
+        }
+    }
 
     private void processHashTx(byte[] dataBytes, long seqNumber) {
         checkSequenceNumber(BitcoinZmqMessage.Topic.hashtx, hashTxSeq, seqNumber);
