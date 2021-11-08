@@ -34,9 +34,11 @@ public class BitcoinZmqPortFinder {
     private synchronized void getNotifications() {
         if (notifications == null) {
             try {
-                client.waitForServer(120);
+                // TODO: We don't want to hang here for 120 seconds or so waiting for a server
+                client.waitForServer(1);
                 notifications = client.getZmqNotifications();
             } catch (IOException e) {
+                // TODO: Handle this more gracefully, without runtime exception
                 throw new RuntimeException(e);
             }
         }

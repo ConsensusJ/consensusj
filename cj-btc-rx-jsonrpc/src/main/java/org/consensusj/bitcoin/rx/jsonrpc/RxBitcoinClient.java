@@ -22,6 +22,8 @@ public class RxBitcoinClient extends BitcoinClient implements RxJsonChainTipClie
 
     public RxBitcoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword, boolean useZmq) {
         super(netParams, server, rpcuser, rpcpassword);
+        // TODO: Determine if ZMQ is available by querying the server
+        // TODO: Determine whether server is up or down -- add a session re-establishment service
         if (useZmq) {
             chainTipService = new RxBitcoinZmqService(this);
         } else {
