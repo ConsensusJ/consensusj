@@ -4,6 +4,7 @@ import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.consensusj.bitcoin.json.pojo.TxOutSetInfo;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
+import org.consensusj.bitcoin.rx.jsonrpc.service.TxOutSetService;
 
 import java.net.URI;
 
@@ -17,17 +18,18 @@ public class TxOutSetWatcherSample {
         NetworkParameters networkParameters = MainNetParams.get();
         String rpcUser = "bitcoinrpc";
         String rpcPassword = "pass";
-//        URI rpcUri = URI.create("http://192.168.8.50:8332");
         URI rpcUri = URI.create("http://localhost:8332");
         boolean useZmq = true;
 
-        try (RxBitcoinClient client = new RxBitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword, useZmq)) {
+        try (   RxBitcoinClient client = new RxBitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword, useZmq);
+                TxOutSetService txOutSetService = new TxOutSetService(client) ) {
 
             // Subscribe to ChainTips
             client.chainTipPublisher()
                     .subscribe(TxOutSetWatcherSample::onChainTip, TxOutSetWatcherSample::onError);
 
-            client.pollOnNewBlock(client::getTxOutSetInfo)
+            // Blocking subscribe to TxOutSetInfo
+            txOutSetService.getTxOutSetPublisher()
                     .blockingSubscribe(TxOutSetWatcherSample::onTxOutSetInfo, TxOutSetWatcherSample::onError);
 
         }

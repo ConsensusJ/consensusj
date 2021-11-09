@@ -120,5 +120,4 @@ public interface JacksonRpcClient extends JsonRpcClient {
     default <R> R send(String method, List<Object> params) throws IOException, JsonRpcStatusException {
         return send(method, getDefaultType(), params);
     }
-
 }
