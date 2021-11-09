@@ -7,9 +7,25 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Not yet
 
+=== consensusj-analytics
+
+* Fix incorrect usage of JDK 9+ APIs
+* Use `Publisher` (rather than `Observable`) for result of `richListUpdates`
+
+=== consensusj-rx-zeromq
+
+* Rename `ZmqTopicPublisher` to `RxZmqContext` (a context has multiple publishers)
+* Rename `ZmqFlowable` to `ZMsgSocketFlowable`
+
 === cj-btc-rx-jsonrpc
 
 * Replace usage of RxJava 3 internal class (`ObservableInterval`)
+* Improved propagation of errors and completions to clients
+* Add TxOutSetService (contains `Publisher` for `TxOutSetInfo`)
+
+=== Build/Test Updates
+
+* Require JDK 11+ for build (JDK 17+ for `cj-bitcoinj-dsl-js`)
 
 == v0.5.11
 
