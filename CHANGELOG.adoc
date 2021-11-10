@@ -26,6 +26,7 @@ Released: Not yet
 === Build/Test Updates
 
 * Require JDK 11+ for build (JDK 17+ for `cj-bitcoinj-dsl-js`)
+* Gradle 7.3
 
 == v0.5.11
 
