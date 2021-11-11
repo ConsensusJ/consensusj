@@ -3,22 +3,40 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.5.12-SNAPSHOT
+== v0.5.12
 
-Released: Not yet
+Released: 2021-11-11
+
+=== Overview
+
+This release allows https://github.com/ConsensusJ/btcproxy[btcproxy] to use `org.consensusj.bitcoin.rx.jsonrpc.RxBitcoinClient` instead of its own implementation.
 
 === consensusj-analytics
 
 * Fix incorrect usage of JDK 9+ APIs
 * Use `Publisher` (rather than `Observable`) for result of `richListUpdates`
 
+=== consensusj-rx-jsonrpc
+
+* Add `RxJsonRpcClient::defer` method for making deferred calls to `CompletableFuture` async methods
+
 === consensusj-rx-zeromq
 
 * Rename `ZmqTopicPublisher` to `RxZmqContext` (a context has multiple publishers)
 * Rename `ZmqFlowable` to `ZMsgSocketFlowable`
 
+=== cj-btc-json
+
+* Rename `ChainTip::getActiveChainTip` method to `ChainTip::findActiveChainTip`
+* Add `ChainTip::findActiveChainTipOrElseThrow` method
+* Add `ChainTip::ofActive` for constructing from active height and hash
+
 === cj-btc-rx-jsonrpc
 
+* `RxBitcoinClient`: extend `BitcoinExtendedClient`
+* `RxBitcoinClient`: add constructor that takes `SSLSocketFactory`
+* `RxBitcoinClient`: Pull up methods from `RxBitcoinZmqService`
+* `RxBitcoinZmq*Service` constructors now take `RxBitcoinClient`
 * Replace usage of RxJava 3 internal class (`ObservableInterval`)
 * Improved propagation of errors and completions to clients
 * Add TxOutSetService (contains `Publisher` for `TxOutSetInfo`)

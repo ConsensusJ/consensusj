@@ -8,9 +8,9 @@
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`
+.. `cj-bitcoinj-dsl-gvy` `ExtensionModule`
 .. `README.adoc` (check/set bitcoinj version variable, too)
-.. cj-bitcoinj-dsl-gvy `ExtensionModule`
-. Update `README.adoc` and other documentation as necessary 
+. Update `README.adoc` and other documentation as necessary
 . Commit version bump and changelog.
 . Make sure project directory is a clean checkout.
 . Full build, test
