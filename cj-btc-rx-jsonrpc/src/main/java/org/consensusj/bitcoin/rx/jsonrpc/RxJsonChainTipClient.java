@@ -8,9 +8,6 @@ import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.jsonrpc.AsyncSupport;
 import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
 
-import java.util.List;
-import java.util.Optional;
-
 /**
  * A JSON-RPC client interface that provides ChainTipService
  */
@@ -34,6 +31,6 @@ public interface RxJsonChainTipClient extends ChainTipService, ChainTipClient, R
      */
     default Maybe<ChainTip> currentChainTipMaybe() {
         return pollOnce(this::getChainTips)
-                .mapOptional(ChainTip::getActiveChainTip);
+                .mapOptional(ChainTip::findActiveChainTip);
     }
 }

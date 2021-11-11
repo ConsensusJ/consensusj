@@ -1,12 +1,11 @@
 package org.consensusj.bitcoin.rx.zeromq;
 
-import org.consensusj.bitcoin.rpc.BitcoinClient;
 import org.consensusj.bitcoin.rpc.internal.BitcoinClientThreadFactory;
 import io.reactivex.rxjava3.core.Flowable;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.params.MainNetParams;
 import org.consensusj.bitcoin.rx.RxBlockchainBinaryService;
+import org.consensusj.bitcoin.rx.jsonrpc.RxBitcoinClient;
 
 import java.io.Closeable;
 import java.net.URI;
@@ -22,20 +21,20 @@ import static org.consensusj.bitcoin.rx.zeromq.BitcoinZmqMessage.Topic.*;
 public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Closeable {
 
     protected final NetworkParameters networkParameters;
-    protected final BitcoinClient client;
+    protected final RxBitcoinClient client;
     private final RxBitcoinSinglePortZmqService blockService;
     private final RxBitcoinSinglePortZmqService txService;
 
-    private final Flowable<byte[]> observableRawTx;
-    private final Flowable<byte[]> observableRawBlock;
+    private final Flowable<byte[]> flowableRawTx;
+    private final Flowable<byte[]> flowableRawBlock;
 
     private final BitcoinClientThreadFactory threadFactory;
 
     public RxBitcoinZmqBinaryService(NetworkParameters networkParameters, URI rpcUri, String rpcUser, String rpcPassword) {
-        this(new BitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword));
+        this(new RxBitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword));
     }
 
-    public RxBitcoinZmqBinaryService(BitcoinClient client) {
+    public RxBitcoinZmqBinaryService(RxBitcoinClient client) {
         this.client = client;
         this.networkParameters = client.getNetParams();
         threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(client.getNetParams()), "RxBitcoinZmq Thread");
@@ -59,13 +58,13 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
             txService = new RxBitcoinSinglePortZmqService(txServiceURI.get(), threadFactory, rawtx);
         }
 
-        observableRawBlock = blockService.blockBinaryPublisher();
-        observableRawTx = txService.transactionBinaryPublisher();
+        flowableRawBlock = blockService.blockBinaryPublisher();
+        flowableRawTx = txService.transactionBinaryPublisher();
     }
 
     @Override
     public Flowable<byte[]> transactionBinaryPublisher() {
-        return observableRawTx;
+        return flowableRawTx;
     }
 
     @Override
@@ -75,7 +74,7 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
 
     @Override
     public Flowable<byte[]> blockBinaryPublisher() {
-        return observableRawBlock;
+        return flowableRawBlock;
     }
 
     @Override

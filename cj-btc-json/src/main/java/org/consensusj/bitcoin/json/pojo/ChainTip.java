@@ -45,7 +45,22 @@ public class ChainTip {
         return status;
     }
 
-    public static Optional<ChainTip> getActiveChainTip(List<ChainTip> chainTips) {
+    public static Optional<ChainTip> findActiveChainTip(List<ChainTip> chainTips) {
         return chainTips.stream().filter(tip -> tip.getStatus().equals("active")).findFirst();
+    }
+
+    public static ChainTip findActiveChainTipOrElseThrow(List<ChainTip> chainTips) {
+        return findActiveChainTip(chainTips).orElseThrow(() -> new RuntimeException("No active ChainTip"));
+    }
+
+    /**
+     * Construct an "active" {@link ChainTip}
+     *
+     * @param height best block height
+     * @param hash best block hash
+     * @return current "active" ChainTip
+     */
+    public static ChainTip ofActive(int height, Sha256Hash hash) {
+        return new ChainTip(height, hash, 0, "active");
     }
 }
