@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import org.consensusj.jsonrpc.AbstractRpcClient;
+import org.consensusj.jsonrpc.JsonRpcError;
+import org.consensusj.jsonrpc.JsonRpcErrorException;
 import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
@@ -110,8 +112,20 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         log.debug("Send aysnc: {}", request);
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .whenComplete(JsonRpcClientJavaNet::log)
+                .thenComposeAsync(this::handleStatusError)
                 .thenApply(HttpResponse::body)
                 .whenComplete(JsonRpcClientJavaNet::log);
+    }
+
+    private CompletableFuture<HttpResponse<String>> handleStatusError(HttpResponse<String> response) {
+        if (response.statusCode() != 200) {
+            String errorResponse = response.body();
+            log.error("Bad status code: {}: {}", response.statusCode(), errorResponse);
+            return CompletableFuture.failedFuture(new JsonRpcStatusException(errorResponse, response.statusCode(), errorResponse, -1, errorResponse, null));
+
+        } else {
+            return CompletableFuture.completedFuture(response);
+        }
     }
 
     private HttpRequest buildJsonRpcPostRequest(JsonRpcRequest request) throws JsonProcessingException {
