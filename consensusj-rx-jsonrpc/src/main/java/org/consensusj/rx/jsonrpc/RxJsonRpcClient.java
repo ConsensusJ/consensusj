@@ -3,11 +3,12 @@ package org.consensusj.rx.jsonrpc;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 import org.consensusj.jsonrpc.AsyncSupport;
-import org.consensusj.jsonrpc.JsonRpcClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOError;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Supplier;
 
 /**
  * RxJava support for calling JSON-RPC clients.
@@ -16,14 +17,26 @@ public interface RxJsonRpcClient extends AsyncSupport {
     Logger log = LoggerFactory.getLogger(RxJsonRpcClient.class);
 
     /**
-     * Return a "hot" {@link Single} for calling a JSON-RPC method.
+     * Return a "hot" {@link Single} for calling a provided synchronous JSON-RPC method.
      *
      * @param method A {@link org.consensusj.jsonrpc.AsyncSupport.ThrowingSupplier} wrapper for a method call.
      * @param <RSLT> The type of the expected result
      * @return A "hot" {@link Single} for calling the method.
      */
     default <RSLT> Single<RSLT> call(AsyncSupport.ThrowingSupplier<RSLT> method) {
-        return Single.defer(() -> Single.fromCompletionStage(this.supplyAsync(method)));
+        return Single.defer(() -> Single.fromCompletionStage(supplyAsync(method)));
+    }
+
+    /**
+     * Return a "hot" {@link Single} for calling a provided asynchronous JSON-RPC method.
+     * (Uses a supplier to make sure the async call isn't made until subscription time)
+     *
+     * @param supplier of completable
+     * @param <RSLT>
+     * @return
+     */
+    default <RSLT> Single<RSLT> defer(Supplier<CompletionStage<RSLT>> supplier) {
+        return Single.defer(() -> Single.fromCompletionStage(supplier.get()));
     }
 
     /**
@@ -46,7 +59,6 @@ public interface RxJsonRpcClient extends AsyncSupport {
                 .toMaybe()
                 .onErrorComplete(this::isTransientError);    // Empty completion if IOError
     }
-
 
     /**
      * Determine if error is transient and should be ignored
