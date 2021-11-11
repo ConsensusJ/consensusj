@@ -7,10 +7,12 @@ import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.consensusj.bitcoin.rpc.BitcoinClient;
 import io.reactivex.rxjava3.core.Flowable;
 import org.bitcoinj.core.NetworkParameters;
+import org.consensusj.bitcoin.rpc.BitcoinExtendedClient;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.bitcoin.rx.zeromq.RxBitcoinZmqService;
 import org.consensusj.bitcoin.util.BlockUtil;
 
+import javax.net.ssl.SSLSocketFactory;
 import java.net.URI;
 
 /**
@@ -25,7 +27,7 @@ import java.net.URI;
  * Should this class be renamed to {@code RxBitcoinJsonRpcClient} and the {@code RxBitcoinClient} interface be moved
  * to {@code cj-btx-rx?}
  */
-public class RxBitcoinClient extends BitcoinClient implements RxJsonChainTipClient {
+public class RxBitcoinClient extends BitcoinExtendedClient implements RxJsonChainTipClient {
     ChainTipService chainTipService;
 
     public RxBitcoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
@@ -33,7 +35,11 @@ public class RxBitcoinClient extends BitcoinClient implements RxJsonChainTipClie
     }
 
     public RxBitcoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword, boolean useZmq) {
-        super(netParams, server, rpcuser, rpcpassword);
+        this((SSLSocketFactory) SSLSocketFactory.getDefault(), netParams, server, rpcuser, rpcpassword, useZmq);
+    }
+
+    public RxBitcoinClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword, boolean useZmq) {
+        super(sslSocketFactory, netParams, server, rpcuser, rpcpassword);
         // TODO: Determine if ZMQ is available by querying the server
         // TODO: Determine whether server is up or down -- add a session re-establishment service
         if (useZmq) {
