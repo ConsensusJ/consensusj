@@ -7,6 +7,10 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
+=== Dependency Updates
+
+* bitcoinj 0.16
+
 == v0.5.12
 
 Released: 2021-11-11
