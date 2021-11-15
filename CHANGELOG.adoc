@@ -7,6 +7,10 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
+=== cj-btc-json
+
+* Deprecate `org.consensusj.bitcoin.rpc.bitcoind.AppDirectory` (use `org.bitcoinj.utils.AppDataDirectory` instead
+
 === Dependency Updates
 
 * bitcoinj 0.16

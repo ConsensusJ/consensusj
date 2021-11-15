@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.rpc.bitcoind;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.bitcoinj.utils.AppDataDirectory;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,16 +12,19 @@ import java.nio.file.NoSuchFileException;
 import java.util.List;
 
 /**
+ * Utility class with (extremely limited) parsing of {@code bitcoin.conf}
+ * <p>
  * Currently focused on just getting connection info
+ * <p>
  * Currently ignores `[Sections]`.
  */
 public class BitcoinConfFile {
     private static final Logger log = LoggerFactory.getLogger(BitcoinConfFile.class);
-    private static String BITCOINAPPNAME = "Bitcoin";
-    private File file;
+    private static final String BITCOINAPPNAME = "Bitcoin";
+    private final File file;
 
     public BitcoinConfFile() {
-        this(new File(AppDataDirectory.forAppName(BITCOINAPPNAME), "bitcoin.conf"));
+        this(AppDataDirectory.getPath(BITCOINAPPNAME).resolve("bitcoin.conf").toFile());
     }
 
     public BitcoinConfFile(File confFile) {

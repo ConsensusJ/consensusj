@@ -1,9 +1,9 @@
 package org.consensusj.namecoin.jsonrpc;
 
+import org.bitcoinj.utils.AppDataDirectory;
 import org.consensusj.bitcoin.rpc.BitcoinClient;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.bitcoin.rpc.RpcConfig;
-import org.consensusj.bitcoin.rpc.bitcoind.AppDataDirectory;
 import org.consensusj.bitcoin.rpc.bitcoind.BitcoinConfFile;
 import org.consensusj.namecoin.jsonrpc.core.NMCMainNetParams;
 import org.consensusj.namecoin.jsonrpc.pojo.NameData;
@@ -43,7 +43,7 @@ public class NamecoinClient extends BitcoinClient {
      * @return object containing RPC endpoint information
      */
     public static RpcConfig readConfig() {
-        File file = new File(AppDataDirectory.forAppName("Namecoin"), "namecoin.conf");
+        File file = AppDataDirectory.getPath("Namecoin").resolve("namecoin.conf").toFile();
         BitcoinConfFile conf = new BitcoinConfFile(file);
         RpcConfig config = conf.readWithFallback().getRPCConfig();
         // Since config is immutable we have to make a new one with NameCoin parameters

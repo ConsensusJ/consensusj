@@ -5,7 +5,9 @@ import java.io.File;
 /**
  * Utility class to find Application data directory.
  *
+ * @deprecated Use {@link org.bitcoinj.utils.AppDataDirectory} instead
  */
+@Deprecated
 public class AppDataDirectory {
     private static final String osName = System.getProperty("os.name").toLowerCase();
 
