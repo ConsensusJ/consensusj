@@ -47,4 +47,17 @@ class GenericJsonRpcToolSpec extends Specification {
         then:
         result == 0
     }
+
+    @Ignore("Functional test")
+    def "Can call a local Bitcoin and get help correctly"() {
+        given:
+        GenericJsonRpcTool tool = new GenericJsonRpcTool()
+        String[] helpArgs = ['-url', expectedURI, 'help']
+
+        when:
+        int result = tool.run(System.out, System.err, helpArgs)
+
+        then:
+        result == 0
+    }
 }

@@ -1,6 +1,7 @@
 package org.consensusj.jsonrpc.cli;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -138,18 +139,21 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             e.printStackTrace();
             throw new ToolException(1, e.getMessage());
         }
-        String resultForPrinting = formatResult(call, result);
+        String resultForPrinting = formatResult(method, call, result);
         call.out.println(resultForPrinting);
     }
 
-    private String formatResult(CommonsCLICall call, Object result) {
+    private String formatResult(String method, CommonsCLICall call, Object result) {
         String string;
         if (result == null) {
             log.info("result is null");
             string = "null";
         } else if (result instanceof JsonNode) {
             log.info("result instanceof JsonNode");
-            if (outputStyle == OutputStyle.PRETTY) {
+            if (result instanceof TextNode) {
+                // This will remove the surrounding quotes and not print `\n` for newlines
+                string = ((TextNode) result).asText();
+            } else if (outputStyle == OutputStyle.PRETTY) {
                 string = ((JsonNode) result).toPrettyString();
             } else {
                 string = result.toString();

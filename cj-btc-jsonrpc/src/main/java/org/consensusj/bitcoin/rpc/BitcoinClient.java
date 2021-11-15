@@ -8,6 +8,7 @@ import org.consensusj.bitcoin.json.pojo.AddressInfo;
 import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
 import org.consensusj.bitcoin.json.pojo.BlockInfo;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
+import org.consensusj.bitcoin.json.pojo.MethodHelpEntry;
 import org.consensusj.bitcoin.json.pojo.NetworkInfo;
 import org.consensusj.bitcoin.json.pojo.Outpoint;
 import org.consensusj.bitcoin.json.pojo.RawTransactionInfo;
@@ -47,6 +48,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * JSON-RPC Client for <b>Bitcoin Core</b>.
@@ -794,10 +797,10 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     }
 
     /**
-     * Returns a human readable list of available commands.
+     * Returns a human-readable list of available commands.
      * <p>
-     * Bitcoin Core 0.9 returns an alphabetical list of commands, and Bitcoin Core 0.10 returns a categorized list of
-     * commands.
+     * Bitcoin Core 0.10+ returns a categorized list of commands including blank lines
+     * and header lines.
      *
      * @return The list of commands as string
      * @throws JsonRpcStatusException JSON RPC status exception
@@ -805,6 +808,42 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      */
     public String help() throws JsonRpcStatusException, IOException {
         return help(null);
+    }
+
+    /**
+     * Returns a human-readable list of available commands.
+     *
+     * @return The response as a stream of one {@link String} for each line
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public Stream<String> helpAsStream() throws JsonRpcStatusException, IOException {
+        return lines(help());
+    }
+
+    /**
+     * Returns a human-readable list of available commands.
+     *
+     * @return The response as a list one {@link String} for each line
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public List<String> helpAsLines() throws JsonRpcStatusException, IOException {
+        return helpAsStream().collect(Collectors.toList());
+    }
+
+    /**
+     * Returns a human-readable list of available commands.
+     *
+     * @return The response as a list one {@link MethodHelpEntry} for each method
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public List<MethodHelpEntry> helpAsMethodEntries() throws JsonRpcStatusException, IOException {
+        return helpAsStream()
+                .filter(this::isMethodEntry)
+                .map(MethodHelpEntry::new)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -829,14 +868,19 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @throws IOException network error
      */
     public List<String> getCommands() throws JsonRpcStatusException, IOException {
-        List<String> commands = new ArrayList<String>();
-        for (String entry : help().split("\n")) {
-            if (!entry.isEmpty() && !entry.matches("== (.+) ==")) {
-                String command = entry.split(" ")[0];
-                commands.add(command);
-            }
-        }
-        return commands;
+        return helpAsMethodEntries().stream()
+                .map(MethodHelpEntry::getMethodName)
+                .collect(Collectors.toList());
+    }
+
+    private Stream<String> lines(String string) {
+        // In JDK 11 this can be replaced by String::lines
+        return Stream.of(string.split("\n"));
+    }
+
+    private boolean isMethodEntry(String line) {
+        // Filter out blank and header lines
+        return !line.isEmpty() && !line.matches("== (.+) ==");
     }
 
     /**

@@ -7,9 +7,19 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
+=== consensusj-jsonrpc-cli
+
+* Use TextNode.asText() to properly process JSON strings (improves format of output for `help` and other commands that return a JSON string)
+
 === cj-btc-json
 
+* Add `MethodHelpEntry` POJO
 * Deprecate `org.consensusj.bitcoin.rpc.bitcoind.AppDirectory` (use `org.bitcoinj.utils.AppDataDirectory` instead
+
+=== cj-btc-jsonrpc
+
+* Add methods for parsing `help` results
+
 
 === Dependency Updates
 
