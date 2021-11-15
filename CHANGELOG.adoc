@@ -13,13 +13,14 @@ Released: Under development
 
 === cj-btc-json
 
+* Add BitCore/Omni `AddressBalanceInfo` and `AddressRequest` POJOs
 * Add `MethodHelpEntry` POJO
 * Deprecate `org.consensusj.bitcoin.rpc.bitcoind.AppDirectory` (use `org.bitcoinj.utils.AppDataDirectory` instead
 
 === cj-btc-jsonrpc
 
+* Add BitCore/Omni `getbalanceinfo` method (requires address indexing)
 * Add methods for parsing `help` results
-
 
 === Dependency Updates
 
