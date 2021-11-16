@@ -5,6 +5,7 @@ org.consensusj.bitcoin.dsl.js
 org.consensusj.bitcoin.future
 org.consensusj.bitcoin.json.conversion
 org.consensusj.bitcoin.json.pojo
+org.consensusj.bitcoin.json.pojo.bitcore
 org.consensusj.bitcoin.rpc
 org.consensusj.bitcoin.rpc.bitcoind
 org.consensusj.bitcoin.rpc.internal
