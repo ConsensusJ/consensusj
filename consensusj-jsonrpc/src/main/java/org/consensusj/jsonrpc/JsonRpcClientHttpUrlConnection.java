@@ -163,13 +163,13 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
                     // If there's a more specific message in the JSON use it instead.
                     exceptionMessage = error.getMessage();
                     jsonRpcCode = error.getCode();
-                    // Since this is an error at the JSON level, let's log it with `info` level and
+                    // Since this is an error at the JSON level, let's log it with `debug` level and
                     // let the higher-level software decide whether to log it as `error` or not.
                     // i.e. The higher-level software can set error level on this module to `warn` and then
                     // decide whether to log this "error" not based upon the JsonRpcStatusException thrown.
                     // An example occurs in Bitcoin when a client is waiting for a server to initialize
                     // and returns 'Still scanning.. at block 530006 of 548850'
-                    log.info("json error code: {}, message: {}", jsonRpcCode, exceptionMessage);
+                    log.debug("json error code: {}, message: {}", jsonRpcCode, exceptionMessage);
                 }
             } else {
                 // No JSON, read response body as string
