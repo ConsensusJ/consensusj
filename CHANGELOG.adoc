@@ -5,7 +5,12 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 == v0.5.13-SNAPSHOT
 
-Released: Under development
+Released: 2021-11-16
+
+=== consensusj-jsonrpc
+
+* Reduce (default) logging of RPC status errors to "debug" level (these errors should be logged
+  or handled at the higher-level and for some use cases are very common)
 
 === consensusj-jsonrpc-cli
 
@@ -20,6 +25,7 @@ Released: Under development
 === cj-btc-jsonrpc
 
 * Add BitCore/Omni `getbalanceinfo` method (requires address indexing)
+* Add isAddressIndexEnabled method
 * Add methods for parsing `help` results
 
 === Dependency Updates
