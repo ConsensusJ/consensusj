@@ -28,7 +28,9 @@ ln -sf $OMNILOG $LOGDIR/omnicore.log
 rm -rf $DATADIR/regtest
 
 # Run bitcoind in regtest mode
-$BITCOIND -regtest -datadir=$DATADIR -addresstype=legacy -paytxfee=0.0001 -minrelaytxfee=0.00001 \
+$BITCOIND -regtest -datadir=$DATADIR \
+  -addresstype=legacy -experimental-btc-balances=1 \
+  -paytxfee=0.0001 -minrelaytxfee=0.00001 \
   -limitancestorcount=750 -limitdescendantcount=750 > $LOGDIR/bitcoin.log &
 BTCSTATUS=$?
 BTCPID=$!
