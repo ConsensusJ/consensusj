@@ -3,7 +3,7 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.5.13-SNAPSHOT
+== v0.5.13
 
 Released: 2021-11-16
 
