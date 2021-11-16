@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.rpc;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.bitcoinj.core.LegacyAddress;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
 import org.consensusj.bitcoin.json.pojo.AddressGroupingItem;
 import org.consensusj.bitcoin.json.pojo.AddressInfo;
@@ -23,6 +24,8 @@ import org.consensusj.bitcoin.json.pojo.ZmqNotification;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressBalanceInfo;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressRequest;
 import org.consensusj.bitcoin.rpc.internal.BitcoinClientThreadFactory;
+import org.consensusj.jsonrpc.JsonRpcError;
+import org.consensusj.jsonrpc.JsonRpcErrorException;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
@@ -91,6 +94,8 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     protected final ExecutorService executorService;
 
     private int serverVersion = 0;    // 0 means unknown serverVersion
+    private boolean isAddressIndexSuccessfullyTested = false;
+    private boolean isAddressIndexEnabled;
 
     public BitcoinClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         super(sslSocketFactory, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
@@ -163,6 +168,55 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
             serverVersion = getNetworkInfo().getVersion();
         }
         return serverVersion;
+    }
+
+    /**
+     * Test if address index is enabled, caching the result of the first successful check
+     *
+     * @return true if enabled, false if not enabled
+     * @throws JsonRpcException an exception other than 1 of the two expected exceptions is thrown
+     * @throws IOException something else went wrong
+     */
+    public synchronized boolean isAddressIndexEnabled() throws JsonRpcException, IOException {
+        if (!isAddressIndexSuccessfullyTested) {
+            try {
+                AddressBalanceInfo info = getAddressBalance(getTestAddress());
+                isAddressIndexSuccessfullyTested = true;
+                isAddressIndexEnabled = true;
+            } catch (JsonRpcErrorException ee) {
+                // If method not found, the method we use for the test isn't even present, so definitely
+                // no address index support is available
+                if (ee.getError().getCode() == JsonRpcError.Error.METHOD_NOT_FOUND.getCode()) {
+                    isAddressIndexSuccessfullyTested = true;
+                    isAddressIndexEnabled = false;
+                } else {
+                    // Some other, unexpected exception, throw it
+                    throw ee;
+                }
+            } catch (JsonRpcStatusException se) {
+                // If the method is there and it returns an error of "Address index not enabled" then we also
+                // know that no address index support is available
+                if (se.getMessage().equals("Address index not enabled")) {
+                    isAddressIndexSuccessfullyTested = true;
+                    isAddressIndexEnabled = false;
+                } else {
+                    // Some other, unexpected exception, throw it
+                    throw se;
+                }
+            }
+        }
+        return isAddressIndexEnabled;
+    }
+
+    private Address getTestAddress() {
+        switch (getNetParams().getId()) {
+            case NetworkParameters.ID_MAINNET:
+                return LegacyAddress.fromBase58(null, "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa");
+            case NetworkParameters.ID_TESTNET:
+            case NetworkParameters.ID_REGTEST:
+            default:
+                return LegacyAddress.fromBase58(null, "moneyqMan7uh8FqdCA2BV5yZ8qVrc9ikLP");
+        }
     }
 
     /**
@@ -979,12 +1033,12 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     }
 
     // Bitcore/Omni transaction for getting non-wallet address balances
-    public AddressBalanceInfo getAddressBalance(Address address) throws JsonRpcStatusException, IOException {
+    public AddressBalanceInfo getAddressBalance(Address address) throws JsonRpcException, IOException {
         return send("getaddressbalance", AddressBalanceInfo.class, address);
     }
 
     // Bitcore/Omni transaction for getting non-wallet address balances
-    public AddressBalanceInfo getAddressBalance(List<Address> addressList) throws JsonRpcStatusException, IOException {
+    public AddressBalanceInfo getAddressBalance(List<Address> addressList) throws JsonRpcException, IOException {
         return send("getaddressbalance", AddressBalanceInfo.class, new AddressRequest(addressList));
     }
 }

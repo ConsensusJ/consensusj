@@ -3,21 +3,16 @@ package org.consensusj.bitcoin.rpc.bitcore
 import org.bitcoinj.core.Coin
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressBalanceInfo
 import org.consensusj.bitcoin.test.BaseRegTestSpec
-import org.consensusj.jsonrpc.JsonRpcException
-import org.spockframework.runtime.extension.builtin.PreconditionContext
-import spock.lang.IgnoreIf
 import spock.lang.Requires
 import spock.lang.Shared
 
 /**
  * Test of OmniCore Bitcore address index JSON-RPC method: {@code getaddressbalance}
- * If {@code help} reports this method is not available, these tests are ignored.
+ * If {@code help} reports address index is not available, these tests are ignored.
  */
 class GetAddressBalanceSpec extends BaseRegTestSpec {
-    @Shared
-    boolean hasMethod
 
-    @Requires({ instance.hasMethod})
+    @Requires({ instance.isAddressIndexEnabled()})
     def "get 1 address balance"() {
         given:
         def address = client.getNewAddress()
@@ -34,7 +29,7 @@ class GetAddressBalanceSpec extends BaseRegTestSpec {
 
     }
 
-    @Requires({ instance.hasMethod})
+    @Requires({ instance.isAddressIndexEnabled()})
     def "get multi-address balance"() {
         given:
         def address1 = client.getNewAddress()
@@ -52,8 +47,7 @@ class GetAddressBalanceSpec extends BaseRegTestSpec {
         balanceInfo.immature >= Coin.ZERO
     }
 
-    def setupSpec() {
-        hasMethod = client.commandExists("getaddressbalance")
+    boolean isAddressIndexEnabled() {
+        return client.isAddressIndexEnabled()
     }
-
 }
