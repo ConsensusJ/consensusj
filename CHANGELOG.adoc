@@ -7,6 +7,15 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Not yet
 
+=== cj-btc-json
+
+* AddressDeserializer: Put invalid address in InvalidFormatException message
+* RpcClientModule: add constructor with strictAddressParsing boolean
+
+=== Dependency Updates
+
+* bitcoinj 0.16.1
+
 == v0.5.13
 
 Released: 2021-11-16
