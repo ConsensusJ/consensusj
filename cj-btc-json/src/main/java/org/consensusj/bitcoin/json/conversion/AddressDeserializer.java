@@ -45,7 +45,7 @@ public class AddressDeserializer extends JsonDeserializer<Address> {
                 try {
                     return Address.fromString(netParams, p.getValueAsString());
                 } catch (AddressFormatException e) {
-                    throw new InvalidFormatException(p, "Invalid Address", p.getValueAsString(), Address.class);
+                    throw new InvalidFormatException(p, "Invalid Address: " + p.getValueAsString(), p.getValueAsString(), Address.class);
                 }
             default:
                 return (Address) ctxt.handleUnexpectedToken(Address.class, p);
