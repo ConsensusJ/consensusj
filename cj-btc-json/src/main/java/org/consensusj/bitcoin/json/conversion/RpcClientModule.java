@@ -14,18 +14,29 @@ import org.bitcoinj.core.Transaction;
  *
  */
 public class RpcClientModule extends SimpleModule {
-    public RpcClientModule(NetworkParameters netParams) {
+    /**
+     * @param netParams Which network we are going to be a client for
+     * @param strictAddressParsing set to {@code false} to not throw exception on addresses from other networks
+     */
+    public RpcClientModule(NetworkParameters netParams, boolean strictAddressParsing) {
         super("BitcoinJMappingClient", new Version(1, 0, 0, null, null, null));
 
-        this.addDeserializer(Address.class, new AddressDeserializer(netParams))
-            .addDeserializer(Block.class, new BlockHexDeserializer(netParams))
-            .addDeserializer(Coin.class, new CoinDeserializer())
-            .addDeserializer(ECKey.class, new ECKeyDeserializer())
-            .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())
-            .addSerializer(Address.class, new AddressSerializer())
-            .addSerializer(Coin.class, new CoinSerializer())
-            .addSerializer(ECKey.class, new ECKeySerializer())
-            .addSerializer(Sha256Hash.class, new Sha256HashSerializer())
-            .addSerializer(Transaction.class, new TransactionHexSerializer());
+        this.addDeserializer(Address.class, new AddressDeserializer(strictAddressParsing ? netParams : null))
+                .addDeserializer(Block.class, new BlockHexDeserializer(netParams))
+                .addDeserializer(Coin.class, new CoinDeserializer())
+                .addDeserializer(ECKey.class, new ECKeyDeserializer())
+                .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())
+                .addSerializer(Address.class, new AddressSerializer())
+                .addSerializer(Coin.class, new CoinSerializer())
+                .addSerializer(ECKey.class, new ECKeySerializer())
+                .addSerializer(Sha256Hash.class, new Sha256HashSerializer())
+                .addSerializer(Transaction.class, new TransactionHexSerializer());
+    }
+
+    /**
+     * @param netParams Which network we are going to be a client for
+     */
+    public RpcClientModule(NetworkParameters netParams) {
+        this(netParams, true);
     }
 }
