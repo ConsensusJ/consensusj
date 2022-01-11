@@ -1,0 +1,14 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    api project(':consensusj-jsonrpc')
+
+    testImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"       // Runtime implementation of slf4j
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
