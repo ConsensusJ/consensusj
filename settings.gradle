@@ -42,8 +42,9 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
     include 'cj-btc-services'                   // bitcoinj-based service objects
 
 if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
-    System.err.println "Including JDK 17 module because Java ${JavaVersion.current()} is JDK 17+"
+    System.err.println "Including JDK 17 modules because Java ${JavaVersion.current()} is JDK 17+"
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
+    include 'consensusj-jsonrpc-unix'           // UNIX Domain Sockets for JSONRPC
 } else {
     System.err.println "Skipping 'cj-bitcoinj-dsl-js', requires Java 17+, currently running Java ${JavaVersion.current()}"
 }
