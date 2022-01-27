@@ -33,7 +33,7 @@ public class JsonRpcToolOptions extends Options {
                     .build())
             .addOption(Option.builder()
                     .longOpt("alt-truststore")
-                    .desc("Alternate truststore (password must be 'changeit'")
+                    .desc("Alternate truststore (password must be 'changeit')")
                     .hasArg()
                     .argName("path")
                     .build())
