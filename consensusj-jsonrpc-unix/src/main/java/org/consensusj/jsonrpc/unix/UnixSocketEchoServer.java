@@ -17,6 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
+ *  For possible implementation with CompletableFuture,
+ *  See https://github.com/IBM/java-async-util/blob/master/asyncutil/src/test/java/com/ibm/asyncutil/examples/nio/nio.md#nio-bridge
  *
  */
 public class UnixSocketEchoServer {
