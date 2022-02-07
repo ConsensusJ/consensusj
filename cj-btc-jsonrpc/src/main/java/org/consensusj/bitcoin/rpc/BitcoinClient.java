@@ -23,6 +23,7 @@ import org.consensusj.bitcoin.json.pojo.WalletTransactionInfo;
 import org.consensusj.bitcoin.json.pojo.ZmqNotification;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressBalanceInfo;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressRequest;
+import org.consensusj.bitcoin.json.pojo.bitcore.AddressUtxoResult;
 import org.consensusj.bitcoin.rpc.internal.BitcoinClientThreadFactory;
 import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcErrorException;
@@ -1041,4 +1042,15 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     public AddressBalanceInfo getAddressBalance(List<Address> addressList) throws JsonRpcException, IOException {
         return send("getaddressbalance", AddressBalanceInfo.class, new AddressRequest(addressList));
     }
+
+    // Bitcore/Omni transaction for getting non-wallet address UTXO Info
+    public AddressUtxoResult getAddressUtxos(Address address) throws JsonRpcException, IOException {
+        return send("getaddressutxos", AddressUtxoResult.class, address);
+    }
+
+    // Bitcore/Omni transaction for getting non-wallet address UTXO Info
+    public AddressUtxoResult getAddressUtxos(List<Address> addressList) throws JsonRpcException, IOException {
+        return send("getaddressutxos", AddressUtxoResult.class, new AddressRequest(addressList));
+    }
+
 }

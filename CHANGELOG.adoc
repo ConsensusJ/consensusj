@@ -7,8 +7,13 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Not yet
 
+=== cj-btc-jsonrpc
+
+* Add BitCore/Omni `getAddressUtxos()`/`getaddressutxos` method (requires address indexing)
+
 === cj-btc-json
 
+* Add BitCore/Omni `AddressUtxoResult` and `AddressUtxoInfo` POJOs
 * AddressDeserializer: Put invalid address in InvalidFormatException message
 * RpcClientModule: add constructor with strictAddressParsing boolean
 
