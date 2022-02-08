@@ -33,7 +33,7 @@ Released: Not yet
 
 === Build/Test Updates
 
-* Gradle 7.3.1
+* Gradle 7.3.3
 
 == v0.5.13
 
