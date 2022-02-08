@@ -11,8 +11,13 @@ micronaut {
         incremental(true)
         annotations("org.consensusj.jsonrpc.daemon.*")
     }
-    nativeImage {
-        imageName('jsonrpc-echod')
+}
+
+graalvmNative {
+    binaries {
+        main {
+            imageName = 'jsonrpc-echod'
+        }
     }
 }
 

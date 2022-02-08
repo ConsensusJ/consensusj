@@ -3,7 +3,7 @@ Sean Gilligan <https://github.com/msgilligan>
 v0.5.13
 :description: ConsensusJ README document.
 :consensusj-version: 0.5.13
-:bitcoinj-version: 0.16
+:bitcoinj-version: 0.16.1
 :bitcoinj-apidoc: https://bitcoinj.org/javadoc/{bitcoinj-version}/
 :cj-apidoc: https://consensusj.github.io/consensusj/apidoc
 :tip-caption: :bulb:
@@ -435,7 +435,7 @@ NOTE: The first time you run the build all dependency JARS will be downloaded.
 
 To build the CLI executable jar:
 
-    ./gradlew :consensusj-jsonrpc-cli:nativeImage
+    ./gradlew :consensusj-jsonrpc-cli:nativeCompile
 
 To run it and display a list of command line options:
 
@@ -446,7 +446,7 @@ To run it and display a list of command line options:
 
 To build the CLI executable jar:
 
-    ./gradlew :cj-btc-cli:nativeImage
+    ./gradlew :cj-btc-cli:nativeCompile
 
 To run it and display a list of command line options:
 
@@ -461,8 +461,8 @@ To build and run from Gradle:
 
 To build a native image and run:
 
-    ./gradlew :consensusj-jsonrpc-daemon:nativeImage
-    consensusj-jsonrpc-daemon/build/jsonrpc-echod
+    ./gradlew :consensusj-jsonrpc-daemon:nativeCompile
+    consensusj-jsonrpc-daemon/build/native/nativeCompile/jsonrpc-echod
 
 === Build and Run JSON-RPC Bitcoin daemon
 
@@ -472,8 +472,8 @@ To build and run from Gradle:
 
 To build a native image and run:
 
-    ./gradlew :cj-btc-daemon:nativeImage
-    cj-btc-daemon/build/jbitcoind
+    ./gradlew :cj-btc-daemon:nativeCompile
+    cj-btc-daemon/build/native/nativeCompile/jbitcoind
 
 
 

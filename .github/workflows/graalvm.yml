@@ -31,7 +31,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
       - name: Build with Gradle
-        run: ./gradlew nativeImage --scan --info --stacktrace
+        run: ./gradlew nativeCompile --scan --info --stacktrace
       - name: Upload jsonrpc tool as artifact
         uses: actions/upload-artifact@v2
         with:

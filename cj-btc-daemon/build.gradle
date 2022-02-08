@@ -11,8 +11,13 @@ micronaut {
         incremental(true)
         annotations("org.consensusj.daemon.micronaut.*")
     }
-    nativeImage {
-        imageName('jbitcoind')
+}
+
+graalvmNative {
+    binaries {
+        main {
+            imageName = 'jbitcoind'
+        }
     }
 }
 

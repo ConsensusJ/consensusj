@@ -44,7 +44,7 @@ test {
 
 // Compile a native image of the MathService tool sample using Graal's native-image tool
 // Graal must be installed at $GRAALVM_HOME
-task nativeImage(type:Exec, dependsOn: jar) {
+task nativeCompile(type:Exec, dependsOn: jar) {
     workingDir = projectDir
     executable = "${System.env.GRAALVM_HOME}/bin/native-image"
     args = [ '--verbose',
