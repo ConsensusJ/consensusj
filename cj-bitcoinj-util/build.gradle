@@ -9,6 +9,8 @@ ext.moduleName = 'org.consensusj.bitcoinj.util'
 
 dependencies {
     api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+
+    testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy DSL in tests
 }
 
 jar {
