@@ -7,6 +7,15 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Not yet
 
+=== cj-bitcoinj-util
+
+* Add `SigningWalletKeychain`, `BipStandardDeterministicKeychain`, tests.
+
+** `SigningRequest` is essentially an immutable, unsigned transaction
+** `SigningWalletKeychain` is an HD keychain that can sign a `SigningRequest`
+** `BipStandardDeterministicKeyChain` is an HD keychain that supports BIP 44, BIP 84, etc.
+** `KeychainRoundTripStepwiseSpec` is a functional test that tests all the above
+
 === cj-btc-jsonrpc
 
 * Add BitCore/Omni `getAddressUtxos()`/`getaddressutxos` method (requires address indexing)
