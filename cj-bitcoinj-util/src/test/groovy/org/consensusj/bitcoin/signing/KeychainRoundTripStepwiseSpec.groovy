@@ -3,6 +3,7 @@ package org.consensusj.bitcoin.signing
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.Coin
 import org.bitcoinj.core.NetworkParameters
+import org.bitcoinj.core.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.TransactionOutput
 import org.bitcoinj.crypto.ChildNumber
@@ -10,6 +11,7 @@ import org.bitcoinj.crypto.DeterministicKey
 import org.bitcoinj.crypto.HDPath
 import org.bitcoinj.params.TestNet3Params
 import org.bitcoinj.script.Script
+import org.bitcoinj.script.ScriptBuilder
 import org.bitcoinj.wallet.DeterministicKeyChain
 import org.bitcoinj.wallet.DeterministicSeed
 import org.bitcoinj.wallet.KeyChain
@@ -53,6 +55,7 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
         netParams = TestNet3Params.get()
         int signingAccountIndex = 0
         Script.ScriptType outputScriptType = Script.ScriptType.P2PKH;
+//        Script.ScriptType outputScriptType = Script.ScriptType.P2WPKH;
         DeterministicSeed seed = setupTestSeed()
 
         signingKeychain = new BipStandardDeterministicKeyChain(seed, outputScriptType, netParams, signingAccountIndex);
@@ -100,24 +103,36 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
 
     def "NETWORK wallet can create a transaction and create a signing request "() {
         given: "a transaction with a UTXO in output 1"
-        // This is actually the first transaction received by the 0'th change address in our "panda diary" keychain.
-        Transaction parentTx = firstChangeTransaction()
-        TransactionOutput utxo = parentTx.getOutput(1)
+        boolean isSegwit = signingKeychain.getOutputScriptType() == Script.ScriptType.P2WPKH
+        Script script
+        Coin utxoAmount
+        Sha256Hash txid
+        int index
+        if (isSegwit) {
+            // Make believe transaction
+            script = ScriptBuilder.createP2WPKHOutputScript(signingKeychain.getKeyByPath(HDPath.m(signingKeychain.getAccountPath()).extend(fromKeyPath), false))
+            utxoAmount = Coin.CENT
+            txid = Sha256Hash.ZERO_HASH
+            index = 0
+        } else {
+            // This is actually the first transaction received by the 0'th change address in our "panda diary" keychain.
+            Transaction parentTx = firstChangeTransaction()
+            TransactionOutput utxo = parentTx.getOutput(1)
+            script = utxo.scriptPubKey
+            utxoAmount = utxo.value
+            txid = parentTx.txId
+            index = utxo.index
+        }
 
         when: "we build a 1-input, 2-output (unsigned) transaction request to spend the UTXO"
         Address toAddr = signingKeychain.addressFromKey(networkKeyChain.getKeyByPath(HDPath.M(networkAccountPath).extend(toKeyPath), false))
         Address changeAddr = signingKeychain.addressFromKey(networkKeyChain.getKeyByPath(HDPath.M(networkAccountPath).extend(changeKeyPath), false))
         Coin txAmount = 0.01.btc
         Coin changeAmount = 0.20990147.btc
-        
-        and: "We serialize it to transaction signing request"
-        TransactionInputData input = new TransactionInputData(netParams.id, parentTx.txId.bytes, utxo.index, utxo.scriptBytes)
-        List<TransactionInputData> inputs = List.of(input)
-        List<TransactionOutputData> outputs = List.of(
-                new TransactionOutputAddress(txAmount.value, toAddr),
-                new TransactionOutputAddress(changeAmount.value, changeAddr)
-        )
-        signingRequest = new DefaultSigningRequest(netParams.id, inputs, outputs)
+        signingRequest = new DefaultSigningRequest(netParams)
+                .addInput(script, utxoAmount, txid, index)
+                .addOutput(toAddr, txAmount)
+                .addOutput(changeAddr, changeAmount)
 
         then: "request looks correct"
         signingRequest != null
@@ -126,7 +141,7 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
 
     def "SIGNING wallet can sign and produce a valid transaction"() {
         given: "An transaction signer object"
-        SigningWalletKeychain signer = new SigningWalletKeychain(signingKeychain)
+        HDKeychainSigner signer = new HDKeychainSigner(signingKeychain)
 
         when: "we sign the transaction"
         signedTx = signer.signTransaction(signingRequest).get()

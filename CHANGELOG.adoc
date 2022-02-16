@@ -9,10 +9,10 @@ Released: Not yet
 
 === cj-bitcoinj-util
 
-* Add `SigningWalletKeychain`, `BipStandardDeterministicKeychain`, tests.
+* Add `HDKeychainSigner`, `BipStandardDeterministicKeychain`, tests.
 
 ** `SigningRequest` is essentially an immutable, unsigned transaction
-** `SigningWalletKeychain` is an HD keychain that can sign a `SigningRequest`
+** `HDKeychainSigner` is an HD keychain that can sign a `SigningRequest`
 ** `BipStandardDeterministicKeyChain` is an HD keychain that supports BIP 44, BIP 84, etc.
 ** `KeychainRoundTripStepwiseSpec` is a functional test that tests all the above
 

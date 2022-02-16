@@ -1,6 +1,7 @@
 package org.consensusj.bitcoin.signing;
 
 import org.bitcoinj.core.Address;
+import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionOutPoint;
@@ -12,16 +13,15 @@ import org.consensusj.bitcoinj.wallet.BipStandardDeterministicKeyChain;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 /**
  * A "signing wallet"  that uses a {@link BipStandardDeterministicKeyChain} to
  * sign {@link SigningRequest}s.
  */
-public class SigningWalletKeychain {
+public class HDKeychainSigner implements TransactionSigner {
     private final BipStandardDeterministicKeyChain keyChain;
 
-    public SigningWalletKeychain(BipStandardDeterministicKeyChain keyChain) {
+    public HDKeychainSigner(BipStandardDeterministicKeyChain keyChain) {
         this.keyChain = keyChain;
     }
 
@@ -30,8 +30,8 @@ public class SigningWalletKeychain {
      * <p>
      * NOTE: This was an attempt to use an unsigned transaction and a list of address.
      * It is private and should not be used. I'm leaving it here because it demonstrates
-     * the use of `duplicatDetached()` and we may want to use this elsewhere to sign
-     * incomplete bitcionj transactions.
+     * the use of `duplicateDetached()` and we may want to use this elsewhere to sign
+     * incomplete bitcoinj transactions.
      * <p>
      * Assumes all inputs are P2PKH (for now) and addresses must be in
      * the same order as the unsigned inputs in the unsigned transaction.
@@ -66,46 +66,13 @@ public class SigningWalletKeychain {
     }
 
 
-    /**
-     * Create a signed bitcoinj transaction from the signing request
-     * <p>
-     * @param request Signing request with data for all inputs and all outputs
-     * @return A signed transaction (should be treated as immutable)
-     */
-    public CompletableFuture<Transaction> signTransaction(SigningRequest request) {
-        // Create a new, empty (mutable) bitcoinj transaction
-        Transaction transaction = new Transaction(NetworkParameters.fromID(request.networkId()));
-
-        // For each output in the signing request, add an output to the bitcoinj transaction
-        // TODO: Transaction validation
-        request.outputs().forEach(
-            output -> transaction.addOutput(output.toMutableOutput())
-        );
-
-        // For each address in the input list, add a signed input to the bitcoinj transaction
-        request.inputs().forEach(
-            input -> addSignedInput(transaction, input, () -> new RuntimeException("Unsupported transaction input"))
-        );
-
-        return CompletableFuture.completedFuture(transaction);
-    }
-
-    /**
-     *
-     * @param tx Mutable transaction currently being built
-     * @param in The transaction input data
-     * @param exceptionSupplier exception to throw if key is not available.
-     */
-    void addSignedInput(Transaction tx, TransactionInputData in, Supplier<? extends RuntimeException> exceptionSupplier) {
-        tx.addSignedInput(in.toOutPoint(), in.script(), keyForInput(in).orElseThrow(exceptionSupplier));
-    }
 
     /**
      * Return the signing key for an input, if available
      * @param input Transaction input data
      * @return Signing key, if available, {@link Optional#empty()} otherwise.
      */
-    Optional<DeterministicKey> keyForInput(TransactionInputData input) {
+    public Optional<ECKey> keyForInput(TransactionInputData input) {
         return input
                 .address()
                 .map(a -> keyChain.findKeyFromPubHash(a.getHash()));

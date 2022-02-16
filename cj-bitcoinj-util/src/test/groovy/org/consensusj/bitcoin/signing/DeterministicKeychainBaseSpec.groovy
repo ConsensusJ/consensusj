@@ -1,6 +1,12 @@
 package org.consensusj.bitcoin.signing
 
-import org.bitcoinj.core.*
+import org.bitcoinj.core.Address
+import org.bitcoinj.core.Coin
+import org.bitcoinj.core.NetworkParameters
+import org.bitcoinj.core.SegwitAddress
+import org.bitcoinj.core.Transaction
+import org.bitcoinj.core.TransactionInput
+import org.bitcoinj.core.TransactionOutput
 import org.bitcoinj.params.TestNet3Params
 import org.bitcoinj.script.Script
 import org.bitcoinj.script.ScriptBuilder
@@ -23,6 +29,25 @@ abstract class DeterministicKeychainBaseSpec extends Specification {
         return new DeterministicSeed(mnemonicString, null, "", creationInstant.getEpochSecond());
     }
 
+    static SigningRequest createTestSigningRequest(Address toAddress, Address changeAddress) {
+        // This is actually the first transaction received by the 0'th change address in our "panda diary" keychain.
+        NetworkParameters netParams = TestNet3Params.get()
+        Transaction parentTx = firstChangeTransaction()
+        TransactionOutput utxo = parentTx.getOutput(1)
+        Coin utxoAmount = utxo.value
+
+        Coin txAmount = 0.01.btc
+        Coin changeAmount = 0.20990147.btc
+
+        TransactionInputDataImpl input = new TransactionInputDataImpl(netParams.id, parentTx.txId.bytes, utxo.index, utxoAmount.toSat(), utxo.scriptBytes)
+        List<TransactionInputDataImpl> inputs = List.of(input)
+        List<TransactionOutputData> outputs = List.of(
+                new TransactionOutputAddress(txAmount.value, toAddress),
+                new TransactionOutputAddress(changeAmount.value, changeAddress)
+        )
+        return new DefaultSigningRequest(netParams, inputs, outputs)
+    }
+
     /**
      * Verify that a transaction correctly spends the input specified by index. Throws {@link ScriptException}
      * if verification fails.
@@ -33,10 +58,13 @@ abstract class DeterministicKeychainBaseSpec extends Specification {
      * @throws ScriptException If {@code scriptSig#correctlySpends} fails with exception
      */
     static void correctlySpendsInput(Transaction tx, int inputIndex, Address fromAddr) throws ScriptException {
-        Script scriptPubKey = ScriptBuilder.createOutputScript(fromAddr)
-        TransactionInput input = tx.getInputs().get(inputIndex)
-        input.getScriptSig()
-                .correctlySpends(tx, inputIndex, null, input.value, scriptPubKey, Script.ALL_VERIFY_FLAGS);
+        if (!fromAddr instanceof SegwitAddress) {
+            // TODO: Implement for SegWit, too
+            Script scriptPubKey = ScriptBuilder.createOutputScript(fromAddr)
+            TransactionInput input = tx.getInputs().get(inputIndex)
+            input.getScriptSig()
+                    .correctlySpends(tx, inputIndex, null, input.value, scriptPubKey, Script.ALL_VERIFY_FLAGS);
+        }
     }
 
     protected static Transaction firstChangeTransaction() {

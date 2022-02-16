@@ -12,6 +12,11 @@ public class TransactionOutputAddress implements TransactionOutputData {
     private final long amount;
     private final Address address;
 
+    public TransactionOutputAddress(Coin amount, Address address) {
+        this.amount = amount.toSat();
+        this.address = address;
+    }
+
     public TransactionOutputAddress(long amount, Address address) {
         this.amount = amount;
         this.address = address;
