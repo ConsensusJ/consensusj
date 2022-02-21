@@ -23,7 +23,7 @@ public interface SigningUtils {
 
     static SigningRequest addChange(SigningRequest request, Address changeAddress, FeeCalculator calculator) {
         Coin fee = calculator.calculateFee(request.addOutput(changeAddress, Coin.ZERO));
-        long change = fee.value + sumIn(request.inputs()) - sumOut(request.outputs());
+        long change = sumIn(request.inputs()) - sumOut(request.outputs()) - fee.value;
         if (change < 0) {
             throw new RuntimeException("Insufficient funds");
         }
