@@ -23,6 +23,7 @@ import org.consensusj.bitcoin.json.pojo.WalletTransactionInfo;
 import org.consensusj.bitcoin.json.pojo.ZmqNotification;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressBalanceInfo;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressRequest;
+import org.consensusj.bitcoin.json.pojo.bitcore.AddressUtxoInfo;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressUtxoResult;
 import org.consensusj.bitcoin.rpc.internal.BitcoinClientThreadFactory;
 import org.consensusj.jsonrpc.JsonRpcError;
@@ -1044,13 +1045,15 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     }
 
     // Bitcore/Omni transaction for getting non-wallet address UTXO Info
-    public AddressUtxoResult getAddressUtxos(Address address) throws JsonRpcException, IOException {
-        return send("getaddressutxos", AddressUtxoResult.class, address);
+    public List<AddressUtxoInfo>  getAddressUtxos(Address address) throws JsonRpcException, IOException {
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, AddressUtxoInfo.class);
+        return send("getaddressutxos", resultType, address);
     }
 
     // Bitcore/Omni transaction for getting non-wallet address UTXO Info
-    public AddressUtxoResult getAddressUtxos(List<Address> addressList) throws JsonRpcException, IOException {
-        return send("getaddressutxos", AddressUtxoResult.class, new AddressRequest(addressList));
+    public List<AddressUtxoInfo> getAddressUtxos(List<Address> addressList) throws JsonRpcException, IOException {
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, AddressUtxoInfo.class);
+        return send("getaddressutxos", resultType, new AddressRequest(addressList));
     }
 
 }
