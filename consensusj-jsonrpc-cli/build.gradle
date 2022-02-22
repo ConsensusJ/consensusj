@@ -22,7 +22,7 @@ dependencies {
     // Add SLF4J runtime adapter for JDK logging for GraalVM native-image build of jsonrpc tool
     nativeToolImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 
-    testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    testImplementation "org.apache.groovy:groovy:${groovyVersion}"
 
     testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 }

@@ -4,6 +4,6 @@ plugins {
 
 dependencies {
     api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
-    implementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    implementation "org.apache.groovy:groovy:${groovyVersion}"
 }
 

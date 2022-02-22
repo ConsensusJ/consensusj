@@ -13,8 +13,8 @@ dependencies {
     // Add SLF4J runtime adapter for JDK logging for GraalVM native-image build of MathService/Tool
     nativeSampleImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 
-    testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-    testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    testImplementation "org.apache.groovy:groovy:${groovyVersion}"
+    testImplementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
         transitive = false
     }
 

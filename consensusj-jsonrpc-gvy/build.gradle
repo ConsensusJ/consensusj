@@ -5,9 +5,9 @@ plugins {
 dependencies {
     api project(':consensusj-jsonrpc')
     implementation "org.slf4j:slf4j-api:${slf4jVersion}"       // Loggable trait is part of API
-    implementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+    implementation "org.apache.groovy:groovy:${groovyVersion}"
 
-    testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    testImplementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
         transitive = false
     }
 }

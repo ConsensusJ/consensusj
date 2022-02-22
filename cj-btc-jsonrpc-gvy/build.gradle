@@ -6,8 +6,8 @@ dependencies {
     api project(':cj-btc-jsonrpc')
     api project(':consensusj-jsonrpc-gvy')
 
-    implementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-    implementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    implementation "org.apache.groovy:groovy:${groovyVersion}"
+    implementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
         transitive = false
     }
 
