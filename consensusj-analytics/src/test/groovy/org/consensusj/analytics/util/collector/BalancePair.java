@@ -1,7 +1,5 @@
 package org.consensusj.analytics.util.collector;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * A token address and balance
  * @param <K> key (token address)
@@ -39,7 +37,7 @@ public class BalancePair<K extends Comparable<K>, N extends Number & Comparable<
     }
 
     @Override
-    public int compareTo(@NotNull BalancePair<K, N> o) {
+    public int compareTo(BalancePair<K, N> o) {
         int result = getNumber().compareTo(o.getNumber());
         // If numbers are equal, we must sort by the key itself, we don't
         // want Collections to filter out identical balances as duplicates
