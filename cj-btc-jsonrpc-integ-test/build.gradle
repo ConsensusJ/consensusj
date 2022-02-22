@@ -10,8 +10,8 @@ dependencies {
     testImplementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     testImplementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
-    testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-    testImplementation ("org.codehaus.groovy:groovy-json:${groovyVersion}:indy") {
+    testImplementation "org.apache.groovy:groovy:${groovyVersion}"
+    testImplementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
         transitive = false
     }
 

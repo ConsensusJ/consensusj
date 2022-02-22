@@ -45,7 +45,7 @@ subprojects {
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 
-        testImplementation "org.codehaus.groovy:groovy:${groovyVersion}:indy"
+        testImplementation "org.apache.groovy:groovy:${groovyVersion}"
         testImplementation("org.spockframework:spock-core:${spockVersion}") {
             exclude module: "groovy-all"
         }
@@ -55,11 +55,16 @@ subprojects {
         testRuntimeOnly  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
     }
 
-    // See http://blog.freeside.co/2014/06/24/gradle-and-groovys-invoke-dynamic-support/
     configurations.all {
         resolutionStrategy {
-            force "org.codehaus.groovy:groovy:${groovyVersion}:indy"
-            force "org.codehaus.groovy:groovy-json:${groovyVersion}:indy"
+            force "org.apache.groovy:groovy:${groovyVersion}"
+            force "org.apache.groovy:groovy-json:${groovyVersion}"
+        }
+        // Ensure usage of Groovy 4.0 which has new Maven co-ordinates
+        resolutionStrategy.capabilitiesResolution.all {
+            if (capability.group.equals("org.codehaus.groovy")) {
+                selectHighestVersion()
+            }
         }
     }
 
@@ -69,7 +74,6 @@ subprojects {
     }
 
     tasks.withType(GroovyCompile) {
-        groovyOptions.optimizationOptions.indy = true
         options.encoding = 'UTF-8'
     }
 
