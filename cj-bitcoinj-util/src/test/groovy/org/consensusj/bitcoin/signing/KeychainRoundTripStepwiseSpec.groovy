@@ -31,11 +31,11 @@ import java.time.Instant
 @Stepwise
 class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
     // Account path for the network wallet
-    static final HDPath networkAccountPath = HDPath.of(ChildNumber.ZERO_HARDENED)
+    static final HDPath networkAccountPath = HDPath.M(ChildNumber.ZERO_HARDENED)
     // Relative paths to keys used in tests
-    static final HDPath fromKeyPath = HDPath.of(ChildNumber.ONE, ChildNumber.ZERO)
-    static final HDPath toKeyPath = HDPath.of(ChildNumber.ZERO, ChildNumber.ONE)
-    static final HDPath changeKeyPath = HDPath.of(ChildNumber.ONE, ChildNumber.ONE)
+    static final HDPath fromKeyPath = HDPath.M(ChildNumber.ONE, ChildNumber.ZERO)
+    static final HDPath toKeyPath = HDPath.M(ChildNumber.ZERO, ChildNumber.ONE)
+    static final HDPath changeKeyPath = HDPath.M(ChildNumber.ONE, ChildNumber.ONE)
 
     // Parameters and Keychain initialized in setupSpec
     @Shared NetworkParameters netParams
