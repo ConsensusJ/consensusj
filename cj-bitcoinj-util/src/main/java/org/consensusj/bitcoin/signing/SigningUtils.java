@@ -23,7 +23,7 @@ public interface SigningUtils {
 
     static SigningRequest addChange(SigningRequest request, Address changeAddress, FeeCalculator calculator) {
         Coin fee = calculator.calculateFee(request.addOutput(changeAddress, Coin.ZERO));
-        long change = sumIn(request.inputs()) - sumOut(request.outputs()) - fee.value;
+        long change = sumInputSats(request.inputs()) - sumOutputSats(request.outputs()) - fee.value;
         if (change < 0) {
             throw new RuntimeException("Insufficient funds");
         }
@@ -46,7 +46,7 @@ public interface SigningUtils {
      * @return The fee that will be paid from a set of inputs and outputs
      */
     static Coin getFee(Collection<TransactionInputData> inputs, Collection<TransactionOutputData> outputs) {
-        return Coin.ofSat(sumIn(inputs) - sumOut(outputs));
+        return Coin.ofSat(sumInputSats(inputs) - sumOutputSats(outputs));
     }
 
     /**
@@ -56,7 +56,7 @@ public interface SigningUtils {
      * @return total value in satoshis
      */
     static Coin sumInputs(Collection<TransactionInputData> inputs) {
-        return Coin.ofSat(sumIn(inputs));
+        return Coin.ofSat(sumInputSats(inputs));
     }
 
     /**
@@ -66,16 +66,16 @@ public interface SigningUtils {
      * @return total value in satoshis
      */
     static Coin sumOutputs(Collection<TransactionOutputData> outputs) {
-        return Coin.ofSat(sumOut(outputs));
+        return Coin.ofSat(sumOutputSats(outputs));
     }
 
-    static /* private */ long sumIn(Collection<TransactionInputData> inputs) {
+    static /* private */ long sumInputSats(Collection<TransactionInputData> inputs) {
         return inputs.stream()
                 .mapToLong(input -> input.amount().toSat())
                 .sum();
     }
 
-    static /* private */ long sumOut(Collection<TransactionOutputData> outputs) {
+    static /* private */ long sumOutputSats(Collection<TransactionOutputData> outputs) {
         return outputs.stream()
                 .mapToLong(output -> output.amount().toSat())
                 .sum();
