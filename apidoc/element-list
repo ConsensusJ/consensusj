@@ -17,8 +17,12 @@ org.consensusj.bitcoin.rx.jsonrpc.service
 org.consensusj.bitcoin.rx.peergroup
 org.consensusj.bitcoin.rx.zeromq
 org.consensusj.bitcoin.services
+org.consensusj.bitcoin.signing
+org.consensusj.bitcoin.signing.internal
 org.consensusj.bitcoin.test
 org.consensusj.bitcoin.util
+org.consensusj.bitcoinj.service
+org.consensusj.bitcoinj.wallet
 org.consensusj.currency
 org.consensusj.daemon.micronaut
 org.consensusj.decentralizedid

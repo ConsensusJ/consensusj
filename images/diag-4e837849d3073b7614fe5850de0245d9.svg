@@ -26,7 +26,7 @@ reverse link org.consensusj.jsonrpc.groovy.DynamicRPCFallback to org.consensusj.
 reverse link org.consensusj.bitcoin.rpc.BitcoinClient to org.consensusj.bitcoin.rpc.BitcoinCLIClient--><path d="M576.95,393.15 C593.62,418.74 616.35,453.62 630.05,474.66 " fill="none" id="org.consensusj.bitcoin.rpc.BitcoinClient&lt;-org.consensusj.bitcoin.rpc.BitcoinCLIClient" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="none" points="570.92,396.72,565.87,376.14,582.65,389.08,570.92,396.72" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[544e0cae854cfd7eb8bf5eab4c1706ac]
 reverse link org.consensusj.bitcoin.rpc.BitcoinClient to org.consensusj.namecoin.jsonrpc.NamecoinClient--><path d="M610.24,383.95 C673.89,410.88 777.63,454.77 832.07,477.8 " fill="none" id="org.consensusj.bitcoin.rpc.BitcoinClient&lt;-org.consensusj.namecoin.jsonrpc.NamecoinClient" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="none" points="607.18,390.25,591.49,376.01,612.63,377.36,607.18,390.25" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[5b3efdebdd005c86a5633caac4120490]
 reverse link org.consensusj.namecoin.jsonrpc.NamecoinClient to org.consensusj.namecoin.jsonrpc.NamecoinScriptingClient--><path d="M876.36,529.88 C879.86,544.5 883.78,560.88 886.69,573 " fill="none" id="org.consensusj.namecoin.jsonrpc.NamecoinClient&lt;-org.consensusj.namecoin.jsonrpc.NamecoinScriptingClient" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="869.55,531.5,871.7,510.42,883.16,528.24,869.55,531.5" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[29e114d6a9d19fa1b726f9f87c18aa5a]
-reverse link org.consensusj.jsonrpc.groovy.DynamicRPCFallback to org.consensusj.namecoin.jsonrpc.NamecoinScriptingClient--><path d="M233.73,282.66 C357.66,292.98 616.11,271.47 717,301 C830.17,334.12 887.34,332.71 946,435 C963.25,465.07 956.48,479.96 946,513 C938.69,536.06 921.83,558.19 908.69,572.95 " fill="none" id="org.consensusj.jsonrpc.groovy.DynamicRPCFallback&lt;-org.consensusj.namecoin.jsonrpc.NamecoinScriptingClient" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="232.79,289.6,213.63,280.53,234.26,275.67,232.79,289.6" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[0487928cfd693f9ce3d461275a201528]
+reverse link org.consensusj.jsonrpc.groovy.DynamicRPCFallback to org.consensusj.namecoin.jsonrpc.NamecoinScriptingClient--><path d="M233.73,282.66 C357.66,292.98 616.11,271.47 717,301 C830.17,334.12 887.34,332.71 946,435 C963.25,465.07 956.48,479.96 946,513 C938.69,536.06 921.83,558.19 908.69,572.95 " fill="none" id="org.consensusj.jsonrpc.groovy.DynamicRPCFallback&lt;-org.consensusj.namecoin.jsonrpc.NamecoinScriptingClient" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="232.79,289.6,213.63,280.53,234.26,275.67,232.79,289.6" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[1c1c2461edc93b5c184d09a5ea906eb8]
 @startuml
 skinparam packageStyle Rect
 skinparam shadowing false
@@ -80,7 +80,7 @@ PlantUML version 1.2019.12(Sun Nov 03 02:24:54 PST 2019)
 (APACHE source distribution)
 Java Runtime: OpenJDK Runtime Environment
 JVM: OpenJDK 64-Bit Server VM
-Java Version: 17.0.1+12
+Java Version: 17.0.2+8
 Operating System: Mac OS X
 Default Encoding: UTF-8
 Language: en
