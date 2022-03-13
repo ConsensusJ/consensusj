@@ -16,6 +16,10 @@ Released: Not yet
 ** `BipStandardDeterministicKeyChain` is an HD keychain that supports BIP 44, BIP 84, etc.
 ** `KeychainRoundTripStepwiseSpec` is a functional test that tests all the above
 
+=== cj-bitcoinj-dsl-groovy
+
+* Add ECKey.fromWIF() as a Groovy extension
+
 === cj-btc-jsonrpc
 
 * Add BitCore/Omni `getAddressUtxos()`/`getaddressutxos` method (requires address indexing)
@@ -23,7 +27,7 @@ Released: Not yet
 === cj-btc-json
 
 * Add BitCore/Omni `AddressUtxoResult` and `AddressUtxoInfo` POJOs
-* AddressDeserializer: Put invalid address in InvalidFormatException message
+* AddressDeserializer: Include the invalid address in InvalidFormatException message
 * RpcClientModule: add constructor with strictAddressParsing boolean
 
 === Dependency Updates
