@@ -8,20 +8,20 @@ import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.core.TransactionOutput;
 import org.bitcoinj.crypto.DeterministicKey;
 import org.bitcoinj.script.ScriptBuilder;
-import org.consensusj.bitcoinj.wallet.BipStandardDeterministicKeyChain;
+import org.bitcoinj.wallet.DeterministicKeyChain;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * A "signing wallet"  that uses a {@link BipStandardDeterministicKeyChain} to
+ * A "signing wallet"  that uses a {@link DeterministicKeyChain} to
  * sign {@link SigningRequest}s.
  */
 public class HDKeychainSigner implements TransactionSigner {
-    private final BipStandardDeterministicKeyChain keyChain;
+    private final DeterministicKeyChain keyChain;
 
-    public HDKeychainSigner(BipStandardDeterministicKeyChain keyChain) {
+    public HDKeychainSigner(DeterministicKeyChain keyChain) {
         this.keyChain = keyChain;
     }
 
