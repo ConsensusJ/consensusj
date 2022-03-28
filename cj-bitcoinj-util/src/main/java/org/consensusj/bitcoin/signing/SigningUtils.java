@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.signing;
 
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
+import org.bitcoinj.core.InsufficientMoneyException;
 import org.bitcoinj.core.Transaction;
 
 import java.util.Collection;
@@ -21,11 +22,11 @@ public interface SigningUtils {
         return Transaction.MIN_NONDUST_OUTPUT.times(3);  // TODO: Fix this
     }
 
-    static SigningRequest addChange(SigningRequest request, Address changeAddress, FeeCalculator calculator) {
+    static SigningRequest addChange(SigningRequest request, Address changeAddress, FeeCalculator calculator) throws InsufficientMoneyException {
         Coin fee = calculator.calculateFee(request.addOutput(changeAddress, Coin.ZERO));
         long change = sumInputSats(request.inputs()) - sumOutputSats(request.outputs()) - fee.value;
         if (change < 0) {
-            throw new RuntimeException("Insufficient funds");
+            throw new InsufficientMoneyException(Coin.ofSat(-change));
         }
         return (change > 0) ? request.addOutput(changeAddress, Coin.ofSat(change)) : request;
     }
