@@ -36,15 +36,15 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
     include 'consensusj-jsonrpc-javanet'        // JSON-RPC client using java.net.http (incubating)
     include 'consensusj-analytics'              // Reactive analytics libraries
     include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
-    include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
     include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
-    include 'cj-btc-daemon'                     // Prototype Micronaut version of Bitcoin daemon
-    include 'cj-btc-services'                   // bitcoinj-based service objects
 
 if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
-    System.err.println "Including JDK 17 module because Java ${JavaVersion.current()} is JDK 17+"
+    System.err.println "Including JDK 17 modules because Java ${JavaVersion.current()} is JDK 17+"
+    include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
+    include 'cj-btc-daemon'                     // Prototype Micronaut version of Bitcoin daemon
+    include 'cj-btc-services'                   // bitcoinj-based service objects
 } else {
-    System.err.println "Skipping 'cj-bitcoinj-dsl-js', requires Java 17+, currently running Java ${JavaVersion.current()}"
+    System.err.println "Skipping JDK 17 modules, currently running Java ${JavaVersion.current()}"
 }
 
