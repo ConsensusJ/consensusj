@@ -1,7 +1,9 @@
 package org.consensusj.jsonrpc.introspection;
 
+import org.consensusj.jsonrpc.AsyncSupport;
 import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcErrorException;
+import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcService;
@@ -70,9 +72,13 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @return An error POJO for insertion in a JsonRpcResponse
      */
     default JsonRpcError exceptionToError(Throwable ex) {
-        return (ex instanceof JsonRpcErrorException) ?
-                ((JsonRpcErrorException) ex).getError() :
-                JsonRpcError.of(SERVER_EXCEPTION);
+        if (ex instanceof JsonRpcErrorException) {
+            return ((JsonRpcErrorException) ex).getError();
+        } else if (ex instanceof JsonRpcException) {
+            return JsonRpcError.of(SERVER_EXCEPTION, ex);
+        } else {
+           return JsonRpcError.of(SERVER_EXCEPTION, ex);
+        }
     }
 
     /**
@@ -82,22 +88,22 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @param params List of JSON-RPC parameters
      * @return A future result POJO
      */
-    default <R> CompletableFuture<R> callMethod(String methodName, List<Object> params) {
+    default <RSLT> CompletableFuture<RSLT> callMethod(String methodName, List<Object> params) {
         log.debug("JsonRpcServiceWrapper.callMethod: {}", methodName);
-        CompletableFuture<R> future = new CompletableFuture<>();
+        CompletableFuture<RSLT> future;
         final Method mh = getMethod(methodName);
         if (mh != null) {
             try {
                 @SuppressWarnings("unchecked")
-                R result = (R) mh.invoke(getServiceObject(), params.toArray());
-                future.complete(result);
+                CompletableFuture<RSLT> liveFuture = (CompletableFuture<RSLT>) mh.invoke(getServiceObject(), params.toArray());
+                future = liveFuture;
             } catch (Throwable throwable) {
                 log.error("Exception in invoked service object: ", throwable);
                 JsonRpcErrorException jsonRpcException = new JsonRpcErrorException(SERVER_EXCEPTION, throwable);
-                future.completeExceptionally(jsonRpcException);
+                future = AsyncSupport.failedFuture(jsonRpcException);
             }
         } else {
-            future.completeExceptionally(JsonRpcErrorException.of(METHOD_NOT_FOUND));
+            future = AsyncSupport.failedFuture(JsonRpcErrorException.of(METHOD_NOT_FOUND));
         }
         return future;
     }

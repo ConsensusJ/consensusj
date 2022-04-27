@@ -42,6 +42,13 @@ public interface AsyncSupport {
         return (Runnable r) -> new Thread(r).start();
     }
 
+    // Useful until we bump our minimum requirement to JDK 9
+    static <T> CompletableFuture<T> failedFuture(Throwable t) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        future.completeExceptionally(t);
+        return future;
+    }
+
     static <T> CompletableFuture<T> supplyCatchingAsync(ThrowingSupplier<T> throwingSupplier, Executor executor) {
         CompletableFuture<T> future = new CompletableFuture<>();
         executor.execute(() -> {

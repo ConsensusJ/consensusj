@@ -22,7 +22,7 @@ class MathServiceTest extends Specification {
         def mathService = new MathService();
 
         when:
-        def sum = mathService.add(2, 1)
+        def sum = mathService.add(2, 1).get()
 
         then:
         sum == 3

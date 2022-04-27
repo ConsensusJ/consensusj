@@ -15,5 +15,5 @@ public interface JsonRpcService {
      * @param req The Request POJO
      * @return the Response POJO
      */
-    <T> CompletableFuture<JsonRpcResponse<T>> call(JsonRpcRequest req);
+    <RSLT> CompletableFuture<JsonRpcResponse<RSLT>> call(JsonRpcRequest req);
 }

@@ -13,6 +13,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -47,13 +48,13 @@ public class MathService extends AbstractJsonRpcService {
         System.out.println("Sum is: " + sum);
     }
 
-    public Integer add(Integer a, Integer b) {
+    public CompletableFuture<Integer> add(Integer a, Integer b) {
         log.info("MathService: add {} + {}",a,b);
-        return a + b;
+        return result(a + b);
     }
 
-    public Integer subtract(Integer a, Integer b) {
+    public CompletableFuture<Integer> subtract(Integer a, Integer b) {
         log.info("MathService: subtract {} - {}",a,b);
-        return a - b;
+        return result(a - b);
     }
 }

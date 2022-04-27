@@ -12,6 +12,8 @@ import org.consensusj.bitcoin.services.WalletAppKitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CompletableFuture;
+
 
 /**
  * Embryonic implementation of Bitcoin Core REST API. Incomplete and incorrect at ths point.
@@ -28,19 +30,19 @@ public class BitcoinRestController {
     }
 
     @Get(uri="/block/{hash}.json", produces = MediaType.APPLICATION_JSON)
-    public BlockInfo block(@PathVariable String hash) {
+    public CompletableFuture<BlockInfo> block(@PathVariable String hash) {
         log.info("chaininfo REST GET call");
         return walletAppKitService.getBlockInfo(Sha256Hash.wrap(hash), BlockInfo.IncludeTxFlag.YES);
     }
 
     @Get(uri="/block/notxdetails/{hash}.json", produces = MediaType.APPLICATION_JSON)
-    public BlockInfo blockNoTxDetails(@PathVariable String hash) {
+    public CompletableFuture<BlockInfo> blockNoTxDetails(@PathVariable String hash) {
         log.info("chaininfo REST GET call");
         return walletAppKitService.getBlockInfo(Sha256Hash.wrap(hash),  BlockInfo.IncludeTxFlag.IDONLY);
     }
 
     @Get("/chaininfo.json")
-    public BlockChainInfo chaininfo() {
+    public CompletableFuture<BlockChainInfo> chaininfo() {
         log.info("chaininfo REST GET call");
         return walletAppKitService.getblockchaininfo();
     }
