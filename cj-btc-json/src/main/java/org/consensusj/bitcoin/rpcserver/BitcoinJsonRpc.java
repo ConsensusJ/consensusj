@@ -8,6 +8,8 @@ import org.bitcoinj.core.Sha256Hash;
  * Standard Bitcoin JSON-RPC service
  */
 public interface BitcoinJsonRpc {
+    String help();
+    String stop();
     Integer getblockcount();
     Sha256Hash getbestblockhash();
     Object getblockheader(String blockHashString, Boolean verbose);

@@ -25,6 +25,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +39,10 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     private static final int version = 1;
     private static final int protocolVersion = 1;
     private static final int walletVersion = 0;
+    private static final String helpString = """
+            (note: help is currently incomplete)
+            help
+            stop""";
 
     protected final NetworkParameters netParams;
     protected final Context context;
@@ -74,6 +79,17 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     public PeerGroup getPeerGroup() {
         kit.awaitRunning();
         return kit.peerGroup();
+    }
+
+    @Override
+    public String help() {
+        return helpString;
+    }
+
+    @Override
+    public String stop() {
+        log.info("stop command received, ignoring...");
+        return "stop command ignored.";
     }
 
     @Override
