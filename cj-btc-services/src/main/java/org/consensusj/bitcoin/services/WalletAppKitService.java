@@ -1,5 +1,7 @@
 package org.consensusj.bitcoin.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
 import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
 import org.consensusj.bitcoin.json.pojo.BlockInfo;
@@ -25,6 +27,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -40,19 +43,22 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     private static final int walletVersion = 0;
     private static final String helpString = """
             getbestblockhash
-            getblock hash verbosity
+            getblock hash verbosity(0,1,2)
             getblockchaininfo
             getblockcount
-            getblockhash
-            getblockheader hash verbose
+            getblockhash height (not implemented)
+            getblockheader hash verbose(boolean)
             getconnectioncount
+            getinfo (deprecated)
             getnetworkinfo
             help
-            stop""";
+            stop
+    """;
 
     protected final NetworkParameters netParams;
     protected final Context context;
     protected final WalletAppKit kit;
+    protected final ObjectMapper mapper;
 
     /* Dummy fields for JSON RPC responses TODO: Implement them */
     private int timeOffset = 0;
@@ -67,6 +73,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         this.netParams = params;
         this.context = context;
         this.kit = kit;
+        this.mapper = new ObjectMapper();
     }
 
     @PostConstruct
@@ -75,7 +82,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         kit.setUserAgent(userAgentName, appVersion);
         kit.setBlockingStartup(false);
         kit.startAsync();
-        //kit.awaitRunning();
+        kit.awaitRunning();
     }
 
     public NetworkParameters getNetworkParameters() {
@@ -88,46 +95,50 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     }
 
     @Override
-    public String help() {
-        return helpString;
+    public CompletableFuture<String> help() {
+        return result(helpString);
     }
 
     @Override
-    public String stop() {
+    public CompletableFuture<String> stop() {
         log.info("stop command received, ignoring...");
-        return "stop command ignored.";
+        return result("stop command ignored.");
     }
 
     @Override
-    public Integer getblockcount() {
+    public CompletableFuture<Integer> getblockcount() {
         log.info("getblockcount");
         if(!kit.isRunning()) {
-            log.warn("kit not running, returning null");
-            return null;
+            String state = kit.state().toString();
+            log.warn("WalletAppKit not running, state: {}", state);
+            return exception(new RuntimeException("WalletAppKit not running, state: " + state));
         }
-        return kit.chain().getChainHead().getHeight();
+        return result(kit.chain().getChainHead().getHeight());
     }
 
     @Override
-    public Sha256Hash getbestblockhash() {
+    public CompletableFuture<Sha256Hash> getbestblockhash() {
         log.info("getbestblockhash");
         if(!kit.isRunning()) {
             log.warn("kit not running, returning null");
             return null;
         }
-        return kit.chain().getChainHead().getHeader().getHash();
+        return result(kit.chain().getChainHead().getHeader().getHash());
     }
 
     @Override
-    public Object getblockheader(String blockHashString, Boolean verbose) {
+    public CompletableFuture<JsonNode> getblockheader(String blockHashString, Boolean verbose) {
         return getblockheader2(Sha256Hash.wrap(blockHashString), verbose);
     }
 
-    public Object getblockheader2(Sha256Hash blockHash, Boolean verbose) {
+    public CompletableFuture<JsonNode> getblockheader2(Sha256Hash blockHash, Boolean verbose) {
         if (verbose == null || verbose) {
-            return getBlockInfo(blockHash, BlockInfo.IncludeTxFlag.NO);
+            return getBlockInfo(blockHash, BlockInfo.IncludeTxFlag.NO)
+                    .thenApply(mapper::valueToTree);
         } else {
-            return getBlock(blockHash);
+            return getBlockBytes(blockHash)
+                    .thenApply(HexUtil::bytesToHexString)
+                    .thenApply(mapper::valueToTree);
         }
     }
 
@@ -135,7 +146,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     /**
      * Partial implementation of `getblock`
      *
-     * In the case where verbosity = 0, a a block is returned without transactions (which is incorrect)
+     * In the case where verbosity = 0, a block is returned without transactions (which is incorrect)
      * For verbosity = 1, we return a BlockInfo, but some fields may be missing or incorrect, including a list of TXIDs
      * For verbosity = 2, we are currently throwing an exception.
      * 
@@ -144,18 +155,18 @@ public class WalletAppKitService implements BitcoinJsonRpc {
      * @return Either a `Block` or `BlockInfo` depending upon verbosity.
      */
     @Override
-    public Object getblock(String blockHashString, Integer verbosity) {
+    public CompletableFuture<JsonNode> getblock(String blockHashString, Integer verbosity) {
         return getblock2(Sha256Hash.wrap(blockHashString), verbosity);
     }
 
-    public Object getblock2(Sha256Hash blockHash, Integer verbosity) {
+    public CompletableFuture<JsonNode> getblock2(Sha256Hash blockHash, Integer verbosity) {
         int verbosityInt = verbosity != null ? verbosity : 1;
-        switch(verbosityInt) {
-            case 0: return getBlock(blockHash);
-            case 1: return getBlockInfo(blockHash, BlockInfo.IncludeTxFlag.IDONLY);
-            case 2: return getBlockInfo(blockHash, BlockInfo.IncludeTxFlag.YES);
-            default: throw new IllegalArgumentException("Unknown verbosity parameter");
-        }
+        return (switch (verbosityInt) {
+            case 0 -> getBlockBytes(blockHash).thenApply(HexUtil::bytesToHexString);
+            case 1 -> getBlockInfo(blockHash, BlockInfo.IncludeTxFlag.IDONLY);
+            case 2 -> getBlockInfo(blockHash, BlockInfo.IncludeTxFlag.YES);
+            default -> exception(new IllegalArgumentException("Unknown verbosity parameter"));
+        }).thenApply(mapper::valueToTree);
     }
 
     /**
@@ -165,39 +176,39 @@ public class WalletAppKitService implements BitcoinJsonRpc {
      * @return The Sha256Hash of the specified block
      */
     @Override
-    public Sha256Hash getblockhash(Integer blockNumber) {
+    public CompletableFuture<Sha256Hash> getblockhash(Integer blockNumber) {
         // TODO: Extend Blockchain/Blockstore so it can do this
-        throw new IllegalArgumentException("Unsupported RPC method");
+        return exception(new IllegalArgumentException("Unsupported RPC method"));
     }
 
     @Override
-    public Integer getconnectioncount() {
+    public CompletableFuture<Integer> getconnectioncount() {
         if(!kit.isRunning()) {
-            return null;
+            return exception(new RuntimeException("Kit not running"));
         }
         try {
-            return kit.peerGroup().numConnectedPeers();
+            return result(kit.peerGroup().numConnectedPeers());
         } catch (IllegalStateException ex) {
-            return null;
+            return exception(ex);
         }
     }
 
     @Deprecated
-    public ServerInfo getinfo() {
+    public CompletableFuture<ServerInfo> getinfo() {
         // Dummy up a response for now.
         // Since ServerInfo is immutable, we have to build it entirely with the constructor.
         Coin balance = Coin.valueOf(0);
         boolean testNet = !netParams.getId().equals(NetworkParameters.ID_MAINNET);
         int keyPoolOldest = 0;
         int keyPoolSize = 0;
-        return new ServerInfo(
+        return result(new ServerInfo(
                 version,
                 protocolVersion,
                 walletVersion,
                 balance,
-                getblockcount(),
+                getblockcount().join(),
                 timeOffset,
-                getconnectioncount(),
+                getconnectioncount().join(),
                 "proxy",
                 difficulty,
                 testNet,
@@ -206,57 +217,66 @@ public class WalletAppKitService implements BitcoinJsonRpc {
                 Transaction.REFERENCE_DEFAULT_MIN_TX_FEE,
                 Transaction.REFERENCE_DEFAULT_MIN_TX_FEE, // relayfee
                 "no errors"                        // errors
-        );
+        ));
     }
 
     @Override
-    public BlockChainInfo getblockchaininfo() {
-        return new BlockChainInfo("main",                     // Chain ID
+    public CompletableFuture<BlockChainInfo> getblockchaininfo() {
+        return result(new BlockChainInfo("main",                     // Chain ID
                 kit.chain().getChainHead().getHeight(),             // Block processed
                 kit.chain().getChainHead().getHeight(),             // Headers validated
                 kit.chain().getChainHead().getHeader().getHash(),   // Best block hash
                 difficulty,
                 verificationProgress,
-                chainWork);
+                chainWork));
     }
 
     @Override
-    public NetworkInfo getnetworkinfo() {
+    public CompletableFuture<NetworkInfo> getnetworkinfo() {
         byte[] localServices = {};
         Object[] network = {};
         Object[] address = {};
-        return new NetworkInfo(version,
+        return result(new NetworkInfo(version,
                 "",
                 protocolVersion,
                 timeOffset,
-                getconnectioncount(),
+                getconnectioncount().join(),
                 "proxy",
                 0,
                 localServices,
                 network,
-                address);
+                address));
     }
 
-    private Object getBlock(Sha256Hash blockHash) {
+    private CompletableFuture<byte[]> getBlockBytes(Sha256Hash blockHash) {
         // TODO: This block should have transactions
         StoredBlock storedBlock;
         try {
             storedBlock = getStoredBlockByHash(kit.chain(), blockHash);
         } catch (BlockStoreException e) {
-            throw new RuntimeException(e);
+            return exception(e);
         }
-        return blockToHex(storedBlock.getHeader());
+        byte[] data = storedBlock.getHeader().bitcoinSerialize();
+        return result(data);
     }
 
-    public BlockInfo getBlockInfo(Sha256Hash blockHash, BlockInfo.IncludeTxFlag includeTx) {
+    public CompletableFuture<BlockInfo> getBlockInfo(Sha256Hash blockHash, BlockInfo.IncludeTxFlag includeTx) {
         BlockInfo blockInfo;
         try {
             blockInfo = getBlockInfoByHash(kit.chain(), blockHash, includeTx);
             log.info("blockinfo: {}, {}", blockInfo.hash, blockInfo.height);
         } catch (BlockStoreException e) {
-            throw new RuntimeException(e);
+            return exception(e);
         }
-        return blockInfo;
+        return result(blockInfo);
+    }
+
+    protected <T> CompletableFuture<T> result(T result) {
+        return CompletableFuture.completedFuture(result);
+    }
+
+    private <T> CompletableFuture<T> exception(Throwable exception) {
+        return CompletableFuture.failedFuture(exception);
     }
 
     private static StoredBlock getStoredBlockByHash(AbstractBlockChain blockChain, Sha256Hash blockHash) throws BlockStoreException {
@@ -307,15 +327,5 @@ public class WalletAppKitService implements BitcoinJsonRpc {
                     .collect(Collectors.toList());
             return new BlockInfo.Sha256HashList(list);
         }
-    }
-
-    /**
-     * Convert a block to a String of hex bytes
-     *
-     * @param block
-     * @return
-     */
-    private static String blockToHex(Block block) {
-        return HexUtil.bytesToHexString(block.bitcoinSerialize());
     }
 }

@@ -1,7 +1,10 @@
 package org.consensusj.jsonrpc.introspection;
 
+import org.consensusj.jsonrpc.AsyncSupport;
+
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Graal-compatible implementation that takes a map of Methods in the constructor
@@ -26,4 +29,11 @@ public abstract class AbstractJsonRpcService implements JsonRpcServiceWrapper {
         return methods.get(methodName);
     }
 
+    protected <T> CompletableFuture<T> result(T result) {
+        return CompletableFuture.completedFuture(result);
+    }
+
+    protected <T> CompletableFuture<T> exception(Throwable exception) {
+        return AsyncSupport.failedFuture(exception);
+    }
 }

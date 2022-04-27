@@ -1,10 +1,12 @@
 package org.consensusj.jsonrpc.introspection;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  *
  */
 public class TrivialJsonRpcService {
-    public Integer getblockcount() {
-        return 99;
+    public CompletableFuture<Integer> getblockcount() {
+        return CompletableFuture.completedFuture(99);
     }
 }

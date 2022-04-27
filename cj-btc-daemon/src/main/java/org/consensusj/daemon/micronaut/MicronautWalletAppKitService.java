@@ -11,6 +11,8 @@ import org.consensusj.bitcoin.services.WalletAppKitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * Subclass of {@link WalletAppKitService} that implements the {@code stop} JSON-RPC method using
  * Micronaut {@link EmbeddedServer#stop()}
@@ -32,9 +34,9 @@ public class MicronautWalletAppKitService extends WalletAppKitService {
     }
 
     @Override
-    public String stop() {
+    public CompletableFuture<String> stop() {
         log.info("stop");
         embeddedServer.stop();
-        return "cj-btc-daemon stopping";
+        return result("cj-btc-daemon stopping");
     }
 }

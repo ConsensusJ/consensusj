@@ -9,6 +9,7 @@ import jakarta.inject.Singleton;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Simple Echo JSON-RPC Service
@@ -22,9 +23,9 @@ public class EchoJsonRpcService extends AbstractJsonRpcService {
         super(methods);
     }
 
-    public String echo(String message) {
+    public CompletableFuture<String> echo(String message) {
         log.debug("EchoJsonRpcService: echo {}", message);
-        return message;
+        return result(message);
     }
 
 }

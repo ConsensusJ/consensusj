@@ -27,7 +27,7 @@ class ApplicationSpec extends Specification {
         given:
         def testString = 'Hello jsonrpc-echod!'
         def endpoint = URI.create(server.URI.toString()+"/")
-        def client = new DynamicRpcClient(JsonRpcMessage.Version.V2, endpoint, "", "")
+        def client = new DynamicRpcClient(endpoint, "", "")
 
         when:
         String result = client.echo(testString)
