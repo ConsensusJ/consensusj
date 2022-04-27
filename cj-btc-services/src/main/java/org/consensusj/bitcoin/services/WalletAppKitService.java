@@ -25,7 +25,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +39,14 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     private static final int protocolVersion = 1;
     private static final int walletVersion = 0;
     private static final String helpString = """
-            (note: help is currently incomplete)
+            getbestblockhash
+            getblock hash verbosity
+            getblockchaininfo
+            getblockcount
+            getblockhash
+            getblockheader hash verbose
+            getconnectioncount
+            getnetworkinfo
             help
             stop""";
 
