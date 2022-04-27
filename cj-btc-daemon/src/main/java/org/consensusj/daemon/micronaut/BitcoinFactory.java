@@ -7,7 +7,6 @@ import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.MainNetParams;
-import org.consensusj.bitcoin.services.WalletAppKitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,14 +40,6 @@ public class BitcoinFactory {
         String filePrefix = "BitcoinJDaemon";
 
         return new WalletAppKit(params, directory, filePrefix);
-    }
-
-    @Singleton
-    public WalletAppKitService walletAppKitService(NetworkParameters params, Context context, WalletAppKit kit) {
-        log.info("Returning WalletAppKitService bean");
-        WalletAppKitService service = new WalletAppKitService(params, context, kit);
-        service.start();
-        return service;
     }
 
     @Singleton
