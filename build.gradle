@@ -21,6 +21,7 @@ buildScan {
 allprojects {
     apply plugin: 'java'
     apply plugin: 'groovy'
+    apply plugin: 'test-report-aggregation'
     //apply plugin: 'findbugs'
 
     version = consensusjVersion     // set in gradle.properties
@@ -95,12 +96,22 @@ apply from: 'gradle/asciidoctor.gradle'
 apply from: 'gradle/github-pages.gradle'
 apply from: 'gradle/maven-publish.gradle'
 
-task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/allTests")
-    // Include the results from the `test` task in all subprojects
-    reportOn subprojects*.test
+dependencies {
+    testReportAggregation project(':').subprojects
+}
+
+reporting {
+    reports {
+        testAggregateTestReport(AggregateTestReport) {
+            testType = TestSuiteType.UNIT_TEST
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('testAggregateTestReport', TestReport)
 }
 
 build.dependsOn subprojects.build
 
-task buildCI(dependsOn: [build, testReport, javadocAll, asciidoctor])
+task buildCI(dependsOn: [build, javadocAll, asciidoctor])
