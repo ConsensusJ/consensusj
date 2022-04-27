@@ -1,6 +1,5 @@
 plugins {
     id("groovy")
-    id("com.github.johnrengelman.shadow") version "${micronautShadowVersion}"
     id("io.micronaut.application") version "${micronautAppGradlePluginVersion}"
 }
 
