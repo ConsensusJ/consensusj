@@ -20,35 +20,53 @@ import static org.consensusj.jsonrpc.JsonRpcError.Error.METHOD_NOT_FOUND;
 import static org.consensusj.jsonrpc.JsonRpcError.Error.SERVER_EXCEPTION;
 
 /**
- * Interface to wrap a Java class with JsonRpc support.
+ * Interface and default methods for wrapping a Java class with JSON-RPC support. The wrapper is responsible for
+ * extracting the JSON-RPC {@code method} name and {@code params}from the request, calling the appropriate method
+ * in the wrapped object and wrapping the {@code result} in a {@link JsonRpcResponse}.
+ * <p>
+ * The wrapped class must contain one or more asynchronous methods that return {@link CompletableFuture}s for objects that represent
+ * JSON-RPC {@code result} values. They are mapped to JSON objects when serialized (via <b>Jackson</b> in the current implementation.)
+ * <p>
+ * This interface contains a {@code default} implementation of {@link JsonRpcService#call(JsonRpcRequest)} that
+ * uses {@link JsonRpcServiceWrapper#callMethod(String, List)} to call the wrapped service object.
+ * <p>
+ * Implementations must implement:
+ * <ul>
+ *     <li>{@link #getServiceObject()} to return the wrapped object (singleton)</li>
+ *     <li>{@link #getMethod(String)} to return a {@link Method} object for the named JSON-RPC {@code method}.</li>
+ * </ul>
+ * <p>
+ * The trick to <b>GraalVM</b>-compatibility is to use the {@code static} {@link JsonRpcServiceWrapper#reflect(Class)} method in your
+ * implementation at (static) initialization time so the reflection is done at GraalVM compile-time.
  */
 public interface JsonRpcServiceWrapper extends JsonRpcService {
-    static final Logger log = LoggerFactory.getLogger(JsonRpcServiceWrapper.class);
+    Logger log = LoggerFactory.getLogger(JsonRpcServiceWrapper.class);
 
     /**
-     * Get the service object
+     * Get the service object.
+     * <p>Implementations will return their configured service object here.
      *
      * @return the service object
      */
     Object getServiceObject();
 
     /**
-     * Get a Method object for a named method
+     * Get a {@link Method} object for a named JSON-RPC method
      * @param methodName the name of the method to call
      * @return method handle
      */
     Method getMethod(String methodName);
 
     /**
-     * Handle a request by calling method, getting a result, and embedding it in response.
+     * Handle a request by calling method, getting a result, and embedding it in a response.
      * 
      * @param req The Request POJO
      * @return A future JSON RPC Response
      */
-    default <R> CompletableFuture<JsonRpcResponse<R>> call(final JsonRpcRequest req) {
+    default <RSLT> CompletableFuture<JsonRpcResponse<RSLT>> call(final JsonRpcRequest req) {
         log.debug("JsonRpcServiceWrapper.call: {}", req.getMethod());
-        CompletableFuture<R> result = callMethod(req.getMethod(), req.getParams());
-        return result.handle((R r, Throwable ex) -> resultCompletionHandler(req, r, ex));
+        CompletableFuture<RSLT> futureResult = callMethod(req.getMethod(), req.getParams());
+        return futureResult.handle((RSLT r, Throwable ex) -> resultCompletionHandler(req, r, ex));
     }
     
     /**
@@ -57,9 +75,10 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @param req The request being services
      * @param result A result object or null
      * @param ex exception or null
+     * @param <RSLT> type of result
      * @return A success or error response as appropriate
      */
-    default <T> JsonRpcResponse<T> resultCompletionHandler(JsonRpcRequest req, T result, Throwable ex) {
+    default <RSLT> JsonRpcResponse<RSLT> resultCompletionHandler(JsonRpcRequest req, RSLT result, Throwable ex) {
         return (result != null) ?
                 wrapResult(req, result) :
                 wrapError(req, exceptionToError(ex));
@@ -110,7 +129,8 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
     
     /**
      * Use reflection/introspection to generate a map of methods.
-     * Generally this is called from the constructor of implementing classes.
+     * Generally this is called to initialize a {@link Map} stored in a static field, so the reflection can be done
+     * during GraalVM compile-time..
      * @param apiClass The service class to reflect/introspect
      * @return a map of method names to method objects
      */
@@ -130,11 +150,11 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @param result the result to wrap
      * @return A valid JsonRpcResponse
      */
-    static <T> JsonRpcResponse<T> wrapResult(JsonRpcRequest req, T result) {
+    static <RSLT> JsonRpcResponse<RSLT> wrapResult(JsonRpcRequest req, RSLT result) {
         return new JsonRpcResponse<>(req, result);
     }
 
-    static <T> JsonRpcResponse<T> wrapError(JsonRpcRequest req, JsonRpcError error) {
+    static <RSLT> JsonRpcResponse<RSLT> wrapError(JsonRpcRequest req, JsonRpcError error) {
         return new JsonRpcResponse<>(req, error);
     }
 }

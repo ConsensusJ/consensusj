@@ -11,20 +11,20 @@ import org.slf4j.LoggerFactory;
 /**
  * JSON-RPC Response POJO
  *
- * Note that `result` is a parameterized type and can be used to directly map JSON-RPC results
+ * Note that {@code result} is a parameterized type and can be used to directly map JSON-RPC results
  * to the correct type for each method.
  */
-public class JsonRpcResponse<R> {
+public class JsonRpcResponse<RSLT> {
     private static final Logger log = LoggerFactory.getLogger(JsonRpcResponse.class);
     private final String          jsonrpc;   // version
     private final String          id;
-    private final R               result;
+    private final RSLT               result;
     private final JsonRpcError    error;
 
     @JsonCreator
     public JsonRpcResponse(@JsonProperty("jsonrpc")  String jsonrpc,
                             @JsonProperty("id")      String id,
-                            @JsonProperty("result")  R result,
+                            @JsonProperty("result")  RSLT result,
                             @JsonProperty("error")   JsonRpcError error) {
         if ((result == null && error == null) || (result != null && error != null)) {
             log.warn("non-compliant response: (error, result) both null or both set.");
@@ -36,7 +36,7 @@ public class JsonRpcResponse<R> {
     }
 
     public JsonRpcResponse(JsonRpcRequest request,
-                           R result) {
+                           RSLT result) {
         this.jsonrpc = request.getJsonrpc();
         this.id = request.getId();
         this.result = result;
@@ -57,7 +57,7 @@ public class JsonRpcResponse<R> {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public R getResult() {
+    public RSLT getResult() {
         return result;
     }
 

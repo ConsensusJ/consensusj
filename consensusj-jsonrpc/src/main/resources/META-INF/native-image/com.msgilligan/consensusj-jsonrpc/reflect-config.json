@@ -23,5 +23,10 @@
     "name" : "org.consensusj.jsonrpc.internal.NumberStringSerializer",
     "allPublicMethods" : true,
     "allPublicConstructors" : true
+  },
+  {
+    "name" : "org.consensusj.jsonrpc.introspection.sample.MathService",
+    "allPublicMethods" : true,
+    "allPublicConstructors" : true
   }
 ]
