@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Graal-compatible implementation that takes a map of Methods in the constructor
- * so that introspection can be done at static initialization time. Assumes
- * implementation is in a subclass.
- * (which means during native image generation)
+ * GraalVM-compatible implementation of {@link JsonRpcServiceWrapper} that takes a map of {@link Method}s in the constructor
+ * so that introspection can be done at static initialization time (which means during native image generation).
+ * Since {@link #getServiceObject()} returns {@code this} you typically directly subclass {@code AbstractJsonRpcService}.
+ * For example see {@link org.consensusj.jsonrpc.introspection.sample.MathService}.
  */
 public abstract class AbstractJsonRpcService implements JsonRpcServiceWrapper {
-    protected Map<String, Method> methods;
+    protected final Map<String, Method> methods;
 
     public AbstractJsonRpcService(Map<String, Method> methods) {
         this.methods = methods;
@@ -29,11 +29,11 @@ public abstract class AbstractJsonRpcService implements JsonRpcServiceWrapper {
         return methods.get(methodName);
     }
 
-    protected <T> CompletableFuture<T> result(T result) {
+    protected <RSLT> CompletableFuture<RSLT> result(RSLT result) {
         return CompletableFuture.completedFuture(result);
     }
 
-    protected <T> CompletableFuture<T> exception(Throwable exception) {
+    protected <RSLT> CompletableFuture<RSLT> exception(Throwable exception) {
         return AsyncSupport.failedFuture(exception);
     }
 }

@@ -36,7 +36,7 @@ import java.util.concurrent.CompletableFuture;
 )
 @Controller("/")
 public class JsonRpcController {
-    private static Logger log = LoggerFactory.getLogger(JsonRpcController.class);
+    private static final Logger log = LoggerFactory.getLogger(JsonRpcController.class);
     private final JsonRpcService jsonRpcService;
 
     public JsonRpcController(JsonRpcService jsonRpcService) {

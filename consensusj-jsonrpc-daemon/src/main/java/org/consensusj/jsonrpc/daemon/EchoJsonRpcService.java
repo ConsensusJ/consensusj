@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @Singleton
 public class EchoJsonRpcService extends AbstractJsonRpcService {
-    private static Logger log = LoggerFactory.getLogger(EchoJsonRpcService.class);
+    private static final Logger log = LoggerFactory.getLogger(EchoJsonRpcService.class);
     private static final Map<String, Method> methods = JsonRpcServiceWrapper.reflect(MethodHandles.lookup().lookupClass());
 
     public EchoJsonRpcService() {

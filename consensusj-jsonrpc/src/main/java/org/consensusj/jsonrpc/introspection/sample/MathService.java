@@ -22,9 +22,13 @@ import java.util.concurrent.ExecutionException;
  * (including compiling with Graal `native-image` and running as a native tool with SubstrateVM)
  */
 public class MathService extends AbstractJsonRpcService {
-    private static Logger log = LoggerFactory.getLogger(MathService.class);
+    private static final Logger log = LoggerFactory.getLogger(MathService.class);
     private static final Map<String, Method> methods = JsonRpcServiceWrapper.reflect(MethodHandles.lookup().lookupClass());
 
+    /**
+     * Constructor that calls {@link AbstractJsonRpcService#AbstractJsonRpcService(Map)} with a private, statically-initialized
+     * {@link Map} of methods generated with {@link JsonRpcServiceWrapper#reflect(Class)}  }.
+     */
     public MathService() {
         super(methods);
     }
