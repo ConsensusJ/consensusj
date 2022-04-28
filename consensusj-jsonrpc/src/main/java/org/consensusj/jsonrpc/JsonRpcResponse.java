@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.consensusj.jsonrpc.internal.NumberStringSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JSON-RPC Response POJO
@@ -13,6 +15,7 @@ import org.consensusj.jsonrpc.internal.NumberStringSerializer;
  * to the correct type for each method.
  */
 public class JsonRpcResponse<R> {
+    private static final Logger log = LoggerFactory.getLogger(JsonRpcResponse.class);
     private final String          jsonrpc;   // version
     private final String          id;
     private final R               result;
@@ -23,21 +26,13 @@ public class JsonRpcResponse<R> {
                             @JsonProperty("id")      String id,
                             @JsonProperty("result")  R result,
                             @JsonProperty("error")   JsonRpcError error) {
+        if ((result == null && error == null) || (result != null && error != null)) {
+            log.warn("non-compliant response: (error, result) both null or both set.");
+        }
         this.jsonrpc = jsonrpc;
         this.id = id;
         this.result = result;
         this.error = error;
-    }
-
-    @Deprecated
-    public JsonRpcResponse(R result,
-                           JsonRpcError error,
-                           String jsonrpc,
-                           String id) {
-        this.jsonrpc = jsonrpc;
-        this.result = result;
-        this.error = error;
-        this.id = id;
     }
 
     public JsonRpcResponse(JsonRpcRequest request,
