@@ -3,21 +3,19 @@ package org.consensusj.bitcoinj.wallet;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.HDPath;
 import org.bitcoinj.crypto.ChildNumber;
-import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.script.Script;
-import org.bitcoinj.wallet.KeyChainGroupStructure;
 
 /**
- * KeyChainGroupStructure that supports BIP44, BIP84, etc. This should be part of bitcoinj.
+ * Path builder that supports BIP44, BIP84, etc. This functionality will be in the next release of bitcoinj.
+ * This interface will be deprecated after the next release of bitcoinj.
  */
-public interface BipStandardKeyChainGroupStructure extends KeyChainGroupStructure {
+public interface BipStandardKeyChainGroupStructure {
     ChildNumber PURPOSE_BIP44 = new ChildNumber(44, true);  // P2PKH
     ChildNumber PURPOSE_BIP49 = new ChildNumber(49, true);  // P2WPKH-nested-in-P2SH
     ChildNumber PURPOSE_BIP84 = new ChildNumber(84, true);  // P2WPKH
 
     ChildNumber COINTYPE_BTC = new ChildNumber(0, true);
     ChildNumber COINTYPE_TBTC = new ChildNumber(1, true);
-    ChildNumber COINTYPE_LTC = new ChildNumber(2, true);
 
     ChildNumber CHANGE_RECEIVING = new ChildNumber(0, false);
     ChildNumber CHANGE_CHANGE = new ChildNumber(1, false);
@@ -25,33 +23,26 @@ public interface BipStandardKeyChainGroupStructure extends KeyChainGroupStructur
     HDPath BIP44_PARENT = HDPath.m(PURPOSE_BIP44);
     HDPath BIP84_PARENT = HDPath.m(PURPOSE_BIP84);
 
-    /** Map desired output script type to an account path */
-    @Override
-    default HDPath accountPathFor(Script.ScriptType outputScriptType) {
-        return pathFor(outputScriptType, MainNetParams.get(), 0);
-    }
 
     /**
      * Map desired output script type and account index to an account path
      * @param outputScriptType output script type (purpose)
      * @param netId network/coin type
-     * @param accountIndex account index
      * @return The HD Path: purpose / coinType / accountIndex
      */
-    default HDPath pathFor(Script.ScriptType outputScriptType, String netId, int accountIndex) {
+    static HDPath pathFor(Script.ScriptType outputScriptType, String netId) {
         return purpose(outputScriptType)
-                .extend(coinType(netId), account(accountIndex));
+                .extend(coinType(netId), account(0));
     }
 
     /**
      * Map desired output script type and account index to an account path
      * @param outputScriptType output script type (purpose)
      * @param networkParameters network/coin type
-     * @param accountIndex account index
      * @return The HD Path: purpose / coinType / accountIndex
      */
-    default HDPath pathFor(Script.ScriptType outputScriptType, NetworkParameters networkParameters, int accountIndex) {
-        return pathFor(outputScriptType, networkParameters.getId(), accountIndex);
+    static HDPath pathFor(Script.ScriptType outputScriptType, NetworkParameters networkParameters) {
+        return pathFor(outputScriptType, networkParameters.getId());
     }
 
     /**

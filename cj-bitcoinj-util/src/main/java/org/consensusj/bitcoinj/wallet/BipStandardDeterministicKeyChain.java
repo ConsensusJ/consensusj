@@ -10,6 +10,8 @@ import org.bitcoinj.script.Script;
 import org.bitcoinj.wallet.DeterministicKeyChain;
 import org.bitcoinj.wallet.DeterministicSeed;
 
+import java.util.Objects;
+
 /**
  * Deterministic Keychain for BIP44 and related BIPs
  * <p>
@@ -20,8 +22,6 @@ import org.bitcoinj.wallet.DeterministicSeed;
  * </ol>
  */
 public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
-    private static final BipStandardKeyChainGroupStructure pathStructure = new BipStandardKeyChainGroupStructure(){};
-
     private final Script.ScriptType outputScriptType;
     private final NetworkParameters netParams;
     private final HDPath pathReceiving;
@@ -32,11 +32,26 @@ public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
      * @param seed Seed to use
      * @param netParams used to set coinType, etc
      * @param outputScriptType script type for determining the purpose child
-     * @param accountIndex account index to use for the account child
      */
-    public BipStandardDeterministicKeyChain(DeterministicSeed seed, Script.ScriptType outputScriptType, NetworkParameters netParams, int accountIndex) {
-        super(seed, null, outputScriptType, pathStructure.pathFor(outputScriptType, netParams, accountIndex));
+    public BipStandardDeterministicKeyChain(DeterministicSeed seed, Script.ScriptType outputScriptType, NetworkParameters netParams) {
+        super(seed, null, outputScriptType, BipStandardKeyChainGroupStructure.pathFor(outputScriptType, netParams));
         this.outputScriptType = outputScriptType;
+        this.netParams = netParams;
+        pathReceiving = super.getAccountPath().extend(BipStandardKeyChainGroupStructure.CHANGE_RECEIVING);
+        pathChange = super.getAccountPath().extend(BipStandardKeyChainGroupStructure.CHANGE_CHANGE);
+    }
+
+    /**
+     * Construct a BipStandardDeterministicKeyChain from a DeterministicKeyChain
+     * @param hdChain existing DeterministicKeyChain
+     * @param netParams network (used for constructing addresses)
+     */
+    public BipStandardDeterministicKeyChain(DeterministicKeyChain hdChain, NetworkParameters netParams) {
+        super(Objects.requireNonNull(hdChain.getSeed()),
+                null,
+                hdChain.getOutputScriptType(),
+                hdChain.getAccountPath());
+        this.outputScriptType = hdChain.getOutputScriptType();
         this.netParams = netParams;
         pathReceiving = super.getAccountPath().extend(BipStandardKeyChainGroupStructure.CHANGE_RECEIVING);
         pathChange = super.getAccountPath().extend(BipStandardKeyChainGroupStructure.CHANGE_CHANGE);
@@ -56,9 +71,9 @@ public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
         return address(indexPath);
     }
 
-    public Address address(HDPath indexPath) {
-        DeterministicKey key = key(indexPath);
-        return Address.fromKey(netParams, key, outputScriptType);
+    public Address address(HDPath path) {
+        DeterministicKey key = key(path);
+        return addressFromKey(key);
     }
 
     public DeterministicKey receivingKey(int index) {
@@ -69,7 +84,7 @@ public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
         return key(pathChange.extend(new ChildNumber(index)));
     }
 
-    public DeterministicKey key(HDPath indexPath) {
-        return getKeyByPath(indexPath,true);
+    public DeterministicKey key(HDPath path) {
+        return getKeyByPath(path,true);
     }
 }

@@ -53,12 +53,11 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
      */
     def setupSpec() {
         netParams = TestNet3Params.get()
-        int signingAccountIndex = 0
         Script.ScriptType outputScriptType = Script.ScriptType.P2PKH;
 //        Script.ScriptType outputScriptType = Script.ScriptType.P2WPKH;
         DeterministicSeed seed = setupTestSeed()
 
-        signingKeychain = new BipStandardDeterministicKeyChain(seed, outputScriptType, netParams, signingAccountIndex);
+        signingKeychain = new BipStandardDeterministicKeyChain(seed, outputScriptType, netParams);
         // We need to create some leaf keys in the HD keychain so that they can be found for verifying transactions
         signingKeychain.getKeys(KeyChain.KeyPurpose.RECEIVE_FUNDS, 2)  // Generate first 2 receiving address
         signingKeychain.getKeys(KeyChain.KeyPurpose.CHANGE, 2)         // Generate first 2 change address
