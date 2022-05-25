@@ -9,10 +9,14 @@ Released: under development
 
 === Dependency Updates
 
+* Jackson 2.13.3
+* RxJava 3.1.4
+* Micronaut 3.4.4
 * Groovy 4.0.1
 
 === Build/Test Updates
 
+* Gradle 7.4.2
 * Spock 2.2-M1-groovy-4.0
 
 == v0.5.14
