@@ -8,6 +8,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.consensusj.jsonrpc.AbstractRpcClient;
 import org.consensusj.jsonrpc.CompositeTrustManager;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcMessage;
@@ -108,7 +109,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                 // Otherwise, use the default SSLSocketFactory
                 sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
         }
-        JsonRpcClientHttpUrlConnection client = call.rpcClient(sslSocketFactory);
+        AbstractRpcClient client = call.rpcClient(sslSocketFactory);
         String method = args.get(0);
         args.remove(0); // remove method from list
         List<Object> typedArgs = convertParameters(method, args);
@@ -266,7 +267,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         }
 
         @Override
-        public JsonRpcClientHttpUrlConnection rpcClient(SSLSocketFactory sslSocketFactory) {
+        public AbstractRpcClient rpcClient(SSLSocketFactory sslSocketFactory) {
             if (client == null) {
                 URI uri;
                 String urlString;
@@ -293,7 +294,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         }
 
         @Override
-        public JsonRpcClientHttpUrlConnection rpcClient() {
+        public AbstractRpcClient rpcClient() {
             return rpcClient((SSLSocketFactory) SSLSocketFactory.getDefault());
         }
     }
