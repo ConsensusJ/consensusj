@@ -16,14 +16,7 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
         'cj-bitcoinj-util',                     // BlockUtil (and future stuff depending on only bitcoinj)
         'cj-bitcoinj-dsl-gvy',                  // Groovy DSL for bitcoinj
         'cj-bitcoinj-spock',                    // Spock tests/demos of basic bitcoinj capabilities
-        'cj-btc-json',                          // JSON <-> Java Object mapping
-        'cj-btc-jsonrpc',                       // Bitcoin JSON-RPC client using bitcoinj-based types
-        'cj-btc-jsonrpc-gvy',                   // Bitcoin JSON-RPC client with Groovy dynamic method support
-        'cj-btc-jsonrpc-integ-test',            // RPC-based integration tests of bitcoind
-        'cj-eth-jsonrpc',                       // Ethereum JSON-RPC client (experimental)
-        'cj-eth-jsonrpc-gvy',                   // Ethereum JSON-RPC client w/Groovy extensions (experimental)
-        'cj-nmc-jsonrpc',                       // Namecoin JSON-RPC client (experimental)
-        'cj-nmc-jsonrpc-gvy'                    // Namecoin JSON-RPC client w/Groovy extensions (experimental)
+        'cj-btc-json'                           // JSON <-> Java Object mapping
 
 // JDK 9+
     include 'consensusj-rx-jsonrpc'             // RxJava 3 adapter for JSON-RPC
@@ -31,12 +24,17 @@ include 'consensusj-currency',                  // JavaMoney Currency Provider(s
     include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
     include 'cj-btc-rx-peergroup'               // bitcoinj-based RxJava (Transaction) implementation
     include 'cj-btc-rx-jsonrpc'                 // RxJava 3 reactive Bitcoin JSON-RPC bitcoind client (uses ZeroMQ)
+    include 'cj-btc-jsonrpc'                       // Bitcoin JSON-RPC client using bitcoinj-based types
+    include 'cj-btc-jsonrpc-gvy'                   // Bitcoin JSON-RPC client with Groovy dynamic method support
+    include 'cj-btc-jsonrpc-integ-test'            // RPC-based integration tests of bitcoind
+    include 'cj-eth-jsonrpc'                       // Ethereum JSON-RPC client (experimental)
+    include 'cj-eth-jsonrpc-gvy'                   // Ethereum JSON-RPC client w/Groovy extensions (experimental)
+    include 'cj-nmc-jsonrpc'                       // Namecoin JSON-RPC client (experimental)
+    include 'cj-nmc-jsonrpc-gvy'                    // Namecoin JSON-RPC client w/Groovy extensions (experimental)
 
 // JDK 11+
     include 'consensusj-jsonrpc-javanet'        // JSON-RPC client using java.net.http (incubating)
     include 'consensusj-analytics'              // Reactive analytics libraries
-    include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
-    include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
 
 if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
     System.err.println "Including JDK 17 modules because Java ${JavaVersion.current()} is JDK 17+"
@@ -44,6 +42,8 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
     include 'cj-btc-daemon'                     // Prototype Micronaut version of Bitcoin daemon
     include 'cj-btc-services'                   // bitcoinj-based service objects
+    include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
+    include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
 } else {
     System.err.println "Skipping JDK 17 modules, currently running Java ${JavaVersion.current()}"
 }
