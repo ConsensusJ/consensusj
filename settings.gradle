@@ -8,33 +8,34 @@ if (!JavaVersion.current().isJava11Compatible()) {
     throw new RuntimeException("JDK 11 Required to compile ConsensusJ")
 }
 
-include 'consensusj-currency',                  // JavaMoney Currency Provider(s)
-        'consensusj-decentralized-id',          // W3C Decentralized ID library (in-process)
-        'consensusj-exchange',                  // JavaMoney Exchange Providers
-        'consensusj-jsonrpc',                   // JSON-RPC Java client
-        'consensusj-jsonrpc-gvy',               // JSON-RPC Groovy client
-        'cj-bitcoinj-util',                     // BlockUtil (and future stuff depending on only bitcoinj)
-        'cj-bitcoinj-dsl-gvy',                  // Groovy DSL for bitcoinj
-        'cj-bitcoinj-spock',                    // Spock tests/demos of basic bitcoinj capabilities
-        'cj-btc-json'                           // JSON <-> Java Object mapping
+// JDK 8
+    include 'consensusj-analytics'             // Reactive analytics libraries
+    include 'consensusj-currency'              // JavaMoney Currency Provider(s)
+    include 'consensusj-decentralized-id'      // W3C Decentralized ID library (in-process)
+    include 'consensusj-exchange'              // JavaMoney Exchange Providers
+    include 'cj-bitcoinj-util'                 // BlockUtil (and future stuff depending on only bitcoinj)
+    include 'cj-bitcoinj-dsl-gvy'              // Groovy DSL for bitcoinj
+    include 'cj-bitcoinj-spock'                // Spock tests/demos of basic bitcoinj capabilities
+    include 'cj-btc-json'                      // JSON <-> Java Object mapping
 
-// JDK 9+
+// JDK 9
+    include 'consensusj-jsonrpc'                // JSON-RPC Java client
+    include 'consensusj-jsonrpc-gvy'            // JSON-RPC Groovy client
     include 'consensusj-rx-jsonrpc'             // RxJava 3 adapter for JSON-RPC
     include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
     include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
     include 'cj-btc-rx-peergroup'               // bitcoinj-based RxJava (Transaction) implementation
     include 'cj-btc-rx-jsonrpc'                 // RxJava 3 reactive Bitcoin JSON-RPC bitcoind client (uses ZeroMQ)
-    include 'cj-btc-jsonrpc'                       // Bitcoin JSON-RPC client using bitcoinj-based types
-    include 'cj-btc-jsonrpc-gvy'                   // Bitcoin JSON-RPC client with Groovy dynamic method support
-    include 'cj-btc-jsonrpc-integ-test'            // RPC-based integration tests of bitcoind
-    include 'cj-eth-jsonrpc'                       // Ethereum JSON-RPC client (experimental)
-    include 'cj-eth-jsonrpc-gvy'                   // Ethereum JSON-RPC client w/Groovy extensions (experimental)
-    include 'cj-nmc-jsonrpc'                       // Namecoin JSON-RPC client (experimental)
-    include 'cj-nmc-jsonrpc-gvy'                    // Namecoin JSON-RPC client w/Groovy extensions (experimental)
+    include 'cj-btc-jsonrpc'                    // Bitcoin JSON-RPC client using bitcoinj-based types
+    include 'cj-btc-jsonrpc-gvy'                // Bitcoin JSON-RPC client with Groovy dynamic method support
+    include 'cj-btc-jsonrpc-integ-test'         // RPC-based integration tests of bitcoind
+    include 'cj-eth-jsonrpc'                    // Ethereum JSON-RPC client (experimental)
+    include 'cj-eth-jsonrpc-gvy'                // Ethereum JSON-RPC client w/Groovy extensions (experimental)
+    include 'cj-nmc-jsonrpc'                    // Namecoin JSON-RPC client (experimental)
+    include 'cj-nmc-jsonrpc-gvy'                // Namecoin JSON-RPC client w/Groovy extensions (experimental)
 
-// JDK 11+
+// JDK 11
     include 'consensusj-jsonrpc-javanet'        // JSON-RPC client using java.net.http (incubating)
-    include 'consensusj-analytics'              // Reactive analytics libraries
 
 if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
     System.err.println "Including JDK 17 modules because Java ${JavaVersion.current()} is JDK 17+"
