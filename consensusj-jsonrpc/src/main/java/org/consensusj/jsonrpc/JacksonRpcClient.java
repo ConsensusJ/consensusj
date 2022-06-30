@@ -1,6 +1,7 @@
 package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -25,19 +26,35 @@ public interface JacksonRpcClient extends JsonRpcClient {
                 constructParametricType(JsonRpcResponse.class, resultType);
     }
 
+    default JavaType typeForClass(Class<?> clazz) {
+        return getMapper().constructType(clazz);
+    }
+
     /**
-     * Subclasses must implement this method to actually send the request
+     * Send a {@link JsonRpcRequest} for a {@link JsonRpcResponse}
+     * <p>Subclasses must implement this method to actually send the request
      * @param <R> Type of result object
      * @param request The request to send
-     * @param responseType The response to expected (used by Jackson for conversion)
+     * @param responseType The response type expected (used by Jackson for conversion)
      * @return A JSON RPC Response with `result` of type `R`
      * @throws IOException network error
      * @throws JsonRpcStatusException JSON RPC status error
      */
     <R> JsonRpcResponse<R> sendRequestForResponse(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException;
 
-    default <R> R sendRequestForResult(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException {
-        JsonRpcResponse<R> response = sendRequestForResponse(request, responseType);
+    /**
+     * Convenience method for requesting a response with a {@link JsonNode} for the result.
+     * @param request The request to send
+     * @return A JSON RPC Response with `result` of type {@code JsonNode}
+     * @throws IOException network error
+     * @throws JsonRpcStatusException JSON RPC status error
+     */
+    default JsonRpcResponse<JsonNode> sendRequestForResponse(JsonRpcRequest request) throws IOException, JsonRpcStatusException {
+        return sendRequestForResponse(request, responseTypeFor(JsonNode.class));
+    }
+
+    private <R> R sendRequestForResult(JsonRpcRequest request, JavaType resultType) throws IOException, JsonRpcStatusException {
+        JsonRpcResponse<R> response = sendRequestForResponse(request, responseTypeFor(resultType));
 
 //        assert response != null;
 //        assert response.getJsonrpc() != null;
@@ -56,7 +73,7 @@ public interface JacksonRpcClient extends JsonRpcClient {
         }
         return response.getResult();
     }
-
+    
     /**
      * JSON-RPC remote method call that returns 'response.result`
      *
@@ -72,7 +89,7 @@ public interface JacksonRpcClient extends JsonRpcClient {
         // (We can't use R because of type erasure)
 //        JavaType responseType = mapper.getTypeFactory().
 //                constructParametricType(JsonRpcResponse.class, resultType);
-        return sendRequestForResult(buildJsonRequest(method, params), responseTypeFor(resultType));
+        return sendRequestForResult(buildJsonRequest(method, params), typeForClass(resultType));
     }
 
     /**
@@ -89,14 +106,14 @@ public interface JacksonRpcClient extends JsonRpcClient {
         // (We can't use R because of type erasure)
         //JavaType responseType = mapper.getTypeFactory().
         //        constructParametricType(JsonRpcResponse.class, resultType);
-        return sendRequestForResult(buildJsonRequest(method, params), responseTypeFor(resultType));
+        return sendRequestForResult(buildJsonRequest(method, params), resultType);
     }
 
     /**
      * Varargs version
      */
     default <R> R send(String method, JavaType resultType, Object... params) throws IOException, JsonRpcStatusException {
-        return sendRequestForResult(buildJsonRequest(method, params), responseTypeFor(resultType));
+        return sendRequestForResult(buildJsonRequest(method, params), resultType);
     }
 
     /**

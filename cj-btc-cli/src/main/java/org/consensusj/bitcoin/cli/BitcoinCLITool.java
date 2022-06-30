@@ -15,14 +15,12 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import static org.consensusj.bitcoin.rpc.RpcURI.RPCPORT_REGTEST;
 import static org.consensusj.bitcoin.rpc.RpcURI.RPCPORT_TESTNET;
 
 /**
  * An attempt at cloning the bitcoin-cli tool, but using Java and bitcoinj
- *
  */
 public class BitcoinCLITool extends BaseJsonRpcTool {
     public final static String commandName = "cj-bitcoin-cli";
@@ -60,20 +58,6 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
     @Override
     public BitcoinCLICall createCall(PrintWriter out, PrintWriter err, String... args) {
         return new BitcoinCLICall(this, out, err, args);
-    }
-
-    /**
-     * Convert params from strings to Java types that will map to correct JSON types
-     *
-     * TODO: Make this better and complete
-     *
-     * @param method the JSON-RPC method
-     * @param params Params with String type
-     * @return Params with correct Java types for JSON
-     */
-    @Override
-    protected List<Object> convertParameters(String method, List<String> params) {
-        return super.convertParameters(method, params);
     }
 
     public static class BitcoinCLICall extends BaseJsonRpcTool.CommonsCLICall {

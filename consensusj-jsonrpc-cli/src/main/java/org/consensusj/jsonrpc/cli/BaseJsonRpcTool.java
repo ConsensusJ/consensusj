@@ -1,6 +1,7 @@
 package org.consensusj.jsonrpc.cli;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -29,9 +30,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * An abstract base class for JsonRpcClientTool that uses Apache Commons CLI
@@ -44,7 +43,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
     protected final HelpFormatter formatter = new HelpFormatter();
     protected JsonRpcMessage.Version jsonRpcVersion = JsonRpcMessage.Version.V2;
     protected JsonRpcClientTool.OutputObject outputObject = OutputObject.RESULT;
-    protected JsonRpcClientTool.OutputFormat outputFormat = OutputFormat.JSON;
+    //protected JsonRpcClientTool.OutputFormat outputFormat = OutputFormat.JSON;
     protected JsonRpcClientTool.OutputStyle outputStyle = OutputStyle.PRETTY;
 
     public BaseJsonRpcTool() {
@@ -86,19 +85,38 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         if (call.line.hasOption("V1")) {
             jsonRpcVersion = JsonRpcMessage.Version.V1;
         }
+        SSLSocketFactory sslSocketFactory = socketFactory(call.line);
+        AbstractRpcClient client = call.rpcClient(sslSocketFactory);
+        CliParameterParser parser = new CliParameterParser(jsonRpcVersion, client.getMapper());
+        JsonRpcRequest request = parser.parse(args);
+        JsonRpcResponse<JsonNode> response;
+        try {
+            response = client.sendRequestForResponse(request);
+        } catch (JsonRpcException e) {
+            log.error("send exception: ", e);
+            throw new ToolException(1, e.getMessage());
+        } catch (IOException e) {
+            log.error("send exception: ", e);
+            throw new ToolException(1, e.getMessage());
+        }
+        String resultForPrinting = formatResponse(response, client.getMapper());
+        call.out.println(resultForPrinting);
+    }
+
+    SSLSocketFactory socketFactory(CommandLine line) {
         SSLSocketFactory sslSocketFactory;
-        if (call.line.hasOption("add-truststore")) {
+        if (line.hasOption("add-truststore")) {
             // Create SSL sockets using additional truststore and CompositeTrustManager
-            String trustStorePathString = call.line.getOptionValue("add-truststore");
+            String trustStorePathString = line.getOptionValue("add-truststore");
             Path trustStorePath = Path.of(trustStorePathString);
             try {
                 sslSocketFactory = CompositeTrustManager.getCompositeSSLSocketFactory(trustStorePath);
             } catch (NoSuchAlgorithmException | KeyManagementException | FileNotFoundException e) {
                 throw new ToolException(1, e.getMessage());
             }
-        } else if (call.line.hasOption("alt-truststore")) {
+        } else if (line.hasOption("alt-truststore")) {
             // Create SSL sockets using alternate truststore
-            String trustStorePathString = call.line.getOptionValue("alt-truststore");
+            String trustStorePathString = line.getOptionValue("alt-truststore");
             Path trustStorePath = Path.of(trustStorePathString);
             try {
                 sslSocketFactory = CompositeTrustManager.getAlternateSSLSocketFactory(trustStorePath);
@@ -106,122 +124,38 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                 throw new ToolException(1, e.getMessage());
             }
         } else {
-                // Otherwise, use the default SSLSocketFactory
-                sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            // Otherwise, use the default SSLSocketFactory
+            sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
         }
-        AbstractRpcClient client = call.rpcClient(sslSocketFactory);
-        String method = args.get(0);
-        args.remove(0); // remove method from list
-        List<Object> typedArgs = convertParameters(method, args);
-        Object result;
-        try {
-            if (outputObject == OutputObject.RESULT) {
-                if (outputFormat == OutputFormat.JSON) {
-                    // Use Jackson JsonNode type so we can output in JSON format
-                    result = client.send(method, JsonNode.class, typedArgs);
-                } else {
-                    // Use Java Object so we can output in "Java" format (i.e.). via .toString)
-                    result = client.send(method, Object.class, typedArgs);
-                }
-            } else {
-                JsonRpcRequest request = new JsonRpcRequest(jsonRpcVersion, method, typedArgs);
-                if (outputFormat == OutputFormat.JSON) {
-                    // Use Jackson JsonNode type so we can output in JSON format
-                    result = client.sendRequestForResponse(request, client.responseTypeFor(JsonNode.class));
-                } else {
-                    // Use Java Object so we can output in "Java" format (i.e.). via .toString)
-                    result = client.sendRequestForResponse(request, client.responseTypeFor(Object.class));
-                }
-            }
-        } catch (JsonRpcException e) {
-            e.printStackTrace();
-            throw new ToolException(1, e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new ToolException(1, e.getMessage());
-        }
-        String resultForPrinting = formatResult(method, call, result);
-        call.out.println(resultForPrinting);
+        return sslSocketFactory;
     }
 
-    private String formatResult(String method, CommonsCLICall call, Object result) {
+    private String formatResponse(JsonRpcResponse<?> response, ObjectMapper mapper) {
         String string;
-        if (result == null) {
-            log.info("result is null");
-            string = "null";
-        } else if (result instanceof JsonNode) {
-            log.info("result instanceof JsonNode");
-            if (result instanceof TextNode) {
-                // This will remove the surrounding quotes and not print `\n` for newlines
-                string = ((TextNode) result).asText();
-            } else if (outputStyle == OutputStyle.PRETTY) {
-                string = ((JsonNode) result).toPrettyString();
-            } else {
-                string = result.toString();
-            }
-        } else if (result instanceof JsonRpcResponse) {
-            JsonNode reponseAsNode = call.client.getMapper().valueToTree(result);
+        if (outputObject == OutputObject.RESPONSE) {
+            JsonNode reponseAsNode = mapper.valueToTree(response);
             string = reponseAsNode.toPrettyString();
         } else {
-            log.info("result class is: {}", result.getClass());
-            string = result.toString();
-        }
-        return string;
-    }
-
-    /**
-     * Convert params from strings to Java types that will map to correct JSON types
-     *
-     * TODO: Make this better and complete
-     *
-     * @param method the JSON-RPC method
-     * @param params Params with String type
-     * @return Params with correct Java types for JSON
-     */
-    protected List<Object> convertParameters(String method, List<String> params) {
-        List<Object> converted = new ArrayList<>();
-        for (String param : params) {
-            converted.add(convertParam(param));
-        }
-        return converted;
-    }
-
-    /**
-     * Convert a single param from a command-line option {@code String} to a type more appropriate
-     * for Jackson/JSON-RPC.
-     *
-     * @param param A string parameter to convert
-     * @return The input parameter, possibly converted to a different type
-     */
-    protected Object convertParam(String param) {
-        Object result;
-        Optional<Long> l = toLong(param);
-        if (l.isPresent()) {
-            // If the param was a valid Long, return a Long
-            result = l.get();
-        } else {
-            // Else, return a Boolean or String
-            switch (param) {
-                case "false":
-                    result = Boolean.FALSE;
-                    break;
-                case "true":
-                    result = Boolean.TRUE;
-                    break;
-                default:
-                    result = param;
+            Object result = response.getResult();
+            if (result == null) {
+                log.info("result is null");
+                string = "null";
+            } else if (result instanceof JsonNode) {
+                log.info("result instanceof JsonNode");
+                if (result instanceof TextNode) {
+                    // This will remove the surrounding quotes and not print `\n` for newlines
+                    string = ((TextNode) result).asText();
+                } else if (outputStyle == OutputStyle.PRETTY) {
+                    string = ((JsonNode) result).toPrettyString();
+                } else {
+                    string = result.toString();
+                }
+            } else {
+                log.info("result class is: {}", result.getClass());
+                string = result.toString();
             }
         }
-        return result;
-    }
-
-    // Convert to Long (if possible)
-    protected static Optional<Long> toLong(String strNum) {
-        try {
-            return Optional.of(Long.parseLong(strNum));
-        } catch (NumberFormatException nfe) {
-            return Optional.empty();
-        }
+        return string;
     }
 
     public void printHelp(Call call, String usage) {
@@ -236,7 +170,6 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
     public void printError(Call call, String str) {
         call.err.println(str);
     }
-
 
     public static class CommonsCLICall extends JsonRpcClientTool.Call {
         protected final BaseJsonRpcTool rpcTool;

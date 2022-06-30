@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
  * JSON-RPC Client using {@link HttpURLConnection} formerly named{@code RpcClient}.
  * <p>
  * This is a concrete class with generic JSON-RPC functionality, it implements the abstract
- * method {@link AbstractRpcClient#sendRequestForResponse} using {@link HttpURLConnection}.
+ * method {@link AbstractRpcClient#sendRequestForResponse(JsonRpcRequest, JavaType)} using {@link HttpURLConnection}.
  * <p>
  * Uses strongly-typed POJOs representing {@link JsonRpcRequest} and {@link JsonRpcResponse}. The
  * response object uses a parameterized type for the object that is the actual JSON-RPC `result`.

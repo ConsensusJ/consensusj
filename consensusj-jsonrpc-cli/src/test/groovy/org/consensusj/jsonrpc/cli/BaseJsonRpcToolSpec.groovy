@@ -1,7 +1,7 @@
 package org.consensusj.jsonrpc.cli
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.cli.Options
-import org.consensusj.jsonrpc.JsonRpcException
 import spock.lang.Specification
 
 /**
@@ -24,11 +24,6 @@ class BaseJsonRpcToolSpec extends Specification {
             @Override
             void run(BaseJsonRpcTool.CommonsCLICall call) {
                 this.call = call;
-            }
-
-            @Override
-            protected List<Object> convertParameters(String method, List<String> params) {
-                return null
             }
         }
 

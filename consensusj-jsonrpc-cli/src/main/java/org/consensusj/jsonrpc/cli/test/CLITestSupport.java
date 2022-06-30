@@ -12,8 +12,7 @@ import java.io.UnsupportedEncodingException;
 public interface CLITestSupport {
 
     default String[] parseCommandLine(String line) {
-        String[] args = line.split(" ");     // (Overly?) simple parsing of string into args[]
-        return args;
+        return line.split(" ");
     }
 
     /**

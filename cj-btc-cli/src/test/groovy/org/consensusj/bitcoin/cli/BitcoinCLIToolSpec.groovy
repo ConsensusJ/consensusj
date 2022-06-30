@@ -1,7 +1,5 @@
 package org.consensusj.bitcoin.cli
 
-import org.consensusj.jsonrpc.JsonRpcException
-import org.consensusj.jsonrpc.cli.GenericJsonRpcTool
 import spock.lang.Specification
 
 import java.util.spi.ToolProvider

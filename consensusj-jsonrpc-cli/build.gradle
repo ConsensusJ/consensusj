@@ -7,8 +7,8 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 configurations {
     nativeToolImplementation.extendsFrom implementation
