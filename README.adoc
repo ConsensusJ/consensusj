@@ -30,7 +30,7 @@ Modular cryptocurrency libraries for Java, JVM languages, and Android.
 * A *JSON-RPC Java client* for the https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core API] with strong, static types.
 * JSON library using https://github.com/FasterXML/jackson[Jackson] to convert between Bitcoin types and JSON
 ** *bitcoinj* types <--> JSON (e.g. {bitcoinj-apidoc}/org/bitcoinj/core/Address.html[Address], {bitcoinj-apidoc}/org/bitcoinj/core/Sha256Hash.html[Sha256Hash], {bitcoinj-apidoc}/org/bitcoinj/core/Transaction.html[Transaction])
-** Strongly-typed {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/package-summary.html[Java POJOs] <--> Bitcoin Core standard JSON (e.g. {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/BlockChainInfo.html[BlockChainInfo], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/UnspentOutput.html[UnspentOutput], {cj-apidoc}/com/msgilligan/bitcoinj/json/pojo/ChainTip.html[ChainTip])
+** Strongly-typed {cj-apidoc}/org/consensusj/bitcoin/json/pojo/package-summary.html[Java POJOs] <--> Bitcoin Core standard JSON (e.g. {cj-apidoc}/org/consensusj/bitcoin/json/pojo/BlockChainInfo.html[BlockChainInfo], {cj-apidoc}/org/consensusj/bitcoin/json/pojo/UnspentOutput.html[UnspentOutput], {cj-apidoc}/org/consensusj/bitcoin/json/pojo/ChainTip.html[ChainTip])
 * `jakarta.inject`-compatible Bitcoin server components for *server-side JSON-RPC*.
 * **cj-btc-daemon** - A *Micronaut*-based framework for a Java-based implementation of *bitcoind*. It can be natively compiled using https://www.graalvm.org[GraalVM].
 * *cj-btc-cli* - a command line tool and supporting libraries for accessing the JSON-RPC API.
@@ -288,7 +288,7 @@ Java Bitcoin JSON-RPC client and supporting types, both bitcoinj types and POJOs
 If the RPC procedure takes a Bitcoin address as parameter, then the Java method will take an `org.bitcoinj.core.Address`.
 If the RPC returns a transaction, the Java method will return an `org.bitcoinj.core.Transaction`.
 
-See the JavaDoc for {cj-apidoc}/com/msgilligan/bitcoinj/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
+See the JavaDoc for {cj-apidoc}/org/consensusj/bitcoin/rpc/BitcoinClient.html[BitcoinClient] to see the methods implemented.
 
 [#cj-btc-jsonrpc-gvy]
 ==== cj-btc-jsonrpc-gvy
@@ -367,7 +367,7 @@ Bitcoin Core integration test framework and tests (Regression Tests using Spock)
 
 ===== Sample Spock Integration Tests
 
-These sample Spock "feature tests" show the RPC client in action and are from the file https://github.com/ConsensusJ/consensusj/blob/master/bitcoinj-rpcclient/src/integ/groovy/com/msgilligan/bitcoinj/rpc/BitcoinSpec.groovy#L31-L55[BitcoinSpec.groovy].
+These sample Spock "feature tests" show the RPC client in action and are from the file https://github.com/ConsensusJ/consensusj/blob/master/cj-btc-jsonrpc-integ-test/src/integ/groovy/org/consensusj/bitcoin/rpc/BitcoinSpec.groovy#L45-L73[BitcoinSpec.groovy].
 
 [source,groovy]
 ----
