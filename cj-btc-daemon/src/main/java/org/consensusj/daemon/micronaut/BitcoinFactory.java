@@ -3,7 +3,6 @@ package org.consensusj.daemon.micronaut;
 import com.fasterxml.jackson.databind.Module;
 import org.consensusj.bitcoin.json.conversion.RpcServerModule;
 import io.micronaut.context.annotation.Factory;
-import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.MainNetParams;
@@ -27,13 +26,7 @@ public class BitcoinFactory {
     }
 
     @Singleton
-    public Context getContext(NetworkParameters params) {
-        log.info("Returning bitcoinj Context bean");
-        return new Context(params);
-    }
-
-    @Singleton
-    public WalletAppKit getKit(NetworkParameters params) throws Exception {
+    public WalletAppKit getKit(NetworkParameters params) {
         log.info("Returning WalletAppKit bean");
         // TODO: make File(".") and filePrefix configurable
         File directory = new File(".");

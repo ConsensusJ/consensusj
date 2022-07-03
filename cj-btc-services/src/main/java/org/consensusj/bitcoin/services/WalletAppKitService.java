@@ -11,7 +11,6 @@ import org.consensusj.bitcoin.rpcserver.BitcoinJsonRpc;
 import org.bitcoinj.core.AbstractBlockChain;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;
-import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.PeerGroup;
 import org.bitcoinj.core.Sha256Hash;
@@ -56,7 +55,6 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     """;
 
     protected final NetworkParameters netParams;
-    protected final Context context;
     protected final WalletAppKit kit;
     protected final ObjectMapper mapper;
 
@@ -66,21 +64,22 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     private BigDecimal verificationProgress = new BigDecimal(0);
     private byte[] chainWork = new byte[]{0x00, 0x00};
 
+    /**
+     * Construct from an (unstarted) {@link WalletAppKit} instance.
+     * @param walletAppKit instance
+     */
     @Inject
-    public WalletAppKitService(NetworkParameters params,
-                               Context context,
-                               WalletAppKit kit) {
-        this.netParams = params;
-        this.context = context;
-        this.kit = kit;
-        this.mapper = new ObjectMapper();
+    public WalletAppKitService(WalletAppKit walletAppKit) {
+        kit = walletAppKit;
+        netParams = kit.params();
+        mapper = new ObjectMapper();
     }
 
     @PostConstruct
     public void start() {
         log.info("WalletAppKitService.start()");
         kit.setUserAgent(userAgentName, appVersion);
-        kit.setBlockingStartup(false);
+        kit.setBlockingStartup(false);  // `false` means startup is complete when network activity begins
         kit.startAsync();
         kit.awaitRunning();
     }

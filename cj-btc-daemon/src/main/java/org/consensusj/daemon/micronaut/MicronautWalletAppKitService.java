@@ -4,8 +4,6 @@ import io.micronaut.runtime.event.annotation.EventListener;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
 import jakarta.inject.Singleton;
-import org.bitcoinj.core.Context;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.kits.WalletAppKit;
 import org.consensusj.bitcoin.services.WalletAppKitService;
 import org.slf4j.Logger;
@@ -23,8 +21,8 @@ public class MicronautWalletAppKitService extends WalletAppKitService {
 
     private EmbeddedServer embeddedServer;
 
-    public MicronautWalletAppKitService(NetworkParameters params, Context context, WalletAppKit kit) {
-        super(params, context, kit);
+    public MicronautWalletAppKitService(WalletAppKit kit) {
+        super(kit);
     }
     
     @EventListener
