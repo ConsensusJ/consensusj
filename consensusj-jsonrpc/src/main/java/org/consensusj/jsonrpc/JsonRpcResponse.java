@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.node.NullNode;
 import org.consensusj.jsonrpc.internal.NumberStringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,8 @@ public class JsonRpcResponse<RSLT> {
                             @JsonProperty("id")      String id,
                             @JsonProperty("result")  RSLT result,
                             @JsonProperty("error")   JsonRpcError error) {
-        if ((result == null && error == null) || (result != null && error != null)) {
+        if ((error == null && result == null) ||
+            (error != null && result != null && !(result instanceof NullNode))) {
             log.warn("non-compliant response: (error, result) both null or both set.");
         }
         this.jsonrpc = jsonrpc;
