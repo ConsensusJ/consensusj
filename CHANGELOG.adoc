@@ -13,7 +13,7 @@ Released: under development
 * RxJava 3.1.5
 * Reactive Streams 1.0.4
 * Micronaut 3.4.4
-* Groovy 4.0.1
+* Groovy 4.0.3
 
 === Build/Test Updates
 
