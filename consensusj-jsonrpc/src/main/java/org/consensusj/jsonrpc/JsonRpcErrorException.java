@@ -6,7 +6,7 @@ package org.consensusj.jsonrpc;
  *  to the client.
  */
 public class JsonRpcErrorException extends JsonRpcException {
-    private JsonRpcError error;
+    private final JsonRpcError error;
 
     public JsonRpcErrorException(JsonRpcError error) {
         super(error.getMessage());
