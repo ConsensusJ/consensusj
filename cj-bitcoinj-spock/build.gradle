@@ -1,4 +1,15 @@
+ext.moduleName = 'org.consensusj.bitcoinj.spock'
+
 dependencies {
     testImplementation "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
     testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy extensions in tests
+}
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ bitcoinj Spock Tests',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
+    }
 }

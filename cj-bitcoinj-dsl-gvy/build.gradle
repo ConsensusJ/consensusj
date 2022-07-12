@@ -2,8 +2,18 @@ plugins {
     id 'java-library'
 }
 
+ext.moduleName = 'org.consensusj.bitcoinj.dsl.gvy'
+
 dependencies {
     api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
     implementation "org.apache.groovy:groovy:${groovyVersion}"
 }
 
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ bitcoinj Groovy DSL',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
+    }
+}
