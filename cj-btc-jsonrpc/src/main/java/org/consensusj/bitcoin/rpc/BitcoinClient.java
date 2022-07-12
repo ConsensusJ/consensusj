@@ -24,7 +24,6 @@ import org.consensusj.bitcoin.json.pojo.ZmqNotification;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressBalanceInfo;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressRequest;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressUtxoInfo;
-import org.consensusj.bitcoin.json.pojo.bitcore.AddressUtxoResult;
 import org.consensusj.bitcoin.rpc.internal.BitcoinClientThreadFactory;
 import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcErrorException;
@@ -61,8 +60,9 @@ import java.util.stream.Stream;
 /**
  * JSON-RPC Client for <b>Bitcoin Core</b>.
  * <p>
- * A strongly-typed wrapper for a Bitcoin RPC client using the
- * <a href="https://developer.bitcoin.org/reference/rpc/index.html">Bitcoin Core JSON-RPC API</a> and
+ * A strongly-typed wrapper for a Bitcoin Core JSON-RPC client using the
+ * <a href="https://bitcoincore.org/en/doc/">Bitcoin Core JSON-RPC API</a>.
+ * <p>
  * <a href="https://bitcoinj.org">bitcoinj</a> types are used where appropriate.
  * For example, requesting a block hash will return a {@link org.bitcoinj.core.Sha256Hash}:
  *
@@ -77,7 +77,12 @@ import java.util.stream.Stream;
  * }</pre>
  *
  * This version is written to be compatible with Bitcoin Core 0.19 and later. If used with
- * Omni Core (an enhanced Bitcoin Core with Omni Protocol support) Omni Core 0.9.0 or later is required.
+ * Omni Core (an enhanced Bitcoin Core with Omni Protocol support) Omni Core 0.11.0 or later is required.
+ * <p>
+ * Note that according to <a href="https://github.com/bitcoin/bitcoin/issues/2960">Issue #2960: Support JSON-RPC 2.0</a> Bitcoin Core does not correctly follow the JSON-RPC 2.0 specification.
+ * @see org.consensusj.jsonrpc.JsonRpcClient
+ * @see <a href="https://bitcoincore.org/en/doc/">Bitcoin Core JSON-RPC API reference</a>
+ * @see <a href="https://github.com/bitcoin/bitcoin/issues/2960">Bitcoin Core Issue #2960: Support JSON-RPC 2.0</a>
  * <p>
  * <b>This is still a work-in-progress and the API will change.</b>
  *

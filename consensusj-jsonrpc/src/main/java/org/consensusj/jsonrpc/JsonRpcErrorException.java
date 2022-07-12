@@ -4,6 +4,8 @@ package org.consensusj.jsonrpc;
  *  Exception wrapper for JsonRpcError
  *  Useful in server implementations, throwing an error that will be transmitted
  *  to the client.
+ *  TODO: See TODO in parent class {@link JsonRpcException}
+ * @see org.consensusj.jsonrpc.JsonRpcException
  */
 public class JsonRpcErrorException extends JsonRpcException {
     private final JsonRpcError error;

@@ -8,10 +8,15 @@ import java.util.List;
 
 /**
  *  JSON-RPC client interface. This interface is independent of the JSON conversion library
- *  (the current implementation uses Jackson) and HTTP client library (currently {@link HttpURLConnection}).
+ *  (the default implementation uses Jackson) and HTTP client library (currently {@link HttpURLConnection}).
  *  For historical reasons the interface is synchronous, but {@link AsyncSupport} makes it easier
  *  to add use of {@link java.util.concurrent.CompletableFuture} for special cases. In the future
  *  this interface may change to natively asynchronous.
+ *  <p>
+ *  Both JSON-RPC 1.0 and JSON-RPC 2.0 are supported. Implementations should also be (via configuration, perhaps)
+ *  lenient enough to support Bitcoin Core and similar servers that don't follow the JSON-RPC specifications exactly.
+ * @see <a href="https://www.jsonrpc.org/specification_v1">JSON-RPC 1.0 Specification (2005)</a>
+ * @see <a href="https://www.jsonrpc.org/specification">JSON-RPC 2.0 Specification</a>
  */
 public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
 

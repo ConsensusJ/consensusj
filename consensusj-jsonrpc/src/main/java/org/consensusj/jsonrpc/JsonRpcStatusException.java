@@ -3,6 +3,8 @@ package org.consensusj.jsonrpc;
 /**
  * JSON-RPC returned HTTP status other than 200
  * Additional information is usually in JSON-RPC response
+ * TODO: See TODO in parent class {@link JsonRpcException}
+ * @see org.consensusj.jsonrpc.JsonRpcException
  */
 public class JsonRpcStatusException extends JsonRpcException {
     public final String httpMessage;
