@@ -1,6 +1,6 @@
-package org.consensusj.jsonrpc
+package org.consensusj.jsonrpc.javanet
 
-import org.consensusj.jsonrpc.javanet.JsonRpcClientJavaNet
+import org.consensusj.jsonrpc.JsonRpcRequest
 import spock.lang.Ignore
 import spock.lang.Specification
 
