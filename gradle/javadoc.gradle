@@ -1,5 +1,7 @@
 ext.javadocSpec = {
     options.encoding = 'UTF-8'
+    options.addBooleanOption 'html5', true              // Requires JDK 9+
+
     if (JavaVersion.current().isJava9()) {
         // TODO: Are these options Asciidoclet or Java 9 specific? If not, move out of this conditional
         options.addStringOption '-base-dir', "${projectDir}"
@@ -10,14 +12,11 @@ ext.javadocSpec = {
         options.addStringOption '-attribute', 'data-uri'
         options.addBooleanOption 'linksource', true             // include link to HTML source file
     }
-    if (JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption 'html5', true              // Requires JDK 9+
-    }
 
     def javaDocLinks = [
             "https://docs.oracle.com/en/java/javase/17/docs/api",
-            "https://fasterxml.github.io/jackson-core/javadoc/2.12/",
-            "https://fasterxml.github.io/jackson-databind/javadoc/2.12/"
+            "https://fasterxml.github.io/jackson-core/javadoc/2.13/",
+            "https://fasterxml.github.io/jackson-databind/javadoc/2.13/"
     ]
 
     if (!bitcoinjVersion.contains("beta") && !bitcoinjVersion.contains("rc")) {
@@ -39,11 +38,9 @@ task javadocAll(type: Javadoc) {
     classpath = files(subprojects.collect {project -> project.sourceSets.main.compileClasspath})
 }
 javadocAll javadocSpec << {
-    if (JavaVersion.current().isJava9()) {
-        // TODO: Convert this back to HTML
-        options.overview = "doc/javadoc-overview.adoc"
-        inputs.file(options.overview)
-    }
+    // TODO: Convert this back to HTML
+    // options.overview = "doc/javadoc-overview.adoc"
+    // inputs.file(options.overview)
 }
 javadocAll.doLast {
     logger.info "Consolidated JavaDoc generated at <file://${javadocAll.destinationDir}/index.html>"
