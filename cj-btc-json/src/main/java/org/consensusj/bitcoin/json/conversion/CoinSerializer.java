@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public class CoinSerializer  extends JsonSerializer<Coin> {
     @Override
-    public void serialize(Coin value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-        gen.writeNumber(BitcoinMath.coinToBTC(value));
+    public void serialize(Coin coin, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
+        gen.writeNumber(coin.toBtc());
     }
 }

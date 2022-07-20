@@ -21,11 +21,12 @@ public class CoinDeserializer extends JsonDeserializer<Coin> {
 
             case VALUE_NUMBER_FLOAT:
                 BigDecimal bd = p.getDecimalValue();
-                return BitcoinMath.btcToCoin(bd);
+                return Coin.ofBtc(bd);
 
             case VALUE_NUMBER_INT:
+                // TODO: Is this really what we want here? To treat JSON floats as BTC values and JSON integers as Satoshis?
                 long val = p.getNumberValue().longValue(); // should be optimal, whatever it is
-                return Coin.valueOf(val);
+                return Coin.ofSat(val);
 
             // TODO: Allow reading a numeric string. There seem to be cases where a BTC decimal balance
             // is encoded wrapped with quotes.

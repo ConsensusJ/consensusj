@@ -33,16 +33,16 @@ class NumberCategory {
     }
 
     private static Coin btcAsCoin(Number self) {
-        return Coin.valueOf(btcToSatoshi(self))
+        return Coin.ofSat(btcToSatoshi(self))
     }
 
     private static Coin satoshiAsCoin(Number self) {
-        return Coin.valueOf(asSatoshi(self))
+        return Coin.ofSat(asSatoshi(self))
     }
 
     private static long btcToSatoshi(Number self) {
         switch(self) {
-            case BigDecimal:    return ((BigDecimal) self).multiply(satoshiPerBTCDecimal).longValueExact()
+            case BigDecimal:    return Coin.btcToSatoshi((BigDecimal) self)
             case BigInteger:    return ((BigInteger) self).multiply(satoshiPerBTCBigInt).longValue()
             default:            return self.longValue() *  Coin.COIN.value
         }
