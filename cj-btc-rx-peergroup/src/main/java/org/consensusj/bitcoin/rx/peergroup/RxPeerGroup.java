@@ -21,8 +21,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Provide RxJava Observables for {@link PeerGroup} information.
- * This implementation will work with a PeerGroup w/o a BlockStore.
+ * Provide Reactive Publishers for {@link PeerGroup} information.
+ * This implementation works with a PeerGroup w/o a Blockchain/BlockStore.
  */
 public class RxPeerGroup implements RxBlockchainService {
     private static final Logger log = LoggerFactory.getLogger(RxPeerGroup.class);
@@ -31,8 +31,12 @@ public class RxPeerGroup implements RxBlockchainService {
     private static final int period = 1;
     
     private ScheduledExecutorService stpe;
-    private ScheduledFuture<?> future;
+    // Will never return normally, and will throw an exception upon task
+    // cancellation or abnormal termination of a task execution. Use for cancelling
+    // the ScheduledExecutorService
+    private ScheduledFuture<?> scheduledFuture;
 
+    private int lastHeight = -1;
     private final PublishProcessor<Transaction> transactionProcessor;
     private final PublishProcessor<Integer> blockHeightProcessor;
 
@@ -59,7 +63,7 @@ public class RxPeerGroup implements RxBlockchainService {
         blockHeightProcessor.onNext(peerGroup.getMostCommonChainHeight());
 
         stpe = Executors.newScheduledThreadPool(2);
-        future = stpe.scheduleAtFixedRate(this::updateBlockHeight, initialDelay, period, TimeUnit.SECONDS);
+        scheduledFuture = stpe.scheduleAtFixedRate(this::updateBlockHeight, initialDelay, period, TimeUnit.SECONDS);
 
         groupStartedFuture.addListener(RxPeerGroup::peerGroupStartedListener, stpe);
 
@@ -71,8 +75,8 @@ public class RxPeerGroup implements RxBlockchainService {
     @Override
     public void close() {
         if (stpe != null) {
-            if (future != null) {
-                final ScheduledFuture<?> handle = future;
+            if (scheduledFuture != null) {
+                final ScheduledFuture<?> handle = scheduledFuture;
                 Runnable task = () -> handle.cancel(true);
                 stpe.schedule(task, 0, TimeUnit.SECONDS);
             }
@@ -123,16 +127,15 @@ public class RxPeerGroup implements RxBlockchainService {
         log.info("PeerGroup started listener called");
     }
 
-    private int lastHeight = -1;
     private void updateBlockHeight() {
-        Integer newHeight = getBlockHeight();
+        int newHeight = getBlockHeight();
         if (newHeight != lastHeight) {
             lastHeight = newHeight;
             blockHeightProcessor.onNext(newHeight);
         }
     }
 
-    private Integer getBlockHeight() {
+    private int getBlockHeight() {
         return peerGroup.getMostCommonChainHeight();
     }
 
@@ -148,5 +151,4 @@ public class RxPeerGroup implements RxBlockchainService {
     private void onPeerDisconnected(Peer peer, int peerCount) {
         log.info("PeerWatcher: Peer Disconnected, count: {}", peerCount);
     }
-
 }
