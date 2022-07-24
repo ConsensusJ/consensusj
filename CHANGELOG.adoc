@@ -13,12 +13,12 @@ Released: under development
 * RxJava 3.1.5
 * Reactive Streams 1.0.4
 * Micronaut 3.4.4
-* Groovy 4.0.3
+* Groovy 4.0.4
 
 === Build/Test Updates
 
 * Gradle 7.4.2
-* Spock 2.2-M1-groovy-4.0
+* Spock 2.2-M3-groovy-4.0
 
 == v0.5.14
 
