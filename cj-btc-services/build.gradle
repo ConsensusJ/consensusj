@@ -2,6 +2,8 @@ plugins {
     id 'java-library'
 }
 
+ext.moduleName = 'org.consensusj.bitcoin.services'
+
 sourceCompatibility = 17
 targetCompatibility = 17
 
@@ -9,4 +11,13 @@ dependencies {
     api project(':cj-btc-json')
     api 'jakarta.inject:jakarta.inject-api:2.0.1'
     implementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
+}
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ Bitcoin Services',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
+    }
 }

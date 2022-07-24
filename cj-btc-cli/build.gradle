@@ -6,6 +6,8 @@ plugins {
     id 'java-library'
 }
 
+ext.moduleName = 'org.consensusj.bitcoin.cli'
+
 sourceCompatibility = 17
 targetCompatibility = 17
 
@@ -32,6 +34,7 @@ def mainClassName = "org.consensusj.bitcoin.cli.BitcoinCLITool"
 jar {
     manifest {
         attributes 'Implementation-Title': 'ConsensusJ Bitcoin CLI tool',
+                    'Automatic-Module-Name': moduleName,
                     'Main-Class': mainClassName,
                     'Implementation-Version': archiveVersion.get()
     }
