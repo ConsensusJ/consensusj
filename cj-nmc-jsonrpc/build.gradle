@@ -5,6 +5,8 @@ plugins {
 sourceCompatibility = 9
 targetCompatibility = 9
 
+ext.moduleName = 'org.consensusj.namecoin.jsonrpc'
+
 dependencies {
     api project(':cj-btc-jsonrpc')
 
@@ -16,7 +18,14 @@ dependencies {
     testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy extensions in tests
 }
 
-
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ Bitcoin JSON-RPC',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
+    }
+}
 
 test {
     testLogging.showStandardStreams = true

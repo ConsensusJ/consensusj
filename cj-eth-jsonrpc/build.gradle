@@ -5,12 +5,23 @@ plugins {
 sourceCompatibility = 9
 targetCompatibility = 9
 
+ext.moduleName = 'org.consensusj.ethereum.jsonrpc'
+
 dependencies {
     api project(':consensusj-jsonrpc')
 
     testImplementation "org.apache.groovy:groovy:${groovyVersion}"
     testImplementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
         transitive = false
+    }
+}
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ Ethereum JSON-RPC',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
     }
 }
 
