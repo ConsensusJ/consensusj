@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.rx.zeromq;
 
 import org.consensusj.bitcoin.json.pojo.ZmqNotification;
-import org.consensusj.bitcoin.rpc.BitcoinClient;
+import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
 
 import java.io.IOException;
 import java.net.URI;

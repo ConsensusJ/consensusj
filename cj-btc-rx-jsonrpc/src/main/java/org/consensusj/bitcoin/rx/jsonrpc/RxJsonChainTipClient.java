@@ -3,7 +3,7 @@ package org.consensusj.bitcoin.rx.jsonrpc;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
-import org.consensusj.bitcoin.rpc.ChainTipClient;
+import org.consensusj.bitcoin.jsonrpc.ChainTipClient;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.jsonrpc.AsyncSupport;
 import org.consensusj.rx.jsonrpc.RxJsonRpcClient;

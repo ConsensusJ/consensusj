@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.rpc.tx
 
 import org.consensusj.bitcoin.test.BaseRegTestSpec
-import org.consensusj.bitcoin.test.JTransactionTestSupport
+import org.consensusj.bitcoin.jsonrpc.groovy.test.JTransactionTestSupport
 import org.bitcoinj.core.NetworkParameters
 import spock.lang.Shared
 

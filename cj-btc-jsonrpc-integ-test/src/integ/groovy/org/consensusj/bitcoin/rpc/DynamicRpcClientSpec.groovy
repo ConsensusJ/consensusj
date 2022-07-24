@@ -1,7 +1,8 @@
 package org.consensusj.bitcoin.rpc
 
 import com.fasterxml.jackson.databind.node.NullNode
-import org.consensusj.bitcoin.rpc.test.TestServers
+import org.consensusj.bitcoin.jsonrpc.RpcURI
+import org.consensusj.bitcoin.jsonrpc.test.TestServers
 import org.bitcoinj.core.Address
 import org.bitcoinj.core.ECKey
 import org.bitcoinj.core.SegwitAddress
