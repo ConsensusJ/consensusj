@@ -17,7 +17,7 @@ Released: under development
 
 === Build/Test Updates
 
-* Gradle 7.4.2
+* Gradle 7.5
 * Spock 2.2-M3-groovy-4.0
 
 == v0.5.14
