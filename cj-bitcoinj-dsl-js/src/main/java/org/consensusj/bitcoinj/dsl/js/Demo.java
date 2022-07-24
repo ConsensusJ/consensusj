@@ -1,6 +1,6 @@
 package org.consensusj.bitcoinj.dsl.js;
 
-import org.consensusj.bitcoin.rpc.RpcConfig;
+import org.consensusj.bitcoin.jsonrpc.RpcConfig;
 import org.bitcoinj.params.MainNetParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

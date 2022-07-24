@@ -1,11 +1,11 @@
 package org.consensusj.bitcoin.test
 
-import org.consensusj.bitcoin.rpc.BitcoinExtendedClient
+import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient
 import org.bitcoinj.params.MainNetParams
+import org.consensusj.bitcoin.jsonrpc.groovy.test.BTCTestSupport
 import org.consensusj.jsonrpc.groovy.Loggable
-import org.consensusj.bitcoin.rpc.RpcURI
-import org.consensusj.bitcoin.rpc.test.TestServers
-import org.consensusj.bitcoin.test.BTCTestSupport
+import org.consensusj.bitcoin.jsonrpc.RpcURI
+import org.consensusj.bitcoin.jsonrpc.test.TestServers
 import spock.lang.Specification
 
 /**

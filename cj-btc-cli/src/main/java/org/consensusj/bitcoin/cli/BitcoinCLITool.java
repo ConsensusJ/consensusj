@@ -1,8 +1,8 @@
 package org.consensusj.bitcoin.cli;
 
-import org.consensusj.bitcoin.rpc.BitcoinClient;
-import org.consensusj.bitcoin.rpc.RpcConfig;
-import org.consensusj.bitcoin.rpc.bitcoind.BitcoinConfFile;
+import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
+import org.consensusj.bitcoin.jsonrpc.RpcConfig;
+import org.consensusj.bitcoin.jsonrpc.bitcoind.BitcoinConfFile;
 import org.apache.commons.cli.Options;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
@@ -16,8 +16,8 @@ import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static org.consensusj.bitcoin.rpc.RpcURI.RPCPORT_REGTEST;
-import static org.consensusj.bitcoin.rpc.RpcURI.RPCPORT_TESTNET;
+import static org.consensusj.bitcoin.jsonrpc.RpcURI.RPCPORT_REGTEST;
+import static org.consensusj.bitcoin.jsonrpc.RpcURI.RPCPORT_TESTNET;
 
 /**
  * An attempt at cloning the bitcoin-cli tool, but using Java and bitcoinj

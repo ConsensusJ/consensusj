@@ -4,7 +4,7 @@ import org.consensusj.jsonrpc.JsonRpcRequest
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import org.consensusj.bitcoin.rpc.RpcURI
+import org.consensusj.bitcoin.jsonrpc.RpcURI
 
 /**
  * RPCClient test specification

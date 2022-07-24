@@ -1,8 +1,9 @@
 package org.consensusj.bitcoin.rpc
 
+import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient
 import org.consensusj.bitcoin.test.BaseRegTestSpec
-import org.consensusj.bitcoin.test.RegTestEnvironment
-import org.consensusj.bitcoin.test.RegTestFundingSource
+import org.consensusj.bitcoin.jsonrpc.test.RegTestEnvironment
+import org.consensusj.bitcoin.jsonrpc.test.RegTestFundingSource
 import spock.lang.Shared
 import spock.lang.Specification
 

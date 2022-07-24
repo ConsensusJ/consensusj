@@ -1,9 +1,8 @@
 package org.consensusj.bitcoin.cli
 
-import org.consensusj.bitcoin.rpc.test.TestServers
+import org.consensusj.bitcoin.jsonrpc.test.TestServers
 import org.consensusj.jsonrpc.cli.test.CLICommandResult
 import org.consensusj.jsonrpc.cli.test.CLITestSupport
-import spock.lang.Ignore
 import spock.lang.Specification
 
 /**

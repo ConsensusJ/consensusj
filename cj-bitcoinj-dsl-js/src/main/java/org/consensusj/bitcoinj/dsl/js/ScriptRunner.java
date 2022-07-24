@@ -1,11 +1,11 @@
 package org.consensusj.bitcoinj.dsl.js;
 
-import org.consensusj.bitcoin.rpc.BitcoinExtendedClient;
-import org.consensusj.bitcoin.rpc.RpcConfig;
-import org.consensusj.bitcoin.rpc.RpcURI;
-import org.consensusj.bitcoin.rpc.test.TestServers;
-import org.consensusj.bitcoin.test.RegTestEnvironment;
-import org.consensusj.bitcoin.test.RegTestFundingSource;
+import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
+import org.consensusj.bitcoin.jsonrpc.RpcConfig;
+import org.consensusj.bitcoin.jsonrpc.RpcURI;
+import org.consensusj.bitcoin.jsonrpc.test.TestServers;
+import org.consensusj.bitcoin.jsonrpc.test.RegTestEnvironment;
+import org.consensusj.bitcoin.jsonrpc.test.RegTestFundingSource;
 import org.consensusj.jsonrpc.AsyncSupport;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import org.bitcoinj.core.Coin;
