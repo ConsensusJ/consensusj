@@ -7,7 +7,7 @@ import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
 import org.consensusj.bitcoin.json.pojo.BlockInfo;
 import org.consensusj.bitcoin.json.pojo.NetworkInfo;
 import org.consensusj.bitcoin.json.pojo.ServerInfo;
-import org.consensusj.bitcoin.rpcserver.BitcoinJsonRpc;
+import org.consensusj.bitcoin.json.rpc.BitcoinJsonRpc;
 import org.bitcoinj.core.AbstractBlockChain;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Coin;

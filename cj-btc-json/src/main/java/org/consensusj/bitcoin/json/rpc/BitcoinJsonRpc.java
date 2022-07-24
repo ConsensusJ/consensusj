@@ -1,4 +1,4 @@
-package org.consensusj.bitcoin.rpcserver;
+package org.consensusj.bitcoin.json.rpc;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
