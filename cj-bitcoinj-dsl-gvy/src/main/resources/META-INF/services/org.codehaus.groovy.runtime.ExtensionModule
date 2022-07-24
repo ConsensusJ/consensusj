@@ -1,4 +1,4 @@
 moduleName=ConsensusJ Groovy extensions for bitcoinj
 moduleVersion=0.5.15-SNAPSHOT
-extensionClasses=org.consensusj.bitcoin.dsl.groovy.categories.CoinCategory,org.consensusj.bitcoin.dsl.groovy.categories.NumberCategory
-staticExtensionClasses=org.consensusj.bitcoin.dsl.groovy.categories.StaticECKeyExtension
+extensionClasses=org.consensusj.bitcoinj.dsl.groovy.categories.CoinCategory,org.consensusj.bitcoinj.dsl.groovy.categories.NumberCategory
+staticExtensionClasses=org.consensusj.bitcoinj.dsl.groovy.categories.StaticECKeyExtension

@@ -2,6 +2,8 @@ plugins {
     id 'java-library'
 }
 
+ext.moduleName = 'org.consensusj.bitcoinj.dsl.js'
+
 dependencies {
     api project(':cj-btc-jsonrpc')
     implementation 'org.openjdk.nashorn:nashorn-core:15.3'
@@ -12,4 +14,13 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.toVersion("17")
     targetCompatibility = JavaVersion.toVersion("17")
+}
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ bitcoinj JavaScript DSL',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
+    }
 }

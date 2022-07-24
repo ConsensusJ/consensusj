@@ -10,7 +10,7 @@ import org.bitcoinj.core.NetworkParameters;
 import org.consensusj.bitcoin.rpc.BitcoinExtendedClient;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.bitcoin.rx.zeromq.RxBitcoinZmqService;
-import org.consensusj.bitcoin.util.BlockUtil;
+import org.consensusj.bitcoinj.util.BlockUtil;
 
 import javax.net.ssl.SSLSocketFactory;
 import java.net.URI;
