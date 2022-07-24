@@ -118,44 +118,49 @@ We are in the process of refactoring all modules into the new `org.consensusj` n
 NOTE:: This module table is slightly out-of-date and will be updated shortly (there are some new "incubating" modules that are not listed.) See the `CHANGELOG` for relevant changes.
 
 .Core JSON-RPC Modules
-[cols="3,1,3,5"]
+[cols="4,1,3,4"]
 |===
 |Name |Min JDK |Java module name |Description
 
 |<<consensusj-jsonrpc,consensusj-jsonrpc>>
-| 8
+| 9
 | `org.consensusj.jsonrpc`
 | JSON-RPC client
 
+|<<consensusj-jsonrpc-javanet,consensusj-jsonrpc-javanet>>
+| 11
+| `org.consensusj.jsonrpc.javanet`
+| JSON-RPC client using `java.net.http`
+
 |<<consensusj-jsonrpc-gvy,consensusj-jsonrpc-gvy>>
-| 8
+| 9
 | `org.consensusj.jsonrpc.groovy`
 | Groovy JSON-RPC client (dynamic RPC methods)
 
 |<<consensusj-jsonrpc-cli,consensusj-jsonrpc-cli>>
-| *11*
+| *17*
 | `org.consensusj.jsonrpc.cli`
 | JSON-RPC command-line interface (CLI) libraries and tool
 
 |<<consensusj-jsonrpc-daemon, consensusj-jsonrpc-daemon>>
 | *17*
-| `org.consensusj.jsonrpc.daemon`
+| n/a
 | JSON-RPC Sample Server
 
 |<<consensusj-rx-jsonrpc, consensusj-rx-jsonrpc>>
-| *9*
+| 9
 | `org.consensusj.rx.jsonrpc`
 | RxJava 3 support for JSON-RPC
 
 |<<consensusj-rx-zeromq, consensusj-rx-zeromq>>
-| *9*
+| 9
 | `org.consensusj.rx.zeromq`
 | RxJava 3 ZeroMQ client
 
 |===
 
 .Bitcoin Modules
-[cols="3,1,3,5"]
+[cols="4,1,3,4"]
 |===
 |Name |Min JDK |Java module name |Description
 
@@ -165,40 +170,34 @@ NOTE:: This module table is slightly out-of-date and will be updated shortly (th
 |Jackson serializers, deserializers & POJOs for Bitcoin JSON-RPC
 
 |<<cj-btc-jsonrpc,cj-btc-jsonrpc>>
-| 8
+| 9
 | `org.consensusj.bitcoin.jsonrpc`
 | Java JSON-RPC Bitcoin client
 
 |<<cj-btc-jsonrpc-gvy,cj-btc-jsonrpc-gvy>>
-| 8
-| not yet
+| 9
+| `org.consensusj.bitcoin.jsonrpc.groovy`
 | Groovy JSON-RPC Bitcoin client  (dynamic RPC methods)
 
 |<<cj-btc-cli,cj-btc-cli>>
-| *11*
-| not yet
+| *17*
+| `org.consensusj.bitcoin.cli`
 | Command-line JSON-RPC client for Bitcoin
 
 |<<cj-btc-daemon,cj-btc-daemon>>
 | *17*
-| not yet
+| n/a
 |JSON-RPC Bitcoin server daemon prototype, using Micronaut.
 
 |<<cj-btc-services,cj-btc-services>>
 | *17*
-| not yet
+| `org.consensusj.bitcoin.services`
 | Bitcoin Service-Layer objects - compatible with `jakarta.inject` (https://jcp.org/en/jsr/detail?id=330[JSR-330])
 
 |<<cj-btc-jsonrpc-integ-test,cj-btc-jsonrpc-integ-test>>
-|8
-|not yet
+|9
+|n/a
 |Bitcoin JSON-RPC integration tests (RegTest)
-
-
-|<<cj-btc-dsl-gvy,cj-btc-dsl-gvy>>
-|8
-|not yet
-|Groovy DSL support.
 
 |<<cj-btc-rx,cj-btc-rx>>
 |9
@@ -215,14 +214,39 @@ NOTE:: This module table is slightly out-of-date and will be updated shortly (th
 |`org.consensusj.bitcoin.rx.peergroup`
 |RxJava 3 JSON-RPC/ZeroMQ Client using bitcoinj PeerGroup
 
-|<<cj-bitcoinj-spock,cj-bitcoinj-spock>>
-|8
-|not yet
-|https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes.
 |===
 
+
+.bitcoinj Enhancement Modules
+[cols="4,1,3,4"]
+|===
+|Name |Min JDK |Java module name |Description
+
+|<<cj-bitcoinj-dsl-gvy,cj-bitcoinj-dsl-gvy>>
+|8
+|`org.consensusj.bitcoinj.dsl.groovy`
+|Groovy DSL support.
+
+|<<cj-bitcoinj-dsl-js,cj-bitcoinj-dsl-js>>
+|17
+|`org.consensusj.bitcoinj.dsl.js`
+|JavaScript DSL support for Nashorn. Includes JSON-RPC client.
+
+|<<cj-bitcoinj-spock,cj-bitcoinj-spock>>
+|8
+|`org.consensusj.bitcoinj.spock`
+|https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes.
+
+|<<cj-bitcoinj-util,cj-bitcoinj-util>>
+|8
+|`org.consensusj.bitcoinj.util`
+|bitcoinj utilities and enhancements. Some will be submitted upstream.
+
+|===
+
+
 .JavaMoney and Exchange Rate Support
-[cols="3,1,3,5"]
+[cols="4,1,3,4"]
 |===
 |Name |Min JDK |Java module name |Description
 
@@ -239,34 +263,30 @@ NOTE:: This module table is slightly out-of-date and will be updated shortly (th
 |===
 
 .Miscellaneous Modules
-[cols="3,1,3,5"]
+[cols="4,1,3,4"]
 |===
 |Name |Min JDK |Java module name |Description
 
-|<<cj-eth-jsonrpc,cj-eth-jsonrpc>>
+|<<consensusj-analytics,consensusj-analytics>>
 | 8
-| not yet
-| Java JSON-RPC Ethereum client (proof-of-concept)
-
-|<<cj-eth-jsonrpc-gvy,cj-eth-jsonrpc-gvy>>
-| 8
-| not yet
-| Groovy JSON-RPC Ethereum client (dynamic RPC methods)
-
-|<<cj-nmc-jsonrpc,cj-nmc-jsonrpc>>
-| 8
-| not yet
-| Java JSON-RPC Namecoin client (proof-of-concept)
-
-|<<cj-nmc-jsonrpc-gvy,cj-nmc-jsonrpc-gvy>>
-| 8
-| not yet
-| Groovy JSON-RPC Namecoin client (dynamic RPC methods)
+| `org.consensusj.analytics`
+| Richlist calculation support
 
 |<<consensusj-decentralizedid, consensusj-decentralizedid>>
 | 8
 | `org.consensusj.decentralizedid`
 | Preliminary, experimental, W3C DID and BTCR DID Method support
+
+|<<cj-eth-jsonrpc,cj-eth-jsonrpc>>
+| 9
+| `org.consensusj.ethereum.jsonrpc`
+| Java JSON-RPC Ethereum client (proof-of-concept)
+
+|<<cj-nmc-jsonrpc,cj-nmc-jsonrpc>>
+| 9
+| `org.consensusj.namecoin.jsonrpc`
+| Java JSON-RPC Namecoin client (proof-of-concept)
+
 
 |===
 
