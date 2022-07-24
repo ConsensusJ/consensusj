@@ -30,9 +30,7 @@ if (!JavaVersion.current().isJava11Compatible()) {
     include 'cj-btc-jsonrpc-gvy'                // Bitcoin JSON-RPC client with Groovy dynamic method support
     include 'cj-btc-jsonrpc-integ-test'         // RPC-based integration tests of bitcoind
     include 'cj-eth-jsonrpc'                    // Ethereum JSON-RPC client (experimental)
-    include 'cj-eth-jsonrpc-gvy'                // Ethereum JSON-RPC client w/Groovy extensions (experimental)
     include 'cj-nmc-jsonrpc'                    // Namecoin JSON-RPC client (experimental)
-    include 'cj-nmc-jsonrpc-gvy'                // Namecoin JSON-RPC client w/Groovy extensions (experimental)
 
 // JDK 11
     include 'consensusj-jsonrpc-javanet'        // JSON-RPC client using java.net.http (incubating)
