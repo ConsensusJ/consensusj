@@ -7,6 +7,59 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: under development
 
+=== Java Version upgrades
+
+* JSON-RPC clients: Java 9
+* JSON-RPC servers: Java 17
+* CLI modules: Java 17
+
+For details see https://github.com/ConsensusJ/consensusj#consensusj-modules[ConsensusJ Modules] in the README.
+
+=== Java Automatic Module Name Support
+
+* All libraries now have `Automatic-Module-Name` set in their JARs.
+* Some packages were moved to (mostly) conform to the guideline of root package and module name being the same. Notably:
+** `org.consensusj.bitcoin.rpc` -> `org.consensusj.bitcoin.jsonrpc`
+** `org.consensusj.bitcoin.test` -> `org.consensusj.bitcoin.jsonrpc.test`
+** `org.consensusj.bitcoin.rpc.groovy` -> `org.consensusj.bitcoin.jsonrpc.groovy`
+** `org.consensusj.bitcoin.rpcserver` -> `org.consensusj.bitcoin.rpc.json.rpc`
+
+=== Server-side JSON-RPC methods now return CompletableFuture
+
+* `org.consensusj.jsonrpc.JsonRpcService.call(JsonRpcRequest)` now returns `CompletableFuture<JsonRpcResponse<RSLT>>`. This means all server implementations derived from this method were also updated.
+* Corresponding changes in `consensusj-jsonrpc-daemon`, `cj-btc-json`, `cj-btc-services`, `cj-btc-daemon`.
+
+=== consensusj-jsonrpc-cli
+
+* Support parsing command-line arguments that are JSON strings.
+
+=== consensusj-jsonrpc-daemon
+
+* Add `help` command.
+
+=== cj-btc-json
+
+* add `help` and `stop` commands to `BitcoinJsonRpc`
+
+=== cj-btc-services
+
+* add `help` and `stop` commands to `WalletAppKitService`.
+* JSON-RPC methods defined in `BitcoinJsonRpc` now return `CompletableFuture` (even though `WalletAppKitService` methods still operate synchronously.)
+
+=== cj-btc-daemon
+
+* Add GraalVM support
+* Add `help` and `stop` commands
+
+=== cj-bitcoinj-util
+
+* Continued dev of signer stuff Detail TBD
+* Update BIP43 support
+
+=== Removed cj-eth-jsonrpc-groovy, cj-nmc-jsonrpc-groovy
+
+* These modules were experimental, unused (to my knowledge) and are easily constructed from the Java version with `implements DynamicRpcMethodFallback`.
+
 === Dependency Updates
 
 * Jackson 2.13.3
@@ -17,8 +70,13 @@ Released: under development
 
 === Build/Test Updates
 
+* GraalVM 22.1.0
 * Gradle 7.5
 * Spock 2.2-M3-groovy-4.0
+
+=== Contributors
+
+https://github.com/theborakompanioni[@theborakompanioni] - https://github.com/ConsensusJ/consensusj/pull/82[PR #82]: Fix README links.
 
 == v0.5.14
 

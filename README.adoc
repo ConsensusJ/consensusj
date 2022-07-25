@@ -44,8 +44,8 @@ Modular cryptocurrency libraries for Java, JVM languages, and Android.
 
 === JSON-RPC for Ethereum and Namecoin
 
-* Proof-of-concept Java and Groovy JSON-RPC clients for Ethereum (ETH)
-* Proof-of-concept Java and Groovy JSON-RPC clients for Namecoin (NMC)
+* Proof-of-concept Java JSON-RPC client for Ethereum (ETH)
+* Proof-of-concept Java JSON-RPC client for Namecoin (NMC)
 
 WARNING: Do not use this software with your private keys without doing a rigorous audit of the code first. (Feedback welcome.)
 
@@ -59,7 +59,7 @@ This project is a mono-repo with many submodules/components that are published a
 
 === Binaries
 
-Although the API is changing, binary packages are available on https://gitlab.com/ConsensusJ/consensusj/-/packages[Gitlab.com]. You can download JARs or use the provided Maven coordinates to link to them directly from your `pom.xml` or `build.gradle`.
+Although the API is changing, binary packages are available on https://gitlab.com/ConsensusJ/consensusj/-/packages[GitLab.com]. You can download JARs or use the provided Maven coordinates to link to them directly from your `pom.xml` or `build.gradle`.
 
 ==== Maven
 
@@ -93,9 +93,6 @@ We have published {cj-apidoc}/index.html[preliminary JavaDoc] to our Github page
 
 * Github Actions: image:https://github.com/ConsensusJ/consensusj/workflows/Gradle%20Build/badge.svg?branch=master["Github Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Gradle+Build%22"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml/badge.svg?branch=master["Github Actions GraalVM Builds", link="https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml"] image:https://github.com/ConsensusJ/consensusj/workflows/Bitcoin%20Core%20RegTest/badge.svg?branch=master["Github Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Bitcoin+Core+RegTest%22"]
 
-* Travis CI build:
-image:https://travis-ci.com/ConsensusJ/consensusj.svg?branch=master["Build Status", link="https://travis-ci.com/ConsensusJ/consensusj"]
-
 * GitLab CI build: image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
 
 
@@ -108,14 +105,12 @@ image:https://travis-ci.com/ConsensusJ/consensusj.svg?branch=master["Build Statu
 
 === Requirements
 
-* Most modules now require *Java 8* (Android 7) or later.
-* The server and command-line tools/libraries now require *Java 11* or later.
+* Most modules now require *Java 9* (Android 7) or later.
+* The server and command-line tools/libraries now require *Java 17* or later.
 
 === ConsensusJ Modules
 
-We are in the process of refactoring all modules into the new `org.consensusj` namespace. As part of this process, once all the packages in a module are under `org.consensusj` and there are no split packages, we are assigning JPMS module names via the "Automatic Module" mechanism. This results in a consistent package structure, easier usage by Java 9+, and a smooth migration to JPMS module descriptors.
-
-NOTE:: This module table is slightly out-of-date and will be updated shortly (there are some new "incubating" modules that are not listed.) See the `CHANGELOG` for relevant changes.
+In release v0.6.0 we have completed refactoring all modules into the new `org.consensusj` package namespace and have assigned Java Module names via the _Automatic Module_ mechanism. This provides a more consistent package structure, easier usage by Java 9+, and a smooth migration to Java Module descriptors.
 
 .Core JSON-RPC Modules
 [cols="4,1,3,4"]
@@ -293,7 +288,7 @@ NOTE:: This module table is slightly out-of-date and will be updated shortly (th
 [#consensusj-jsonrpc]
 ==== consensusj-jsonrpc
 
-Java implementation of a JSON-RPC client. {cj-apidoc}/org/consensusj/jsonrpc/RPCClient.html[RPCClient] can be subclassed or called directly using the `send()` method and `Object` parameters.
+Java implementation of a JSON-RPC client. {cj-apidoc}/org/consensusj/jsonrpc/JsonRpcClientHttpUrlConnection.html[JsonRpcClientHttpUrlConnection] can be subclassed or called directly using the `send()` method and `Object` parameters.
 
 [#consensusj-jsonrpc-gvy]
 ==== consensusj-jsonrpc-gvy

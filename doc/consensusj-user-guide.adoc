@@ -1,11 +1,12 @@
 = ConsensusJ User Guide
 Sean Gilligan
-v0.2, May 6, 2018: First draft
+v0.6, July 24, 2022: First draft
 :numbered:
 :toc:
 :toclevels: 3
 :linkattrs:
 :imagesdir: images
+//:dot: /opt/homebrew/bin/dot
 
 Paragraph TBD.
 
@@ -15,53 +16,99 @@ This section is TBD. For now the project https://github.com/ConsensusJ/consensus
 
 == JSON-RPC Clients
 
-[plantuml, format="svg", id="class-diagram"]
+The following diagram shows the basic class hierarchy of the core `org.consensusj.jsonrpc` and `org.consensusj.bitcoin.jsonrpc` modules.
+
+[plantuml, format="svg", id="class-diagram-java"]
 ....
 skinparam packageStyle Rect
 skinparam shadowing false
 hide empty members
 
 namespace org.consensusj.jsonrpc {
-    interface UntypedRPCClient
+    interface JsonRpcClient
+    interface JacksonRpcClient
     abstract class AbstractRPCClient
-    class RPCClient
+    class JsonRpcClientHttpUrlConnection
 
-    UntypedRPCClient <|.. AbstractRPCClient
-    AbstractRPCClient <|-- RPCClient
+    JsonRpcClient <|.. JacksonRpcClient
+    JacksonRpcClient <|.. AbstractRPCClient
+    AbstractRPCClient <|-- JsonRpcClientHttpUrlConnection
+
+}
+
+
+namespace org.consensusj.bitcoin.jsonrpc {
+    class BitcoinClient
+    class BitcoinExtendedClient
+
+
+
+    org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection <|-- BitcoinClient
+    BitcoinClient <|-- BitcoinExtendedClient
+}
+
+....
+
+=== Groovy
+
+By implementing the `DynamicRPCMethodFallback` `trait` we can layer dynamic JSON-RPC methods on top of static JSON-RPC methods. The following diagram leaves out some details to focus on the `DynamicRPCClient`. It _extends_ `JsonRpcClientHttpUrlConnection` and _implements_ the `DynamicRPCMethodFallback` `trait`. By doing this, it inherits the (static) methods of  `JsonRpcClientHttpUrlConnection` and falls back to dynamic method resolution for any additional method names that are used.
+
+[plantuml, format="svg", id="class-diagram-groovy"]
+....
+skinparam packageStyle Rect
+skinparam shadowing false
+hide empty members
+
+namespace org.consensusj.jsonrpc {
+    interface JsonRpcClient
+    class JsonRpcClientHttpUrlConnection
+
+    JsonRpcClient <|..JsonRpcClientHttpUrlConnection
 
 }
 
 namespace org.consensusj.jsonrpc.groovy {
-  interface DynamicRPCFallback << Groovy, trait >>
+  interface DynamicRPCMethodFallback << Groovy, trait >>
   class DynamicRPCClient << Groovy >>
 
-  org.consensusj.jsonrpc.UntypedRPCClient <|.. DynamicRPCFallback
-  org.consensusj.jsonrpc.RPCClient <|-- DynamicRPCClient
-  DynamicRPCFallback <|.. DynamicRPCClient
+  org.consensusj.jsonrpc.JsonRpcClient <|.. DynamicRPCMethodFallback
+  org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection <|-- DynamicRPCClient
+  DynamicRPCMethodFallback <|.. DynamicRPCClient
 }
 
-namespace org.consensusj.bitcoin.rpc {
-    class BitcoinClient
-    class BitcoinExtendedClient
-
-    class BitcoinScriptingClient << Groovy >>
-    class BitcoinCLIClient << Groovy >>
-
-
-    org.consensusj.jsonrpc.RPCClient <|-- BitcoinClient
-    BitcoinClient <|-- BitcoinExtendedClient
-    BitcoinExtendedClient <|-- BitcoinScriptingClient
-    org.consensusj.jsonrpc.groovy.DynamicRPCFallback <|.. BitcoinScriptingClient
-    BitcoinClient <|-- BitcoinCLIClient
-}
-
-namespace org.consensusj.namecoin.jsonrpc {
-    class NamecoinClient
-    class NamecoinScriptingClient << Groovy >>
-
-    org.consensusj.bitcoin.rpc.BitcoinClient <|-- NamecoinClient
-    NamecoinClient <|.. NamecoinScriptingClient
-    org.consensusj.jsonrpc.groovy.DynamicRPCFallback <|.. NamecoinScriptingClient
-}
 ....
 
+The following diagram (which also leaves out some details), shows how the `BitcoinScriptingClient` extends `BitcoinExtendedClient` but adds dynamic methods by implementing the `DynamicRPCMethodFallback` `trait`.
+
+[plantuml, format="svg", id="class-diagram-groovy-bitcoin"]
+....
+skinparam packageStyle Rect
+skinparam shadowing false
+hide empty members
+
+namespace org.consensusj.jsonrpc {
+    interface JsonRpcClient
+}
+
+namespace org.consensusj.jsonrpc.groovy {
+  interface DynamicRPCMethodFallback << Groovy, trait >>
+
+  org.consensusj.jsonrpc.JsonRpcClient <|.. DynamicRPCMethodFallback
+}
+
+namespace org.consensusj.bitcoin.jsonrpc {
+    class BitcoinExtendedClient
+
+    org.consensusj.jsonrpc.JsonRpcClient <|.. BitcoinExtendedClient
+}
+
+namespace org.consensusj.bitcoin.jsonrpc.groovy {
+
+    class BitcoinScriptingClient << Groovy >>
+
+
+    org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback <|.. BitcoinScriptingClient
+    org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient <|-- BitcoinScriptingClient
+}
+
+....
