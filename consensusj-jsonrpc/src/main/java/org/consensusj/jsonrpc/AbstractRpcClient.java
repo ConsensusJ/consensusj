@@ -15,7 +15,12 @@ import java.util.Base64;
 //
 // As we want to support both HttpUrlConnection vs. java.net.http while transitioning to java.net.http, we don't want to force
 // subclasses like `BitcoinClient` to choose one or the other. So making (C) transport implementation a separate, composable object
-// is the FIRST STEP. Later we can look at separating (A) and (B).
+// is the FIRST STEP. Later we can look at separating (A) and (B). My first thoughts on how to do this is:
+// (1) Create a JsonRpcClientTransport interface.
+// (2) Rename `AbstractRpcClient` to `DefaultJsonRpcClient`, make it concrete and have it take a JsonRpcClientTransport instance as
+//     a constructor parameter.
+// (3) Create two implementations of `JsonRpcClientTransport` based upon `JsonRpcClientHttpUrlConnection` and `JsonRpcClientJavaNet`.
+// (4) Optional. Maybe look at extracting a class with some common "mapper" functions between the two transport implementations
 //
 // To separate (C) the easiest way is probably via a constructor parameter.
 // The proper separation for (A) is probably a complete separation. There should be no required inheritance to implement
