@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' contentScriptType='application/ecmascript' contentStyleType='text/css' height='593px' preserveAspectRatio='none' style='width:287px;height:593px;' version='1.1' viewBox='0 0 287 593' width='287px' zoomAndPan='magnify'>
+  <defs/>
+  <g>
+    <!--MD5=[d6c030b82a1d27386b42aabafd2ac567]
+cluster org.consensusj.jsonrpc-->
+    <rect fill='#FFFFFF' height='359' style='stroke: #000000; stroke-width: 1.5;' width='246' x='22' y='24'/>
+    <text fill='#000000' font-family='sans-serif' font-size='14' font-weight='bold' lengthAdjust='spacingAndGlyphs' textLength='163' x='63.5' y='39.5352'>
+      org.consensusj.jsonrpc
+    </text>
+    <!--MD5=[9aca668e977beceb041615dea2600460]
+cluster org.consensusj.bitcoin.jsonrpc-->
+    <rect fill='#FFFFFF' height='175' style='stroke: #000000; stroke-width: 1.5;' width='232' x='44' y='407'/>
+    <text fill='#000000' font-family='sans-serif' font-size='14' font-weight='bold' lengthAdjust='spacingAndGlyphs' textLength='216' x='52' y='422.5352'>
+      org.consensusj.bitcoin.jsonrpc
+    </text>
+    <!--MD5=[4632ee6f06b8f52f955d08dd3d7e6c1a]
+class org.consensusj.jsonrpc.JsonRpcClient-->
+    <rect fill='#FEFECE' height='32' id='org.consensusj.jsonrpc.JsonRpcClient' style='stroke: #A80036; stroke-width: 1.5;' width='110' x='90' y='59'/>
+    <ellipse cx='105' cy='75' fill='#B4A7E5' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M101.4277,71.2651 L101.4277,69.1069 L108.8071,69.1069 L108.8071,71.2651 L106.3418,71.2651 L106.3418,79.3418 L108.8071,79.3418 L108.8071,81.5 L101.4277,81.5 L101.4277,79.3418 L103.8931,79.3418 L103.8931,71.2651 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='78' x='119' y='79.5352'>
+      JsonRpcClient
+    </text>
+    <!--MD5=[9587cd30ac2341026a521807297f5e1b]
+class org.consensusj.jsonrpc.JacksonRpcClient-->
+    <rect fill='#FEFECE' height='32' id='org.consensusj.jsonrpc.JacksonRpcClient' style='stroke: #A80036; stroke-width: 1.5;' width='130' x='80' y='151'/>
+    <ellipse cx='95' cy='167' fill='#B4A7E5' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M91.4277,163.2651 L91.4277,161.1069 L98.8071,161.1069 L98.8071,163.2651 L96.3418,163.2651 L96.3418,171.3418 L98.8071,171.3418 L98.8071,173.5 L91.4277,173.5 L91.4277,171.3418 L93.8931,171.3418 L93.8931,163.2651 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='98' x='109' y='171.5352'>
+      JacksonRpcClient
+    </text>
+    <!--MD5=[fe1b1fb034d9fa1ba96db31d9e9e9e4c]
+class org.consensusj.jsonrpc.AbstractRPCClient-->
+    <rect fill='#FEFECE' height='32' id='org.consensusj.jsonrpc.AbstractRPCClient' style='stroke: #A80036; stroke-width: 1.5;' width='135' x='77.5' y='243'/>
+    <ellipse cx='92.5' cy='259' fill='#A9DCDF' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M92.3633,254.3481 L91.2095,259.4199 L93.5254,259.4199 Z M90.8691,252.1069 L93.8657,252.1069 L97.2109,264.5 L94.7622,264.5 L93.9985,261.437 L90.7197,261.437 L89.9727,264.5 L87.5239,264.5 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='103' x='106.5' y='263.5352'>
+      AbstractRPCClient
+    </text>
+    <!--MD5=[62da5df15b1f2bef2bdb0c55dd2311aa]
+class org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection-->
+    <rect fill='#FEFECE' height='32' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.5;' width='214' x='38' y='335'/>
+    <ellipse cx='53' cy='351' fill='#ADD1B2' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M55.4731,357.1431 Q54.8921,357.4419 54.2529,357.5913 Q53.6138,357.7407 52.9082,357.7407 Q50.4014,357.7407 49.0815,356.0889 Q47.7617,354.437 47.7617,351.3159 Q47.7617,348.1865 49.0815,346.5347 Q50.4014,344.8828 52.9082,344.8828 Q53.6138,344.8828 54.2612,345.0322 Q54.9087,345.1816 55.4731,345.4805 L55.4731,348.2031 Q54.8423,347.6221 54.2488,347.3523 Q53.6553,347.0825 53.0244,347.0825 Q51.6797,347.0825 50.9949,348.1492 Q50.3101,349.2158 50.3101,351.3159 Q50.3101,353.4077 50.9949,354.4744 Q51.6797,355.541 53.0244,355.541 Q53.6553,355.541 54.2488,355.2712 Q54.8423,355.0015 55.4731,354.4204 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' lengthAdjust='spacingAndGlyphs' textLength='182' x='67' y='355.5352'>
+      JsonRpcClientHttpUrlConnection
+    </text>
+    <!--MD5=[01822649b9154e3677860cd33eaf6fc4]
+class org.consensusj.bitcoin.jsonrpc.BitcoinClient-->
+    <rect fill='#FEFECE' height='32' id='org.consensusj.bitcoin.jsonrpc.BitcoinClient' style='stroke: #A80036; stroke-width: 1.5;' width='101' x='94.5' y='442'/>
+    <ellipse cx='109.5' cy='458' fill='#ADD1B2' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M111.9731,464.1431 Q111.3921,464.4419 110.7529,464.5913 Q110.1138,464.7407 109.4082,464.7407 Q106.9014,464.7407 105.5815,463.0889 Q104.2617,461.437 104.2617,458.3159 Q104.2617,455.1865 105.5815,453.5347 Q106.9014,451.8828 109.4082,451.8828 Q110.1138,451.8828 110.7612,452.0322 Q111.4087,452.1816 111.9731,452.4805 L111.9731,455.2031 Q111.3423,454.6221 110.7488,454.3523 Q110.1553,454.0825 109.5244,454.0825 Q108.1797,454.0825 107.4949,455.1492 Q106.8101,456.2158 106.8101,458.3159 Q106.8101,460.4077 107.4949,461.4744 Q108.1797,462.541 109.5244,462.541 Q110.1553,462.541 110.7488,462.2712 Q111.3423,462.0015 111.9731,461.4204 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' lengthAdjust='spacingAndGlyphs' textLength='69' x='123.5' y='462.5352'>
+      BitcoinClient
+    </text>
+    <!--MD5=[783fd0a98598e26011ef9d6ec1a25193]
+class org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient-->
+    <rect fill='#FEFECE' height='32' id='org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient' style='stroke: #A80036; stroke-width: 1.5;' width='156' x='67' y='534'/>
+    <ellipse cx='82' cy='550' fill='#ADD1B2' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M84.4731,556.1431 Q83.8921,556.4419 83.2529,556.5913 Q82.6138,556.7407 81.9082,556.7407 Q79.4014,556.7407 78.0815,555.0889 Q76.7617,553.437 76.7617,550.3159 Q76.7617,547.1865 78.0815,545.5347 Q79.4014,543.8828 81.9082,543.8828 Q82.6138,543.8828 83.2612,544.0322 Q83.9087,544.1816 84.4731,544.4805 L84.4731,547.2031 Q83.8423,546.6221 83.2488,546.3523 Q82.6553,546.0825 82.0244,546.0825 Q80.6797,546.0825 79.9949,547.1492 Q79.3101,548.2158 79.3101,550.3159 Q79.3101,552.4077 79.9949,553.4744 Q80.6797,554.541 82.0244,554.541 Q82.6553,554.541 83.2488,554.2712 Q83.8423,554.0015 84.4731,553.4204 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' lengthAdjust='spacingAndGlyphs' textLength='124' x='96' y='554.5352'>
+      BitcoinExtendedClient
+    </text>
+    <!--MD5=[ee3ee4b41ebf5943cf940e0be8ae8d5d]
+reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.jsonrpc.JacksonRpcClient-->
+    <path d='M145,111.61 C145,125.31 145,140.22 145,150.96 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.JacksonRpcClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='138,111.27,145,91.27,152,111.27,138,111.27' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[01a6255b291b6021c6fc5088994f3a7f]
+reverse link org.consensusj.jsonrpc.JacksonRpcClient to org.consensusj.jsonrpc.AbstractRPCClient-->
+    <path d='M145,203.61 C145,217.31 145,232.22 145,242.96 ' fill='none' id='org.consensusj.jsonrpc.JacksonRpcClient&lt;-org.consensusj.jsonrpc.AbstractRPCClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='138,203.27,145,183.27,152,203.27,138,203.27' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[6fefed0810bfb0de7547e92017e56dc8]
+reverse link org.consensusj.jsonrpc.AbstractRPCClient to org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection-->
+    <path d='M145,295.61 C145,309.31 145,324.22 145,334.96 ' fill='none' id='org.consensusj.jsonrpc.AbstractRPCClient&lt;-org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='138,295.27,145,275.27,152,295.27,138,295.27' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[97eb4b56aaa5fa0000f831636e80729d]
+reverse link org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection to org.consensusj.bitcoin.jsonrpc.BitcoinClient-->
+    <path d='M145,387.1 C145,405.76 145,427.73 145,441.98 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinClient' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='138,387.04,145,367.04,152,387.04,138,387.04' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[f516eecb5980a42e8201f221adf3561d]
+reverse link org.consensusj.bitcoin.jsonrpc.BitcoinClient to org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient-->
+    <path d='M145,494.61 C145,508.31 145,523.22 145,533.96 ' fill='none' id='org.consensusj.bitcoin.jsonrpc.BitcoinClient&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='138,494.27,145,474.27,152,494.27,138,494.27' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[10e2a001e6a98edf6b470e34d85790ed]
+@startuml
+skinparam packageStyle Rect
+skinparam shadowing false
+hide empty members
+
+namespace org.consensusj.jsonrpc {
+    interface JsonRpcClient
+    interface JacksonRpcClient
+    abstract class AbstractRPCClient
+    class JsonRpcClientHttpUrlConnection
+
+    JsonRpcClient <|.. JacksonRpcClient
+    JacksonRpcClient <|.. AbstractRPCClient
+    AbstractRPCClient <|- - JsonRpcClientHttpUrlConnection
+
+}
+
+
+namespace org.consensusj.bitcoin.jsonrpc {
+    class BitcoinClient
+    class BitcoinExtendedClient
+
+
+
+    org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection <|- - BitcoinClient
+    BitcoinClient <|- - BitcoinExtendedClient
+}
+
+@enduml
+
+PlantUML version 1.2020.06(Sun Apr 05 05:38:32 PDT 2020)
+(APACHE source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 17.0.3+7
+Operating System: Mac OS X
+Default Encoding: UTF-8
+Language: en
+Country: US
+-->
+  </g>
+</svg>

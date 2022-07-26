@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' contentScriptType='application/ecmascript' contentStyleType='text/css' height='377px' preserveAspectRatio='none' style='width:563px;height:377px;' version='1.1' viewBox='0 0 563 377' width='563px' zoomAndPan='magnify'>
+  <defs/>
+  <g>
+    <!--MD5=[d6c030b82a1d27386b42aabafd2ac567]
+cluster org.consensusj.jsonrpc-->
+    <rect fill='#FFFFFF' height='205' style='stroke: #000000; stroke-width: 1.5;' width='274' x='22' y='24'/>
+    <text fill='#000000' font-family='sans-serif' font-size='14' font-weight='bold' lengthAdjust='spacingAndGlyphs' textLength='163' x='77.5' y='39.5352'>
+      org.consensusj.jsonrpc
+    </text>
+    <!--MD5=[9ed5e7af55394a2731ac5e85ed4b1bb0]
+cluster org.consensusj.jsonrpc.groovy-->
+    <rect fill='#FFFFFF' height='89' style='stroke: #000000; stroke-width: 1.5;' width='226' x='46' y='116'/>
+    <text fill='#000000' font-family='sans-serif' font-size='14' font-weight='bold' lengthAdjust='spacingAndGlyphs' textLength='49' x='134.5' y='131.5352'>
+      groovy
+    </text>
+    <!--MD5=[9aca668e977beceb041615dea2600460]
+cluster org.consensusj.bitcoin.jsonrpc-->
+    <rect fill='#FFFFFF' height='247' style='stroke: #000000; stroke-width: 1.5;' width='232' x='320' y='119'/>
+    <text fill='#000000' font-family='sans-serif' font-size='14' font-weight='bold' lengthAdjust='spacingAndGlyphs' textLength='216' x='328' y='134.5352'>
+      org.consensusj.bitcoin.jsonrpc
+    </text>
+    <!--MD5=[09aa1014fd1eb4c3e4a090a2938b01a3]
+cluster org.consensusj.bitcoin.jsonrpc.groovy-->
+    <rect fill='#FFFFFF' height='89' style='stroke: #000000; stroke-width: 1.5;' width='182' x='344' y='253'/>
+    <text fill='#000000' font-family='sans-serif' font-size='14' font-weight='bold' lengthAdjust='spacingAndGlyphs' textLength='49' x='410.5' y='268.5352'>
+      groovy
+    </text>
+    <!--MD5=[4632ee6f06b8f52f955d08dd3d7e6c1a]
+class org.consensusj.jsonrpc.JsonRpcClient-->
+    <rect fill='#FEFECE' height='32' id='org.consensusj.jsonrpc.JsonRpcClient' style='stroke: #A80036; stroke-width: 1.5;' width='110' x='137' y='59'/>
+    <ellipse cx='152' cy='75' fill='#B4A7E5' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M148.4277,71.2651 L148.4277,69.1069 L155.8071,69.1069 L155.8071,71.2651 L153.3418,71.2651 L153.3418,79.3418 L155.8071,79.3418 L155.8071,81.5 L148.4277,81.5 L148.4277,79.3418 L150.8931,79.3418 L150.8931,71.2651 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='78' x='166' y='79.5352'>
+      JsonRpcClient
+    </text>
+    <!--MD5=[fd4078fe9bdc5566164caefcd68a7e7e]
+class org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback-->
+    <rect fill='#FEFECE' height='38.2656' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.5;' width='194' x='62' y='151'/>
+    <ellipse cx='77' cy='170.1328' fill='#B4A7E5' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M73.4277,166.3979 L73.4277,164.2397 L80.8071,164.2397 L80.8071,166.3979 L78.3418,166.3979 L78.3418,174.4746 L80.8071,174.4746 L80.8071,176.6328 L73.4277,176.6328 L73.4277,174.4746 L75.8931,174.4746 L75.8931,166.3979 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='83' x='130.5' y='167.6016'>
+      «Groovy, trait»
+    </text>
+    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='162' x='91' y='181.7344'>
+      DynamicRPCMethodFallback
+    </text>
+    <!--MD5=[783fd0a98598e26011ef9d6ec1a25193]
+class org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient-->
+    <rect fill='#FEFECE' height='32' id='org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient' style='stroke: #A80036; stroke-width: 1.5;' width='156' x='346' y='154'/>
+    <ellipse cx='361' cy='170' fill='#ADD1B2' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M363.4731,176.1431 Q362.8921,176.4419 362.2529,176.5913 Q361.6138,176.7407 360.9082,176.7407 Q358.4014,176.7407 357.0815,175.0889 Q355.7617,173.437 355.7617,170.3159 Q355.7617,167.1865 357.0815,165.5347 Q358.4014,163.8828 360.9082,163.8828 Q361.6138,163.8828 362.2612,164.0322 Q362.9087,164.1816 363.4731,164.4805 L363.4731,167.2031 Q362.8423,166.6221 362.2488,166.3523 Q361.6553,166.0825 361.0244,166.0825 Q359.6797,166.0825 358.9949,167.1492 Q358.3101,168.2158 358.3101,170.3159 Q358.3101,172.4077 358.9949,173.4744 Q359.6797,174.541 361.0244,174.541 Q361.6553,174.541 362.2488,174.2712 Q362.8423,174.0015 363.4731,173.4204 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' lengthAdjust='spacingAndGlyphs' textLength='124' x='375' y='174.5352'>
+      BitcoinExtendedClient
+    </text>
+    <!--MD5=[e081d8efed490c8ddc3c72b8aecd7cfe]
+class org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient-->
+    <rect fill='#FEFECE' height='38.2656' id='org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.5;' width='150' x='360' y='288'/>
+    <ellipse cx='375' cy='307.1328' fill='#ADD1B2' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M377.4731,313.2759 Q376.8921,313.5747 376.2529,313.7241 Q375.6138,313.8735 374.9082,313.8735 Q372.4014,313.8735 371.0815,312.2217 Q369.7617,310.5698 369.7617,307.4487 Q369.7617,304.3193 371.0815,302.6675 Q372.4014,301.0156 374.9082,301.0156 Q375.6138,301.0156 376.2612,301.165 Q376.9087,301.3145 377.4731,301.6133 L377.4731,304.3359 Q376.8423,303.7549 376.2488,303.4851 Q375.6553,303.2153 375.0244,303.2153 Q373.6797,303.2153 372.9949,304.282 Q372.3101,305.3486 372.3101,307.4487 Q372.3101,309.5405 372.9949,310.6072 Q373.6797,311.6738 375.0244,311.6738 Q375.6553,311.6738 376.2488,311.4041 Q376.8423,311.1343 377.4731,310.5532 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='52' x='422' y='304.6016'>
+      «Groovy»
+    </text>
+    <text fill='#000000' font-family='sans-serif' font-size='12' lengthAdjust='spacingAndGlyphs' textLength='118' x='389' y='318.7344'>
+      BitcoinScriptingClient
+    </text>
+    <!--MD5=[ff1f07209556703b9dc20fa62e76f680]
+reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback-->
+    <path d='M179.83,110.31 C174.96,124.01 169.56,139.24 165.48,150.74 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='173.27,107.86,186.55,91.36,186.46,112.55,173.27,107.86' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[f9b13b3b4fd44aae865b4aab470b4851]
+reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient-->
+    <path d='M248.42,98.56 C256.34,101.73 264.37,104.94 272,108 C311.06,123.65 355.76,141.59 386.53,153.95 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='245.82,105.06,229.85,91.13,251.02,92.06,245.82,105.06' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[62a22a9d8b219e737de4efab4f6cc8bb]
+reverse link org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback to org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient-->
+    <path d='M213.97,197.89 C268.5,224.56 350.56,264.7 397.84,287.82 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='210.83,204.14,195.94,189.07,216.98,191.57,210.83,204.14' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[7bd8ebe65fb5e91b0a6ae39edc7da5c7]
+reverse link org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient to org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient-->
+    <path d='M426.89,206.43 C429.01,232.47 431.81,266.82 433.5,287.61 ' fill='none' id='org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient&lt;-org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='419.89,206.73,425.24,186.22,433.84,205.59,419.89,206.73' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[e94ce66b61b6073741ecca89c180794c]
+@startuml
+skinparam packageStyle Rect
+skinparam shadowing false
+hide empty members
+
+namespace org.consensusj.jsonrpc {
+    interface JsonRpcClient
+}
+
+namespace org.consensusj.jsonrpc.groovy {
+  interface DynamicRPCMethodFallback << Groovy, trait >>
+
+  org.consensusj.jsonrpc.JsonRpcClient <|.. DynamicRPCMethodFallback
+}
+
+namespace org.consensusj.bitcoin.jsonrpc {
+    class BitcoinExtendedClient
+
+    org.consensusj.jsonrpc.JsonRpcClient <|.. BitcoinExtendedClient
+}
+
+namespace org.consensusj.bitcoin.jsonrpc.groovy {
+
+    class BitcoinScriptingClient << Groovy >>
+
+
+    org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback <|.. BitcoinScriptingClient
+    org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient <|- - BitcoinScriptingClient
+}
+
+@enduml
+
+PlantUML version 1.2020.06(Sun Apr 05 05:38:32 PDT 2020)
+(APACHE source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 17.0.3+7
+Operating System: Mac OS X
+Default Encoding: UTF-8
+Language: en
+Country: US
+-->
+  </g>
+</svg>
