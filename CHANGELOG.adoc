@@ -7,9 +7,25 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: 2022-07-26
 
+=== Java Version consistency and upgrades
+
+* Fixed a build issue causing `cj-btc-jsonrpc-gvy` to have Java 17 bytecode.
+* Java 9 is now the default target API & bytecode for most JARs
+* The following modules are still Java 8:
+** `cj-bitcoinj-dsl-gvy` (**bitcoinj** Groovy DSL)
+** `cj-bitcoinj-util` (**bitcoinj** add-on Utilities)
+* The following modules require Java 11:
+** `consensusj-jsonrpc-javanet` (uses Java 11's `java.net.http`)
+* The following modules require Java 17:
+** `cj-bitcoinj-dsl-js` (Uses _unbundled_ Nashorn Javascript support)
+** `cj-btc-services` (Intended for server-side usage)
+** CLI tools/libraries
+** Server daemons
+
+
 === Build
 
-* Fix issues with JAR bytecode versions
+* `options.release` is used to enforce usage of correct Java API versions in each module.
 
 == v0.6.0
 

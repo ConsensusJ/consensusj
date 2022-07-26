@@ -105,8 +105,9 @@ We have published {cj-apidoc}/index.html[preliminary JavaDoc] to our Github page
 
 === Requirements
 
-* Most modules now require *Java 9* (Android 7) or later.
-* The server and command-line tools/libraries now require *Java 17* or later.
+* Most modules now require *Java 9* or later.
+* `bitcoinj-util` and `bitcoinj-dsl-gvy` still work with JDK 8
+* The server and command-line tools/libraries require *Java 17* or later.
 
 === ConsensusJ Modules
 
@@ -160,7 +161,7 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 |Name |Min JDK |Java module name |Description
 
 |<<cj-btc-json,cj-btc-json>>
-|8
+| 9
 | `org.consensusj.bitcoin.json`
 |Jackson serializers, deserializers & POJOs for Bitcoin JSON-RPC
 
@@ -190,22 +191,22 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 | Bitcoin Service-Layer objects - compatible with `jakarta.inject` (https://jcp.org/en/jsr/detail?id=330[JSR-330])
 
 |<<cj-btc-jsonrpc-integ-test,cj-btc-jsonrpc-integ-test>>
-|9
+| 9
 |n/a
 |Bitcoin JSON-RPC integration tests (RegTest)
 
 |<<cj-btc-rx,cj-btc-rx>>
-|9
+| 9
 |`org.consensusj.bitcoin.rx`
 |Reactive interfaces for Bitcoin.
 
 |<<cj-btc-rx-jsonrpc,cj-btc-rx-jsonrpc>>
-|9
+| 9
 |`org.consensusj.bitcoin.rx.jsonrpc`
 |RxJava 3 JSON-RPC/ZeroMQ Client for Bitcoin Core
 
 |<<cj-btc-rx-peergroup,cj-btc-rx-peergroup>>
-|9
+| 9
 |`org.consensusj.bitcoin.rx.peergroup`
 |RxJava 3 JSON-RPC/ZeroMQ Client using bitcoinj PeerGroup
 
@@ -218,22 +219,22 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 |Name |Min JDK |Java module name |Description
 
 |<<cj-bitcoinj-dsl-gvy,cj-bitcoinj-dsl-gvy>>
-|8
+| 8
 |`org.consensusj.bitcoinj.dsl.groovy`
 |Groovy DSL support.
 
 |<<cj-bitcoinj-dsl-js,cj-bitcoinj-dsl-js>>
-|17
+| 17
 |`org.consensusj.bitcoinj.dsl.js`
 |JavaScript DSL support for Nashorn. Includes JSON-RPC client.
 
 |<<cj-bitcoinj-spock,cj-bitcoinj-spock>>
-|8
+| 8
 |`org.consensusj.bitcoinj.spock`
 |https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes.
 
 |<<cj-bitcoinj-util,cj-bitcoinj-util>>
-|8
+| 8
 |`org.consensusj.bitcoinj.util`
 |bitcoinj utilities and enhancements. Some will be submitted upstream.
 
@@ -246,12 +247,12 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 |Name |Min JDK |Java module name |Description
 
 |<<consensusj-currency,consensusj-currency>>
-| 8
+| 9
 | `org.consensusj.currency`
 | http://javamoney.github.io[JavaMoney] Currency Provider(s)
 
 |<<consensusj-exchange,consensusj-exchange>>
-| 8
+| 9
 | `org.consensusj.exchange`
 | http://javamoney.github.io[JavaMoney] Exchange Providers. Adapter to use http://knowm.org/open-source/xchange/[XChange] `Exchange` implementations as JavaMoney `ExchangeRateProvider`s.
 
@@ -263,12 +264,12 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 |Name |Min JDK |Java module name |Description
 
 |<<consensusj-analytics,consensusj-analytics>>
-| 8
+| 9
 | `org.consensusj.analytics`
 | Richlist calculation support
 
 |<<consensusj-decentralizedid, consensusj-decentralizedid>>
-| 8
+| 9
 | `org.consensusj.decentralizedid`
 | Preliminary, experimental, W3C DID and BTCR DID Method support
 
