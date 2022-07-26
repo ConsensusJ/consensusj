@@ -1,11 +1,13 @@
 plugins {
     id 'java-library'
+    id 'groovy'
 }
 
-sourceCompatibility = 9
-targetCompatibility = 9
-
 ext.moduleName = 'org.consensusj.bitcoin.jsonrpc.groovy'
+
+tasks.withType(GroovyCompile) {
+    targetCompatibility = 9
+}
 
 dependencies {
     api project(':cj-btc-jsonrpc')

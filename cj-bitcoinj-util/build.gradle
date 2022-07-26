@@ -2,8 +2,9 @@ plugins {
     id 'java-library'
 }
 
-sourceCompatibility = 8
-targetCompatibility = 8
+tasks.withType(JavaCompile) {
+    options.release = 8
+}
 
 ext.moduleName = 'org.consensusj.bitcoinj.util'
 

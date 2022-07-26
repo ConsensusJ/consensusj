@@ -40,9 +40,6 @@ allprojects {
 }
 
 subprojects {
-    sourceCompatibility = 8
-    targetCompatibility = 8
-
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 
@@ -72,6 +69,7 @@ subprojects {
     compileJava {
         options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
         options.encoding = 'UTF-8'
+        options.release = 9
     }
 
     tasks.withType(GroovyCompile) {

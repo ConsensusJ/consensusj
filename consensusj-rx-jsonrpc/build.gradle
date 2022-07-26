@@ -2,9 +2,6 @@ plugins {
     id 'java-library'
 }
 
-sourceCompatibility = 9
-targetCompatibility = 9
-
 ext.moduleName = 'org.consensusj.rx.jsonrpc'
 
 dependencies {

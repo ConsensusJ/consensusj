@@ -2,9 +2,6 @@ plugins {
     id 'java-library'
 }
 
-sourceCompatibility = 8
-targetCompatibility = 8
-
 dependencies {
     api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
     api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"

@@ -1,6 +1,3 @@
-sourceCompatibility = 9
-targetCompatibility = 9
-
 configurations {
     integrationTestImplementation.extendsFrom testImplementation
     integrationTestRuntimeOnly.extendsFrom testRuntimeOnly

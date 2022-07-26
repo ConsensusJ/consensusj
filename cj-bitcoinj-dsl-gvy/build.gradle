@@ -4,6 +4,10 @@ plugins {
 
 ext.moduleName = 'org.consensusj.bitcoinj.dsl.gvy'
 
+tasks.withType(GroovyCompile) {
+    targetCompatibility = 1.8
+}
+
 dependencies {
     api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
     implementation "org.apache.groovy:groovy:${groovyVersion}"

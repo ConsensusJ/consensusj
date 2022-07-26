@@ -2,12 +2,16 @@ plugins {
     id 'java-library'
 }
 
-sourceCompatibility = 9
-targetCompatibility = 9
+ext.moduleName = 'org.consensusj.jsonrpc.groovy'
+
+tasks.withType(GroovyCompile) {
+    targetCompatibility = 9
+}
 
 dependencies {
     api project(':consensusj-jsonrpc')
     implementation "org.slf4j:slf4j-api:${slf4jVersion}"       // Loggable trait is part of API
+
     implementation "org.apache.groovy:groovy:${groovyVersion}"
 
     testImplementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
@@ -15,12 +19,12 @@ dependencies {
     }
 }
 
-ext.moduleName = 'org.consensusj.jsonrpc.groovy'
-
 jar {
     inputs.property("moduleName", moduleName)
     manifest {
-        attributes "Automatic-Module-Name": moduleName
+        attributes  'Implementation-Title': 'ConsensusJ JSON-RPC Groovy Support',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
     }
 }
 

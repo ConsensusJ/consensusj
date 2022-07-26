@@ -1,5 +1,9 @@
 ext.moduleName = 'org.consensusj.bitcoinj.spock'
 
+tasks.withType(GroovyCompile) {
+    targetCompatibility = 1.8
+}
+
 dependencies {
     testImplementation "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
     testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy extensions in tests

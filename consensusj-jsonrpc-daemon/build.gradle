@@ -3,6 +3,10 @@ plugins {
     id("io.micronaut.application") version "${micronautAppGradlePluginVersion}"
 }
 
+tasks.withType(JavaCompile) {
+    options.release = 17
+}
+
 micronaut {
     runtime("netty")
     testRuntime("spock2")
@@ -35,11 +39,6 @@ dependencies {
 
 application {
     mainClass.set("org.consensusj.jsonrpc.daemon.Application")
-}
-
-java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-    targetCompatibility = JavaVersion.toVersion("17")
 }
 
 dockerBuild {

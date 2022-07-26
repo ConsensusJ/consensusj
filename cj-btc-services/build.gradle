@@ -4,8 +4,9 @@ plugins {
 
 ext.moduleName = 'org.consensusj.bitcoin.services'
 
-sourceCompatibility = 17
-targetCompatibility = 17
+tasks.withType(JavaCompile) {
+    options.release = 17
+}
 
 dependencies {
     api project(':cj-btc-json')
