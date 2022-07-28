@@ -3,6 +3,10 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
+== v0.6.2-SHAPSHOT
+
+Released: not yet
+
 == v0.6.1
 
 Released: 2022-07-26
