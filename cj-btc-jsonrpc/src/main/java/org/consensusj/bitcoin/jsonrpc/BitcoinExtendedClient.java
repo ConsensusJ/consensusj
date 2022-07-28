@@ -252,14 +252,10 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @return The balance
      */
     public Coin getBitcoinBalance(Address address, Integer minConf, Integer maxConf) throws JsonRpcStatusException, IOException {
-        long btcBalance = 0;
-        List<UnspentOutput> unspentOutputs = listUnspent(minConf, maxConf, Collections.singletonList(address));
-
-        for (UnspentOutput unspentOutput : unspentOutputs) {
-            btcBalance += unspentOutput.getAmount().value;
-        }
-
-        return Coin.valueOf(btcBalance);
+        return listUnspent(minConf, maxConf, Collections.singletonList(address))
+                .stream()
+                .map(UnspentOutput::getAmount)
+                .reduce(Coin.ZERO, Coin::add);
     }
 
     /**
@@ -318,17 +314,15 @@ public class BitcoinExtendedClient extends BitcoinClient {
 
         // Calculate change (units are satoshis)
         // First sum all available UTXOs
-        final long amountIn = unspentOutputs.stream()
+        final Coin amountIn = unspentOutputs.stream()
                 .map(TransactionOutput::getValue)
-                .mapToLong(Coin::getValue)
-                .sum();
+                .reduce(Coin.ZERO, Coin::add);
         // Then sum the requested outputs for this transaction
-        final long amountOut = outputs.stream()
+        final Coin amountOut = outputs.stream()
                 .map(TransactionOutput::getValue)
-                .mapToLong(Coin::getValue)
-                .sum();
+                .reduce(Coin.ZERO, Coin::add);
         // Change is the difference less the standard transaction fee
-        final long amountChange = amountIn - amountOut - stdTxFeeSatoshis;
+        final long amountChange = amountIn.value - amountOut.value - stdTxFeeSatoshis;
         if (amountChange < 0) {
             // TODO: Throw Exception
             System.out.println("Insufficient funds"); // + ": ${amountIn} < ${amountOut + stdTxFeeSatoshis}"
