@@ -7,6 +7,18 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: not yet
 
+=== cj-btc-jsonrpc-integ-test
+
+* Add `WalletAppKitRegTest` a pure-Java RegTest-based integration test.
+
+=== Dependency updates
+
+* Continue to depend on **bitcoinj** 0.16.1 but decrease usage of `org.bitcoinj.core.Context` to prepare for breaking changes in **bitcoinj** 0.17.
+
+=== Build/Test
+
+* Add `-peerbloomfilters` option to `test-run-regtest.sh`
+
 == v0.6.1
 
 Released: 2022-07-26
