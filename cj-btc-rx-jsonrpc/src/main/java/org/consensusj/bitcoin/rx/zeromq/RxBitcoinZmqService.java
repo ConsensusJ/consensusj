@@ -7,7 +7,6 @@ import io.reactivex.rxjava3.processors.BehaviorProcessor;
 import io.reactivex.rxjava3.processors.FlowableProcessor;
 import org.bitcoinj.core.BitcoinSerializer;
 import org.bitcoinj.core.Block;
-import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.Transaction;
@@ -25,7 +24,6 @@ import java.net.URI;
  *  have to wait ~ten minutes for one.
  */
 public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements RxBlockchainService, ChainTipService, Closeable {
-    private final Context bitcoinContext;
     private final BitcoinSerializer bitcoinSerializer;
 
     private final FlowableProcessor<ChainTip> flowableChainTip = BehaviorProcessor.create();
@@ -37,7 +35,6 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
 
     public RxBitcoinZmqService(RxBitcoinClient client) {
         super(client);
-        bitcoinContext = new Context(networkParameters);
         bitcoinSerializer = networkParameters.getSerializer(false);
         blockSubscription = blockPublisher()
                 .flatMapSingle(client::activeChainTipFromBestBlock)
@@ -96,16 +93,4 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
     void onNextChainTip(ChainTip tip) {
         flowableChainTip.onNext(tip);
     }
-
-    /**
-     * This method might be useful if we end up needing bitcoinj Context-aware threads
-     * for deserializing binary messages to bitcoinj types.
-     */
-    private Thread createZMQThread(Runnable runnable) {
-        return new Thread(() -> {
-            Context.propagate(this.bitcoinContext);
-            runnable.run();
-        }, "ZMQ Bitcoin Thread (" + networkParameters.getId()  +")");
-    }
-
 }

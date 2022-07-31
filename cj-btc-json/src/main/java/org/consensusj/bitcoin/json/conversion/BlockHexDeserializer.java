@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.bitcoinj.core.Block;
-import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.ProtocolException;
 
@@ -17,10 +16,10 @@ import java.io.IOException;
  *
  */
 public class BlockHexDeserializer extends JsonDeserializer<Block> {
-    private final Context context;
+    private final NetworkParameters netParams;
 
     public BlockHexDeserializer(NetworkParameters netParams) {
-        this.context = new Context(netParams);
+        this.netParams = netParams;
     }
 
     @Override
@@ -30,7 +29,7 @@ public class BlockHexDeserializer extends JsonDeserializer<Block> {
             case VALUE_STRING:
                 try {
                     byte[] payload = HexUtil.hexStringToByteArray(p.getValueAsString()); // convert  to hex
-                    return context.getParams().getDefaultSerializer().makeBlock(payload);
+                    return netParams.getDefaultSerializer().makeBlock(payload);
                 } catch (ProtocolException e) {
                     throw new InvalidFormatException(p, "Invalid Block", p.getValueAsString(), Block.class);
                 }

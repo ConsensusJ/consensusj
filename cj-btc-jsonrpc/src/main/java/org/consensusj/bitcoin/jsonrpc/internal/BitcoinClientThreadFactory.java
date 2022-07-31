@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadFactory;
 
 /**
  * A {@link ThreadFactory} for the {@link BitcoinClient}. It is based upon <b>bitcoinj</b>'s
- * {@link org.bitcoinj.utils.ContextPropagatingThreadFactory} but differs in two ways:
+ * {@link org.bitcoinj.utils.ContextPropagatingThreadFactory} but differs in a few ways:
  * <ul>
  *     <li>It takes a {@link Context} in the constructor rather than propagating the Context from the caller. We want
  *     all threads in the pool to have the same context as the associated {@code BitcoinClient} and (more importantly)

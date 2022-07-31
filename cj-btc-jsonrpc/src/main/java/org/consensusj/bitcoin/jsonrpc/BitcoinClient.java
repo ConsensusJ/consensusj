@@ -96,7 +96,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     private static final int RETRY_SECONDS = 5;
     private static final int MESSAGE_SECONDS = 30;
     
-    protected final Context context;
+    protected final NetworkParameters netParams;
     protected final ThreadFactory threadFactory;
     protected final ExecutorService executorService;
 
@@ -106,9 +106,9 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
 
     public BitcoinClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         super(sslSocketFactory, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
-        context = new Context(netParams);
-        mapper.registerModule(new RpcClientModule(context.getParams()));
-        threadFactory = new BitcoinClientThreadFactory(context, "Bitcoin RPC Client");
+        this.netParams = netParams;
+        mapper.registerModule(new RpcClientModule(netParams));
+        threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(netParams), "Bitcoin RPC Client");
         // TODO: Tune and/or make configurable the thread pool size.
         // Current pool size of 5 is chosen to minimize simultaneous active RPC
         // calls in `bitcoind` -- which is not designed for serving multiple clients.
@@ -140,7 +140,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      */
     @Override
     public NetworkParameters getNetParams() {
-        return context.getParams();
+        return netParams;
     }
 
     @Override
@@ -517,7 +517,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     public Transaction getRawTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {
         String hexEncoded = send("getrawtransaction", txid);
         byte[] raw = HexUtil.hexStringToByteArray(hexEncoded);
-        return new Transaction(context.getParams(), raw);
+        return new Transaction(netParams, raw);
     }
 
     /**

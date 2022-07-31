@@ -75,7 +75,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
     }
 
     public synchronized Address getRegTestMiningAddress() {
-        if (!context.getParams().getId().equals(NetworkParameters.ID_REGTEST)) {
+        if (!netParams.getId().equals(NetworkParameters.ID_REGTEST)) {
             throw new UnsupportedOperationException("Operation only supported in RegTest context");
         }
         if (regTestMiningAddress == null) {
