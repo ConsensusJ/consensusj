@@ -87,7 +87,7 @@ import java.util.stream.Stream;
  * <b>This is still a work-in-progress and the API will change.</b>
  *
  */
-public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements ChainTipClient, NetworkParametersProperty {
+public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements ChainTipClient {
     private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);
 
     private static final int THREAD_POOL_SIZE = 5;
@@ -138,7 +138,6 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * Get network parameters
      * @return network parameters for the server
      */
-    @Override
     public NetworkParameters getNetParams() {
         return netParams;
     }
