@@ -17,6 +17,7 @@ Released: not yet
 
 === Build/Test
 
+* Upgrade to Gradle 7.5.1
 * Add `-peerbloomfilters` option to `test-run-regtest.sh`
 
 == v0.6.1
