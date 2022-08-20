@@ -28,8 +28,9 @@ public class CoinDeserializer extends JsonDeserializer<Coin> {
                 long val = p.getNumberValue().longValue(); // should be optimal, whatever it is
                 return Coin.ofSat(val);
 
-            // TODO: Allow reading a numeric string. There seem to be cases where a BTC decimal balance
-            // is encoded wrapped with quotes.
+            // Read a numeric string. There are cases where a BTC decimal balance is encoded wrapped with quotes.
+            case VALUE_STRING:
+                return Coin.parseCoin(p.getText());
 
             default:
                 return (Coin) ctxt.handleUnexpectedToken(Coin.class, p);

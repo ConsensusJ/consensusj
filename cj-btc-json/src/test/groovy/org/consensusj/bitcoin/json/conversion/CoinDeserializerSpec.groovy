@@ -17,12 +17,17 @@ class CoinDeserializerSpec extends BaseObjectMapperSpec {
         result == expectedResult
 
         where:
-        fragment     | expectedResult
-        '21000000.0' | NetworkParameters.MAX_MONEY
-        '1.0'        | Coin.COIN
-        '0.001'      | Coin.MILLICOIN
-        '0.000001'   | Coin.MICROCOIN
-        '0.00000001' | Coin.SATOSHI
+        fragment        | expectedResult
+        '21000000.0'    | NetworkParameters.MAX_MONEY
+        '1.0'           | Coin.COIN
+        '0.001'         | Coin.MILLICOIN
+        '0.000001'      | Coin.MICROCOIN
+        '0.00000001'    | Coin.SATOSHI
+        '"21000000.0"'  | NetworkParameters.MAX_MONEY
+        '"1.0"'         | Coin.COIN
+        '"0.001"'       | Coin.MILLICOIN
+        '"0.000001"'    | Coin.MICROCOIN
+        '"0.00000001"'  | Coin.SATOSHI
     }
 
     @Override
