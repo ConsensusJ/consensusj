@@ -6,6 +6,7 @@ import org.bitcoinj.core.LegacyAddress;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
 import org.consensusj.bitcoin.json.pojo.AddressGroupingItem;
 import org.consensusj.bitcoin.json.pojo.AddressInfo;
+import org.consensusj.bitcoin.json.pojo.BitcoinTransactionInfo;
 import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
 import org.consensusj.bitcoin.json.pojo.BlockInfo;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
@@ -799,6 +800,42 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
 
     public WalletTransactionInfo getTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {
         return send("gettransaction", WalletTransactionInfo.class, txid);
+    }
+
+    /**
+     * List the default number (10) of wallet transactions.
+     * @return A list of wallet transactions
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public List<BitcoinTransactionInfo> listTransactions() throws JsonRpcStatusException, IOException {
+        return listTransactions(null, null, null, null);
+    }
+
+    /**
+     * List wallet transactions.
+     * @param label Return transactions matching this address label, use "*" to return all transactions. {@code null} will use the server default ({@code "*"})
+     * @param count Maximum number of transactions to return. {@code null} will use the sever default number (10)
+     * @return A list of wallet transactions
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public List<BitcoinTransactionInfo> listTransactions(String label, Integer count) throws JsonRpcStatusException, IOException {
+        return listTransactions(label, count, null, null);
+    }
+    /**
+     * List wallet transactions
+     * @param label Return transactions matching this address label, use "*" to return all transactions. {@code null} will use the server default ({@code "*"})
+     * @param count Maximum number of transactions to return. {@code null} will use the sever default number (10)
+     * @param skip Number of transactions to skip. {@code null} will use the server default (0)
+     * @param includeWatchOnly Include transactions to/from watch-only addresses. {@code null} will use the server default, which is  ({@code true}) for watch-only wallets, {@code false} otherwise.
+     * @return A list of wallet transactions
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public List<BitcoinTransactionInfo> listTransactions(String label, Integer count, Integer skip, Boolean includeWatchOnly) throws JsonRpcStatusException, IOException {
+        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, BitcoinTransactionInfo.class);
+        return send("listtransactions", resultType, label, count, skip, includeWatchOnly);
     }
 
     /**
