@@ -25,9 +25,9 @@ public class BitcoinZmqPortFinder {
     public Optional<URI> findPort(BitcoinZmqMessage.Topic topic) {
         getNotifications();
         return notifications.stream()
-                .filter(n -> n.getType().equals("pub" + topic.toString()))
+                .filter(n -> n.type().equals("pub" + topic.toString()))
                 .findFirst()
-                .map(ZmqNotification::getAddress)
+                .map(ZmqNotification::address)
                 .map(this::mapUri);
     }
     

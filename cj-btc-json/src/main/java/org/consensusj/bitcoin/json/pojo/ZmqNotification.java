@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.net.URI;
 
 /**
- * Information on ZMQ Notifications, returned in an array by `getzmqnotifications` RPC
+ * Information about an active ZeroMQ notification. An array of this type is returned by the {@code getzmqnotifications} JSON-RPC method.
  */
 public class ZmqNotification {
     private final String type;
@@ -22,15 +22,28 @@ public class ZmqNotification {
         this.hwm = hwm;
     }
 
-    public String getType() {
+    /**
+     * @return Type of notification
+     */
+    public String type() {
         return type;
     }
 
-    public URI getAddress() {
+
+    /**
+     * @return Address of the publisher
+     */
+    public URI address() {
         return address;
     }
 
-    public int getHwm() {
+    /**
+     * @return Outbound message high water mark
+     */
+    public int hwm() {
         return hwm;
     }
+
+    @Deprecated public String getType() { return type(); }
+    @Deprecated public URI getAddress() { return address(); }
 }
