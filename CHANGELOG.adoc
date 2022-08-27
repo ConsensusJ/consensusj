@@ -14,6 +14,7 @@ Released: not yet
 === Dependency updates
 
 * Continue to depend on **bitcoinj** 0.16.1 but decrease usage of `org.bitcoinj.core.Context` to prepare for breaking changes in **bitcoinj** 0.17.
+* SLF4J 2.0.0
 
 === Build/Test
 
