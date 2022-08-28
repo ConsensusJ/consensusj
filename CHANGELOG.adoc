@@ -325,10 +325,10 @@ Released: 2021-11-01
 
 * Gradle 7.2
 * Asciidoctor Gradle Plugin 3.3.2
-* Github Actions: Use **Temurin** (JDK 11 & 17)
-* Github Actions: Use **GraalVM** 21.3.0 (JDK 11 & 17)
-* Github Actions: Upgrade to `setup-java@v2.2.0` action
-* Github Actions: Upgrade to `setup-graalvm@4.0` action
+* 'GitHub Actions: Use **Temurin** (JDK 11 & 17)
+* 'GitHub Actions: Use **GraalVM** 21.3.0 (JDK 11 & 17)
+* 'GitHub Actions: Upgrade to `setup-java@v2.2.0` action
+* 'GitHub Actions: Upgrade to `setup-graalvm@4.0` action
 * Use Omni Core 0.11.0 in RegTest CI
 
 == v0.5.9
@@ -510,15 +510,15 @@ Released: 2021.02.26
 
 === Build
 
-* Official build now uses JDK 11 - Github Actions and Travis CI updated accordingly
+* Official build now uses JDK 11 - 'GitHub Actions and Travis CI updated accordingly
 * TravisCI -- add `build` target (which was surprisingly missing)
 * Add `buildDeprecatedModules` in `settings.gradle`, set to `"true"` for now (see https://github.com/ConsensusJ/consensusj/issues/69[Issue 69])
 * Asciidoclet is temporarily disabled (sadly)
 * Gradle 6.8.2
 * Update Micronaut daemon build scripts to latest Micronaut Gradle Plugin, etc.
-* Add Github Actions "Gradle Build": `gradle.yml`
-* Add Github Actions "GraalVM Build": `graalvm.yml`
-* Add Github Actions "Bitcoin Core RegTest": `regtest.yml`
+* Add 'GitHub Actions "Gradle Build": `gradle.yml`
+* Add 'GitHub Actions "GraalVM Build": `graalvm.yml`
+* Add 'GitHub Actions "Bitcoin Core RegTest": `regtest.yml`
 * Only build `cj-bitcoinj-dsl-js` if JDK < 15
 * Spock 2.0-M4-groovy-3.0
 

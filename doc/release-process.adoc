@@ -21,9 +21,9 @@
 . Push: `git push --tags origin master`
 . Publish to Maven Repo (currently on Gitlab):
 .. `./gradlew publish`
-. Update Github-pages site (including JavaDoc)
+. Update GitHub-pages site (including JavaDoc)
 .. `./gradlew javadocAll publishSite`
-.. Add Release on Github
+.. Add Release on GitHub
 
 == Announcements
 

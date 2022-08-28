@@ -1,4 +1,4 @@
-= ConsensusJ Github Pages
+= ConsensusJ GitHub Pages
 Sean Gilligan
 v0.4.0, March 26, 2019: Stub
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]

@@ -12,7 +12,7 @@ v0.6.1
 :caution-caption: :fire:
 :warning-caption: :warning:
 
-image:https://github.com/ConsensusJ/consensusj/workflows/Gradle%20Build/badge.svg?branch=master["Github Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Gradle+Build%22"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml/badge.svg?branch=master["Github Actions GraalVM Builds", link="https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml"] image:https://github.com/ConsensusJ/consensusj/workflows/Bitcoin%20Core%20RegTest/badge.svg?branch=master["Github Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Bitcoin+Core+RegTest%22"] image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
+image:https://github.com/ConsensusJ/consensusj/workflows/Gradle%20Build/badge.svg?branch=master["GitHub Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Gradle+Build%22"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml/badge.svg?branch=master["'GitHub Actions GraalVM Builds", link="https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml"] image:https://github.com/ConsensusJ/consensusj/workflows/Bitcoin%20Core%20RegTest/badge.svg?branch=master["'GitHub Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Bitcoin+Core+RegTest%22"] image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
 
 
 Modular cryptocurrency libraries for Java, JVM languages, and Android.
@@ -87,11 +87,11 @@ Add the following to the `repositories` section of your `build.gradle`:
 
 === API Documentation
 
-We have published {cj-apidoc}/index.html[preliminary JavaDoc] to our Github pages site.
+We have published {cj-apidoc}/index.html[preliminary JavaDoc] to our GitHub pages site.
 
 === Continuous Integration 
 
-* Github Actions: image:https://github.com/ConsensusJ/consensusj/workflows/Gradle%20Build/badge.svg?branch=master["Github Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Gradle+Build%22"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml/badge.svg?branch=master["Github Actions GraalVM Builds", link="https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml"] image:https://github.com/ConsensusJ/consensusj/workflows/Bitcoin%20Core%20RegTest/badge.svg?branch=master["Github Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Bitcoin+Core+RegTest%22"]
+* 'GitHub Actions: image:https://github.com/ConsensusJ/consensusj/workflows/Gradle%20Build/badge.svg?branch=master["GitHub Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Gradle+Build%22"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml/badge.svg?branch=master["'GitHub Actions GraalVM Builds", link="https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml"] image:https://github.com/ConsensusJ/consensusj/workflows/Bitcoin%20Core%20RegTest/badge.svg?branch=master["'GitHub Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Bitcoin+Core+RegTest%22"]
 
 * GitLab CI build: image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
 

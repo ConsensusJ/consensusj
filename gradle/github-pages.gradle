@@ -28,4 +28,4 @@ gitPublish {
 gitPublishPush.dependsOn javadocAll, asciidoctor
 
 task publishSite(dependsOn: gitPublishPush, group: 'render',
-        description: "Publishes ${siteDir} to Github Pages on 'gh-pages' branch")
+        description: "Publishes ${siteDir} to GitHub Pages on 'gh-pages' branch")
