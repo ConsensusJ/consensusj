@@ -3,6 +3,8 @@ package org.consensusj.bitcoin.json.pojo;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.bitcoinj.core.Address;
+import org.bitcoinj.script.Script;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Sha256Hash;
@@ -75,9 +77,10 @@ public class RawTransactionInfo {
         }
         vout = new VoutList();
         for (TransactionOutput output : transaction.getOutputs()) {
+            ScriptPubKeyInfo scriptPubKeyInfo = new ScriptPubKeyInfo(output.getScriptPubKey());
             vout.add(new Vout(output.getValue(),
                                 output.getIndex(),
-                                output.getScriptPubKey().toString()));
+                                scriptPubKeyInfo));
         }
     }
 
@@ -133,6 +136,7 @@ public class RawTransactionInfo {
         public final  Object scriptSig;
         public final  long sequence;
 
+        @JsonCreator
         public Vin(@JsonProperty("txid") Sha256Hash txid,
                    @JsonProperty("vout") long vout,
                    @JsonProperty("scriptSig") Object scriptSig,
@@ -163,11 +167,12 @@ public class RawTransactionInfo {
     public static class Vout {
         public final  Coin value;
         public final  int n;
-        public final  Object scriptPubKey;
+        public final  ScriptPubKeyInfo scriptPubKey;
 
+        @JsonCreator
         public Vout(@JsonProperty("value")          Coin value,
                     @JsonProperty("n")              int n,
-                    @JsonProperty("scriptPubKey")   Object scriptPubKey) {
+                    @JsonProperty("scriptPubKey")   ScriptPubKeyInfo scriptPubKey) {
             this.value = value;
             this.n = n;
             this.scriptPubKey = scriptPubKey;
@@ -181,8 +186,57 @@ public class RawTransactionInfo {
             return n;
         }
 
-        public Object getScriptPubKey() {
+        public ScriptPubKeyInfo getScriptPubKey() {
             return scriptPubKey;
+        }
+    }
+
+    public static class ScriptPubKeyInfo {
+        private final String asm;
+        private final String hex;
+        private final int reqSigs;
+        private final String type;
+        private final List<Address> addresses;
+
+        @JsonCreator
+        public ScriptPubKeyInfo(@JsonProperty("asm") String asm,
+                                @JsonProperty("hex") String hex,
+                                @JsonProperty("reqSigs") int reqSigs,
+                                @JsonProperty("type") String type,
+                                @JsonProperty("addresses") List<Address> addresses) {
+            this.asm = asm;
+            this.hex = hex;
+            this.reqSigs = reqSigs;
+            this.type = type;
+            this.addresses = addresses;
+        }
+
+        public ScriptPubKeyInfo(Script script) {
+            this.asm = script.toString();
+            this.hex = HexUtil.bytesToHexString(script.getProgram());
+            this.reqSigs = -1;
+            this.type = "bitcoinj Script (not-fully-supported)";
+            this.addresses = null;
+        }
+
+        public String getAsm() {
+            return asm;
+        }
+
+        public String getHex() {
+            return hex;
+        }
+
+        public int getReqSigs() {
+            return reqSigs;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public List<Address> getAddresses() {
+            return addresses;
         }
     }
 }

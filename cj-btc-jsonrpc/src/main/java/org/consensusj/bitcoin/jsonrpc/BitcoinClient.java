@@ -799,7 +799,11 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     }
 
     public WalletTransactionInfo getTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {
-        return send("gettransaction", WalletTransactionInfo.class, txid);
+        return getTransaction(txid, null, null);
+    }
+
+    public WalletTransactionInfo getTransaction(Sha256Hash txid, Boolean includeWatchOnly, Boolean verbose) throws JsonRpcStatusException, IOException {
+        return send("gettransaction", WalletTransactionInfo.class, txid, includeWatchOnly, verbose);
     }
 
     /**

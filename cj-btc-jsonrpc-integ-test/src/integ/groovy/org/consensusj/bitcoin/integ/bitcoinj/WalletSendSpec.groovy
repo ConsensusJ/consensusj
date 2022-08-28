@@ -162,7 +162,7 @@ class WalletSendSpec extends BaseRegTestSpec {
 
         and: "we generate a block"
         client.generateBlocks(1)
-        WalletTransactionInfo confirmedTx = client.getTransaction(txid)
+        WalletTransactionInfo confirmedTx = client.getTransaction(txid, false, true)
 
         then: "the transaction is confirmed"
         confirmedTx.confirmations == 1

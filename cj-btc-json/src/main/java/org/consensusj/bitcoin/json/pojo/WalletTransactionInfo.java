@@ -28,6 +28,7 @@ public class WalletTransactionInfo {
     private final String bip125Replaceable;
     private final DetailList details;
     private final String hex;
+    private final RawTransactionInfo decoded;
 
     @JsonCreator
     public WalletTransactionInfo(@JsonProperty("amount")            Coin amount,
@@ -42,7 +43,8 @@ public class WalletTransactionInfo {
                                  @JsonProperty("timereceived")      int timereceived,
                                  @JsonProperty("bip125-replaceable") String bip125Replaceable,
                                  @JsonProperty("details")           DetailList details,
-                                 @JsonProperty("hex")               String hex) {
+                                 @JsonProperty("hex")               String hex,
+                                 @JsonProperty("decoded")           RawTransactionInfo decoded) {
         this.amount = amount;
         this.fee = fee;
         this.confirmations = confirmations;
@@ -56,6 +58,7 @@ public class WalletTransactionInfo {
         this.bip125Replaceable = bip125Replaceable;
         this.details = details;
         this.hex = hex;
+        this.decoded = decoded;
     }
 
     public Coin getAmount() {
@@ -104,6 +107,10 @@ public class WalletTransactionInfo {
 
     public String getHex() {
         return hex;
+    }
+
+    public RawTransactionInfo getDecoded() {
+        return decoded;
     }
 
     public static class WalletConflictList extends ArrayList<Sha256Hash> {
