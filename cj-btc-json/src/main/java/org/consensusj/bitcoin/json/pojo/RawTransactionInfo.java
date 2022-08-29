@@ -13,6 +13,7 @@ import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutput;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -216,7 +217,7 @@ public class RawTransactionInfo {
             this.hex = HexUtil.bytesToHexString(script.getProgram());
             this.reqSigs = -1;
             this.type = "bitcoinj Script (not-fully-supported)";
-            this.addresses = null;
+            this.addresses = Collections.emptyList();
         }
 
         public String getAsm() {
