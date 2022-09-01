@@ -3,9 +3,23 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.6.2-SHAPSHOT
+== v0.6.2
 
-Released: not yet
+Released: 2022-09-01
+
+=== cj-btc-json
+
+* add `BitcoinTransactionInfo` for `listtransactions`
+* `WalletTransactionInfo`: add `decoded` property (RawTransactionInfo)
+* `RawTransactionInfo`: create inner POJO for `scriptPubKey` property
+* `CoinDeserializer` allow reading from `String`
+* `ZMQNotification`: migrate to record-like accessors, deprecate getters. (In the future we may do this for all "POJOs" in this module)
+
+=== cj-btc-jsonrpc
+
+* `BitcoinClient`: add `listTransactions()`
+* `BitcoinClient`: deprecate `getNetParams()`
+* `BitcoinClient`: create overload of `getTransaction` with additional nullable parameters
 
 === cj-btc-jsonrpc-integ-test
 
