@@ -29,7 +29,6 @@ public class ZmqNotification {
         return type;
     }
 
-
     /**
      * @return Address of the publisher
      */
@@ -46,4 +45,5 @@ public class ZmqNotification {
 
     @Deprecated public String getType() { return type(); }
     @Deprecated public URI getAddress() { return address(); }
+    @Deprecated public int getHwm() { return hwm(); }
 }
