@@ -82,7 +82,7 @@ reverse link org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection to org.consen
 reverse link org.consensusj.bitcoin.jsonrpc.BitcoinClient to org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient-->
     <path d='M145,494.61 C145,508.31 145,523.22 145,533.96 ' fill='none' id='org.consensusj.bitcoin.jsonrpc.BitcoinClient&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient' style='stroke: #A80036; stroke-width: 1.0;'/>
     <polygon fill='none' points='138,494.27,145,474.27,152,494.27,138,494.27' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <!--MD5=[10e2a001e6a98edf6b470e34d85790ed]
+    <!--MD5=[c2580ee4540205be08e730a152e21198]
 @startuml
 skinparam packageStyle Rect
 skinparam shadowing false
@@ -117,7 +117,7 @@ PlantUML version 1.2020.06(Sun Apr 05 05:38:32 PDT 2020)
 (APACHE source distribution)
 Java Runtime: OpenJDK Runtime Environment
 JVM: OpenJDK 64-Bit Server VM
-Java Version: 17.0.3+7
+Java Version: 17.0.4+8
 Operating System: Mac OS X
 Default Encoding: UTF-8
 Language: en
