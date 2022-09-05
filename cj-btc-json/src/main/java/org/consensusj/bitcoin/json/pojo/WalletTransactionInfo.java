@@ -7,6 +7,7 @@ import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Sha256Hash;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +21,11 @@ public class WalletTransactionInfo {
     private final int confirmations;
     private final Sha256Hash blockhash;
     private final int blockindex;
-    private final int blocktime;
+    private final Instant blocktime;
     private final Sha256Hash txid;
     private final WalletConflictList walletconflicts;
-    private final int time;
-    private final int timereceived;
+    private final Instant time;
+    private final Instant timereceived;
     private final String bip125Replaceable;
     private final DetailList details;
     private final String hex;
@@ -36,11 +37,11 @@ public class WalletTransactionInfo {
                                  @JsonProperty("confirmations")     int confirmations,
                                  @JsonProperty("blockhash")         Sha256Hash blockhash,
                                  @JsonProperty("blockindex")        int blockindex,
-                                 @JsonProperty("blocktime")         int blocktime,
+                                 @JsonProperty("blocktime")         long blocktime,
                                  @JsonProperty("txid")              Sha256Hash txid,
                                  @JsonProperty("walletconflicts")   WalletConflictList walletconflicts,
-                                 @JsonProperty("time")              int time,
-                                 @JsonProperty("timereceived")      int timereceived,
+                                 @JsonProperty("time")              long time,
+                                 @JsonProperty("timereceived")      long timereceived,
                                  @JsonProperty("bip125-replaceable") String bip125Replaceable,
                                  @JsonProperty("details")           DetailList details,
                                  @JsonProperty("hex")               String hex,
@@ -50,11 +51,11 @@ public class WalletTransactionInfo {
         this.confirmations = confirmations;
         this.blockhash = blockhash;
         this.blockindex = blockindex;
-        this.blocktime = blocktime;
+        this.blocktime = Instant.ofEpochSecond(blocktime);
         this.txid = txid;
         this.walletconflicts = walletconflicts;
-        this.time = time;
-        this.timereceived = timereceived;
+        this.time = Instant.ofEpochSecond(time);
+        this.timereceived = Instant.ofEpochSecond(timereceived);
         this.bip125Replaceable = bip125Replaceable;
         this.details = details;
         this.hex = hex;
@@ -81,7 +82,7 @@ public class WalletTransactionInfo {
         return blockindex;
     }
 
-    public int getBlocktime() {
+    public Instant getBlocktime() {
         return blocktime;
     }
 
@@ -93,11 +94,11 @@ public class WalletTransactionInfo {
         return walletconflicts;
     }
 
-    public int getTime() {
+    public Instant getTime() {
         return time;
     }
 
-    public int getTimereceived() {
+    public Instant getTimereceived() {
         return timereceived;
     }
 

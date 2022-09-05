@@ -1,6 +1,9 @@
 package org.consensusj.bitcoin.json.pojo;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.Address;
 
@@ -17,7 +20,7 @@ public class AddressInfo {
     private final boolean iscompressed;
     private final String label;
     private final boolean ischange;
-    private final Long timestamp;
+    private final Instant timestamp;
     private final List<Object> labels;
 
     /**
@@ -64,7 +67,7 @@ public class AddressInfo {
         this.iscompressed = iscompressed;
         this.label = label;
         this.ischange = ischange;
-        this.timestamp = timestamp;
+        this.timestamp = timestamp != null ? Instant.ofEpochSecond(timestamp) : null;
         this.labels = labels;
     }
 
@@ -116,8 +119,11 @@ public class AddressInfo {
         return ischange;
     }
 
-    public Long getTimestamp() {
-        return timestamp;
+    /**
+     * @return The creation time of the key, if available
+     */
+    public Optional<Instant> getTimestamp() {
+        return Optional.ofNullable(timestamp);
     }
 
     public List<Object> getLabels() {

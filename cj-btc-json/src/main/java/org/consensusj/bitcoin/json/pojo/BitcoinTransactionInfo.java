@@ -7,6 +7,7 @@ import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.Sha256Hash;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,11 +37,11 @@ public class BitcoinTransactionInfo {
     private final Sha256Hash        blockHash;
     private final int               blockHeight;
     private final int               blockIndex;
-    private final long              blockTime;
-    private final Sha256Hash        txId;
+    private final Instant              blockTime;
+    private final Sha256Hash            txId;
     private final List<Sha256Hash>      walletConflicts;
-    private final long                  time;
-    private final long                  timeReceived;
+    private final Instant               time;
+    private final Instant               timeReceived;
     private final String                comment;
     private final String                bip125Replaceable;
     private final boolean               abandoned;
@@ -81,11 +82,11 @@ public class BitcoinTransactionInfo {
         this.blockHash = blockHash;
         this.blockHeight = blockHeight;
         this.blockIndex = blockIndex;
-        this.blockTime = blockTime;
+        this.blockTime = Instant.ofEpochSecond(blockTime);
         this.txId = txId;
         this.walletConflicts = walletConflicts;
-        this.time = time;
-        this.timeReceived = timeReceived;
+        this.time = Instant.ofEpochSecond(time);
+        this.timeReceived = Instant.ofEpochSecond(timeReceived);
         this.comment = comment;
         this.bip125Replaceable = bip125Replaceable;
         this.abandoned = abandoned;
@@ -154,7 +155,7 @@ public class BitcoinTransactionInfo {
         return blockIndex;
     }
 
-    public long getBlockTime() {
+    public Instant getBlockTime() {
         return blockTime;
     }
 
@@ -166,11 +167,11 @@ public class BitcoinTransactionInfo {
         return walletConflicts;
     }
 
-    public long getTime() {
+    public Instant getTime() {
         return time;
     }
 
-    public long getTimeReceived() {
+    public Instant getTimeReceived() {
         return timeReceived;
     }
 

@@ -12,6 +12,7 @@ import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutput;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,8 +31,8 @@ public class RawTransactionInfo {
     public final VoutList vout;
     public final Sha256Hash blockhash;
     public final int confirmations;
-    public final long time;
-    public final long blocktime;
+    public final Instant time;
+    public final Instant blocktime;
 
     @JsonCreator
     public RawTransactionInfo(@JsonProperty("hex")              String hex,
@@ -52,8 +53,8 @@ public class RawTransactionInfo {
         this.vout = vout;
         this.blockhash = blockhash;
         this.confirmations = confirmations;
-        this.time = time;
-        this.blocktime = blocktime;
+        this.time = Instant.ofEpochSecond(time);
+        this.blocktime = Instant.ofEpochSecond(blocktime);
     }
 
     /**
@@ -67,7 +68,7 @@ public class RawTransactionInfo {
         this.locktime = transaction.getLockTime();
         this.blockhash = null;  // For now
         this.confirmations = transaction.getConfidence().getDepthInBlocks();
-        this.time = 0; // TODO: block header time of block including transaction
+        this.time = Instant.ofEpochSecond(0); // TODO: block header time of block including transaction
         this.blocktime = this.time; // same as time (see API doc)
         vin = new VinList();
         for (TransactionInput input : transaction.getInputs()) {
@@ -117,11 +118,11 @@ public class RawTransactionInfo {
         return confirmations;
     }
 
-    public long getTime() {
+    public Instant getTime() {
         return time;
     }
 
-    public long getBlocktime() {
+    public Instant getBlocktime() {
         return blocktime;
     }
 

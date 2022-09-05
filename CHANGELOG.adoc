@@ -7,6 +7,10 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Not yet
 
+=== cj-btc-json
+
+* Breaking: Use `java.time.Instant` for UNIX epoch timestamps
+
 == v0.6.2
 
 Released: 2022-09-01

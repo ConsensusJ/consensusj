@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.core.Sha256Hash;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class BlockInfo {
     public final Sha256Hash merkleroot;
     private final int nTx;
     public final Sha256HashList tx;
-    public final int time;
+    public final Instant time;
     public final long nonce;
     public final String bits;
     public final BigDecimal difficulty;
@@ -44,7 +45,7 @@ public class BlockInfo {
                      @JsonProperty("merkleroot")        Sha256Hash merkleroot,
                      @JsonProperty("nTx")               int nTx,
                      @JsonProperty("tx")                Sha256HashList tx,
-                     @JsonProperty("time")              int time,
+                     @JsonProperty("time")              long time,
                      @JsonProperty("nonce")             long nonce,
                      @JsonProperty("bits")              String bits,
                      @JsonProperty("difficulty")        BigDecimal difficulty,
@@ -59,7 +60,7 @@ public class BlockInfo {
         this.merkleroot = merkleroot;
         this.nTx = nTx;
         this.tx = tx;
-        this.time = time;
+        this.time = Instant.ofEpochSecond(time);
         this.nonce = nonce;
         this.bits = bits;
         this.difficulty = difficulty;
@@ -107,7 +108,7 @@ public class BlockInfo {
         return tx;
     }
 
-    public int getTime() {
+    public Instant getTime() {
         return time;
     }
 
