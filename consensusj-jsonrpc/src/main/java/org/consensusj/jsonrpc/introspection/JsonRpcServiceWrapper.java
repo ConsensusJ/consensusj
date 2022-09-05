@@ -119,10 +119,10 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
             } catch (Throwable throwable) {
                 log.error("Exception in invoked service object: ", throwable);
                 JsonRpcErrorException jsonRpcException = new JsonRpcErrorException(SERVER_EXCEPTION, throwable);
-                future = AsyncSupport.failedFuture(jsonRpcException);
+                future = CompletableFuture.failedFuture(jsonRpcException);
             }
         } else {
-            future = AsyncSupport.failedFuture(JsonRpcErrorException.of(METHOD_NOT_FOUND));
+            future = CompletableFuture.failedFuture(JsonRpcErrorException.of(METHOD_NOT_FOUND));
         }
         return future;
     }

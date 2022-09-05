@@ -34,6 +34,6 @@ public abstract class AbstractJsonRpcService implements JsonRpcServiceWrapper {
     }
 
     protected <RSLT> CompletableFuture<RSLT> exception(Throwable exception) {
-        return AsyncSupport.failedFuture(exception);
+        return CompletableFuture.failedFuture(exception);
     }
 }
