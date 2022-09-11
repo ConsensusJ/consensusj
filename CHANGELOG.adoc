@@ -3,13 +3,17 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.6.3-SNAPSHOT
+== v0.6.3
 
-Released: Not yet
+Released: 2022-09-11
 
 === cj-btc-json
 
 * Breaking: Use `java.time.Instant` for UNIX epoch timestamps
+
+=== consensusj-jsonrpc
+
+* Deprecate `AsyncSupport.failedFuture()` in favor of JDK 9 `CompletableFuture.failedFuture()`.
 
 == v0.6.2
 
