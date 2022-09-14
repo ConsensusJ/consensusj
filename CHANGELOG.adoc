@@ -8,6 +8,14 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under-development
 
+=== Dependency Updates
+
+* SLF4J 2.0.1
+
+=== Build/Test Updates
+
+* Spock 2.2-4.0
+
 
 == v0.6.3
 
