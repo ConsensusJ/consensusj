@@ -96,7 +96,8 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     private static final int SECOND_IN_MSEC = 1000;
     private static final int RETRY_SECONDS = 5;
     private static final int MESSAGE_SECONDS = 30;
-    
+
+    // TODO: Replace NetworkParameters with Network/BitcoinNetwork once we upgrade to bitcoinj 0.17 (once it is released)
     protected final NetworkParameters netParams;
     protected final ThreadFactory threadFactory;
     protected final ExecutorService executorService;
@@ -116,6 +117,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
     }
 
+    // TODO: Create a constructor that doesn't require a NetworkParameters and figures out Network type by querying the server
     /**
      * Construct a BitcoinClient from Network Parameters, URI, user name, and password.
      * @param netParams Correct Network Parameters for destination server
