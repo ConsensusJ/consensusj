@@ -3,6 +3,9 @@ package org.consensusj.bitcoin.jsonrpc;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.bitcoinj.core.LegacyAddress;
+import org.bitcoinj.params.MainNetParams;
+import org.bitcoinj.params.RegTestParams;
+import org.bitcoinj.params.TestNet3Params;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
 import org.consensusj.bitcoin.json.pojo.AddressGroupingItem;
 import org.consensusj.bitcoin.json.pojo.AddressInfo;
@@ -51,6 +54,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -98,9 +102,8 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     private static final int MESSAGE_SECONDS = 30;
 
     // TODO: Replace NetworkParameters with Network/BitcoinNetwork once we upgrade to bitcoinj 0.17 (once it is released)
-    protected final NetworkParameters netParams;
-    protected final ThreadFactory threadFactory;
-    protected final ExecutorService executorService;
+    private NetworkParameters netParams;
+    private ExecutorService executorService;
 
     private int serverVersion = 0;    // 0 means unknown serverVersion
     private boolean isAddressIndexSuccessfullyTested = false;
@@ -109,15 +112,48 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     public BitcoinClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         super(sslSocketFactory, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
         this.netParams = netParams;
+        if (netParams != null) {
+            initExecutor();
+        }
+    }
+
+    private void initExecutor() {
         mapper.registerModule(new RpcClientModule(netParams));
-        threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(netParams), "Bitcoin RPC Client");
+        ThreadFactory threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(netParams), "Bitcoin RPC Client");
         // TODO: Tune and/or make configurable the thread pool size.
         // Current pool size of 5 is chosen to minimize simultaneous active RPC
         // calls in `bitcoind` -- which is not designed for serving multiple clients.
         executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
     }
 
-    // TODO: Create a constructor that doesn't require a NetworkParameters and figures out Network type by querying the server
+    // TODO: Reconcile this constructor mode with {@link #waitForServer(int)}
+    /**
+     * Incubating constructor that doesn't require a {@link NetworkParameters}.
+     * <p>
+     * When using this constructor, it is recommended that {@link #getNetParams()} be called after construction
+     * and before any other methods are called, to allow the Bitcoin network type to be initialized.
+     * @param sslSocketFactory Custom socket factory
+     * @param server URI of the Bitcoin RPC server
+     * @param rpcuser Username (if required)
+     * @param rpcpassword Password (if required)
+     */
+    public BitcoinClient(SSLSocketFactory sslSocketFactory, URI server, String rpcuser, String rpcpassword) {
+        this(sslSocketFactory, null, server, rpcuser, rpcpassword);
+    }
+
+    /**
+     * Incubating constructor that doesn't require a {@link NetworkParameters}.
+     * <p>
+     * When using this constructor, it is recommended that {@link #getNetParams()} be called after construction
+     * and before any other methods are called, to allow the Bitcoin network type to be initialized.
+     * @param server URI of the Bitcoin RPC server
+     * @param rpcuser Username (if required)
+     * @param rpcpassword Password (if required)
+     */
+    public BitcoinClient(URI server, String rpcuser, String rpcpassword) {
+        this((SSLSocketFactory) SSLSocketFactory.getDefault(), null, server, rpcuser, rpcpassword);
+    }
+
     /**
      * Construct a BitcoinClient from Network Parameters, URI, user name, and password.
      * @param netParams Correct Network Parameters for destination server
@@ -139,9 +175,24 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
 
     /**
      * Get network parameters
+     * <p>
+     * Traditionally the Bitcoin network has been required as a constructor parameter and required to match
+     * the mode of the server. However, to simplify client configuration we have added a constructor
+     * that doesn't require a {@link NetworkParameters}. This changes some assumptions about how {@code BitcoinClient} works.
+     * Previously, no JSON-RPC I/O calls would be performed unless something was explicitly requested -- which
+     * also gave users of {@code BitcoinClient} the ability to call {@link #waitForServer(int)}
+     * before calling any RPCs.
+     * <p>
+     * Until further improvements/changes are made, if you use one of the constructors that does not specify a
+     * {@code NetworkParameters} you should call {@code getNetParams()} as soon as possible after calling the constructor
+     * (especially before calling any JSON-RPC I/O methods except {@link #waitForServer(int)}).
      * @return network parameters for the server
      */
-    public NetworkParameters getNetParams() {
+    public synchronized NetworkParameters getNetParams() {
+        if (netParams == null) {
+            netParams = getNetworkFromServer().join();
+            initExecutor();
+        }
         return netParams;
     }
 
@@ -177,6 +228,39 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
             serverVersion = getNetworkInfo().getVersion();
         }
         return serverVersion;
+    }
+
+    // TODO: Convert to {@code Network} type with bitcoinj 0.17
+    private CompletableFuture<NetworkParameters> getNetworkFromServer() {
+        return getBlockchainInfoMap().thenApply(info -> {
+            NetworkParameters params;
+            switch((String) info.get("chain")) {
+                case "main":
+                    params = MainNetParams.get();
+                    break;
+                case "test":
+                    params = TestNet3Params.get();
+                    break;
+                // TODO: Signet support?
+                case "regtest":
+                    params = RegTestParams.get();
+                    break;
+                default:
+                    throw new RuntimeException("Server returned unrecognized Bitcoin network");
+
+            }
+            return params;
+        });
+    }
+
+    /**
+     * Return BlockchainInfo as a Map (this avoids use of RpcClientModule and a circular dependency on NetworkParameters)
+     * Note that we also can't use our ThreadFactory or ExecutorService because they depend on NetworkParameters as well,
+     * and are not created until after we know what network we are on.
+     * @return  getblockchaininfo response JSON as a Map
+     */
+    private CompletableFuture<Map<String, Object>> getBlockchainInfoMap() {
+        return supplyAsync(() -> send("getblockchaininfo"), r -> new Thread(r).start());
     }
 
     /**
@@ -228,6 +312,9 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         }
     }
 
+    // TODO: Make this an async method that returns CompletableFuture.
+    // TODO: Consider renaming this method "connect"
+    // TODO: Consider having this method automatically get the Bitcoin Network, Server Version, RegTest mining address, etc once connection is made
     /**
      * Wait until the server is available.
      *

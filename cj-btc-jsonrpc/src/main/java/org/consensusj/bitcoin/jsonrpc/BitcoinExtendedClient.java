@@ -70,12 +70,16 @@ public class BitcoinExtendedClient extends BitcoinClient {
         this((SSLSocketFactory) SSLSocketFactory.getDefault(), netParams, server, rpcuser, rpcpassword);
     }
 
+    public BitcoinExtendedClient(URI server, String rpcuser, String rpcpassword) {
+        this((SSLSocketFactory) SSLSocketFactory.getDefault(), null, server, rpcuser, rpcpassword);
+    }
+
     public BitcoinExtendedClient(RpcConfig config) {
         this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());
     }
 
     public synchronized Address getRegTestMiningAddress() {
-        if (!netParams.getId().equals(NetworkParameters.ID_REGTEST)) {
+        if (!getNetParams().getId().equals(NetworkParameters.ID_REGTEST)) {
             throw new UnsupportedOperationException("Operation only supported in RegTest context");
         }
         if (regTestMiningAddress == null) {

@@ -24,7 +24,7 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     static BitcoinExtendedClient getClientInstance() {
         // We use a shared client for RegTest integration tests, because we want a single value for regTestMiningAddress
         if (INSTANCE == null) {
-            INSTANCE = new BitcoinExtendedClient(RegTestParams.get(), RpcURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
+            INSTANCE = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
         }
         return INSTANCE;
     }
@@ -32,12 +32,12 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     // Initializer to set up trait properties, Since Spock doesn't allow constructors
     {
         client = getClientInstance()
-        serverReady()
+        serverReady(RegTestParams.get())
         fundingSource = new RegTestFundingSource(client)
     }
 
     void setupSpec() {
-        serverReady()
+        serverReady(RegTestParams.get())
 
         // Make sure we have enough test coins
         // Do we really need to keep doing this now that most tests

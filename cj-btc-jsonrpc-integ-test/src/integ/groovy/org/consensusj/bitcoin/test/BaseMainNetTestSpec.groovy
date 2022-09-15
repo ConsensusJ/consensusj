@@ -18,12 +18,12 @@ abstract class BaseMainNetTestSpec extends Specification implements BTCTestSuppo
 
     // Initializer to set up trait properties, Since Spock doesn't allow constructors
     {
-        client = new BitcoinExtendedClient(MainNetParams.get(), RpcURI.defaultMainNetURI, rpcTestUser, rpcTestPassword)
+        client = new BitcoinExtendedClient(RpcURI.defaultMainNetURI, rpcTestUser, rpcTestPassword)
         fundingSource = null    // No funding source implementation for MainNet yet.
     }
 
     void setupSpec() {
-        serverReady()
+        serverReady(MainNetParams.get())
     }
 
     /**
@@ -31,5 +31,4 @@ abstract class BaseMainNetTestSpec extends Specification implements BTCTestSuppo
      */
     void cleanupSpec() {
     }
-
 }
