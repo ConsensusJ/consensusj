@@ -1,6 +1,7 @@
 package org.consensusj.bitcoin.jsonrpc.groovy
 
 import groovy.json.JsonSlurper
+import org.consensusj.bitcoin.jsonrpc.test.BlockchainSyncing
 
 /**
  * Implementation of BlockchainSyncing that uses BlockCypher.com API
