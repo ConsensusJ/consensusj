@@ -11,9 +11,9 @@ trait BitcoinClientDelegate {
 
     /**
      * Since we can't have a final (read-only) property in a trait
-     * Let's at least allow it to be only set once.
+     * Let's at least require it to be only set once.
      */
-    void setClient(BitcoinExtendedClient client) {
+    synchronized void setClient(BitcoinExtendedClient client) {
         if (this.client == null) {
             this.client = client
         } else {
