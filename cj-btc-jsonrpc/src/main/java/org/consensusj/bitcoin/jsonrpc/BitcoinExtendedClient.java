@@ -78,6 +78,13 @@ public class BitcoinExtendedClient extends BitcoinClient {
         this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());
     }
 
+    /**
+     * Constructor that uses bitcoin.conf to get connection information (Incubating)
+     */
+    public BitcoinExtendedClient() {
+        this(BitcoinConfFile.readDefaultConfig().getRPCConfig());
+    }
+
     public synchronized Address getRegTestMiningAddress() {
         if (!getNetParams().getId().equals(NetworkParameters.ID_REGTEST)) {
             throw new UnsupportedOperationException("Operation only supported in RegTest context");

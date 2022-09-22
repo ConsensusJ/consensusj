@@ -6,14 +6,15 @@ import org.bitcoinj.core.NetworkParameters
 import org.consensusj.jsonrpc.groovy.DynamicRpcMethodFallback
 
 /**
- * Bitcoin RPC client for scripting
- * No args constructor reads bitcoin.conf
- * Allows dynamic methods to access new RPCs or RPCs not implemented in Java client
+ * Bitcoin RPC client for scripting. Allows dynamic methods to access new RPCs or RPCs not implemented in Java client
  */
 class BitcoinScriptingClient extends BitcoinExtendedClient implements DynamicRpcMethodFallback {
 
+    /**
+     * No args constructor reads bitcoin.conf
+     */
     BitcoinScriptingClient() {
-        super(BitcoinConfFile.readDefaultConfig().getRPCConfig())
+        super()
     }
 
     BitcoinScriptingClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
