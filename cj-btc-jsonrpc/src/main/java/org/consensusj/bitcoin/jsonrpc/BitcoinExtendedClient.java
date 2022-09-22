@@ -9,6 +9,7 @@ import org.bitcoinj.core.Block;
 import org.bitcoinj.params.RegTestParams;
 import org.bitcoinj.script.Script;
 import org.bouncycastle.util.encoders.Hex;
+import org.consensusj.bitcoin.jsonrpc.bitcoind.BitcoinConfFile;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
