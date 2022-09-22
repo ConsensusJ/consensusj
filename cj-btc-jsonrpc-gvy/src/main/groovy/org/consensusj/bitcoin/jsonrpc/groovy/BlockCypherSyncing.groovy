@@ -7,10 +7,10 @@ import groovy.json.JsonSlurper
  *
  * Note: 5 requests/sec and 600 requests/hr without API token.
  */
-trait BlockCypherSyncing extends BlockchainSyncing {
+interface BlockCypherSyncing extends BlockchainSyncing {
 
-    Integer getReferenceBlockHeight() {
-        Integer height = new JsonSlurper().parse(new URL("https://api.blockcypher.com/v1/btc/main")).height
+    default int getReferenceBlockHeight() {
+        int height = new JsonSlurper().parse(new URL("https://api.blockcypher.com/v1/btc/main")).height
         return height
     }
 }

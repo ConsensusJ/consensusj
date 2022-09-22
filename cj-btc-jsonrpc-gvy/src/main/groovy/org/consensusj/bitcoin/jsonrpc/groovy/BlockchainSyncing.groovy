@@ -1,7 +1,9 @@
 package org.consensusj.bitcoin.jsonrpc.groovy
 
+import groovy.transform.CompileStatic
 import org.consensusj.bitcoin.jsonrpc.BitcoinClient
-import org.consensusj.jsonrpc.groovy.Loggable
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Wait for synchronization with a reference source of block height.
@@ -9,14 +11,21 @@ import org.consensusj.jsonrpc.groovy.Loggable
  * Since synchronization may take time, we check the block height again
  * after waitForBlock returns.
  */
-trait BlockchainSyncing extends Loggable {
+@CompileStatic
+interface BlockchainSyncing {
+    static final Logger log = LoggerFactory.getLogger(BlockchainSyncing.class)
 
-    def waitForSync(BitcoinClient client) {
+    /**
+     * Wait until a {@link BitcoinClient} is synced to a reference blockheight
+     * @param client The client we want to synchronize
+     * @return the blockheight upon synchronization
+     */
+    default int waitForSync(BitcoinClient client) {
         //
         // Get in sync with the block chain
         //
-        def curHeight = 0
-        def newHeight = getReferenceBlockHeight()
+        int curHeight = 0
+        int newHeight = getReferenceBlockHeight()
         log.info "Reference current height: {}", newHeight
         while ( newHeight > curHeight ) {
             curHeight = newHeight
@@ -24,12 +33,12 @@ trait BlockchainSyncing extends Loggable {
             newHeight = getReferenceBlockHeight()
             log.info "Current reference block height: {}", newHeight
         }
-
+        return curHeight
     }
 
     /**
      * Use an external reference to get the current block height
      * See: BlockchainDotInfoSyncing
      */
-    abstract Integer getReferenceBlockHeight()
+    int getReferenceBlockHeight()
 }
