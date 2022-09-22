@@ -10,6 +10,7 @@ import org.consensusj.bitcoin.jsonrpc.BitcoinClient
  * Currently incomplete and unused. Should this extend BitcoinClient or wrap it?
  */
 @CompileStatic
+@Deprecated
 class BitcoinCLIClient extends BitcoinClient {
 
     BitcoinCLIClient(URI server, String rpcuser, String rpcpassword) {
