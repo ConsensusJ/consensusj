@@ -1,4 +1,4 @@
-package org.consensusj.bitcoin.jsonrpc.groovy;
+package org.consensusj.bitcoin.jsonrpc.test;
 
 import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
 import org.slf4j.Logger;
