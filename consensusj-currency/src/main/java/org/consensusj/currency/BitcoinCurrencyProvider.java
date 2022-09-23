@@ -7,7 +7,6 @@ import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyQuery;
 import javax.money.CurrencyUnit;
 import javax.money.spi.CurrencyProviderSpi;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -28,7 +27,7 @@ public class BitcoinCurrencyProvider implements CurrencyProviderSpi {
         CurrencyUnit btcUnit = CurrencyUnitBuilder.of("BTC", CONTEXT)
                 .setDefaultFractionDigits(bitcoinFractionDigits)
                 .build();
-        bitcoinSet = Collections.singleton(btcUnit);
+        bitcoinSet = Set.of(btcUnit);
     }
     
     /**
@@ -42,6 +41,6 @@ public class BitcoinCurrencyProvider implements CurrencyProviderSpi {
     public Set<CurrencyUnit> getCurrencies(CurrencyQuery query){
         // Query for currencyCode BTC or default query returns bitcoinSet else emptySet.
         return (query.getCurrencyCodes().contains("BTC") ||
-                query.getCurrencyCodes().isEmpty()) ? bitcoinSet : Collections.emptySet();
+                query.getCurrencyCodes().isEmpty()) ? bitcoinSet : Set.of();
     }
 }

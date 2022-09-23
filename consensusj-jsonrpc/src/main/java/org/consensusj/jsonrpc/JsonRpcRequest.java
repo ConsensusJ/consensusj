@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.consensusj.jsonrpc.internal.NumberStringSerializer;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -125,7 +124,7 @@ public class JsonRpcRequest {
      * @param method method name string
      */
     public JsonRpcRequest(String method) {
-        this(method, Collections.emptyList());
+        this(method, List.of());
     }
 
     public String getJsonrpc() {

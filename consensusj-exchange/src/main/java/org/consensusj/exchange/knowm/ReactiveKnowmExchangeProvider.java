@@ -22,7 +22,6 @@ import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +71,7 @@ public class ReactiveKnowmExchangeProvider implements ReactiveExchange {
         } else {
             this.exchangeClassName = exchangeClassName;
         }
-        this.tickerSymbolConversions = (tickerSymbolConversions != null) ? tickerSymbolConversions : Collections.emptyMap();
+        this.tickerSymbolConversions = (tickerSymbolConversions != null) ? tickerSymbolConversions : Map.of();
         this.interval = interval;
         for (CurrencyUnitPair pair : pairs) {
             MonitoredCurrency observablePair = new MonitoredCurrency(pair, xchangePair(pair));

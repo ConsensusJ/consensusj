@@ -11,9 +11,7 @@ import org.zeromq.ZMsg;
 
 import java.io.Closeable;
 import java.net.URI;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -48,9 +46,9 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
         this(tcpAddress, threadFactory, Set.of(topics));
     }
 
-    private RxBitcoinSinglePortZmqService(URI tcpAddress, ThreadFactory threadFactory, Collection<BitcoinZmqMessage.Topic> topics) {
+    private RxBitcoinSinglePortZmqService(URI tcpAddress, ThreadFactory threadFactory, Set<BitcoinZmqMessage.Topic> topics) {
         this.tcpAddress = tcpAddress;
-        topicSet = Collections.unmodifiableSet(new HashSet<>(topics));
+        topicSet = Collections.unmodifiableSet(topics);
         List<String> stringTopics = topics.stream().map(BitcoinZmqMessage.Topic::toString).collect(Collectors.toList());
         zmqContext = new RxZmqContext(tcpAddress, stringTopics, threadFactory);
         for (BitcoinZmqMessage.Topic topic : topics) {

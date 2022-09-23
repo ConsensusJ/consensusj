@@ -26,7 +26,6 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -225,7 +224,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @return The hex-encoded raw transaction
      */
     public String createRawTransaction(Address fromAddress, Address toAddress, Coin amount) throws JsonRpcStatusException, IOException {
-        return createRawTransaction(fromAddress, Collections.singletonMap(toAddress, amount));
+        return createRawTransaction(fromAddress, Map.of(toAddress, amount));
     }
 
     /**
@@ -280,7 +279,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @return The transaction hash
      */
     public Sha256Hash sendBitcoin(Address fromAddress, Address toAddress, Coin amount) throws JsonRpcStatusException, IOException {
-        Map<Address, Coin> outputs = Collections.singletonMap(toAddress, amount);
+        Map<Address, Coin> outputs = Map.of(toAddress, amount);
         return sendBitcoin(fromAddress, outputs);
     }
 
