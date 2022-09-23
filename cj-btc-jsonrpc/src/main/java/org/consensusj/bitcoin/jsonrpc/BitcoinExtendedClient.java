@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.jsonrpc;
 
 import com.fasterxml.jackson.databind.JavaType;
 import org.consensusj.bitcoin.json.pojo.AddressInfo;
+import org.consensusj.bitcoin.json.pojo.LoadWalletResult;
 import org.consensusj.bitcoin.json.pojo.Outpoint;
 import org.consensusj.bitcoin.json.pojo.SignedRawTransaction;
 import org.consensusj.bitcoin.json.pojo.UnspentOutput;
@@ -83,6 +84,17 @@ public class BitcoinExtendedClient extends BitcoinClient {
      */
     public BitcoinExtendedClient() {
         this(BitcoinConfFile.readDefaultConfig().getRPCConfig());
+    }
+
+    /**
+     * Incubating: clone the client with a new base URI for a named wallet.
+     * @param walletName wallet name
+     * @param rpcUser username must be provided because it is not accessible in the parent class
+     * @param rpcPassword password must be provided because it is not accessible in the parent class
+     * @return A new client with a baseURI configured for the specified wallet name.
+     */
+    public BitcoinExtendedClient withWallet(String walletName, String rpcUser, String rpcPassword) {
+        return new BitcoinExtendedClient(this.getNetParams(), this.getServerURI().resolve("/wallet/" + walletName), rpcUser, rpcPassword);
     }
 
     public synchronized Address getRegTestMiningAddress() {

@@ -1,5 +1,6 @@
 package org.consensusj.bitcoin.jsonrpc.test;
 
+import org.consensusj.bitcoin.json.pojo.LoadWalletResult;
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.bitcoin.json.pojo.Outpoint;
@@ -36,14 +37,20 @@ public class RegTestFundingSource implements FundingSource {
             throw new RuntimeException(ioe);
         }
 
-        // Bitcoin Core 0.21+ will not create default wallet (named "") if it doesn't exist
-        // so we have to do it ourselves
+        // Bitcoin Core 0.21+ will not create default wallet (named "") if it doesn't exist, so we have to do it ourselves
         if (bitcoinCoreVersion >= 210000) {
             try {
                 List<String> walletList = client.listWallets();
                 if (!walletList.contains("")) {
-                    Map<String, String> result = client.createWallet("", false, false);
-                    log.warn("Created default wallet: {}", result);
+                    LoadWalletResult result = (bitcoinCoreVersion >= 230000)
+                        // Create a (non-descriptor) wallet
+                        ? client.createWallet("", false, false, null, null, false, null, null)
+                        : client.createWallet("", false, false, null, null);
+                    if (result.getWarning().isEmpty()) {
+                        log.info("Created default wallet: \"{}\"", result.getName());
+                    } else {
+                        log.warn("Warning creating default wallet \"{}\": {}", result.getName(), result.getWarning());
+                    }
                 }
             } catch (IOException ioe) {
                 throw new RuntimeException(ioe);
