@@ -179,7 +179,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
         // Copy the Map (which may be immutable) and add prepare change output if needed.
         Map<Address, Coin> outputsWithChange = new HashMap<>(outputs);
         // Get unspent outputs via RPC
-        List<UnspentOutput> unspentOutputs = listUnspent(0, defaultMaxConf, Collections.singletonList(fromAddress));
+        List<UnspentOutput> unspentOutputs = listUnspent(0, defaultMaxConf, fromAddress);
 
         // Gather inputs as OutPoints
         List<Outpoint> inputs = unspentOutputs.stream()
@@ -264,7 +264,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @return The balance
      */
     public Coin getBitcoinBalance(Address address, Integer minConf, Integer maxConf) throws JsonRpcStatusException, IOException {
-        return listUnspent(minConf, maxConf, Collections.singletonList(address))
+        return listUnspent(minConf, maxConf, address)
                 .stream()
                 .map(UnspentOutput::getAmount)
                 .reduce(Coin.ZERO, Coin::add);
@@ -362,7 +362,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @throws IOException            An I/O error occured
      */
     public Transaction createSignedTransaction(ECKey fromKey, Address toAddress, Coin amount) throws JsonRpcStatusException, IOException {
-        List<TransactionOutput> outputs = Collections.singletonList(
+        List<TransactionOutput> outputs = List.of(
                 new TransactionOutput(getNetParams(), null, amount, toAddress));
         return createSignedTransaction(fromKey, outputs);
     }
@@ -375,8 +375,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @return All unspent TransactionOutputs for fromAddress
      */
     public List<TransactionOutput> listUnspentJ(Address fromAddress) throws JsonRpcStatusException, IOException {
-        List<Address> addresses = Collections.singletonList(fromAddress);
-        List<UnspentOutput> unspentOutputs = listUnspent(0, defaultMaxConf, addresses); // RPC UnspentOutput objects
+        List<UnspentOutput> unspentOutputs = listUnspent(0, defaultMaxConf, fromAddress); // RPC UnspentOutput objects
         return unspentOutputs.stream()
                 .map(this::unspentToTransactionOutput)
                 .collect(Collectors.toList());
@@ -389,8 +388,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @return All unspent TransactionOutPoints for fromAddress
      */
     public List<TransactionOutPoint> listUnspentOutPoints(Address fromAddress) throws JsonRpcStatusException, IOException {
-        List<Address> addresses = Collections.singletonList(fromAddress);
-        List<UnspentOutput> unspentOutputsRPC = listUnspent(0, defaultMaxConf, addresses); // RPC UnspentOutput objects
+        List<UnspentOutput> unspentOutputsRPC = listUnspent(0, defaultMaxConf, fromAddress); // RPC UnspentOutput objects
         return unspentOutputsRPC.stream()
                 .map(this::unspentToTransactionOutpoint)
                 .collect(Collectors.toList());
