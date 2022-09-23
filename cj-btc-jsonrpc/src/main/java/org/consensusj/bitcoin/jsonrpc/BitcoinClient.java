@@ -740,7 +740,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @throws IOException network error
      */
     public List<UnspentOutput> listUnspent() throws JsonRpcStatusException, IOException {
-        return listUnspent(null, null, null);
+        return listUnspent(null, null, null, null);
     }
 
     /**
@@ -755,10 +755,15 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      */
     public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf)
             throws JsonRpcStatusException, IOException {
-        return listUnspent(minConf, maxConf, null);
+        return listUnspent(minConf, maxConf, null, null);
     }
 
-    public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, Iterable<Address> filter)
+    public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, Address address)
+            throws JsonRpcStatusException, IOException {
+        return listUnspent(minConf, maxConf, List.of(address), true);
+    }
+
+    public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, List<Address> filter)
             throws JsonRpcStatusException, IOException {
         return listUnspent(minConf, maxConf, filter, true);
     }
@@ -770,11 +775,12 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @param minConf The minimum confirmations to filter
      * @param maxConf The maximum confirmations to filter
      * @param filter  Include only transaction outputs to the specified addresses
+     * @param includeUnsafe optional
      * @return The unspent transaction outputs
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, Iterable<Address> filter, boolean includeUnsafe)
+    public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, List<Address> filter, Boolean includeUnsafe)
             throws JsonRpcStatusException, IOException {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, UnspentOutput.class);
         return send("listunspent", resultType, minConf, maxConf, filter, includeUnsafe);

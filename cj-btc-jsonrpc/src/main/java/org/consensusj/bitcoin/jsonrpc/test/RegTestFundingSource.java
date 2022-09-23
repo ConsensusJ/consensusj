@@ -125,26 +125,10 @@ public class RegTestFundingSource implements FundingSource {
     }
 
     private Map<Address, Coin> calcChange(Coin availableFunds, Coin amountToSend, Address destAddress, Address changeAddress) {
-        Coin change;
-        if (availableFunds.value - (amountToSend.value + txFee.value) > 0) {
-            change = Coin.valueOf(availableFunds.value - (amountToSend.value + txFee.value));
-        } else {
-            change = Coin.ZERO;
-        }
-        Map<Address, Coin> outputs = change.value > 0 ?
-                // Send change to regTestMiningAddress
-                mapOf(destAddress, amountToSend, client.getRegTestMiningAddress(), change) :
-                // No change, send everything
-                Collections.singletonMap(destAddress, amountToSend);
-        return outputs;
-    }
-
-    // This can be eliminated when we upgrade this file to Java 9
-    private <K,V> Map<K, V> mapOf(K k1, V v1, K k2, V v2) {
-        Map<K, V>  outputs = new HashMap<>();
-        outputs.put(k1, v1);
-        outputs.put(k2, v2);
-        return outputs;
+        Coin change = availableFunds.minus(amountToSend.plus(txFee));
+        return change.isPositive()
+                ? Map.of(destAddress, amountToSend, changeAddress, change)  // include change output
+                : Map.of(destAddress, amountToSend);                        // no change output
     }
 
     /**
@@ -216,7 +200,7 @@ public class RegTestFundingSource implements FundingSource {
         List<Outpoint> inputs = unspentOutputsToOutpoints(unspentOutputs);
 
         // Send it all to the RegTestMiningAddress
-        Map<Address,Coin> outputs = Collections.singletonMap(client.getRegTestMiningAddress(), amountIn.subtract(txFee));
+        Map<Address,Coin> outputs = Map.of(client.getRegTestMiningAddress(), amountIn.subtract(txFee));
 
         String unsignedTxHex = client.createRawTransaction(inputs, outputs);
         SignedRawTransaction signingResult = client.signRawTransactionWithWallet(unsignedTxHex);
@@ -248,14 +232,14 @@ public class RegTestFundingSource implements FundingSource {
      * Get all available funds in the server-side wallet
      */
     private List<UnspentOutput> getSpendable() throws  JsonRpcException, IOException {
-        return client.listUnspent(1, defaultMaxConf, null);
+        return client.listUnspent(1, defaultMaxConf, null, null);
     }
 
     /**
      * Get all available funds in a specific address in the server-side wallet
      */
     private List<UnspentOutput> getSpendable(Address address) throws  JsonRpcException, IOException {
-        return client.listUnspent(1, defaultMaxConf, Collections.singletonList(address))
+        return client.listUnspent(1, defaultMaxConf, address)
                 .stream()
                 .filter(out -> out.isSpendable() && out.isSafe())
                 .collect(Collectors.toList());
@@ -268,7 +252,9 @@ public class RegTestFundingSource implements FundingSource {
     }
 
     private Coin sumUnspentOutputs(List<UnspentOutput> unspentOutputs) {
-        return Coin.valueOf(unspentOutputs.stream().mapToLong(output -> output.getAmount().value).sum());
+        return unspentOutputs.stream()
+                .map(UnspentOutput::getAmount)
+                .reduce(Coin.ZERO, Coin::add);
     }
 
     private Sha256Hash sendRawTransactionUnlimitedFees(String hexTx) throws IOException {
