@@ -13,6 +13,7 @@ import org.consensusj.bitcoin.json.pojo.BitcoinTransactionInfo;
 import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
 import org.consensusj.bitcoin.json.pojo.BlockInfo;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
+import org.consensusj.bitcoin.json.pojo.LoadWalletResult;
 import org.consensusj.bitcoin.json.pojo.MethodHelpEntry;
 import org.consensusj.bitcoin.json.pojo.NetworkInfo;
 import org.consensusj.bitcoin.json.pojo.Outpoint;
@@ -21,6 +22,7 @@ import org.consensusj.bitcoin.json.pojo.ReceivedByAddressInfo;
 import org.consensusj.bitcoin.json.pojo.SignedRawTransaction;
 import org.consensusj.bitcoin.json.pojo.TxOutInfo;
 import org.consensusj.bitcoin.json.pojo.TxOutSetInfo;
+import org.consensusj.bitcoin.json.pojo.UnloadWalletResult;
 import org.consensusj.bitcoin.json.pojo.UnspentOutput;
 import org.consensusj.bitcoin.json.conversion.RpcClientModule;
 import org.consensusj.bitcoin.json.pojo.WalletTransactionInfo;
@@ -81,10 +83,11 @@ import java.util.stream.Stream;
  * Coin balance = client.getBalance();
  * }</pre>
  *
- * This version is written to be compatible with Bitcoin Core 0.19 and later. If used with
- * Omni Core (an enhanced Bitcoin Core with Omni Protocol support) Omni Core 0.11.0 or later is required.
+ * This version is written to be compatible with Bitcoin Core 0.20 and later. If used with
+ * Omni Core (an enhanced version of Bitcoin Core with Omni Protocol support) Omni Core 0.11.0 or later is required.
  * <p>
- * Note that according to <a href="https://github.com/bitcoin/bitcoin/issues/2960">Issue #2960: Support JSON-RPC 2.0</a> Bitcoin Core does not correctly follow the JSON-RPC 2.0 specification.
+ * Note that according to <a href="https://github.com/bitcoin/bitcoin/issues/2960">Issue #2960: Support JSON-RPC 2.0</a> Bitcoin Core
+ * does not correctly follow the JSON-RPC 2.0 specification.
  * @see org.consensusj.jsonrpc.JsonRpcClient
  * @see <a href="https://bitcoincore.org/en/doc/">Bitcoin Core JSON-RPC API reference</a>
  * @see <a href="https://github.com/bitcoin/bitcoin/issues/2960">Bitcoin Core Issue #2960: Support JSON-RPC 2.0</a>
@@ -223,7 +226,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    private synchronized int getServerVersion() throws IOException, JsonRpcStatusException {
+    synchronized int getServerVersion() throws IOException, JsonRpcStatusException {
         if (serverVersion == 0) {
             serverVersion = getNetworkInfo().getVersion();
         }
@@ -290,6 +293,10 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
                 // If the method is there and it returns an error of "Address index not enabled" then we also
                 // know that no address index support is available
                 if (se.getMessage().equals("Address index not enabled")) {
+                    isAddressIndexSuccessfullyTested = true;
+                    isAddressIndexEnabled = false;
+                } else if ( se.jsonRpcCode == JsonRpcError.Error.METHOD_NOT_FOUND.getCode()) {
+                    // It looks like the behavior changed in Bitcoin Core v23.0 and we end up here rather than in the  JsonRpcErrorException handler above
                     isAddressIndexSuccessfullyTested = true;
                     isAddressIndexEnabled = false;
                 } else {
@@ -510,8 +517,28 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         return send("listwallets", resultType);
     }
 
-    public Map<String, String> createWallet(String name, Boolean disablePrivateKeys, Boolean blank) throws JsonRpcStatusException, IOException {
-        return send("createwallet", name, disablePrivateKeys, blank);
+    public LoadWalletResult createWallet(String name, Boolean disablePrivateKeys, Boolean blank) throws JsonRpcStatusException, IOException {
+        return createWallet(name, disablePrivateKeys, blank, null, null, null, null, null);
+    }
+
+    public LoadWalletResult createWallet(String name, Boolean disablePrivateKeys, Boolean blank, String passPhrase,
+                                         Boolean avoidReuse) throws JsonRpcStatusException, IOException {
+        return send("createwallet", LoadWalletResult.class, name, disablePrivateKeys, blank, passPhrase, avoidReuse);
+    }
+
+    // To use all these params server must be "recent"
+    public LoadWalletResult createWallet(String name, Boolean disablePrivateKeys, Boolean blank, String passPhrase,
+                                         Boolean avoidReuse, Boolean descriptors, Boolean loadOnStartup,
+                                         Boolean externalSigner) throws JsonRpcStatusException, IOException {
+        return send("createwallet", LoadWalletResult.class, name, disablePrivateKeys, blank, passPhrase, avoidReuse, descriptors, loadOnStartup, externalSigner);
+    }
+
+    public UnloadWalletResult unloadWallet() throws JsonRpcStatusException, IOException {
+        return unloadWallet(null, null);
+    }
+
+    public UnloadWalletResult unloadWallet(String name, Boolean loadOnStartup) throws JsonRpcStatusException, IOException {
+        return send("unloadwallet", UnloadWalletResult.class, name, loadOnStartup);
     }
 
     /**
