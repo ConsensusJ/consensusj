@@ -92,29 +92,35 @@ public class RegTestFundingSource implements FundingSource {
     }
 
     /**
-     * Mine zero or more blocks until {@code availableFunds >= requestedAmount}
+     * Mine zero or more blocks until {@code availableFunds >= requestedAmount + fee}
      *
      * @param requestAmount Funds requested
      * @return A list of unspent outputs
      * @throws IOException ISH
      */
     private List<UnspentOutput> mineEnoughFunds(Coin requestAmount) throws IOException {
-        List<UnspentOutput> unspent = availableFunds();
-        Coin availableAmount = sumUnspentOutputs(unspent);
-        log.info("mineEnoughFunds: Available: {} Requested: {}", availableAmount.toPlainString(), requestAmount.toPlainString());
+        Coin neededAmount = requestAmount.plus(txFee);
 
-        while (availableAmount.isLessThan(requestAmount.plus(txFee))) {
-            client.generateToAddress(1, client.getRegTestMiningAddress());
-            unspent = availableFunds();
-            availableAmount = sumUnspentOutputs(unspent);
-            int height = client.getBlockCount();
-            log.warn("⛏⛏⛏⛏⛏ Mined {} (blk#{}): Available: {} Requested: {} ⛏⛏⛏⛏⛏",
-                    rewardFromRegTestHeight(height).toPlainString(),
-                    height,
-                    availableAmount.toPlainString(),
-                    requestAmount.toPlainString());
+        List<UnspentOutput> available = availableFunds();
+
+        while (sumUnspentOutputs(available).isLessThan(neededAmount)) {
+            client.generateBlocks(1);
+            available = availableFunds();
+            logMined(neededAmount, available);
         }
-        return unspent;
+
+        log.info("mineEnoughFunds: Needed: {} Returned: {}", neededAmount.toPlainString(), sumUnspentOutputs(available).toPlainString());
+
+        return available;
+    }
+
+    private void logMined(Coin needed, List<UnspentOutput> available) throws IOException {
+        int height = client.getBlockCount();
+        log.warn("⛏⛏⛏⛏⛏ Mined {} (blk#{}): Available: {} Needed: {} ⛏⛏⛏⛏⛏",
+                rewardFromRegTestHeight(height).toPlainString(),
+                height,
+                sumUnspentOutputs(available).toPlainString(),
+                needed.toPlainString());
     }
 
     private Coin rewardFromRegTestHeight(int height) {
