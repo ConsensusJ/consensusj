@@ -4,15 +4,15 @@ import org.consensusj.jsonrpc.JsonRpcMessage
 import org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection
 
 /**
- * Use Groovy <code>methodMissing</code> to allow *any* JSON-RPC call to be made
- * as <code>client.rpcMethod(args)</code>. Note that calling a non-existent method
- * will result in an error from the server.
- *
- * The focus of RPC client development in bitcoin-spock has been strongly typed clients
- * the core of which is implemented in and can be used from pure Java. We also
- * believe that a strongly typed RPC client is the best choice for integration tests.
- * This client is provided for those looking for something simple, flexible, dynamic, and Groovy.
- *
+ * Client that uses Groovy <code>methodMissing</code> to allow <i>any</i> JSON-RPC call to be made as <code>client.rpcMethod(args)</code>.
+ * Note that calling a non-existent method will result in an error from the server.
+ * <p>
+ * The focus of JSON-RPC client development in <b>ConsensusJ</b> has been strongly-typed clients implemented in pure Java.
+ * We believe that a strongly-typed RPC client is the best choice for most applications and for most integration tests. However,
+ * there are many times where a dynamic client is useful and there are users who have a strong preference for a dynamic client.
+ * <p>
+ * This client and the {@link DynamicRpcMethodFallback} trait are provided for those looking for something simple,
+ * flexible, dynamic, and Groovy.
  */
 class DynamicRpcClient extends JsonRpcClientHttpUrlConnection implements DynamicRpcMethodFallback {
 
