@@ -34,4 +34,8 @@ public interface RpcURI {
     static URI getDefaultRegTestURI() {
         return DEFAULT_REGTEST_URI;
     }
+
+    static URI getDefaultRegTestWalletURI() {
+        return DEFAULT_REGTEST_URI.resolve("/wallet/" + BitcoinExtendedClient.REGTEST_WALLET_NAME);
+    }
 }

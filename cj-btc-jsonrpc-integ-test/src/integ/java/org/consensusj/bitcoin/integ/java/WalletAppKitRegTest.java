@@ -42,7 +42,7 @@ public class WalletAppKitRegTest {
 
     @BeforeEach
     void setupTest(@TempDir File tempDir) throws UnknownHostException {
-        client = new BitcoinExtendedClient(netParams, RpcURI.getDefaultRegTestURI(), rpcTestUser, rpcTestPassword);
+        client = new BitcoinExtendedClient(netParams, RpcURI.getDefaultRegTestWalletURI(), rpcTestUser, rpcTestPassword);
         kit = new WalletAppKit(netParams,
                 Script.ScriptType.P2WPKH,
                 KeyChainGroupStructure.DEFAULT,

@@ -24,7 +24,7 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     static BitcoinExtendedClient getClientInstance() {
         // We use a shared client for RegTest integration tests, because we want a single value for regTestMiningAddress
         if (INSTANCE == null) {
-            INSTANCE = new BitcoinExtendedClient(RpcURI.defaultRegTestURI, rpcTestUser, rpcTestPassword)
+            INSTANCE = new BitcoinExtendedClient(RpcURI.getDefaultRegTestWalletURI(), rpcTestUser, rpcTestPassword)
         }
         return INSTANCE;
     }
@@ -39,9 +39,8 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     void setupSpec() {
         serverReady(RegTestParams.get())
 
+        // TODO: Do we really need to keep doing this now that most tests explicitly fund their addresses?
         // Make sure we have enough test coins
-        // Do we really need to keep doing this now that most tests
-        // explicitly fund their addresses?
         while (client.getBalance() < minBTCForTests) {
             // Mine blocks until we have some coins to spend
             client.generateBlocks(1)

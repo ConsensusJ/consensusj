@@ -37,24 +37,26 @@ public class RegTestFundingSource implements FundingSource {
             throw new RuntimeException(ioe);
         }
 
-        // Bitcoin Core 0.21+ will not create default wallet (named "") if it doesn't exist, so we have to do it ourselves
-        if (bitcoinCoreVersion >= 210000) {
+        // Create a named wallet for RegTest (previously we used the default wallet with an empty-string name)
+        if (bitcoinCoreVersion >= 200000) {
             try {
                 List<String> walletList = client.listWallets();
-                if (!walletList.contains("")) {
+                if (!walletList.contains(BitcoinExtendedClient.REGTEST_WALLET_NAME)) {
                     LoadWalletResult result = (bitcoinCoreVersion >= 230000)
                         // Create a (non-descriptor) wallet
-                        ? client.createWallet("", false, false, null, null, false, null, null)
-                        : client.createWallet("", false, false, null, null);
+                        ? client.createWallet(BitcoinExtendedClient.REGTEST_WALLET_NAME, false, false, null, null, false, null, null)
+                        : client.createWallet(BitcoinExtendedClient.REGTEST_WALLET_NAME, false, false, null, null);
                     if (result.getWarning().isEmpty()) {
-                        log.info("Created default wallet: \"{}\"", result.getName());
+                        log.info("Created REGTEST wallet: \"{}\"", result.getName());
                     } else {
-                        log.warn("Warning creating default wallet \"{}\": {}", result.getName(), result.getWarning());
+                        log.warn("Warning creating REGTEST wallet \"{}\": {}", result.getName(), result.getWarning());
                     }
                 }
             } catch (IOException ioe) {
                 throw new RuntimeException(ioe);
             }
+        } else {
+            throw new RuntimeException("Unsupported Bitcoin JSON-RPC server version");
         }
     }
 
