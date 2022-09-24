@@ -70,6 +70,8 @@ public interface BipStandardKeyChainGroupStructure {
                 return COINTYPE_BTC;
             case NetworkParameters.ID_TESTNET:
                 return COINTYPE_TBTC;
+            case NetworkParameters.ID_REGTEST:
+                return COINTYPE_TBTC;
             default:
                 throw new IllegalArgumentException("Unknown network id (coin type)");
         }
