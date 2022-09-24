@@ -46,6 +46,8 @@ public class BitcoinExtendedClient extends BitcoinClient {
     private static final String RegTestMiningAddressLabel = "RegTestMiningAddress";
     private /* lazy */ Address regTestMiningAddress;
 
+    public static final String REGTEST_WALLET_NAME = "consensusj-regtest-wallet";
+
     public final Coin stdTxFee = Coin.valueOf(10000);
     public final Coin stdRelayTxFee = Coin.valueOf(1000);
     public final Integer defaultMaxConf = 9999999;
