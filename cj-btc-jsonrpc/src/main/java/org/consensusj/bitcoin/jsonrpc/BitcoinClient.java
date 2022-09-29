@@ -122,7 +122,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
 
     private void initExecutor() {
         mapper.registerModule(new RpcClientModule(netParams));
-        ThreadFactory threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(netParams), "Bitcoin RPC Client");
+        ThreadFactory threadFactory = new BitcoinClientThreadFactory(new Context(netParams), "Bitcoin RPC Client");
         // TODO: Tune and/or make configurable the thread pool size.
         // Current pool size of 5 is chosen to minimize simultaneous active RPC
         // calls in `bitcoind` -- which is not designed for serving multiple clients.
