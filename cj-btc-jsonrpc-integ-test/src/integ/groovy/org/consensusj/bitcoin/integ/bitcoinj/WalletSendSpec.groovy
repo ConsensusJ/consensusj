@@ -48,20 +48,27 @@ class WalletSendSpec extends BaseRegTestSpec {
     PeerGroup peerGroup
 
     void setupSpec() {
+        log.warn("WalletSendSpec.setupSpec()")
         BriefLogFormatter.init()
+        log.warn("About to call getNetParams")
         params = getNetParams()
 
+        log.warn("About to createDeterministic")
         wallet = Wallet.createDeterministic(params, Script.ScriptType.P2PKH)
         def store = new MemoryBlockStore(params)
         def chain = new BlockChain(params,wallet,store)
         peerGroup = new PeerGroup(params, chain)
+        log.warn("Starting PeerGroup")
         peerGroup.start()
+        log.warn("Starting Blockchain Download")
         peerGroup.downloadBlockChain()
+        log.warn("Finished Blockchain Download")
     }
 
     def "Wait for bitcoinj wallet to sync with RegTest chain"() {
         when: "we wait for the bitcoinj wallet to sync"
         //client.generateBlocks(1)   // This RPC call is necessary when I run locally, though I don't think it should be
+        log.warn("Waiting for bitcoinj wallet sync")
         waitForWalletSync()
 
         then: "the bitcoinj wallet has the same height as the RPC server"
