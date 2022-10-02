@@ -19,6 +19,7 @@ import org.bitcoinj.wallet.SendRequest
 import org.bitcoinj.store.MemoryBlockStore
 import org.bitcoinj.utils.BriefLogFormatter
 import org.consensusj.bitcoin.test.BaseRegTestSpec
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -30,6 +31,7 @@ import spock.lang.Stepwise
  * in {@link WalletSendSpec#setupSpec}. Since these are integration tests (not pure unit tests) and
  * communicate with the stateful Bitcoin blockchain, the {@code Stepwise} approach is helpful.
  */
+@Ignore
 @Slf4j
 @Stepwise
 class WalletSendSpec extends BaseRegTestSpec {
