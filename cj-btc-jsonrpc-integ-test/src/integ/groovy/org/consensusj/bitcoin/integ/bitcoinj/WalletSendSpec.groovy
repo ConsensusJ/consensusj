@@ -1,6 +1,7 @@
 package org.consensusj.bitcoin.integ.bitcoinj
 
 import com.google.common.util.concurrent.ListenableFuture
+import groovy.util.logging.Slf4j
 import org.consensusj.bitcoin.json.pojo.WalletTransactionInfo
 import org.bitcoinj.core.TransactionBroadcast
 import org.bitcoinj.core.TransactionConfidence
@@ -29,6 +30,7 @@ import spock.lang.Stepwise
  * in {@link WalletSendSpec#setupSpec}. Since these are integration tests (not pure unit tests) and
  * communicate with the stateful Bitcoin blockchain, the {@code Stepwise} approach is helpful.
  */
+@Slf4j
 @Stepwise
 class WalletSendSpec extends BaseRegTestSpec {
     /**

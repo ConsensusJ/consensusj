@@ -1,11 +1,13 @@
 package org.consensusj.bitcoin.jsonrpc.groovy
 
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient
+import org.consensusj.bitcoin.jsonrpc.test.BitcoinClientAccessor
 
 /**
  * Trait to Mix-in BitcoinClient methods via Delegation pattern
  */
-trait BitcoinClientDelegate {
+@Deprecated
+trait BitcoinClientDelegate implements BitcoinClientAccessor {
     @Delegate
     BitcoinExtendedClient client
 
