@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
     name: ${{ matrix.os }} JDK ${{ matrix.java }}
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Download Omni Core (Bitcoin Core superset)
       run: ./test-download-omnicore-ubuntu.sh
     - name: Set up JDK
