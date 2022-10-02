@@ -33,7 +33,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew nativeCompile --scan --info --stacktrace
       - name: Upload jsonrpc tool as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: jsonrpc-tool-${{ matrix.os }}
           path: consensusj-jsonrpc-cli/build/jsonrpc
