@@ -46,7 +46,14 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     }
     
     void setupSpec() {
+        log.warn("Calling serverReady()")
         serverReady(RegTestParams.get())
+        log.warn("Server is ready, make sure we have 50 coins to spend")
+        while (client.getBalance() < 50.btc) {
+            // Mine blocks until we have some coins to spend
+            client.generateBlocks(1)
+        }
+        log.warn("We've got 50 coins to rub together")
     }
 
     /**
