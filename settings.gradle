@@ -9,23 +9,23 @@ if (!JavaVersion.current().isJava11Compatible()) {
 }
 
 // JDK 8
-    include 'consensusj-analytics'             // Reactive analytics libraries
-    include 'consensusj-currency'              // JavaMoney Currency Provider(s)
-    include 'consensusj-decentralized-id'      // W3C Decentralized ID library (in-process)
-    include 'consensusj-exchange'              // JavaMoney Exchange Providers
-    include 'cj-bitcoinj-util'                 // BlockUtil (and future stuff depending on only bitcoinj)
-    include 'cj-bitcoinj-dsl-gvy'              // Groovy DSL for bitcoinj
-    include 'cj-bitcoinj-spock'                // Spock tests/demos of basic bitcoinj capabilities
-    include 'cj-btc-json'                      // JSON <-> Java Object mapping
+    include 'cj-bitcoinj-util'                  // BlockUtil (and future stuff depending on only bitcoinj)
+    include 'cj-bitcoinj-dsl-gvy'               // Groovy DSL for bitcoinj
 
 // JDK 9
+    include 'consensusj-analytics'              // Reactive analytics libraries
+    include 'consensusj-currency'               // JavaMoney Currency Provider(s)
+    include 'consensusj-decentralized-id'       // W3C Decentralized ID library (in-process)
+    include 'consensusj-exchange'               // JavaMoney Exchange Providers
     include 'consensusj-jsonrpc'                // JSON-RPC Java client
     include 'consensusj-jsonrpc-gvy'            // JSON-RPC Groovy client
     include 'consensusj-rx-jsonrpc'             // RxJava 3 adapter for JSON-RPC
     include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
+    include 'cj-bitcoinj-spock'                 // Spock tests/demos of basic bitcoinj capabilities
     include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
     include 'cj-btc-rx-peergroup'               // bitcoinj-based RxJava (Transaction) implementation
     include 'cj-btc-rx-jsonrpc'                 // RxJava 3 reactive Bitcoin JSON-RPC bitcoind client (uses ZeroMQ)
+    include 'cj-btc-json'                       // JSON <-> Java Object mapping
     include 'cj-btc-jsonrpc'                    // Bitcoin JSON-RPC client using bitcoinj-based types
     include 'cj-btc-jsonrpc-gvy'                // Bitcoin JSON-RPC client with Groovy dynamic method support
     include 'cj-btc-jsonrpc-integ-test'         // RPC-based integration tests of bitcoind
