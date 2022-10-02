@@ -14,7 +14,7 @@ jobs:
     name: ${{ matrix.os }} JDK ${{ matrix.graalvm }}.${{ matrix.java }}
     steps:
       - name: Git checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
       - name: Set up GraalVM
         uses: DeLaGuardo/setup-graalvm@4.0
         with:
