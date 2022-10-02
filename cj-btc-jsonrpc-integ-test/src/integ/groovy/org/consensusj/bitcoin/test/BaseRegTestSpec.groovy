@@ -1,6 +1,7 @@
 package org.consensusj.bitcoin.test
 
 import groovy.util.logging.Slf4j
+import org.bitcoinj.core.Address
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient
 import org.bitcoinj.params.RegTestParams
 import org.consensusj.bitcoin.jsonrpc.groovy.test.BTCTestSupport
@@ -49,10 +50,7 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
         log.warn("Calling serverReady()")
         serverReady(RegTestParams.get())
         log.warn("Server is ready, make sure we have 50 coins to spend")
-        while (client.getBalance() < 50.btc) {
-            // Mine blocks until we have some coins to spend
-            client.generateBlocks(1)
-        }
+        Address wasted = fundingSource().createFundedAddress(50.btc)
         log.warn("We've got 50 coins to rub together")
     }
 
