@@ -1,11 +1,13 @@
 package org.consensusj.bitcoin.jsonrpc.groovy.test
 
 import org.consensusj.bitcoin.jsonrpc.test.FundingSource
+import org.consensusj.bitcoin.jsonrpc.test.FundingSourceAccessor
 
 /**
  * Provide a funding source for a test Spec
  */
-trait FundingSourceDelegate {
+@Deprecated
+trait FundingSourceDelegate implements FundingSourceAccessor {
     @Delegate
     FundingSource fundingSource
 
