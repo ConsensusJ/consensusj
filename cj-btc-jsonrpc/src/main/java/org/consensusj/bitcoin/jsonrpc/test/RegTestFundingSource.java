@@ -61,13 +61,14 @@ public class RegTestFundingSource implements FundingSource {
     }
 
     /**
-     * Generate blocks and fund an address with requested amount of BTC
-     *
-     * TODO: test new logic and delete "old logic"
+     * Generate blocks (if necessary) and fund an address with requested amount of BTC.
+     * This will create, sign, and transmit a transaction to fund an address with BTC. This method
+     * does not mine a block to confirm the transaction. A separate call to {@link BitcoinExtendedClient#generateBlocks(int)}
+     * or equivalent must be made to confirm the transaction.
      *
      * @param toAddress Address to fund with BTC
      * @param requestAmount Amount of BTC to "mine" and send (minimum ending balance of toAddress?)
-     * @return The hash of transaction that provided the funds.
+     * @return The hash of an unconfirmed transaction that provides the funds.
      */
     @Override
     public Sha256Hash requestBitcoin(Address toAddress, Coin requestAmount) throws JsonRpcException, IOException {
@@ -98,6 +99,22 @@ public class RegTestFundingSource implements FundingSource {
         log.info("Funding transaction sent: {}", txid);
 
         return txid;
+    }
+
+    /**
+     * Create an address and fund it with bitcoin.
+     * This will create, sign, and transmit a transaction to fund an address with BTC. This method
+     * does not mine a block to confirm the transaction. A separate call to {@link BitcoinExtendedClient#generateBlocks(int)}
+     * or equivalent must be made to confirm the transaction.
+     *
+     * @param amount requested amount of BTC
+     * @return Newly created address that will have the requested amount of bitcoin after the next block is mined
+     */
+    @Override
+    public Address createFundedAddress(Coin amount) throws Exception {
+        Address address = client.getNewAddress();
+        requestBitcoin(address, amount);
+        return address;
     }
 
     /**
@@ -142,19 +159,6 @@ public class RegTestFundingSource implements FundingSource {
         return change.isPositive()
                 ? Map.of(destAddress, amountToSend, changeAddress, change)  // include change output
                 : Map.of(destAddress, amountToSend);                        // no change output
-    }
-
-    /**
-     * Create an address and fund it with bitcoin
-     *
-     * @param amount requested amount
-     * @return Newly created address with the requested amount of bitcoin
-     */
-    @Override
-    public Address createFundedAddress(Coin amount) throws Exception {
-        Address address = client.getNewAddress();
-        requestBitcoin(address, amount);
-        return address;
     }
 
     /**
