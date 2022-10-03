@@ -55,13 +55,36 @@ class WalletSendSpec extends BaseRegTestSpec {
         def store = new MemoryBlockStore(params)
         def chain = new BlockChain(params,wallet,store)
         peerGroup = new PeerGroup(params, chain)
+    }
+
+    // TODO: Pull request to bitcoinj to make downloadBlockChain() work on 0-block RegTest?
+    def "Make sure there's at least one block in the blockchain"() {
+        // TODO: Have generateBlocks verify/create the server-side regtest wallet before mining
+        when: "First make sure there is a server-side RegTest wallet for mining"
+        var fundingSource = fundingSource()
+
+        and: "Then make sure at least one block is mined"
+        var height = getBlockCount()
+        if (height < 1) {
+            generateBlocks(1)
+        }
+        var newHeight = getBlockCount()
+
+        then:
+        newHeight >= 1
+    }
+
+    def "Have the PeerGroup download the blockchain"() {
+        when:
         peerGroup.start()
         peerGroup.downloadBlockChain()
+
+        then:
+        peerGroup.getMostCommonChainHeight() > 0
     }
 
     def "Wait for bitcoinj wallet to sync with RegTest chain"() {
         when: "we wait for the bitcoinj wallet to sync"
-        //client.generateBlocks(1)   // This RPC call is necessary when I run locally, though I don't think it should be
         waitForWalletSync()
 
         then: "the bitcoinj wallet has the same height as the RPC server"
