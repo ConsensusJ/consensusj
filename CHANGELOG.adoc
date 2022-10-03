@@ -12,11 +12,11 @@ Released: Under-development
 
 * Jackson 2.13.4
 * Groovy 4.0.5
-* SLF4J 2.0.1
+* SLF4J 2.0.3
 
 === Build/Test Updates
 
-* Spock 2.2-groovy-4.0
+* Spock 2.3-groovy-4.0
 
 
 == v0.6.3
