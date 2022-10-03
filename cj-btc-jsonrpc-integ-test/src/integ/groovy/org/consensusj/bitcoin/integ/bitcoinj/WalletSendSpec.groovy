@@ -161,7 +161,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         and: "we send it using the PeerGroup"
         log.info("Sending Tx: {}", tx)
         TransactionBroadcast broadcast = peerGroup.broadcastTransaction(request.tx)
-        log.info("Waiting for completion of broadcast for txid: {}", broadcast.tx.getTxId())
+        log.info("Waiting for completion of broadcast for txid: {}", request.tx.getTxId())
         Transaction sentTx = (workaroundBitcoinJ_015_8_Issue) ? request.tx : broadcast.future().get()
         waitForUnconfirmedTransaction(tx.txId)  // Wait for tx to show up on server as unconfirmed
 
