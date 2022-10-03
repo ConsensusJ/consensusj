@@ -50,7 +50,7 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
         log.warn("Calling serverReady()")
         serverReady(RegTestParams.get())
         log.warn("Server is ready, make sure we have 50 coins to spend")
-        var wasted = fundingSource().createFundedAddress(1.btc)
+        var unused = fundingSource()//.createFundedAddress(1.btc)
         log.warn("We've got 50 coins to rub together")
     }
 
