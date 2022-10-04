@@ -11,6 +11,7 @@ import org.bitcoinj.core.Transaction
 
 import java.util.function.UnaryOperator
 
+// TODO: Merge into TxTestBaseSpec, remove
 /**
  * Test support for testing client-generated bitcoinj transactions
  * in RegTest mode by sending them via P2P and/or RPC
