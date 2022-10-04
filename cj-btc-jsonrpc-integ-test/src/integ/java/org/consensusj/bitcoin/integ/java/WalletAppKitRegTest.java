@@ -2,7 +2,6 @@ package org.consensusj.bitcoin.integ.java;
 
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.PeerAddress;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.RegTestParams;
@@ -14,6 +13,7 @@ import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
 import org.consensusj.bitcoin.jsonrpc.RpcURI;
 import org.consensusj.bitcoin.jsonrpc.test.TestServers;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -37,12 +37,17 @@ public class WalletAppKitRegTest {
     static final protected String rpcTestUser = testServers.getRpcTestUser();
     static final protected String rpcTestPassword = testServers.getRpcTestPassword();
 
-    BitcoinExtendedClient client;
+    private static BitcoinExtendedClient client;
     WalletAppKit kit;
+
+    @BeforeAll
+    static void setupRegTestWallet() {
+        client = new BitcoinExtendedClient(netParams, RpcURI.getDefaultRegTestWalletURI(), rpcTestUser, rpcTestPassword);
+        client.initRegTestWallet();
+    }
 
     @BeforeEach
     void setupTest(@TempDir File tempDir) throws UnknownHostException {
-        client = new BitcoinExtendedClient(netParams, RpcURI.getDefaultRegTestWalletURI(), rpcTestUser, rpcTestPassword);
         kit = new WalletAppKit(netParams,
                 Script.ScriptType.P2WPKH,
                 KeyChainGroupStructure.DEFAULT,

@@ -44,9 +44,10 @@ public class BitcoinExtendedClient extends BitcoinClient {
 
     private static final BigInteger NotSoPrivatePrivateInt = new BigInteger(1, Hex.decode("180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19"));
     private static final String RegTestMiningAddressLabel = "RegTestMiningAddress";
+    public static final String REGTEST_WALLET_NAME = "consensusj-regtest-wallet";
+    private boolean regTestWalletInitialized = false;
     private /* lazy */ Address regTestMiningAddress;
 
-    public static final String REGTEST_WALLET_NAME = "consensusj-regtest-wallet";
 
     public final Coin stdTxFee = Coin.valueOf(10000);
     public final Coin stdRelayTxFee = Coin.valueOf(1000);
@@ -104,6 +105,9 @@ public class BitcoinExtendedClient extends BitcoinClient {
             throw new UnsupportedOperationException("Operation only supported in RegTest context");
         }
         if (regTestMiningAddress == null) {
+            if (!regTestWalletInitialized) {
+                initRegTestWallet();
+            }
             // If in the future, we want to manage the keys for mined coins on the client side,
             // we could initialize regTestMiningKey from a bitcoinj-generated ECKey or HD Keychain.
             try {
@@ -127,6 +131,43 @@ public class BitcoinExtendedClient extends BitcoinClient {
             }
         }
         return regTestMiningAddress;
+    }
+
+    /**
+     * Initialize a server-side wallet for RegTest mining and test transaction funding. Creates a non-descriptor wallet
+     * with name {@link #REGTEST_WALLET_NAME} if it doesn't already exist.
+     */
+    public synchronized void initRegTestWallet() {
+        if (!regTestWalletInitialized) {
+            // Create a named wallet for RegTest (previously we used the default wallet with an empty-string name)
+            int bitcoinCoreVersion = getServerVersion();
+            try {
+                List<String> walletList = listWallets();
+                if (!walletList.contains(REGTEST_WALLET_NAME)) {
+                    createRegTestWallet(bitcoinCoreVersion, REGTEST_WALLET_NAME);
+                }
+            } catch (IOException ioe) {
+                throw new RuntimeException(ioe);
+            }
+            regTestWalletInitialized = true;
+        }
+    }
+
+    /**
+     * Create a server-side wallet suitable for RegTest mining/funding, defaulting all other parameters.
+     * @param bitcoinCoreVersion Used to select correct JSON-RPC parameters to used based on server version
+     * @param name name of wallet to create
+     */
+    private void createRegTestWallet(int bitcoinCoreVersion, String name) throws JsonRpcStatusException, IOException {
+        LoadWalletResult result = (bitcoinCoreVersion >= BITCOIN_CORE_VERSION_DESC_DEFAULT)
+                    // Create a (non-descriptor) wallet
+                    ? createWallet(name, false, false, null, null, false, null, null)
+                    : createWallet(name, false, false, null, null);
+        if (result.getWarning().isEmpty()) {
+            log.info("Created REGTEST wallet: \"{}\"", result.getName());
+        } else {
+            log.warn("Warning creating REGTEST wallet \"{}\": {}", result.getName(), result.getWarning());
+        }
     }
 
     /**
