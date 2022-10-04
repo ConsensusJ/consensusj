@@ -188,10 +188,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
     /**
      * Returns information about a block at index provided.
      *
-     * Use two RPCs: `getblockhash` and then `getblock`.
-     * Note: somewhat-overrides (primitive vs boxed) deprecated method that will be removed.
-     * The deprecated method in `BitcoinClient` takes an `Integer`, this method
-     * takes an `int`.
+     * Uses two RPCs: {@code getblockhash} and then {@code getblock}.
      *
      * @param index The block index
      * @return The information about the block
@@ -350,7 +347,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
         String unsignedTxHex = createRawTransaction(fromAddress, outputs);
         SignedRawTransaction signingResult = signRawTransactionWithWallet(unsignedTxHex);
 
-        Boolean complete = signingResult.isComplete();
+        boolean complete = signingResult.isComplete();
         assert complete;
 
         String signedTxHex = signingResult.getHex();
