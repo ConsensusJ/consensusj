@@ -68,7 +68,7 @@ reverse link org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection to org.consen
 reverse link org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback to org.consensusj.jsonrpc.groovy.DynamicRPCClient-->
     <path d='M378.07,208.94 C375.93,222.63 373.62,237.45 371.86,248.7 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
     <polygon fill='none' points='371.17,207.74,381.18,189.06,385.01,209.9,371.17,207.74' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <!--MD5=[50522ec05e5a7d62a9f3bc1d8f96e763]
+    <!--MD5=[f04c61f6d39d060dfaf0725f12b5cc54]
 @startuml
 skinparam packageStyle Rect
 skinparam shadowing false
@@ -97,7 +97,7 @@ PlantUML version 1.2020.06(Sun Apr 05 05:38:32 PDT 2020)
 (APACHE source distribution)
 Java Runtime: OpenJDK Runtime Environment
 JVM: OpenJDK 64-Bit Server VM
-Java Version: 17.0.4.1+1
+Java Version: 17.0.4+8-jvmci-22.2-b06
 Operating System: Mac OS X
 Default Encoding: UTF-8
 Language: en

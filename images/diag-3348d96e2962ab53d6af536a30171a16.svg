@@ -80,7 +80,7 @@ reverse link org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback to org.conse
 reverse link org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient to org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient-->
     <path d='M426.89,206.43 C429.01,232.47 431.81,266.82 433.5,287.61 ' fill='none' id='org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient&lt;-org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.0;'/>
     <polygon fill='none' points='419.89,206.73,425.24,186.22,433.84,205.59,419.89,206.73' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <!--MD5=[90df667ffcb1c9b9fb87cdd1cd7a0e67]
+    <!--MD5=[6d14ff3c1e642cefa1f99ea19315c88a]
 @startuml
 skinparam packageStyle Rect
 skinparam shadowing false
@@ -117,7 +117,7 @@ PlantUML version 1.2020.06(Sun Apr 05 05:38:32 PDT 2020)
 (APACHE source distribution)
 Java Runtime: OpenJDK Runtime Environment
 JVM: OpenJDK 64-Bit Server VM
-Java Version: 17.0.4.1+1
+Java Version: 17.0.4+8-jvmci-22.2-b06
 Operating System: Mac OS X
 Default Encoding: UTF-8
 Language: en
