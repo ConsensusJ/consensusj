@@ -1,7 +1,9 @@
 package org.consensusj.bitcoinj.spock
 
 import org.bitcoinj.core.Coin
+import org.bitcoinj.core.NetworkParameters
 import spock.lang.Specification
+import spock.lang.Unroll
 
 
 /**
@@ -22,6 +24,37 @@ class CoinSpec extends Specification {
     def "valueOf can make one bitcent correctly"() {
         expect:
         Coin.valueOf(0,1) == Coin.CENT
+    }
+
+    @Unroll
+    def "we can convert #btc btc to #satoshi satoshi"(BigDecimal btc, long satoshi) {
+        when:
+        def result = Coin.btcToSatoshi(btc)
+
+        then:
+        result == satoshi
+
+        where:
+        btc         | satoshi
+        21_000_000  | NetworkParameters.MAX_MONEY.value
+        10.0        |  10*Coin.COIN.value
+        0.00000001 | 1
+    }
+
+    @Unroll
+    def "we can convert #satoshi satoshi to #btc btc"(long satoshi, BigDecimal btc) {
+        when:
+        def result = Coin.satoshiToBtc(satoshi)
+
+        then:
+        result == btc
+
+        where:
+        satoshi     | btc
+        100_000_000 | 1
+        298         | 0.00000298
+        1           | 0.00000001
+        NetworkParameters.MAX_MONEY.value |  21_000_000
     }
 
     def "addition"() {
