@@ -710,36 +710,6 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         return sendRawTransaction(hexTx, (Coin) null);
     }
 
-    /**
-     * Submit a raw transaction to local node and network
-     *
-     * @param tx The raw transaction
-     * @param allowHighFees deprecated boolean parameter
-     * @return SHA256 Transaction ID
-     * @throws JsonRpcStatusException JSON RPC status exception
-     * @throws IOException network error
-     * @deprecated In Bitcoin Core 0.19 and later, use {@link BitcoinClient#sendRawTransaction(Transaction, Coin)}
-     */
-    @Deprecated
-    public Sha256Hash sendRawTransaction(Transaction tx, Boolean allowHighFees) throws JsonRpcStatusException, IOException {
-        return send("sendrawtransaction", Sha256Hash.class, tx, allowHighFees);
-    }
-
-    /**
-     * Submit a raw transaction to local node and network
-     *
-     * @param hexTx The raw transaction as a hex-encoded string
-     * @param allowHighFees deprecated boolean parameter
-     * @return SHA256 Transaction ID
-     * @throws JsonRpcStatusException JSON RPC status exception
-     * @throws IOException network error
-     * @deprecated In Bitcoin Core 0.19 and later, use {@link BitcoinClient#sendRawTransaction(Transaction, Coin)}
-     */
-    @Deprecated
-    public Sha256Hash sendRawTransaction(String hexTx, Boolean allowHighFees) throws JsonRpcStatusException, IOException {
-        return send("sendrawtransaction", Sha256Hash.class, hexTx, allowHighFees);
-    }
-
     public AddressInfo getAddressInfo(Address address) throws JsonRpcStatusException, IOException {
         return send("getaddressinfo", AddressInfo.class, address);
     }

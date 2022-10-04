@@ -15,16 +15,6 @@ import static org.consensusj.jsonrpc.JsonRpcMessage.Version.*;
  * JSON-RPC Request POJO
  */
 public class JsonRpcRequest {
-    /**
-     * @deprecated Use {@link JsonRpcMessage.Version#V1} enum instead
-     */
-    @Deprecated
-    public static final String JSON_RPC_VERSION_1 = V1.jsonrpc();
-    /**
-     * @deprecated Use {@link JsonRpcMessage.Version#V2} enum instead
-     */
-    @Deprecated
-    public static final String JSON_RPC_VERSION_2 = V2.jsonrpc();
     private static final JsonRpcMessage.Version DEFAULT_JSON_RPC_VERSION = V2;
     private static final AtomicLong nextRequestId =  new AtomicLong(0);
 
@@ -100,23 +90,6 @@ public class JsonRpcRequest {
      */
     public JsonRpcRequest(String method, List<Object> params) {
         this(DEFAULT_JSON_RPC_VERSION, method, params);
-    }
-
-    /**
-     * Create a JSON RPC request (for serialization.)
-     * Can be used to override default JSON RPC version. To create a request on the client side, it
-     * is generally recommended to use the methods in {@link JsonRpcClient}.
-     * 
-     * @param method Method of remote procedure to call
-     * @param params Parameters to serialize
-     * @param jsonRpcVersionString JSON-RPC version string
-     * @see JsonRpcClient#buildJsonRequest(String, List)
-     * @see JsonRpcClient#buildJsonRequest(String, Object...)
-     * @deprecated Use {@link JsonRpcRequest#JsonRpcRequest(JsonRpcMessage.Version, String, List)}
-     */
-    @Deprecated
-    public JsonRpcRequest(String method, List<Object> params, String jsonRpcVersionString) {
-        this(jsonRpcVersionString, Long.toString(JsonRpcRequest.nextRequestId.incrementAndGet()), method, removeTrailingNulls(params));
     }
 
     /**

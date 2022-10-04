@@ -7,9 +7,6 @@ import spock.lang.Shared
 
 /**
  * Base test class for testing bitcoinj transactions via P2P and RPC on RegTest
- * TODO: The inheritance of BitcoinClientDelegate through both BaseRegTestSpec and
- * JTransactionTestSupport seems to cause delegated calls (e.g. getNetParams()) to
- * get a NPE when looking for the client property.
  */
 abstract class TxTestBaseSpec extends BaseRegTestSpec implements JTransactionTestSupport {
     @Shared

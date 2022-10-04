@@ -42,14 +42,6 @@ public interface AsyncSupport {
         return (Runnable r) -> new Thread(r).start();
     }
 
-    /**
-     * @deprecated Use {@link CompletableFuture#failedFuture(Throwable)}
-     */
-    @Deprecated
-    static <T> CompletableFuture<T> failedFuture(Throwable t) {
-        return CompletableFuture.failedFuture(t);
-    }
-
     static <T> CompletableFuture<T> supplyCatchingAsync(ThrowingSupplier<T> throwingSupplier, Executor executor) {
         CompletableFuture<T> future = new CompletableFuture<>();
         executor.execute(() -> {

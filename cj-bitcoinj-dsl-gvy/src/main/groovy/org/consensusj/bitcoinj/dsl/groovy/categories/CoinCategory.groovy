@@ -9,17 +9,6 @@ import org.bitcoinj.core.Coin
 @CompileStatic
 @Category(Coin)
 class CoinCategory {
-    /**
-     * Convert to BTC in BigDecimal format
-     *
-     * @return a BigDecimal object
-     * @deprecated Use {@link Coin#toBtc()}
-     */
-    @Deprecated
-    public BigDecimal getDecimalBtc() {
-        return this.toBtc();
-    }
-
     // TODO: Needs more tests!
 
     Coin negative() {

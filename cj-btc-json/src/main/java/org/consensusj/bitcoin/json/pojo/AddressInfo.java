@@ -129,29 +129,4 @@ public class AddressInfo {
     public List<Object> getLabels() {
         return labels;
     }
-
-    @Deprecated
-    public static class Label {
-
-        private final String name;
-        private final String purpose;
-
-        /**
-         *
-         * @param name Label name
-         * @param purpose Label purpose ("send" or "receive")
-         */
-        public Label(@JsonProperty("name") String name, @JsonProperty("purpose") String purpose) {
-            this.name = name;
-            this.purpose = purpose;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getPurpose() {
-            return purpose;
-        }
-    }
 }

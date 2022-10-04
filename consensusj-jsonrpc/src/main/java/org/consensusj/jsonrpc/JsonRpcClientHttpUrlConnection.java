@@ -57,20 +57,6 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
     }
 
     /**
-     * Construct a JSON-RPC client from URI, username, and password
-     *
-     * @param server server URI should not contain username/password
-     * @param rpcUser username for the RPC HTTP connection
-     * @param rpcPassword password for the RPC HTTP connection
-     * @deprecated Specify JSON-RPC version and use {@link JsonRpcClientHttpUrlConnection#JsonRpcClientHttpUrlConnection(JsonRpcMessage.Version, URI, String, String)}
-     */
-    @Deprecated
-    public JsonRpcClientHttpUrlConnection(URI server, final String rpcUser, final String rpcPassword) {
-        this(JsonRpcMessage.Version.V1, server, rpcUser, rpcPassword);
-    }
-
-
-    /**
      * Get the URI of the server this client connects to
      * @return Server URI
      */

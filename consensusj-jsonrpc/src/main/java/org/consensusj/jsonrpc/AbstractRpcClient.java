@@ -54,14 +54,6 @@ public abstract class AbstractRpcClient implements JacksonRpcClient {
     protected final ObjectMapper mapper;
     private final JavaType defaultType;
 
-    /**
-     * @deprecated Specify JSON-RPC version and use {@link AbstractRpcClient#AbstractRpcClient(JsonRpcMessage.Version)}
-     */
-    @Deprecated
-    public AbstractRpcClient() {
-        this(DEFAULT_JSON_RPC_VERSION);
-    }
-
     public AbstractRpcClient(JsonRpcMessage.Version jsonRpcVersion) {
         this.jsonRpcVersion = jsonRpcVersion;
         mapper = new ObjectMapper();

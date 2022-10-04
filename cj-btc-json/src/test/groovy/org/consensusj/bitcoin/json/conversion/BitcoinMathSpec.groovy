@@ -7,14 +7,14 @@ import spock.lang.Unroll
 
 
 /**
- * Unit tests for BitcoinMathSpec
+ * Unit tests for Coin conversion statics
  */
 class BitcoinMathSpec extends Specification {
 
     @Unroll
     def "we can convert #btc btc to #satoshi satoshi"(BigDecimal btc, long satoshi) {
         when:
-        def result = BitcoinMath.btcToSatoshi(btc)
+        def result = Coin.btcToSatoshi(btc)
 
         then:
         result == satoshi
@@ -29,7 +29,7 @@ class BitcoinMathSpec extends Specification {
     @Unroll
     def "we can convert #satoshi satoshi to #btc btc"(long satoshi, BigDecimal btc) {
         when:
-        def result = BitcoinMath.satoshiToBtc(satoshi)
+        def result = Coin.satoshiToBtc(satoshi)
 
         then:
         result == btc
