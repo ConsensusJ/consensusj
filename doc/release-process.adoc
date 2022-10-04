@@ -4,7 +4,7 @@
 
 . Use Java 17 for official builds
 .. `sdk use 17.0.4.1-tem`
-.. `sdk use 22.1.0.r17-grl` (for GraalVM build)
+.. `sdk use 22.2.r17-grl` (for GraalVM build)
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`

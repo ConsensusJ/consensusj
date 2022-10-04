@@ -46,13 +46,14 @@ Released: Under-development
 === Dependency Updates
 
 * Jackson 2.13.4
+* Micronaut 3.7.1
 * Groovy 4.0.5
 * SLF4J 2.0.3
 
 === Build/Test Updates
 
 * Spock 2.3-groovy-4.0
-
+* GraalVM 22.2
 
 == v0.6.3
 
