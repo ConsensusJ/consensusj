@@ -47,6 +47,7 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     
     void setupSpec() {
         serverReady(RegTestParams.get())
+        client().initRegTestWallet()
     }
 
     /**

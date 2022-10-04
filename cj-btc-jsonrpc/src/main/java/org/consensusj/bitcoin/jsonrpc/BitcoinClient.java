@@ -104,6 +104,9 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     private static final int RETRY_SECONDS = 5;
     private static final int MESSAGE_SECONDS = 30;
 
+    public static final int BITCOIN_CORE_VERSION_MIN = 200000;              // Minimum Bitcoin Core supported (tested) version
+    public static final int BITCOIN_CORE_VERSION_DESC_DEFAULT = 230000;     // Bitcoin Core version that DEFAULTS to descriptor wallets
+
     // TODO: Replace NetworkParameters with Network/BitcoinNetwork once we upgrade to bitcoinj 0.17 (once it is released)
     private NetworkParameters netParams;
     private ExecutorService executorService;
@@ -222,13 +225,18 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
 
     /**
      * Get a (cached after first call) serverVersion number
-     * @return serverVersion number of bitcoin node
-     * @throws JsonRpcStatusException JSON RPC status exception
-     * @throws IOException network error
+     * @return serverVersion version of bitcoin server node
      */
-    synchronized int getServerVersion() throws IOException, JsonRpcStatusException {
+    synchronized int getServerVersion() {
         if (serverVersion == 0) {
-            serverVersion = getNetworkInfo().getVersion();
+            try {
+                serverVersion = getNetworkInfo().getVersion();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (serverVersion < BITCOIN_CORE_VERSION_MIN) {
+                throw new RuntimeException("Unsupported server version");
+            }
         }
         return serverVersion;
     }

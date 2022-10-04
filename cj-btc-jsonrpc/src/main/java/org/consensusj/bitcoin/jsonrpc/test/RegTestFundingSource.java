@@ -27,37 +27,9 @@ public class RegTestFundingSource implements FundingSource {
     private final Integer defaultMaxConf = 9999999;
     private static final Logger log = LoggerFactory.getLogger(RegTestFundingSource.class);
     protected final BitcoinExtendedClient client;
-    protected final int bitcoinCoreVersion;
 
     public RegTestFundingSource(BitcoinExtendedClient client) {
         this.client = client;
-        try {
-            bitcoinCoreVersion = client.getNetworkInfo().getVersion();
-        } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
-        }
-
-        // Create a named wallet for RegTest (previously we used the default wallet with an empty-string name)
-        if (bitcoinCoreVersion >= 200000) {
-            try {
-                List<String> walletList = client.listWallets();
-                if (!walletList.contains(BitcoinExtendedClient.REGTEST_WALLET_NAME)) {
-                    LoadWalletResult result = (bitcoinCoreVersion >= 230000)
-                        // Create a (non-descriptor) wallet
-                        ? client.createWallet(BitcoinExtendedClient.REGTEST_WALLET_NAME, false, false, null, null, false, null, null)
-                        : client.createWallet(BitcoinExtendedClient.REGTEST_WALLET_NAME, false, false, null, null);
-                    if (result.getWarning().isEmpty()) {
-                        log.info("Created REGTEST wallet: \"{}\"", result.getName());
-                    } else {
-                        log.warn("Warning creating REGTEST wallet \"{}\": {}", result.getName(), result.getWarning());
-                    }
-                }
-            } catch (IOException ioe) {
-                throw new RuntimeException(ioe);
-            }
-        } else {
-            throw new RuntimeException("Unsupported Bitcoin JSON-RPC server version");
-        }
     }
 
     /**
