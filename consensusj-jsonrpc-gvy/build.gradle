@@ -10,7 +10,6 @@ tasks.withType(GroovyCompile) {
 
 dependencies {
     api project(':consensusj-jsonrpc')
-    implementation "org.slf4j:slf4j-api:${slf4jVersion}"       // Loggable trait is part of API
 
     implementation "org.apache.groovy:groovy:${groovyVersion}"
 
