@@ -8,6 +8,41 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under-development
 
+=== cj-btc-jsonrpc
+
+* Improve `createwallet` support for Bitcoin Core v23 (descriptor wallets)
+* Add support for using named wallet (not just `""`) in tests
+* Add `unloadwallet` methods
+* Add (incubating) BitcoinExtendedClient.withWallet() to clone a client with new wallet URL
+* Add LoadWalletResult and UnloadWalletResult types
+* RegTestFundingSource: Fix to make sure default wallet created is NOT a descriptor wallet
+* Add Spock test CreateWalletSpec to create (and unload) wallets
+* Add WalletTestUtil class for creating random wallet names
+* Add "incubating" constructors that don't require a `NetworkParameters`
+* `BitcoinCient`: Add overloaded `listUnspent` that takes a single address for filter
+* `BitcoinCient`: use `new Context` not `getOrCreate` in `threadFactory`
+
+* `BitcoinExtendedClient`: Add no-args constructor that reads `bitcoin.conf` for connection info
+* Deprecate `BitcoinCLIClient.groovy`,
+* `BlockchainSyncing` migrate from Groovy `trait` to Java `interface`
+* `BlockchainDotInfoSyncing`, `BlockCypherSyncing` migrate from `trait` to `interface`
+* Add `BitcoinClientAccessor.java` (replaces BitcoinClientDelegate.groovy)
+* ADD `FundingSourceAccessor.java` (replaces FundingSourceDelegate.groovy)
+
+=== cj-btc-jsonrpc-gvy
+
+* Deprecate BitcoinClientDelegate.groovy, add Java replacement
+* Deprecate FundingSourceDelegate.groovy, add Java replacement
+* Deprecate Loggable
+* Convert BTCTestSupport to a @CompileStatic interface (maybe move to Java later)
+* Use @Delegate annotation directly in BaseRegTestSpec, BaseMainNetTestSpec
+* Move `consolidateCoins` to `BaseRegTestSpec`
+* Use built-in @Slf4j annotation where needed
+
+=== cj-btc-jsonrpc-integ-test
+
+* Use named wallet (`consensusj-regtest-wallet`) for RegTest mining and test funding
+
 === Dependency Updates
 
 * Jackson 2.13.4
