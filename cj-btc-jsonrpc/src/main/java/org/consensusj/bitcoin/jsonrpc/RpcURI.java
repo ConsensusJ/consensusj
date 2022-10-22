@@ -15,10 +15,11 @@ public interface RpcURI {
     int RPCPORT_TESTNET = 18332;
     int RPCPORT_REGTEST = 18443;  // Was same port as TESTNET until Bitcoin Core 0.16.0
 
-    URI DEFAULT_MAINNET_URI = URI.create(rpcproto + "://" + rpchost + ":" + RPCPORT_MAINNET + rpcfile);
-    URI DEFAULT_TESTNET_URI = URI.create(rpcproto + "://" + rpchost + ":" + RPCPORT_TESTNET + rpcfile);
-    URI DEFAULT_REGTEST_URI = URI.create(rpcproto + "://" + rpchost + ":" + RPCPORT_REGTEST + rpcfile);
+    URI DEFAULT_MAINNET_URI = rpcURI( rpchost, RPCPORT_MAINNET);
+    URI DEFAULT_TESTNET_URI = rpcURI( rpchost, RPCPORT_TESTNET );
+    URI DEFAULT_REGTEST_URI = rpcURI( rpchost, RPCPORT_REGTEST);
 
+    // TODO: Deprecate?
     URI defaultMainNetURI = DEFAULT_MAINNET_URI;
     URI defaultTestNetURI = DEFAULT_TESTNET_URI;
     URI defaultRegTestURI = DEFAULT_REGTEST_URI;
@@ -36,6 +37,18 @@ public interface RpcURI {
     }
 
     static URI getDefaultRegTestWalletURI() {
-        return DEFAULT_REGTEST_URI.resolve("/wallet/" + BitcoinExtendedClient.REGTEST_WALLET_NAME);
+        return getRegTestWalletURI(rpchost);
+    }
+
+    static URI getRegTestWalletURI(String hostName) {
+        return rpcWalletURI(hostName, RPCPORT_REGTEST, BitcoinExtendedClient.REGTEST_WALLET_NAME);
+    }
+
+    static URI rpcURI(String hostName, int port) {
+        return URI.create(rpcproto + "://" + hostName + ":" + port + rpcfile);
+    }
+
+    static URI rpcWalletURI(String hostName, int port, String walletName) {
+        return URI.create(rpcproto + "://" + hostName + ":" + port + "/wallet/" + walletName);
     }
 }
