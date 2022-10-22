@@ -26,17 +26,17 @@ graalvmNative {
 
 dependencies {
     implementation project(':consensusj-jsonrpc')
-    implementation("io.micronaut:micronaut-runtime")
-    implementation("javax.annotation:javax.annotation-api")
-    implementation 'jakarta.inject:jakarta.inject-api:2.0.1'
 
-    compileOnly("org.graalvm.nativeimage:svm")
+    implementation "io.micronaut:micronaut-runtime"
+    implementation "javax.annotation:javax.annotation-api"
+
+    compileOnly "org.graalvm.nativeimage:svm"
 
     implementation('org.slf4j:slf4j-api:1.7.36') {
         force = true
     }
 
-    runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly "ch.qos.logback:logback-classic"
 
     testImplementation project(':consensusj-jsonrpc-gvy')
 }

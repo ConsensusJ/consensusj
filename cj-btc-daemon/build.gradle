@@ -27,20 +27,19 @@ graalvmNative {
 }
 
 dependencies {
-    implementation("io.micronaut:micronaut-runtime")
-    implementation("javax.annotation:javax.annotation-api")
-
-    implementation project(':consensusj-jsonrpc')
-    implementation project(':cj-btc-json')
     implementation project(':cj-btc-services')
+    implementation project(':consensusj-jsonrpc')
 
-    compileOnly("org.graalvm.nativeimage:svm")
+    implementation "io.micronaut:micronaut-runtime"
+    implementation "javax.annotation:javax.annotation-api"
+
+    compileOnly "org.graalvm.nativeimage:svm"
 
     implementation('org.slf4j:slf4j-api:1.7.36') {
         force = true
     }
 
-    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+    runtimeOnly "ch.qos.logback:logback-classic"
 }
 
 application {
