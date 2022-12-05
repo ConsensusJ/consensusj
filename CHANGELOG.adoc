@@ -10,6 +10,9 @@ Released: In development
 === Dependency Updates
 
 * bitcoinj 0.16.2
+* Jackson 2.14.1
+* Micronaut 3.7.4
+* SLF4J 2.0.5
 
 == v0.6.4
 
