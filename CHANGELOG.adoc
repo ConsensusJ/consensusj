@@ -7,6 +7,9 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: In development
 
+=== Dependency Updates
+
+* bitcoinj 0.16.2
 
 == v0.6.4
 
