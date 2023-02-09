@@ -11,7 +11,7 @@ Released: In development
 
 * bitcoinj 0.16.2
 * Jackson 2.14.1
-* Micronaut 3.7.4
+* Micronaut 3.8.4
 * SLF4J 2.0.6
 * Groovy 4.0.9
 
