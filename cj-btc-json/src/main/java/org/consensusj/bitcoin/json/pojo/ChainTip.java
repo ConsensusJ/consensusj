@@ -11,7 +11,6 @@ import java.util.Optional;
 /**
  *
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChainTip {
     private final int height;
     private final Sha256Hash hash;

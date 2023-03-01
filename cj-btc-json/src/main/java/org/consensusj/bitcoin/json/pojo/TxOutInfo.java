@@ -11,7 +11,6 @@ import java.util.Map;
 /**
  * Result of `gettxout`
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class TxOutInfo {
     private final Sha256Hash bestblock;
     private final int        confirmations;

@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * BlockInfo POJO returned by GetBlockInfo
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
 // "strippedsize" property added (present in Bitcoin 0.13)
 public class BlockInfo {
     public enum IncludeTxFlag {

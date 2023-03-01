@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  *
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class SignedRawTransaction {
     private final String hex;
     private final boolean complete;

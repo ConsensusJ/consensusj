@@ -12,7 +12,6 @@ import java.util.List;
 /**
  *
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ReceivedByAddressInfo {
     public final Address address;
     public final Coin amount;

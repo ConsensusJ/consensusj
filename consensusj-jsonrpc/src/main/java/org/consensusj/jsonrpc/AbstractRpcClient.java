@@ -58,7 +58,6 @@ public abstract class AbstractRpcClient implements JacksonRpcClient {
         this.jsonRpcVersion = jsonRpcVersion;
         mapper = new ObjectMapper();
         // TODO: Provide external API to configure FAIL_ON_UNKNOWN_PROPERTIES
-        // TODO: Remove "ignore unknown" annotations on various POJOs that we've defined.
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         defaultType = mapper.getTypeFactory().constructType(Object.class);
     }

@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 /**
  * POJO for `getblockchaininfo` RPC response.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class BlockChainInfo {
     private final String      chain;
     private final int         blocks;

@@ -19,7 +19,6 @@ import java.util.List;
 /**
  * RawTransaction POJO
  */
-@JsonIgnoreProperties(ignoreUnknown=true)
 // "hash" property added (present in Bitcoin 0.13)
 public class RawTransactionInfo {
     public final String hex;
