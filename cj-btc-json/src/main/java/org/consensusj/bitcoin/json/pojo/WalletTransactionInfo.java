@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * Detailed information about an in-wallet transaction (from gettransaction RPC)
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class WalletTransactionInfo {
     private final Coin amount;
     private final Coin fee;
@@ -120,7 +119,6 @@ public class WalletTransactionInfo {
     public static class DetailList extends ArrayList<Detail> {
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Detail {
         private final String account;
         private final Address address;

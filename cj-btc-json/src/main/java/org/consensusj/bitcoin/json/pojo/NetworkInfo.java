@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * POJO for `getnetworkinfo` RPC response.
  * Warning: `network` and `address` will be upgraded to POJOs in the future
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class NetworkInfo {
     private final int version;
     private final String subVersion;

@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 /**
  * POJO for `getinfo` RPC response.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ServerInfo {
     private final int version;
     private final int protocolversion;
