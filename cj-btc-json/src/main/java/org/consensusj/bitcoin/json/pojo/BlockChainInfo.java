@@ -26,8 +26,8 @@ public class BlockChainInfo {
                           @JsonProperty("headers")          int headers,
                           @JsonProperty("bestblockhash")        Sha256Hash bestBlockHash,
                           @JsonProperty("difficulty")           BigDecimal difficulty,
-                          @JsonProperty("verificationProgress") BigDecimal verificationProgress,
-                          @JsonProperty("chainWork")            byte[] chainWork) {
+                          @JsonProperty("verificationprogress") BigDecimal verificationProgress,
+                          @JsonProperty("chainwork")            byte[] chainWork) {
         this.chain = chain;
         this.blocks = blocks;
         this.headers = headers;
