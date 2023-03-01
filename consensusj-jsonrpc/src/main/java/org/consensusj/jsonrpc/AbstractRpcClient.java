@@ -2,7 +2,10 @@ package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+
 import java.util.Base64;
 
 // TODO: Rather than implementing transport (HttpUrlConnection vs. java.net.http) with subclasses use composition
@@ -36,6 +39,7 @@ import java.util.Base64;
 // map from request to string/stream and to map from string/stream to response.  The java.net.http implementation has already defined
 // some functional interfaces for this, so coming up with an interface that both the java.net.http implementation and the HttpUrlConnection
 // implementation can use will lead to this "SECOND STEP"
+
 /**
  * Abstract Base class for a strongly-typed, Jackson-based JSON-RPC client. Most of the work is done
  * in default methods in {@link JacksonRpcClient} This abstract class implements the constructors, static fields, and
@@ -56,11 +60,13 @@ public abstract class AbstractRpcClient implements JacksonRpcClient {
 
     public AbstractRpcClient(JsonRpcMessage.Version jsonRpcVersion) {
         this.jsonRpcVersion = jsonRpcVersion;
-        mapper = new ObjectMapper();
-        // TODO: Provide external API to configure FAIL_ON_UNKNOWN_PROPERTIES
-        // TODO: Remove "ignore unknown" annotations on various POJOs that we've defined.
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        defaultType = mapper.getTypeFactory().constructType(Object.class);
+        this.mapper = JsonMapper.builder()
+                // TODO: Provide external API to configure FAIL_ON_UNKNOWN_PROPERTIES
+                // TODO: Remove "ignore unknown" annotations on various POJOs that we've defined.
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
+                .build();
+        this.defaultType = mapper.getTypeFactory().constructType(Object.class);
     }
 
     @Override
