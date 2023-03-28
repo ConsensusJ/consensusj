@@ -72,13 +72,13 @@ import java.util.stream.Stream;
  * <a href="https://bitcoincore.org/en/doc/">Bitcoin Core JSON-RPC API</a>.
  * <p>
  * <a href="https://bitcoinj.org">bitcoinj</a> types are used where appropriate.
- * For example, requesting a block hash will return a {@link org.bitcoinj.core.Sha256Hash}:
+ * For example, requesting a block hash will return a {@link org.bitcoinj.base.Sha256Hash}:
  *
  * <pre> {@code
  * Sha256Hash hash = client.getBlockHash(342650);
  * }</pre>
  *
- * Requesting a Bitcoin balance will return the amount as a {@link org.bitcoinj.core.Coin}:
+ * Requesting a Bitcoin balance will return the amount as a {@link org.bitcoinj.base.Coin}:
  *
  * <pre> {@code
  * Coin balance = client.getBalance();
