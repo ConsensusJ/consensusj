@@ -1,6 +1,5 @@
 package org.consensusj.bitcoin.integ.bitcoinj
 
-import com.google.common.util.concurrent.ListenableFuture
 import groovy.util.logging.Slf4j
 import org.bitcoinj.base.ScriptType
 import org.consensusj.bitcoin.json.pojo.WalletTransactionInfo
@@ -21,6 +20,8 @@ import org.bitcoinj.utils.BriefLogFormatter
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import spock.lang.Shared
 import spock.lang.Stepwise
+
+import java.util.concurrent.CompletableFuture
 
 /**
  * Interoperability tests between a bitcoinj {@link Wallet} and a Bitcoin Core RPC server in RegTest mode.
@@ -135,7 +136,7 @@ class WalletSendSpec extends BaseRegTestSpec {
 
         and: "Wait for the bitcoinj wallet to get confirmation of the transaction"
         // Wait for wallet to get confirmation of the transaction
-        ListenableFuture<TransactionConfidence> depthFuture = sentTx.getConfidence().getDepthFuture(1)
+        CompletableFuture<TransactionConfidence> depthFuture = sentTx.getConfidence().getDepthFuture(1)
         do {
             log.warn("Waiting for bitcoinj wallet to get a confirmation of the transaction...")
             sleep(100)

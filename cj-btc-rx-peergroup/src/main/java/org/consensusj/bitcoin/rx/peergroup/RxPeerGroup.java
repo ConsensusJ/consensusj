@@ -1,6 +1,5 @@
 package org.consensusj.bitcoin.rx.peergroup;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import io.reactivex.rxjava3.processors.PublishProcessor;
 import org.bitcoinj.core.Block;
@@ -15,6 +14,7 @@ import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -57,7 +57,7 @@ public class RxPeerGroup implements RxBlockchainService {
      * But if we move (@code start()} to the constructor, it breaks PeerWatcher.
      */
     public void start() {
-        ListenableFuture<?> groupStartedFuture = peerGroup.startAsync();
+        CompletableFuture<?> groupStartedFuture = peerGroup.startAsync();
 
         // This should be a BehaviorSubject or something that caches the last message
         blockHeightProcessor.onNext(peerGroup.getMostCommonChainHeight());
@@ -65,7 +65,7 @@ public class RxPeerGroup implements RxBlockchainService {
         stpe = Executors.newScheduledThreadPool(2);
         scheduledFuture = stpe.scheduleAtFixedRate(this::updateBlockHeight, initialDelay, period, TimeUnit.SECONDS);
 
-        groupStartedFuture.addListener(RxPeerGroup::peerGroupStartedListener, stpe);
+        groupStartedFuture.thenRunAsync(RxPeerGroup::peerGroupStartedListener, stpe);
 
         peerGroup.addConnectedEventListener(this::onPeerConnected);
         peerGroup.addDisconnectedEventListener(this::onPeerDisconnected);
