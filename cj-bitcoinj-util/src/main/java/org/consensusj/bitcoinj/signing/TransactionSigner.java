@@ -1,9 +1,8 @@
 package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.crypto.ECKey;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
-import org.consensusj.bitcoinj.signing.internal.PatchedTransaction;
+import org.bitcoinj.params.BitcoinNetworkParams;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -21,7 +20,7 @@ public interface TransactionSigner {
      */
     default CompletableFuture<Transaction> signTransaction(SigningRequest request) {
         // Create a new, empty (mutable) bitcoinj transaction
-        PatchedTransaction transaction = new PatchedTransaction(NetworkParameters.fromID(request.networkId()));
+        Transaction transaction = new Transaction(BitcoinNetworkParams.fromID(request.networkId()));
 
         // For each output in the signing request, add an output to the bitcoinj transaction
         // TODO: Transaction validation
@@ -44,7 +43,7 @@ public interface TransactionSigner {
      * @param exceptionSupplier exception to throw if key is not available.
      */
     default void addSignedInput(Transaction tx, TransactionInputData in, Supplier<? extends RuntimeException> exceptionSupplier) {
-        ((PatchedTransaction) tx).addSignedInput(in.toOutPoint(), in.script(), in.amount(), keyForInput(in).orElseThrow(exceptionSupplier), Transaction.SigHash.ALL, false);
+        tx.addSignedInput(in.toOutPoint(), in.script(), in.amount(), keyForInput(in).orElseThrow(exceptionSupplier), Transaction.SigHash.ALL, false);
     }
 
     /**
