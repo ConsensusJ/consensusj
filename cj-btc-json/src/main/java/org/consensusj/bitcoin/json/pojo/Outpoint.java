@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.json.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Sha256Hash;
 
 /**
  * Data class for Outpoint as used by RPC methods

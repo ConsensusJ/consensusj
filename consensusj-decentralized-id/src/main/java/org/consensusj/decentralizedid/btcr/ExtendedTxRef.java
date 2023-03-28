@@ -1,6 +1,6 @@
 package org.consensusj.decentralizedid.btcr;
 
-import org.bitcoinj.core.Bech32;
+import org.bitcoinj.base.Bech32;
 
 /**
  * A Bech32 representation of a Bitcoin transaction output

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.bitcoinj.core.Address;
+import org.bitcoinj.base.Address;
 
 public class AddressInfo {
     private final Address address;

@@ -1,7 +1,7 @@
 package org.consensusj.bitcoinj.dsl.groovy.categories
 
-import org.bitcoinj.core.Base58
-import org.bitcoinj.core.ECKey
+import org.bitcoinj.base.Base58
+import org.bitcoinj.crypto.ECKey
 
 /**
  * Extension to add static methods to ECKey

@@ -3,7 +3,7 @@ package org.consensusj.bitcoin.rpc
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.consensusj.bitcoin.json.pojo.BlockInfo
 import org.bitcoinj.core.Block
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Sha256Hash
 
 /**
  * Spec for getBlock() and getBlockInfo()

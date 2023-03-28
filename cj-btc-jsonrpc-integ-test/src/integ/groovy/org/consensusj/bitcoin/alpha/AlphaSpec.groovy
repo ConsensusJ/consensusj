@@ -3,10 +3,10 @@ package org.consensusj.bitcoin.alpha
 import org.consensusj.jsonrpc.groovy.DynamicRpcClient
 import org.consensusj.bitcoin.jsonrpc.RpcURI
 import org.consensusj.bitcoin.jsonrpc.test.TestServers
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.DumpedPrivateKey
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Address
+import org.bitcoinj.crypto.DumpedPrivateKey
+import org.bitcoinj.crypto.ECKey
+import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.TransactionOutPoint
 import org.bitcoinj.params.RegTestParams

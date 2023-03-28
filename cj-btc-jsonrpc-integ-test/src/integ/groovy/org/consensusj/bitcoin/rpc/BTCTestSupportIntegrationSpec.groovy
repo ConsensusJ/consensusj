@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.rpc
 
 import org.consensusj.bitcoin.test.BaseRegTestSpec
-import org.bitcoinj.core.Coin
+import org.bitcoinj.base.Coin
 
 /**
  * Test Spec for BTCTestSupport.

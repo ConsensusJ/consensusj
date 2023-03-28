@@ -1,7 +1,6 @@
 package org.consensusj.bitcoinj.dsl.groovy.categories
 
-import org.bitcoinj.core.Coin
-import org.consensusj.bitcoinj.dsl.groovy.categories.CoinCategory
+import org.bitcoinj.base.Coin
 import spock.lang.Specification
 import spock.util.mop.Use
 

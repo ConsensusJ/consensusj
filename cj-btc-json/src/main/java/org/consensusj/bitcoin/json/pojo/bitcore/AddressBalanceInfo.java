@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.json.pojo.bitcore;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Coin;
 
 /**
  * Result of OmniCore/BitCore {@code getaddressbalance} method.

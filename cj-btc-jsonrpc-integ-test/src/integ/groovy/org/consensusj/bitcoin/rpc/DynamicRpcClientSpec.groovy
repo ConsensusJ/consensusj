@@ -3,9 +3,9 @@ package org.consensusj.bitcoin.rpc
 import com.fasterxml.jackson.databind.node.NullNode
 import org.consensusj.bitcoin.jsonrpc.RpcURI
 import org.consensusj.bitcoin.jsonrpc.test.TestServers
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.SegwitAddress
+import org.bitcoinj.base.Address
+import org.bitcoinj.crypto.ECKey
+import org.bitcoinj.base.SegwitAddress
 import org.bitcoinj.params.RegTestParams
 import org.consensusj.jsonrpc.groovy.DynamicRpcClient
 import org.consensusj.jsonrpc.JsonRpcStatusException

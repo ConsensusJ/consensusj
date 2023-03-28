@@ -1,10 +1,9 @@
 package org.consensusj.bitcoin.rpc.bitcore
 
-import org.bitcoinj.core.Coin
+import org.bitcoinj.base.Coin
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressBalanceInfo
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import spock.lang.Requires
-import spock.lang.Shared
 
 /**
  * Test of OmniCore Bitcore address index JSON-RPC method: {@code getaddressbalance}

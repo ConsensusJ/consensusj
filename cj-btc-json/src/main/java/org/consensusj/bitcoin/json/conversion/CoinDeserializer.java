@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Coin;
 
 import java.io.IOException;
 import java.math.BigDecimal;

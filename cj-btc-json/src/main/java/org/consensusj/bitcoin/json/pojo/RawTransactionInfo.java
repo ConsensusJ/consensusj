@@ -1,13 +1,12 @@
 package org.consensusj.bitcoin.json.pojo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.bitcoinj.core.Address;
+import org.bitcoinj.base.Address;
 import org.bitcoinj.script.Script;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
-import org.bitcoinj.core.Coin;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Coin;
+import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutput;

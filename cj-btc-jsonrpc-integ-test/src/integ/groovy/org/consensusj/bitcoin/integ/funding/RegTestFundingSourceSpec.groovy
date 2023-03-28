@@ -1,9 +1,9 @@
 package org.consensusj.bitcoin.integ.funding
 
 
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.Coin
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Address
+import org.bitcoinj.base.Coin
+import org.bitcoinj.base.Sha256Hash
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.consensusj.bitcoin.jsonrpc.test.RegTestFundingSource
 import spock.lang.Shared

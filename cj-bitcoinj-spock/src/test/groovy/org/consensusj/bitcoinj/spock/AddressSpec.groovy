@@ -1,12 +1,12 @@
 package org.consensusj.bitcoinj.spock
 
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.SegwitAddress
+import org.bitcoinj.base.Address
+import org.bitcoinj.base.ScriptType
+import org.bitcoinj.base.SegwitAddress
+import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.params.MainNetParams
 import org.bitcoinj.params.RegTestParams
 import org.bitcoinj.params.TestNet3Params
-import org.bitcoinj.script.Script
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -20,7 +20,7 @@ class AddressSpec extends Specification {
     def "Create valid MainNet Address from private key"() {
 
         when: "We create a MainNet Address"
-        Address address = Address.fromKey(mainNetParams, key, Script.ScriptType.P2PKH)
+        Address address = Address.fromKey(mainNetParams, key, ScriptType.P2PKH)
 
         then: "It has expected value and properties"
         address.toString() == "1GtCqbyqTzbvtBWMMRgkwkxenPJNzz1TY4"
@@ -31,7 +31,7 @@ class AddressSpec extends Specification {
     def "Create valid TestNet Address from private key"() {
 
         when: "We create a TestNet Address"
-        Address address = Address.fromKey(testNetParams, key, Script.ScriptType.P2PKH)
+        Address address = Address.fromKey(testNetParams, key, ScriptType.P2PKH)
 
         then: "It has expected value and properties"
         address.toString() == "mwQA8f4pH23BfHyy4zf8mgAyeNu5uoy6GU"
@@ -42,37 +42,37 @@ class AddressSpec extends Specification {
     def "Create valid RegTest Address from private key"() {
 
         when: "We create a RegTest Address"
-        Address address = Address.fromKey(regTestParams, key, Script.ScriptType.P2PKH)
+        Address address = Address.fromKey(regTestParams, key, ScriptType.P2PKH)
 
         then: "It has expected value and properties"
         address.toString() == "mwQA8f4pH23BfHyy4zf8mgAyeNu5uoy6GU"
-        address.version == regTestParams.addressHeader
-        address.parameters == regTestParams
+        address.version == testNetParams.addressHeader
+        address.parameters == testNetParams
     }
 
     def "MainNet and TestNet3 address from same key aren't equals and don't compare"() {
 
         when: "We create a ainNet and TestNet3 addresses"
-        Address mainNetAddr = Address.fromKey(mainNetParams, key, Script.ScriptType.P2PKH)
-        Address testNetAddr = Address.fromKey(testNetParams, key, Script.ScriptType.P2PKH)
+        Address mainNetAddr = Address.fromKey(mainNetParams, key, ScriptType.P2PKH)
+        Address testNetAddr = Address.fromKey(testNetParams, key, ScriptType.P2PKH)
 
-        then: "They don't equals() or compareTo()"
+        then: "They aren't equals() and don't compareTo()"
         !mainNetAddr.equals(testNetAddr)
         mainNetAddr.compareTo(testNetAddr) != 0
 
-        and: "Their STRINGS DON'T MATCH"
+        and: "Their STRINGS DO MATCH"
         mainNetAddr.toString() != testNetAddr.toString()
     }
 
-    def "TestNet3 and Regtest address from same key aren't equals and don't compare"() {
+    def "TestNet3 and Regtest address from same key ARE equals and DO compare"() {
 
         when: "We create a ainNet and TestNet3 addresses"
-        Address mainNetAddr = Address.fromKey(testNetParams, key, Script.ScriptType.P2PKH)
-        Address testNetAddr = Address.fromKey(regTestParams, key, Script.ScriptType.P2PKH)
+        Address mainNetAddr = Address.fromKey(testNetParams, key, ScriptType.P2PKH)
+        Address testNetAddr = Address.fromKey(regTestParams, key, ScriptType.P2PKH)
 
-        then: "They don't equals() or compareTo()"
-        !mainNetAddr.equals(testNetAddr)
-        mainNetAddr.compareTo(testNetAddr) != 0
+        then: "They ARE equals() and DO compareTo()"
+        mainNetAddr.equals(testNetAddr)
+        mainNetAddr.compareTo(testNetAddr) == 0
 
         and: "Their STRINGS ACTUALLY DO MATCH"
         mainNetAddr.toString() == testNetAddr.toString()
@@ -83,7 +83,7 @@ class AddressSpec extends Specification {
         var key = new ECKey();
 
         when:
-        Address segAddress = Address.fromKey(mainNetParams, key, Script.ScriptType.P2WPKH)
+        Address segAddress = Address.fromKey(mainNetParams, key, ScriptType.P2WPKH)
 
         then:
         segAddress != null
@@ -96,7 +96,7 @@ class AddressSpec extends Specification {
         var key = new ECKey();
 
         when:
-        Address tapAddress = Address.fromKey(mainNetParams, key, Script.ScriptType.P2TR)
+        Address tapAddress = Address.fromKey(mainNetParams, key, ScriptType.P2TR)
 
         then:
         tapAddress != null

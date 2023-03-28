@@ -1,13 +1,13 @@
 package org.consensusj.bitcoinj.signing
 
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.Coin
-import org.bitcoinj.core.ECKey
+import org.bitcoinj.base.Address
+import org.bitcoinj.base.Coin
+import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.core.NetworkParameters
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.crypto.HDPath
-import org.bitcoinj.script.Script.ScriptType
+import org.bitcoinj.base.ScriptType
 import org.bitcoinj.wallet.DeterministicSeed
 import org.bitcoinj.wallet.KeyChain
 import org.bitcoinj.wallet.Wallet

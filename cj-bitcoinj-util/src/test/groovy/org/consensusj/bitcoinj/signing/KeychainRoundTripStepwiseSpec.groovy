@@ -1,9 +1,10 @@
 package org.consensusj.bitcoinj.signing
 
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.Coin
+import org.bitcoinj.base.Address
+import org.bitcoinj.base.Coin
+import org.bitcoinj.base.ScriptType
 import org.bitcoinj.core.NetworkParameters
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.TransactionOutput
 import org.bitcoinj.crypto.ChildNumber
@@ -53,8 +54,8 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
      */
     def setupSpec() {
         netParams = TestNet3Params.get()
-        Script.ScriptType outputScriptType = Script.ScriptType.P2PKH;
-//        Script.ScriptType outputScriptType = Script.ScriptType.P2WPKH;
+        org.bitcoinj.base.ScriptType outputScriptType = ScriptType.P2PKH;
+//        org.bitcoinj.base.ScriptType outputScriptType = ScriptType.P2WPKH;
         DeterministicSeed seed = setupTestSeed()
 
         signingKeychain = new BipStandardDeterministicKeyChain(seed, outputScriptType, netParams);
@@ -79,7 +80,7 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
 
     def "NETWORK wallet can create a network keychain from the xpub"() {
         given:
-        Script.ScriptType outputScriptType = signingKeychain.getOutputScriptType()
+        org.bitcoinj.base.ScriptType outputScriptType = signingKeychain.getOutputScriptType()
         HDPath signingAccountPath = signingKeychain.getAccountPath()
 
         when: "we create a network keychain from the xpub"
@@ -102,7 +103,7 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
 
     def "NETWORK wallet can create a transaction and create a signing request "() {
         given: "a transaction with a UTXO in output 1"
-        boolean isSegwit = signingKeychain.getOutputScriptType() == Script.ScriptType.P2WPKH
+        boolean isSegwit = signingKeychain.getOutputScriptType() == ScriptType.P2WPKH
         Script script
         Coin utxoAmount
         Sha256Hash txid

@@ -1,10 +1,10 @@
 package org.consensusj.bitcoinj.spock.tx
 
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Address
+import org.bitcoinj.base.ScriptType
+import org.bitcoinj.base.Sha256Hash
+import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.params.MainNetParams
-import org.bitcoinj.script.Script
 import spock.lang.Specification
 
 
@@ -17,6 +17,6 @@ abstract class BaseTransactionSpec extends Specification {
     static final utxo_id = Sha256Hash.wrap("81b4c832d70cb56ff957589752eb4125a4cab78a25a8fc52d6a09e5bd4404d48")
     static final utxo_amount = 0.00091234.btc
     static final fromKey = ECKey.fromPrivate(NotSoPrivatePrivateKey, false)
-    static final fromAddr = Address.fromKey(mainNetParams, fromKey, Script.ScriptType.P2PKH)
+    static final fromAddr = Address.fromKey(mainNetParams, fromKey, ScriptType.P2PKH)
     static final toAddr = Address.fromString(mainNetParams, "1KKKK6N21XKo48zWKuQKXdvSsCf95ibHFa")
 }

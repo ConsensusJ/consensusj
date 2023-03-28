@@ -1,11 +1,11 @@
 package org.consensusj.bitcoin.integ.java;
 
-import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Coin;
+import org.bitcoinj.base.ScriptType;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.RegTestParams;
-import org.bitcoinj.script.Script;
 import org.bitcoinj.wallet.KeyChainGroupStructure;
 import org.bitcoinj.wallet.Wallet;
 import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
@@ -49,7 +49,7 @@ public class WalletAppKitRegTest {
     @BeforeEach
     void setupTest(@TempDir File tempDir) throws UnknownHostException {
         kit = new WalletAppKit(netParams,
-                Script.ScriptType.P2WPKH,
+                ScriptType.P2WPKH,
                 KeyChainGroupStructure.DEFAULT,
                 tempDir,
                 "prefix");

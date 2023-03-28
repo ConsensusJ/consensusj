@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.json.pojo.bitcore;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Sha256Hash;
 
 import java.util.List;
 

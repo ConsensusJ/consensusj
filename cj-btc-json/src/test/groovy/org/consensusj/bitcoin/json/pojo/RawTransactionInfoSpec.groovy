@@ -1,6 +1,6 @@
 package org.consensusj.bitcoin.json.pojo
 
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.TransactionConfidence
 import spock.lang.Specification

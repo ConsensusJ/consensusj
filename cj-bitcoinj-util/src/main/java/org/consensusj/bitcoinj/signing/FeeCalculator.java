@@ -1,6 +1,6 @@
 package org.consensusj.bitcoinj.signing;
 
-import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Coin;
 
 /**
  * Interface for transaction fee calculation.

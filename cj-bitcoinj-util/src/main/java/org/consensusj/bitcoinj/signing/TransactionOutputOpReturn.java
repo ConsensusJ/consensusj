@@ -1,6 +1,6 @@
 package org.consensusj.bitcoinj.signing;
 
-import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Coin;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;

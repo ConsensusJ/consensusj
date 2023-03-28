@@ -1,6 +1,6 @@
 package org.consensusj.bitcoin.json.pojo.bitcore;
 
-import org.bitcoinj.core.Address;
+import org.bitcoinj.base.Address;
 
 import java.util.List;
 

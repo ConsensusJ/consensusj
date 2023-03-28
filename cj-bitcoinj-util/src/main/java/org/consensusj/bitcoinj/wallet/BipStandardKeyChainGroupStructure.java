@@ -1,9 +1,12 @@
 package org.consensusj.bitcoinj.wallet;
 
+import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.HDPath;
 import org.bitcoinj.crypto.ChildNumber;
-import org.bitcoinj.script.Script;
+
+import static org.bitcoinj.base.ScriptType.P2PKH;
+import static org.bitcoinj.base.ScriptType.P2WPKH;
 
 /**
  * Path builder that supports BIP44, BIP84, etc. This functionality will be in the next release of bitcoinj.
@@ -30,7 +33,7 @@ public interface BipStandardKeyChainGroupStructure {
      * @param netId network/coin type
      * @return The HD Path: purpose / coinType / accountIndex
      */
-    static HDPath pathFor(Script.ScriptType outputScriptType, String netId) {
+    static HDPath pathFor(org.bitcoinj.base.ScriptType outputScriptType, String netId) {
         return purpose(outputScriptType)
                 .extend(coinType(netId), account(0));
     }
@@ -41,7 +44,7 @@ public interface BipStandardKeyChainGroupStructure {
      * @param networkParameters network/coin type
      * @return The HD Path: purpose / coinType / accountIndex
      */
-    static HDPath pathFor(Script.ScriptType outputScriptType, NetworkParameters networkParameters) {
+    static HDPath pathFor(org.bitcoinj.base.ScriptType outputScriptType, NetworkParameters networkParameters) {
         return pathFor(outputScriptType, networkParameters.getId());
     }
 
@@ -50,10 +53,10 @@ public interface BipStandardKeyChainGroupStructure {
      * @param scriptType script/address type
      * @return An HDPath with a BIP44 "purpose" entry
      */
-    static HDPath purpose(Script.ScriptType scriptType) {
-        if (scriptType == null || scriptType == Script.ScriptType.P2PKH) {
+    static HDPath purpose(org.bitcoinj.base.ScriptType scriptType) {
+        if (scriptType == null || scriptType == P2PKH) {
             return BIP44_PARENT;
-        } else if (scriptType == Script.ScriptType.P2WPKH) {
+        } else if (scriptType == P2WPKH) {
             return BIP84_PARENT;
         } else {
             throw new IllegalArgumentException(scriptType.toString());
@@ -62,18 +65,21 @@ public interface BipStandardKeyChainGroupStructure {
 
     /**
      * Return coin type path component for a network id
-     * @param networkId network id string, eg. {@link NetworkParameters#ID_MAINNET}
+     * @param networkId network id string, eg. {@link BitcoinNetwork#ID_MAINNET}
      */
     static ChildNumber coinType(String networkId) {
-        switch (networkId) {
-            case NetworkParameters.ID_MAINNET:
+        BitcoinNetwork network = BitcoinNetwork.fromIdString(networkId)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown network id (coin type)"));
+        switch (network) {
+            case MAINNET:
                 return COINTYPE_BTC;
-            case NetworkParameters.ID_TESTNET:
+            case TESTNET:
                 return COINTYPE_TBTC;
-            case NetworkParameters.ID_REGTEST:
+            case SIGNET:
                 return COINTYPE_TBTC;
+            case REGTEST:
             default:
-                throw new IllegalArgumentException("Unknown network id (coin type)");
+                return COINTYPE_TBTC;
         }
     }
 

@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.rpc.blockchain
 
 import org.consensusj.bitcoin.test.BaseRegTestSpec
-import org.bitcoinj.core.Coin
+import org.bitcoinj.base.Coin
 
 /**
  * Functional test of `gettxoutsetinfo` via {@link BitcoinClient#getTxOutSetInfo}

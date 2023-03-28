@@ -2,10 +2,10 @@ package org.consensusj.bitcoin.integ.bitcoinj
 
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.bitcoinj.core.BlockChain
-import org.bitcoinj.core.Coin
-import org.bitcoinj.core.ECKey
+import org.bitcoinj.base.Coin
+import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.core.PeerGroup
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.TransactionInput
 import org.bitcoinj.core.TransactionOutput
 import org.bitcoinj.crypto.TransactionSignature

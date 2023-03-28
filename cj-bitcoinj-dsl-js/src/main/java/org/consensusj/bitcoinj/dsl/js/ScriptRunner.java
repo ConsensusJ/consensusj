@@ -8,7 +8,7 @@ import org.consensusj.bitcoin.jsonrpc.test.RegTestEnvironment;
 import org.consensusj.bitcoin.jsonrpc.test.RegTestFundingSource;
 import org.consensusj.jsonrpc.AsyncSupport;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
-import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Coin;
 import org.bitcoinj.params.MainNetParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,6 @@
 package org.consensusj.bitcoin.rpc.blockchain
 
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Sha256Hash
 import org.consensusj.bitcoin.json.pojo.BlockChainInfo
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 

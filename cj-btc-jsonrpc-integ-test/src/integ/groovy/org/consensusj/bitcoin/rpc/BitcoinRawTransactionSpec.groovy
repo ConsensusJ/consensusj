@@ -1,8 +1,8 @@
 package org.consensusj.bitcoin.rpc
 
 import org.consensusj.bitcoin.test.BaseRegTestSpec
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.Coin
+import org.bitcoinj.base.Address
+import org.bitcoinj.base.Coin
 import spock.lang.Shared
 import spock.lang.Stepwise
 

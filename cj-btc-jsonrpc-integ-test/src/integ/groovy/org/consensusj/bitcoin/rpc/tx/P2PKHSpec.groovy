@@ -1,6 +1,6 @@
 package org.consensusj.bitcoin.rpc.tx
 
-import org.bitcoinj.core.Coin
+import org.bitcoinj.base.Coin
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.script.ScriptBuilder
 import spock.lang.Unroll

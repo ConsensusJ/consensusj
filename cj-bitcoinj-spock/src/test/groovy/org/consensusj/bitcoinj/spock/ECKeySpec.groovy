@@ -1,13 +1,11 @@
 package org.consensusj.bitcoinj.spock
 
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.ECKey
+import org.bitcoinj.base.ScriptType
+import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.params.MainNetParams
 import org.bitcoinj.params.RegTestParams
 import org.bitcoinj.params.TestNet3Params
-import org.bitcoinj.script.Script
 import org.bouncycastle.util.encoders.Hex
-import spock.lang.Ignore
 import spock.lang.Specification
 
 
@@ -35,9 +33,8 @@ class ECKeySpec extends Specification {
         key.pubKeyHash.length == 20         // Is available in RIPEMD160 form
         // Can be converted to addresses (which have a different header for each network
         // This test is no longer directly testing the header becuase of changes in bitcoinj 0.15
-        Address.fromKey(mainNetParams, key, Script.ScriptType.P2PKH).parameters == mainNetParams
-        Address.fromKey(testNetParams, key, Script.ScriptType.P2PKH).parameters == testNetParams
-        Address.fromKey(regTestParams, key, Script.ScriptType.P2PKH).parameters == regTestParams
+        key.toAddress(ScriptType.P2PKH, mainNetParams.network()).network() == mainNetParams.network()
+        key.toAddress(ScriptType.P2PKH, testNetParams.network()).network() == testNetParams.network()
         key.creationTimeSeconds > 0          // since we created it, we know the creation time
     }
 

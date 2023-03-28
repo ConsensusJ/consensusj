@@ -1,9 +1,9 @@
 package org.consensusj.bitcoinj.dsl.groovy.categories
 
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.ECKey
+import org.bitcoinj.base.Address
+import org.bitcoinj.base.ScriptType
+import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.params.MainNetParams
-import org.bitcoinj.script.Script
 import spock.lang.Specification
 
 /**
@@ -23,7 +23,7 @@ class StaticECKeyExtensionSpec extends Specification {
         ECKey fromKey = ECKey.fromWIF(fromKeyWIF, false)
 
         and: "we convert it to an address"
-        Address fromAddress = Address.fromKey(mainNetParams, fromKey, Script.ScriptType.P2PKH)
+        Address fromAddress = Address.fromKey(mainNetParams, fromKey, ScriptType.P2PKH)
 
         then: "it is the address from the article"
         fromAddress == expectedAddress
@@ -34,7 +34,7 @@ class StaticECKeyExtensionSpec extends Specification {
         ECKey fromKey = ECKey.fromWIF(fromKeyWIF, true)
 
         and: "we convert it to a segwit address"
-        Address fromAddress = Address.fromKey(mainNetParams, fromKey, Script.ScriptType.P2WPKH)
+        Address fromAddress = Address.fromKey(mainNetParams, fromKey, ScriptType.P2WPKH)
 
         then: "it is as expected"
         fromAddress == expectedSegWitAddress
