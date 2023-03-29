@@ -1,13 +1,11 @@
 package org.consensusj.bitcoin.cli;
 
+import org.bitcoinj.base.BitcoinNetwork;
+import org.bitcoinj.base.Network;
 import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
 import org.consensusj.bitcoin.jsonrpc.RpcConfig;
 import org.consensusj.bitcoin.jsonrpc.bitcoind.BitcoinConfFile;
 import org.apache.commons.cli.Options;
-import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.params.MainNetParams;
-import org.bitcoinj.params.RegTestParams;
-import org.bitcoinj.params.TestNet3Params;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.cli.BaseJsonRpcTool;
 
@@ -106,7 +104,7 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
          * @return a newly constructed BitcoinClient with specified config
          */
         protected BitcoinClient createClient(SSLSocketFactory sslSocketFactory, RpcConfig config) {
-            return new BitcoinClient( sslSocketFactory, config.getNetParams(),
+            return new BitcoinClient( sslSocketFactory, config.network(),
                     config.getURI(),
                     config.getUsername(),
                     config.getPassword());
@@ -117,16 +115,16 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
             URI uri = getServerURI(confFileConfig.getURI());
             String user = line.getOptionValue("rpcuser", confFileConfig.getUsername());
             String pass = line.getOptionValue("rpcpassword", confFileConfig.getPassword());
-            NetworkParameters netParams;
+            Network network;
             if (line.hasOption("regtest")) {
-                netParams = RegTestParams.get();
+                network = BitcoinNetwork.REGTEST;
             } else if (line.hasOption(("testnet"))) {
-                netParams = TestNet3Params.get();
+                network = BitcoinNetwork.TESTNET;
             } else {
                 // TODO: Use network params from BitcoinConfFile, before falling back
-                netParams = MainNetParams.get();
+                network =BitcoinNetwork.MAINNET;
             }
-            return new RpcConfig(netParams, uri, user, pass);
+            return new RpcConfig(network, uri, user, pass);
         }
 
         private URI getServerURI(URI confFileURI) {

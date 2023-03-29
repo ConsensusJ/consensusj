@@ -5,8 +5,9 @@ import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.consensusj.bitcoin.json.pojo.AddressInfo
 import org.bitcoinj.base.Address
 import org.bitcoinj.crypto.ECKey
-import org.bitcoinj.params.RegTestParams
 import spock.lang.Stepwise
+
+import static org.bitcoinj.base.BitcoinNetwork.REGTEST
 
 /**
  * Functional test of importPrivKey
@@ -14,7 +15,7 @@ import spock.lang.Stepwise
 @Stepwise
 class ImportPrivKeySpec extends BaseRegTestSpec  {
     static final ECKey TEST_PRIVATE_KEY = new ECKey().decompress()
-    static final Address TEST_ADDRESS = Address.fromKey(RegTestParams.get(), TEST_PRIVATE_KEY, ScriptType.P2PKH)
+    static final Address TEST_ADDRESS = TEST_PRIVATE_KEY.toAddress(ScriptType.P2PKH, REGTEST)
     static final String TEST_ADDRESS_LABEL = "ImportPrivKeySpec";
     
     def "can import without error"() {

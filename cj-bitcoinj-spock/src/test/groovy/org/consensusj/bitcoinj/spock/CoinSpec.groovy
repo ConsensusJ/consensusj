@@ -1,7 +1,7 @@
 package org.consensusj.bitcoinj.spock
 
+import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.Coin
-import org.bitcoinj.core.NetworkParameters
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -36,7 +36,7 @@ class CoinSpec extends Specification {
 
         where:
         btc         | satoshi
-        21_000_000  | NetworkParameters.MAX_MONEY.value
+        21_000_000  | BitcoinNetwork.MAX_MONEY.value
         10.0        |  10*Coin.COIN.value
         0.00000001 | 1
     }
@@ -54,7 +54,7 @@ class CoinSpec extends Specification {
         100_000_000 | 1
         298         | 0.00000298
         1           | 0.00000001
-        NetworkParameters.MAX_MONEY.value |  21_000_000
+        BitcoinNetwork.MAX_MONEY.value |  21_000_000
     }
 
     def "addition"() {

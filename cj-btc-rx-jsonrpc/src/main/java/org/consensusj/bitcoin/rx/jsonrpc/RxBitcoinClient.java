@@ -1,12 +1,12 @@
 package org.consensusj.bitcoin.rx.jsonrpc;
 
 import io.reactivex.rxjava3.core.Single;
+import org.bitcoinj.base.Network;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.base.Sha256Hash;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
 import io.reactivex.rxjava3.core.Flowable;
-import org.bitcoinj.core.NetworkParameters;
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.bitcoin.rx.zeromq.RxBitcoinZmqService;
@@ -30,16 +30,16 @@ import java.net.URI;
 public class RxBitcoinClient extends BitcoinExtendedClient implements RxJsonChainTipClient {
     ChainTipService chainTipService;
 
-    public RxBitcoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        this(netParams, server, rpcuser, rpcpassword, true);
+    public RxBitcoinClient(Network network, URI server, String rpcuser, String rpcpassword) {
+        this(network, server, rpcuser, rpcpassword, true);
     }
 
-    public RxBitcoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword, boolean useZmq) {
-        this((SSLSocketFactory) SSLSocketFactory.getDefault(), netParams, server, rpcuser, rpcpassword, useZmq);
+    public RxBitcoinClient(Network network, URI server, String rpcuser, String rpcpassword, boolean useZmq) {
+        this((SSLSocketFactory) SSLSocketFactory.getDefault(), network, server, rpcuser, rpcpassword, useZmq);
     }
 
-    public RxBitcoinClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword, boolean useZmq) {
-        super(sslSocketFactory, netParams, server, rpcuser, rpcpassword);
+    public RxBitcoinClient(SSLSocketFactory sslSocketFactory, Network network, URI server, String rpcuser, String rpcpassword, boolean useZmq) {
+        super(sslSocketFactory, network, server, rpcuser, rpcpassword);
         // TODO: Determine if ZMQ is available by querying the server
         // TODO: Determine whether server is up or down -- add a session re-establishment service
         if (useZmq) {

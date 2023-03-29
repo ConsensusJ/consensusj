@@ -1,5 +1,7 @@
 package org.consensusj.bitcoin.integ.bitcoinj
 
+import org.bitcoinj.base.BitcoinNetwork
+import org.bitcoinj.core.NetworkParameters
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.bitcoinj.core.BlockChain
 import org.bitcoinj.base.Coin
@@ -13,7 +15,6 @@ import org.bitcoinj.script.Script;
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.wallet.Wallet
 import org.bitcoinj.wallet.SendRequest
-import org.bitcoinj.params.RegTestParams
 import org.bitcoinj.script.ScriptBuilder
 import org.bitcoinj.store.MemoryBlockStore
 import org.bitcoinj.wallet.AllowUnconfirmedCoinSelector
@@ -28,7 +29,7 @@ import spock.lang.Stepwise
 @Ignore("not working yet")
 @Stepwise
 class WorkingWithContractsSpec extends BaseRegTestSpec {
-    static final params = RegTestParams.get()
+    static final params = NetworkParameters.of(BitcoinNetwork.REGTEST)
     static final walletStartAmount = 10.btc
     static final txAmount = 0.5.btc
 

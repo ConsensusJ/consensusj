@@ -1,5 +1,6 @@
 package org.consensusj.bitcoin.jsonrpc.test;
 
+import org.bitcoinj.base.BitcoinNetwork;
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.bitcoin.json.pojo.Outpoint;
@@ -7,7 +8,6 @@ import org.consensusj.bitcoin.json.pojo.SignedRawTransaction;
 import org.consensusj.bitcoin.json.pojo.UnspentOutput;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.base.Sha256Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class RegTestFundingSource implements FundingSource {
     @Override
     public Sha256Hash requestBitcoin(Address toAddress, Coin requestAmount) throws JsonRpcException, IOException {
         log.info("requestBitcoin requesting {} for {}", requestAmount.toPlainString(), toAddress);
-        if (requestAmount.value > NetworkParameters.MAX_MONEY.value) {
+        if (requestAmount.value > BitcoinNetwork.MAX_MONEY.value) {
             throw new IllegalArgumentException("request exceeds MAX_MONEY");
         }
 

@@ -2,17 +2,16 @@ package org.consensusj.bitcoinj.spock
 
 import org.bitcoinj.base.ScriptType
 import org.bitcoinj.crypto.ECKey
-import org.bitcoinj.params.MainNetParams
-import org.bitcoinj.params.RegTestParams
-import org.bitcoinj.params.TestNet3Params
 import org.bouncycastle.util.encoders.Hex
 import spock.lang.Specification
 
+import java.time.Instant
+
+import static org.bitcoinj.base.BitcoinNetwork.MAINNET
+import static org.bitcoinj.base.BitcoinNetwork.TESTNET
+
 
 class ECKeySpec extends Specification {
-    static final mainNetParams = MainNetParams.get()
-    static final testNetParams = TestNet3Params.get()
-    static final regTestParams = RegTestParams.get()
     static final BigInteger NotSoPrivatePrivateKey = new BigInteger(1, Hex.decode("180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19"))
 
     def "Generate a new, random valid Elliptic Curve Keypair"() {
@@ -32,10 +31,11 @@ class ECKeySpec extends Specification {
         ECKey.isPubKeyCanonical(key.pubKey) // Length is correct for compressed/uncompressed
         key.pubKeyHash.length == 20         // Is available in RIPEMD160 form
         // Can be converted to addresses (which have a different header for each network
-        // This test is no longer directly testing the header becuase of changes in bitcoinj 0.15
-        key.toAddress(ScriptType.P2PKH, mainNetParams.network()).network() == mainNetParams.network()
-        key.toAddress(ScriptType.P2PKH, testNetParams.network()).network() == testNetParams.network()
-        key.creationTimeSeconds > 0          // since we created it, we know the creation time
+        // This test is no longer directly testing the header because of changes in bitcoinj 0.15
+        key.toAddress(ScriptType.P2PKH, MAINNET).network() == MAINNET
+        key.toAddress(ScriptType.P2PKH, TESTNET).network() == TESTNET
+        key.creationTime().isPresent()
+        key.creationTime().ifPresent(t -> t.isAfter(Instant.EPOCH))        // since we created it, we know the creation time
     }
 
     def "Import a constant, publicly-known private key "() {

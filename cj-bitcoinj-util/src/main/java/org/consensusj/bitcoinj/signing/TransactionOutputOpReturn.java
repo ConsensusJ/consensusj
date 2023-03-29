@@ -2,6 +2,7 @@ package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.params.BitcoinNetworkParams;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
 import org.bitcoinj.script.ScriptOpCodes;
@@ -14,7 +15,7 @@ public class TransactionOutputOpReturn implements TransactionOutputData {
     private final byte[] opReturnData;
 
     public TransactionOutputOpReturn(String networkId, byte[] opReturnData) {
-        netParams = NetworkParameters.fromID(networkId);
+        netParams = BitcoinNetworkParams.fromID(networkId);
         if (netParams == null) {
             throw new IllegalArgumentException("bad network id");
         }

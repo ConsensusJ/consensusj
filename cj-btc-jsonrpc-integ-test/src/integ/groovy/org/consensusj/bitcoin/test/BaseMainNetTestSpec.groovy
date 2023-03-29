@@ -1,8 +1,8 @@
 package org.consensusj.bitcoin.test
 
 import groovy.util.logging.Slf4j
+import org.bitcoinj.base.BitcoinNetwork
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient
-import org.bitcoinj.params.MainNetParams
 import org.consensusj.bitcoin.jsonrpc.groovy.test.BTCTestSupport
 import org.consensusj.bitcoin.jsonrpc.RpcURI
 import org.consensusj.bitcoin.jsonrpc.test.TestServers
@@ -33,7 +33,7 @@ abstract class BaseMainNetTestSpec extends Specification implements BTCTestSuppo
     }
 
     void setupSpec() {
-        serverReady(MainNetParams.get())
+        serverReady(BitcoinNetwork.MAINNET)
     }
 
     /**

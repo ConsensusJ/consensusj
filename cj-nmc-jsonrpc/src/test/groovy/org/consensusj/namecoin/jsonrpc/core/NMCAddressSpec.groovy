@@ -2,11 +2,13 @@ package org.consensusj.namecoin.jsonrpc.core
 
 import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.ScriptType
+import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.crypto.DumpedPrivateKey
 import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.base.LegacyAddress
-import org.bitcoinj.params.MainNetParams
 import spock.lang.Specification
+
+import java.nio.ByteBuffer
 
 /**
  * Tests of creating Namecoin addresses and conversion between BTC and NMC
@@ -14,7 +16,7 @@ import spock.lang.Specification
  * These tests were ported from some earlier work with Litecoin and the prefixes and logic have not been double-checked.
  */
 class NMCAddressSpec extends Specification {
-    static final mainNetParams = MainNetParams.get()
+    static final mainNetParams = NetworkParameters.of(BitcoinNetwork.MAINNET)
     static final nmcNetParams = NMCMainNetParams.get()
     static final NotSoPrivatePrivateKey = new BigInteger(1, '180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19'.decodeHex());
     static final nmcPrefixRange = 'M'..'N'
@@ -36,7 +38,7 @@ class NMCAddressSpec extends Specification {
         def key = new ECKey()
 
         when: "We construct an NMC address from it"
-        def nmcAddress = LegacyAddress.fromPubKeyHash(NameCoinNetwork.MAINNET, key.pubKeyHash)
+        def nmcAddress = key.toAddress(ScriptType.P2PKH, NameCoinNetwork.MAINNET)
         def firstChar = nmcAddress.toString().charAt(0)
 
         then: "It begins with an 'M' or 'N'"
@@ -45,10 +47,10 @@ class NMCAddressSpec extends Specification {
 
     def "We can create a BTC address from an NMC address"() {
         given: "An NMC address"
-        def nmcAddress = LegacyAddress.fromPubKeyHash(nmcNetParams, new ECKey().pubKeyHash)
+        def nmcAddress = new ECKey().toAddress(ScriptType.P2PKH, NameCoinNetwork.MAINNET)
 
         when: "We generate a BTC address from it"
-        def btcAddress = LegacyAddress.fromPubKeyHash(mainNetParams, nmcAddress.hash)
+        def btcAddress = new ECKey().toAddress(ScriptType.P2PKH, BitcoinNetwork.MAINNET)
 
         then: "It begins with a '1'"
         btcAddress.toString().charAt(0) == '1' as char
@@ -69,10 +71,10 @@ class NMCAddressSpec extends Specification {
 
     def "We can create a BTC address from a known NMC address"() {
         given: "An NMC address"
-        def nmcAddress = LegacyAddress.fromPubKeyHash(nmcNetParams, ECKey.fromPrivate(NotSoPrivatePrivateKey).pubKeyHash)
+        def nmcAddress = ECKey.fromPrivate(NotSoPrivatePrivateKey).toAddress(ScriptType.P2PKH, NameCoinNetwork.MAINNET)
 
         when: "We generate a BTC address from it"
-        def btcAddress = LegacyAddress.fromPubKeyHash(mainNetParams, nmcAddress.hash)
+        def btcAddress = LegacyAddress.fromPubKeyHash(BitcoinNetwork.MAINNET, nmcAddress.hash)
 
         then: "It begins with a '1'"
         btcAddress.toString().charAt(0) == '1' as char

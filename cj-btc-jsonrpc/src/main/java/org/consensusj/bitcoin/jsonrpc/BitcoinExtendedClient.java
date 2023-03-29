@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.jsonrpc;
 
 import com.fasterxml.jackson.databind.JavaType;
 import org.bitcoinj.base.BitcoinNetwork;
+import org.bitcoinj.base.Network;
 import org.bitcoinj.base.ScriptType;
 import org.consensusj.bitcoin.json.pojo.AddressInfo;
 import org.consensusj.bitcoin.json.pojo.LoadWalletResult;
@@ -9,7 +10,6 @@ import org.consensusj.bitcoin.json.pojo.Outpoint;
 import org.consensusj.bitcoin.json.pojo.SignedRawTransaction;
 import org.consensusj.bitcoin.json.pojo.UnspentOutput;
 import org.bitcoinj.core.Block;
-import org.bitcoinj.params.RegTestParams;
 import org.bouncycastle.util.encoders.Hex;
 import org.consensusj.bitcoin.jsonrpc.bitcoind.BitcoinConfFile;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
@@ -67,20 +67,30 @@ public class BitcoinExtendedClient extends BitcoinClient {
         return defaultMaxConf;
     }
 
-    public BitcoinExtendedClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        super(sslSocketFactory, netParams, server, rpcuser, rpcpassword);
+    public BitcoinExtendedClient(SSLSocketFactory sslSocketFactory, Network network, URI server, String rpcuser, String rpcpassword) {
+        super(sslSocketFactory, network, server, rpcuser, rpcpassword);
     }
 
+    @Deprecated
+    public BitcoinExtendedClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
+        super(sslSocketFactory, netParams.network(), server, rpcuser, rpcpassword);
+    }
+
+    public BitcoinExtendedClient(Network network, URI server, String rpcuser, String rpcpassword) {
+        this((SSLSocketFactory) SSLSocketFactory.getDefault(), network, server, rpcuser, rpcpassword);
+    }
+
+    @Deprecated
     public BitcoinExtendedClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         this((SSLSocketFactory) SSLSocketFactory.getDefault(), netParams, server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(URI server, String rpcuser, String rpcpassword) {
-        this((SSLSocketFactory) SSLSocketFactory.getDefault(), null, server, rpcuser, rpcpassword);
+        this((SSLSocketFactory) SSLSocketFactory.getDefault(), (Network) null, server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(RpcConfig config) {
-        this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());
+        this(config.network(), config.getURI(), config.getUsername(), config.getPassword());
     }
 
     /**
@@ -98,11 +108,11 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @return A new client with a baseURI configured for the specified wallet name.
      */
     public BitcoinExtendedClient withWallet(String walletName, String rpcUser, String rpcPassword) {
-        return new BitcoinExtendedClient(this.getNetParams(), this.getServerURI().resolve("/wallet/" + walletName), rpcUser, rpcPassword);
+        return new BitcoinExtendedClient(this.getNetwork(), this.getServerURI().resolve("/wallet/" + walletName), rpcUser, rpcPassword);
     }
 
     public synchronized Address getRegTestMiningAddress() {
-        if (!getNetParams().getId().equals(BitcoinNetwork.ID_REGTEST)) {
+        if (getNetwork() != BitcoinNetwork.REGTEST) {
             throw new UnsupportedOperationException("Operation only supported in RegTest context");
         }
         if (regTestMiningAddress == null) {
@@ -113,7 +123,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
             // we could initialize regTestMiningKey from a bitcoinj-generated ECKey or HD Keychain.
             try {
                 ECKey notSoPrivatePrivateKey = ECKey.fromPrivate(NotSoPrivatePrivateInt, false);
-                Address address = Address.fromKey(RegTestParams.get(), notSoPrivatePrivateKey, ScriptType.P2PKH);
+                Address address = notSoPrivatePrivateKey.toAddress(ScriptType.P2PKH, BitcoinNetwork.REGTEST);
                 AddressInfo addressInfo = getAddressInfo(address);
                 if (addressInfo.getIsmine() && !addressInfo.getIswatchonly() && addressInfo.getSolvable()) {
                     log.warn("Address with label {} is present in server-side wallet", RegTestMiningAddressLabel);
@@ -368,7 +378,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @throws IOException            An I/O error occured
      */
     public Transaction createSignedTransaction(ECKey fromKey, List<TransactionOutput> outputs) throws JsonRpcStatusException, IOException {
-        Address fromAddress = Address.fromKey(getNetParams(), fromKey, ScriptType.P2PKH);
+        Address fromAddress = fromKey.toAddress(ScriptType.P2PKH, getNetwork());
 
         Transaction tx = new Transaction(getNetParams());   // Create a new transaction
         outputs.forEach(tx::addOutput);                     // Add all requested outputs to it

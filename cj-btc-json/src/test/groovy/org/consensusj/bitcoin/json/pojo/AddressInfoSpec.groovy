@@ -1,8 +1,8 @@
 package org.consensusj.bitcoin.json.pojo
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.bitcoinj.base.BitcoinNetwork
 import org.consensusj.bitcoin.json.conversion.RpcClientModule
-import org.bitcoinj.params.RegTestParams
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -76,6 +76,6 @@ class AddressInfoSpec extends Specification {
 
     void setup() {
         mapper = new ObjectMapper()
-        mapper.registerModule(new RpcClientModule(RegTestParams.get()))
+        mapper.registerModule(new RpcClientModule(BitcoinNetwork.REGTEST))
     }
 }

@@ -1,13 +1,14 @@
 package org.consensusj.namecoin.jsonrpc;
 
+import org.bitcoinj.base.Network;
 import org.bitcoinj.utils.AppDataDirectory;
 import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.bitcoin.jsonrpc.RpcConfig;
 import org.consensusj.bitcoin.jsonrpc.bitcoind.BitcoinConfFile;
 import org.consensusj.namecoin.jsonrpc.core.NMCMainNetParams;
+import org.consensusj.namecoin.jsonrpc.core.NameCoinNetwork;
 import org.consensusj.namecoin.jsonrpc.pojo.NameData;
-import org.bitcoinj.core.NetworkParameters;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,12 +19,12 @@ import java.net.URI;
  * See: https://wiki.namecoin.org/index.php?title=Client_API
  */
 public class NamecoinClient extends BitcoinClient {
-    public NamecoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        super(netParams, server, rpcuser, rpcpassword);
+    public NamecoinClient(Network network, URI server, String rpcuser, String rpcpassword) {
+        super(network, server, rpcuser, rpcpassword);
     }
 
     public NamecoinClient(RpcConfig config) {
-        this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());
+        this(config.network(), config.getURI(), config.getUsername(), config.getPassword());
     }
 
     /**
@@ -47,7 +48,7 @@ public class NamecoinClient extends BitcoinClient {
         BitcoinConfFile conf = new BitcoinConfFile(file);
         RpcConfig config = conf.readWithFallback().getRPCConfig();
         // Since config is immutable we have to make a new one with NameCoin parameters
-        config = new RpcConfig(NMCMainNetParams.get(),
+        config = new RpcConfig(NameCoinNetwork.MAINNET,
                 config.getURI(),
                 config.getUsername(),
                 config.getPassword());

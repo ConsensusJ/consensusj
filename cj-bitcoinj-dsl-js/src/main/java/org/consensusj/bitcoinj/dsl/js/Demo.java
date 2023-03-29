@@ -1,7 +1,7 @@
 package org.consensusj.bitcoinj.dsl.js;
 
+import org.bitcoinj.base.BitcoinNetwork;
 import org.consensusj.bitcoin.jsonrpc.RpcConfig;
-import org.bitcoinj.params.MainNetParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public class Demo {
             System.exit(-1);
         }
 
-        var rpcConfig = new RpcConfig(MainNetParams.get(),  // Network to connect to
+        var rpcConfig = new RpcConfig(BitcoinNetwork.MAINNET,  // Network to connect to
                 URI.create("http://localhost:8332"),        // RPC Server URL
                 "bitcoinrpc",                      // RPC Server username
                 "pass");                           // RPC Server password

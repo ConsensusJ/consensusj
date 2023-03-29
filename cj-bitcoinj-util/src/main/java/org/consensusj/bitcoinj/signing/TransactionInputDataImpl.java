@@ -6,6 +6,7 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutPoint;
+import org.bitcoinj.params.BitcoinNetworkParams;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
 import org.bitcoinj.script.ScriptException;
@@ -25,7 +26,7 @@ public class TransactionInputDataImpl implements TransactionInputData {
     private final Script script;
 
     public TransactionInputDataImpl(String networkId, Sha256Hash txId, long index, Coin amount, Script script) {
-        netParams = NetworkParameters.fromID(networkId);
+        netParams = BitcoinNetworkParams.fromID(networkId);
         if (netParams == null) {
             throw new IllegalArgumentException("Invalid network ID");
         }

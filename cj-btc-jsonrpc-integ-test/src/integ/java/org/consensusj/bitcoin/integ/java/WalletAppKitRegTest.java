@@ -1,11 +1,10 @@
 package org.consensusj.bitcoin.integ.java;
 
+import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.base.ScriptType;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.kits.WalletAppKit;
-import org.bitcoinj.params.RegTestParams;
 import org.bitcoinj.wallet.KeyChainGroupStructure;
 import org.bitcoinj.wallet.Wallet;
 import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
@@ -32,7 +31,7 @@ import java.util.concurrent.TimeoutException;
  * Java RegTest that mines RegTest coins and sends them to a WalletAppKit
  */
 public class WalletAppKitRegTest {
-    static final NetworkParameters netParams = RegTestParams.get();
+    static final BitcoinNetwork network = BitcoinNetwork.REGTEST;
     static final private TestServers testServers = TestServers.getInstance();
     static final protected String rpcTestUser = testServers.getRpcTestUser();
     static final protected String rpcTestPassword = testServers.getRpcTestPassword();
@@ -42,13 +41,13 @@ public class WalletAppKitRegTest {
 
     @BeforeAll
     static void setupRegTestWallet() {
-        client = new BitcoinExtendedClient(netParams, RpcURI.getDefaultRegTestWalletURI(), rpcTestUser, rpcTestPassword);
+        client = new BitcoinExtendedClient(network, RpcURI.getDefaultRegTestWalletURI(), rpcTestUser, rpcTestPassword);
         client.initRegTestWallet();
     }
 
     @BeforeEach
     void setupTest(@TempDir File tempDir) throws UnknownHostException {
-        kit = new WalletAppKit(netParams,
+        kit = new WalletAppKit(network,
                 ScriptType.P2WPKH,
                 KeyChainGroupStructure.DEFAULT,
                 tempDir,
