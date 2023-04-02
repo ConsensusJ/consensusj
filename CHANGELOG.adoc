@@ -10,7 +10,7 @@ Released: In development
 === Dependency Updates
 
 * bitcoinj 0.16.2
-* Jackson 2.14.1
+* Jackson 2.14.2
 * Micronaut 3.8.4
 * SLF4J 2.0.7
 * Groovy 4.0.11
