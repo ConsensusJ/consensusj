@@ -13,7 +13,7 @@ Released: In development
 * Jackson 2.14.1
 * Micronaut 3.8.4
 * SLF4J 2.0.6
-* Groovy 4.0.9
+* Groovy 4.0.11
 
 === Build/Test Updates
 
