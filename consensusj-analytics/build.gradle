@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
-    api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    api "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
 
     // For annotations on TokenRichList
     //api "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"

@@ -5,7 +5,7 @@ tasks.withType(GroovyCompile) {
 }
 
 dependencies {
-    testImplementation "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    testImplementation "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
     testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy extensions in tests
 }
 

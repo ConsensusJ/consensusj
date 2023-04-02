@@ -13,7 +13,7 @@ tasks.withType(GroovyCompile) {
 }
 
 dependencies {
-    api "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    api "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
     implementation "org.apache.groovy:groovy:${groovyVersion}"
 }
 

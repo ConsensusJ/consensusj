@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation "${bitcoinjGroup}:${bitcoinjArtifact}:${bitcoinjVersion}"
+    implementation "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
 
     testImplementation "org.apache.groovy:groovy:${groovyVersion}"
     testImplementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
