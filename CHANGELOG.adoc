@@ -5,7 +5,21 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 == v0.6.5-SNAPSHOT
 
-Released: In development
+Released: 2023-04-04
+
+This will likely be the last release using **bitcoinj** 0.16.x. `bitcoinj-0.17-alpha1` has https://bitcoinj.org/pre-release-notes[significant improvements], and we will begin using it on the `master` branch immediately after this release.
+
+=== All modules
+
+* Remove many deprecated classes and methods
+
+=== Bug Fixes
+
+* https://github.com/ConsensusJ/consensusj/pull/99[#99]: `BlockChainInfo`: fix case errors in `@JsonProperty` constructor annotations.
+
+=== cj-btc-json
+
+* https://github.com/ConsensusJ/consensusj/pull/100[#100]: Remove `ignoreUnknown` annotation on defined JSON POJOs
 
 === Dependency Updates
 
@@ -18,8 +32,10 @@ Released: In development
 
 === Build/Test Updates
 
+* GitHub JDK Matrix: Java 11, 17. 19
 * Gradle 7.6.1
 * GraalVM 22.3.1
+* Miscellaneous build improvements
 
 == v0.6.4
 
