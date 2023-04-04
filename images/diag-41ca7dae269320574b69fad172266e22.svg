@@ -64,25 +64,25 @@ class org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient-->
     </text>
     <!--MD5=[ee3ee4b41ebf5943cf940e0be8ae8d5d]
 reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.jsonrpc.JacksonRpcClient-->
-    <path d='M145,111.61 C145,125.31 145,140.22 145,150.96 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.JacksonRpcClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='138,111.27,145,91.27,152,111.27,138,111.27' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M145,112.47 C145,125.8 145,140.17 145,150.66 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.JacksonRpcClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='138,112.78,145,92.78,152,112.78,138,112.78' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[01a6255b291b6021c6fc5088994f3a7f]
 reverse link org.consensusj.jsonrpc.JacksonRpcClient to org.consensusj.jsonrpc.AbstractRPCClient-->
-    <path d='M145,203.61 C145,217.31 145,232.22 145,242.96 ' fill='none' id='org.consensusj.jsonrpc.JacksonRpcClient&lt;-org.consensusj.jsonrpc.AbstractRPCClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='138,203.27,145,183.27,152,203.27,138,203.27' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M145,204.47 C145,217.8 145,232.17 145,242.66 ' fill='none' id='org.consensusj.jsonrpc.JacksonRpcClient&lt;-org.consensusj.jsonrpc.AbstractRPCClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='138,204.78,145,184.78,152,204.78,138,204.78' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[6fefed0810bfb0de7547e92017e56dc8]
 reverse link org.consensusj.jsonrpc.AbstractRPCClient to org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection-->
-    <path d='M145,295.61 C145,309.31 145,324.22 145,334.96 ' fill='none' id='org.consensusj.jsonrpc.AbstractRPCClient&lt;-org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <polygon fill='none' points='138,295.27,145,275.27,152,295.27,138,295.27' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M145,296.47 C145,309.8 145,324.17 145,334.66 ' fill='none' id='org.consensusj.jsonrpc.AbstractRPCClient&lt;-org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='138,296.78,145,276.78,152,296.78,138,296.78' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[97eb4b56aaa5fa0000f831636e80729d]
 reverse link org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection to org.consensusj.bitcoin.jsonrpc.BitcoinClient-->
-    <path d='M145,387.1 C145,405.76 145,427.73 145,441.98 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinClient' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <polygon fill='none' points='138,387.04,145,367.04,152,387.04,138,387.04' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M145,388.96 C145,407.12 145,428 145,441.78 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinClient' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='138,389.01,145,369.01,152,389.01,138,389.01' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[f516eecb5980a42e8201f221adf3561d]
 reverse link org.consensusj.bitcoin.jsonrpc.BitcoinClient to org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient-->
-    <path d='M145,494.61 C145,508.31 145,523.22 145,533.96 ' fill='none' id='org.consensusj.bitcoin.jsonrpc.BitcoinClient&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <polygon fill='none' points='138,494.27,145,474.27,152,494.27,138,494.27' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <!--MD5=[5de7c7e1c49c126f708a230503d22564]
+    <path d='M145,495.47 C145,508.8 145,523.17 145,533.66 ' fill='none' id='org.consensusj.bitcoin.jsonrpc.BitcoinClient&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='138,495.78,145,475.78,152,495.78,138,495.78' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[62583fe1be7a071cfb5dbe36960bc3e7]
 @startuml
 skinparam packageStyle Rect
 skinparam shadowing false
@@ -117,7 +117,7 @@ PlantUML version 1.2020.06(Sun Apr 05 05:38:32 PDT 2020)
 (APACHE source distribution)
 Java Runtime: OpenJDK Runtime Environment
 JVM: OpenJDK 64-Bit Server VM
-Java Version: 17.0.4+8-jvmci-22.2-b06
+Java Version: 17.0.6+10
 Operating System: Mac OS X
 Default Encoding: UTF-8
 Language: en
