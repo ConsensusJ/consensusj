@@ -38,7 +38,7 @@ public class PollingChainTipServiceImpl implements Closeable, PollingChainTipSer
     public PollingChainTipServiceImpl(BitcoinClient bitcoinClient, Observable<Long> interval) {
         client = bitcoinClient;
         this.interval = interval;
-        log.info("Constructing polling ChainTipService: {}, {}", client.getNetParams().getId(), client.getServerURI());
+        log.info("Constructing polling ChainTipService: {}, {}", client.getNetwork().id(), client.getServerURI());
         chainTipSource = pollForDistinctChainTip();
     }
 

@@ -4,7 +4,7 @@ import org.bitcoinj.base.Coin
 import spock.lang.Specification
 import spock.util.mop.Use
 
-import static org.bitcoinj.core.NetworkParameters.MAX_MONEY
+import static org.bitcoinj.base.BitcoinNetwork.MAX_MONEY
 
 /**
  * Spec to test CoinCategory

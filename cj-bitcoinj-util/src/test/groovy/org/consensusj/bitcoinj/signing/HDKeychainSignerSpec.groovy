@@ -8,6 +8,7 @@ import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.crypto.HDPath
 import org.bitcoinj.base.ScriptType
+import org.bitcoinj.params.BitcoinNetworkParams
 import org.bitcoinj.wallet.DeterministicSeed
 import org.bitcoinj.wallet.KeyChain
 import org.bitcoinj.wallet.Wallet
@@ -23,7 +24,7 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
 
     void "Can sign a simple Tx"(String netId, ScriptType scriptType) {
         given: "Given a deterministic seed, a keychain, and some test addresses"
-        NetworkParameters netParams = NetworkParameters.fromID(netId)
+        NetworkParameters netParams = BitcoinNetworkParams.fromID(netId)
         DeterministicSeed seed = setupTestSeed();
 
         BipStandardDeterministicKeyChain keychain = new BipStandardDeterministicKeyChain(seed, scriptType, netParams);

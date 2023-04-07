@@ -57,7 +57,7 @@ public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
     }
     
     public Address addressFromKey(ECKey key) {
-        return Address.fromKey(netParams, key, outputScriptType);
+        return key.toAddress(outputScriptType, netParams.network());
     }
 
     public Address receivingAddr(int index) {

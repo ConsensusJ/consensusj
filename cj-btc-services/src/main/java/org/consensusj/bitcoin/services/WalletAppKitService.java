@@ -3,6 +3,7 @@ package org.consensusj.bitcoin.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bitcoinj.base.BitcoinNetwork;
+import org.bitcoinj.base.Network;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
 import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
 import org.consensusj.bitcoin.json.pojo.BlockInfo;
@@ -12,7 +13,6 @@ import org.consensusj.bitcoin.json.rpc.BitcoinJsonRpc;
 import org.bitcoinj.core.AbstractBlockChain;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.PeerGroup;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.StoredBlock;
@@ -55,7 +55,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
             stop
     """;
 
-    protected final NetworkParameters netParams;
+    protected final BitcoinNetwork network;
     protected final WalletAppKit kit;
     protected final ObjectMapper mapper;
 
@@ -72,7 +72,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     @Inject
     public WalletAppKitService(WalletAppKit walletAppKit) {
         kit = walletAppKit;
-        netParams = kit.params();
+        network = kit.network();
         mapper = new ObjectMapper();
     }
 
@@ -85,8 +85,8 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         kit.awaitRunning();
     }
 
-    public NetworkParameters getNetworkParameters() {
-        return this.netParams;
+    public Network network() {
+        return this.network;
     }
 
     public PeerGroup getPeerGroup() {
@@ -198,7 +198,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         // Dummy up a response for now.
         // Since ServerInfo is immutable, we have to build it entirely with the constructor.
         Coin balance = Coin.valueOf(0);
-        boolean testNet = !netParams.getId().equals(BitcoinNetwork.ID_MAINNET);
+        boolean testNet = !network.id().equals(BitcoinNetwork.ID_MAINNET);
         int keyPoolOldest = 0;
         int keyPoolSize = 0;
         return result(new ServerInfo(

@@ -1,11 +1,10 @@
 package org.consensusj.bitcoin.jsonrpc
 
-import org.bitcoinj.params.RegTestParams
-import org.consensusj.bitcoin.jsonrpc.BitcoinClient
-import org.consensusj.bitcoin.jsonrpc.RpcURI
 import spock.lang.Specification
 
 import java.util.concurrent.CompletableFuture
+
+import static org.bitcoinj.base.BitcoinNetwork.REGTEST
 
 /**
  * A few basic tests of BitcoinClient that don't need a server/network
@@ -13,7 +12,7 @@ import java.util.concurrent.CompletableFuture
 class BitcoinClientSpec extends Specification {
     def "can construct and close"() {
         when:
-        def client = new BitcoinClient(RegTestParams.get(), RpcURI.defaultRegTestURI, "", "")
+        def client = new BitcoinClient(REGTEST, RpcURI.defaultRegTestURI, "", "")
 
         then:
         client != null
@@ -28,7 +27,7 @@ class BitcoinClientSpec extends Specification {
 
     def "can construct and close twice"() {
         when:
-        def client = new BitcoinClient(RegTestParams.get(), RpcURI.defaultRegTestURI, "", "")
+        def client = new BitcoinClient(REGTEST, RpcURI.defaultRegTestURI, "", "")
 
         then:
         client != null
@@ -45,7 +44,7 @@ class BitcoinClientSpec extends Specification {
     def "can construct and auto-close"() {
         when:
         def client
-        try ( def c = new BitcoinClient(RegTestParams.get(), RpcURI.defaultRegTestURI, "", "") ) {
+        try ( def c = new BitcoinClient(REGTEST, RpcURI.defaultRegTestURI, "", "") ) {
             client = c;
         }
 
@@ -59,7 +58,7 @@ class BitcoinClientSpec extends Specification {
         when:
         def client
         def result;
-        try ( def c = new BitcoinClient(RegTestParams.get(), RpcURI.defaultRegTestURI, "", "") ) {
+        try ( def c = new BitcoinClient(REGTEST, RpcURI.defaultRegTestURI, "", "") ) {
             client = c
             // Run a simple function using the BitcoinClients thread pool
             CompletableFuture<Integer> cf = c.supplyAsync(() -> 5)

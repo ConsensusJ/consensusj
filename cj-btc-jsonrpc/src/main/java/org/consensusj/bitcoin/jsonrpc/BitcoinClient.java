@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.LegacyAddress;
-import org.bitcoinj.params.MainNetParams;
-import org.bitcoinj.params.RegTestParams;
-import org.bitcoinj.params.TestNet3Params;
+import org.bitcoinj.base.Network;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
 import org.consensusj.bitcoin.json.pojo.AddressGroupingItem;
 import org.consensusj.bitcoin.json.pojo.AddressInfo;
@@ -54,6 +52,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.URI;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -109,24 +108,30 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     public static final int BITCOIN_CORE_VERSION_DESC_DEFAULT = 230000;     // Bitcoin Core version that DEFAULTS to descriptor wallets
 
     // TODO: Replace NetworkParameters with Network/BitcoinNetwork once we upgrade to bitcoinj 0.17 (once it is released)
-    private NetworkParameters netParams;
+
+    private Network network;
     private ExecutorService executorService;
 
     private int serverVersion = 0;    // 0 means unknown serverVersion
     private boolean isAddressIndexSuccessfullyTested = false;
     private boolean isAddressIndexEnabled;
 
-    public BitcoinClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
+    public BitcoinClient(SSLSocketFactory sslSocketFactory, Network network, URI server, String rpcuser, String rpcpassword) {
         super(sslSocketFactory, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
-        this.netParams = netParams;
-        if (netParams != null) {
+        this.network = network;
+        if (network != null) {
             initExecutor();
         }
     }
 
+    @Deprecated
+    public BitcoinClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
+        this(sslSocketFactory, netParams.network(), server, rpcuser, rpcpassword);
+    }
+
     private void initExecutor() {
-        mapper.registerModule(new RpcClientModule(netParams));
-        ThreadFactory threadFactory = new BitcoinClientThreadFactory(new Context(netParams), "Bitcoin RPC Client");
+        mapper.registerModule(new RpcClientModule(network));
+        ThreadFactory threadFactory = new BitcoinClientThreadFactory(new Context(), "Bitcoin RPC Client");
         // TODO: Tune and/or make configurable the thread pool size.
         // Current pool size of 5 is chosen to minimize simultaneous active RPC
         // calls in `bitcoind` -- which is not designed for serving multiple clients.
@@ -135,7 +140,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
 
     // TODO: Reconcile this constructor mode with {@link #waitForServer(int)}
     /**
-     * Incubating constructor that doesn't require a {@link NetworkParameters}.
+     * Incubating constructor that doesn't require a {@link Network}.
      * <p>
      * When using this constructor, it is recommended that {@link #getNetParams()} be called after construction
      * and before any other methods are called, to allow the Bitcoin network type to be initialized.
@@ -145,11 +150,11 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @param rpcpassword Password (if required)
      */
     public BitcoinClient(SSLSocketFactory sslSocketFactory, URI server, String rpcuser, String rpcpassword) {
-        this(sslSocketFactory, null, server, rpcuser, rpcpassword);
+        this(sslSocketFactory, (Network) null, server, rpcuser, rpcpassword);
     }
 
     /**
-     * Incubating constructor that doesn't require a {@link NetworkParameters}.
+     * Incubating constructor that doesn't require a {@link Network}.
      * <p>
      * When using this constructor, it is recommended that {@link #getNetParams()} be called after construction
      * and before any other methods are called, to allow the Bitcoin network type to be initialized.
@@ -158,18 +163,23 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @param rpcpassword Password (if required)
      */
     public BitcoinClient(URI server, String rpcuser, String rpcpassword) {
-        this((SSLSocketFactory) SSLSocketFactory.getDefault(), null, server, rpcuser, rpcpassword);
+        this((SSLSocketFactory) SSLSocketFactory.getDefault(), (Network) null, server, rpcuser, rpcpassword);
     }
 
     /**
-     * Construct a BitcoinClient from Network Parameters, URI, user name, and password.
-     * @param netParams Correct Network Parameters for destination server
+     * Construct a BitcoinClient from Network, URI, user name, and password.
+     * @param network Correct Network Parameters for destination server
      * @param server URI of the Bitcoin RPC server
      * @param rpcuser Username (if required)
      * @param rpcpassword Password (if required)
      */
+    public BitcoinClient(Network network, URI server, String rpcuser, String rpcpassword) {
+        this((SSLSocketFactory) SSLSocketFactory.getDefault(), network, server, rpcuser, rpcpassword);
+    }
+
+    @Deprecated
     public BitcoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        this((SSLSocketFactory) SSLSocketFactory.getDefault(), netParams, server, rpcuser, rpcpassword);
+        this(netParams.network(), server, rpcuser, rpcpassword);
     }
 
     /**
@@ -177,7 +187,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @param config Contains URI, user name, and password
      */
     public BitcoinClient(RpcConfig config) {
-        this(config.getNetParams(), config.getURI(), config.getUsername(), config.getPassword());
+        this(config.network(), config.getURI(), config.getUsername(), config.getPassword());
     }
 
     /**
@@ -196,11 +206,15 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @return network parameters for the server
      */
     public synchronized NetworkParameters getNetParams() {
-        if (netParams == null) {
-            netParams = getNetworkFromServer().join();
+        return NetworkParameters.of(getNetwork());
+    }
+
+    public synchronized Network getNetwork() {
+        if (network == null) {
+            network = getNetworkFromServer().join();
             initExecutor();
         }
-        return netParams;
+        return network;
     }
 
     @Override
@@ -242,26 +256,27 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         return serverVersion;
     }
 
-    // TODO: Convert to {@code Network} type with bitcoinj 0.17
-    private CompletableFuture<NetworkParameters> getNetworkFromServer() {
+    private CompletableFuture<Network> getNetworkFromServer() {
         return getBlockchainInfoMap().thenApply(info -> {
-            NetworkParameters params;
+            Network network;
             switch((String) info.get("chain")) {
                 case "main":
-                    params = MainNetParams.get();
+                    network = BitcoinNetwork.MAINNET;
                     break;
                 case "test":
-                    params = TestNet3Params.get();
+                    network = BitcoinNetwork.TESTNET;
                     break;
-                // TODO: Signet support?
+                case "signet":
+                    network = BitcoinNetwork.SIGNET;
+                    break;
                 case "regtest":
-                    params = RegTestParams.get();
+                    network = BitcoinNetwork.REGTEST;
                     break;
                 default:
                     throw new RuntimeException("Server returned unrecognized Bitcoin network");
 
             }
-            return params;
+            return network;
         });
     }
 
@@ -318,7 +333,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     }
 
     private Address getTestAddress() {
-        BitcoinNetwork network = (BitcoinNetwork) getNetParams().network();
+        BitcoinNetwork network = (BitcoinNetwork) getNetwork();
         switch (network) {
             case MAINNET:
                 return LegacyAddress.fromBase58(null, "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa");
@@ -599,7 +614,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @throws IOException network error
      */
     public void importPrivKey(ECKey privateKey, String label, boolean rescan) throws JsonRpcStatusException, IOException {
-        send("importprivkey", Void.class, privateKey.getPrivateKeyEncoded(this.getNetParams()).toBase58(), label, rescan);
+        send("importprivkey", Void.class, privateKey.getPrivateKeyEncoded(this.getNetwork()).toBase58(), label, rescan);
     }
     
     /**
@@ -644,7 +659,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     public Transaction getRawTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {
         String hexEncoded = send("getrawtransaction", txid);
         byte[] raw = HexUtil.hexStringToByteArray(hexEncoded);
-        return new Transaction(netParams, raw);
+        return new Transaction(NetworkParameters.of(network), ByteBuffer.wrap(raw));
     }
 
     /**
@@ -994,7 +1009,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         for (List<List<Object>> rawGrouping : raw) {
             List<AddressGroupingItem> grouping = new ArrayList<>();
             for (List<Object> addressItem : rawGrouping) {
-                AddressGroupingItem item = new AddressGroupingItem(addressItem, getNetParams());
+                AddressGroupingItem item = new AddressGroupingItem(addressItem, getNetwork());
                 grouping.add(item);
             }
             result.add(grouping);

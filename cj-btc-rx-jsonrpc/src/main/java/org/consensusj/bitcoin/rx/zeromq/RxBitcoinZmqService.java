@@ -1,5 +1,6 @@
 package org.consensusj.bitcoin.rx.zeromq;
 
+import org.bitcoinj.base.Network;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -30,13 +31,13 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
     private final FlowableProcessor<ChainTip> flowableChainTip = BehaviorProcessor.create();
     private final Disposable blockSubscription;
 
-    public RxBitcoinZmqService(NetworkParameters networkParameters, URI rpcUri, String rpcUser, String rpcPassword) {
-        this(new RxBitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword));
+    public RxBitcoinZmqService(Network network, URI rpcUri, String rpcUser, String rpcPassword) {
+        this(new RxBitcoinClient(network, rpcUri, rpcUser, rpcPassword));
     }
 
     public RxBitcoinZmqService(RxBitcoinClient client) {
         super(client);
-        bitcoinSerializer = networkParameters.getSerializer();
+        bitcoinSerializer = NetworkParameters.of(network).getSerializer();
         blockSubscription = blockPublisher()
                 .flatMapSingle(client::activeChainTipFromBestBlock)
                 .distinctUntilChanged(ChainTip::getHash)
@@ -44,14 +45,14 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
     }
 
     @Override
-    public NetworkParameters getNetworkParameters() {
-        return networkParameters;
+    public Network network() {
+        return network;
     }
 
     @Override
     public Flowable<Transaction> transactionPublisher() {
         return transactionBinaryPublisher()
-                .map(bytes -> new Transaction(networkParameters, bytes));   // Deserialize to Transaction
+                .map(bytes -> new Transaction(NetworkParameters.of(network), ByteBuffer.wrap(bytes)));   // Deserialize to Transaction
     }
 
     @Override

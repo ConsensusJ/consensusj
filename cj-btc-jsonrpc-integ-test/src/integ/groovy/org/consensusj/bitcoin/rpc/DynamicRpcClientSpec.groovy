@@ -1,12 +1,12 @@
 package org.consensusj.bitcoin.rpc
 
 import com.fasterxml.jackson.databind.node.NullNode
+import org.bitcoinj.base.BitcoinNetwork
+import org.bitcoinj.base.ScriptType
 import org.consensusj.bitcoin.jsonrpc.RpcURI
 import org.consensusj.bitcoin.jsonrpc.test.TestServers
 import org.bitcoinj.base.Address
 import org.bitcoinj.crypto.ECKey
-import org.bitcoinj.base.SegwitAddress
-import org.bitcoinj.params.RegTestParams
 import org.consensusj.jsonrpc.groovy.DynamicRpcClient
 import org.consensusj.jsonrpc.JsonRpcStatusException
 import spock.lang.Shared
@@ -51,7 +51,7 @@ class DynamicRpcClientSpec extends Specification {
 
     def "generatetoaddress"() {
         given:
-        Address toAddress = SegwitAddress.fromKey(RegTestParams.get(), new ECKey())
+        Address toAddress = new ECKey().toAddress(ScriptType.P2PKH, BitcoinNetwork.REGTEST)
 
         when:
         def result = client.generatetoaddress(2, toAddress.toString())

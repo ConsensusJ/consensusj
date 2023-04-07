@@ -1,8 +1,8 @@
 package org.consensusj.bitcoin.test
 
 import groovy.util.logging.Slf4j
+import org.bitcoinj.base.BitcoinNetwork
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient
-import org.bitcoinj.params.RegTestParams
 import org.consensusj.bitcoin.jsonrpc.groovy.test.BTCTestSupport
 import org.consensusj.bitcoin.jsonrpc.test.FundingSource
 import org.consensusj.bitcoin.jsonrpc.test.FundingSourceAccessor
@@ -46,7 +46,7 @@ abstract class BaseRegTestSpec extends Specification implements BTCTestSupport, 
     }
     
     void setupSpec() {
-        serverReady(RegTestParams.get())
+        serverReady(BitcoinNetwork.REGTEST)
         client().initRegTestWallet()
     }
 

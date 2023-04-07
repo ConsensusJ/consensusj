@@ -1,5 +1,6 @@
 package org.consensusj.bitcoinj.dsl.js;
 
+import org.bitcoinj.base.BitcoinNetwork;
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
 import org.consensusj.bitcoin.jsonrpc.RpcConfig;
 import org.consensusj.bitcoin.jsonrpc.RpcURI;
@@ -9,7 +10,6 @@ import org.consensusj.bitcoin.jsonrpc.test.RegTestFundingSource;
 import org.consensusj.jsonrpc.AsyncSupport;
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.params.MainNetParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ public class ScriptRunner {
     }
 
     public ScriptRunner() {
-        this(new RpcConfig(MainNetParams.get(), RpcURI.getDefaultMainNetURI(),
+        this(new RpcConfig(BitcoinNetwork.MAINNET, RpcURI.getDefaultMainNetURI(),
                 TestServers.getInstance().getRpcTestUser(), TestServers.getInstance().getRpcTestPassword()));
     }
 

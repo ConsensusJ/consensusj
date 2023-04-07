@@ -1,6 +1,7 @@
 package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.params.BitcoinNetworkParams;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +16,7 @@ public class DefaultSigningRequest implements SigningRequest {
 
 
     public DefaultSigningRequest(String networkId, List<TransactionInputData> inputs, List<TransactionOutputData> outputs) {
-        this(NetworkParameters.fromID(networkId), inputs, outputs);
+        this(BitcoinNetworkParams.fromID(networkId), inputs, outputs);
     }
 
     public DefaultSigningRequest(NetworkParameters netParams, List<TransactionInputData> inputs, List<TransactionOutputData> outputs) {
@@ -33,7 +34,7 @@ public class DefaultSigningRequest implements SigningRequest {
     }
 
     public DefaultSigningRequest(String networkId) {
-        this(NetworkParameters.fromID(networkId), Collections.emptyList(), Collections.emptyList());
+        this(BitcoinNetworkParams.fromID(networkId), Collections.emptyList(), Collections.emptyList());
     }
 
     @Override

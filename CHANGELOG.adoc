@@ -13,8 +13,9 @@ The 0.7.0 release of **ConsensusJ** will require **bitcoinj** v0.17, currently i
 === bitcoinj-0.17 update
 
 * Upgrade to bitcoinj-0.17 API
+* Migrate from `NetworkParameters` to `Network` where possible
 * Remove usage of Guava `ListenableFuture`
-* Remove `PatchedTransaction` class used to workaround an issue in bitcoinj, see https://github.com/bitcoinj/bitcoinj/pull/2274[bitcoinj #2274]
+* Remove `PatchedTransaction` class used to work around an issue in bitcoinj, see https://github.com/bitcoinj/bitcoinj/pull/2274[bitcoinj #2274]
 
 === Dependency Updates
 

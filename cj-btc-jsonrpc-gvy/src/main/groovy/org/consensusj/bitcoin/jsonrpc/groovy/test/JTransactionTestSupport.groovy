@@ -39,7 +39,7 @@ trait JTransactionTestSupport implements BTCTestSupport {
     }
 
     private void setupPeerGroup() {
-        peerGroup = new PeerGroup(client.getNetParams())
+        peerGroup = new PeerGroup(client.getNetwork())
         peerGroup.start()
     }
 

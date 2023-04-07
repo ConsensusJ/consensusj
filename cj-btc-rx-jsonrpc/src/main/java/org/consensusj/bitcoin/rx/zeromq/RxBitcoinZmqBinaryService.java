@@ -1,9 +1,9 @@
 package org.consensusj.bitcoin.rx.zeromq;
 
+import org.bitcoinj.base.Network;
 import org.consensusj.bitcoin.jsonrpc.internal.BitcoinClientThreadFactory;
 import io.reactivex.rxjava3.core.Flowable;
 import org.bitcoinj.core.Context;
-import org.bitcoinj.core.NetworkParameters;
 import org.consensusj.bitcoin.rx.RxBlockchainBinaryService;
 import org.consensusj.bitcoin.rx.jsonrpc.RxBitcoinClient;
 
@@ -20,7 +20,7 @@ import static org.consensusj.bitcoin.rx.zeromq.BitcoinZmqMessage.Topic.*;
  */
 public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Closeable {
 
-    protected final NetworkParameters networkParameters;
+    protected final Network network;
     protected final RxBitcoinClient client;
     private final RxBitcoinSinglePortZmqService blockService;
     private final RxBitcoinSinglePortZmqService txService;
@@ -30,14 +30,14 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
 
     private final BitcoinClientThreadFactory threadFactory;
 
-    public RxBitcoinZmqBinaryService(NetworkParameters networkParameters, URI rpcUri, String rpcUser, String rpcPassword) {
-        this(new RxBitcoinClient(networkParameters, rpcUri, rpcUser, rpcPassword));
+    public RxBitcoinZmqBinaryService(Network network, URI rpcUri, String rpcUser, String rpcPassword) {
+        this(new RxBitcoinClient(network, rpcUri, rpcUser, rpcPassword));
     }
 
     public RxBitcoinZmqBinaryService(RxBitcoinClient client) {
         this.client = client;
-        this.networkParameters = client.getNetParams();
-        threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(client.getNetParams()), "RxBitcoinZmq Thread");
+        this.network = client.getNetwork();
+        threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(), "RxBitcoinZmq Thread");
 
         // TODO: Create background thread to look for the ZMQ Ports
         BitcoinZmqPortFinder portFinder = new BitcoinZmqPortFinder(client);

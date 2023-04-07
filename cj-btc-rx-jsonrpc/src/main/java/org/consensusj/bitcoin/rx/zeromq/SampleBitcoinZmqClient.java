@@ -1,9 +1,10 @@
 package org.consensusj.bitcoin.rx.zeromq;
 
+import org.bitcoinj.base.BitcoinNetwork;
+import org.bitcoinj.base.Network;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import io.reactivex.rxjava3.disposables.Disposable;
 import org.bitcoinj.core.Block;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.MainNetParams;
 import org.consensusj.bitcoinj.util.BlockUtil;
@@ -18,12 +19,12 @@ import static java.lang.System.out;
 public class SampleBitcoinZmqClient {
 
     public static void main(String[] args) {
-        NetworkParameters networkParameters = MainNetParams.get();
+        Network network = BitcoinNetwork.MAINNET;
         String rpcUser = "";
         String rpcPassword = "";
         URI rpcUri = URI.create("http://localhost:8332");
 
-        try (RxBitcoinZmqService client = new RxBitcoinZmqService(networkParameters, rpcUri, rpcUser, rpcPassword)) {
+        try (RxBitcoinZmqService client = new RxBitcoinZmqService(network, rpcUri, rpcUser, rpcPassword)) {
             // Subscribe to Blocks
             Disposable disposable = client.blockPublisher()
                     .subscribe(SampleBitcoinZmqClient::onBlock, SampleBitcoinZmqClient::onError);

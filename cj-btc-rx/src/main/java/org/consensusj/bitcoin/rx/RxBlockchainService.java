@@ -1,8 +1,8 @@
 package org.consensusj.bitcoin.rx;
 
+import org.bitcoinj.base.Network;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.bitcoinj.core.Block;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.reactivestreams.Publisher;
@@ -21,7 +21,7 @@ import java.io.Closeable;
  * published data type.
  */
 public interface RxBlockchainService extends Closeable {
-    NetworkParameters getNetworkParameters();
+    Network network();
     Publisher<Transaction> transactionPublisher();
     Publisher<Sha256Hash> transactionHashPublisher();
     Publisher<Block> blockPublisher();

@@ -1,9 +1,10 @@
 package org.consensusj.bitcoin.json.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.bitcoinj.base.Address;
+import org.bitcoinj.base.AddressParser;
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.base.DefaultAddressParser;
+import org.bitcoinj.base.Network;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * Note: In the JSON response this is actually an array
  */
 public class AddressGroupingItem {
+    private static final AddressParser addressParser = new DefaultAddressParser();
     private final Address address;
     private final Coin balance;
     private final String account;
@@ -22,12 +24,12 @@ public class AddressGroupingItem {
         this.account = account;
     }
 
-    public AddressGroupingItem(List<Object> addressItem, NetworkParameters netParams) {
+    public AddressGroupingItem(List<Object> addressItem, Network network) {
         String addressStr = (String) addressItem.get(0);
         //TODO: Try to avoid using Double
         Double balanceDouble = (Double) addressItem.get(1);
         account = (addressItem.size() > 2) ? (String) addressItem.get(2) : null;
-        address = Address.fromString(netParams, addressStr);
+        address = addressParser.parseAddress(addressStr, network);
         balance = Coin.valueOf(((Double)(balanceDouble * 100000000.0)).longValue());
 
     }

@@ -1,8 +1,7 @@
 package org.consensusj.bitcoin.jsonrpc.groovy
 
+import org.bitcoinj.base.Network
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient
-import org.consensusj.bitcoin.jsonrpc.bitcoind.BitcoinConfFile
-import org.bitcoinj.core.NetworkParameters
 import org.consensusj.jsonrpc.groovy.DynamicRpcMethodFallback
 
 /**
@@ -17,7 +16,7 @@ class BitcoinScriptingClient extends BitcoinExtendedClient implements DynamicRpc
         super()
     }
 
-    BitcoinScriptingClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        super(netParams, server, rpcuser, rpcpassword);
+    BitcoinScriptingClient(Network network, URI server, String rpcuser, String rpcpassword) {
+        super(network, server, rpcuser, rpcpassword);
     }
 }
