@@ -2,7 +2,7 @@ package org.consensusj.bitcoin.jsonrpc.test;
 
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
 import org.consensusj.jsonrpc.JsonRpcException;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Sha256Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

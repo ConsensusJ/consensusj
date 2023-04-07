@@ -3,8 +3,8 @@ package org.consensusj.namecoin.jsonrpc.cli;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.namecoin.jsonrpc.pojo.NameData;
 import org.consensusj.namecoin.jsonrpc.NamecoinClient;
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.AddressFormatException;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.base.exceptions.AddressFormatException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

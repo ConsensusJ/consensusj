@@ -6,9 +6,10 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.bitcoinj.core.AddressFormatException;
-import org.bitcoinj.core.DumpedPrivateKey;
-import org.bitcoinj.core.ECKey;
+import org.bitcoinj.base.Network;
+import org.bitcoinj.base.exceptions.AddressFormatException;
+import org.bitcoinj.crypto.DumpedPrivateKey;
+import org.bitcoinj.crypto.ECKey;
 
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ public class ECKeyDeserializer extends JsonDeserializer<ECKey> {
         switch (token) {
             case VALUE_STRING:
                 try {
-                    return DumpedPrivateKey.fromBase58(null, p.getValueAsString()).getKey();
+                    return DumpedPrivateKey.fromBase58((Network) null, p.getValueAsString()).getKey();
                 } catch (AddressFormatException e) {
                     throw new InvalidFormatException(p, "Invalid Key", p.getValueAsString(), ECKey.class);
                 }

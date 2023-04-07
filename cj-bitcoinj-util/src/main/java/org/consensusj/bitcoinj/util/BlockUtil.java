@@ -2,7 +2,7 @@ package org.consensusj.bitcoinj.util;
 
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Transaction;
-import org.bitcoinj.core.Utils;
+import org.bitcoinj.base.internal.ByteUtils;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -35,7 +35,7 @@ public class BlockUtil {
         BigInteger height;
         if (scriptBytes[0] == 3) {
             byte[] blockNumBytes = Arrays.copyOfRange(scriptBytes, 1, 4);
-            height = new BigInteger(Utils.reverseBytes(blockNumBytes));
+            height = new BigInteger(ByteUtils.reverseBytes(blockNumBytes));
         } else {
             height = BigInteger.valueOf(-1);
         }

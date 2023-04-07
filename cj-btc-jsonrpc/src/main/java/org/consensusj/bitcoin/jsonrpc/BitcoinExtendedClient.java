@@ -1,6 +1,8 @@
 package org.consensusj.bitcoin.jsonrpc;
 
 import com.fasterxml.jackson.databind.JavaType;
+import org.bitcoinj.base.BitcoinNetwork;
+import org.bitcoinj.base.ScriptType;
 import org.consensusj.bitcoin.json.pojo.AddressInfo;
 import org.consensusj.bitcoin.json.pojo.LoadWalletResult;
 import org.consensusj.bitcoin.json.pojo.Outpoint;
@@ -8,15 +10,14 @@ import org.consensusj.bitcoin.json.pojo.SignedRawTransaction;
 import org.consensusj.bitcoin.json.pojo.UnspentOutput;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.params.RegTestParams;
-import org.bitcoinj.script.Script;
 import org.bouncycastle.util.encoders.Hex;
 import org.consensusj.bitcoin.jsonrpc.bitcoind.BitcoinConfFile;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Coin;
-import org.bitcoinj.core.ECKey;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.base.Coin;
+import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.core.TransactionOutput;
@@ -101,7 +102,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
     }
 
     public synchronized Address getRegTestMiningAddress() {
-        if (!getNetParams().getId().equals(NetworkParameters.ID_REGTEST)) {
+        if (!getNetParams().getId().equals(BitcoinNetwork.ID_REGTEST)) {
             throw new UnsupportedOperationException("Operation only supported in RegTest context");
         }
         if (regTestMiningAddress == null) {
@@ -112,7 +113,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
             // we could initialize regTestMiningKey from a bitcoinj-generated ECKey or HD Keychain.
             try {
                 ECKey notSoPrivatePrivateKey = ECKey.fromPrivate(NotSoPrivatePrivateInt, false);
-                Address address = Address.fromKey(RegTestParams.get(), notSoPrivatePrivateKey, Script.ScriptType.P2PKH);
+                Address address = Address.fromKey(RegTestParams.get(), notSoPrivatePrivateKey, ScriptType.P2PKH);
                 AddressInfo addressInfo = getAddressInfo(address);
                 if (addressInfo.getIsmine() && !addressInfo.getIswatchonly() && addressInfo.getSolvable()) {
                     log.warn("Address with label {} is present in server-side wallet", RegTestMiningAddressLabel);
@@ -358,7 +359,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
 
     /**
      * Create a signed transaction locally (i.e. with a client-side key.) Finds UTXOs this
-     * key can spend (assuming they are Script.ScriptType.P2PKH UTXOs)
+     * key can spend (assuming they are ScriptType.P2PKH UTXOs)
      *
      * @param fromKey Signing key
      * @param outputs Outputs to sign
@@ -367,7 +368,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @throws IOException            An I/O error occured
      */
     public Transaction createSignedTransaction(ECKey fromKey, List<TransactionOutput> outputs) throws JsonRpcStatusException, IOException {
-        Address fromAddress = Address.fromKey(getNetParams(), fromKey, Script.ScriptType.P2PKH);
+        Address fromAddress = Address.fromKey(getNetParams(), fromKey, ScriptType.P2PKH);
 
         Transaction tx = new Transaction(getNetParams());   // Create a new transaction
         outputs.forEach(tx::addOutput);                     // Add all requested outputs to it
@@ -403,7 +404,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
 
     /**
      * Create a signed transaction locally (i.e. with a client-side key.) Finds UTXOs this
-     * key can spend (assuming they are Script.ScriptType.P2PKH UTXOs)
+     * key can spend (assuming they are org.bitcoinj.base.ScriptType.P2PKH UTXOs)
      *
      * @param fromKey   Signing key
      * @param toAddress Destination address

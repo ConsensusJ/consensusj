@@ -1,15 +1,14 @@
 package org.consensusj.bitcoin.jsonrpc.test;
 
-import org.consensusj.bitcoin.json.pojo.LoadWalletResult;
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.bitcoin.json.pojo.Outpoint;
 import org.consensusj.bitcoin.json.pojo.SignedRawTransaction;
 import org.consensusj.bitcoin.json.pojo.UnspentOutput;
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.base.Coin;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Sha256Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bitcoinj.base.BitcoinNetwork;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
 import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
 import org.consensusj.bitcoin.json.pojo.BlockInfo;
@@ -10,10 +11,10 @@ import org.consensusj.bitcoin.json.pojo.ServerInfo;
 import org.consensusj.bitcoin.json.rpc.BitcoinJsonRpc;
 import org.bitcoinj.core.AbstractBlockChain;
 import org.bitcoinj.core.Block;
-import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Coin;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.PeerGroup;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.StoredBlock;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.kits.WalletAppKit;
@@ -197,7 +198,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         // Dummy up a response for now.
         // Since ServerInfo is immutable, we have to build it entirely with the constructor.
         Coin balance = Coin.valueOf(0);
-        boolean testNet = !netParams.getId().equals(NetworkParameters.ID_MAINNET);
+        boolean testNet = !netParams.getId().equals(BitcoinNetwork.ID_MAINNET);
         int keyPoolOldest = 0;
         int keyPoolSize = 0;
         return result(new ServerInfo(

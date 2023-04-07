@@ -1,8 +1,8 @@
 package org.consensusj.bitcoin.json.pojo.bitcore;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.base.Sha256Hash;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
 
 /**

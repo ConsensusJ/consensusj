@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.jsonrpc.test;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.ECKey;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.TransactionOutPoint;
 
 import java.util.List;

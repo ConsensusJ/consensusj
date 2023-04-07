@@ -2,7 +2,8 @@ package org.consensusj.bitcoin.jsonrpc;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.bitcoinj.core.LegacyAddress;
+import org.bitcoinj.base.BitcoinNetwork;
+import org.bitcoinj.base.LegacyAddress;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.RegTestParams;
 import org.bitcoinj.params.TestNet3Params;
@@ -37,13 +38,13 @@ import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection;
-import org.bitcoinj.core.Address;
+import org.bitcoinj.base.Address;
 import org.bitcoinj.core.Block;
-import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Coin;
 import org.bitcoinj.core.Context;
-import org.bitcoinj.core.ECKey;
+import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,13 +72,13 @@ import java.util.stream.Stream;
  * <a href="https://bitcoincore.org/en/doc/">Bitcoin Core JSON-RPC API</a>.
  * <p>
  * <a href="https://bitcoinj.org">bitcoinj</a> types are used where appropriate.
- * For example, requesting a block hash will return a {@link org.bitcoinj.core.Sha256Hash}:
+ * For example, requesting a block hash will return a {@link org.bitcoinj.base.Sha256Hash}:
  *
  * <pre> {@code
  * Sha256Hash hash = client.getBlockHash(342650);
  * }</pre>
  *
- * Requesting a Bitcoin balance will return the amount as a {@link org.bitcoinj.core.Coin}:
+ * Requesting a Bitcoin balance will return the amount as a {@link org.bitcoinj.base.Coin}:
  *
  * <pre> {@code
  * Coin balance = client.getBalance();
@@ -317,11 +318,13 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     }
 
     private Address getTestAddress() {
-        switch (getNetParams().getId()) {
-            case NetworkParameters.ID_MAINNET:
+        BitcoinNetwork network = (BitcoinNetwork) getNetParams().network();
+        switch (network) {
+            case MAINNET:
                 return LegacyAddress.fromBase58(null, "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa");
-            case NetworkParameters.ID_TESTNET:
-            case NetworkParameters.ID_REGTEST:
+            case TESTNET:
+            case REGTEST:
+            case SIGNET:
             default:
                 return LegacyAddress.fromBase58(null, "moneyqMan7uh8FqdCA2BV5yZ8qVrc9ikLP");
         }

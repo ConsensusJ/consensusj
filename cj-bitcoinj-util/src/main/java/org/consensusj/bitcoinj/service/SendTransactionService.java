@@ -1,7 +1,7 @@
 package org.consensusj.bitcoinj.service;
 
-import org.bitcoinj.core.Coin;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Coin;
+import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 
 import java.util.concurrent.CompletableFuture;

@@ -2,17 +2,17 @@ package org.consensusj.bitcoin.integ.bitcoinj
 
 import com.google.common.util.concurrent.ListenableFuture
 import groovy.util.logging.Slf4j
+import org.bitcoinj.base.ScriptType
 import org.consensusj.bitcoin.json.pojo.WalletTransactionInfo
 import org.bitcoinj.core.TransactionBroadcast
 import org.bitcoinj.core.TransactionConfidence
-import org.bitcoinj.script.Script
 import org.consensusj.jsonrpc.JsonRpcStatusException
-import org.bitcoinj.core.Address
+import org.bitcoinj.base.Address
 import org.bitcoinj.core.BlockChain
-import org.bitcoinj.core.Coin
+import org.bitcoinj.base.Coin
 import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.core.PeerGroup
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.wallet.Wallet
 import org.bitcoinj.wallet.SendRequest
@@ -51,7 +51,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         BriefLogFormatter.init()
         params = getNetParams()
 
-        wallet = Wallet.createDeterministic(params, Script.ScriptType.P2PKH)
+        wallet = Wallet.createDeterministic(params, ScriptType.P2PKH)
         def store = new MemoryBlockStore(params)
         def chain = new BlockChain(params,wallet,store)
         peerGroup = new PeerGroup(params, chain)

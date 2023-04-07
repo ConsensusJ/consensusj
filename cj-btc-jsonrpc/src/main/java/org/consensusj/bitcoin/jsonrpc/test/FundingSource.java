@@ -1,8 +1,8 @@
 package org.consensusj.bitcoin.jsonrpc.test;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Coin;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.base.Coin;
+import org.bitcoinj.base.Sha256Hash;
 
 /**
  * A source of Bitcoin funds for testing

@@ -1,6 +1,6 @@
 package org.consensusj.bitcoinj.spock
 
-import org.bitcoinj.core.Coin
+import org.bitcoinj.base.Coin
 import org.bitcoinj.core.NetworkParameters
 import spock.lang.Specification
 import spock.lang.Unroll

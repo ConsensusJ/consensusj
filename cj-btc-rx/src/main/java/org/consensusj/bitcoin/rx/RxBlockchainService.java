@@ -3,7 +3,7 @@ package org.consensusj.bitcoin.rx;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.reactivestreams.Publisher;
 

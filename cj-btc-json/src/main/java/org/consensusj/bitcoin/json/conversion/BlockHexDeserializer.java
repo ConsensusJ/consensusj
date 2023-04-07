@@ -11,6 +11,7 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.ProtocolException;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  *
@@ -29,7 +30,7 @@ public class BlockHexDeserializer extends JsonDeserializer<Block> {
             case VALUE_STRING:
                 try {
                     byte[] payload = HexUtil.hexStringToByteArray(p.getValueAsString()); // convert  to hex
-                    return netParams.getDefaultSerializer().makeBlock(payload);
+                    return netParams.getDefaultSerializer().makeBlock(ByteBuffer.wrap(payload));
                 } catch (ProtocolException e) {
                     throw new InvalidFormatException(p, "Invalid Block", p.getValueAsString(), Block.class);
                 }

@@ -1,12 +1,11 @@
 package org.consensusj.bitcoinj.wallet;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.ECKey;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.ChildNumber;
 import org.bitcoinj.crypto.DeterministicKey;
 import org.bitcoinj.crypto.HDPath;
-import org.bitcoinj.script.Script;
 import org.bitcoinj.wallet.DeterministicKeyChain;
 import org.bitcoinj.wallet.DeterministicSeed;
 
@@ -22,7 +21,7 @@ import java.util.Objects;
  * </ol>
  */
 public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
-    private final Script.ScriptType outputScriptType;
+    private final org.bitcoinj.base.ScriptType outputScriptType;
     private final NetworkParameters netParams;
     private final HDPath pathReceiving;
     private final HDPath pathChange;
@@ -33,7 +32,7 @@ public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
      * @param netParams used to set coinType, etc
      * @param outputScriptType script type for determining the purpose child
      */
-    public BipStandardDeterministicKeyChain(DeterministicSeed seed, Script.ScriptType outputScriptType, NetworkParameters netParams) {
+    public BipStandardDeterministicKeyChain(DeterministicSeed seed, org.bitcoinj.base.ScriptType outputScriptType, NetworkParameters netParams) {
         super(seed, null, outputScriptType, BipStandardKeyChainGroupStructure.pathFor(outputScriptType, netParams));
         this.outputScriptType = outputScriptType;
         this.netParams = netParams;

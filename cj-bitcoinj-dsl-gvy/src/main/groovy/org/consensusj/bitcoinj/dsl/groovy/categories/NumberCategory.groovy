@@ -1,7 +1,7 @@
 package org.consensusj.bitcoinj.dsl.groovy.categories
 
 import groovy.transform.CompileStatic
-import org.bitcoinj.core.Coin
+import org.bitcoinj.base.Coin
 
 
 /**

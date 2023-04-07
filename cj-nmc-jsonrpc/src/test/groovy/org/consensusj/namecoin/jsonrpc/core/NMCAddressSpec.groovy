@@ -1,11 +1,11 @@
 package org.consensusj.namecoin.jsonrpc.core
 
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.DumpedPrivateKey
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.LegacyAddress
+import org.bitcoinj.base.BitcoinNetwork
+import org.bitcoinj.base.ScriptType
+import org.bitcoinj.crypto.DumpedPrivateKey
+import org.bitcoinj.crypto.ECKey
+import org.bitcoinj.base.LegacyAddress
 import org.bitcoinj.params.MainNetParams
-import org.bitcoinj.script.Script
 import spock.lang.Specification
 
 /**
@@ -24,7 +24,7 @@ class NMCAddressSpec extends Specification {
         def key = new ECKey()
 
         when: "We generate an NMC address from it"
-        def nmcAddress = Address.fromKey(nmcNetParams, key, Script.ScriptType.P2PKH)
+        def nmcAddress = key.toAddress(ScriptType.P2PKH, NameCoinNetwork.MAINNET)
         def firstChar = nmcAddress.toString().charAt(0)
 
         then: "It begins with 'M' or 'N'"
@@ -36,7 +36,7 @@ class NMCAddressSpec extends Specification {
         def key = new ECKey()
 
         when: "We construct an NMC address from it"
-        def nmcAddress = LegacyAddress.fromPubKeyHash(nmcNetParams, key.pubKeyHash)
+        def nmcAddress = LegacyAddress.fromPubKeyHash(NameCoinNetwork.MAINNET, key.pubKeyHash)
         def firstChar = nmcAddress.toString().charAt(0)
 
         then: "It begins with an 'M' or 'N'"
@@ -59,7 +59,7 @@ class NMCAddressSpec extends Specification {
         def key = ECKey.fromPrivate(NotSoPrivatePrivateKey)
 
         when: "We generate an NMC address from it"
-        def nmcAddress = Address.fromKey(nmcNetParams, key, Script.ScriptType.P2PKH)
+        def nmcAddress = key.toAddress(ScriptType.P2PKH, NameCoinNetwork.MAINNET)
         def firstChar = nmcAddress.toString().charAt(0)
 
         then: "It begins with an 'N' and looks correct"
@@ -88,8 +88,8 @@ class NMCAddressSpec extends Specification {
         when:
         def nmcPrivateKey = DumpedPrivateKey.fromBase58(nmcNetParams, nmcPrivKeyString)
         def key = nmcPrivateKey.getKey()
-        def nmcAddress = Address.fromKey(nmcNetParams, key, Script.ScriptType.P2PKH)
-        def btcAddress = Address.fromKey(mainNetParams, key, Script.ScriptType.P2PKH)
+        def nmcAddress = key.toAddress(ScriptType.P2PKH, NameCoinNetwork.MAINNET)
+        def btcAddress = key.toAddress(ScriptType.P2PKH, BitcoinNetwork.MAINNET)
         def nmcExportKey = key.getPrivateKeyEncoded(nmcNetParams)
         def btcExportKey = key.getPrivateKeyEncoded(mainNetParams)
 

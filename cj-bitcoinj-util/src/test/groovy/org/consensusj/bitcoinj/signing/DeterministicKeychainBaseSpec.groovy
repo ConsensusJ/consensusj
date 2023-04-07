@@ -1,9 +1,9 @@
 package org.consensusj.bitcoinj.signing
 
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.Coin
+import org.bitcoinj.base.Address
+import org.bitcoinj.base.Coin
 import org.bitcoinj.core.NetworkParameters
-import org.bitcoinj.core.SegwitAddress
+import org.bitcoinj.base.SegwitAddress
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.TransactionInput
 import org.bitcoinj.core.TransactionOutput

@@ -1,9 +1,8 @@
 package org.consensusj.bitcoinj.signing;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Coin;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.base.Coin;
 import org.bitcoinj.core.InsufficientMoneyException;
-import org.bitcoinj.core.Transaction;
 
 import java.util.Collection;
 
@@ -11,7 +10,7 @@ import java.util.Collection;
  *
  */
 public interface SigningUtils {
-
+    /* private */ Coin MIN_NONDUST_OUTPUT = Coin.valueOf(546);
     static TransactionOutputData createDustOutput(Address address) {
         TransactionOutputData test = new TransactionOutputAddress(Coin.ZERO, address);
         Coin dustAmount = SigningUtils.getMinNonDustValue(test);
@@ -19,7 +18,7 @@ public interface SigningUtils {
     }
 
     static Coin getMinNonDustValue(TransactionOutputData data) {
-        return Transaction.MIN_NONDUST_OUTPUT.times(3);  // TODO: Fix this
+        return MIN_NONDUST_OUTPUT.times(3);  // TODO: Fix this
     }
 
     static SigningRequest addChange(SigningRequest request, Address changeAddress, FeeCalculator calculator) throws InsufficientMoneyException {

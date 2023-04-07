@@ -1,14 +1,15 @@
 package org.consensusj.bitcoin.rpc.tx
 
-import org.bitcoinj.core.Coin
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Coin
+import org.bitcoinj.crypto.ECKey
+import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.TransactionInput
 import org.bitcoinj.core.TransactionOutput
 import org.bitcoinj.crypto.TransactionSignature
 import org.bitcoinj.script.ScriptBuilder
 import org.bitcoinj.script.Script
+import org.bitcoinj.script.ScriptPattern
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -73,7 +74,7 @@ class BareMultisigSpec extends TxTestBaseSpec {
         Coin value = multisigOutput.getValue()
 
         then: "it's a multisig output and the amount is correct"
-        multisigScript.isSentToMultiSig()
+        ScriptPattern.isSentToMultisig(multisigScript)
         value == amount
 
         when: "OK, now build a transaction that spends the money back to the client."
@@ -125,7 +126,7 @@ class BareMultisigSpec extends TxTestBaseSpec {
         then:
         // [Client] now has the money back in it.
         confirmedTx.outputs.size() == 1
-        confirmedTx.outputs[0].getScriptPubKey().isSentToRawPubKey()
+        ScriptPattern.isP2PK(confirmedTx.outputs[0].getScriptPubKey())
         confirmedTx.outputs[0].value == amount2
     }
 }

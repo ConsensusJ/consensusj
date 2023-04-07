@@ -7,6 +7,14 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
+The 0.7.0 release of **ConsensusJ** will require **bitcoinj** v0.17, currently in alpha release. There will likely be multiple alpha releases of ConsensusJ as bitcoinj is updated.
+
+
+=== bitcoinj-0.17 update
+
+=== Dependency Updates
+
+* bitcoinj 0.17-alpha1
 
 == v0.6.5
 

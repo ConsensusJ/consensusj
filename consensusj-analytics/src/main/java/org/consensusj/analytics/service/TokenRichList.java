@@ -1,7 +1,7 @@
 package org.consensusj.analytics.service;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Address;
+import org.bitcoinj.base.Sha256Hash;
 
 import java.util.ArrayList;
 import java.util.Collections;

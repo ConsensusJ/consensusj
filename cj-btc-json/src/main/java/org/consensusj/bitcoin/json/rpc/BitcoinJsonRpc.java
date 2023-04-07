@@ -3,7 +3,7 @@ package org.consensusj.bitcoin.json.rpc;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
 import org.consensusj.bitcoin.json.pojo.NetworkInfo;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Sha256Hash;
 
 import java.util.concurrent.CompletableFuture;
 

@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.processors.FlowableProcessor;
 import org.bitcoinj.core.BitcoinSerializer;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.bitcoin.rx.jsonrpc.RxBitcoinClient;
@@ -16,6 +16,7 @@ import org.consensusj.bitcoin.rx.RxBlockchainService;
 
 import java.io.Closeable;
 import java.net.URI;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -35,7 +36,7 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
 
     public RxBitcoinZmqService(RxBitcoinClient client) {
         super(client);
-        bitcoinSerializer = networkParameters.getSerializer(false);
+        bitcoinSerializer = networkParameters.getSerializer();
         blockSubscription = blockPublisher()
                 .flatMapSingle(client::activeChainTipFromBestBlock)
                 .distinctUntilChanged(ChainTip::getHash)
@@ -62,6 +63,7 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
     @Override
     public Flowable<Block> blockPublisher() {
         return blockBinaryPublisher()
+                .map(ByteBuffer::wrap)
                 .map(bitcoinSerializer::makeBlock)  // Deserialize to bitcoinj Block
                 .startWith(client.getBestBlockViaRpc()); // Use JSON-RPC client to fetch an initial block
     }

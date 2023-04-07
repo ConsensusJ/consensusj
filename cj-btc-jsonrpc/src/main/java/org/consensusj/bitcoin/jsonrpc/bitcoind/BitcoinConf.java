@@ -1,8 +1,8 @@
 package org.consensusj.bitcoin.jsonrpc.bitcoind;
 
+import org.bitcoinj.base.BitcoinNetwork;
 import org.consensusj.bitcoin.jsonrpc.RpcConfig;
 import org.consensusj.bitcoin.jsonrpc.RpcURI;
-import org.bitcoinj.core.NetworkParameters;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,11 +51,11 @@ public class BitcoinConf extends HashMap<String, String> {
         }
 
         if (isRegTest) {
-            return NetworkParameters.ID_REGTEST;
+            return BitcoinNetwork.ID_REGTEST;
         } else if (isTestNet) {
-            return NetworkParameters.ID_TESTNET;
+            return BitcoinNetwork.ID_TESTNET;
         } else {
-            return NetworkParameters.ID_MAINNET;
+            return BitcoinNetwork.ID_MAINNET;
         }
     }
 }

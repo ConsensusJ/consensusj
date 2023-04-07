@@ -1,9 +1,10 @@
 package org.consensusj.bitcoinj.spock
 
-import org.bitcoinj.core.Address
-import org.bitcoinj.core.Coin
-import org.bitcoinj.core.ECKey
-import org.bitcoinj.core.Sha256Hash
+import org.bitcoinj.base.Address
+import org.bitcoinj.base.Coin
+import org.bitcoinj.base.ScriptType
+import org.bitcoinj.base.Sha256Hash
+import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.TransactionInput
 import org.bitcoinj.core.TransactionOutPoint
@@ -33,7 +34,7 @@ class TransactionSpec extends Specification {
     def "Can create and serialize a transaction"() {
 
         when: "We create a signed transaction"
-        Address fromAddress = Address.fromKey(mainNetParams, fromKey, Script.ScriptType.P2PKH)
+        Address fromAddress = Address.fromKey(mainNetParams, fromKey, ScriptType.P2PKH)
         Transaction tx = new Transaction(mainNetParams)
         TransactionOutPoint outPoint = new TransactionOutPoint(mainNetParams, 0, utxo_id)
         tx.addOutput(txAmount, toAddr)
