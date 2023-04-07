@@ -12,6 +12,9 @@ The 0.7.0 release of **ConsensusJ** will require **bitcoinj** v0.17, currently i
 
 === bitcoinj-0.17 update
 
+* Upgrade to bitcoinj-0.17 API
+* Remove usage of Guava `ListenableFuture`
+
 === Dependency Updates
 
 * bitcoinj 0.17-alpha1
