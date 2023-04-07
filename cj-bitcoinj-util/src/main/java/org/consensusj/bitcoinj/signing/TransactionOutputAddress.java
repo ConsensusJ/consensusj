@@ -2,6 +2,7 @@ package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
+import org.bitcoinj.base.DefaultAddressParser;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
 
@@ -24,12 +25,12 @@ public class TransactionOutputAddress implements TransactionOutputData {
 
     public TransactionOutputAddress(long amount, String address) {
         this.amount = amount;
-        this.address = Address.fromString(null, address);
+        this.address = new DefaultAddressParser().parseAddressAnyNetwork(address);
     }
 
     @Override
     public String networkId() {
-        return address.getParameters().getId();
+        return address.network().id();
     }
 
     @Override

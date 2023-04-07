@@ -38,6 +38,6 @@ public class BitcoinFactory {
 
     @Singleton
     public Module jacksonModule() {
-        return new RpcServerModule(null);
+        return new RpcServerModule();
     }
 }

@@ -1,9 +1,9 @@
 package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Address;
+import org.bitcoinj.base.Network;
 import org.bitcoinj.base.ScriptType;
 import org.bitcoinj.crypto.ECKey;
-import org.bitcoinj.core.NetworkParameters;
 
 import java.util.Optional;
 
@@ -14,9 +14,9 @@ public class ECKeySigner implements TransactionSigner {
     private final ECKey ecKey;
     private final Address address;
 
-    public ECKeySigner(NetworkParameters netParams, ECKey ecKey, ScriptType scriptType) {
+    public ECKeySigner(Network network, ECKey ecKey, ScriptType scriptType) {
         this.ecKey = ecKey;
-        address = Address.fromKey(netParams, ecKey, scriptType);
+        address = ecKey.toAddress(scriptType, network);
     }
     
     /**

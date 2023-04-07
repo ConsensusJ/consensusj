@@ -6,7 +6,6 @@ import org.consensusj.bitcoin.json.pojo.ChainTip;
 import io.reactivex.rxjava3.disposables.Disposable;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Transaction;
-import org.bitcoinj.params.MainNetParams;
 import org.consensusj.bitcoinj.util.BlockUtil;
 
 import java.net.URI;

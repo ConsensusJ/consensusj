@@ -309,7 +309,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
                 header.getMerkleRoot(),
                 -1,     // Unknown number of Transactions
                 (includeTx == BlockInfo.IncludeTxFlag.IDONLY) ? hashListFromTxList(header.getTransactions()) : null,
-                (int) header.getTimeSeconds(),
+                (int) header.time().getEpochSecond(),
                 header.getNonce(),
                 null, // TODO: Return "bits" here
                 new BigDecimal(header.getDifficultyTargetAsInteger()),  // TODO: Verify this is correct

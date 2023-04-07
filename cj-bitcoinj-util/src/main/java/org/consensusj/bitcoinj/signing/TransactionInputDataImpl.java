@@ -1,12 +1,13 @@
 package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Address;
+import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Coin;
+import org.bitcoinj.base.Network;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutPoint;
-import org.bitcoinj.params.BitcoinNetworkParams;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
 import org.bitcoinj.script.ScriptException;
@@ -19,17 +20,14 @@ import java.util.Optional;
  * This aspires to be a Java record someday
  */
 public class TransactionInputDataImpl implements TransactionInputData {
-    private final NetworkParameters netParams;
+    private final Network network;
     private final Sha256Hash txId;
     private final long index;
     private final long amount;
     private final Script script;
 
     public TransactionInputDataImpl(String networkId, Sha256Hash txId, long index, Coin amount, Script script) {
-        netParams = BitcoinNetworkParams.fromID(networkId);
-        if (netParams == null) {
-            throw new IllegalArgumentException("Invalid network ID");
-        }
+        this.network = BitcoinNetwork.fromIdString(networkId).orElseThrow(() -> new IllegalArgumentException("Invalid network ID"));
         this.txId = txId;
         this.index = index;
         this.amount = amount.getValue();
@@ -50,7 +48,7 @@ public class TransactionInputDataImpl implements TransactionInputData {
 
     @Override
     public String networkId() {
-        return netParams.getId();
+        return network.id();
     }
 
     public Sha256Hash txId() {
@@ -76,7 +74,7 @@ public class TransactionInputDataImpl implements TransactionInputData {
     public Optional<Address> address() {
         Optional<Address> optAddress;
         try {
-            optAddress = Optional.of(script.getToAddress(netParams));
+            optAddress = Optional.of(script.getToAddress(NetworkParameters.of(network)));
         } catch (ScriptException e ) {
             optAddress = Optional.empty();
         }
@@ -89,7 +87,7 @@ public class TransactionInputDataImpl implements TransactionInputData {
 
     @Override
     public TransactionOutPoint toOutPoint() {
-        return new TransactionOutPoint(netParams, index, txId);
+        return new TransactionOutPoint(NetworkParameters.of(network), index, txId);
     }
 
     private static TransactionInput createTransactionInput(TransactionOutPoint outPoint, Coin amount, Script script) {

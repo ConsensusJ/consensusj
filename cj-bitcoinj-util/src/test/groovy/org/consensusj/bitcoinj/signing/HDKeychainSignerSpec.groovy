@@ -2,6 +2,7 @@ package org.consensusj.bitcoinj.signing
 
 import org.bitcoinj.base.Address
 import org.bitcoinj.base.Coin
+import org.bitcoinj.base.DefaultAddressParser
 import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.base.Sha256Hash
@@ -18,6 +19,7 @@ import org.consensusj.bitcoinj.wallet.BipStandardDeterministicKeyChain
  *
  */
 class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
+    static final addressParser = new DefaultAddressParser();
     static final Sha256Hash input_txid = Sha256Hash.wrap("81b4c832d70cb56ff957589752eb4125a4cab78a25a8fc52d6a09e5bd4404d48")
     static final int input_vout = 0;
     static final Coin input_amount = Coin.SATOSHI;
@@ -34,14 +36,14 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
         keychain.getKeys(KeyChain.KeyPurpose.CHANGE, 1)         // Generate first change address
 
         Address fromAddress = keychain.receivingAddr(0)
-        Address toAddress = Address.fromKey(netParams, new ECKey(), scriptType)
+        Address toAddress = new ECKey().toAddress(scriptType, netParams.network())
         Address changeAddress = keychain.changeAddr(0)
 
         when: "We we create an HDKeychainSigner"
         HDKeychainSigner signer = new HDKeychainSigner(keychain);
 
         and: "We sign a transaction"
-        SigningRequest signingRequest = new DefaultSigningRequest(netParams)
+        SigningRequest signingRequest = new DefaultSigningRequest(netParams.network())
                 .addInput(fromAddress, input_amount, input_txid, input_vout)
                 .addOutput(toAddress, 0.01.btc)
                 .addOutput(changeAddress, 0.20990147.btc)
@@ -83,14 +85,14 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
         keychain.getKeys(KeyChain.KeyPurpose.CHANGE, 1)         // Generate first change address
 
         Address fromAddress = keychain.receivingAddr(0)
-        Address toAddress = Address.fromKey(netParams, new ECKey(), scriptType)
+        Address toAddress = new ECKey().toAddress(scriptType, netParams.network())
         Address changeAddress = keychain.changeAddr(0)
 
         when: "We we create an HDKeychainSigner"
         HDKeychainSigner signer = new HDKeychainSigner(keychain);
 
         and: "We sign a transaction"
-        SigningRequest signingRequest = new DefaultSigningRequest(netParams)
+        SigningRequest signingRequest = new DefaultSigningRequest(netParams.network())
                 .addInput(fromAddress, input_amount, input_txid, input_vout)
                 .addOutput(toAddress, 0.01.btc)
                 .addOutput(changeAddress, 0.20990147.btc)
@@ -133,11 +135,11 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
         keychain.changeAddr(0) == address("muerkyvAYxuDRwvodNXmjg8UFP8wFaUWB8")
 
         and:
-        keychain.findKeyFromPubHash(Address.fromString(null, "muuZ2RXkePUsx9Y6cWt3TCSbQyetD6nKak").getHash()) != null
-        keychain.findKeyFromPubHash(Address.fromString(null, "muerkyvAYxuDRwvodNXmjg8UFP8wFaUWB8").getHash()) != null
+        keychain.findKeyFromPubHash(address("muuZ2RXkePUsx9Y6cWt3TCSbQyetD6nKak").getHash()) != null
+        keychain.findKeyFromPubHash(address( "muerkyvAYxuDRwvodNXmjg8UFP8wFaUWB8").getHash()) != null
     }
 
     private Address address(String addressString) {
-        return Address.fromString(null, addressString);
+        return addressParser.parseAddressAnyNetwork(addressString);
     }
 }

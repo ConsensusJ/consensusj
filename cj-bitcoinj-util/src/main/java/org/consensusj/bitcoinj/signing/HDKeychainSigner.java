@@ -1,6 +1,7 @@
 package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Address;
+import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
@@ -58,9 +59,10 @@ public class HDKeychainSigner implements TransactionSigner {
         // For each address in the input list, add a signed input to the bitcoinj transaction
         for (int index = 0; index < unsignedTx.getInputs().size(); index++) {
             Address address = addresses.get(index);
-            TransactionOutPoint outPoint = unsignedTx.getInputs().get(index).duplicateDetached().getOutpoint();
+            TransactionInput input = unsignedTx.getInputs().get(index);
+            TransactionOutPoint outPoint = input.duplicateDetached().getOutpoint();
             DeterministicKey fromKey = keyChain.findKeyFromPubHash(address.getHash());
-            tx.addSignedInput(outPoint, ScriptBuilder.createOutputScript(address), fromKey);
+            tx.addSignedInput(outPoint, ScriptBuilder.createOutputScript(address), input.getValue(), fromKey);
         }
         return CompletableFuture.completedFuture(tx);
     }

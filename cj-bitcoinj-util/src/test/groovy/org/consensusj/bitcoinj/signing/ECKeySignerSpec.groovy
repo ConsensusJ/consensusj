@@ -26,10 +26,10 @@ class ECKeySignerSpec extends DeterministicKeychainBaseSpec {
         Address changeAddress = new ECKey().toAddress(scriptType, network)
 
         when: "We we create an ECKeySigner"
-        ECKeySigner signer = new ECKeySigner(NetworkParameters.of(network), fromKey, scriptType)
+        ECKeySigner signer = new ECKeySigner(network, fromKey, scriptType)
 
         and: "We sign a transaction"
-        SigningRequest signingRequest = new DefaultSigningRequest(NetworkParameters.of(network))
+        SigningRequest signingRequest = new DefaultSigningRequest(network)
                 .addInput(fromAddress, input_amount, input_txid, input_vout)
                 .addOutput(toAddress, 0.01.btc)
                 .addOutput(changeAddress, 0.20990147.btc)

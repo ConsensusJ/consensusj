@@ -129,7 +129,7 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
         Address changeAddr = signingKeychain.addressFromKey(networkKeyChain.getKeyByPath(HDPath.M(networkAccountPath).extend(changeKeyPath), false))
         Coin txAmount = 0.01.btc
         Coin changeAmount = 0.20990147.btc
-        signingRequest = new DefaultSigningRequest(netParams)
+        signingRequest = new DefaultSigningRequest(netParams.network())
                 .addInput(script, utxoAmount, txid, index)
                 .addOutput(toAddr, txAmount)
                 .addOutput(changeAddr, changeAmount)

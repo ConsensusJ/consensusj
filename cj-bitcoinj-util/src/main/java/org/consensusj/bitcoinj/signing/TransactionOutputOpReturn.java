@@ -1,8 +1,8 @@
 package org.consensusj.bitcoinj.signing;
 
+import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.params.BitcoinNetworkParams;
+import org.bitcoinj.base.Network;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
 import org.bitcoinj.script.ScriptOpCodes;
@@ -11,20 +11,17 @@ import org.bitcoinj.script.ScriptOpCodes;
  * Raw, immutable data for an OP_RETURN transaction output
  */
 public class TransactionOutputOpReturn implements TransactionOutputData {
-    private final NetworkParameters netParams;
+    private final Network network;
     private final byte[] opReturnData;
 
     public TransactionOutputOpReturn(String networkId, byte[] opReturnData) {
-        netParams = BitcoinNetworkParams.fromID(networkId);
-        if (netParams == null) {
-            throw new IllegalArgumentException("bad network id");
-        }
+        network = BitcoinNetwork.fromIdString(networkId).orElseThrow(() -> new IllegalArgumentException("bad network id"));
         this.opReturnData = opReturnData;
     }
 
     @Override
     public String networkId() {
-        return netParams.getId();
+        return network.id();
     }
 
     @Override

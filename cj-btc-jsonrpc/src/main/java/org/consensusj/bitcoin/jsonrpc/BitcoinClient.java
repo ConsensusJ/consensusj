@@ -336,12 +336,12 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         BitcoinNetwork network = (BitcoinNetwork) getNetwork();
         switch (network) {
             case MAINNET:
-                return LegacyAddress.fromBase58(null, "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa");
+                return LegacyAddress.fromBase58( "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", network);
             case TESTNET:
             case REGTEST:
             case SIGNET:
             default:
-                return LegacyAddress.fromBase58(null, "moneyqMan7uh8FqdCA2BV5yZ8qVrc9ikLP");
+                return LegacyAddress.fromBase58( "moneyqMan7uh8FqdCA2BV5yZ8qVrc9ikLP", network);
         }
     }
 

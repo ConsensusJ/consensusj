@@ -3,6 +3,7 @@ package org.consensusj.bitcoin.json.pojo;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.base.Address;
+import org.bitcoinj.core.LockTime;
 import org.bitcoinj.script.Script;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
 import org.bitcoinj.base.Coin;
@@ -20,15 +21,15 @@ import java.util.List;
  */
 // "hash" property added (present in Bitcoin 0.13)
 public class RawTransactionInfo {
-    public final String hex;
-    public final Sha256Hash txid;
-    public final long version;
-    public final long locktime;
-    public final VinList vin;
-    public final VoutList vout;
-    public final Sha256Hash blockhash;
-    public final int confirmations;
-    public final Instant time;
+    private final String hex;
+    private final Sha256Hash txid;
+    private final long version;
+    private final LockTime lockTime;
+    private final VinList vin;
+    private final VoutList vout;
+    private final Sha256Hash blockhash;
+    private final int confirmations;
+    private final Instant time;
     public final Instant blocktime;
 
     @JsonCreator
@@ -45,7 +46,7 @@ public class RawTransactionInfo {
         this.hex = hex;
         this.txid = txid;
         this.version = version;
-        this.locktime = locktime;
+        this.lockTime = LockTime.of(locktime);
         this.vin = vin;
         this.vout = vout;
         this.blockhash = blockhash;
@@ -62,7 +63,7 @@ public class RawTransactionInfo {
         this.hex = HexUtil.bytesToHexString(transaction.bitcoinSerialize());
         this.txid = transaction.getTxId();
         this.version = transaction.getVersion();
-        this.locktime = transaction.getLockTime();
+        this.lockTime = transaction.lockTime();
         this.blockhash = null;  // For now
         this.confirmations = transaction.getConfidence().getDepthInBlocks();
         this.time = Instant.ofEpochSecond(0); // TODO: block header time of block including transaction
@@ -95,8 +96,17 @@ public class RawTransactionInfo {
         return version;
     }
 
+    public LockTime getLockTime() {
+        return lockTime;
+    }
+
+    /**
+     * @return lock time
+     * @deprecated Use {@link #getLockTime()}
+     */
+    @Deprecated
     public long getLocktime() {
-        return locktime;
+        return getLockTime() != null ? getLockTime().rawValue() : 0;
     }
 
     public List<Vin> getVin() {
