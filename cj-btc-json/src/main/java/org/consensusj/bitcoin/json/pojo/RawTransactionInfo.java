@@ -9,12 +9,11 @@ import org.consensusj.bitcoin.json.conversion.HexUtil;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
-import org.bitcoinj.core.TransactionInput;
-import org.bitcoinj.core.TransactionOutput;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * RawTransaction POJO
@@ -68,20 +67,19 @@ public class RawTransactionInfo {
         this.confirmations = transaction.getConfidence().getDepthInBlocks();
         this.time = Instant.ofEpochSecond(0); // TODO: block header time of block including transaction
         this.blocktime = this.time; // same as time (see API doc)
-        vin = new VinList();
-        for (TransactionInput input : transaction.getInputs()) {
-            vin.add(new Vin(txid,
-                            input.getOutpoint().getIndex(),
-                            input.getScriptSig().toString(),
-                            input.getSequenceNumber()));
-        }
-        vout = new VoutList();
-        for (TransactionOutput output : transaction.getOutputs()) {
-            ScriptPubKeyInfo scriptPubKeyInfo = new ScriptPubKeyInfo(output.getScriptPubKey());
-            vout.add(new Vout(output.getValue(),
-                                output.getIndex(),
-                                scriptPubKeyInfo));
-        }
+        vin = transaction.getInputs().stream()
+                .map(input -> new Vin(txid,
+                        input.getOutpoint().getIndex(),
+                        input.getScriptSig().toString(),
+                        input.getSequenceNumber())
+                )
+                .collect(Collectors.toList());
+        vout = transaction.getOutputs().stream()
+                .map(output -> new Vout(output.getValue(),
+                        output.getIndex(),
+                        new ScriptPubKeyInfo(output.getScriptPubKey()))
+                )
+                .collect(Collectors.toList());
     }
 
     public String getHex() {
