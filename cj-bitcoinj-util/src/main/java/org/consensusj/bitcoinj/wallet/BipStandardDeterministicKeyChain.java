@@ -9,6 +9,7 @@ import org.bitcoinj.crypto.DeterministicKey;
 import org.bitcoinj.crypto.HDPath;
 import org.bitcoinj.wallet.DeterministicKeyChain;
 import org.bitcoinj.wallet.DeterministicSeed;
+import org.bitcoinj.wallet.KeyChainGroupStructure;
 
 import java.util.Objects;
 
@@ -34,11 +35,11 @@ public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
      * @param outputScriptType script type for determining the purpose child
      */
     public BipStandardDeterministicKeyChain(DeterministicSeed seed, ScriptType outputScriptType, NetworkParameters netParams) {
-        super(seed, null, outputScriptType, BipStandardKeyChainGroupStructure.pathFor(outputScriptType, netParams));
+        super(seed, null, outputScriptType, KeyChainGroupStructure.BIP43.accountPathFor(outputScriptType, netParams));
         this.outputScriptType = outputScriptType;
         this.netParams = netParams;
-        pathReceiving = super.getAccountPath().extend(BipStandardKeyChainGroupStructure.CHANGE_RECEIVING);
-        pathChange = super.getAccountPath().extend(BipStandardKeyChainGroupStructure.CHANGE_CHANGE);
+        pathReceiving = super.getAccountPath().extend(DeterministicKeyChain.EXTERNAL_SUBPATH);
+        pathChange = super.getAccountPath().extend(DeterministicKeyChain.INTERNAL_SUBPATH);
     }
 
     /**
@@ -53,8 +54,8 @@ public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
                 hdChain.getAccountPath());
         this.outputScriptType = hdChain.getOutputScriptType();
         this.netParams = netParams;
-        pathReceiving = super.getAccountPath().extend(BipStandardKeyChainGroupStructure.CHANGE_RECEIVING);
-        pathChange = super.getAccountPath().extend(BipStandardKeyChainGroupStructure.CHANGE_CHANGE);
+        pathReceiving = super.getAccountPath().extend(DeterministicKeyChain.EXTERNAL_SUBPATH);
+        pathChange = super.getAccountPath().extend(DeterministicKeyChain.INTERNAL_SUBPATH);
     }
     
     public Address addressFromKey(ECKey key) {

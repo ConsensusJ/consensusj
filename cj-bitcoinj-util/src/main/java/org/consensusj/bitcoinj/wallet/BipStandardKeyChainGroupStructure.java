@@ -11,20 +11,22 @@ import static org.bitcoinj.base.ScriptType.P2WPKH;
 /**
  * Path builder that supports BIP44, BIP84, etc. This functionality will be in the next release of bitcoinj.
  * This interface will be deprecated after the next release of bitcoinj.
+ * @deprecated Use {@link org.bitcoinj.wallet.KeyChainGroupStructure#BIP43} and constants in {@link org.bitcoinj.wallet.DeterministicKeyChain}
  */
+@Deprecated
 public interface BipStandardKeyChainGroupStructure {
-    ChildNumber PURPOSE_BIP44 = new ChildNumber(44, true);  // P2PKH
-    ChildNumber PURPOSE_BIP49 = new ChildNumber(49, true);  // P2WPKH-nested-in-P2SH
-    ChildNumber PURPOSE_BIP84 = new ChildNumber(84, true);  // P2WPKH
+    ChildNumber PURPOSE_BIP44 = ChildNumber.PURPOSE_BIP44;  // P2PKH
+    ChildNumber PURPOSE_BIP49 = ChildNumber.PURPOSE_BIP49;  // P2WPKH-nested-in-P2SH
+    ChildNumber PURPOSE_BIP84 = ChildNumber.PURPOSE_BIP84;  // P2WPKH
 
-    ChildNumber COINTYPE_BTC = new ChildNumber(0, true);
+    ChildNumber COINTYPE_BTC = ChildNumber.COINTYPE_BTC;
     ChildNumber COINTYPE_TBTC = new ChildNumber(1, true);
 
-    ChildNumber CHANGE_RECEIVING = new ChildNumber(0, false);
-    ChildNumber CHANGE_CHANGE = new ChildNumber(1, false);
+    ChildNumber CHANGE_RECEIVING = ChildNumber.ZERO;
+    ChildNumber CHANGE_CHANGE = ChildNumber.ONE;
 
-    HDPath BIP44_PARENT = HDPath.m(PURPOSE_BIP44);
-    HDPath BIP84_PARENT = HDPath.m(PURPOSE_BIP84);
+    HDPath BIP44_PARENT = HDPath.BIP44_PARENT;
+    HDPath BIP84_PARENT = HDPath.BIP84_PARENT;
 
 
     /**
