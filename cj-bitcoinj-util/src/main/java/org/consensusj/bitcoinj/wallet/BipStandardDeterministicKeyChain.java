@@ -1,6 +1,7 @@
 package org.consensusj.bitcoinj.wallet;
 
 import org.bitcoinj.base.Address;
+import org.bitcoinj.base.ScriptType;
 import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.ChildNumber;
@@ -21,7 +22,7 @@ import java.util.Objects;
  * </ol>
  */
 public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
-    private final org.bitcoinj.base.ScriptType outputScriptType;
+    private final ScriptType outputScriptType;
     private final NetworkParameters netParams;
     private final HDPath pathReceiving;
     private final HDPath pathChange;
