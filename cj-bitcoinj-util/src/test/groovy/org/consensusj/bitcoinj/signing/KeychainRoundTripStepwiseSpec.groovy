@@ -1,7 +1,9 @@
 package org.consensusj.bitcoinj.signing
 
 import org.bitcoinj.base.Address
+import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.Coin
+import org.bitcoinj.base.Network
 import org.bitcoinj.base.ScriptType
 import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.base.Sha256Hash
@@ -10,7 +12,6 @@ import org.bitcoinj.core.TransactionOutput
 import org.bitcoinj.crypto.ChildNumber
 import org.bitcoinj.crypto.DeterministicKey
 import org.bitcoinj.crypto.HDPath
-import org.bitcoinj.params.TestNet3Params
 import org.bitcoinj.script.Script
 import org.bitcoinj.script.ScriptBuilder
 import org.bitcoinj.wallet.DeterministicKeyChain
@@ -39,7 +40,7 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
     static final HDPath changeKeyPath = HDPath.M(ChildNumber.ONE, ChildNumber.ONE)
 
     // Parameters and Keychain initialized in setupSpec
-    @Shared NetworkParameters netParams
+    @Shared Network network
     @Shared BipStandardDeterministicKeyChain signingKeychain
 
     // Variables used to communicate between test steps
@@ -53,12 +54,12 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
      * Setup test parameters and create the signingKeyChain
      */
     def setupSpec() {
-        netParams = TestNet3Params.get()
-        org.bitcoinj.base.ScriptType outputScriptType = ScriptType.P2PKH;
+        network = BitcoinNetwork.TESTNET
+        ScriptType outputScriptType = ScriptType.P2PKH;
 //        org.bitcoinj.base.ScriptType outputScriptType = ScriptType.P2WPKH;
         DeterministicSeed seed = setupTestSeed()
 
-        signingKeychain = new BipStandardDeterministicKeyChain(seed, outputScriptType, netParams);
+        signingKeychain = new BipStandardDeterministicKeyChain(seed, outputScriptType, NetworkParameters.of(network));
         // We need to create some leaf keys in the HD keychain so that they can be found for verifying transactions
         signingKeychain.getKeys(KeyChain.KeyPurpose.RECEIVE_FUNDS, 2)  // Generate first 2 receiving address
         signingKeychain.getKeys(KeyChain.KeyPurpose.CHANGE, 2)         // Generate first 2 change address
@@ -69,9 +70,9 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
         signingKeychain != null
 
         when:
-        def watchingKey = signingKeychain.getWatchingKey()
-        xpub = watchingKey.serializePubB58(netParams,  signingKeychain.getOutputScriptType())
-        xpubCreationInstant = Instant.ofEpochSecond(watchingKey.creationTimeSeconds)
+        DeterministicKey watchingKey = signingKeychain.getWatchingKey()
+        xpub = watchingKey.serializePubB58(network)
+        xpubCreationInstant = watchingKey.creationTime().orElseThrow(RuntimeException::new)
 
         then:
         xpub.length() > 0
@@ -80,12 +81,12 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
 
     def "NETWORK wallet can create a network keychain from the xpub"() {
         given:
-        org.bitcoinj.base.ScriptType outputScriptType = signingKeychain.getOutputScriptType()
+        ScriptType outputScriptType = signingKeychain.getOutputScriptType()
         HDPath signingAccountPath = signingKeychain.getAccountPath()
 
         when: "we create a network keychain from the xpub"
-        DeterministicKey key = DeterministicKey.deserializeB58(xpub, netParams)
-        key.creationTimeSeconds = xpubCreationInstant.epochSecond
+        DeterministicKey key = DeterministicKey.deserializeB58(xpub, network)
+        key.setCreationTime(xpubCreationInstant);
         networkKeyChain = DeterministicKeyChain.builder().watch(key).outputScriptType(outputScriptType).build()
 
         and: "we fetch the keys that are used in later steps"
@@ -129,7 +130,7 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
         Address changeAddr = signingKeychain.addressFromKey(networkKeyChain.getKeyByPath(HDPath.M(networkAccountPath).extend(changeKeyPath), false))
         Coin txAmount = 0.01.btc
         Coin changeAmount = 0.20990147.btc
-        signingRequest = new DefaultSigningRequest(netParams.network())
+        signingRequest = new DefaultSigningRequest(network)
                 .addInput(script, utxoAmount, txid, index)
                 .addOutput(toAddr, txAmount)
                 .addOutput(changeAddr, changeAmount)

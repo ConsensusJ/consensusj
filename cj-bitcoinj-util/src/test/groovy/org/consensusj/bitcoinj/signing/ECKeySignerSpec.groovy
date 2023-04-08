@@ -4,7 +4,6 @@ import org.bitcoinj.base.Address
 import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.Coin
 import org.bitcoinj.crypto.ECKey
-import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.base.ScriptType

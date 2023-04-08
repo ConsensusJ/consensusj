@@ -15,6 +15,8 @@ import org.bitcoinj.script.Script
 
 import spock.lang.Specification
 
+import java.nio.ByteBuffer
+
 import static org.bitcoinj.base.BitcoinNetwork.MAINNET
 
 /**
@@ -45,7 +47,7 @@ class TransactionSpec extends Specification {
         tx.addSignedInput(outPoint, ScriptBuilder.createOutputScript(fromAddress), fromKey);
 
         and: "We serialize the transaction"
-        byte[] rawTx = tx.bitcoinSerialize()
+        var rawTx = ByteBuffer.wrap(tx.bitcoinSerialize())
 
         and: "We parse it into a new Transaction object"
         Transaction parsedTx = new Transaction(mainNetParams, rawTx)
