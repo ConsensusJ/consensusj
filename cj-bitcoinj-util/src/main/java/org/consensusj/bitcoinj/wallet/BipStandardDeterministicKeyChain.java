@@ -33,7 +33,7 @@ public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
      * @param netParams used to set coinType, etc
      * @param outputScriptType script type for determining the purpose child
      */
-    public BipStandardDeterministicKeyChain(DeterministicSeed seed, org.bitcoinj.base.ScriptType outputScriptType, NetworkParameters netParams) {
+    public BipStandardDeterministicKeyChain(DeterministicSeed seed, ScriptType outputScriptType, NetworkParameters netParams) {
         super(seed, null, outputScriptType, BipStandardKeyChainGroupStructure.pathFor(outputScriptType, netParams));
         this.outputScriptType = outputScriptType;
         this.netParams = netParams;
