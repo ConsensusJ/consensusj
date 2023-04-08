@@ -106,7 +106,7 @@ public class RawTransactionInfo {
      */
     @Deprecated
     public long getLocktime() {
-        return getLockTime() != null ? getLockTime().rawValue() : 0;
+        return getLockTime().rawValue();
     }
 
     public List<Vin> getVin() {
