@@ -25,8 +25,8 @@ public class RawTransactionInfo {
     private final Sha256Hash txid;
     private final long version;
     private final LockTime lockTime;
-    private final VinList vin;
-    private final VoutList vout;
+    private final List<Vin> vin;
+    private final List<Vout> vout;
     private final Sha256Hash blockhash;
     private final int confirmations;
     private final Instant time;
