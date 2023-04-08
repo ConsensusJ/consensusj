@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.KeyDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.bitcoinj.base.AddressParser;
 import org.bitcoinj.base.DefaultAddressParser;
+import org.bitcoinj.base.Network;
 import org.bitcoinj.core.NetworkParameters;
 
 import java.io.IOException;
@@ -29,12 +30,19 @@ public class AddressKeyDeserializer extends KeyDeserializer {
      * When deserializing addresses, addresses that are not from the specified network will cause a
      * {@link InvalidFormatException} to be thrown during deserialization.
      *
-     * @param netParams Network parameters to specify the only network we will deserialize addresses for.
+     * @param network specify the only network we will deserialize addresses for.
+     */
+    public AddressKeyDeserializer(Network network) {
+        addressParser = (network != null)
+                ? (s) -> new DefaultAddressParser().parseAddress(s, network)
+                : (s) -> new DefaultAddressParser().parseAddressAnyNetwork(s);
+    }
+
+    /**
+     * @deprecated use {@link #AddressKeyDeserializer(Network)}
      */
     public AddressKeyDeserializer(NetworkParameters netParams) {
-        addressParser = (netParams != null)
-                ? (s) -> new DefaultAddressParser().parseAddress(s, netParams.network())
-                : (s) -> new DefaultAddressParser().parseAddressAnyNetwork(s);
+        this(netParams.network());
     }
 
     @Override
