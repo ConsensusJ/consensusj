@@ -1,14 +1,18 @@
 package org.consensusj.bitcoin.json.pojo
 
 import org.bitcoinj.base.Sha256Hash
-import org.bitcoinj.core.Transaction
-import org.bitcoinj.core.TransactionConfidence
+import org.bitcoinj.core.Context
+import org.bitcoinj.params.MainNetParams
+import org.bitcoinj.testing.FakeTxBuilder
 import spock.lang.Specification
 
 /**
  * RawTransactionInfo tests
  */
 class RawTransactionInfoSpec extends Specification {
+    def setupSpec() {
+        Context.propagate(new Context());
+    }
     
     def "Jackson-style constructor works"() {
         when:
@@ -28,14 +32,9 @@ class RawTransactionInfoSpec extends Specification {
         raw.version == 1
     }
 
-    def "Construct from Mock BitcoinJ transaction"() {
+    def "Construct from Fake BitcoinJ transaction"() {
         given:
-        def tx = Mock(Transaction) {
-            bitcoinSerialize() >> ([0x01] as byte[])
-            getConfidence() >> Mock(TransactionConfidence)
-            getInputs() >> []
-            getOutputs() >> []
-        }
+        def tx = FakeTxBuilder.createFakeTx(MainNetParams.get())
 
         when:
         def raw = new RawTransactionInfo(tx)
