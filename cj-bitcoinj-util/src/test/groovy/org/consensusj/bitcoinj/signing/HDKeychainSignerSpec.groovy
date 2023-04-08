@@ -1,15 +1,15 @@
 package org.consensusj.bitcoinj.signing
 
 import org.bitcoinj.base.Address
+import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.Coin
 import org.bitcoinj.base.DefaultAddressParser
+import org.bitcoinj.base.Network
 import org.bitcoinj.crypto.ECKey
-import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.crypto.HDPath
 import org.bitcoinj.base.ScriptType
-import org.bitcoinj.params.BitcoinNetworkParams
 import org.bitcoinj.wallet.DeterministicSeed
 import org.bitcoinj.wallet.KeyChain
 import org.bitcoinj.wallet.Wallet
@@ -26,24 +26,24 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
 
     void "Can sign a simple Tx"(String netId, ScriptType scriptType) {
         given: "Given a deterministic seed, a keychain, and some test addresses"
-        NetworkParameters netParams = BitcoinNetworkParams.fromID(netId)
+        Network network = BitcoinNetwork.fromIdString(netId).orElseThrow(RuntimeException::new)
         DeterministicSeed seed = setupTestSeed();
 
-        BipStandardDeterministicKeyChain keychain = new BipStandardDeterministicKeyChain(seed, scriptType, netParams);
+        BipStandardDeterministicKeyChain keychain = new BipStandardDeterministicKeyChain(seed, scriptType, network);
         println("DeterministicKeyChain.accountPath = ${keychain.getAccountPath()}")
         // We need to create some leaf keys in the HD keychain so that they can be found for verifying transactions
         keychain.getKeys(KeyChain.KeyPurpose.RECEIVE_FUNDS, 1)  // Generate first receiving address
         keychain.getKeys(KeyChain.KeyPurpose.CHANGE, 1)         // Generate first change address
 
         Address fromAddress = keychain.receivingAddr(0)
-        Address toAddress = new ECKey().toAddress(scriptType, netParams.network())
+        Address toAddress = new ECKey().toAddress(scriptType, network)
         Address changeAddress = keychain.changeAddr(0)
 
         when: "We we create an HDKeychainSigner"
         HDKeychainSigner signer = new HDKeychainSigner(keychain);
 
         and: "We sign a transaction"
-        SigningRequest signingRequest = new DefaultSigningRequest(netParams.network())
+        SigningRequest signingRequest = new DefaultSigningRequest(network)
                 .addInput(fromAddress, input_amount, input_txid, input_vout)
                 .addOutput(toAddress, 0.01.btc)
                 .addOutput(changeAddress, 0.20990147.btc)
@@ -73,11 +73,11 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
         given: "Given a deterministic seed, a keychain, and some test addresses"
         var walletFile = new File("src/test/resources/bip44_testnet_panda.wallet")
         var wallet = Wallet.loadFromFile(walletFile)
-        var netParams = wallet.getNetworkParameters()
+        var network = wallet.network()
         var scriptType = wallet.getActiveKeyChain().getOutputScriptType()
         var c = wallet.getActiveKeyChain()
         println("DeterministicKeyChain.accountPath = ${c.getAccountPath()}")
-        var keychain = new BipStandardDeterministicKeyChain(c, netParams)
+        var keychain = new BipStandardDeterministicKeyChain(c, network)
         println("DeterministicKeyChain.accountPath = ${keychain.getAccountPath()}")
 
         // We need to create some leaf keys in the HD keychain so that they can be found for verifying transactions
@@ -85,14 +85,14 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
         keychain.getKeys(KeyChain.KeyPurpose.CHANGE, 1)         // Generate first change address
 
         Address fromAddress = keychain.receivingAddr(0)
-        Address toAddress = new ECKey().toAddress(scriptType, netParams.network())
+        Address toAddress = new ECKey().toAddress(scriptType, network)
         Address changeAddress = keychain.changeAddr(0)
 
         when: "We we create an HDKeychainSigner"
         HDKeychainSigner signer = new HDKeychainSigner(keychain);
 
         and: "We sign a transaction"
-        SigningRequest signingRequest = new DefaultSigningRequest(netParams.network())
+        SigningRequest signingRequest = new DefaultSigningRequest(network)
                 .addInput(fromAddress, input_amount, input_txid, input_vout)
                 .addOutput(toAddress, 0.01.btc)
                 .addOutput(changeAddress, 0.20990147.btc)
@@ -114,11 +114,11 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
         given: "Given a deterministic seed, a keychain, and some test addresses"
         var walletFile = new File("src/test/resources/bip44_testnet_panda.wallet")
         var wallet = Wallet.loadFromFile(walletFile)
-        var netParams = wallet.getNetworkParameters()
+        var network = wallet.network()
         var scriptType = wallet.getActiveKeyChain().getOutputScriptType()
         var c = wallet.getActiveKeyChain()
         println("DeterministicKeyChain.accountPath = ${c.getAccountPath()}")
-        var keychain = new BipStandardDeterministicKeyChain(c, netParams)
+        var keychain = new BipStandardDeterministicKeyChain(c, network)
         println("DeterministicKeyChain.accountPath = ${keychain.getAccountPath()}")
 
         when:

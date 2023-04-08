@@ -5,7 +5,6 @@ import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.Coin
 import org.bitcoinj.base.Network
 import org.bitcoinj.base.ScriptType
-import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.TransactionOutput
@@ -59,7 +58,7 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
 //        org.bitcoinj.base.ScriptType outputScriptType = ScriptType.P2WPKH;
         DeterministicSeed seed = setupTestSeed()
 
-        signingKeychain = new BipStandardDeterministicKeyChain(seed, outputScriptType, NetworkParameters.of(network));
+        signingKeychain = new BipStandardDeterministicKeyChain(seed, outputScriptType, network);
         // We need to create some leaf keys in the HD keychain so that they can be found for verifying transactions
         signingKeychain.getKeys(KeyChain.KeyPurpose.RECEIVE_FUNDS, 2)  // Generate first 2 receiving address
         signingKeychain.getKeys(KeyChain.KeyPurpose.CHANGE, 2)         // Generate first 2 change address
