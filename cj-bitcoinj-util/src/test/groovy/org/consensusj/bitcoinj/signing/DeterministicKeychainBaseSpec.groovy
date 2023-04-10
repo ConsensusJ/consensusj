@@ -41,7 +41,7 @@ abstract class DeterministicKeychainBaseSpec extends Specification {
         Coin txAmount = 0.01.btc
         Coin changeAmount = 0.20990147.btc
 
-        TransactionInputDataImpl input = new TransactionInputDataImpl(network.id(), parentTx.txId.bytes, utxo.index, utxoAmount.toSat(), utxo.scriptBytes)
+        TransactionInputDataImpl input = new TransactionInputDataImpl(parentTx.txId.bytes, utxo.index, utxoAmount.toSat(), utxo.scriptBytes)
         List<TransactionInputDataImpl> inputs = List.of(input)
         List<TransactionOutputData> outputs = List.of(
                 new TransactionOutputAddress(txAmount.value, toAddress),
