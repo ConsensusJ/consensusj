@@ -5,7 +5,6 @@ import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.Coin
 import org.bitcoinj.base.LegacyAddress
 import org.bitcoinj.base.Network
-import org.bitcoinj.base.SegwitAddress
 import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.TransactionInput
@@ -48,7 +47,7 @@ abstract class DeterministicKeychainBaseSpec extends Specification {
                 new TransactionOutputAddress(txAmount.value, toAddress),
                 new TransactionOutputAddress(changeAmount.value, changeAddress)
         )
-        return new DefaultSigningRequest(network.id(), inputs, outputs)
+        return new DefaultSigningRequest(network, inputs, outputs)
     }
 
     /**

@@ -45,7 +45,7 @@ public interface TransactionSigner {
      * @param exceptionSupplier exception to throw if key is not available.
      */
     default void addSignedInput(Transaction tx, TransactionInputData in, Supplier<? extends RuntimeException> exceptionSupplier) {
-        tx.addSignedInput(in.toOutPoint(), in.script(), in.amount(), keyForInput(in).orElseThrow(exceptionSupplier), Transaction.SigHash.ALL, false);
+        tx.addSignedInput(in.toOutPoint(tx.getParams().network()), in.script(), in.amount(), keyForInput(in).orElseThrow(exceptionSupplier), Transaction.SigHash.ALL, false);
     }
 
     /**

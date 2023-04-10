@@ -17,23 +17,28 @@ import java.util.List;
  * immutable transactions in a mostly-compatible way with the existing transaction classes.
  */
 public interface SigningRequest {
+    /**
+     * This property is only here because bitcoinj {@link org.bitcoinj.core.Transaction} currently requires
+     * this information for construction. This will be removed in the future when bitcoinj is updated.
+     * @return the id string for the network
+     */
     String networkId();
     List<TransactionInputData> inputs();
     List<TransactionOutputData> outputs();
 
 
     default SigningRequest addInput(Address address, Coin amount, Sha256Hash txId, long index) {
-        TransactionInputData in = new TransactionInputDataImpl(networkId(), txId, index, amount, address);
+        TransactionInputData in = new TransactionInputDataImpl(txId, index, amount, address);
         return addInput(in);
     }
 
     default SigningRequest addInput(Script script, Coin amount, Sha256Hash txId, long index) {
-        TransactionInputData in = new TransactionInputDataImpl(networkId(), txId, index, amount, script);
+        TransactionInputData in = new TransactionInputDataImpl(txId, index, amount, script);
         return addInput(in);
     }
 
     default SigningRequest addInput(byte[] script, Coin amount, Sha256Hash txId, long index) {
-        TransactionInputData in = new TransactionInputDataImpl(networkId(), txId, index, amount, script);
+        TransactionInputData in = new TransactionInputDataImpl(txId, index, amount, script);
         return addInput(in);
     }
 

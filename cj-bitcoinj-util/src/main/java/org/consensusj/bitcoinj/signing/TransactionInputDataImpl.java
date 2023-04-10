@@ -1,7 +1,6 @@
 package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Address;
-import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.core.NetworkParameters;
@@ -10,9 +9,6 @@ import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
-import org.bitcoinj.script.ScriptException;
-
-import java.util.Optional;
 
 /**
  * Immutable aggregate of data for TransactionInput.
@@ -20,30 +16,28 @@ import java.util.Optional;
  * This aspires to be a Java record someday
  */
 public class TransactionInputDataImpl implements TransactionInputData {
-    private final Network network;
     private final Sha256Hash txId;
     private final long index;
     private final long amount;
     private final Script script;
 
-    public TransactionInputDataImpl(String networkId, Sha256Hash txId, long index, Coin amount, Script script) {
-        this.network = BitcoinNetwork.fromIdString(networkId).orElseThrow(() -> new IllegalArgumentException("Invalid network ID"));
+    public TransactionInputDataImpl(Sha256Hash txId, long index, Coin amount, Script script) {
         this.txId = txId;
         this.index = index;
         this.amount = amount.getValue();
         this.script = script;
     }
 
-    public TransactionInputDataImpl(String networkId, Sha256Hash txId, long index, Coin amount, Address address) {
-        this(networkId, txId, index, amount, ScriptBuilder.createOutputScript(address));
+    public TransactionInputDataImpl(Sha256Hash txId, long index, Coin amount, Address address) {
+        this(txId, index, amount, ScriptBuilder.createOutputScript(address));
     }
 
-    public TransactionInputDataImpl(String networkId, byte[] txId, long index, long satoshis, byte[] scriptBytes) {
-        this(networkId, Sha256Hash.wrap(txId), index, Coin.ofSat(satoshis), new Script(scriptBytes));
+    public TransactionInputDataImpl(byte[] txId, long index, long satoshis, byte[] scriptBytes) {
+        this(Sha256Hash.wrap(txId), index, Coin.ofSat(satoshis), new Script(scriptBytes));
     }
 
-    public TransactionInputDataImpl(String networkId, Sha256Hash txId, long index, Coin amount, byte[] scriptBytes) {
-        this(networkId, txId, index, amount, new Script(scriptBytes));
+    public TransactionInputDataImpl(Sha256Hash txId, long index, Coin amount, byte[] scriptBytes) {
+        this(txId, index, amount, new Script(scriptBytes));
     }
 
     public Sha256Hash txId() {
@@ -62,12 +56,12 @@ public class TransactionInputDataImpl implements TransactionInputData {
         return script;
     }
     
-    public TransactionInput toMutableInput() {
-        return createTransactionInput(toOutPoint(), Coin.ofSat(amount), script);
+    public TransactionInput toMutableInput(Network network) {
+        return createTransactionInput(toOutPoint(network), Coin.ofSat(amount), script);
     }
 
     @Override
-    public TransactionOutPoint toOutPoint() {
+    public TransactionOutPoint toOutPoint(Network network) {
         return new TransactionOutPoint(NetworkParameters.of(network), index, txId);
     }
 
