@@ -156,7 +156,8 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
 
         when: "We validate the signature on the input"
         // Extract fromAddress out of the signing request
-        Address fromAddress = signingRequest.inputs().get(0).address().orElse(null)
+        var signingKey = signingKeychain.getKeyByPath(HDPath.m(signingKeychain.getAccountPath()).extend(fromKeyPath), false);
+        var fromAddress = signingKey.toAddress(signingKeychain.getOutputScriptType(), network);
         correctlySpendsInput(signedTx, 0, fromAddress)
 
         then: "It validates successfully"

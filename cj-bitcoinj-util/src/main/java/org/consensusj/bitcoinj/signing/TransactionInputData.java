@@ -11,10 +11,8 @@ import java.util.Optional;
  *
  */
 public interface TransactionInputData {
-    String networkId();
     Coin amount();
     Script script();
-    Optional<Address> address();
 
     /**
      * This probably shouldn't be here but is needed for proper operation with bitcoinj

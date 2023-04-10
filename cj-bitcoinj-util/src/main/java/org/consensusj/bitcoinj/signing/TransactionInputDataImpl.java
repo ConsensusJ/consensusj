@@ -46,11 +46,6 @@ public class TransactionInputDataImpl implements TransactionInputData {
         this(networkId, txId, index, amount, new Script(scriptBytes));
     }
 
-    @Override
-    public String networkId() {
-        return network.id();
-    }
-
     public Sha256Hash txId() {
         return txId;
     }
@@ -66,21 +61,7 @@ public class TransactionInputDataImpl implements TransactionInputData {
     public Script script() {
         return script;
     }
-
-    /**
-     * @return An address, if available
-     */
-    @Override
-    public Optional<Address> address() {
-        Optional<Address> optAddress;
-        try {
-            optAddress = Optional.of(script.getToAddress(NetworkParameters.of(network)));
-        } catch (ScriptException e ) {
-            optAddress = Optional.empty();
-        }
-        return optAddress;
-    }
-
+    
     public TransactionInput toMutableInput() {
         return createTransactionInput(toOutPoint(), Coin.ofSat(amount), script);
     }

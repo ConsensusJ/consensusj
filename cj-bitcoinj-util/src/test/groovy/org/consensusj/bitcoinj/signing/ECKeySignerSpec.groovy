@@ -39,8 +39,7 @@ class ECKeySignerSpec extends DeterministicKeychainBaseSpec {
         signedTx.verify()
 
         when: "We validate the signature on the input"
-        Address addressFromInput = signingRequest.inputs().get(0).address().orElse(null)
-        correctlySpendsInput(signedTx, 0, addressFromInput)
+        correctlySpendsInput(signedTx, 0, fromAddress)
 
         then: "It validates successfully"
         noExceptionThrown()
