@@ -40,11 +40,6 @@ public interface SigningRequest {
         return addInput(in);
     }
 
-    default SigningRequest addInput(byte[] script, Coin amount, Sha256Hash txId, long index) {
-        TransactionInputData in = new TransactionInputDataImpl(txId, index, amount, script);
-        return addInput(in);
-    }
-
     default SigningRequest addInput(TransactionInputData input) {
         List<TransactionInputData> ins = append(inputs(), input);
         return new DefaultSigningRequest(networkId(), ins, outputs());

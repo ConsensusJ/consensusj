@@ -32,14 +32,6 @@ public class TransactionInputDataImpl implements TransactionInputData {
         this(txId, index, amount, ScriptBuilder.createOutputScript(address));
     }
 
-    public TransactionInputDataImpl(byte[] txId, long index, long satoshis, byte[] scriptBytes) {
-        this(Sha256Hash.wrap(txId), index, Coin.ofSat(satoshis), new Script(scriptBytes));
-    }
-
-    public TransactionInputDataImpl(Sha256Hash txId, long index, Coin amount, byte[] scriptBytes) {
-        this(txId, index, amount, new Script(scriptBytes));
-    }
-
     public Sha256Hash txId() {
         return txId;
     }
