@@ -67,16 +67,14 @@ public class HDKeychainSigner implements TransactionSigner {
         return CompletableFuture.completedFuture(tx);
     }
 
-
-
     /**
      * Return the signing key for an input, if available
      * @param input Transaction input data
      * @return Signing key, if available, {@link Optional#empty()} otherwise.
      */
     public Optional<ECKey> keyForInput(TransactionInputData input) {
-        return input
-                .address()
-                .map(a -> keyChain.findKeyFromPubHash(a.getHash()));
+        return Optional.ofNullable(
+                keyChain.findKeyFromPubHash(input.script().getPubKeyHash())
+        );
     }
 }
