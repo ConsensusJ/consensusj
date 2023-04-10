@@ -3,6 +3,7 @@ package org.consensusj.bitcoinj.signing
 import org.bitcoinj.base.Address
 import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.Coin
+import org.bitcoinj.base.LegacyAddress
 import org.bitcoinj.base.Network
 import org.bitcoinj.base.SegwitAddress
 import org.bitcoinj.core.NetworkParameters
@@ -60,12 +61,15 @@ abstract class DeterministicKeychainBaseSpec extends Specification {
      * @throws ScriptException If {@code scriptSig#correctlySpends} fails with exception
      */
     static void correctlySpendsInput(Transaction tx, int inputIndex, Address fromAddr) throws ScriptException {
-        if (!fromAddr instanceof SegwitAddress) {
-            // TODO: Implement for SegWit, too
-            Script scriptPubKey = ScriptBuilder.createOutputScript(fromAddr)
-            TransactionInput input = tx.getInputs().get(inputIndex)
+        Script scriptPubKey = ScriptBuilder.createOutputScript(fromAddr)
+        TransactionInput input = tx.getInputs().get(inputIndex)
+        if (fromAddr instanceof LegacyAddress) {
             input.getScriptSig()
                     .correctlySpends(tx, inputIndex, null, input.value, scriptPubKey, Script.ALL_VERIFY_FLAGS);
+        } else {
+            input.getScriptSig()
+                    .correctlySpends(tx, inputIndex, input.getWitness(), input.value, scriptPubKey, Script.ALL_VERIFY_FLAGS);
+
         }
     }
 
