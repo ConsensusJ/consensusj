@@ -1,6 +1,8 @@
 package org.consensusj.bitcoinj.signing;
 
+import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.BitcoinNetworkParams;
@@ -45,7 +47,8 @@ public interface TransactionSigner {
      * @param exceptionSupplier exception to throw if key is not available.
      */
     default void addSignedInput(Transaction tx, TransactionInputData in, Supplier<? extends RuntimeException> exceptionSupplier) {
-        tx.addSignedInput(in.toOutPoint(tx.getParams().network()), in.script(), in.amount(), keyForInput(in).orElseThrow(exceptionSupplier), Transaction.SigHash.ALL, false);
+        TransactionOutPoint outPoint = new TransactionOutPoint(tx.getParams(), 0, Sha256Hash.ZERO_HASH);  // Create Dummy outPoint, doesn't seem to be needed for signing
+        tx.addSignedInput(outPoint, in.script(), in.amount(), keyForInput(in).orElseThrow(exceptionSupplier), Transaction.SigHash.ALL, false);
     }
 
     /**
