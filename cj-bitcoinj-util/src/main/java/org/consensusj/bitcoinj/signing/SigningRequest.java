@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+// TODO: This probably shouldn't have the addXyz methods that create a new, modified instance.
+// A SigningRequest should be immutable *and* complete/ready-to-sign. There should be some kind of SigningRequestBuilder
+// to build a SigningRequest.
 /**
  * A transaction signing request with immutable data specifying the transaction.
  * <p>
