@@ -29,11 +29,6 @@ public class TransactionOutputAddress implements TransactionOutputData {
     }
 
     @Override
-    public String networkId() {
-        return address.network().id();
-    }
-
-    @Override
     public Coin amount() {
         return Coin.ofSat(amount);
     }
