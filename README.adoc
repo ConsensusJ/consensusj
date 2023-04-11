@@ -105,13 +105,13 @@ We have published {cj-apidoc}/index.html[preliminary JavaDoc] to our GitHub page
 
 === Requirements
 
-* Most modules now require *Java 9* or later.
+* Most modules now require *Java 11* or later.
 * `bitcoinj-util` and `bitcoinj-dsl-gvy` still work with JDK 8
 * The server and command-line tools/libraries require *Java 17* or later.
 
 === ConsensusJ Modules
 
-In release v0.6.0 we have completed refactoring all modules into the new `org.consensusj` package namespace and have assigned Java Module names via the _Automatic Module_ mechanism. This provides a more consistent package structure, easier usage by Java 9+, and a smooth migration to Java Module descriptors.
+We have completed refactoring all modules into the new `org.consensusj` package namespace and have assigned Java Module names via the _Automatic Module_ mechanism. This provides a more consistent package structure and a smooth migration to Java Module descriptors.
 
 .Core JSON-RPC Modules
 [cols="4,1,3,4"]
@@ -119,7 +119,7 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 |Name |Min JDK |Java module name |Description
 
 |<<consensusj-jsonrpc,consensusj-jsonrpc>>
-| 9
+| 11
 | `org.consensusj.jsonrpc`
 | JSON-RPC client
 
@@ -129,7 +129,7 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 | JSON-RPC client using `java.net.http`
 
 |<<consensusj-jsonrpc-gvy,consensusj-jsonrpc-gvy>>
-| 9
+| 11
 | `org.consensusj.jsonrpc.groovy`
 | Groovy JSON-RPC client (dynamic RPC methods)
 
@@ -144,12 +144,12 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 | JSON-RPC Sample Server
 
 |<<consensusj-rx-jsonrpc, consensusj-rx-jsonrpc>>
-| 9
+| 11
 | `org.consensusj.rx.jsonrpc`
 | RxJava 3 support for JSON-RPC
 
 |<<consensusj-rx-zeromq, consensusj-rx-zeromq>>
-| 9
+| 11
 | `org.consensusj.rx.zeromq`
 | RxJava 3 ZeroMQ client
 
@@ -161,17 +161,17 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 |Name |Min JDK |Java module name |Description
 
 |<<cj-btc-json,cj-btc-json>>
-| 9
+| 11
 | `org.consensusj.bitcoin.json`
 |Jackson serializers, deserializers & POJOs for Bitcoin JSON-RPC
 
 |<<cj-btc-jsonrpc,cj-btc-jsonrpc>>
-| 9
+| 11
 | `org.consensusj.bitcoin.jsonrpc`
 | Java JSON-RPC Bitcoin client
 
 |<<cj-btc-jsonrpc-gvy,cj-btc-jsonrpc-gvy>>
-| 9
+| 11
 | `org.consensusj.bitcoin.jsonrpc.groovy`
 | Groovy JSON-RPC Bitcoin client  (dynamic RPC methods)
 
@@ -191,22 +191,22 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 | Bitcoin Service-Layer objects - compatible with `jakarta.inject` (https://jcp.org/en/jsr/detail?id=330[JSR-330])
 
 |<<cj-btc-jsonrpc-integ-test,cj-btc-jsonrpc-integ-test>>
-| 9
+| 11
 |n/a
 |Bitcoin JSON-RPC integration tests (RegTest)
 
 |<<cj-btc-rx,cj-btc-rx>>
-| 9
+| 11
 |`org.consensusj.bitcoin.rx`
 |Reactive interfaces for Bitcoin.
 
 |<<cj-btc-rx-jsonrpc,cj-btc-rx-jsonrpc>>
-| 9
+| 11
 |`org.consensusj.bitcoin.rx.jsonrpc`
 |RxJava 3 JSON-RPC/ZeroMQ Client for Bitcoin Core
 
 |<<cj-btc-rx-peergroup,cj-btc-rx-peergroup>>
-| 9
+| 11
 |`org.consensusj.bitcoin.rx.peergroup`
 |RxJava 3 JSON-RPC/ZeroMQ Client using bitcoinj PeerGroup
 
@@ -247,12 +247,12 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 |Name |Min JDK |Java module name |Description
 
 |<<consensusj-currency,consensusj-currency>>
-| 9
+| 11
 | `org.consensusj.currency`
 | http://javamoney.github.io[JavaMoney] Currency Provider(s)
 
 |<<consensusj-exchange,consensusj-exchange>>
-| 9
+| 11
 | `org.consensusj.exchange`
 | http://javamoney.github.io[JavaMoney] Exchange Providers. Adapter to use http://knowm.org/open-source/xchange/[XChange] `Exchange` implementations as JavaMoney `ExchangeRateProvider`s.
 
@@ -264,22 +264,22 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 |Name |Min JDK |Java module name |Description
 
 |<<consensusj-analytics,consensusj-analytics>>
-| 9
+| 11
 | `org.consensusj.analytics`
 | Richlist calculation support
 
 |<<consensusj-decentralizedid, consensusj-decentralizedid>>
-| 9
+| 11
 | `org.consensusj.decentralizedid`
 | Preliminary, experimental, W3C DID and BTCR DID Method support
 
 |<<cj-eth-jsonrpc,cj-eth-jsonrpc>>
-| 9
+| 11
 | `org.consensusj.ethereum.jsonrpc`
 | Java JSON-RPC Ethereum client (proof-of-concept)
 
 |<<cj-nmc-jsonrpc,cj-nmc-jsonrpc>>
-| 9
+| 11
 | `org.consensusj.namecoin.jsonrpc`
 | Java JSON-RPC Namecoin client (proof-of-concept)
 

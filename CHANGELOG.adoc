@@ -19,6 +19,7 @@ The 0.7.0 release of **ConsensusJ** will require **bitcoinj** v0.17, currently i
 
 === Dependency Updates
 
+* Most modules now require a minimum of JDK 11 or later (see `README.adoc` for exceptions)
 * bitcoinj 0.17-alpha1
 
 == v0.6.5

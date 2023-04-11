@@ -2,10 +2,6 @@ plugins {
     id 'java-library'
 }
 
-tasks.withType(JavaCompile) {
-    options.release = 11
-}
-
 dependencies {
     api project(':consensusj-jsonrpc')
 
