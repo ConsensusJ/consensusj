@@ -5,8 +5,6 @@ import org.bitcoinj.base.Network;
 import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.script.Script;
 
-import java.util.Optional;
-
 /**
  *
  */
