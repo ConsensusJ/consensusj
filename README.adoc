@@ -229,7 +229,7 @@ In release v0.6.0 we have completed refactoring all modules into the new `org.co
 |JavaScript DSL support for Nashorn. Includes JSON-RPC client.
 
 |<<cj-bitcoinj-spock,cj-bitcoinj-spock>>
-| 8
+| 17
 |`org.consensusj.bitcoinj.spock`
 |https://github.com/spockframework/spock/blob/master/README.md[Spock] tests of **bitcoinj** classes.
 

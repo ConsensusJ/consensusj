@@ -21,7 +21,6 @@ if (!JavaVersion.current().isJava11Compatible()) {
     include 'consensusj-jsonrpc-gvy'            // JSON-RPC Groovy client
     include 'consensusj-rx-jsonrpc'             // RxJava 3 adapter for JSON-RPC
     include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
-    include 'cj-bitcoinj-spock'                 // Spock tests/demos of basic bitcoinj capabilities
     include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
     include 'cj-btc-rx-peergroup'               // bitcoinj-based RxJava (Transaction) implementation
     include 'cj-btc-rx-jsonrpc'                 // RxJava 3 reactive Bitcoin JSON-RPC bitcoind client (uses ZeroMQ)
@@ -38,6 +37,7 @@ if (!JavaVersion.current().isJava11Compatible()) {
 if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
     System.err.println "Including JDK 17 modules because Java ${JavaVersion.current()} is JDK 17+"
     include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
+    include 'cj-bitcoinj-spock'                 // Spock tests/demos of basic bitcoinj capabilities
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
     include 'cj-btc-daemon'                     // Prototype Micronaut version of Bitcoin daemon
     include 'cj-btc-services'                   // bitcoinj-based service objects
