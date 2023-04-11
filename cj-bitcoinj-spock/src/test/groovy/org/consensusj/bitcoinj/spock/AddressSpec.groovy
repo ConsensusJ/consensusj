@@ -23,7 +23,8 @@ class AddressSpec extends Specification {
 
         then: "It has expected value and properties"
         address.toString() == "1GtCqbyqTzbvtBWMMRgkwkxenPJNzz1TY4"
-        address.version == MAINNET.legacyAddressHeader()
+        address instanceof LegacyAddress
+        ((LegacyAddress) address).version == MAINNET.legacyAddressHeader()
         address.network() == MAINNET
     }
 
@@ -34,7 +35,8 @@ class AddressSpec extends Specification {
 
         then: "It has expected value and properties"
         address.toString() == "mwQA8f4pH23BfHyy4zf8mgAyeNu5uoy6GU"
-        address.version == TESTNET.legacyAddressHeader()
+        address instanceof LegacyAddress
+        ((LegacyAddress) address).version == TESTNET.legacyAddressHeader()
         address.network() == TESTNET
     }
 
