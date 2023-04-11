@@ -2,7 +2,9 @@ package org.consensusj.bitcoin.json.pojo.bitcore;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.base.Address;
+import org.bitcoinj.base.Coin;
 import org.bitcoinj.base.Sha256Hash;
+import org.bitcoinj.script.Script;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
 
 /**
@@ -12,8 +14,8 @@ public class AddressUtxoInfo {
     private final Address address;
     private final Sha256Hash txid;
     private final int outputIndex;
-    private final byte[] script;
-    private final long satoshis;
+    private final Script script;
+    private final Coin satoshis;
     private final int height;
     private final boolean coinbase;
 
@@ -27,8 +29,8 @@ public class AddressUtxoInfo {
         this.address = address;
         this.txid = txid;
         this.outputIndex = outputIndex;
-        this.script = HexUtil.hexStringToByteArray(script);
-        this.satoshis = satoshis;
+        this.script = new Script(HexUtil.hexStringToByteArray(script));
+        this.satoshis = Coin.ofSat(satoshis);
         this.height = height;
         this.coinbase = coinbase;
     }
@@ -45,11 +47,11 @@ public class AddressUtxoInfo {
         return outputIndex;
     }
 
-    public byte[] getScript() {
+    public Script getScript() {
         return script;
     }
 
-    public long getSatoshis() {
+    public Coin getSatoshis() {
         return satoshis;
     }
 
