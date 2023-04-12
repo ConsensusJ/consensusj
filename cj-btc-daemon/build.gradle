@@ -35,6 +35,9 @@ dependencies {
 
     compileOnly "org.graalvm.nativeimage:svm"
 
+    testImplementation project(':cj-btc-jsonrpc')
+    testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy extensions in tests
+
     implementation('org.slf4j:slf4j-api:1.7.36') {
         force = true
     }

@@ -2,9 +2,14 @@ package org.consensusj.bitcoin.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bitcoinj.base.Address;
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Network;
+import org.bitcoinj.base.ScriptType;
+import org.bitcoinj.crypto.DeterministicKey;
+import org.bitcoinj.wallet.KeyChain;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
+import org.consensusj.bitcoin.json.conversion.RpcServerModule;
 import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
 import org.consensusj.bitcoin.json.pojo.BlockInfo;
 import org.consensusj.bitcoin.json.pojo.NetworkInfo;
@@ -26,6 +31,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -42,6 +48,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
     private static final int protocolVersion = 1;
     private static final int walletVersion = 0;
     private static final String helpString = """
+            getbalance
             getbestblockhash
             getblock hash verbosity(0,1,2)
             getblockchaininfo
@@ -52,6 +59,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
             getinfo (deprecated)
             getnetworkinfo
             help
+            sendtoaddress "address" amount [TBD]
             stop
     """;
 
@@ -74,6 +82,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
         kit = walletAppKit;
         network = kit.network();
         mapper = new ObjectMapper();
+        mapper.registerModule(new RpcServerModule());
     }
 
     @PostConstruct
@@ -222,7 +231,7 @@ public class WalletAppKitService implements BitcoinJsonRpc {
 
     @Override
     public CompletableFuture<BlockChainInfo> getblockchaininfo() {
-        return result(new BlockChainInfo("main",                     // Chain ID
+        return result(new BlockChainInfo(network.toString(),        // Chain ID
                 kit.chain().getChainHead().getHeight(),             // Block processed
                 kit.chain().getChainHead().getHeight(),             // Headers validated
                 kit.chain().getChainHead().getHeader().getHash(),   // Best block hash
@@ -246,6 +255,23 @@ public class WalletAppKitService implements BitcoinJsonRpc {
                 localServices,
                 network,
                 address));
+    }
+
+    @Override
+    public CompletableFuture<String> getnewaddress() {
+        List<DeterministicKey> keys = kit.wallet().getActiveKeyChain().getKeys(KeyChain.KeyPurpose.RECEIVE_FUNDS, 1);
+        Address address = keys.get(0).toAddress(ScriptType.P2PKH, network);
+        return CompletableFuture.completedFuture(address.toString());
+    }
+
+    @Override
+    public CompletableFuture<String> getbalance() {
+        return CompletableFuture.completedFuture(kit.wallet().getBalance().toPlainString());
+    }
+
+    @Override
+    public CompletableFuture<Sha256Hash> sendtoaddress(String address, Double amount) {
+        return exception(new UnsupportedOperationException("Not implemented yet"));
     }
 
     private CompletableFuture<byte[]> getBlockBytes(Sha256Hash blockHash) {

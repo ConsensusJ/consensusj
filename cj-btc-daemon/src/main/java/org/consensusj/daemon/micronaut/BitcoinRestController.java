@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 
 
 /**
- * Embryonic implementation of Bitcoin Core REST API. Incomplete and incorrect at ths point.
+ * Embryonic implementation of Bitcoin Core REST API. Incomplete and incorrect at this point.
  */
 @Controller("/rest")
 @Context

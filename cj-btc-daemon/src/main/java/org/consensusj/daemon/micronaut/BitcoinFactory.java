@@ -18,21 +18,20 @@ import java.io.File;
  */
 @Factory
 public class BitcoinFactory {
-    private static Logger log = LoggerFactory.getLogger(BitcoinFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(BitcoinFactory.class);
 
     @Singleton
     public BitcoinNetwork network() {
-        log.info("Returning NetworkParameters bean");
-        return BitcoinNetwork.MAINNET;
+        log.info("Returning Network bean");
+        return BitcoinNetwork.REGTEST;
     }
 
     @Singleton
     public WalletAppKit getKit(BitcoinNetwork network) {
-        log.info("Returning WalletAppKit bean");
         // TODO: make File(".") and filePrefix configurable
         File directory = new File(".");
         String filePrefix = "BitcoinJDaemon";
-
+        log.info("Returning WalletAppKit bean, wallet directory: {}, prefix: {}", directory.getAbsolutePath(), filePrefix);
         return new WalletAppKit(network, ScriptType.P2PKH, KeyChainGroupStructure.BIP32, directory, filePrefix);
     }
 
