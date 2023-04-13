@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @Singleton
 public class MicronautWalletAppKitService extends WalletAppKitService {
-    private static final Logger log = LoggerFactory.getLogger(JsonRpcController.class);
+    private static final Logger log = LoggerFactory.getLogger(MicronautWalletAppKitService.class);
 
     private EmbeddedServer embeddedServer;
 
