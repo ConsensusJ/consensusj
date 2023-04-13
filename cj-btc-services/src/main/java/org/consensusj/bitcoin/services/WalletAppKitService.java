@@ -28,8 +28,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
+import java.io.Closeable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
@@ -40,7 +43,7 @@ import java.util.stream.Collectors;
  * Implement a subset of Bitcoin JSON RPC using a WalletAppKit
  */
 @Named
-public class WalletAppKitService implements BitcoinJsonRpc {
+public class WalletAppKitService implements BitcoinJsonRpc, Closeable {
     private static final Logger log = LoggerFactory.getLogger(WalletAppKitService.class);
     private static final String userAgentName = "PeerList";
     private static final String appVersion = "0.1";
@@ -353,5 +356,14 @@ public class WalletAppKitService implements BitcoinJsonRpc {
                     .collect(Collectors.toList());
             return new BlockInfo.Sha256HashList(list);
         }
+    }
+
+    @Override
+    @PreDestroy
+    public void close() {
+        log.info("Closing WalletAppKit...");
+        kit.close();
+        kit.awaitTerminated();  // This should be done by WalletAppKit itself, see https://github.com/bitcoinj/bitcoinj/pull/3028
+        log.info("WalletAppKit terminated");
     }
 }

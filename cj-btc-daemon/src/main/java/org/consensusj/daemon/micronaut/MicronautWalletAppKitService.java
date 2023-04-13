@@ -2,6 +2,7 @@ package org.consensusj.daemon.micronaut;
 
 import io.micronaut.runtime.event.annotation.EventListener;
 import io.micronaut.runtime.server.EmbeddedServer;
+import io.micronaut.runtime.server.event.ServerShutdownEvent;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
 import jakarta.inject.Singleton;
 import org.bitcoinj.kits.WalletAppKit;
@@ -31,10 +32,22 @@ public class MicronautWalletAppKitService extends WalletAppKitService {
         embeddedServer = event.getSource();
     }
 
+    @EventListener
+    public void onShutdown(ServerShutdownEvent event) {
+        log.info("Shutting down");
+        this.close();
+    }
+
+    /**
+     * Initiate server shutdown. This is a JSON-RPC method and will initiate but not
+     * complete server-shutdown because it must return a response to the client.
+     * @return A status string indicating the server is stopping
+     */
     @Override
     public CompletableFuture<String> stop() {
         log.info("stop");
         embeddedServer.stop();
-        return result("cj-btc-daemon stopping");
+        var appName = embeddedServer.getApplicationConfiguration().getName().orElse("server");
+        return result(appName + " stopping");
     }
 }

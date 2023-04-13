@@ -3,7 +3,6 @@ package org.consensusj.daemon.micronaut
 import io.micronaut.runtime.server.EmbeddedServer
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import org.bitcoinj.base.Address
-import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.Coin
 import org.bitcoinj.base.Network
 import org.bitcoinj.base.ScriptType
@@ -30,8 +29,7 @@ class ApplicationSpec extends Specification {
     BitcoinExtendedClient client
     
     def setup() {
-        var endpoint = URI.create(server.URI.toString()+"/")
-        client = new BitcoinExtendedClient(endpoint, "", "")
+        client = new BitcoinExtendedClient(server.URI, "", "")
         network = client.getNetwork()   // This forces the JSON-Mappers to load  TODO: Make this automatic
     }
 
@@ -44,10 +42,10 @@ class ApplicationSpec extends Specification {
 
     void 'getnetwork'() {
         when:
-        Network net2 = client.getNetwork()
+        Network net = client.getNetwork()
 
         then:
-        net2 == network
+        net == network
     }
 
     void 'getblockcount request'() {

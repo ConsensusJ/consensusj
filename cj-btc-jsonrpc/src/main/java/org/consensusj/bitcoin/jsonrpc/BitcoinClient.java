@@ -459,6 +459,17 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         return false;
     }
 
+
+    /**
+     * Tell the server to stop
+     * @return A status string
+     * @throws JsonRpcStatusException JSON RPC status exception
+     * @throws IOException network error
+     */
+    public String stop() throws JsonRpcStatusException, IOException {
+        return send("stop");
+    }
+
     /**
      * Returns the number of blocks in the longest block chain.
      *
