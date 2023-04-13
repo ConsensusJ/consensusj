@@ -22,11 +22,11 @@ public class AddressDeserializer extends JsonDeserializer<Address> {
     private final AddressParser.Strict addressParser;
 
     /**
-     * Construct an address deserializer that will deserialize addresses for any supported network.
+     * Construct an address deserializer that will deserialize addresses for any of the default supported networks.
      * See {@link NetworkParameters} to understand what the supported networks are.
      */
     public AddressDeserializer() {
-        addressParser = (s) -> new DefaultAddressParser().parseAddressAnyNetwork(s);
+        this((s) -> new DefaultAddressParser().parseAddressAnyNetwork(s));
     }
 
     /**
@@ -37,7 +37,7 @@ public class AddressDeserializer extends JsonDeserializer<Address> {
      * @param network Network id to specify the only network we will deserialize addresses for.
      */
     public AddressDeserializer(Network network) {
-        addressParser = (s) -> new DefaultAddressParser().parseAddress(s, network);
+        this((s) -> new DefaultAddressParser().parseAddress(s, network));
     }
 
     /**
@@ -48,9 +48,17 @@ public class AddressDeserializer extends JsonDeserializer<Address> {
      * @param netParams Network parameters to specify the only network we will deserialize addresses for.
      */
     public AddressDeserializer(NetworkParameters netParams) {
-        addressParser = (netParams != null)
+        this((netParams != null)
                 ? (s) -> new DefaultAddressParser().parseAddress(s, netParams.network())
-                : (s) -> new DefaultAddressParser().parseAddressAnyNetwork(s);
+                : (s) -> new DefaultAddressParser().parseAddressAnyNetwork(s));
+    }
+
+    /**
+     * Construct an address deserializer with a custom {@link AddressParser}
+     * @param addressParser parser to convert a string to an address
+     */
+    public AddressDeserializer(AddressParser.Strict addressParser) {
+        this.addressParser = addressParser;
     }
 
     @Override

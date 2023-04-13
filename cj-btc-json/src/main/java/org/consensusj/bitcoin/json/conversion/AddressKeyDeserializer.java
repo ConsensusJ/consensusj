@@ -4,9 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.KeyDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.bitcoinj.base.Address;
 import org.bitcoinj.base.AddressParser;
 import org.bitcoinj.base.DefaultAddressParser;
 import org.bitcoinj.base.Network;
+import org.bitcoinj.base.exceptions.AddressFormatException;
 import org.bitcoinj.core.NetworkParameters;
 
 import java.io.IOException;
@@ -18,11 +20,19 @@ public class AddressKeyDeserializer extends KeyDeserializer {
     private final AddressParser.Strict addressParser;
 
     /**
-     * Construct an address deserializer that will deserialize addresses for any supported network.
+     * Construct an address deserializer that will deserialize addresses for the default supported networks.
      * See {@link NetworkParameters} to understand what the supported networks are.
      */
     public AddressKeyDeserializer() {
-        addressParser = (s) -> new DefaultAddressParser().parseAddressAnyNetwork(s);
+        this((s) -> new DefaultAddressParser().parseAddressAnyNetwork(s));
+    }
+
+    /**
+     * Construct an address KeyDeserializer with a custom {@link AddressParser}
+     * @param addressParser parser to convert a string to an address
+     */
+    public AddressKeyDeserializer(AddressParser.Strict addressParser) {
+        this.addressParser = addressParser;
     }
 
     /**
@@ -33,9 +43,9 @@ public class AddressKeyDeserializer extends KeyDeserializer {
      * @param network specify the only network we will deserialize addresses for.
      */
     public AddressKeyDeserializer(Network network) {
-        addressParser = (network != null)
+        this( (network != null)
                 ? (s) -> new DefaultAddressParser().parseAddress(s, network)
-                : (s) -> new DefaultAddressParser().parseAddressAnyNetwork(s);
+                : (s) -> new DefaultAddressParser().parseAddressAnyNetwork(s));
     }
 
     /**
@@ -47,6 +57,10 @@ public class AddressKeyDeserializer extends KeyDeserializer {
 
     @Override
     public Object deserializeKey(String key, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        return addressParser.parseAddress(key);
+        try {
+            return addressParser.parseAddress(key);
+        } catch (AddressFormatException afe) {
+            throw new InvalidFormatException(ctxt.getParser(), "Invalid Address: " + key, key, Address.class);
+        }
     }
 }
