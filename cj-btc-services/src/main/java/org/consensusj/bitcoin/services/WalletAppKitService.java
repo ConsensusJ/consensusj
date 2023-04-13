@@ -234,13 +234,28 @@ public class WalletAppKitService implements BitcoinJsonRpc, Closeable {
 
     @Override
     public CompletableFuture<BlockChainInfo> getblockchaininfo() {
-        return result(new BlockChainInfo(network.toString(),        // Chain ID
+        return result(new BlockChainInfo(chainName(network),        // Chain ID
                 kit.chain().getChainHead().getHeight(),             // Block processed
                 kit.chain().getChainHead().getHeight(),             // Headers validated
                 kit.chain().getChainHead().getHeader().getHash(),   // Best block hash
                 difficulty,
                 verificationProgress,
                 chainWork));
+    }
+
+    /**
+     * Map {@link BitcoinNetwork} to a chain-id string.
+     * Bitcoin Core returns strings that differ from {@link BitcoinNetwork#toString()}.
+     * @param network bitcoinj enum type
+     * @return Bitcoin Core-compatible <q>chain</q> string
+     */
+    private String chainName(BitcoinNetwork network) {
+        return switch(network) {
+            case MAINNET -> "main";
+            case TESTNET -> "test";
+            case SIGNET -> "signet";
+            case REGTEST -> "regtest";
+        };
     }
 
     @Override
