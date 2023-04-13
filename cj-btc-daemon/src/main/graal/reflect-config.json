@@ -36,7 +36,16 @@
   "name":"[Lcom.fasterxml.jackson.databind.ser.Serializers;"
 },
 {
+  "name":"[Lio.micronaut.http.HttpMethod;"
+},
+{
+  "name":"[Ljava.lang.Object;"
+},
+{
   "name":"[Ljava.lang.String;"
+},
+{
+  "name":"[Ljava.math.BigDecimal;"
 },
 {
   "name":"[Ljavax.management.openmbean.CompositeData;"
@@ -124,22 +133,8 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.google.common.primitives.UnsignedBytes$LexicographicalComparatorHolder$UnsafeComparator"
-},
-{
-  "name":"com.google.common.util.concurrent.AbstractFuture",
-  "fields":[
-    {"name":"listeners"}, 
-    {"name":"value"}, 
-    {"name":"waiters"}
-  ]
-},
-{
-  "name":"com.google.common.util.concurrent.AbstractFuture$Waiter",
-  "fields":[
-    {"name":"next"}, 
-    {"name":"thread"}
-  ]
+  "name":"com.sun.crypto.provider.HmacCore$HmacSHA512",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.sun.management.GarbageCollectorMXBean",
@@ -254,6 +249,10 @@
 },
 {
   "name":"io.micronaut.health.$HeartbeatTask$Definition$Reference",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.MediaTypeConvertersRegistrar",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -450,7 +449,7 @@
 },
 {
   "name":"io.micronaut.http.netty.reactive.HandlerPublisher",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
@@ -463,7 +462,7 @@
 },
 {
   "name":"io.micronaut.http.netty.stream.HttpStreamsServerHandler",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
     {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelWritabilityChanged","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
@@ -543,10 +542,6 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"io.micronaut.http.server.cors.$BeanConfiguration",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"io.micronaut.http.server.cors.$CorsFilter$Definition$Reference",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -591,6 +586,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"io.micronaut.http.server.exceptions.response.$HateoasErrorResponseProcessorReplacement$Definition$Reference",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"io.micronaut.http.server.netty.$DefaultHttpCompressionStrategy$Definition$Reference",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -623,11 +622,14 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"io.micronaut.http.server.netty.NettyHttpServer$NettyHttpServerInitializer"
+  "name":"io.micronaut.http.server.netty.NettyHttpServer$1"
+},
+{
+  "name":"io.micronaut.http.server.netty.NettyHttpServer$Listener"
 },
 {
   "name":"io.micronaut.http.server.netty.RoutingInBoundHandler",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }, 
     {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }
@@ -665,6 +667,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"io.micronaut.http.server.netty.configuration.$NettyHttpServerConfiguration$NettyListenerConfiguration$Definition$Reference",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"io.micronaut.http.server.netty.configuration.$NettyHttpServerConfiguration$Parent$Definition$Reference",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -674,6 +680,10 @@
 },
 {
   "name":"io.micronaut.http.server.netty.converters.$NettyConverters$Definition$Reference",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.NettyConvertersSpi",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -727,7 +737,8 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"io.micronaut.http.server.netty.websocket.NettyServerWebSocketUpgradeHandler"
+  "name":"io.micronaut.http.server.netty.websocket.NettyServerWebSocketUpgradeHandler",
+  "methods":[{"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }]
 },
 {
   "name":"io.micronaut.http.server.util.$DefaultHttpClientAddressResolver$Definition$Reference",
@@ -815,6 +826,10 @@
 },
 {
   "name":"io.micronaut.http.util.$OutgoingHttpRequestProcessorImpl$Definition$Reference",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.inject.annotation.AnnotationConvertersRegistrar",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -1013,7 +1028,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"io.micronaut.runtime.converters.time.$TimeConverterRegistrar$Definition$Reference",
+  "name":"io.micronaut.runtime.converters.time.TimeConverterRegistrar",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -1209,7 +1224,7 @@
 },
 {
   "name":"io.netty.bootstrap.ServerBootstrap$ServerBootstrapAcceptor",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
     {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }
   ]
@@ -1224,7 +1239,7 @@
 },
 {
   "name":"io.netty.channel.ChannelDuplexHandler",
-  "queriedMethods":[
+  "methods":[
     {"name":"bind","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
     {"name":"close","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, 
     {"name":"connect","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
@@ -1237,11 +1252,11 @@
 },
 {
   "name":"io.netty.channel.ChannelHandlerAdapter",
-  "queriedMethods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
+  "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
 },
 {
   "name":"io.netty.channel.ChannelInboundHandlerAdapter",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
@@ -1255,14 +1270,14 @@
 },
 {
   "name":"io.netty.channel.ChannelInitializer",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }
   ]
 },
 {
   "name":"io.netty.channel.ChannelOutboundHandlerAdapter",
-  "queriedMethods":[
+  "methods":[
     {"name":"bind","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
     {"name":"close","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, 
     {"name":"connect","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
@@ -1274,7 +1289,7 @@
 },
 {
   "name":"io.netty.channel.CombinedChannelDuplexHandler",
-  "queriedMethods":[
+  "methods":[
     {"name":"bind","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
     {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
@@ -1296,7 +1311,7 @@
 },
 {
   "name":"io.netty.channel.DefaultChannelPipeline$HeadContext",
-  "queriedMethods":[
+  "methods":[
     {"name":"bind","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
     {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
@@ -1318,7 +1333,7 @@
 },
 {
   "name":"io.netty.channel.DefaultChannelPipeline$TailContext",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
@@ -1332,26 +1347,26 @@
 },
 {
   "name":"io.netty.channel.SimpleChannelInboundHandler",
-  "queriedMethods":[{"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }]
+  "methods":[{"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }]
 },
 {
   "name":"io.netty.handler.codec.MessageToMessageCodec",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
     {"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }
   ]
 },
 {
   "name":"io.netty.handler.codec.MessageToMessageDecoder",
-  "queriedMethods":[{"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }]
+  "methods":[{"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }]
 },
 {
   "name":"io.netty.handler.codec.MessageToMessageEncoder",
-  "queriedMethods":[{"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }]
+  "methods":[{"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }]
 },
 {
   "name":"io.netty.handler.codec.http.HttpContentDecoder",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }
   ]
@@ -1361,21 +1376,21 @@
 },
 {
   "name":"io.netty.handler.codec.http.HttpContentEncoder",
-  "queriedMethods":[{"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }]
+  "methods":[{"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }]
 },
 {
   "name":"io.netty.handler.codec.http.HttpServerCodec"
 },
 {
   "name":"io.netty.handler.codec.http.HttpServerKeepAliveHandler",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
     {"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }
   ]
 },
 {
   "name":"io.netty.handler.codec.http.websocketx.extensions.WebSocketServerExtensionHandler",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
     {"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }
   ]
@@ -1385,7 +1400,7 @@
 },
 {
   "name":"io.netty.handler.flow.FlowControlHandler",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
     {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
@@ -1394,7 +1409,7 @@
 },
 {
   "name":"io.netty.handler.stream.ChunkedWriteHandler",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelWritabilityChanged","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"flush","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
@@ -1403,7 +1418,7 @@
 },
 {
   "name":"io.netty.handler.timeout.IdleStateHandler",
-  "queriedMethods":[
+  "methods":[
     {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
@@ -1444,6 +1459,10 @@
   "name":"java.io.FilePermission"
 },
 {
+  "name":"java.io.Serializable",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"java.lang.Boolean",
   "fields":[{"name":"TYPE"}]
 },
@@ -1454,6 +1473,10 @@
 {
   "name":"java.lang.Character",
   "fields":[{"name":"TYPE"}]
+},
+{
+  "name":"java.lang.Comparable",
+  "queryAllDeclaredMethods":true
 },
 {
   "name":"java.lang.Deprecated",
@@ -1476,6 +1499,18 @@
   "fields":[{"name":"TYPE"}]
 },
 {
+  "name":"java.lang.Number",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.lang.ProcessHandle",
+  "methods":[
+    {"name":"current","parameterTypes":[] }, 
+    {"name":"pid","parameterTypes":[] }
+  ]
+},
+{
   "name":"java.lang.RuntimePermission"
 },
 {
@@ -1488,6 +1523,10 @@
 },
 {
   "name":"java.lang.String"
+},
+{
+  "name":"java.lang.Throwable",
+  "methods":[{"name":"getSuppressed","parameterTypes":[] }]
 },
 {
   "name":"java.lang.Void",
@@ -1539,22 +1578,28 @@
 },
 {
   "name":"java.lang.management.PlatformLoggingMXBean",
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"getLoggerLevel","parameterTypes":["java.lang.String"] }, 
+    {"name":"getLoggerNames","parameterTypes":[] }, 
+    {"name":"getParentLoggerName","parameterTypes":["java.lang.String"] }, 
+    {"name":"setLoggerLevel","parameterTypes":["java.lang.String","java.lang.String"] }
+  ]
 },
 {
   "name":"java.lang.management.RuntimeMXBean",
   "queryAllPublicMethods":true,
-  "methods":[
-    {"name":"getInputArguments","parameterTypes":[] }, 
-    {"name":"getName","parameterTypes":[] }
-  ]
+  "methods":[{"name":"getInputArguments","parameterTypes":[] }]
 },
 {
   "name":"java.lang.management.ThreadInfo",
   "queryAllPublicMethods":true
 },
 {
-  "name":"java.math.BigDecimal"
+  "name":"java.math.BigDecimal",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
 },
 {
   "name":"java.math.BigInteger"
@@ -1571,7 +1616,7 @@
 },
 {
   "name":"java.nio.Bits",
-  "queriedMethods":[{"name":"unaligned","parameterTypes":[] }]
+  "methods":[{"name":"unaligned","parameterTypes":[] }]
 },
 {
   "name":"java.nio.Buffer",
@@ -1579,15 +1624,15 @@
 },
 {
   "name":"java.nio.ByteBuffer",
-  "queriedMethods":[{"name":"alignedSlice","parameterTypes":["int"] }]
+  "methods":[{"name":"alignedSlice","parameterTypes":["int"] }]
 },
 {
   "name":"java.nio.DirectByteBuffer",
-  "queriedMethods":[{"name":"<init>","parameterTypes":["long","int"] }]
+  "methods":[{"name":"<init>","parameterTypes":["long","int"] }]
 },
 {
   "name":"java.nio.channels.spi.SelectorProvider",
-  "queriedMethods":[
+  "methods":[
     {"name":"openServerSocketChannel","parameterTypes":["java.net.ProtocolFamily"] }, 
     {"name":"openSocketChannel","parameterTypes":["java.net.ProtocolFamily"] }
   ]
@@ -1629,6 +1674,24 @@
   "name":"java.sql.Timestamp"
 },
 {
+  "name":"java.time.Instant",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"java.time.temporal.Temporal",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.time.temporal.TemporalAccessor",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.time.temporal.TemporalAdjuster",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"java.util.Date"
 },
 {
@@ -1645,7 +1708,8 @@
 },
 {
   "name":"javax.management.MBeanOperationInfo",
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"getSignature","parameterTypes":[] }]
 },
 {
   "name":"javax.management.MBeanServerBuilder",
@@ -1665,7 +1729,11 @@
 },
 {
   "name":"javax.management.remote.rmi.RMIServer",
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"getVersion","parameterTypes":[] }, 
+    {"name":"newClient","parameterTypes":["java.lang.Object"] }
+  ]
 },
 {
   "name":"javax.management.remote.rmi.RMIServerImpl_Stub",
@@ -1743,6 +1811,15 @@
   ]
 },
 {
+  "name":"org.bitcoinj.wallet.Protos$PeerAddress",
+  "fields":[
+    {"name":"bitField0_"}, 
+    {"name":"ipAddress_"}, 
+    {"name":"port_"}, 
+    {"name":"services_"}
+  ]
+},
+{
   "name":"org.bitcoinj.wallet.Protos$Script",
   "fields":[
     {"name":"bitField0_"}, 
@@ -1778,6 +1855,41 @@
   ]
 },
 {
+  "name":"org.bitcoinj.wallet.Protos$TransactionConfidence",
+  "fields":[
+    {"name":"appearedAtHeight_"}, 
+    {"name":"bitField0_"}, 
+    {"name":"broadcastBy_"}, 
+    {"name":"depth_"}, 
+    {"name":"lastBroadcastedAt_"}, 
+    {"name":"overridingTransaction_"}, 
+    {"name":"source_"}, 
+    {"name":"type_"}
+  ]
+},
+{
+  "name":"org.bitcoinj.wallet.Protos$TransactionInput",
+  "fields":[
+    {"name":"bitField0_"}, 
+    {"name":"scriptBytes_"}, 
+    {"name":"sequence_"}, 
+    {"name":"transactionOutPointHash_"}, 
+    {"name":"transactionOutPointIndex_"}, 
+    {"name":"value_"}, 
+    {"name":"witness_"}
+  ]
+},
+{
+  "name":"org.bitcoinj.wallet.Protos$TransactionOutput",
+  "fields":[
+    {"name":"bitField0_"}, 
+    {"name":"scriptBytes_"}, 
+    {"name":"spentByTransactionHash_"}, 
+    {"name":"spentByTransactionIndex_"}, 
+    {"name":"value_"}
+  ]
+},
+{
   "name":"org.bitcoinj.wallet.Protos$Wallet",
   "fields":[
     {"name":"bitField0_"}, 
@@ -1798,11 +1910,93 @@
   ]
 },
 {
+  "name":"org.consensusj.bitcoin.json.pojo.BlockChainInfo",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getBestBlockHash","parameterTypes":[] }, 
+    {"name":"getBlocks","parameterTypes":[] }, 
+    {"name":"getChain","parameterTypes":[] }, 
+    {"name":"getChainWork","parameterTypes":[] }, 
+    {"name":"getDifficulty","parameterTypes":[] }, 
+    {"name":"getHeaders","parameterTypes":[] }, 
+    {"name":"getVerificationProgress","parameterTypes":[] }
+  ]
+},
+{
+  "name":"org.consensusj.bitcoin.json.pojo.BlockInfo",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getConfirmations","parameterTypes":[] }, 
+    {"name":"getHash","parameterTypes":[] }, 
+    {"name":"getHeight","parameterTypes":[] }, 
+    {"name":"getMerkleroot","parameterTypes":[] }, 
+    {"name":"getSize","parameterTypes":[] }, 
+    {"name":"getTime","parameterTypes":[] }, 
+    {"name":"getTx","parameterTypes":[] }, 
+    {"name":"getVersion","parameterTypes":[] }
+  ]
+},
+{
+  "name":"org.consensusj.bitcoin.json.pojo.NetworkInfo",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getAddress","parameterTypes":[] }, 
+    {"name":"getConnections","parameterTypes":[] }, 
+    {"name":"getLocalServices","parameterTypes":[] }, 
+    {"name":"getNetwork","parameterTypes":[] }, 
+    {"name":"getProtocolVersion","parameterTypes":[] }, 
+    {"name":"getProxy","parameterTypes":[] }, 
+    {"name":"getRelayFee","parameterTypes":[] }, 
+    {"name":"getSubVersion","parameterTypes":[] }, 
+    {"name":"getTimeOffset","parameterTypes":[] }, 
+    {"name":"getVersion","parameterTypes":[] }
+  ]
+},
+{
+  "name":"org.consensusj.bitcoin.json.pojo.ServerInfo",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getBalance","parameterTypes":[] }, 
+    {"name":"getBlocks","parameterTypes":[] }, 
+    {"name":"getConnections","parameterTypes":[] }, 
+    {"name":"getDifficulty","parameterTypes":[] }, 
+    {"name":"getErrors","parameterTypes":[] }, 
+    {"name":"getKeypoololdest","parameterTypes":[] }, 
+    {"name":"getKeypoolsize","parameterTypes":[] }, 
+    {"name":"getPaytxfee","parameterTypes":[] }, 
+    {"name":"getProtocolversion","parameterTypes":[] }, 
+    {"name":"getProxy","parameterTypes":[] }, 
+    {"name":"getRelayfee","parameterTypes":[] }, 
+    {"name":"getTestnet","parameterTypes":[] }, 
+    {"name":"getTimeoffset","parameterTypes":[] }, 
+    {"name":"getVersion","parameterTypes":[] }, 
+    {"name":"getWalletversion","parameterTypes":[] }
+  ]
+},
+{
   "name":"org.consensusj.bitcoin.services.WalletAppKitService",
   "queryAllPublicMethods":true,
   "methods":[
+    {"name":"getbalance","parameterTypes":[] }, 
+    {"name":"getbestblockhash","parameterTypes":[] }, 
+    {"name":"getblock","parameterTypes":["java.lang.String","java.lang.Integer"] }, 
+    {"name":"getblockchaininfo","parameterTypes":[] }, 
     {"name":"getblockcount","parameterTypes":[] }, 
+    {"name":"getblockheader","parameterTypes":["java.lang.String","java.lang.Boolean"] }, 
+    {"name":"getconnectioncount","parameterTypes":[] }, 
+    {"name":"getinfo","parameterTypes":[] }, 
+    {"name":"getnetworkinfo","parameterTypes":[] }, 
+    {"name":"getnewaddress","parameterTypes":[] }, 
     {"name":"help","parameterTypes":[] }, 
+    {"name":"sendtoaddress","parameterTypes":["java.lang.String","java.lang.Double"] }, 
     {"name":"stop","parameterTypes":[] }
   ]
 },
@@ -1811,19 +2005,15 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.consensusj.daemon.micronaut.$BitcoinFactory$GetContext1$Definition$Reference",
+  "name":"org.consensusj.daemon.micronaut.$BitcoinFactory$GetKit1$Definition$Reference",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.consensusj.daemon.micronaut.$BitcoinFactory$GetKit2$Definition$Reference",
+  "name":"org.consensusj.daemon.micronaut.$BitcoinFactory$JacksonModule2$Definition$Reference",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.consensusj.daemon.micronaut.$BitcoinFactory$JacksonModule3$Definition$Reference",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"org.consensusj.daemon.micronaut.$BitcoinFactory$NetworkParameters0$Definition$Reference",
+  "name":"org.consensusj.daemon.micronaut.$BitcoinFactory$Network0$Definition$Reference",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -1845,6 +2035,17 @@
 {
   "name":"org.consensusj.daemon.micronaut.$WalletAppKitJsonRpcService$Definition$Reference",
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.consensusj.jsonrpc.JsonRpcError",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getCode","parameterTypes":[] }, 
+    {"name":"getData","parameterTypes":[] }, 
+    {"name":"getMessage","parameterTypes":[] }
+  ]
 },
 {
   "name":"org.consensusj.jsonrpc.JsonRpcRequest",
@@ -1910,8 +2111,7 @@
 {
   "name":"sun.misc.Unsafe",
   "allDeclaredFields":true,
-  "methods":[{"name":"invokeCleaner","parameterTypes":["java.nio.ByteBuffer"] }],
-  "queriedMethods":[
+  "methods":[
     {"name":"arrayBaseOffset","parameterTypes":["java.lang.Class"] }, 
     {"name":"arrayIndexScale","parameterTypes":["java.lang.Class"] }, 
     {"name":"copyMemory","parameterTypes":["long","long","long"] }, 
@@ -1928,6 +2128,7 @@
     {"name":"getLong","parameterTypes":["long"] }, 
     {"name":"getLong","parameterTypes":["java.lang.Object","long"] }, 
     {"name":"getObject","parameterTypes":["java.lang.Object","long"] }, 
+    {"name":"invokeCleaner","parameterTypes":["java.nio.ByteBuffer"] }, 
     {"name":"objectFieldOffset","parameterTypes":["java.lang.reflect.Field"] }, 
     {"name":"putBoolean","parameterTypes":["java.lang.Object","long","boolean"] }, 
     {"name":"putByte","parameterTypes":["long","byte"] }, 
@@ -1938,7 +2139,8 @@
     {"name":"putInt","parameterTypes":["java.lang.Object","long","int"] }, 
     {"name":"putLong","parameterTypes":["long","long"] }, 
     {"name":"putLong","parameterTypes":["java.lang.Object","long","long"] }, 
-    {"name":"putObject","parameterTypes":["java.lang.Object","long","java.lang.Object"] }
+    {"name":"putObject","parameterTypes":["java.lang.Object","long","java.lang.Object"] }, 
+    {"name":"storeFence","parameterTypes":[] }
   ]
 },
 {
@@ -1982,6 +2184,10 @@
 },
 {
   "name":"sun.security.provider.SHA2$SHA256",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA5$SHA512",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
