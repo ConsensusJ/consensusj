@@ -1,0 +1,15 @@
+micronaut.application.name = 'cjbitcoind'
+
+# network-id must specify a valid org.bitcoinj.base.BitcoinNetwork either by
+# a lowercase name ("mainnet", "testnet", "signet", or "regtest") or by
+# an ID ("org.bitcoin.production", "org.bitcoin.testnet", etc.)
+cjbitcoind.config.network-id = "mainnet"
+
+# The server port for listening for JSON-RPC and REST queries
+cjbitcoind.config.server-port = 8080
+
+# path to wallet data-directory, if `null`, defaults to AppDataDirectory for appName
+#cjbitcoind.config.data-dir
+
+# Base name for wallet files, e.g. CJBitcoinDaemon-mainnet.wallet, CJBitcoinDaemon-mainnet.spvchain
+cjbitcoind.config.wallet-base-name = "CJBitcoinDaemon"

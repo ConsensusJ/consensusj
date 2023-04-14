@@ -31,6 +31,7 @@ dependencies {
     implementation project(':consensusj-jsonrpc')
 
     implementation "io.micronaut:micronaut-runtime"
+    implementation("io.micronaut.toml:micronaut-toml")
     implementation "javax.annotation:javax.annotation-api"
 
     compileOnly "org.graalvm.nativeimage:svm"

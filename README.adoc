@@ -351,11 +351,11 @@ Service-Layer object(s) that power the Daemon. These objects rely solely on http
 Built as a fat, executable jar, so it can be run with `java -jar`.
 
 [#cj-btc-daemon]
-==== Experimental Micronaut-based Bitcoin daemon
+==== bitcoinj and SPV-based Bitcoin daemon
 
-An experimental port of `bitcoinj-daemon` to https://micronaut.io[Micronaut].
+A proof-of-concept, bitcoinj-SPV-based Bitcoin daemon using the https://micronaut.io[Micronaut] framework.
 
-A starting point for building a complete `bitcoind` equivalent using **bitcoinj**. It currently serves a small subset of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
+A very limited and incomplete `bitcoind` equivalent using **bitcoinj**. It currently serves a small subset of the https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs[Bitcoin RPC API] (Bitcoin uses http://www.jsonrpc.org[JSON-RPC].)
 
 It builds as a native binary using GraalVM.
 
@@ -484,17 +484,9 @@ To build a native image and run:
 
 To build and run from Gradle:
 
-    ./gradlew :cj-btc-daemon:run
+    ./gradlew :cj-btc-daemon:run --args="-cjbitcoind.config.network-id=testnet"
 
 To build a native image and run:
 
     ./gradlew :cj-btc-daemon:nativeCompile
-    cj-btc-daemon/build/native/nativeCompile/jbitcoind
-
-
-
-
-
-
-
-
+    cj-btc-daemon/build/native/nativeCompile/jbitcoind -cjbitcoind.config.network-id=testnet
