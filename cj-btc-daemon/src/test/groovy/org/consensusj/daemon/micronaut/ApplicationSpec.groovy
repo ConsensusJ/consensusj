@@ -56,6 +56,15 @@ class ApplicationSpec extends Specification {
         height >= 0
     }
 
+    void 'getblockhash request'() {
+        when:
+        var txId = client.getBlockHash(0);
+
+        then:
+        JsonRpcStatusException ex = thrown()
+        ex.getMessage() == "Server exception: Unimplemented RPC method"
+    }
+
     void 'help request'() {
         when:
         var help = client.help()
@@ -87,7 +96,7 @@ class ApplicationSpec extends Specification {
 
         then:
         JsonRpcStatusException ex = thrown()
-        ex.getMessage() == "Server exception: Not implemented yet"
+        ex.getMessage() == "Server exception: Unimplemented RPC method"
     }
 
     private Address randomAddress() {

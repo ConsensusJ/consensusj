@@ -6,6 +6,7 @@ import org.bitcoinj.base.Address;
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.base.ScriptType;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.DeterministicKey;
 import org.bitcoinj.wallet.KeyChain;
 import org.consensusj.bitcoin.json.conversion.HexUtil;
@@ -13,7 +14,6 @@ import org.consensusj.bitcoin.json.conversion.RpcServerModule;
 import org.consensusj.bitcoin.json.pojo.BlockChainInfo;
 import org.consensusj.bitcoin.json.pojo.BlockInfo;
 import org.consensusj.bitcoin.json.pojo.NetworkInfo;
-import org.consensusj.bitcoin.json.pojo.ServerInfo;
 import org.consensusj.bitcoin.json.rpc.BitcoinJsonRpc;
 import org.bitcoinj.core.AbstractBlockChain;
 import org.bitcoinj.core.Block;
@@ -34,7 +34,6 @@ import jakarta.inject.Named;
 
 import java.io.Closeable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -45,21 +44,21 @@ import java.util.stream.Collectors;
 @Named
 public class WalletAppKitService implements BitcoinJsonRpc, Closeable {
     private static final Logger log = LoggerFactory.getLogger(WalletAppKitService.class);
-    private static final String userAgentName = "PeerList";
+    // P2P user-agent string
+    private static final String userAgentName = "WalletAppKitService";
+    // P2P user-agent version
     private static final String appVersion = "0.1";
+    // server version, placeholder for now (returned in `getnetworkinfo`)
     private static final int version = 1;
-    private static final int protocolVersion = 1;
-    private static final int walletVersion = 0;
     private static final String helpString = """
             getbalance
             getbestblockhash
             getblock hash verbosity(0,1,2)
             getblockchaininfo
             getblockcount
-            getblockhash height (not implemented)
+            getblockhash height [TBD]
             getblockheader hash verbose(boolean)
             getconnectioncount
-            getinfo (deprecated)
             getnetworkinfo
             help
             sendtoaddress "address" amount [TBD]
@@ -154,7 +153,6 @@ public class WalletAppKitService implements BitcoinJsonRpc, Closeable {
         }
     }
 
-
     /**
      * Partial implementation of `getblock`
      *
@@ -182,7 +180,7 @@ public class WalletAppKitService implements BitcoinJsonRpc, Closeable {
     }
 
     /**
-     * Placeholder -- currently throws `IllegalArgumentException`
+     * Placeholder -- currently throws `UnsupportedOperationException`
      * 
      * @param blockNumber The block height of the desired block
      * @return The Sha256Hash of the specified block
@@ -190,7 +188,7 @@ public class WalletAppKitService implements BitcoinJsonRpc, Closeable {
     @Override
     public CompletableFuture<Sha256Hash> getblockhash(Integer blockNumber) {
         // TODO: Extend Blockchain/Blockstore so it can do this
-        return exception(new IllegalArgumentException("Unsupported RPC method"));
+        return exception(new UnsupportedOperationException("Unimplemented RPC method"));
     }
 
     @Override
@@ -205,37 +203,10 @@ public class WalletAppKitService implements BitcoinJsonRpc, Closeable {
         }
     }
 
-    @Deprecated
-    public CompletableFuture<ServerInfo> getinfo() {
-        // Dummy up a response for now.
-        // Since ServerInfo is immutable, we have to build it entirely with the constructor.
-        Coin balance = Coin.valueOf(0);
-        boolean testNet = !network.id().equals(BitcoinNetwork.ID_MAINNET);
-        int keyPoolOldest = 0;
-        int keyPoolSize = 0;
-        return result(new ServerInfo(
-                version,
-                protocolVersion,
-                walletVersion,
-                balance,
-                getblockcount().join(),
-                timeOffset,
-                getconnectioncount().join(),
-                "proxy",
-                difficulty,
-                testNet,
-                keyPoolOldest,
-                keyPoolSize,
-                Transaction.REFERENCE_DEFAULT_MIN_TX_FEE,
-                Transaction.REFERENCE_DEFAULT_MIN_TX_FEE, // relayfee
-                "no errors"                        // errors
-        ));
-    }
-
     @Override
     public CompletableFuture<BlockChainInfo> getblockchaininfo() {
         return result(new BlockChainInfo(chainName(network),        // Chain ID
-                kit.chain().getChainHead().getHeight(),             // Block processed
+                kit.chain().getChainHead().getHeight(),             // Block processed (same as headers for SPV)
                 kit.chain().getChainHead().getHeight(),             // Headers validated
                 kit.chain().getChainHead().getHeader().getHash(),   // Best block hash
                 difficulty,
@@ -264,11 +235,11 @@ public class WalletAppKitService implements BitcoinJsonRpc, Closeable {
         Object[] address = {};
         return result(new NetworkInfo(version,
                 "",
-                protocolVersion,
+                NetworkParameters.ProtocolVersion.CURRENT.getBitcoinProtocolVersion(),
                 timeOffset,
                 getconnectioncount().join(),
                 "proxy",
-                0,
+                (int) Transaction.REFERENCE_DEFAULT_MIN_TX_FEE.getValue(),  // relayFee
                 localServices,
                 network,
                 address));
@@ -288,7 +259,7 @@ public class WalletAppKitService implements BitcoinJsonRpc, Closeable {
 
     @Override
     public CompletableFuture<Sha256Hash> sendtoaddress(String address, Double amount) {
-        return exception(new UnsupportedOperationException("Not implemented yet"));
+        return exception(new UnsupportedOperationException("Unimplemented RPC method"));
     }
 
     private CompletableFuture<byte[]> getBlockBytes(Sha256Hash blockHash) {
