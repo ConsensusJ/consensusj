@@ -9,7 +9,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macOS-latest]
         graalvm: [ '22.3.1' ]
-        java: [ '11', '17' ]
+        java: [ '17', '19' ]
       fail-fast: false
     name: ${{ matrix.os }} JDK ${{ matrix.graalvm }}.${{ matrix.java }}
     steps:
