@@ -253,8 +253,7 @@ public class WalletAppKitService implements BitcoinJsonRpc, Closeable {
         return switch(network) {
             case MAINNET -> "main";
             case TESTNET -> "test";
-            case SIGNET -> "signet";
-            case REGTEST -> "regtest";
+            case SIGNET, REGTEST -> network.toString();
         };
     }
 
