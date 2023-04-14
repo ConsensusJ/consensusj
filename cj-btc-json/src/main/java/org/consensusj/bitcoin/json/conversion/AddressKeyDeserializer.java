@@ -51,6 +51,7 @@ public class AddressKeyDeserializer extends KeyDeserializer {
     /**
      * @deprecated use {@link #AddressKeyDeserializer(Network)}
      */
+    @Deprecated
     public AddressKeyDeserializer(NetworkParameters netParams) {
         this(netParams.network());
     }
