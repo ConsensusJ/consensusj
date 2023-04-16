@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -126,7 +127,8 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
         }
         return future;
     }
-    
+
+    // TODO: Create a mechanism to return a map with only the desired remotely-accessible methods in it.
     /**
      * Use reflection/introspection to generate a map of methods.
      * Generally this is called to initialize a {@link Map} stored in a static field, so the reflection can be done
@@ -136,6 +138,8 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      */
     static Map<String, Method> reflect(Class<?>  apiClass) {
         return Arrays.stream(apiClass.getMethods())
+                .filter(m -> Modifier.isPublic(m.getModifiers()))               // Only public methods
+                .filter(m -> m.getReturnType().equals(CompletableFuture.class)) // Only methods that return CompletableFuture
                 .collect(Collectors
                         .toUnmodifiableMap(Method::getName, // key is method name
                                 (method) -> method,         // value is Method object
