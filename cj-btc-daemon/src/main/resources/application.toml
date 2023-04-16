@@ -3,7 +3,7 @@ micronaut.application.name = 'cjbitcoind'
 # network-id must specify a valid org.bitcoinj.base.BitcoinNetwork either by
 # a lowercase name ("mainnet", "testnet", "signet", or "regtest") or by
 # an ID ("org.bitcoin.production", "org.bitcoin.testnet", etc.)
-cjbitcoind.config.network-id = "mainnet"
+cjbitcoind.config.network-id = "testnet"
 
 # The server port for listening for JSON-RPC and REST queries
 cjbitcoind.config.server-port = 8080

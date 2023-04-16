@@ -17,8 +17,8 @@ class BitcoinDaemonConfigSpec extends Specification {
 
         then:
         config.walletBaseName() == "CJBitcoinDaemon"
-        config.networkId() == "mainnet"
-        config.network() == BitcoinNetwork.MAINNET
+        config.networkId() == "testnet"
+        config.network() == BitcoinNetwork.TESTNET
         config.serverPort() == 8080
 
         cleanup:
