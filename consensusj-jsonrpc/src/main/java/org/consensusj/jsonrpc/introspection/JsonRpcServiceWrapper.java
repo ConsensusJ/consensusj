@@ -1,6 +1,5 @@
 package org.consensusj.jsonrpc.introspection;
 
-import org.consensusj.jsonrpc.AsyncSupport;
 import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcErrorException;
 import org.consensusj.jsonrpc.JsonRpcException;
@@ -11,10 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import static org.consensusj.jsonrpc.JsonRpcError.Error.METHOD_NOT_FOUND;
 import static org.consensusj.jsonrpc.JsonRpcError.Error.SERVER_EXCEPTION;
@@ -135,13 +135,12 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @return a map of method names to method objects
      */
     static Map<String, Method> reflect(Class<?>  apiClass) {
-        java.lang.reflect.Method[] publicInheritedMethods = apiClass.getMethods();
-        Map<String, Method> methods = new HashMap<>();
-        for (Method method : publicInheritedMethods) {
-            String name = method.getName();
-            methods.put(name, method);
-        }
-        return methods;
+        return Arrays.stream(apiClass.getMethods())
+                .collect(Collectors
+                        .toUnmodifiableMap(Method::getName, // key is method name
+                                (method) -> method,         // value is Method object
+                                (existingKey, key) -> key)  // if duplicate, replace existing
+                );
     }
 
     /**
