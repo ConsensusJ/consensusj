@@ -74,7 +74,7 @@ sourceSets {
 }
 
 task regTest(type: Test) {
-    description = 'Runs integration tests against Bitcon Core in regtest mode'
+    description = 'Runs integration tests against Bitcoin Core in regtest mode'
     group = 'verification'
     useJUnitPlatform()
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
