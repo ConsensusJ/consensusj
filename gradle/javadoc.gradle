@@ -1,17 +1,14 @@
 ext.javadocSpec = {
     options.encoding = 'UTF-8'
-    options.addBooleanOption 'html5', true              // Requires JDK 9+
+    options.addBooleanOption 'html5', true
 
-    if (JavaVersion.current().isJava9()) {
-        // TODO: Are these options Asciidoclet or Java 9 specific? If not, move out of this conditional
-        options.addStringOption '-base-dir', "${projectDir}"
-        options.addStringOption '-attribute',
-                "name=${project.name}," +
-                        "version=${project.version}," +
-                        "title-link=http://consensusj.github.io/consensusj/[${project.name} ${project.version}]"
-        options.addStringOption '-attribute', 'data-uri'
-        options.addBooleanOption 'linksource', true             // include link to HTML source file
-    }
+    options.addStringOption '-base-dir', "${projectDir}"
+    options.addStringOption '-attribute',
+            "name=${project.name}," +
+            "version=${project.version}," +
+            "title-link=http://consensusj.github.io/consensusj/[${project.name} ${project.version}]"
+    options.addStringOption '-attribute', 'data-uri'
+    options.addBooleanOption 'linksource', true             // include link to HTML source file
 
     def javaDocLinks = [
             "https://docs.oracle.com/en/java/javase/17/docs/api",
@@ -26,7 +23,6 @@ ext.javadocSpec = {
     String[] linksArray = javaDocLinks.toArray(new String[]{})
 
     options.links(linksArray)
-
 }
 
 allprojects {
