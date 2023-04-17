@@ -1,4 +1,4 @@
-image: ubuntu:focal
+image: debian:bookworm-slim
 
 # Note: You can test changes to this file locally with:
 # gitlab-runner exec docker --docker-privileged build
@@ -10,13 +10,12 @@ cache:
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-  UBUNTU_CODENAME: "focal"
-  JDK_PACKAGE: "openjdk-17-jdk"
+  JDK_PACKAGE: "openjdk-17-jdk-headless"
 
 before_script:
   - apt-get update
   - apt-get -y upgrade
-  - DEBIAN_FRONTEND=noninteractive apt-get -y install wget apt-transport-https gnupg curl graphviz
+  - apt-get -y install wget apt-transport-https gnupg curl graphviz
   - apt-get -y install binutils $JDK_PACKAGE
   - java -version
 
