@@ -64,6 +64,7 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @param req The Request POJO
      * @return A future JSON RPC Response
      */
+    @Override
     default <RSLT> CompletableFuture<JsonRpcResponse<RSLT>> call(final JsonRpcRequest req) {
         log.debug("JsonRpcServiceWrapper.call: {}", req.getMethod());
         CompletableFuture<RSLT> futureResult = callMethod(req.getMethod(), req.getParams());
