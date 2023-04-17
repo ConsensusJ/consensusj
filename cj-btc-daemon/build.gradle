@@ -26,6 +26,12 @@ graalvmNative {
     }
 }
 
+configurations {
+    compileClasspath {
+        resolutionStrategy.force 'org.slf4j:slf4j-api:1.7.36'
+    }
+}
+
 dependencies {
     implementation project(':cj-btc-services')
     implementation project(':consensusj-jsonrpc')
@@ -38,10 +44,6 @@ dependencies {
 
     testImplementation project(':cj-btc-jsonrpc')
     testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy extensions in tests
-
-    implementation('org.slf4j:slf4j-api:1.7.36') {
-        force = true
-    }
 
     runtimeOnly "ch.qos.logback:logback-classic"
 }

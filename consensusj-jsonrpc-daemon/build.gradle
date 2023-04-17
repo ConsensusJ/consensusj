@@ -24,6 +24,12 @@ graalvmNative {
     }
 }
 
+configurations {
+    compileClasspath {
+        resolutionStrategy.force 'org.slf4j:slf4j-api:1.7.36'
+    }
+}
+
 dependencies {
     implementation project(':consensusj-jsonrpc')
 
@@ -31,10 +37,6 @@ dependencies {
     implementation "javax.annotation:javax.annotation-api"
 
     compileOnly "org.graalvm.nativeimage:svm"
-
-    implementation('org.slf4j:slf4j-api:1.7.36') {
-        force = true
-    }
 
     runtimeOnly "ch.qos.logback:logback-classic"
 
