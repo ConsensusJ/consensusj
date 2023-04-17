@@ -4,7 +4,6 @@
  */
 plugins {
     id 'java-library'
-    id 'com.github.johnrengelman.shadow' version '4.0.4'
 }
 
 tasks.withType(JavaCompile) {
