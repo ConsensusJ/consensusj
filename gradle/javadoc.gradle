@@ -1,13 +1,6 @@
 ext.javadocSpec = {
     options.encoding = 'UTF-8'
     options.addBooleanOption 'html5', true
-
-    options.addStringOption '-base-dir', "${projectDir}"
-    options.addStringOption '-attribute',
-            "name=${project.name}," +
-            "version=${project.version}," +
-            "title-link=http://consensusj.github.io/consensusj/[${project.name} ${project.version}]"
-    options.addStringOption '-attribute', 'data-uri'
     options.addBooleanOption 'linksource', true             // include link to HTML source file
 
     def javaDocLinks = [
