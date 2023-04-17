@@ -26,6 +26,7 @@ The 0.7.0 release of **ConsensusJ** will require **bitcoinj** v0.17, currently i
 
 * Gradle 8.1
 * Use `JAVA_HOME` not `GRAALVM_HOME` to find `native-image` tool in `consensusj-jsonrpc`, `consensusj-jsonrpc-cli` and `cj-btc-cli` builds.
+* GitHub JDK Matrix: Java 11, 17, **20**
 
 == v0.6.5
 
@@ -56,7 +57,7 @@ This will likely be the last release using **bitcoinj** 0.16.x. `bitcoinj-0.17-a
 
 === Build/Test Updates
 
-* GitHub JDK Matrix: Java 11, 17. 19
+* GitHub JDK Matrix: Java 11, 17, 19
 * Gradle 7.6.1
 * GraalVM 22.3.1
 * Miscellaneous build improvements
