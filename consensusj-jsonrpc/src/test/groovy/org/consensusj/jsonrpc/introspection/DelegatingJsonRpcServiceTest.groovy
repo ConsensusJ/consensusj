@@ -1,6 +1,7 @@
 package org.consensusj.jsonrpc.introspection
 
-
+import org.consensusj.jsonrpc.JsonRpcRequest
+import org.consensusj.jsonrpc.JsonRpcResponse
 import spock.lang.Specification
 
 /**
@@ -9,13 +10,13 @@ import spock.lang.Specification
 class DelegatingJsonRpcServiceTest extends Specification {
     def "callMethod works"() {
         given:
-        def unwrapped = new TrivialJsonRpcService()
-        def wrapped = new DelegatingJsonRpcService(unwrapped)
+        var unwrapped = new TrivialJsonRpcService()
+        var wrapped = new DelegatingJsonRpcService(unwrapped)
 
         when:
-        def result = wrapped.callMethod("getblockcount", []).get()
+        JsonRpcResponse<Integer> response = wrapped.call(new JsonRpcRequest("getblockcount")).get()
 
         then:
-        result == 99
+        response.result == 99
     }
 }
