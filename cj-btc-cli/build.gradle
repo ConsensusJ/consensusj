@@ -43,10 +43,10 @@ jar {
 
 
 // Compile a native image using GraalVM's native-image tool
-// Graal must be installed at $GRAALVM_HOME
+// Graal must be installed at $JAVA_HOME
 task nativeCompile(type:Exec, dependsOn: jar) {
     workingDir = projectDir
-    executable = "${System.env.GRAALVM_HOME}/bin/native-image"
+    executable = "${System.env.JAVA_HOME}/bin/native-image"
     args = [ '--verbose',
              '--no-fallback',
              '-cp', "${-> configurations.nativeToolImplementation.asPath}", // Lazy configuration resolution
