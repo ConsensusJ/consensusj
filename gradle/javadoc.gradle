@@ -5,8 +5,8 @@ ext.javadocSpec = {
 
     def javaDocLinks = [
             "https://docs.oracle.com/en/java/javase/17/docs/api",
-            "https://fasterxml.github.io/jackson-core/javadoc/2.13/",
-            "https://fasterxml.github.io/jackson-databind/javadoc/2.13/"
+            "https://fasterxml.github.io/jackson-core/javadoc/2.14/",
+            "https://fasterxml.github.io/jackson-databind/javadoc/2.14/"
     ]
 
     if (!bitcoinjVersion.contains("beta") && !bitcoinjVersion.contains("rc")) {
