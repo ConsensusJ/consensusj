@@ -1,4 +1,4 @@
 /**
- * Generic and Bitcoin JSON-RPC Java clients and supporting classes.
+ * Bitcoin JSON-RPC Java client and supporting classes.
  */
 package org.consensusj.bitcoin.jsonrpc;
