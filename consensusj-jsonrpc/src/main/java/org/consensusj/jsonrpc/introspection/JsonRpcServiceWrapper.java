@@ -80,7 +80,7 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @param <RSLT> type of result
      * @return A success or error response as appropriate
      */
-    default <RSLT> JsonRpcResponse<RSLT> resultCompletionHandler(JsonRpcRequest req, RSLT result, Throwable ex) {
+    private <RSLT> JsonRpcResponse<RSLT> resultCompletionHandler(JsonRpcRequest req, RSLT result, Throwable ex) {
         return (result != null) ?
                 wrapResult(req, result) :
                 wrapError(req, exceptionToError(ex));
@@ -92,7 +92,7 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @param ex Exception returned from "unwrapped" method
      * @return An error POJO for insertion in a JsonRpcResponse
      */
-    default JsonRpcError exceptionToError(Throwable ex) {
+    private JsonRpcError exceptionToError(Throwable ex) {
         if (ex instanceof JsonRpcErrorException) {
             return ((JsonRpcErrorException) ex).getError();
         } else if (ex instanceof JsonRpcException) {
@@ -109,7 +109,7 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @param params List of JSON-RPC parameters
      * @return A future result POJO
      */
-    default <RSLT> CompletableFuture<RSLT> callMethod(String methodName, List<Object> params) {
+    private <RSLT> CompletableFuture<RSLT> callMethod(String methodName, List<Object> params) {
         log.debug("JsonRpcServiceWrapper.callMethod: {}", methodName);
         CompletableFuture<RSLT> future;
         final Method mh = getMethod(methodName);
@@ -154,11 +154,11 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @param result the result to wrap
      * @return A valid JsonRpcResponse
      */
-    static <RSLT> JsonRpcResponse<RSLT> wrapResult(JsonRpcRequest req, RSLT result) {
+    private static <RSLT> JsonRpcResponse<RSLT> wrapResult(JsonRpcRequest req, RSLT result) {
         return new JsonRpcResponse<>(req, result);
     }
 
-    static <RSLT> JsonRpcResponse<RSLT> wrapError(JsonRpcRequest req, JsonRpcError error) {
+    private static <RSLT> JsonRpcResponse<RSLT> wrapError(JsonRpcRequest req, JsonRpcError error) {
         return new JsonRpcResponse<>(req, error);
     }
 }
