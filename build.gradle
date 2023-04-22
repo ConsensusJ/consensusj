@@ -66,6 +66,11 @@ subprojects {
         }
     }
 
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
     compileJava {
         options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
         options.encoding = 'UTF-8'
