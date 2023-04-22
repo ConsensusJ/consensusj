@@ -9,9 +9,9 @@ allprojects {
 
         }
         repositories {
-            def consensusJGitlabProjectId = "8482916"
+            def consensusJGitLabProjectId = "8482916"
             maven {
-                url "https://gitlab.com/api/v4/projects/${consensusJGitlabProjectId}/packages/maven"
+                url "https://gitlab.com/api/v4/projects/${consensusJGitLabProjectId}/packages/maven"
                 name "GitLab"
                 credentials(HttpHeaderCredentials) {
                     name = 'Private-Token'
