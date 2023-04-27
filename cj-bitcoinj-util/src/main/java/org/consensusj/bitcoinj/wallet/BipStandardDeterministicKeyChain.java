@@ -4,7 +4,6 @@ import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.base.ScriptType;
 import org.bitcoinj.crypto.ECKey;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.ChildNumber;
 import org.bitcoinj.crypto.DeterministicKey;
 import org.bitcoinj.crypto.HDPath;
@@ -45,6 +44,7 @@ public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
 
     /**
      * Construct a BipStandardDeterministicKeyChain from a DeterministicKeyChain
+     * THIS IS NOT A WRAPPER, BUT A COPY -- THIS IS PROBABLY NOT WHAT WE WANT!
      * @param hdChain existing DeterministicKeyChain
      * @param network network (used for constructing addresses)
      */
@@ -57,16 +57,6 @@ public class BipStandardDeterministicKeyChain extends DeterministicKeyChain {
         this.network = network;
         pathReceiving = super.getAccountPath().extend(DeterministicKeyChain.EXTERNAL_SUBPATH);
         pathChange = super.getAccountPath().extend(DeterministicKeyChain.INTERNAL_SUBPATH);
-    }
-
-    @Deprecated
-    public BipStandardDeterministicKeyChain(DeterministicSeed seed, ScriptType outputScriptType, NetworkParameters netParams) {
-        this(seed, outputScriptType, netParams.network());
-    }
-
-    @Deprecated
-    public BipStandardDeterministicKeyChain(DeterministicKeyChain hdChain, NetworkParameters netParams) {
-        this(hdChain, netParams.network());
     }
 
     public Address addressFromKey(ECKey key) {

@@ -2,12 +2,19 @@ package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
+import org.bitcoinj.base.Network;
 import org.bitcoinj.base.Sha256Hash;
+import org.bitcoinj.core.InsufficientMoneyException;
+import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.Transaction;
+import org.bitcoinj.core.TransactionInput;
+import org.bitcoinj.core.TransactionOutput;
 import org.bitcoinj.script.Script;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 // TODO: This probably shouldn't have the addXyz methods that create a new, modified instance.
 // A SigningRequest should be immutable *and* complete/ready-to-sign. There should be some kind of SigningRequestBuilder
@@ -64,4 +71,35 @@ public interface SigningRequest {
         modifiable.add(element);
         return Collections.unmodifiableList(modifiable);
     }
+
+    /**
+     * bitcoinj signing (currently) uses mutable {@link Transaction} objects, this convenience method will create
+     * a completed, unsigned bitcoinj {@code Transaction} if you want to use bitcoinj to sign this request.
+     * @return an unsigned bitcoinj transaction
+     */
+    Transaction toUnsignedTransaction();
+
+    /**
+     * Create from completed, but unsigned bitcoinj {@link Transaction}
+     * @param network This shouldn't be needed, but currently is required.
+     * @param transaction a completed, but unsigned bitcoinj transaction.
+     * @return A signing request
+     */
+    static SigningRequest ofTransaction(Network network, Transaction transaction) {
+        List<? extends TransactionInputData> inputs = transaction.getInputs().stream()
+                .map(in -> new TransactionInputDataImpl(
+                        in.getParentTransaction().getTxId(),
+                        in.getIndex(),
+                        in.getValue(),
+                        in.getScriptSig()))
+                .collect(Collectors.toList());
+        List<? extends TransactionOutputData> outputs = transaction.getOutputs().stream()
+                .map(out -> new TransactionOutputDataScript(
+                        out.getValue(),
+                        out.getScriptPubKey()))
+                .collect(Collectors.toList());
+        SigningRequest request = new DefaultSigningRequest(network, (List<TransactionInputData>) inputs, (List<TransactionOutputData>) outputs);
+        return request;
+    }
+
 }

@@ -19,6 +19,11 @@ class BitcoinExtendedClientSpec extends Specification {
     @Shared
     FundingSource funder
 
+    def "There is well-known RegTestMiningAddress"() {
+        expect:
+        client.getRegTestMiningAddress() == BitcoinExtendedClient.DEFAULT_REGTEST_MINING_ADDRESS
+    }
+
     def "Can create a funded address and send coins with sendBitcoin()"() {
         given: "a client, a source of funds, and a blockchain environment"
         RegTestEnvironment chainEnv = new RegTestEnvironment(client)

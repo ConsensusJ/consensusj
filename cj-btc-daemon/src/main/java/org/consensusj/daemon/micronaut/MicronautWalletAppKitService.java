@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
 
+// TODO: Rather than subclass WalletAppKitService there should be a RPCServerShutdown class or interface
+// that is passed in to  WalletAppKitService that it can all when `stop` is called.
 /**
  * Subclass of {@link WalletAppKitService} that implements the {@code stop} JSON-RPC method using
  * Micronaut {@link EmbeddedServer#stop()}

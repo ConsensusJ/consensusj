@@ -10,7 +10,7 @@ import org.bitcoinj.base.Sha256Hash;
  * Data class for UnspentOutput as returned by listUnspent RPC
  * Because the class is immutable we have to give Jackson some hints via annotations.
  */
-public class UnspentOutput {
+public class UnspentOutput implements UtxoInfo {
     private final Sha256Hash  txid;
     private final int         vout;
     private final Address     address;
