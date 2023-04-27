@@ -5,7 +5,7 @@ import org.bitcoinj.base.BitcoinNetwork
 import spock.lang.Specification
 
 /**
- * Test the configuration record
+ * Test the configuration record. It should be loaded from {@code resources/application-test.toml}.
  */
 class BitcoinDaemonConfigSpec extends Specification {
     void "test default BitcoinDaemon configuration"() {
@@ -17,8 +17,8 @@ class BitcoinDaemonConfigSpec extends Specification {
 
         then:
         config.walletBaseName() == "CJBitcoinDaemon"
-        config.networkId() == "testnet"
-        config.network() == BitcoinNetwork.TESTNET
+        config.networkId() == "regtest"
+        config.network() == BitcoinNetwork.REGTEST
         config.serverPort() == 8080
 
         cleanup:

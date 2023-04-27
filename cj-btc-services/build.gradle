@@ -10,6 +10,7 @@ tasks.withType(JavaCompile) {
 
 dependencies {
     api project(':cj-btc-json')
+    implementation project(':cj-bitcoinj-util')
     api 'jakarta.inject:jakarta.inject-api:2.0.1'
     implementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
 }

@@ -6,6 +6,7 @@ configurations {
 dependencies {
     testImplementation project(':cj-btc-jsonrpc-gvy')
     testImplementation project(':cj-btc-json')
+    testImplementation project(':cj-btc-services')     // To test WalletAppKitService
     testImplementation project(':cj-bitcoinj-util')     // For BlockUtils
     testImplementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     testImplementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
@@ -84,5 +85,6 @@ task regTest(type: Test) {
     include 'org/consensusj/bitcoin/rpc/**',
             'org/consensusj/bitcoin/integ/bitcoinj/**',
             'org/consensusj/bitcoin/integ/funding/**',
+            'org/consensusj/bitcoin/integ/services/**',
             'org/consensusj/bitcoin/integ/java/**'
 }

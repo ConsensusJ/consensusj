@@ -12,13 +12,14 @@ if (!JavaVersion.current().isJava11Compatible()) {
     include 'cj-bitcoinj-util'                  // BlockUtil (and future stuff depending on only bitcoinj)
     include 'cj-bitcoinj-dsl-gvy'               // Groovy DSL for bitcoinj
 
-// JDK 9
+// JDK 11
     include 'consensusj-analytics'              // Reactive analytics libraries
     include 'consensusj-currency'               // JavaMoney Currency Provider(s)
     include 'consensusj-decentralized-id'       // W3C Decentralized ID library (in-process)
     include 'consensusj-exchange'               // JavaMoney Exchange Providers
     include 'consensusj-jsonrpc'                // JSON-RPC Java client
     include 'consensusj-jsonrpc-gvy'            // JSON-RPC Groovy client
+    include 'consensusj-jsonrpc-javanet'        // JSON-RPC client using java.net.http (incubating)
     include 'consensusj-rx-jsonrpc'             // RxJava 3 adapter for JSON-RPC
     include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
     include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
@@ -27,12 +28,8 @@ if (!JavaVersion.current().isJava11Compatible()) {
     include 'cj-btc-json'                       // JSON <-> Java Object mapping
     include 'cj-btc-jsonrpc'                    // Bitcoin JSON-RPC client using bitcoinj-based types
     include 'cj-btc-jsonrpc-gvy'                // Bitcoin JSON-RPC client with Groovy dynamic method support
-    include 'cj-btc-jsonrpc-integ-test'         // RPC-based integration tests of bitcoind
     include 'cj-eth-jsonrpc'                    // Ethereum JSON-RPC client (experimental)
     include 'cj-nmc-jsonrpc'                    // Namecoin JSON-RPC client (experimental)
-
-// JDK 11
-    include 'consensusj-jsonrpc-javanet'        // JSON-RPC client using java.net.http (incubating)
 
 if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
     System.err.println "Including JDK 17 modules because Java ${JavaVersion.current()} is JDK 17+"
@@ -40,6 +37,7 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
     include 'cj-bitcoinj-spock'                 // Spock tests/demos of basic bitcoinj capabilities
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
     include 'cj-btc-daemon'                     // Prototype Micronaut version of Bitcoin daemon
+    include 'cj-btc-jsonrpc-integ-test'         // RPC-based integration tests of/using bitcoind
     include 'cj-btc-services'                   // bitcoinj-based service objects
     include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
     include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI

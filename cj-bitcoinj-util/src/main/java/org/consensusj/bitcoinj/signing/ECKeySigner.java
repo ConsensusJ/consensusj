@@ -12,7 +12,7 @@ import java.util.Optional;
  * A simple transaction signer using a single ECKey that can sign either
  * {@link ScriptType#P2PKH} or {@link ScriptType#P2WPKH} transactions.
  */
-public class ECKeySigner implements TransactionSigner {
+public class ECKeySigner implements BaseTransactionSigner {
     private final ECKey ecKey;
 
     /**

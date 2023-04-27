@@ -21,13 +21,25 @@ public class TransactionInputDataImpl implements TransactionInputData {
     private final long amount;
     private final Script script;
 
+    /**
+     * @param txId parent txId (shouldn't be needed but Transaction.addSignedInput currently needs an Outpoint)
+     * @param index index of unspent output
+     * @param amount amount of unspent output
+     * @param script
+     */
     public TransactionInputDataImpl(Sha256Hash txId, long index, Coin amount, Script script) {
         this.txId = txId;
         this.index = index;
-        this.amount = amount.getValue();
+        this.amount = amount != null ? amount.getValue() : 0;        // TODO: Throw when amount is null?
         this.script = script;
     }
 
+    /**
+     * @param txId parent txId (shouldn't be needed but Transaction.addSignedInput currently needs an Outpoint)
+     * @param index index of unspent output
+     * @param amount amount of unspent output
+     * @param address
+     */
     public TransactionInputDataImpl(Sha256Hash txId, long index, Coin amount, Address address) {
         this(txId, index, amount, ScriptBuilder.createOutputScript(address));
     }

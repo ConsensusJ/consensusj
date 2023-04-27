@@ -30,6 +30,9 @@ configurations {
     compileClasspath {
         resolutionStrategy.force 'org.slf4j:slf4j-api:1.7.36'
     }
+    runtimeClasspath {
+        resolutionStrategy.force 'org.slf4j:slf4j-api:1.7.36'
+    }
 }
 
 dependencies {

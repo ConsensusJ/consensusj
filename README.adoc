@@ -191,7 +191,7 @@ We have completed refactoring all modules into the new `org.consensusj` package 
 | Bitcoin Service-Layer objects - compatible with `jakarta.inject` (https://jcp.org/en/jsr/detail?id=330[JSR-330])
 
 |<<cj-btc-jsonrpc-integ-test,cj-btc-jsonrpc-integ-test>>
-| 11
+| *17*
 |n/a
 |Bitcoin JSON-RPC integration tests (RegTest)
 
@@ -419,7 +419,7 @@ These sample Spock "feature tests" show the RPC client in action and are from th
 http://javamoney.github.io[JavaMoney] (also known as http://javamoney.github.io/api.html[JSR 354]) is the new Java Standard for advanced and flexible currency handling on the Java platform.
 
 [quote, JavaMoney Web Site]
-JSR 354 provides a portable and extensible framework for handling of Money & Currency. The API models monetary amounts and currencies in a platform independent and portable way, including well defined extension points.
+JSR 354 provides a portable and extensible framework for handling of Money & Currency. The API models monetary amounts and currencies in a platform independent and portable way, including well-defined extension points.
 
 Support for virtual currencies is one of the key design goals in the specification. The `consensusj-currency` module allows Bitcoin to
 be used by standard Java APIs in the same ways as fiat currencies.

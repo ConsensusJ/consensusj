@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
  * A "signing wallet"  that uses a {@link DeterministicKeyChain} to
  * sign {@link SigningRequest}s.
  */
-public class HDKeychainSigner implements TransactionSigner {
+public class HDKeychainSigner implements BaseTransactionSigner {
     private final DeterministicKeyChain keyChain;
 
     public HDKeychainSigner(DeterministicKeyChain keyChain) {

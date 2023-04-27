@@ -8,6 +8,7 @@ import java.util.Formatter;
 public class HexUtil {
     /**
      * Converts a hex-encoded string into a byte array.
+     * If you are on Java 17 or later you should use {@code HexFormat}
      *
      * @param s A string to convert
      * @return The byte array

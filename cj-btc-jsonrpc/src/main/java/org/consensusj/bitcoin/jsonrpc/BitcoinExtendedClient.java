@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.jsonrpc;
 
 import com.fasterxml.jackson.databind.JavaType;
 import org.bitcoinj.base.BitcoinNetwork;
+import org.bitcoinj.base.DefaultAddressParser;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.base.ScriptType;
 import org.consensusj.bitcoin.json.pojo.AddressInfo;
@@ -43,12 +44,12 @@ import java.util.stream.Collectors;
 public class BitcoinExtendedClient extends BitcoinClient {
     private static final Logger log = LoggerFactory.getLogger(BitcoinExtendedClient.class);
 
+    public static final Address DEFAULT_REGTEST_MINING_ADDRESS = new DefaultAddressParser().parseAddressAnyNetwork("mwQA8f4pH23BfHyy4zf8mgAyeNu5uoy6GU");
     private static final BigInteger NotSoPrivatePrivateInt = new BigInteger(1, Hex.decode("180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19"));
     private static final String RegTestMiningAddressLabel = "RegTestMiningAddress";
     public static final String REGTEST_WALLET_NAME = "consensusj-regtest-wallet";
     private boolean regTestWalletInitialized = false;
     private /* lazy */ Address regTestMiningAddress;
-
 
     public final Coin stdTxFee = Coin.valueOf(10000);
     public final Coin stdRelayTxFee = Coin.valueOf(1000);
