@@ -45,8 +45,4 @@ class GetAddressBalanceSpec extends BaseRegTestSpec {
         balanceInfo.received >= Coin.ZERO
         balanceInfo.immature >= Coin.ZERO
     }
-
-    boolean isAddressIndexEnabled() {
-        return client.isAddressIndexEnabled()
-    }
 }
