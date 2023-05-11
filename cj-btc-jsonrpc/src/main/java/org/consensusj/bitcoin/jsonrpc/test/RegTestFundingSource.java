@@ -114,15 +114,10 @@ public class RegTestFundingSource implements FundingSource {
     private void logMined(Coin needed, List<UnspentOutput> available) throws IOException {
         int height = client.getBlockCount();
         log.warn("⛏⛏⛏⛏⛏ Mined {} (blk#{}): Available: {} Needed: {} ⛏⛏⛏⛏⛏",
-                rewardFromRegTestHeight(height).toPlainString(),
+                client.getBlockReward(height).toPlainString(),
                 height,
                 sumUnspentOutputs(available).toPlainString(),
                 needed.toPlainString());
-    }
-
-    private Coin rewardFromRegTestHeight(int height) {
-        int halvings = height / 150;
-        return Coin.valueOf(Coin.FIFTY_COINS.value >> halvings);
     }
 
     private Map<Address, Coin> calcChange(Coin availableFunds, Coin amountToSend, Address destAddress, Address changeAddress) {

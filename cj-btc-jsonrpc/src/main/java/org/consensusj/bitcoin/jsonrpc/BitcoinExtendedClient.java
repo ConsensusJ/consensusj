@@ -5,6 +5,7 @@ import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.DefaultAddressParser;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.base.ScriptType;
+import org.bitcoinj.params.BitcoinNetworkParams;
 import org.consensusj.bitcoin.json.pojo.AddressInfo;
 import org.consensusj.bitcoin.json.pojo.LoadWalletResult;
 import org.consensusj.bitcoin.json.pojo.Outpoint;
@@ -195,6 +196,15 @@ public class BitcoinExtendedClient extends BitcoinClient {
      */
     public List<Sha256Hash> generateBlocks(int numBlocks) throws JsonRpcStatusException, IOException {
         return this.generateToAddress(numBlocks, getRegTestMiningAddress());
+    }
+
+    /**
+     * Calculate the block reward for a given height on the current network
+     * @param height the height at which to calculate the block reward
+     * @return block reward
+     */
+    public Coin getBlockReward(int height) {
+        return ((BitcoinNetworkParams) getNetParams()).getBlockInflation(height);
     }
 
     /**
