@@ -47,6 +47,18 @@
 . `./gradlew clean buildCI publishToMavenLocal`
 
 
+== Update the GraalVM resource json files for the Bitcoin Daemon
+
+This is not working yet. Needs refinement:
+
+. `sdk use java 22.3.1.r17-grl`
+. `./gradlew -Pagent cj-btc-daemon:run --args="-cjbitcoind.config.network-id=regtest" &`
+. `./run-all-methods.sh`
+. `./gradlew cj-btc-daemon:metadataCopy --task run --dir build/graal-native-image-metadata`
+. Commit changes
+
+
+
 
 
 
