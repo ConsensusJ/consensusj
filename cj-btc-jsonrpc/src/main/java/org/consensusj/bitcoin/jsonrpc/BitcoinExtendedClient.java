@@ -199,11 +199,11 @@ public class BitcoinExtendedClient extends BitcoinClient {
     }
 
     /**
-     * Calculate the block reward for a given height on the current network
-     * @param height the height at which to calculate the block reward
-     * @return block reward
+     * Calculate the subsidy portion block reward for a given height on the current network
+     * @param height the height at which to calculate the mining subsidy
+     * @return mining subsidy
      */
-    public Coin getBlockReward(int height) {
+    public Coin getBlockSubsidy(int height) {
         return ((BitcoinNetworkParams) getNetParams()).getBlockInflation(height);
     }
 

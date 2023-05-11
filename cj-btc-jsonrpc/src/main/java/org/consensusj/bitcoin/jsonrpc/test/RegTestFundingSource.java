@@ -114,7 +114,7 @@ public class RegTestFundingSource implements FundingSource {
     private void logMined(Coin needed, List<UnspentOutput> available) throws IOException {
         int height = client.getBlockCount();
         log.warn("⛏⛏⛏⛏⛏ Mined {} (blk#{}): Available: {} Needed: {} ⛏⛏⛏⛏⛏",
-                client.getBlockReward(height).toPlainString(),
+                client.getBlockSubsidy(height).toPlainString(),
                 height,
                 sumUnspentOutputs(available).toPlainString(),
                 needed.toPlainString());
