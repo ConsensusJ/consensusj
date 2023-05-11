@@ -419,14 +419,29 @@ signrawtransactionwithwallet hex
 
     @Override
     public CompletableFuture<Sha256Hash> sendrawtransaction(String hex) {
+        log.info("received raw tx: {}", hex);
         ByteBuffer raw = ByteBuffer.wrap(hexFormat.parseHex(hex));
         Transaction signedTx;
         try {
             signedTx = new Transaction(NetworkParameters.of(network), raw);
-        } catch (ProtocolException e) {
-            return CompletableFuture.failedFuture(new RuntimeException("Invalid raw (hex) transaction", e));
+        } catch (ProtocolException pe) {
+            return CompletableFuture.failedFuture(new RuntimeException("Invalid raw (hex) transaction", pe));
+        }
+        log.info("received raw tx: {}", signedTx);
+        try {
+            signedTx.verify();
+        } catch (VerificationException ve) {
+            // TODO: More validation?
+            return CompletableFuture.failedFuture(ve);
         }
         return sendTransaction(signedTx)
+                .whenComplete((bcast, error) -> {
+                    if (error != null) {
+                        log.info("Broadcast {}, done: {}", bcast.transaction().getTxId(), bcast.awaitSent().isDone());
+                    } else {
+                        log.error("", error);
+                    }
+                })
                 .thenCompose(tb1 -> tb1.awaitRelayed()
                         .thenApply(tb2 -> tb2.transaction()
                                 .getTxId()
@@ -441,13 +456,14 @@ signrawtransactionwithwallet hex
     @Override
     public CompletableFuture<SignedRawTransaction> signrawtransactionwithwallet(String hex) {
         ByteBuffer raw = ByteBuffer.wrap(hexFormat.parseHex(hex));
-        Transaction unsignedTx;
+
+        SigningRequest signingRequest;
         try {
-            unsignedTx = new Transaction(NetworkParameters.of(network), raw);
+            Transaction unsignedTx = new Transaction(NetworkParameters.of(network), raw);
+            signingRequest = SigningRequest.ofTransaction(network, unsignedTx);
         } catch (ProtocolException e) {
             return CompletableFuture.failedFuture(new RuntimeException("Invalid raw (hex) transaction", e));
         }
-        SigningRequest signingRequest = SigningRequest.ofTransaction(network, unsignedTx);
 
         return signingService.signTransaction(signingRequest)
                 .thenApply(SignedRawTransaction::of);
@@ -455,10 +471,12 @@ signrawtransactionwithwallet hex
 
     private CompletableFuture<TransactionBroadcast> sendTransaction(Transaction tx) {
         try {
+            log.info("committing tx to wallet: {}", tx);
             kit.wallet().commitTx(tx);
+            log.info("broadcasting tx: {}", tx);
             return kit.peerGroup().broadcastTransaction(tx).awaitSent();
-        } catch (VerificationException ve) {
-            return CompletableFuture.failedFuture(ve);
+        } catch (Throwable t) {
+            return CompletableFuture.failedFuture(t);
         }
     }
 
