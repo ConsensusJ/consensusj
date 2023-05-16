@@ -21,7 +21,7 @@ public interface SignTransactionService extends TransactionSigner {
 
     /**
      * Create and sign a transaction to send coins to the specified address. Implements the transaction-building
-     * and signing portion of `sendtoaddress` RPC.
+     * and signing portion of {@code sendtoaddress} RPC.
      * @param toAddress destination address
      * @param amount amount to send
      * @return a future signed transaction
@@ -37,5 +37,5 @@ public interface SignTransactionService extends TransactionSigner {
      * @param changeAddress address that will receive change
      * @return a completed transaction signing request
      */
-    SigningRequest createBitcoinSigningRequest(Network network, List<? super TransactionInputData> inputUtxos, List<TransactionOutputData> outputs, Address changeAddress) throws InsufficientMoneyException;
+    SigningRequest createBitcoinSigningRequest(Network network, List<TransactionInputData> inputUtxos, List<TransactionOutputData> outputs, Address changeAddress) throws InsufficientMoneyException;
 }

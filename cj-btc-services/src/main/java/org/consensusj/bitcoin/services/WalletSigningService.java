@@ -10,7 +10,6 @@ import org.bitcoinj.core.TransactionOutput;
 import org.bitcoinj.wallet.Wallet;
 import org.consensusj.bitcoin.json.rpc.BitcoinJsonRpc;
 import org.consensusj.bitcoinj.service.SignTransactionService;
-import org.consensusj.bitcoinj.signing.DefaultSigningRequest;
 import org.consensusj.bitcoinj.signing.FeeCalculator;
 import org.consensusj.bitcoinj.signing.HDKeychainSigner;
 import org.consensusj.bitcoinj.signing.RawTransactionSigningRequest;
@@ -93,18 +92,17 @@ public class WalletSigningService implements SignTransactionService {
     }
     
     @Override
-    public SigningRequest createBitcoinSigningRequest(Network network, List<? super TransactionInputData> inputUtxos, List<TransactionOutputData> outputs, Address changeAddress) throws InsufficientMoneyException {
-        SigningRequest request = new DefaultSigningRequest(network, (List<TransactionInputData>) inputUtxos, outputs);
+    public SigningRequest createBitcoinSigningRequest(Network network, List<TransactionInputData> inputUtxos, List<TransactionOutputData> outputs, Address changeAddress) throws InsufficientMoneyException {
+        SigningRequest request = SigningRequest.of(network, inputUtxos, outputs);
         // TODO: see Wallet.calculateFee
         return SigningUtils.addChange(request, changeAddress, feeCalculator);
     }
 
     List<TransactionInputData> getInputs() {
         List<TransactionOutput> spendCandidates = findUnspentOutputs(1, BitcoinJsonRpc.DEFAULT_MAX_CONF, List.of());
-        List<? extends TransactionInputData> utxos  = spendCandidates.stream()
+        return spendCandidates.stream()
                 .map(TransactionInputData::fromTxOut)
                 .toList();
-        return (List<TransactionInputData>) utxos;
     }
 
     /**
