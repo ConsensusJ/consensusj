@@ -13,6 +13,7 @@ import org.consensusj.bitcoinj.service.SignTransactionService;
 import org.consensusj.bitcoinj.signing.DefaultSigningRequest;
 import org.consensusj.bitcoinj.signing.FeeCalculator;
 import org.consensusj.bitcoinj.signing.HDKeychainSigner;
+import org.consensusj.bitcoinj.signing.RawTransactionSigningRequest;
 import org.consensusj.bitcoinj.signing.SigningRequest;
 import org.consensusj.bitcoinj.signing.SigningUtils;
 import org.consensusj.bitcoinj.signing.TestnetFeeCalculator;
@@ -41,6 +42,36 @@ public class WalletSigningService implements SignTransactionService {
         signer = new HDKeychainSigner(wallet.getActiveKeyChain());
     }
 
+    /**
+     *
+     * @param rawRequest "raw" signing request with UTXO hash, index information only
+     * @return A (future) signed transaction
+     */
+    public CompletableFuture<Transaction> signTransaction(RawTransactionSigningRequest rawRequest) {
+        SigningRequest completeRequest;
+        try {
+            // Foreach incomplete input, find the UTXO in the wallet and make a complete input
+            List<TransactionInputData> inputs = rawRequest.inputs().stream()
+                    .map(input -> TransactionInputData.of(
+                                    findUtxo(input.toUtxo())
+                                            .orElseThrow(() -> new RuntimeException("UTXO not found in wallet"))
+                            )
+                    )
+                    .toList();
+            // Make a (full) signing request that can be signed with a keychain alone
+            completeRequest = SigningRequest.of(wallet.network(), inputs, rawRequest.outputs());
+        } catch (RuntimeException e) {
+            return CompletableFuture.failedFuture(e);
+        }
+
+        return signTransaction(completeRequest);
+    }
+
+
+    /**
+     * @param request "complete" signing request with UTXO hash, index, amount, scriptPubKey
+     * @return A (future) signed transaction
+     */
     @Override
     public CompletableFuture<Transaction> signTransaction(SigningRequest request) {
         return signer.signTransaction(request);

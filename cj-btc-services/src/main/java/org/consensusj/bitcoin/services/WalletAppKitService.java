@@ -469,23 +469,7 @@ signrawtransactionwithwallet hex
             return CompletableFuture.failedFuture(new RuntimeException("Invalid raw (hex) transaction", e));
         }
 
-        SigningRequest completeRequest;
-        try {
-            // Foreach incomplete input, find the UTXO in the wallet and make a complete input
-            List<TransactionInputData> inputs = signingRequest.inputs().stream()
-                    .map(input -> TransactionInputData.of(
-                                    signingService.findUtxo(input.toUtxo())
-                                            .orElseThrow(() -> new RuntimeException("UTXO not found in wallet"))
-                            )
-                    )
-                    .toList();
-            // Make a (full) signing request that can be signed with a keychain alone
-            completeRequest = SigningRequest.of(network(), inputs, signingRequest.outputs());
-        } catch (RuntimeException e) {
-            return CompletableFuture.failedFuture(e);
-        }
-
-        return signingService.signTransaction(completeRequest)
+        return signingService.signTransaction(signingRequest)
                 .thenApply(SignedRawTransaction::of);
     }
 
