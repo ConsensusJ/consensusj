@@ -12,7 +12,7 @@ import org.bitcoinj.script.Script;
  */
 public interface TransactionOutputData {
     Coin amount();
-    Script script();
+    Script scriptPubKey();
 
     static TransactionOutputData of(Address address, Coin amount) {
         return new TransactionOutputAddress(amount, address);
@@ -25,6 +25,6 @@ public interface TransactionOutputData {
     }
 
     default TransactionOutput toMutableOutput(Network network) {
-        return new TransactionOutput(BitcoinNetworkParams.of(network), null, amount(), script().getProgram());
+        return new TransactionOutput(BitcoinNetworkParams.of(network), null, amount(), scriptPubKey().getProgram());
     }
 }

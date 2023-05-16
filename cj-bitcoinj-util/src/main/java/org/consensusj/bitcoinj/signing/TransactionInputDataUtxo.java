@@ -11,9 +11,8 @@ import org.bitcoinj.script.Script;
 import java.util.Objects;
 
 /**
- * Immutable aggregate of data for TransactionInput. This is almost the same as Utxo.Complete
- * <p>
- * This aspires to be a Java record someday
+ * Immutable aggregate of data for TransactionInput. This holds the same data as {@link Utxo.Complete} and
+ * the two may be combined in the future.
  */
 public class TransactionInputDataUtxo implements TransactionInputData, Utxo {
     private final Sha256Hash txId;

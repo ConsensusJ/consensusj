@@ -10,7 +10,9 @@ import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
 
 /**
- * I am a class with existential issues. Am I a TransactionInputSpec? or am I TransactionInputData?
+ * Immutable data for a transaction input.
+ * See also {@link RawTransactionSigningRequest.RawInput} which can hold an incomplete transaction input, like
+ * those sent in the {@code signtransactionwithwallet} JSON-RPC request.
  */
 public interface TransactionInputData {
     Coin amount();

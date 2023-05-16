@@ -234,7 +234,7 @@ We have completed refactoring all modules into the new `org.consensusj` package 
 |https://spockframework.org[Spock] tests of **bitcoinj** classes.
 
 |<<cj-bitcoinj-util,cj-bitcoinj-util>>
-| 8
+| 9
 |`org.consensusj.bitcoinj.util`
 |bitcoinj utilities and enhancements. Some will be submitted upstream.
 

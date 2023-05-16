@@ -26,7 +26,7 @@ public class TransactionOutputOpReturn implements TransactionOutputData {
     }
 
     @Override
-    public Script script() {
+    public Script scriptPubKey() {
         return new ScriptBuilder()
                 .op(ScriptOpCodes.OP_RETURN)
                 .data(opReturnData)

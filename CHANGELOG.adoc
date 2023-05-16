@@ -17,6 +17,26 @@ The 0.7.0 release of **ConsensusJ** will require **bitcoinj** v0.17, currently i
 * Remove usage of Guava `ListenableFuture`
 * Remove `PatchedTransaction` class used to work around an issue in bitcoinj, see https://github.com/bitcoinj/bitcoinj/pull/2274[bitcoinj #2274]
 
+=== cj-bitcoinj-util
+
+* Require JDK 9 (make use of `List.of()`)
+* BaseTransactionSigner can look up keys and pubKeys
+* Distinguish between RawTransactionSigningRequest and SigningRequest (i.e. the later has all UTXO information
+and can be signed with keychain only)
+* (Generally) construct SigningRequest with `of`, remove (most) add methods
+* SigningRequest constructor that specifies outputs as a Map<Address, Coin>
+* Rename TransactionInputDataImpl to TransactionInputDataUtxo
+* Utxo interface with Base, Signable, and Complete implementations
+
+=== cj-bitcoinj-json
+
+* UtxoInfo, PrevTxOutInfo change scriptPubKey type to Script (from String)
+* Add ScriptSerializer
+
+=== cj-btc-services
+
+* WalletSigningService can look up UTXO scriptPubKey and amount
+
 === Dependency Updates
 
 * Most modules now require a minimum of JDK 11 or later (see `README.adoc` for exceptions)

@@ -1,25 +1,13 @@
 package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Address;
-import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.base.Network;
-import org.bitcoinj.base.Sha256Hash;
-import org.bitcoinj.core.InsufficientMoneyException;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
-import org.bitcoinj.core.TransactionInput;
-import org.bitcoinj.core.TransactionOutput;
-import org.bitcoinj.script.Script;
-import org.bitcoinj.script.ScriptBuilder;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-// TODO: This probably shouldn't have the addXyz methods that create a new, modified instance.
 // A SigningRequest should be immutable *and* complete/ready-to-sign. There should be some kind of SigningRequestBuilder
 // to build a SigningRequest.
 /**

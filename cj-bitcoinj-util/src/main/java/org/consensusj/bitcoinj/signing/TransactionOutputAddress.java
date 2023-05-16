@@ -34,7 +34,7 @@ public class TransactionOutputAddress implements TransactionOutputData {
     }
 
     @Override
-    public Script script() {
+    public Script scriptPubKey() {
         return ScriptBuilder.createOutputScript(address);
     }
 

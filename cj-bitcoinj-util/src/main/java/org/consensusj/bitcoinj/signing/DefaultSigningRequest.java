@@ -4,11 +4,7 @@ import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
-import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutput;
-import org.bitcoinj.crypto.ECKey;
-import org.bitcoinj.crypto.TransactionSignature;
-import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
 
 import java.util.Collections;
@@ -101,7 +97,7 @@ public class DefaultSigningRequest implements SigningRequest {
                 utx.addOutput(new TransactionOutput(params,
                         utx,
                         out.amount(),
-                        out.script().getProgram())));
+                        out.scriptPubKey().getProgram())));
         return utx;
     }
 }

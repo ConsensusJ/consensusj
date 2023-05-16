@@ -21,7 +21,7 @@ public class TransactionOutputDataScript implements TransactionOutputData {
     }
 
     @Override
-    public Script script() {
+    public Script scriptPubKey() {
         return script;
     }
 }
