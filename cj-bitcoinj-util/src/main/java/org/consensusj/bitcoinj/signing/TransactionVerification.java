@@ -9,7 +9,7 @@ import org.bitcoinj.script.ScriptBuilder;
 import org.bitcoinj.script.ScriptException;
 
 /**
- *
+ * Utility for transaction validation
  */
 public class TransactionVerification {
     /**

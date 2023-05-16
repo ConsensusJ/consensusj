@@ -4,7 +4,10 @@ import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.core.InsufficientMoneyException;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -22,12 +25,24 @@ public interface SigningUtils {
     }
 
     static SigningRequest addChange(SigningRequest request, Address changeAddress, FeeCalculator calculator) throws InsufficientMoneyException {
-        Coin fee = calculator.calculateFee(request.addOutput(changeAddress, Coin.ZERO));
+        Coin fee = calculator.calculateFee(addOutput(request, changeAddress, Coin.ZERO));
         long change = sumInputSats(request.inputs()) - sumOutputSats(request.outputs()) - fee.value;
         if (change < 0) {
             throw new InsufficientMoneyException(Coin.ofSat(-change));
         }
-        return (change > 0) ? request.addOutput(changeAddress, Coin.ofSat(change)) : request;
+        return (change > 0) ? addOutput(request, changeAddress, Coin.ofSat(change)) : request;
+    }
+
+    private static SigningRequest addOutput(SigningRequest req, Address address, Coin amount) {
+        List<TransactionOutputData> outs = append(req.outputs(),
+                new TransactionOutputAddress(amount, address));
+        return SigningRequest.of(req.network(), req.inputs(), outs);
+    }
+
+    private static <T> List<T> append(List<T> list, T element) {
+        List<T> modifiable = new ArrayList<>(list);
+        modifiable.add(element);
+        return Collections.unmodifiableList(modifiable);
     }
 
     /**

@@ -1,20 +1,17 @@
 package org.consensusj.bitcoin.integ.services
 
-import com.fasterxml.jackson.databind.JsonNode
 import groovy.util.logging.Slf4j
 import org.bitcoinj.base.Address
-import org.bitcoinj.base.AddressParser
 import org.bitcoinj.base.BitcoinNetwork
-import org.bitcoinj.base.DefaultAddressParser
 import org.bitcoinj.base.ScriptType
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.crypto.ECKey
-import org.bitcoinj.script.Script
 import org.bitcoinj.script.ScriptBuilder
-import org.consensusj.bitcoin.json.conversion.HexUtil
 import org.consensusj.bitcoin.services.WalletAppKitService
 import org.consensusj.bitcoin.test.BaseRegTestSpec
-import org.consensusj.bitcoinj.signing.DefaultSigningRequest
+import org.consensusj.bitcoinj.signing.SigningRequest
+import org.consensusj.bitcoinj.signing.TransactionInputData
+import org.consensusj.bitcoinj.signing.Utxo
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -81,23 +78,25 @@ class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
         given:
         var toAddr = new ECKey().toAddress(ScriptType.P2PKH, network)
 
-        when: "we list unspent outputs go get a utxo"
+        when: "we list unspent outputs to get a utxo"
         var list = appKitService.listunspent(null, null, List.of(spvWalletAddress.toString()), false).join()
 
         then:
         list != null
         list.size() == 1
         list[0].amount == 2.btc
-        list[0].scriptPubKey == hexFormatter.formatHex(ScriptBuilder.createP2PKHOutputScript(spvWalletAddress.hash).getProgram())
+        list[0].scriptPubKey.getProgram() == ScriptBuilder.createP2PKHOutputScript(spvWalletAddress.hash).getProgram()
 
         when: "we build an unsigned tx"
-        var utxo = list[0]
-        var funds = utxo.amount
+        var unspent = list[0]
+        var utxo = Utxo.of(unspent.txid, unspent.vout, unspent.amount, unspent.scriptPubKey)
+        var funds = utxo.amount()
         var sendAmount = 0.5.btc
-        var signingRequest = new DefaultSigningRequest(network)
-                .addInput(new Script(HexFormat.of().parseHex(utxo.getScriptPubKey())), utxo.amount, utxo.txid, utxo.vout)
-                .addOutput(toAddr, sendAmount)
-                .addOutput(spvWalletAddress, funds - (sendAmount + 0.1.btc))   // Change
+        var signingRequest = SigningRequest.of(network,
+                [TransactionInputData.of(utxo)],
+                [(toAddr): sendAmount,
+                 (spvWalletAddress): funds - (sendAmount + 0.1.btc)]  // Change
+        )
         var utx = signingRequest.toUnsignedTransaction()
 
         then:
@@ -130,7 +129,7 @@ class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
         list != null
         list.size() == 1
         list[0].amount >= 1.btc
-        list[0].scriptPubKey == hexFormatter.formatHex(ScriptBuilder.createP2PKHOutputScript(spvWalletAddress.hash).getProgram())
+        list[0].scriptPubKey == ScriptBuilder.createP2PKHOutputScript(spvWalletAddress.hash)
 
         when: "we build an unsigned tx"
         var utxo = list[0]
@@ -160,8 +159,6 @@ class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
         signed != null
         signed.getOutputSum() >= 0.9.btc
     }
-
-
 
     /**
      * Wait for the bitcoinj wallet to sync with the Bitcoin Core blockchain

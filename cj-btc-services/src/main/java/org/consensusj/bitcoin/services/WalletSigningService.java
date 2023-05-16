@@ -19,6 +19,7 @@ import org.consensusj.bitcoinj.signing.TestnetFeeCalculator;
 import org.consensusj.bitcoinj.signing.TransactionInputData;
 import org.consensusj.bitcoinj.signing.TransactionOutputAddress;
 import org.consensusj.bitcoinj.signing.TransactionOutputData;
+import org.consensusj.bitcoinj.signing.Utxo;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -76,11 +77,25 @@ public class WalletSigningService implements SignTransactionService {
     }
 
     /**
+     */
+    public Optional<Utxo.Complete> findUtxo(Utxo utxo) {
+        List<TransactionOutput> candidates = wallet.calculateAllSpendCandidates();
+        return candidates.stream()
+                .filter(out -> out.getParentTransactionHash().equals(utxo.txId()) &&
+                        out.getIndex() == utxo.index())
+                .findFirst()
+                .map(out -> new Utxo.Complete(out.getParentTransactionHash(),
+                        out.getIndex(),
+                        out.getValue(),
+                        out.getScriptPubKey()));
+    }
+
+    /**
      * @param txId txid
      * @param vout output index
      * @return  list of matching transaction outputs (bitcoinj objects)
      */
-    Optional<TransactionOutput> findUnspentOutput(Sha256Hash txId, int vout) {
+    public Optional<TransactionOutput> findUnspentOutput(Sha256Hash txId, int vout) {
         return wallet.calculateAllSpendCandidates().stream()
                 .filter(out -> out.getParentTransactionDepthInBlocks() >= 1 &&
                         out.getParentTransactionHash().equals(txId) &&

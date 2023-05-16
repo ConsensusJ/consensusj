@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import static org.bitcoinj.base.BitcoinNetwork.REGTEST;
+
 /**
  * A "signing wallet"  that uses a {@link DeterministicKeyChain} to
  * sign {@link SigningRequest}s.
@@ -73,8 +75,25 @@ public class HDKeychainSigner implements BaseTransactionSigner {
      * @return Signing key, if available, {@link Optional#empty()} otherwise.
      */
     public Optional<ECKey> keyForInput(TransactionInputData input) {
+
         return Optional.ofNullable(
                 keyChain.findKeyFromPubHash(input.script().getPubKeyHash())
         );
+    }
+
+    /**
+     * Return the signing key for an input, if available
+     * @param pubKeyHash pubKeyHash
+     * @return Signing key, if available, {@link Optional#empty()} otherwise.
+     */
+    public Optional<ECKey> keyForHash(byte[] pubKeyHash) {
+
+        return Optional.ofNullable(
+                keyChain.findKeyFromPubHash(pubKeyHash)
+        );
+    }
+
+    public Optional<ECKey> pubKeyFromPubKeyHash(byte[] pubKeyHash) {
+        return keyForHash(pubKeyHash).map(ECKey::fromPublicOnly);
     }
 }

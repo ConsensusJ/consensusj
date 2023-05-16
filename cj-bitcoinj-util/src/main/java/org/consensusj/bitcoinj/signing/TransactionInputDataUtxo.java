@@ -1,6 +1,5 @@
 package org.consensusj.bitcoinj.signing;
 
-import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.core.NetworkParameters;
@@ -8,16 +7,17 @@ import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.script.Script;
-import org.bitcoinj.script.ScriptBuilder;
+
+import java.util.Objects;
 
 /**
- * Immutable aggregate of data for TransactionInput.
+ * Immutable aggregate of data for TransactionInput. This is almost the same as Utxo.Complete
  * <p>
  * This aspires to be a Java record someday
  */
-public class TransactionInputDataImpl implements TransactionInputData {
+public class TransactionInputDataUtxo implements TransactionInputData, Utxo {
     private final Sha256Hash txId;
-    private final long index;
+    private final int index;
     private final long amount;
     private final Script script;
 
@@ -25,30 +25,20 @@ public class TransactionInputDataImpl implements TransactionInputData {
      * @param txId parent txId (shouldn't be needed but Transaction.addSignedInput currently needs an Outpoint)
      * @param index index of unspent output
      * @param amount amount of unspent output
-     * @param script
+     * @param script This is the scriptPubKey of the utxo we want to spend
      */
-    public TransactionInputDataImpl(Sha256Hash txId, long index, Coin amount, Script script) {
-        this.txId = txId;
+    public TransactionInputDataUtxo(Sha256Hash txId, int index, Coin amount, Script script) {
+        this.txId = Objects.requireNonNull(txId);
         this.index = index;
         this.amount = amount != null ? amount.getValue() : 0;        // TODO: Throw when amount is null?
-        this.script = script;
-    }
-
-    /**
-     * @param txId parent txId (shouldn't be needed but Transaction.addSignedInput currently needs an Outpoint)
-     * @param index index of unspent output
-     * @param amount amount of unspent output
-     * @param address
-     */
-    public TransactionInputDataImpl(Sha256Hash txId, long index, Coin amount, Address address) {
-        this(txId, index, amount, ScriptBuilder.createOutputScript(address));
+        this.script = Objects.requireNonNull(script);
     }
 
     public Sha256Hash txId() {
         return txId;
     }
 
-    public long index() {
+    public int index() {
         return index;
     }
 
@@ -62,6 +52,11 @@ public class TransactionInputDataImpl implements TransactionInputData {
     
     public TransactionInput toMutableInput(Network network) {
         return createTransactionInput(toOutPoint(network), Coin.ofSat(amount), script);
+    }
+
+    @Override
+    public Utxo.Complete toUtxo() {
+        return Utxo.of(txId, index, Coin.ofSat(amount), script);
     }
 
     @Override

@@ -104,35 +104,28 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
     def "NETWORK wallet can create a transaction and create a signing request "() {
         given: "a transaction with a UTXO in output 1"
         boolean isSegwit = signingKeychain.getOutputScriptType() == ScriptType.P2WPKH
-        Script script
-        Coin utxoAmount
-        Sha256Hash txid
-        int index
+        TransactionInputData input
         if (isSegwit) {
             // Make believe transaction
-            script = ScriptBuilder.createP2WPKHOutputScript(signingKeychain.getKeyByPath(HDPath.m(signingKeychain.getAccountPath()).extend(fromKeyPath), false))
-            utxoAmount = Coin.CENT
-            txid = Sha256Hash.ZERO_HASH
-            index = 0
+            input = TransactionInputData.of(
+                    Utxo.of(Sha256Hash.ZERO_HASH, 0, Coin.CENT,
+                    ScriptBuilder.createP2WPKHOutputScript(signingKeychain.getKeyByPath(HDPath.m(signingKeychain.getAccountPath()).extend(fromKeyPath), false)))
+            )
         } else {
             // This is actually the first transaction received by the 0'th change address in our "panda diary" keychain.
             Transaction parentTx = firstChangeTransaction()
-            TransactionOutput utxo = parentTx.getOutput(1)
-            script = utxo.scriptPubKey
-            utxoAmount = utxo.value
-            txid = parentTx.txId
-            index = utxo.index
+            TransactionOutput output = parentTx.getOutput(1)
+            input = TransactionInputData.of(
+                    Utxo.of(parentTx.txId, output.index, output.value, output.scriptPubKey)
+            )
         }
 
         when: "we build a 1-input, 2-output (unsigned) transaction request to spend the UTXO"
         Address toAddr = signingKeychain.addressFromKey(networkKeyChain.getKeyByPath(HDPath.M(networkAccountPath).extend(toKeyPath), false))
         Address changeAddr = signingKeychain.addressFromKey(networkKeyChain.getKeyByPath(HDPath.M(networkAccountPath).extend(changeKeyPath), false))
-        Coin txAmount = 0.01.btc
-        Coin changeAmount = 0.20990147.btc
-        signingRequest = new DefaultSigningRequest(network)
-                .addInput(script, utxoAmount, txid, index)
-                .addOutput(toAddr, txAmount)
-                .addOutput(changeAddr, changeAmount)
+        signingRequest = SigningRequest.of(network,
+                [input],
+                [(toAddr): 0.01.btc, (changeAddr): 0.20990147.btc]);
 
         then: "request looks correct"
         signingRequest != null

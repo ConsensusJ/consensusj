@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.base.Sha256Hash;
+import org.bitcoinj.script.Script;
+import org.consensusj.bitcoin.json.conversion.HexUtil;
 
 /**
  * Data class for UnspentOutput as returned by listUnspent RPC
@@ -15,7 +17,7 @@ public class UnspentOutput implements UtxoInfo {
     private final int         vout;
     private final Address     address;
     private final String      label;
-    private final String      scriptPubKey;
+    private final Script      scriptPubKey;
     private final Coin        amount;
     private final int         confirmations;
 
@@ -45,7 +47,7 @@ public class UnspentOutput implements UtxoInfo {
         this.vout = vout;
         this.address = address;
         this.label = label;
-        this.scriptPubKey = scriptPubKey;
+        this.scriptPubKey = new Script(HexUtil.hexStringToByteArray(scriptPubKey));
         this.amount = amount;
         this.confirmations = confirmations;
         this.redeemScript = redeemScript;
@@ -72,7 +74,7 @@ public class UnspentOutput implements UtxoInfo {
         return label;
     }
 
-    public String getScriptPubKey() {
+    public Script getScriptPubKey() {
         return scriptPubKey;
     }
 

@@ -9,6 +9,7 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Peer;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
+import org.bitcoinj.script.Script;
 
 /**
  *
@@ -26,7 +27,8 @@ public class RpcServerModule extends SimpleModule {
                 .addSerializer(ECKey.class, new ECKeySerializer())
                 .addSerializer(Peer.class, new PeerSerializer())
                 .addSerializer(Sha256Hash.class, new Sha256HashSerializer())
-                .addSerializer(Transaction.class, new TransactionSerializer());
+                .addSerializer(Transaction.class, new TransactionSerializer())
+                .addSerializer(Script.class, new ScriptSerializer());
     }
 
     @Deprecated
