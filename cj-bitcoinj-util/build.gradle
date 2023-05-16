@@ -3,7 +3,7 @@ plugins {
 }
 
 tasks.withType(JavaCompile) {
-    options.release = 8
+    options.release = 9
 }
 
 ext.moduleName = 'org.consensusj.bitcoinj.util'

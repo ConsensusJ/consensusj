@@ -19,17 +19,15 @@ import org.consensusj.bitcoinj.wallet.BipStandardDeterministicKeyChain
  *
  */
 class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
-    static final addressParser = new DefaultAddressParser();
+    static final addressParser = new DefaultAddressParser()
     static final Sha256Hash input_txid = Sha256Hash.wrap("81b4c832d70cb56ff957589752eb4125a4cab78a25a8fc52d6a09e5bd4404d48")
-    static final int input_vout = 0;
-    static final Coin input_amount = Coin.SATOSHI;
+    static final Utxo utxo = Utxo.of(input_txid, 0, Coin.SATOSHI);
 
-    void "Can sign a simple Tx"(String netId, ScriptType scriptType) {
+    void "Can sign a simple Tx"(BitcoinNetwork network, ScriptType scriptType) {
         given: "Given a deterministic seed, a keychain, and some test addresses"
-        Network network = BitcoinNetwork.fromIdString(netId).orElseThrow(RuntimeException::new)
         DeterministicSeed seed = setupTestSeed();
 
-        BipStandardDeterministicKeyChain keychain = new BipStandardDeterministicKeyChain(seed, scriptType, network);
+        BipStandardDeterministicKeyChain keychain = new BipStandardDeterministicKeyChain(seed, scriptType, network)
         println("DeterministicKeyChain.accountPath = ${keychain.getAccountPath()}")
         // We need to create some leaf keys in the HD keychain so that they can be found for verifying transactions
         keychain.getKeys(KeyChain.KeyPurpose.RECEIVE_FUNDS, 1)  // Generate first receiving address
@@ -43,10 +41,10 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
         HDKeychainSigner signer = new HDKeychainSigner(keychain);
 
         and: "We sign a transaction"
-        SigningRequest signingRequest = new DefaultSigningRequest(network)
-                .addInput(fromAddress, input_amount, input_txid, input_vout)
-                .addOutput(toAddress, 0.01.btc)
-                .addOutput(changeAddress, 0.20990147.btc)
+        SigningRequest signingRequest = SigningRequest.of(network,
+                [TransactionInputData.of(utxo, fromAddress)],
+                [(toAddress): 0.01.btc, (changeAddress): 0.20990147.btc])
+
         Transaction signedTx = signer.signTransaction(signingRequest).join()
 
         then:
@@ -60,11 +58,11 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
         noExceptionThrown()
 
         where:
-        netId                       | scriptType
-        "org.bitcoin.test"          | ScriptType.P2PKH
-        "org.bitcoin.production"    | ScriptType.P2PKH
-        "org.bitcoin.test"          | ScriptType.P2WPKH
-        "org.bitcoin.production"    | ScriptType.P2WPKH
+        network                 | scriptType
+        BitcoinNetwork.MAINNET  | ScriptType.P2PKH
+        BitcoinNetwork.TESTNET  | ScriptType.P2PKH
+        BitcoinNetwork.MAINNET  | ScriptType.P2WPKH
+        BitcoinNetwork.TESTNET  | ScriptType.P2WPKH
     }
 
 
@@ -91,10 +89,10 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
         HDKeychainSigner signer = new HDKeychainSigner(keychain);
 
         and: "We sign a transaction"
-        SigningRequest signingRequest = new DefaultSigningRequest(network)
-                .addInput(fromAddress, input_amount, input_txid, input_vout)
-                .addOutput(toAddress, 0.01.btc)
-                .addOutput(changeAddress, 0.20990147.btc)
+        SigningRequest signingRequest = SigningRequest.of(network,
+                [TransactionInputData.of(utxo, fromAddress)],
+                [(toAddress): 0.01.btc, (changeAddress): 0.20990147.btc])
+        
         Transaction signedTx = signer.signTransaction(signingRequest).join()
 
         then:

@@ -38,10 +38,12 @@ import org.bitcoinj.core.Transaction;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.store.BlockStoreException;
 import org.consensusj.bitcoinj.signing.DefaultSigningRequest;
+import org.consensusj.bitcoinj.signing.RawTransactionSigningRequest;
 import org.consensusj.bitcoinj.signing.SigningRequest;
 import org.consensusj.bitcoinj.signing.TransactionInputData;
 import org.consensusj.bitcoinj.signing.TransactionOutputData;
 import org.consensusj.bitcoinj.signing.TransactionOutputDataScript;
+import org.consensusj.bitcoinj.signing.Utxo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,6 +128,11 @@ signrawtransactionwithwallet hex
      * @return an un-started instance (use {@link #start()} to start it)
      */
     public static WalletAppKitService createTemporary(BitcoinNetwork network, ScriptType scriptType, String walletBaseName) {
+        WalletAppKit walletAppKit = createTemporaryWallet(network, scriptType, walletBaseName);
+        return new WalletAppKitService(walletAppKit);
+    }
+
+    public static WalletAppKit createTemporaryWallet(BitcoinNetwork network, ScriptType scriptType, String walletBaseName) {
         Context.propagate(new Context());
         String filePrefix = walletBaseName + "-" + network;
         File dataDirectory = null;
@@ -135,8 +142,7 @@ signrawtransactionwithwallet hex
             throw new RuntimeException(e);
         }
         log.info("Returning WalletAppKit bean, wallet directory: {}, prefix: {}", dataDirectory.getAbsolutePath(), filePrefix);
-        WalletAppKit walletAppKit = new WalletAppKit(network, scriptType, KeyChainGroupStructure.BIP43, dataDirectory, filePrefix);
-        return new WalletAppKitService(walletAppKit);
+        return new WalletAppKit(network, scriptType, KeyChainGroupStructure.BIP43, dataDirectory, filePrefix);
     }
 
     /**
@@ -331,7 +337,7 @@ signrawtransactionwithwallet hex
     @Override
     public CompletableFuture<String> createrawtransaction(List<Map<String, Object>> inputs, List<Map<String, String>> outputs) {
         try {
-            List<? extends TransactionInputData> ins = inputs.stream()
+            List<TransactionInputData> ins = inputs.stream()
                     .map(outpoint::new)
                     .flatMap(op -> signingService.findUnspentOutput(op.txId, op.vout).stream())
                     .map(TransactionInputData::fromTxOut)
@@ -342,7 +348,7 @@ signrawtransactionwithwallet hex
                     .map(o -> new TransactionOutputDataScript(o.amount(), o.script()))
                     .toList();
             // TODO: Add a change output?
-            SigningRequest sr = new DefaultSigningRequest(network, (List<TransactionInputData>) ins, (List<TransactionOutputData>) outs);
+            SigningRequest sr = SigningRequest.of(network, ins, (List<TransactionOutputData>) outs);
             Transaction rawTx = sr.toUnsignedTransaction();
             return CompletableFuture.completedFuture(rawTx.toHexString());
         } catch (Throwable t) {
@@ -457,15 +463,31 @@ signrawtransactionwithwallet hex
     public CompletableFuture<SignedRawTransaction> signrawtransactionwithwallet(String hex) {
         ByteBuffer raw = ByteBuffer.wrap(hexFormat.parseHex(hex));
 
-        SigningRequest signingRequest;
+        RawTransactionSigningRequest signingRequest;
         try {
             Transaction unsignedTx = new Transaction(NetworkParameters.of(network), raw);
-            signingRequest = SigningRequest.ofTransaction(network, unsignedTx);
+            signingRequest = RawTransactionSigningRequest.ofTransaction(network, unsignedTx);
         } catch (ProtocolException e) {
             return CompletableFuture.failedFuture(new RuntimeException("Invalid raw (hex) transaction", e));
         }
 
-        return signingService.signTransaction(signingRequest)
+        SigningRequest completeRequest;
+        try {
+            // Foreach incomplete input, find the UTXO in the wallet and make a complete input
+            List<TransactionInputData> inputs = signingRequest.inputs().stream()
+                    .map(input -> TransactionInputData.of(
+                                    signingService.findUtxo(input.toUtxo())
+                                            .orElseThrow(() -> new RuntimeException("UTXO not found in wallet"))
+                            )
+                    )
+                    .toList();
+            // Make a (full) signing request that can be signed with a keychain alone
+            completeRequest = SigningRequest.of(network(), inputs, signingRequest.outputs());
+        } catch (RuntimeException e) {
+            return CompletableFuture.failedFuture(e);
+        }
+
+        return signingService.signTransaction(completeRequest)
                 .thenApply(SignedRawTransaction::of);
     }
 

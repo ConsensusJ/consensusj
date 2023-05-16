@@ -36,18 +36,10 @@ abstract class DeterministicKeychainBaseSpec extends Specification {
         Network network = BitcoinNetwork.TESTNET
         Transaction parentTx = firstChangeTransaction()
         TransactionOutput utxo = parentTx.getOutput(1)
-        Coin utxoAmount = utxo.value
-
-        Coin txAmount = 0.01.btc
-        Coin changeAmount = 0.20990147.btc
-
-        TransactionInputDataImpl input = new TransactionInputDataImpl(parentTx.txId.bytes, utxo.index, utxoAmount.toSat(), utxo.scriptBytes)
-        List<TransactionInputDataImpl> inputs = List.of(input)
-        List<TransactionOutputData> outputs = List.of(
-                new TransactionOutputAddress(txAmount.value, toAddress),
-                new TransactionOutputAddress(changeAmount.value, changeAddress)
-        )
-        return new DefaultSigningRequest(network, inputs, outputs)
+        
+        return SigningRequest.of(network,
+                [TransactionInputData.fromTxOut(utxo)],
+                [(toAddress): 0.01.btc, (changeAddress): 0.20990147.btc])
     }
 
 

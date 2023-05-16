@@ -13,6 +13,8 @@ import java.util.function.Supplier;
 /**
  * A template interface, implementations need only implement {@link #keyForInput(TransactionInputData)}.
  * The {@link HDKeychainSigner} implementation can sign transactions using a <b>bitcoinj</b> {@link DeterministicKeyChain}.
+ * <p>
+ * Keys and PubKeys can be searched for, but not UTXOs or amounts
  */
 public interface BaseTransactionSigner extends TransactionSigner {
     /**
@@ -23,7 +25,7 @@ public interface BaseTransactionSigner extends TransactionSigner {
      */
     @Override
     default CompletableFuture<Transaction> signTransaction(SigningRequest request) {
-        NetworkParameters params = BitcoinNetworkParams.fromID(request.networkId());
+        NetworkParameters params = BitcoinNetworkParams.of(request.network());
         // Create a new, empty (mutable) bitcoinj transaction
         Transaction transaction = new Transaction(params);
 
@@ -48,7 +50,12 @@ public interface BaseTransactionSigner extends TransactionSigner {
      * @param exceptionSupplier exception to throw if key is not available.
      */
     default void addSignedInput(Transaction tx, TransactionInputData in, Supplier<? extends RuntimeException> exceptionSupplier) {
-        tx.addSignedInput(in.toOutPoint(tx.getParams().network()), in.script(), in.amount(), keyForInput(in).orElseThrow(exceptionSupplier), Transaction.SigHash.ALL, false);
+        tx.addSignedInput(in.toOutPoint(tx.getParams().network()),
+                in.script(),
+                in.amount(),
+                keyForInput(in).orElseThrow(exceptionSupplier),
+                Transaction.SigHash.ALL,
+                false);
     }
 
     /**
@@ -57,4 +64,8 @@ public interface BaseTransactionSigner extends TransactionSigner {
      * @return The ECKey or empty
      */
     Optional<ECKey> keyForInput(TransactionInputData input);
+
+    default Optional<ECKey> pubKeyForInput(TransactionInputData input) {
+        return keyForInput(input).map(ECKey::fromPublicOnly);
+    }
 }

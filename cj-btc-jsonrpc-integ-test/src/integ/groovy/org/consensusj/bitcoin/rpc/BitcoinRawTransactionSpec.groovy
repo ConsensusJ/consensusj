@@ -1,10 +1,14 @@
 package org.consensusj.bitcoin.rpc
 
+import org.bitcoinj.core.Transaction
+import org.consensusj.bitcoin.json.conversion.HexUtil
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.bitcoinj.base.Address
 import org.bitcoinj.base.Coin
 import spock.lang.Shared
 import spock.lang.Stepwise
+
+import java.nio.ByteBuffer
 
 /**
  * Tests of creating and sending raw transactions via RPC
@@ -48,6 +52,17 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
         then: "there should be a raw transaction"
         rawTransactionHex != null
         rawTransactionHex.size() > 0
+
+    }
+
+    def "Verify bitcoinj can round-trip the raw transaction"() {
+        when: "We parse the transaction"
+        var buffer = ByteBuffer.wrap(HexUtil.hexStringToByteArray(rawTransactionHex))
+        var transaction = new Transaction(client().getNetParams(), buffer)
+        var roundtrip = HexUtil.bytesToHexString(transaction.bitcoinSerialize())
+
+        then:
+        rawTransactionHex == roundtrip
     }
 
     def "Sign unsigned raw transaction"() {

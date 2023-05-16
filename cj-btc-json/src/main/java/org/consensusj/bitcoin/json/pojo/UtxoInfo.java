@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.json.pojo;
 
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.base.Sha256Hash;
+import org.bitcoinj.script.Script;
 
 /**
  * Interface for commonly-used UTXO information, for example the {@code prevtxs} parameter of
@@ -12,7 +13,7 @@ public interface UtxoInfo {
 
     int getVout();
 
-    String getScriptPubKey();
+    Script getScriptPubKey();
 
     String getRedeemScript();
 

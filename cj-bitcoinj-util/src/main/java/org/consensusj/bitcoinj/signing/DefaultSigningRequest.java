@@ -6,6 +6,10 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutput;
+import org.bitcoinj.crypto.ECKey;
+import org.bitcoinj.crypto.TransactionSignature;
+import org.bitcoinj.script.Script;
+import org.bitcoinj.script.ScriptBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +23,7 @@ public class DefaultSigningRequest implements SigningRequest {
     private final List<TransactionOutputData> outputs;
 
 
+    @Deprecated
     public DefaultSigningRequest(String networkId, List<TransactionInputData> inputs, List<TransactionOutputData> outputs) {
         this(BitcoinNetwork.fromIdString(networkId).orElseThrow(IllegalArgumentException::new), inputs, outputs);
     }
@@ -29,10 +34,12 @@ public class DefaultSigningRequest implements SigningRequest {
         this.outputs = Collections.unmodifiableList(outputs);
     }
 
+    @Deprecated
     public DefaultSigningRequest(Network network, TransactionInputData input) {
         this(network, Collections.singletonList(input), Collections.emptyList());
     }
 
+    @Deprecated
     public DefaultSigningRequest(Network network) {
         this(network, Collections.emptyList(), Collections.emptyList());
     }
@@ -52,11 +59,18 @@ public class DefaultSigningRequest implements SigningRequest {
         this(netParams.network(), Collections.emptyList(), Collections.emptyList());
     }
 
+    @Deprecated
     public DefaultSigningRequest(String networkId) {
         this(BitcoinNetwork.fromIdString(networkId).orElseThrow(IllegalArgumentException::new), Collections.emptyList(), Collections.emptyList());
     }
 
     @Override
+    public Network network() {
+        return network;
+    }
+
+    @Override
+    @Deprecated
     public String networkId() {
         return network.id();
     }
@@ -80,9 +94,9 @@ public class DefaultSigningRequest implements SigningRequest {
         NetworkParameters params = NetworkParameters.of(network);
         Transaction utx = new Transaction(params);
         this.inputs().forEach(in ->
-                utx.addInput(new TransactionInput(params,
-                        utx,
-                        in.script().getProgram())));
+                utx.addInput(in.toOutPoint(network).getHash(),
+                        in.toOutPoint(network).getIndex(),
+                        ScriptBuilder.createEmpty()));
         this.outputs().forEach(out ->
                 utx.addOutput(new TransactionOutput(params,
                         utx,
