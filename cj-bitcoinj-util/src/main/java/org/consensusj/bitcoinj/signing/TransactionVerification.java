@@ -1,7 +1,6 @@
 package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Address;
-import org.bitcoinj.base.LegacyAddress;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.script.Script;
@@ -22,15 +21,21 @@ public class TransactionVerification {
      * @throws ScriptException If {@code scriptSig#correctlySpends} fails with exception
      */
     public static void correctlySpendsInput(Transaction tx, int inputIndex, Address fromAddr) throws ScriptException {
-        Script scriptPubKey = ScriptBuilder.createOutputScript(fromAddr);
-        TransactionInput input = tx.getInputs().get(inputIndex);
-        if (fromAddr instanceof LegacyAddress) {
-            input.getScriptSig()
-                    .correctlySpends(tx, inputIndex, null, input.getValue(), scriptPubKey, Script.ALL_VERIFY_FLAGS);
-        } else {
-            input.getScriptSig()
-                    .correctlySpends(tx, inputIndex, input.getWitness(), input.getValue(), scriptPubKey, Script.ALL_VERIFY_FLAGS);
+        correctlySpendsInput(tx, inputIndex, ScriptBuilder.createOutputScript(fromAddr));
+    }
 
-        }
+    /**
+     * Verify that a transaction correctly spends the input specified by index. Throws {@link ScriptException}
+     * if verification fails.
+     *
+     * @param tx The transaction to verify
+     * @param inputIndex The input to verify
+     * @param scriptPubKey The script we are trying to spend
+     * @throws ScriptException If {@code scriptSig#correctlySpends} fails with exception
+     */
+    public static void correctlySpendsInput(Transaction tx, int inputIndex, Script scriptPubKey) throws ScriptException {
+        TransactionInput input = tx.getInputs().get(inputIndex);
+        input.getScriptSig()
+                    .correctlySpends(tx, inputIndex, input.getWitness(), input.getValue(), scriptPubKey, Script.ALL_VERIFY_FLAGS);
     }
 }

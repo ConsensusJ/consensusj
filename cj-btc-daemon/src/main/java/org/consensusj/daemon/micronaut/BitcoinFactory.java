@@ -36,8 +36,8 @@ public class BitcoinFactory {
                     ? Files.createTempDirectory(config.walletBaseName()).toFile()  // null && regtest -> temporary dir
                     : AppDataDirectory.get(config.walletBaseName()).toFile()       // null -> app data dir
                 : config.dataDir().toFile();                                       // non-null -> use Path from config
+        log.info("Creating WalletAppKit for {} <============", config.network().id());
         log.info("Returning WalletAppKit bean, wallet directory: {}, prefix: {}", dataDirectory.getAbsolutePath(), filePrefix);
-        System.out.println("Creating WalletAppKit for " + config.network().id());
         return new WalletAppKit((BitcoinNetwork) config.network(), ScriptType.P2PKH, KeyChainGroupStructure.BIP43, dataDirectory, filePrefix);
     }
 

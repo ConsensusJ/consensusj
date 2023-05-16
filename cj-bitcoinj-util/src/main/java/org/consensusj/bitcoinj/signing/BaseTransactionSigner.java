@@ -4,8 +4,10 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.BitcoinNetworkParams;
+import org.bitcoinj.script.ScriptException;
 import org.bitcoinj.wallet.DeterministicKeyChain;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -30,7 +32,6 @@ public interface BaseTransactionSigner extends TransactionSigner {
         Transaction transaction = new Transaction(params);
 
         // For each output in the signing request, add an output to the bitcoinj transaction
-        // TODO: Transaction validation
         request.outputs().forEach(
                 output -> transaction.addOutput(output.toMutableOutput(params.network()))
         );
@@ -40,7 +41,25 @@ public interface BaseTransactionSigner extends TransactionSigner {
                 input -> addSignedInput(transaction, input, () -> new RuntimeException("Unsupported transaction input"))
         );
 
-        return CompletableFuture.completedFuture(transaction);
+        // TODO: Additional Transaction validation?
+        return verify(transaction, request.inputs())
+                .map(CompletableFuture::<Transaction>failedFuture)
+                .orElse(CompletableFuture.completedFuture(transaction));
+    }
+
+    default Optional<Exception> verify(Transaction tx, List<TransactionInputData> reqInputs) {
+        return tx.getInputs().stream().flatMap(i ->
+            verifyInput(tx, i.getIndex(), reqInputs.get(i.getIndex())).stream()
+        ).findFirst();
+    }
+
+    default Optional<Exception> verifyInput(Transaction tx, int index, TransactionInputData inputData) {
+        try {
+            TransactionVerification.correctlySpendsInput(tx, index, inputData.script());
+            return Optional.empty();
+        } catch (ScriptException se) {
+            return Optional.of(se);
+        }
     }
 
     /**

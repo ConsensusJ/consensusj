@@ -37,13 +37,11 @@ import org.bitcoinj.core.StoredBlock;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.store.BlockStoreException;
-import org.consensusj.bitcoinj.signing.DefaultSigningRequest;
 import org.consensusj.bitcoinj.signing.RawTransactionSigningRequest;
 import org.consensusj.bitcoinj.signing.SigningRequest;
 import org.consensusj.bitcoinj.signing.TransactionInputData;
 import org.consensusj.bitcoinj.signing.TransactionOutputData;
 import org.consensusj.bitcoinj.signing.TransactionOutputDataScript;
-import org.consensusj.bitcoinj.signing.Utxo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
