@@ -464,6 +464,7 @@ signrawtransactionwithwallet hex
         RawTransactionSigningRequest signingRequest;
         try {
             Transaction unsignedTx = new Transaction(NetworkParameters.of(network), raw);
+            log.info("received tx: {}", unsignedTx);
             signingRequest = RawTransactionSigningRequest.ofTransaction(network, unsignedTx);
         } catch (ProtocolException e) {
             return CompletableFuture.failedFuture(new RuntimeException("Invalid raw (hex) transaction", e));

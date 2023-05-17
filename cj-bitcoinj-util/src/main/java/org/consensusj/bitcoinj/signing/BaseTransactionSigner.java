@@ -1,11 +1,14 @@
 package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.BitcoinNetworkParams;
 import org.bitcoinj.script.ScriptException;
 import org.bitcoinj.wallet.DeterministicKeyChain;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +22,7 @@ import java.util.function.Supplier;
  * Keys and PubKeys can be searched for, but not UTXOs or amounts
  */
 public interface BaseTransactionSigner extends TransactionSigner {
+    Logger log = LoggerFactory.getLogger(BaseTransactionSigner.class);
     /**
      * Create a signed bitcoinj transaction from the signing request
      * <p>
@@ -41,6 +45,8 @@ public interface BaseTransactionSigner extends TransactionSigner {
                 input -> addSignedInput(transaction, input, () -> new RuntimeException("Unsupported transaction input"))
         );
 
+        log.info("signed tx: {}", transaction);
+
         // TODO: Additional Transaction validation?
         return verify(transaction, request.inputs())
                 .map(CompletableFuture::<Transaction>failedFuture)
@@ -55,9 +61,11 @@ public interface BaseTransactionSigner extends TransactionSigner {
 
     default Optional<Exception> verifyInput(Transaction tx, int index, TransactionInputData inputData) {
         try {
+            log.info("Verifying input {}", tx.getInputs().get(index));
             TransactionVerification.correctlySpendsInput(tx, index, inputData.script());
             return Optional.empty();
         } catch (ScriptException se) {
+            log.error("Invalid input", se);
             return Optional.of(se);
         }
     }
