@@ -66,20 +66,20 @@ class org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient-->
     </text>
     <!--MD5=[ff1f07209556703b9dc20fa62e76f680]
 reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback-->
-    <path d='M179.48,111.28 C174.71,124.73 169.47,139.51 165.48,150.74 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='172.76,109.29,186.04,92.78,185.95,113.97,172.76,109.29' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M179.65,110.79 C174.84,124.37 169.51,139.37 165.48,150.74 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='173.27,108.86,186.55,92.36,186.46,113.55,173.27,108.86' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[f9b13b3b4fd44aae865b4aab470b4851]
 reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient-->
-    <path d='M250.54,99.41 C257.77,102.3 265.05,105.22 272,108 C310.67,123.49 354.86,141.23 385.59,153.57 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='248.03,105.94,232.06,92.02,253.23,92.95,248.03,105.94' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M249.89,99.15 C257.33,102.12 264.84,105.13 272,108 C310.67,123.49 354.86,141.23 385.59,153.57 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='247.63,105.38,231.66,91.45,252.83,92.38,247.63,105.38' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[62a22a9d8b219e737de4efab4f6cc8bb]
 reverse link org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback to org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient-->
-    <path d='M215.86,198.81 C270.14,225.36 350.39,264.61 397.22,287.52 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='213.05,205.23,198.16,190.15,219.2,192.65,213.05,205.23' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M215.5,198.64 C269.78,225.19 350.28,264.56 397.22,287.52 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='212.69,204.56,197.8,189.49,218.84,191.99,212.69,204.56' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[7bd8ebe65fb5e91b0a6ae39edc7da5c7]
 reverse link org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient to org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient-->
-    <path d='M427.01,207.91 C429.12,233.8 431.85,267.3 433.51,287.69 ' fill='none' id='org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient&lt;-org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <polygon fill='none' points='420.03,208.5,425.38,187.99,433.99,207.36,420.03,208.5' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M426.94,207.12 C429.06,233.11 431.83,267.09 433.51,287.69 ' fill='none' id='org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient&lt;-org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='419.91,207.99,425.26,187.49,433.86,206.85,419.91,207.99' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[c6b52b1ca8f4e102fa30323c6b155c78]
 @startuml
 skinparam packageStyle Rect

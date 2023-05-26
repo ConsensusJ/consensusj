@@ -54,20 +54,20 @@ class org.consensusj.jsonrpc.groovy.DynamicRPCClient-->
     </text>
     <!--MD5=[38007ac204c8ece275af148089ad1d69]
 reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection-->
-    <path d='M227.6,104.45 C206.88,120.64 181.74,140.29 164.68,153.62 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='223.09,99.09,243.16,92.29,231.71,110.12,223.09,99.09' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M227.91,104.2 C207.13,120.44 181.83,140.22 164.68,153.62 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='223.28,98.16,243.35,91.36,231.9,109.19,223.28,98.16' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[ff1f07209556703b9dc20fa62e76f680]
 reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback-->
-    <path d='M300.62,104.38 C320.07,119.46 343.41,137.54 360.44,150.74 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='296.53,110.07,285.01,92.28,305.11,99,296.53,110.07' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M300.32,104.15 C319.83,119.27 343.32,137.48 360.44,150.74 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='296.34,109.14,284.82,91.36,304.91,98.08,296.34,109.14' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[136309c1916f5149a10adbefbc8e65b4]
 reverse link org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection to org.consensusj.jsonrpc.groovy.DynamicRPCClient-->
-    <path d='M200.58,194.82 C239.43,211.47 290.53,233.37 326.21,248.66 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <polygon fill='none' points='198.01,201.33,182.38,187.02,203.52,188.46,198.01,201.33' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M200.05,194.59 C238.96,211.27 290.36,233.3 326.21,248.66 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='197.61,200.74,181.99,186.42,203.13,187.87,197.61,200.74' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[46cc87d9bba02c79c3641f77a6c91460]
 reverse link org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback to org.consensusj.jsonrpc.groovy.DynamicRPCClient-->
-    <path d='M377.92,209.92 C375.82,223.33 373.57,237.72 371.86,248.7 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='370.94,209.23,380.94,190.55,384.77,211.39,370.94,209.23' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M378,209.43 C375.88,222.98 373.6,237.59 371.86,248.7 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='371.17,208.74,381.18,190.06,385.01,210.9,371.17,208.74' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[defc76a6edbac860da3abce7e26615ca]
 @startuml
 skinparam packageStyle Rect

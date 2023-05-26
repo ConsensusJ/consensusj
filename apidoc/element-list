@@ -16,10 +16,8 @@ org.consensusj.bitcoin.rx.peergroup
 org.consensusj.bitcoin.rx.zeromq
 org.consensusj.bitcoin.services
 org.consensusj.bitcoinj.dsl.js
-org.consensusj.bitcoinj.future
 org.consensusj.bitcoinj.service
 org.consensusj.bitcoinj.signing
-org.consensusj.bitcoinj.signing.internal
 org.consensusj.bitcoinj.util
 org.consensusj.bitcoinj.wallet
 org.consensusj.currency

@@ -440,7 +440,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>ConsensusJ Release Process</h1>
 <div class="details">
-<span id="revnumber">version 0.6.5</span>
+<span id="revnumber">version 0.7.0-alpha1</span>
 </div>
 </div>
 <div id="content">
@@ -583,7 +583,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_publish_snapshot_to_public_maven_repo_on_gitlab">Publish Snapshot to public Maven Repo on Gitlab</h2>
+<h2 id="_publish_snapshot_to_public_maven_repo_on_gitlab">Publish Snapshot to public Maven Repo on GitLab</h2>
 <div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
@@ -606,11 +606,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_update_the_graalvm_resource_json_files_for_the_bitcoin_daemon">Update the GraalVM resource json files for the Bitcoin Daemon</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is not working yet. Needs refinement:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>sdk use java 22.3.1.r17-grl</code></p>
+</li>
+<li>
+<p><code>./gradlew -Pagent cj-btc-daemon:run --args="-cjbitcoind.config.network-id=regtest" &amp;</code></p>
+</li>
+<li>
+<p><code>./run-all-methods.sh</code></p>
+</li>
+<li>
+<p><code>./gradlew cj-btc-daemon:metadataCopy --task run --dir build/graal-native-image-metadata</code></p>
+</li>
+<li>
+<p>Commit changes</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.6.5<br>
-Last updated 2023-04-03 23:58:34 -0700
+Version 0.7.0-alpha1<br>
+Last updated 2023-05-25 18:46:12 -0700
 </div>
 </div>
 </body>
