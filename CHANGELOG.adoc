@@ -61,6 +61,8 @@ and can be signed with keychain only)
 * Gradle 8.1.1
 * Use `JAVA_HOME` not `GRAALVM_HOME` to find `native-image` tool in `consensusj-jsonrpc`, `consensusj-jsonrpc-cli` and `cj-btc-cli` builds.
 * GitHub JDK Matrix: Java 11, 17, **20**
+* `gradle-git-publish` 4.2.0
+* `gitPublishPushCopy.dependsOn javadocAll, asciidoctor`
 * Publish source and Javadoc JARs
 
 == v0.6.5
