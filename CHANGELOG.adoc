@@ -7,6 +7,13 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
+The 0.7.0 release of **ConsensusJ** will require **bitcoinj** v0.17, currently in alpha release. There will likely be multiple alpha releases of ConsensusJ as bitcoinj is updated.
+
+=== Build/Test Updates
+
+* Gradle 8.2-rc-1
+* GitHub JDK Matrix: Java 11, 17, **21-ea**
+
 == v0.7.0-alpha1
 
 Released: 2023-05-25
