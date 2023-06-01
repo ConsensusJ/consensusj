@@ -1,0 +1,34 @@
+= ConsensusJ User Guide
+Sean Gilligan
+v0.6.1, June 1, 2023: Draft
+:numbered:
+:toc:
+:toclevels: 3
+:linkattrs:
+:imagesdir: images
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+//:dot: /opt/homebrew/bin/dot
+
+Paragraph TBD.
+
+== Introduction to ConsensusJ
+
+This section is TBD. For now the project https://github.com/ConsensusJ/consensusj/blob/master/README.adoc[README] is the best place to get started.
+
+== JSON-RPC Clients
+
+=== Generic
+
+The module `consensusj-jsonrpc` contains `JsonRpcClientHttpUrlConnection` which is a generic JSON-RPC client.
+
+=== Bitcoin
+
+
+The module `cj-btc-jsonrpc` contains `BitcoinClient` and `ExtendedBitcoinClient`. 
+
+
+=== Class Diagrams
+
+For some class diagrams see <<rpc-client-inheritance.adoc#, ConsensusJ JSON-RPC Inheritance>>.
+
+
