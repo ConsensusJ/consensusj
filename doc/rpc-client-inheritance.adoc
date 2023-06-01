@@ -1,18 +1,19 @@
-= ConsensusJ User Guide
+= ConsensusJ JSON-RPC Client Inheritance
 Sean Gilligan
-v0.6, July 24, 2022: First draft
+v0.1, June 1, 2023: First version as separate document
 :numbered:
 :toc:
 :toclevels: 3
 :linkattrs:
 :imagesdir: images
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 //:dot: /opt/homebrew/bin/dot
 
 Paragraph TBD.
 
-== Introduction to ConsensusJ
+== Overview
 
-This section is TBD. For now the project https://github.com/ConsensusJ/consensusj/blob/master/README.adoc[README] is the best place to get started.
+This document is a new document containing the PlantUML diagrams previously in the <<consensusj-user-guide#, ConsensusJ User Guide>>.
 
 == JSON-RPC Clients
 
