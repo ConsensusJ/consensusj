@@ -6,15 +6,15 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+// TODO: Create a command-line option to set finer-grained log levels
 /**
- * GraalVM-compatible Support for using Java Logging
- * See: https://github.com/oracle/graal/blob/master/substratevm/LOGGING.md
- *
- * The default log-level for command-line tools configured in logging.properties
- * should be `WARNING`. The `-v` command-line switch should set the level to `FINE`.
- * Request-logging in RpcClient is at the `FINE` (slf4j `debug`) level.
- *
- * TODO: Create a command-line option to set finer-grained log levels
+ * GraalVM-compatible support for using Java Logging.
+ * <p>
+ * See: <a href="https://github.com/oracle/graal/blob/master/docs/reference-manual/native-image/guides/add-logging-to-native-executable.md">add-logging-to-native-executable.md"LOGGING.md</a>
+ * <p>
+ * The default log-level for command-line tools configured in {@code logging.properties} should be {@link Level#WARNING}.
+ * The {@code -v} command-line switch should set the level to {@link Level#FINE}.
+ * Request-logging in {@link org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection} is at the {@link Level#FINE} (slf4j {@code debug}) level.
  */
 public class JavaLoggingSupport {
     private final static String loggingPropertiesResource = "/logging.properties";

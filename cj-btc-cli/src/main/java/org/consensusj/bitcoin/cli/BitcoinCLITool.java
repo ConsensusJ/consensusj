@@ -18,7 +18,8 @@ import static org.consensusj.bitcoin.jsonrpc.RpcURI.RPCPORT_REGTEST;
 import static org.consensusj.bitcoin.jsonrpc.RpcURI.RPCPORT_TESTNET;
 
 /**
- * An attempt at cloning the bitcoin-cli tool, but using Java and bitcoinj
+ * An attempt at cloning the {@code bitcoin-cli} tool, but using Java and <b>bitcoinj</b>.
+ * The generic JSON-RPC client in {@code consensusj-jsonrpc-cli} is better-maintained.
  */
 public class BitcoinCLITool extends BaseJsonRpcTool {
     public final static String commandName = "cj-bitcoin-cli";
@@ -40,9 +41,9 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
 
     /**
      * main method for bitcoinj-cli tool.
-     *
-     * See {@link BitcoinRpcCliOptions} for options and https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core JSON-RPC API]
-     * for the methods and parameters. Users can use `-?` to get general help or {@code help _command_} to get help
+     * <p>
+     * See {@link BitcoinRpcCliOptions} for options and <a href="https://bitcoin.org/en/developer-reference#bitcoin-core-apis">Bitcoin Core JSON-RPC API</a>
+     * for the methods and parameters. Users can use {@code -?} to get general help or {@code help <command>} to get help
      * on a specific command.
      *
      * @param args options, JSON-RPC method, JSON-RPC parameters
