@@ -116,7 +116,7 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
                 responseJson = mapper.readValue(inputStream, responseType);
             }
         } catch (JsonProcessingException e) {
-            log.error("JsonProcessingException: {}", e);
+            log.error("JsonProcessingException: ", e);
             // TODO: Map to some kind of JsonRPC exception similar to JsonRPCStatusException
             throw e;
         }
