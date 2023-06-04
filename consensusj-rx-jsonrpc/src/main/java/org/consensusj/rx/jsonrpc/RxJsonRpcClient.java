@@ -11,7 +11,8 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 
 /**
- * RxJava support for calling JSON-RPC clients.
+ * RxJava support for calling JSON-RPC clients. Extend/implement this interface to inherit {@code default} methods
+ * {@link #call(ThrowingSupplier)}, {@link #defer(Supplier)}, and {@link #pollOnce(ThrowingSupplier)}.
  */
 public interface RxJsonRpcClient extends AsyncSupport {
     Logger log = LoggerFactory.getLogger(RxJsonRpcClient.class);
@@ -63,14 +64,14 @@ public interface RxJsonRpcClient extends AsyncSupport {
     }
 
     /**
-     * Determine if error is transient and should be ignored
-     *
+     * Determine if error is transient and should be ignored.
+     * <p>
      * TODO: Ignoring all IOError is too broad
      * 
      * @param t Error thrown from calling an RPC method
      * @return true if the error is transient and can be ignored
      */
-    default boolean isTransientError(Throwable t) {
+    private boolean isTransientError(Throwable t) {
         return t instanceof IOError;
     }
     

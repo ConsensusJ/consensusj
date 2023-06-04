@@ -58,10 +58,12 @@ public interface AsyncSupport {
     /**
      * Subinterface of {@link Supplier} for Lambdas which throw exceptions.
      * Can be used for two purposes:
-     * 1. To cast a lambda that throws an exception to a {@link Supplier} and
-     * automatically wrapping any exceptions with {@link RuntimeException}.
-     * 2. As a {@code FunctionalInterface} where a lambda that throws exceptions is
-     * expected or allowed.
+     * <ol>
+     *     <li>To cast a lambda that throws an exception to a {@link Supplier} while
+     *      automatically wrapping any exception thrown by the lambda with {@link RuntimeException}.</li>
+     *     <li>As a {@code FunctionalInterface} where a lambda that throws exceptions is
+     *      expected or allowed.</li>
+     * </ol>
      *
      * @param <T>
      */

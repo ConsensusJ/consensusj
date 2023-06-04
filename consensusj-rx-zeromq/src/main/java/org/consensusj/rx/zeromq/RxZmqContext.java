@@ -21,9 +21,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadFactory;
 
 /**
- * ZMQ Context with a single socket and one {@code FlowableProcessor<ZMsg>} per topic.
+ * ZMQ Context with a single socket and one {@link FlowableProcessor<ZMsg>} per topic.
  * It subscribes {@code SUB} to one or more topics using ZMQ and receives a multiplexed
- * stream of {@link ZMsg} from the ZMsgSocketFlowable. In {@link RxZmqContext#onNext} the ZMsg
+ * stream of {@link ZMsg} from the {@link ZMsgSocketFlowable}. In {@link RxZmqContext#onNext} the {@code ZMsg}
  * are de-multiplexed by the {@code topic} {@code String} and placed in a per-topic
  * {@code FlowableProcessor<ZMsg>}.
  * <p>
@@ -43,6 +43,11 @@ public class RxZmqContext implements Closeable {
         this(tcpAddress, topics, (Runnable r) -> new Thread(r, "ZeroMQ Subscriber"));
     }
 
+    /**
+     * @param tcpAddress Address of ZMQ server to connect to
+     * @param topics a list of topics to subscribe to
+     * @param threadFactory factory to create a thread for the receive loop (see {@link ZMsgSocketFlowable#createFromSocket(ZMQ.Socket, BackpressureStrategy, ThreadFactory)})
+     */
     public RxZmqContext(URI tcpAddress, List<String> topics, ThreadFactory threadFactory) {
         zContext = new ZContext();
         //  Socket to talk to server

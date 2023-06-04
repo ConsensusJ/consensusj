@@ -49,7 +49,7 @@ public class ZMsgSocketFlowable {
     }
 
     /**
-     * A runnable {@link ZMQ.Socket} receive loop that is can be cancelled with {@link Thread#interrupt}
+     * A runnable {@link ZMQ.Socket} receive loop that can be cancelled with {@link Thread#interrupt}
      * and sends messages and errors to the supplied {@link FlowableEmitter}.
      */
     private static class ZmqReceiveLoop implements Runnable {
