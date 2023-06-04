@@ -8,12 +8,14 @@ v0.6.1, June 1, 2023: Draft
 :imagesdir: images
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 //:dot: /opt/homebrew/bin/dot
+:mmdc: /opt/homebrew/bin/mmdc
 
 Paragraph TBD.
 
 == Introduction to ConsensusJ
 
 This section is TBD. For now the project https://github.com/ConsensusJ/consensusj/blob/master/README.adoc[README] is the best place to get started.
+
 
 == JSON-RPC Clients
 
@@ -32,3 +34,48 @@ The module `cj-btc-jsonrpc` contains `BitcoinClient` and `ExtendedBitcoinClient`
 For some class diagrams see <<rpc-client-inheritance.adoc#, ConsensusJ JSON-RPC Inheritance>>.
 
 
+== Module Dependency Graphs
+
+=== consensusj-rx-zeromq
+
+This module is independent of the core JSON-RPC clients. It has no dependencies on **bitcoinj**, or anything cryptocurrency or JSON-RPC related.
+
+[mermaid]
+----
+flowchart TD
+    consensusj-rx-zeromq --> RxJava3
+    consensusj-rx-zeromq --> JeroMQ
+
+classDef external fill:#999;
+class RxJava3 external;
+class JeroMQ external;
+----
+
+=== Core JSON-RPC
+
+The core JSON-RPC modules have no dependencies on **bitcoinj** or anything cryptocurrency-related.
+
+[mermaid]
+----
+flowchart TD
+    consensusj-jsonrpc --> Jackson
+    consensusj-jsonrpc-javanet --> java.net.http
+    consensusj-jsonrpc-javanet --> consensusj-jsonrpc
+    consensusj-jsonrpc-gvy --> Groovy
+    consensusj-jsonrpc-gvy --> consensusj-jsonrpc
+    consensusj-jsonrpc-cli --> Commons-CLI
+    consensusj-jsonrpc-cli --> consensusj-jsonrpc
+    consensusj-jsonrpc-daemon --> consensusj-jsonrpc
+    consensusj-jsonrpc-daemon --> Micronaut
+    consensusj-rx-jsonrpc --> consensusj-jsonrpc
+    consensusj-rx-jsonrpc --> RxJava3
+
+classDef external fill:#999;
+class java.net.http external;
+class Jackson external;
+class Groovy external;
+class Commons-CLI external;
+class Micronaut external;
+class RxJava3 external;
+class JeroMQ external;
+----
