@@ -17,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.function.Function;
 
+// TODO: Add ability to pass an sslSocketFactory (or equivalent) in the constructor.
 /**
  * Incubating JSON-RPC client using java.net.http.
  * Synchronous API only for now (internal implementation is async), will add async API later.

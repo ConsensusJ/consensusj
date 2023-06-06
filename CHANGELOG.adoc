@@ -11,11 +11,13 @@ The 0.7.0 release of **ConsensusJ** will require **bitcoinj** v0.17, currently i
 
 === consensusj-jsonrpc
 
-* Now that this module requires Java 11+, the `java.net.http`-based client `JsonRpcClientJavaNet` has been moved to this module and the `consensusj-jsonrpc-javanet` module has been removed. Users should consider migrating from `JsonRpcClientHttpUrlConnection` to this more modern implementation.
+* Now that this module requires Java 11+, the _incubating_ `java.net.http`-based client `JsonRpcClientJavaNet` has been moved here. The `consensusj-jsonrpc-javanet` module has been removed. Feel free to try out this client instead of `JsonRpcClientHttpUrlConnection` and let us know how it works.
 
-=== consensusj-jsonrpc-javanet
+=== consensusj-jsonrpc-javanet (removed)
 
-This module has been removed. Its sole class, `org.consensusj.jsonrpc.javanet.JsonRpcClientJavaNet` has been moved to the `consensusj-jsonrpc` module (in the `org.consensusj.jsonrpc` package.) You can remove or replace your references to `consensusj-jsonrpc-javanet` with `consensusj-jsonrpc` and remove the `.javanet` from your `import` statements.
+This _incubating_ module has been removed. Its only class, `org.consensusj.jsonrpc.javanet.JsonRpcClientJavaNet` has been _moved_ to the `consensusj-jsonrpc` module (in the `org.consensusj.jsonrpc` package.)
+
+If you are using `consensusj-jsonrpc-javanet`, you need to remove the `.javanet` from your `import` statements. You should also remove your Maven/Gradle references to the JAR/Module and replace them with references to `consensusj-jsonrpc`.
 
 
 === Build/Test Updates
