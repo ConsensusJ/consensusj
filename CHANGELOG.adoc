@@ -9,6 +9,15 @@ Released: Under development
 
 The 0.7.0 release of **ConsensusJ** will require **bitcoinj** v0.17, currently in alpha release. There will likely be multiple alpha releases of ConsensusJ as bitcoinj is updated.
 
+=== consensusj-jsonrpc
+
+* Now that this module requires Java 11+, the `java.net.http`-based client `JsonRpcClientJavaNet` has been moved to this module and the `consensusj-jsonrpc-javanet` module has been removed. Users should consider migrating from `JsonRpcClientHttpUrlConnection` to this more modern implementation.
+
+=== consensusj-jsonrpc-javanet
+
+This module has been removed. Its sole class, `org.consensusj.jsonrpc.javanet.JsonRpcClientJavaNet` has been moved to the `consensusj-jsonrpc` module (in the `org.consensusj.jsonrpc` package.) You can remove or replace your references to `consensusj-jsonrpc-javanet` with `consensusj-jsonrpc` and remove the `.javanet` from your `import` statements.
+
+
 === Build/Test Updates
 
 * Gradle 8.2-rc-1
