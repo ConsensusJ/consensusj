@@ -121,12 +121,7 @@ We have completed refactoring all modules into the new `org.consensusj` package 
 |<<consensusj-jsonrpc,consensusj-jsonrpc>>
 | 11
 | `org.consensusj.jsonrpc`
-| JSON-RPC client
-
-|<<consensusj-jsonrpc-javanet,consensusj-jsonrpc-javanet>>
-| 11
-| `org.consensusj.jsonrpc.javanet`
-| JSON-RPC client using `java.net.http`
+| JSON-RPC clients: one using `java.net.http` and one legacy.
 
 |<<consensusj-jsonrpc-gvy,consensusj-jsonrpc-gvy>>
 | 11

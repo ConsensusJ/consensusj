@@ -59,8 +59,6 @@ The core JSON-RPC modules have no dependencies on **bitcoinj** or anything crypt
 ----
 flowchart TD
     consensusj-jsonrpc --> Jackson
-    consensusj-jsonrpc-javanet --> java.net.http
-    consensusj-jsonrpc-javanet --> consensusj-jsonrpc
     consensusj-jsonrpc-gvy --> Groovy
     consensusj-jsonrpc-gvy --> consensusj-jsonrpc
     consensusj-jsonrpc-cli --> Commons-CLI
@@ -71,7 +69,6 @@ flowchart TD
     consensusj-rx-jsonrpc --> RxJava3
 
 classDef external fill:#999;
-class java.net.http external;
 class Jackson external;
 class Groovy external;
 class Commons-CLI external;

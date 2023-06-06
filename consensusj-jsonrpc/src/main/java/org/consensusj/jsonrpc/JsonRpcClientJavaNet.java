@@ -1,15 +1,8 @@
-package org.consensusj.jsonrpc.javanet;
+package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
-import org.consensusj.jsonrpc.AbstractRpcClient;
-import org.consensusj.jsonrpc.JsonRpcError;
-import org.consensusj.jsonrpc.JsonRpcErrorException;
-import org.consensusj.jsonrpc.JsonRpcMessage;
-import org.consensusj.jsonrpc.JsonRpcRequest;
-import org.consensusj.jsonrpc.JsonRpcResponse;
-import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
