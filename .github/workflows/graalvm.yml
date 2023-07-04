@@ -11,7 +11,7 @@ jobs:
         java-version: [ '17' ]
         distribution: [ 'graalvm-community' ]
       fail-fast: false
-    name: ${{ matrix.os }} JDK ${{ matrix.graalvm }}.${{ matrix.java }}
+    name: ${{ matrix.os }} JDK ${{ matrix.java-version }}.${{ matrix.distribution }}
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
