@@ -19,7 +19,6 @@ if (!JavaVersion.current().isJava11Compatible()) {
     include 'consensusj-exchange'               // JavaMoney Exchange Providers
     include 'consensusj-jsonrpc'                // JSON-RPC Java client
     include 'consensusj-jsonrpc-gvy'            // JSON-RPC Groovy client
-    include 'consensusj-jsonrpc-javanet'        // JSON-RPC client using java.net.http (incubating)
     include 'consensusj-rx-jsonrpc'             // RxJava 3 adapter for JSON-RPC
     include 'consensusj-rx-zeromq'              // RxJava 3 adapter for ZeroMQ (uses JeroMQ)
     include 'cj-btc-rx'                         // bitcoinj-based RxJava interfaces
