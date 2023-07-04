@@ -3,8 +3,8 @@
 == Main Release Process
 
 . Use Java 17 for official builds
-.. `sdk use 17.0.6-tem`
-.. `sdk use 22.3.r17-grl` (for GraalVM build)
+.. `sdk use 17.0.7-tem`
+.. `sdk use 17.0.7-graalce` (for GraalVM build)
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`
@@ -51,7 +51,7 @@
 
 This is not working yet. Needs refinement:
 
-. `sdk use java 22.3.1.r17-grl`
+. `sdk use java 17.0.7-graalce`
 . `./gradlew -Pagent cj-btc-daemon:run --args="-cjbitcoind.config.network-id=regtest" &`
 . `./run-all-methods.sh`
 . `./gradlew cj-btc-daemon:metadataCopy --task run --dir build/graal-native-image-metadata`
