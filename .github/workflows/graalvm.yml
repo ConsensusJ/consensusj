@@ -8,8 +8,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest]
-        graalvm: [ '22.3.2' ]
-        java: [ '17' ]
+        java-version: [ '17' ]
+        distribution: [ 'graalvm-community' ]
       fail-fast: false
     name: ${{ matrix.os }} JDK ${{ matrix.graalvm }}.${{ matrix.java }}
     steps:
@@ -18,8 +18,8 @@ jobs:
       - name: Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
-          version: ${{ matrix.graalvm }}
-          java-version: ${{ matrix.java }}
+          java-version: ${{ matrix.java-version }}
+          distribution: ${{ matrix.distribution }}
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Verify Gradle Wrapper
