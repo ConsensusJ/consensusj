@@ -20,10 +20,15 @@ This _incubating_ module has been removed. Its only class, `org.consensusj.jsonr
 If you are using `consensusj-jsonrpc-javanet`, you need to remove the `.javanet` from your `import` statements. You should also remove your Maven/Gradle references to the JAR/Module and replace them with references to `consensusj-jsonrpc`.
 
 
+=== Dependency Updates
+
+* Micronaut 3.9.4
+
 === Build/Test Updates
 
 * Gradle 8.2-rc-1
 * GitHub JDK Matrix: Java 11, 17, **21-ea**
+* GraalVM 17.0.7 (new release with new versioning scheme)
 
 == v0.7.0-alpha1
 

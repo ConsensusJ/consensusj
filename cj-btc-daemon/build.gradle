@@ -8,6 +8,7 @@ tasks.withType(JavaCompile) {
 }
 
 micronaut {
+    version micronautVersion
     runtime("netty")
     testRuntime("spock2")
     processing {
