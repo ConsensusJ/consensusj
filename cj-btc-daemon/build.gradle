@@ -27,17 +27,15 @@ graalvmNative {
     }
 }
 
-configurations.all {
-    resolutionStrategy.force 'org.slf4j:slf4j-api:1.7.36'
-}
-
 dependencies {
     implementation project(':cj-btc-services')
     implementation project(':consensusj-jsonrpc')
 
     implementation "io.micronaut:micronaut-runtime"
+    implementation("io.micronaut:micronaut-websocket")
     implementation("io.micronaut.toml:micronaut-toml")
-    implementation "javax.annotation:javax.annotation-api"
+    implementation "io.micronaut:micronaut-jackson-databind"
+    implementation "jakarta.annotation:jakarta.annotation-api"
 
     compileOnly "org.graalvm.nativeimage:svm"
 
