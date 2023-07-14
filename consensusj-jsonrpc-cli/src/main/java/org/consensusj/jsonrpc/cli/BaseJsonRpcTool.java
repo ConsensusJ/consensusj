@@ -132,7 +132,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
 
     private String formatResponse(JsonRpcResponse<?> response, ObjectMapper mapper) {
         String string;
-        if (outputObject == OutputObject.RESPONSE) {
+        if (response.getResult() == null || response.getError() != null || outputObject == OutputObject.RESPONSE) {
             JsonNode reponseAsNode = mapper.valueToTree(response);
             string = reponseAsNode.toPrettyString();
         } else {
