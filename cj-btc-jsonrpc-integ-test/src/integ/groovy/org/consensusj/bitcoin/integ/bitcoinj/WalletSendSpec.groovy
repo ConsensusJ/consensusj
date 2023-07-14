@@ -42,20 +42,16 @@ class WalletSendSpec extends BaseRegTestSpec {
     static final workaroundBitcoinJ_015_8_Issue = true
 
     @Shared
-    NetworkParameters params
-    @Shared
     Wallet wallet
     @Shared
     PeerGroup peerGroup
 
     void setupSpec() {
         BriefLogFormatter.init()
-        params = getNetParams()
-
-        wallet = Wallet.createDeterministic(params, ScriptType.P2PKH)
-        def store = new MemoryBlockStore(params)
-        def chain = new BlockChain(params,wallet,store)
-        peerGroup = new PeerGroup(params, chain)
+        wallet = Wallet.createDeterministic(NetworkParameters.of(network), ScriptType.P2PKH)
+        var store = new MemoryBlockStore(NetworkParameters.of(network))
+        var chain = new BlockChain(NetworkParameters.of(network),wallet,store)
+        peerGroup = new PeerGroup(network, chain)
     }
 
     // TODO: Pull request to bitcoinj to make downloadBlockChain() work on 0-block RegTest?
@@ -153,7 +149,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         when: "we create a transaction using bitcoinj"
         Coin amount = 1.btc
         Address serverWalletAddress = client.getNewAddress()
-        Transaction tx = new Transaction(params)
+        Transaction tx = new Transaction(NetworkParameters.of(network))
         tx.addOutput(amount, serverWalletAddress)
         SendRequest request = SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
@@ -177,7 +173,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         when: "we create a transaction using the bitcoinj wallet"
         Coin amount = 1.btc
         Address rpcAddress = client.getNewAddress()
-        Transaction tx = new Transaction(params)
+        Transaction tx = new Transaction(NetworkParameters.of(network))
         tx.addOutput(amount, rpcAddress)
         SendRequest request = SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.

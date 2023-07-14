@@ -1,5 +1,7 @@
 package org.consensusj.bitcoin.alpha
 
+import org.bitcoinj.base.BitcoinNetwork
+import org.bitcoinj.core.NetworkParameters
 import org.consensusj.jsonrpc.groovy.DynamicRpcClient
 import org.consensusj.bitcoin.jsonrpc.RpcURI
 import org.consensusj.bitcoin.jsonrpc.test.TestServers
@@ -9,7 +11,6 @@ import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.TransactionOutPoint
-import org.bitcoinj.params.RegTestParams
 import org.bitcoinj.script.ScriptBuilder
 import spock.lang.Ignore
 import spock.lang.Shared
@@ -27,7 +28,7 @@ class AlphaSpec extends Specification {
     static final protected String rpcTestUser = testServers.rpcTestUser
     static final protected String rpcTestPassword = testServers.rpcTestPassword;
     static final testAmount = 2.0
-    static final netParams = RegTestParams.get()
+    static final netParams = NetworkParameters.of(BitcoinNetwork.REGTEST)
 
     @Shared DynamicRpcClient client
 

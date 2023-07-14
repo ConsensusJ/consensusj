@@ -7,7 +7,6 @@ import org.bitcoinj.base.Network;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.crypto.ECKey;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 
@@ -22,9 +21,8 @@ public class RpcClientModule extends SimpleModule {
     public RpcClientModule(Network network, boolean strictAddressParsing) {
         super("BitcoinJMappingClient", new Version(1, 0, 0, null, null, null));
 
-        NetworkParameters netParams = NetworkParameters.of(network);
-        this.addDeserializer(Address.class, new AddressDeserializer(strictAddressParsing ? netParams : null))
-                .addDeserializer(Block.class, new BlockHexDeserializer(netParams))
+        this.addDeserializer(Address.class, strictAddressParsing ? new AddressDeserializer(network) : new AddressDeserializer())
+                .addDeserializer(Block.class, new BlockHexDeserializer(network))
                 .addDeserializer(Coin.class, new CoinDeserializer())
                 .addDeserializer(ECKey.class, new ECKeyDeserializer())
                 .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())

@@ -46,7 +46,9 @@ public class AddressDeserializer extends JsonDeserializer<Address> {
      * {@link InvalidFormatException} to be thrown during deserialization.
      *
      * @param netParams Network parameters to specify the only network we will deserialize addresses for.
+     * @deprecated Use {@link AddressDeserializer#AddressDeserializer(Network)}
      */
+    @Deprecated
     public AddressDeserializer(NetworkParameters netParams) {
         this((netParams != null)
                 ? (s) -> new DefaultAddressParser().parseAddress(s, netParams.network())

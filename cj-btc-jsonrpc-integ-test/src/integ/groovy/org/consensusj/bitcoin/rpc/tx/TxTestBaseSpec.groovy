@@ -13,6 +13,6 @@ abstract class TxTestBaseSpec extends BaseRegTestSpec implements JTransactionTes
     NetworkParameters params
 
     void setupSpec() {
-        params = client.getNetParams()
+        params = NetworkParameters.of(client.getNetwork())
     }
 }

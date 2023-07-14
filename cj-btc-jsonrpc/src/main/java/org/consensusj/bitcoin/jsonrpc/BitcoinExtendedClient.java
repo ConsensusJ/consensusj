@@ -204,7 +204,8 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @return mining subsidy
      */
     public Coin getBlockSubsidy(int height) {
-        return ((BitcoinNetworkParams) getNetParams()).getBlockInflation(height);
+        BitcoinNetworkParams params = (BitcoinNetworkParams) BitcoinNetworkParams.of(getNetwork());
+        return params.getBlockInflation(height);
     }
 
     /**

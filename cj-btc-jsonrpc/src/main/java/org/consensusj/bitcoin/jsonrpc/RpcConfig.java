@@ -10,10 +10,7 @@ import org.bitcoinj.core.NetworkParameters;
 import java.net.URI;
 
 /**
- * Configuration class for JSON-RPC client
- *
- * Contains complete URL, username, and password.
- *
+ * Configuration class for JSON-RPC client. Contains complete URL, username, and password.
  */
 public class RpcConfig {
 
@@ -57,6 +54,10 @@ public class RpcConfig {
         return network;
     }
 
+    /**
+     * @deprecated Use {@link #network()}
+     */
+    @Deprecated
     @JsonIgnore
     public NetworkParameters getNetParams() {
         return NetworkParameters.of(network);

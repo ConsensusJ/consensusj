@@ -1,5 +1,6 @@
 package org.consensusj.bitcoin.rpc
 
+import org.bitcoinj.base.ScriptType
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.bitcoinj.base.Coin
 import org.bitcoinj.base.LegacyAddress
@@ -101,11 +102,11 @@ class BitcoinSpec extends BaseRegTestSpec {
     def "We can get the correct private key for an address"() {
         when: "we create a new address and dump it's private key"
         def address = getNewAddress()
-        def netParams = getNetParams()
+        def network = getNetwork()
         def key = dumpPrivKey(address)
 
         then: "when we convert the dumped key to an address we get the same address"
-        LegacyAddress.fromKey(netParams, key) == address
+        address == key.toAddress(ScriptType.P2PKH, network)
     }
 
     def "We can get information about chain tips"() {

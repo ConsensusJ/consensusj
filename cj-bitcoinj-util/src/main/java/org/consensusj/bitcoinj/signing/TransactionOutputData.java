@@ -3,8 +3,8 @@ package org.consensusj.bitcoinj.signing;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.base.Network;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.TransactionOutput;
-import org.bitcoinj.params.BitcoinNetworkParams;
 import org.bitcoinj.script.Script;
 
 /**
@@ -25,6 +25,6 @@ public interface TransactionOutputData {
     }
 
     default TransactionOutput toMutableOutput(Network network) {
-        return new TransactionOutput(BitcoinNetworkParams.of(network), null, amount(), scriptPubKey().getProgram());
+        return new TransactionOutput(NetworkParameters.of(network), null, amount(), scriptPubKey().getProgram());
     }
 }

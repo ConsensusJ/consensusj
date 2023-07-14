@@ -6,9 +6,7 @@ import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.ScriptType
 import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.core.Transaction
-import org.bitcoinj.core.TransactionOutput
 import org.bitcoinj.crypto.ECKey
-import org.bitcoinj.params.BitcoinNetworkParams
 import org.consensusj.bitcoin.json.pojo.UnspentOutput
 import org.consensusj.bitcoin.services.WalletAppKitService
 import org.consensusj.bitcoin.services.WalletSigningService

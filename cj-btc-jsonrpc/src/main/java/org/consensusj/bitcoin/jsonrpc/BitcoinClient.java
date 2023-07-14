@@ -142,7 +142,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     /**
      * Incubating constructor that doesn't require a {@link Network}.
      * <p>
-     * When using this constructor, it is recommended that {@link #getNetParams()} be called after construction
+     * When using this constructor, it is recommended that {@link #getNetwork()} be called after construction
      * and before any other methods are called, to allow the Bitcoin network type to be initialized.
      * @param sslSocketFactory Custom socket factory
      * @param server URI of the Bitcoin RPC server
@@ -156,7 +156,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     /**
      * Incubating constructor that doesn't require a {@link Network}.
      * <p>
-     * When using this constructor, it is recommended that {@link #getNetParams()} be called after construction
+     * When using this constructor, it is recommended that {@link #getNetwork()} be called after construction
      * and before any other methods are called, to allow the Bitcoin network type to be initialized.
      * @param server URI of the Bitcoin RPC server
      * @param rpcuser Username (if required)

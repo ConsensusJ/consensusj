@@ -4,7 +4,6 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.Transaction;
-import org.bitcoinj.params.BitcoinNetworkParams;
 import org.bitcoinj.script.ScriptException;
 import org.bitcoinj.wallet.DeterministicKeyChain;
 import org.slf4j.Logger;
@@ -31,7 +30,7 @@ public interface BaseTransactionSigner extends TransactionSigner {
      */
     @Override
     default CompletableFuture<Transaction> signTransaction(SigningRequest request) {
-        NetworkParameters params = BitcoinNetworkParams.of(request.network());
+        NetworkParameters params = NetworkParameters.of(request.network());
         // Create a new, empty (mutable) bitcoinj transaction
         Transaction transaction = new Transaction(params);
 
