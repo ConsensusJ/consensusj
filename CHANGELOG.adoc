@@ -22,7 +22,7 @@ If you are using `consensusj-jsonrpc-javanet`, you need to remove the `.javanet`
 
 === Dependency Updates
 
-* Micronaut 4.0.0-RC1
+* Micronaut 4.0.0
 * Jackson 2.15.2
 * Groovy 4.0.13
 
