@@ -1,7 +1,6 @@
 package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.script.ScriptException;
@@ -30,13 +29,12 @@ public interface BaseTransactionSigner extends TransactionSigner {
      */
     @Override
     default CompletableFuture<Transaction> signTransaction(SigningRequest request) {
-        NetworkParameters params = NetworkParameters.of(request.network());
         // Create a new, empty (mutable) bitcoinj transaction
-        Transaction transaction = new Transaction(params);
+        Transaction transaction = new Transaction(NetworkParameters.of(request.network()));
 
         // For each output in the signing request, add an output to the bitcoinj transaction
         request.outputs().forEach(
-                output -> transaction.addOutput(output.toMutableOutput(params.network()))
+                output -> transaction.addOutput(output.toMutableOutput(request.network()))
         );
 
         // For each address in the input list, add a signed input to the bitcoinj transaction
