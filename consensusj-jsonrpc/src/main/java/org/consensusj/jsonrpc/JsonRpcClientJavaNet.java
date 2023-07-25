@@ -46,11 +46,15 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
     }
 
     @Override
-    public <R> JsonRpcResponse<R> sendRequestForResponse(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException {
-        //TypeReference<Map<Address, OmniwalletAddressBalance>> typeRef = new TypeReference<>() {};
-        HttpRequest httpRequest = buildJsonRpcPostRequest(request);
-        return (JsonRpcResponse<R>) sendForResponseAsync(httpRequest, responseType).join();
-
+    public <R> CompletableFuture<JsonRpcResponse<R>> sendRequestForResponseAsync(JsonRpcRequest request, JavaType responseType) {
+        log.debug("Send aysnc: {}", request);
+        try {
+            HttpRequest httpRequest = buildJsonRpcPostRequest(request);
+            return sendAsyncCommon(httpRequest)
+                    .thenApply(mappingFunc(responseType));
+        } catch (JsonProcessingException e) {
+            return CompletableFuture.failedFuture(e);
+        }
     }
 
     // For testing only
@@ -75,12 +79,6 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
 
     private String encodeJsonRpcRequest(JsonRpcRequest request) throws JsonProcessingException {
         return mapper.writeValueAsString(request);
-    }
-
-    private <R> CompletableFuture<JsonRpcResponse<R>> sendForResponseAsync(HttpRequest request, JavaType responseType) {
-        log.debug("Send aysnc: {}", request);
-        return sendAsyncCommon(request)
-                .thenApply(mappingFunc(responseType));
     }
 
     private CompletableFuture<String> sendAsyncCommon(HttpRequest request) {

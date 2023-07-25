@@ -14,12 +14,13 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * JSON-RPC Client using {@link HttpURLConnection} formerly named{@code RpcClient}.
  * <p>
  * This is a concrete class with generic JSON-RPC functionality, it implements the abstract
- * method {@link AbstractRpcClient#sendRequestForResponse(JsonRpcRequest, JavaType)} using {@link HttpURLConnection}.
+ * method {@link AbstractRpcClient#sendRequestForResponseAsync(JsonRpcRequest, JavaType)} using {@link HttpURLConnection}.
  * <p>
  * Uses strongly-typed POJOs representing {@link JsonRpcRequest} and {@link JsonRpcResponse}. The
  * response object uses a parameterized type for the object that is the actual JSON-RPC `result`.
@@ -101,6 +102,11 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
         JsonRpcResponse<R> responseJson = responseFromStream(connection.getInputStream(), responseType);
         connection.disconnect();
         return responseJson;
+    }
+
+    @Override
+    public <R> CompletableFuture<JsonRpcResponse<R>> sendRequestForResponseAsync(JsonRpcRequest request, JavaType responseType) {
+        return supplyAsync(() -> this.sendRequestForResponse(request, responseType));
     }
 
     private <R> JsonRpcResponse<R> responseFromStream(InputStream inputStream, JavaType responseType) throws IOException {

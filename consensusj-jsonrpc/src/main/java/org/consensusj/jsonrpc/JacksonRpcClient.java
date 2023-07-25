@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
 
 /**
  * Interface with default methods for a strongly-typed JSON-RPC client that uses Jackson to map from JSON to Java Objects.
@@ -32,7 +35,9 @@ public interface JacksonRpcClient extends JsonRpcClient {
 
     /**
      * Send a {@link JsonRpcRequest} for a {@link JsonRpcResponse}
-     * <p>Subclasses must implement this method to actually send the request
+     * <p>Synchronous subclasses should override this method to prevent {@link CompletableFuture#supplyAsync(Supplier)} from
+     * being called twice when {@link AsyncSupport} is being used. Eventually we'll migrate more of the codebase to native
+     * async, and then we won't have to worry about calling {@code supplyAsync} twice.
      * @param <R> Type of result object
      * @param request The request to send
      * @param responseType The response type expected (used by Jackson for conversion)
@@ -40,7 +45,32 @@ public interface JacksonRpcClient extends JsonRpcClient {
      * @throws IOException network error
      * @throws JsonRpcStatusException JSON RPC status error
      */
-    <R> JsonRpcResponse<R> sendRequestForResponse(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException;
+    default <R> JsonRpcResponse<R> sendRequestForResponse(JsonRpcRequest request, JavaType responseType) throws IOException, JsonRpcStatusException {
+        try {
+            return (JsonRpcResponse<R>) sendRequestForResponseAsync(request, responseType).get();
+        } catch (InterruptedException ie) {
+            throw new RuntimeException(ie);
+        } catch (ExecutionException ee) {
+            Throwable cause = ee.getCause();
+            if (cause instanceof JsonRpcStatusException) {
+                throw (JsonRpcStatusException) cause;
+            } else if (cause instanceof IOException) {
+                throw (IOException) cause;
+            } else {
+                throw new RuntimeException(ee);
+            }
+        }
+    }
+
+    /**
+     * Send a {@link JsonRpcRequest} for a {@link JsonRpcResponse} asynchronously.
+     * <p>Subclasses must implement this method to actually send the request
+     * @param <R> Type of result object
+     * @param request The request to send
+     * @param responseType The response type expected (used by Jackson for conversion)
+     * @return A future JSON RPC Response with `result` of type `R`
+     */
+    <R> CompletableFuture<JsonRpcResponse<R>> sendRequestForResponseAsync(JsonRpcRequest request, JavaType responseType);
 
     /**
      * Convenience method for requesting a response with a {@link JsonNode} for the result.
