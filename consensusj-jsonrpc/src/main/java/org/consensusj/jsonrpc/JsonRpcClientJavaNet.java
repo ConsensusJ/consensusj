@@ -1,7 +1,6 @@
 package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,7 @@ import java.util.function.Function;
 
 // TODO: Add ability to pass an sslSocketFactory (or equivalent) in the constructor.
 /**
- * Incubating JSON-RPC client using java.net.http.
+ * Incubating JSON-RPC client using {@link java.net.http.HttpClient}
  * Synchronous API only for now (internal implementation is async), will add async API later.
  */
 public class JsonRpcClientJavaNet extends AbstractRpcClient {
@@ -54,10 +53,15 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
 
     }
 
-    public String sendRequestForResponseString(JsonRpcRequest request) throws IOException, JsonRpcStatusException {
-        HttpRequest httpRequest = buildJsonRpcPostRequest(request);
-        return sendForStringAsync(httpRequest).join();
-
+    // For testing only
+    CompletableFuture<String> sendRequestForResponseStringAsync(JsonRpcRequest request) {
+        log.debug("Send aysnc: {}", request);
+        try {
+            HttpRequest httpRequest = buildJsonRpcPostRequest(request);
+            return sendAsyncCommon(httpRequest);
+        } catch (JsonProcessingException e) {
+            return CompletableFuture.failedFuture(e);
+        }
     }
 
     /**
@@ -79,36 +83,13 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
                 .thenApply(mappingFunc(responseType));
     }
 
-    private CompletableFuture<String> sendForStringAsync(HttpRequest request) {
-        log.debug("Send aysnc: {}", request);
-        return sendAsyncCommon(request);
-    }
-
-    private <R> CompletableFuture<R> sendAsync(HttpRequest request, Class<R> clazz) {
-        log.debug("Send aysnc: {}", request);
-        return sendAsyncCommon(request)
-                .thenApply(mappingFunc(clazz));
-    }
-
-    private <R> CompletableFuture<R> sendAsync(HttpRequest request, JavaType responseType) {
-        log.debug("Send aysnc: {}", request);
-        return sendAsyncCommon(request)
-                .thenApply(mappingFunc(responseType));
-    }
-
-    private <R> CompletableFuture<R> sendAsync(HttpRequest request, TypeReference<R> typeReference) {
-        log.debug("Send aysnc: {}", request);
-        return sendAsyncCommon(request)
-                .thenApply(mappingFunc(typeReference));
-    }
-
     private CompletableFuture<String> sendAsyncCommon(HttpRequest request) {
         log.debug("Send aysnc: {}", request);
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .whenComplete(JsonRpcClientJavaNet::log)
+                .whenComplete(this::log)
                 .thenComposeAsync(this::handleStatusError)
                 .thenApply(HttpResponse::body)
-                .whenComplete(JsonRpcClientJavaNet::log);
+                .whenComplete(this::log);
     }
 
     private CompletableFuture<HttpResponse<String>> handleStatusError(HttpResponse<String> response) {
@@ -143,27 +124,30 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
                 .build();
     }
 
-
-    private <R> MappingFunction<R> mappingFunc(Class<R> clazz) {
-        return s -> mapper.readValue(s, clazz);
-    }
-
     private <R> MappingFunction<R> mappingFunc(JavaType responseType) {
         return s -> mapper.readValue(s, responseType);
     }
 
-    private <R> MappingFunction<R> mappingFunc(TypeReference<R> typeReference) {
-        return s -> mapper.readValue(s, typeReference);
-    }
-
+    /**
+     * Map a response string to Java object
+     * @param <R> Desired type of Java object
+     */
     @FunctionalInterface
-    interface MappingFunction<R> extends ThrowingFunction<String, R> {}
+    protected interface MappingFunction<R> extends ThrowingFunction<String, R> {}
 
+    /**
+     * Utility interface for declaring functions that throw checked exceptions and wrapping
+     * them in a {@link Function} that will throw {@link RuntimeException} if the underlying
+     * {@link #applyThrows(Object)} method throws a checked {@link Exception}.
+     * @param <T> input type
+     * @param <R> result type
+     */
     @FunctionalInterface
-    interface ThrowingFunction<T,R> extends Function<T, R> {
+    protected interface ThrowingFunction<T,R> extends Function<T, R> {
 
         /**
-         * Gets a result wrapping checked Exceptions with {@link RuntimeException}
+         * Gets a result. Wraps checked Exceptions with {@link RuntimeException}
+         * @param t input
          * @return a result
          */
         @Override
@@ -176,15 +160,16 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         }
 
         /**
-         * Gets a result.
+         * Gets a result and may throw a checked exception.
          *
+         * @param t input
          * @return a result
          * @throws Exception Any checked Exception
          */
         R applyThrows(T t) throws Exception;
     }
     
-    private static void log(HttpResponse<String> httpResponse, Throwable t) {
+    private void log(HttpResponse<String> httpResponse, Throwable t) {
         if ((httpResponse != null)) {
             log.info("log data string: {}", httpResponse);
         } else {
@@ -192,7 +177,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         }
     }
 
-    private static void log(String s, Throwable t) {
+    private void log(String s, Throwable t) {
         if ((s != null)) {
             log.info("log data string: {}", s.substring(0 ,Math.min(100, s.length())));
         } else {
