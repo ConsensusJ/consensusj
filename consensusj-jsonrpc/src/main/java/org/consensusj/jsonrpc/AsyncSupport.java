@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc;
 
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
@@ -13,7 +14,7 @@ public interface AsyncSupport {
     /**
      * Supply async for a ThrowingSupplier by catching exceptions and completing exceptionally.
      *
-     * @param throwingSupplier Supplier of T that can throw an exception
+     * @param throwingSupplier Supplier of T that can throw an {@code IOException}
      * @param <T> return type
      * @return A completable future, returning T
      */
@@ -24,7 +25,7 @@ public interface AsyncSupport {
     /**
      * Supply async for a ThrowingSupplier by catching exceptions and completing exceptionally.
      *
-     * @param throwingSupplier Supplier of T that can throw an exception
+     * @param throwingSupplier Supplier of T that can throw an {@code IOException}
      * @param executor Executor to run the Supplier
      * @param <T> return type
      * @return A completable future, returning T
@@ -56,14 +57,17 @@ public interface AsyncSupport {
     }
 
     /**
-     * Subinterface of {@link Supplier} for Lambdas which throw exceptions.
+     * Subinterface of {@link Supplier} for Lambdas which throw {@link IOException}.
      * Can be used for two purposes:
      * <ol>
-     *     <li>To cast a lambda that throws an exception to a {@link Supplier} while
+     *     <li>To cast a lambda that throws an {@code IOException} to a {@link Supplier} while
      *      automatically wrapping any exception thrown by the lambda with {@link RuntimeException}.</li>
      *     <li>As a {@code FunctionalInterface} where a lambda that throws exceptions is
      *      expected or allowed.</li>
      * </ol>
+     * This is intended to be used to wrap JSON-RPC I/O methods of {@link JsonRpcClient} that throw {@link IOException} and
+     * subclasses such as {@link JsonRpcException}, so we have narrowed the allowed exceptions in {@link #getThrows()} to
+     * {@link IOException}.
      *
      * @param <T>
      */
@@ -87,8 +91,8 @@ public interface AsyncSupport {
          * Gets a result.
          *
          * @return a result
-         * @throws Exception Any checked Exception
+         * @throws IOException A (checked) exception
          */
-        T getThrows() throws Exception;
+        T getThrows() throws IOException;
     }
 }
