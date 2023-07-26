@@ -34,6 +34,8 @@ import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcErrorException;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcMessage;
+import org.consensusj.jsonrpc.JsonRpcRequest;
+import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection;
 import org.bitcoinj.base.Address;
@@ -110,7 +112,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     // TODO: Replace NetworkParameters with Network/BitcoinNetwork once we upgrade to bitcoinj 0.17 (once it is released)
 
     private Network network;
-    private ExecutorService executorService;
+    private final ExecutorService executorService;
 
     private int serverVersion = 0;    // 0 means unknown serverVersion
     private boolean isAddressIndexSuccessfullyTested = false;
@@ -119,8 +121,13 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     public BitcoinClient(SSLSocketFactory sslSocketFactory, Network network, URI server, String rpcuser, String rpcpassword) {
         super(sslSocketFactory, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
         this.network = network;
+        ThreadFactory threadFactory = new BitcoinClientThreadFactory(new Context(), "Bitcoin RPC Client");
+        // TODO: Tune and/or make configurable the thread pool size.
+        // Current pool size of 5 is chosen to minimize simultaneous active RPC
+        // calls in `bitcoind` -- which is not designed for serving multiple clients.
+        executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
         if (network != null) {
-            initExecutor();
+            initMapper();
         }
     }
 
@@ -129,13 +136,11 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         this(sslSocketFactory, netParams.network(), server, rpcuser, rpcpassword);
     }
 
-    private void initExecutor() {
+    /**
+     * Initialize the Jackson Mapper (after we are sure we have the {@code Network})
+     */
+    private void initMapper() {
         mapper.registerModule(new RpcClientModule(network));
-        ThreadFactory threadFactory = new BitcoinClientThreadFactory(new Context(), "Bitcoin RPC Client");
-        // TODO: Tune and/or make configurable the thread pool size.
-        // Current pool size of 5 is chosen to minimize simultaneous active RPC
-        // calls in `bitcoind` -- which is not designed for serving multiple clients.
-        executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
     }
 
     // TODO: Reconcile this constructor mode with {@link #waitForServer(int)}
@@ -212,7 +217,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     public synchronized Network getNetwork() {
         if (network == null) {
             network = getNetworkFromServer().join();
-            initExecutor();
+            initMapper();
         }
         return network;
     }
