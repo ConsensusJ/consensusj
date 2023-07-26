@@ -9,7 +9,7 @@ import org.bitcoinj.core.Transaction;
 import java.io.IOException;
 
 /**
- *
+ * Serialize a transaction as a hex-encoded binary string.
  */
 public class TransactionHexSerializer extends JsonSerializer<Transaction> {
     @Override

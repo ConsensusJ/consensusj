@@ -10,8 +10,10 @@ import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 
+// TODO: In (planned) bitcoinj 0.17-alpha2 Network/NetworkParameters is no longer needed to construct this class
+// TODO: After bitcoinj 0.17-alpha2 maybe merge RpcClientModule and RpcServerModule (though there are currently conflicting serializers for Transaction)
 /**
- *
+ * Jackson Module with serializers and deserializers for JSON-RPC clients.
  */
 public class RpcClientModule extends SimpleModule {
     /**

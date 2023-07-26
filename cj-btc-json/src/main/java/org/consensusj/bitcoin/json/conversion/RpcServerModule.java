@@ -12,7 +12,7 @@ import org.bitcoinj.core.Transaction;
 import org.bitcoinj.script.Script;
 
 /**
- *
+ * Jackson Module with serializers and deserializers for JSON-RPC servers.
  */
 public class RpcServerModule extends SimpleModule {
     public RpcServerModule() {

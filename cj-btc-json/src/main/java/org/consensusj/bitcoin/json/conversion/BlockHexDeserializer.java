@@ -14,8 +14,9 @@ import org.bitcoinj.core.ProtocolException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+// TODO: In (planned) bitcoinj 0.17-alpha2 Network/NetworkParameters is no longer needed to construct blocks
 /**
- *
+ * Deserializes a hex string as a Bitcoin {@link Block}
  */
 public class BlockHexDeserializer extends JsonDeserializer<Block> {
     private final NetworkParameters netParams;
@@ -36,6 +37,7 @@ public class BlockHexDeserializer extends JsonDeserializer<Block> {
             case VALUE_STRING:
                 try {
                     byte[] payload = HexUtil.hexStringToByteArray(p.getValueAsString()); // convert  to hex
+                    // TODO: return Block.read(ByteBuffer.wrap(payload));
                     return netParams.getDefaultSerializer().makeBlock(ByteBuffer.wrap(payload));
                 } catch (ProtocolException e) {
                     throw new InvalidFormatException(p, "Invalid Block", p.getValueAsString(), Block.class);
