@@ -229,8 +229,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      */
     @Override
     public void close() throws InterruptedException {
-        // TODO: See shutdownAndAwaitTermination method in the ExecutorService JavaDoc for
-        // how to correctly implement this.
+        // TODO: See shutdownAndAwaitTermination method in the ExecutorService JavaDoc for how to correctly implement this.
         executorService.shutdown();
         boolean successfullyTerminated = executorService.awaitTermination(10, TimeUnit.SECONDS);
         if (!successfullyTerminated) {
@@ -256,10 +255,14 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         return serverVersion;
     }
 
+    /**
+     * Get the {@link Network} for this client by asking the server.
+     * @return A future for the server-side {@code Network}
+     */
     private CompletableFuture<Network> getNetworkFromServer() {
-        return getBlockchainInfoMap().thenApply(info -> {
+        return getBlockchainInfoMap().thenApply(map -> {
             Network network;
-            switch((String) info.get("chain")) {
+            switch((String) map.get("chain")) {
                 case "main":
                     network = BitcoinNetwork.MAINNET;
                     break;
@@ -281,13 +284,13 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     }
 
     /**
-     * Return BlockchainInfo as a Map (this avoids use of RpcClientModule and a circular dependency on NetworkParameters)
-     * Note that we also can't use our ThreadFactory or ExecutorService because they depend on NetworkParameters as well,
-     * and are not created until after we know what network we are on.
-     * @return  getblockchaininfo response JSON as a Map
+     * Return {@code BlockchainInfo} as a {@link Map}. This avoids use of {@link RpcClientModule} and a circular dependency on {@link Network}
+     * @return  {@code getblockchaininfo} response JSON as a {@link Map}
      */
     private CompletableFuture<Map<String, Object>> getBlockchainInfoMap() {
-        return supplyAsync(() -> send("getblockchaininfo"), r -> new Thread(r).start());
+        JsonRpcRequest request = buildJsonRequest("getblockchaininfo");
+        CompletableFuture<JsonRpcResponse<Map<String, Object>>> response = sendRequestForResponseAsync(request, responseTypeFor(Map.class));
+        return response.thenApply(JsonRpcResponse::getResult);
     }
 
     /**
