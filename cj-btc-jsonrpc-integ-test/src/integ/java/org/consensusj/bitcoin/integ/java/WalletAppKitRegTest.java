@@ -49,7 +49,7 @@ public class WalletAppKitRegTest {
     void setupTest(@TempDir File tempDir) throws UnknownHostException {
         kit = new WalletAppKit(network,
                 ScriptType.P2WPKH,
-                KeyChainGroupStructure.DEFAULT,
+                KeyChainGroupStructure.BIP43,
                 tempDir,
                 "prefix");
         kit.connectToLocalHost();
