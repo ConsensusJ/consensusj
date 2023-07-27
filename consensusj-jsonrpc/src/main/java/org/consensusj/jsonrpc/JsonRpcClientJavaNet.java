@@ -113,7 +113,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         String basicAuth = "Basic " + base64Encode(auth);
 
         return HttpRequest
-                .newBuilder(serverURI.resolve(""))
+                .newBuilder(serverURI)
                 .header("Content-Type", "application/json;charset=" +  UTF8)
                 .header("Accept-Charset", UTF8)
                 .header("Accept", "application/json")
