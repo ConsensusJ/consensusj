@@ -26,6 +26,7 @@ import org.bitcoinj.core.TransactionOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -69,6 +70,12 @@ public class BitcoinExtendedClient extends BitcoinClient {
         return defaultMaxConf;
     }
 
+
+    public BitcoinExtendedClient(SSLContext sslContext, Network network, URI server, String rpcuser, String rpcpassword) {
+        super(sslContext, network, server, rpcuser, rpcpassword);
+    }
+
+    @Deprecated
     public BitcoinExtendedClient(SSLSocketFactory sslSocketFactory, Network network, URI server, String rpcuser, String rpcpassword) {
         super(sslSocketFactory, network, server, rpcuser, rpcpassword);
     }
@@ -79,16 +86,16 @@ public class BitcoinExtendedClient extends BitcoinClient {
     }
 
     public BitcoinExtendedClient(Network network, URI server, String rpcuser, String rpcpassword) {
-        this((SSLSocketFactory) SSLSocketFactory.getDefault(), network, server, rpcuser, rpcpassword);
+        this(getDefaultSSLContext(), network, server, rpcuser, rpcpassword);
     }
 
     @Deprecated
     public BitcoinExtendedClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        this((SSLSocketFactory) SSLSocketFactory.getDefault(), netParams, server, rpcuser, rpcpassword);
+        this(getDefaultSSLContext(), netParams.network(), server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(URI server, String rpcuser, String rpcpassword) {
-        this((SSLSocketFactory) SSLSocketFactory.getDefault(), (Network) null, server, rpcuser, rpcpassword);
+        this(getDefaultSSLContext(), (Network) null, server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(RpcConfig config) {

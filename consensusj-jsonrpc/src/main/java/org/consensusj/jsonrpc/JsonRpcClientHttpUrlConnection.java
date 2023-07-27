@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,9 +37,19 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
     private static final String UTF8 = StandardCharsets.UTF_8.name();
     private final SSLSocketFactory sslSocketFactory;
     
+    @Deprecated
     public JsonRpcClientHttpUrlConnection(SSLSocketFactory socketFactory, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
         super(jsonRpcVersion);
         this.sslSocketFactory = socketFactory;
+        log.debug("Constructing JSON-RPC client for: {}", server);
+        this.serverURI = server;
+        this.username = rpcUser;
+        this.password = rpcPassword;
+    }
+
+    public JsonRpcClientHttpUrlConnection(SSLContext sslContext, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
+        super(jsonRpcVersion);
+        this.sslSocketFactory = sslContext.getSocketFactory();
         log.debug("Constructing JSON-RPC client for: {}", server);
         this.serverURI = server;
         this.username = rpcUser;
@@ -54,7 +65,7 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
      * @param rpcPassword password for the RPC HTTP connection
      */
     public JsonRpcClientHttpUrlConnection(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
-        this((SSLSocketFactory) SSLSocketFactory.getDefault(), jsonRpcVersion, server, rpcUser, rpcPassword);
+        this(getDefaultSSLContext(), jsonRpcVersion, server, rpcUser, rpcPassword);
     }
 
     /**

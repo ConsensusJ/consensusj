@@ -49,12 +49,14 @@ import org.bitcoinj.core.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -118,6 +120,20 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     private boolean isAddressIndexSuccessfullyTested = false;
     private boolean isAddressIndexEnabled;
 
+    public BitcoinClient(SSLContext sslContext, Network network, URI server, String rpcuser, String rpcpassword) {
+        super(sslContext, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
+        this.network = network;
+        ThreadFactory threadFactory = new BitcoinClientThreadFactory(new Context(), "Bitcoin RPC Client");
+        // TODO: Tune and/or make configurable the thread pool size.
+        // Current pool size of 5 is chosen to minimize simultaneous active RPC
+        // calls in `bitcoind` -- which is not designed for serving multiple clients.
+        executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
+        if (network != null) {
+            initMapper();
+        }
+    }
+
+    @Deprecated
     public BitcoinClient(SSLSocketFactory sslSocketFactory, Network network, URI server, String rpcuser, String rpcpassword) {
         super(sslSocketFactory, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
         this.network = network;
@@ -149,13 +165,13 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * <p>
      * When using this constructor, it is recommended that {@link #getNetwork()} be called after construction
      * and before any other methods are called, to allow the Bitcoin network type to be initialized.
-     * @param sslSocketFactory Custom socket factory
+     * @param sslContext Custom socket factory
      * @param server URI of the Bitcoin RPC server
      * @param rpcuser Username (if required)
      * @param rpcpassword Password (if required)
      */
-    public BitcoinClient(SSLSocketFactory sslSocketFactory, URI server, String rpcuser, String rpcpassword) {
-        this(sslSocketFactory, (Network) null, server, rpcuser, rpcpassword);
+    public BitcoinClient(SSLContext sslContext, URI server, String rpcuser, String rpcpassword) {
+        this(sslContext, (Network) null, server, rpcuser, rpcpassword);
     }
 
     /**
@@ -168,7 +184,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @param rpcpassword Password (if required)
      */
     public BitcoinClient(URI server, String rpcuser, String rpcpassword) {
-        this((SSLSocketFactory) SSLSocketFactory.getDefault(), (Network) null, server, rpcuser, rpcpassword);
+        this(getDefaultSSLContext(), (Network) null, server, rpcuser, rpcpassword);
     }
 
     /**
@@ -179,7 +195,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @param rpcpassword Password (if required)
      */
     public BitcoinClient(Network network, URI server, String rpcuser, String rpcpassword) {
-        this((SSLSocketFactory) SSLSocketFactory.getDefault(), network, server, rpcuser, rpcpassword);
+        this(getDefaultSSLContext(), network, server, rpcuser, rpcpassword);
     }
 
     @Deprecated

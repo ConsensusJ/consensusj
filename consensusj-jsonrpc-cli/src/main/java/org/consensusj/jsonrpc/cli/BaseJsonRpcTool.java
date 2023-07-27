@@ -19,7 +19,7 @@ import org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.SSLContext;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -85,7 +85,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         if (call.line.hasOption("V1")) {
             jsonRpcVersion = JsonRpcMessage.Version.V1;
         }
-        SSLSocketFactory sslSocketFactory = socketFactory(call.line);
+        SSLContext sslSocketFactory = sslContext(call.line);
         AbstractRpcClient client = call.rpcClient(sslSocketFactory);
         CliParameterParser parser = new CliParameterParser(jsonRpcVersion, client.getMapper());
         JsonRpcRequest request = parser.parse(args);
@@ -103,14 +103,14 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         call.out.println(resultForPrinting);
     }
 
-    SSLSocketFactory socketFactory(CommandLine line) {
-        SSLSocketFactory sslSocketFactory;
+    SSLContext sslContext(CommandLine line) {
+        SSLContext sslContext;
         if (line.hasOption("add-truststore")) {
             // Create SSL sockets using additional truststore and CompositeTrustManager
             String trustStorePathString = line.getOptionValue("add-truststore");
             Path trustStorePath = Path.of(trustStorePathString);
             try {
-                sslSocketFactory = CompositeTrustManager.getCompositeSSLSocketFactory(trustStorePath);
+                sslContext = CompositeTrustManager.getCompositeSSLContext(trustStorePath);
             } catch (NoSuchAlgorithmException | KeyManagementException | FileNotFoundException e) {
                 throw new ToolException(1, e.getMessage());
             }
@@ -119,15 +119,19 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             String trustStorePathString = line.getOptionValue("alt-truststore");
             Path trustStorePath = Path.of(trustStorePathString);
             try {
-                sslSocketFactory = CompositeTrustManager.getAlternateSSLSocketFactory(trustStorePath);
+                sslContext = CompositeTrustManager.getAlternateSSLContext(trustStorePath);
             } catch (NoSuchAlgorithmException | KeyManagementException | CertificateException | KeyStoreException | IOException e) {
                 throw new ToolException(1, e.getMessage());
             }
         } else {
             // Otherwise, use the default SSLSocketFactory
-            sslSocketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            try {
+                sslContext = SSLContext.getDefault();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
         }
-        return sslSocketFactory;
+        return sslContext;
     }
 
     private String formatResponse(JsonRpcResponse<?> response, ObjectMapper mapper) {
@@ -200,7 +204,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         }
 
         @Override
-        public AbstractRpcClient rpcClient(SSLSocketFactory sslSocketFactory) {
+        public AbstractRpcClient rpcClient(SSLContext sslContext) {
             if (client == null) {
                 URI uri;
                 String urlString;
@@ -221,14 +225,20 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                     rpcUser = split[0];
                     rpcPassword = split[1];
                 }
-                client = new JsonRpcClientHttpUrlConnection(sslSocketFactory, rpcTool.jsonRpcVersion, uri, rpcUser, rpcPassword);
+                client = new JsonRpcClientHttpUrlConnection(sslContext, rpcTool.jsonRpcVersion, uri, rpcUser, rpcPassword);
             }
             return client;
         }
 
         @Override
         public AbstractRpcClient rpcClient() {
-            return rpcClient((SSLSocketFactory) SSLSocketFactory.getDefault());
+            SSLContext sslContext;
+            try {
+                sslContext = SSLContext.getDefault();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+            return rpcClient(sslContext);
         }
     }
 }

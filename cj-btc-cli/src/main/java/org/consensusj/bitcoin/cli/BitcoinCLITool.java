@@ -9,10 +9,11 @@ import org.apache.commons.cli.Options;
 import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.cli.BaseJsonRpcTool;
 
-import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.SSLContext;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
 
 import static org.consensusj.bitcoin.jsonrpc.RpcURI.RPCPORT_REGTEST;
 import static org.consensusj.bitcoin.jsonrpc.RpcURI.RPCPORT_TESTNET;
@@ -69,12 +70,12 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
         }
 
         @Override
-        public BitcoinClient rpcClient(SSLSocketFactory sslSocketFactory) {
+        public BitcoinClient rpcClient(SSLContext sslContext) {
             // Not threadsafe
             // This needs work if there are ever going to be multiple clients calling this method
             if (client == null) {
                 RpcConfig config = getRPCConfig();
-                client = createClient(sslSocketFactory, config);
+                client = createClient(sslContext, config);
                 if (rpcWait) {
                     // TODO: Add logging here to replace the System.out.println
                     //System.out.println("Connecting to: " + getRPCConfig().getURI() + " with -rpcWait");
@@ -96,7 +97,13 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
 
         @Override
         public BitcoinClient rpcClient() {
-            return rpcClient((SSLSocketFactory) SSLSocketFactory.getDefault());
+            SSLContext sslContext;
+            try {
+                sslContext = SSLContext.getDefault();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+            return rpcClient(sslContext);
         }
 
         /**
@@ -104,8 +111,8 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
          * @param config Configuration information for connecting to server
          * @return a newly constructed BitcoinClient with specified config
          */
-        protected BitcoinClient createClient(SSLSocketFactory sslSocketFactory, RpcConfig config) {
-            return new BitcoinClient( sslSocketFactory, config.network(),
+        protected BitcoinClient createClient(SSLContext sslContext, RpcConfig config) {
+            return new BitcoinClient( sslContext, config.network(),
                     config.getURI(),
                     config.getUsername(),
                     config.getPassword());

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import javax.net.ssl.SSLContext;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -31,6 +31,10 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
 
 
     public JsonRpcClientJavaNet(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
+        this(getDefaultSSLContext(), jsonRpcVersion, server, rpcUser, rpcPassword);
+    }
+
+    public JsonRpcClientJavaNet(SSLContext sslContext, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
         super(jsonRpcVersion);
         log.debug("Constructing JSON-RPC client for: {}", server);
         this.serverURI = server;
@@ -38,6 +42,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         this.password = rpcPassword;
         this.client = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofMinutes(2))
+                .sslContext(sslContext)
                 .build();
     }
 

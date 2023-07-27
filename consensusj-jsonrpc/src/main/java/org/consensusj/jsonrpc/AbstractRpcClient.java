@@ -3,6 +3,9 @@ package org.consensusj.jsonrpc;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javax.net.ssl.SSLContext;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 // TODO: Rather than implementing transport (HttpUrlConnection vs. java.net.http) with subclasses use composition
@@ -75,6 +78,18 @@ public abstract class AbstractRpcClient implements JacksonRpcClient {
     @Override
     public JavaType getDefaultType() {
         return defaultType;
+    }
+
+    /**
+     * Return the default {@link SSLContext} without declaring a checked exception
+     * @return The default {@code SSLContext}
+     */
+    protected static SSLContext getDefaultSSLContext() {
+        try {
+            return SSLContext.getDefault();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
