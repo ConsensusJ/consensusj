@@ -33,7 +33,7 @@ public interface BaseTransactionSigner extends TransactionSigner {
 
         // For each output in the signing request, add an output to the bitcoinj transaction
         request.outputs().forEach(
-                output -> transaction.addOutput(output.toMutableOutput(request.network()))
+                output -> transaction.addOutput(output.toMutableOutput())
         );
 
         // For each address in the input list, add a signed input to the bitcoinj transaction

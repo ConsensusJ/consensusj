@@ -346,7 +346,7 @@ signrawtransactionwithwallet hex
                     .map(o -> new TransactionOutputDataScript(o.amount(), o.script()))
                     .toList();
             // TODO: Add a change output?
-            SigningRequest sr = SigningRequest.of(network, ins, (List<TransactionOutputData>) outs);
+            SigningRequest sr = SigningRequest.of(ins, (List<TransactionOutputData>) outs);
             Transaction rawTx = sr.toUnsignedTransaction();
             return CompletableFuture.completedFuture(HexFormat.of().formatHex(rawTx.serialize()));
         } catch (Throwable t) {

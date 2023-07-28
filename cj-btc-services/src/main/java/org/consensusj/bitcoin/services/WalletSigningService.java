@@ -58,7 +58,7 @@ public class WalletSigningService implements SignTransactionService {
                     )
                     .toList();
             // Make a (full) signing request that can be signed with a keychain alone
-            completeRequest = SigningRequest.of(wallet.network(), inputs, rawRequest.outputs());
+            completeRequest = SigningRequest.of(inputs, rawRequest.outputs());
         } catch (RuntimeException e) {
             return CompletableFuture.failedFuture(e);
         }
@@ -93,7 +93,7 @@ public class WalletSigningService implements SignTransactionService {
     
     @Override
     public SigningRequest createBitcoinSigningRequest(Network network, List<TransactionInputData> inputUtxos, List<TransactionOutputData> outputs, Address changeAddress) throws InsufficientMoneyException {
-        SigningRequest request = SigningRequest.of(network, inputUtxos, outputs);
+        SigningRequest request = SigningRequest.of(inputUtxos, outputs);
         // TODO: see Wallet.calculateFee
         return SigningUtils.addChange(request, changeAddress, feeCalculator);
     }

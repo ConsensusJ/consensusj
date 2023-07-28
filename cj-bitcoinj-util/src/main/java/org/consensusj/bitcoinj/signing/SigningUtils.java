@@ -36,7 +36,7 @@ public interface SigningUtils {
     private static SigningRequest addOutput(SigningRequest req, Address address, Coin amount) {
         List<TransactionOutputData> outs = append(req.outputs(),
                 new TransactionOutputAddress(amount, address));
-        return SigningRequest.of(req.network(), req.inputs(), outs);
+        return SigningRequest.of(req.inputs(), outs);
     }
 
     private static <T> List<T> append(List<T> list, T element) {

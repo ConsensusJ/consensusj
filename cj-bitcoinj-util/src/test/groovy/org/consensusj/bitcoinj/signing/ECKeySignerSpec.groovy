@@ -27,7 +27,7 @@ class ECKeySignerSpec extends DeterministicKeychainBaseSpec {
         ECKeySigner signer = new ECKeySigner(fromKey)
 
         and: "We sign a transaction"
-        SigningRequest signingRequest = SigningRequest.of(network,
+        SigningRequest signingRequest = SigningRequest.of(
                 [TransactionInputData.of(utxo, fromAddress)],
                 [(toAddress): 0.01.btc, (changeAddress): 0.20990147.btc])
 

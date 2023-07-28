@@ -2,7 +2,6 @@ package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.base.Network;
 import org.bitcoinj.core.TransactionOutput;
 import org.bitcoinj.script.Script;
 
@@ -23,7 +22,7 @@ public interface TransactionOutputData {
                 out.getScriptPubKey());
     }
 
-    default TransactionOutput toMutableOutput(Network network) {
+    default TransactionOutput toMutableOutput() {
         return new TransactionOutput(null, amount(), scriptPubKey().getProgram());
     }
 }

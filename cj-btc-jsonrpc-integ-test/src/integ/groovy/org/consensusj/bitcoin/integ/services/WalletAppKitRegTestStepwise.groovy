@@ -92,7 +92,7 @@ class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
         var utxo = Utxo.of(unspent.txid, unspent.vout, unspent.amount, unspent.scriptPubKey)
         var funds = utxo.amount()
         var sendAmount = 0.5.btc
-        var signingRequest = SigningRequest.of(network,
+        var signingRequest = SigningRequest.of(
                 [TransactionInputData.of(utxo)],
                 [(toAddr): sendAmount,
                  (spvWalletAddress): funds - (sendAmount + 0.1.btc)]  // Change

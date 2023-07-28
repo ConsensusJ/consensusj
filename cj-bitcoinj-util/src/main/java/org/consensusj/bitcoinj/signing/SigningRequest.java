@@ -2,7 +2,6 @@ package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.base.Network;
 import org.bitcoinj.core.Transaction;
 import java.util.List;
 import java.util.Map;
@@ -18,26 +17,18 @@ import java.util.stream.Collectors;
  * immutable transactions in a mostly-compatible way with the existing transaction classes.
  */
 public interface SigningRequest {
-    /**
-     * This property is only here because bitcoinj {@link org.bitcoinj.core.Transaction} currently requires
-     * this information for construction. This will be removed in the future when bitcoinj is updated.
-     * @return the id string for the network
-     */
-    @Deprecated
-    String networkId();
-    Network network();
     List<TransactionInputData> inputs();
     List<TransactionOutputData> outputs();
 
-    static SigningRequest of(Network network, List<TransactionInputData> inputs, List<TransactionOutputData> outputs) {
-        return new DefaultSigningRequest(network, inputs, outputs);
+    static SigningRequest of(List<TransactionInputData> inputs, List<TransactionOutputData> outputs) {
+        return new DefaultSigningRequest(inputs, outputs);
     }
 
-    static SigningRequest of(Network network, List<TransactionInputData> inputs, Map<Address, Coin> outputMap) {
+    static SigningRequest of(List<TransactionInputData> inputs, Map<Address, Coin> outputMap) {
         List<TransactionOutputData> outs = outputMap.entrySet().stream()
                 .map(e -> new TransactionOutputAddress(e.getValue(), e.getKey()))
                 .collect(Collectors.toList());
-        return SigningRequest.of(network, inputs, outs);
+        return SigningRequest.of(inputs, outs);
     }
 
     /**

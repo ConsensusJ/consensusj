@@ -58,7 +58,7 @@ class WalletSigningServiceRegTestSpec extends BaseRegTestSpec {
 
         when: "we build an unsigned tx via a SigningRequest"
         var changeAmount = utxo.amount() - (sendAmount + 0.1.btc)
-        var signingRequest = SigningRequest.of(network,
+        var signingRequest = SigningRequest.of(
                 [TransactionInputData.of(utxo)],
                 [(toAddr): sendAmount,
                  (spvWalletAddress): changeAmount]  // Change
@@ -93,7 +93,7 @@ class WalletSigningServiceRegTestSpec extends BaseRegTestSpec {
         var in0 = req.inputs().get(0)
         var dUtxo = signingService.findUtxo(in0.toUtxo()).get()
         var finalInput = TransactionInputData.of(dUtxo)
-        var completeTx = SigningRequest.of(appKitService.network(), List.of(finalInput), req.outputs())
+        var completeTx = SigningRequest.of(List.of(finalInput), req.outputs())
         var sTx = signingService.signTransaction(completeTx).join()
 
         then: "it is complete"

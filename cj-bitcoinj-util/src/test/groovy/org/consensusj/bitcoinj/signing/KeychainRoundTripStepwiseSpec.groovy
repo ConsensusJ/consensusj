@@ -123,7 +123,7 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
         when: "we build a 1-input, 2-output (unsigned) transaction request to spend the UTXO"
         Address toAddr = signingKeychain.addressFromKey(networkKeyChain.getKeyByPath(HDPath.M(networkAccountPath).extend(toKeyPath), false))
         Address changeAddr = signingKeychain.addressFromKey(networkKeyChain.getKeyByPath(HDPath.M(networkAccountPath).extend(changeKeyPath), false))
-        signingRequest = SigningRequest.of(network,
+        signingRequest = SigningRequest.of(
                 [input],
                 [(toAddr): 0.01.btc, (changeAddr): 0.20990147.btc]);
 
