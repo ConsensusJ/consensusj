@@ -56,9 +56,9 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
 
     def "Client has a Bitcoinj Wallet with some funds"() {
         when: "Create a bitcoinj wallet"
-        wallet = new Wallet(params)
+        wallet = Wallet.createBasic(BitcoinNetwork.REGTEST)
         wallet.setCoinSelector(new AllowUnconfirmedCoinSelector())
-        def store = new MemoryBlockStore(params)
+        def store = new MemoryBlockStore(params.getGenesisBlock())
         chain = new BlockChain(params,wallet,store)
         peerGroup = new PeerGroup(params, chain)
         peerGroup.addWallet(wallet)
@@ -73,7 +73,7 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
         given:
         def fundingAddress = createFundedAddress(walletStartAmount + 0.1.btc)
         def walletKey = new ECKey()
-        def walletAddr = walletKey.toAddress(params)
+        def walletAddr = walletKey.toAddress(P2PKH, BitcoinNetwork.REGTEST)
         wallet.importKey(walletKey)
 
         when: "we send coins to the wallet and write a block"
@@ -107,7 +107,7 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
         clientKey = new ECKey();
 
         and: "Prepare a template for the contract."
-        Transaction contract = new Transaction(params)
+        Transaction contract = new Transaction()
         List<ECKey> keys = Arrays.asList(clientKey, serverKey)
         // Create a 2-of-2 multisig output script.
         Script script = ScriptBuilder.createMultiSigOutputScript(2, keys)
@@ -149,7 +149,7 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
         Coin value = multisigOutput.getValue();
 
         // OK, now build a transaction that spends the money back to the client.
-        Transaction spendTx = new Transaction(params);
+        Transaction spendTx = new Transaction();
         spendTx.addOutput(value, clientKey);
         spendTx.addInput(multisigOutput);
 
@@ -172,7 +172,7 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
 
         when:
         // Client side code.
-        Transaction spendTx = new Transaction(params);
+        Transaction spendTx = new Transaction();
         spendTx.addOutput(txAmount, clientKey);
         TransactionInput input = spendTx.addInput(multisigOutput);
         Sha256Hash sighash = spendTx.hashForSignature(0, multisigScript, Transaction.SigHash.ALL, false);

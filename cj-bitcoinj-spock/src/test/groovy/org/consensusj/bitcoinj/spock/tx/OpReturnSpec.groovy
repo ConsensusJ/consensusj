@@ -8,6 +8,8 @@ import org.bitcoinj.script.ScriptOpCodes
 import org.bitcoinj.script.Script
 import spock.lang.Unroll
 
+import java.nio.ByteBuffer
+
 
 /**
  * Test/Demonstration of OP_RETURN transaction
@@ -21,8 +23,8 @@ class OpReturnSpec extends BaseTransactionSpec {
         def testData = 0..<length as byte[]
 
         when: "we build an OP_RETURN transaction"
-        Transaction tx = new Transaction(mainNetParams)
-        TransactionOutPoint outPoint = new TransactionOutPoint(mainNetParams, 0, utxo_id)
+        Transaction tx = new Transaction()
+        TransactionOutPoint outPoint = new TransactionOutPoint( 0, utxo_id)
         Script script = new ScriptBuilder()
                 .op(ScriptOpCodes.OP_RETURN)
                 .data(testData)
@@ -35,7 +37,7 @@ class OpReturnSpec extends BaseTransactionSpec {
         byte[] rawTx = tx.bitcoinSerialize()
 
         and: "We parse it into a new Transaction object"
-        Transaction parsedTx = new Transaction(mainNetParams, rawTx)
+        Transaction parsedTx = Transaction.read(ByteBuffer.wrap(rawTx))
 
         then: "we can retrieve the data"
         with (parsedTx.getOutput(0).scriptPubKey.chunks.get(0)) {

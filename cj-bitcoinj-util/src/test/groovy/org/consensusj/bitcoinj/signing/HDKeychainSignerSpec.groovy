@@ -1,10 +1,9 @@
 package org.consensusj.bitcoinj.signing
 
 import org.bitcoinj.base.Address
+import org.bitcoinj.base.AddressParser
 import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.Coin
-import org.bitcoinj.base.DefaultAddressParser
-import org.bitcoinj.base.Network
 import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Transaction
@@ -19,7 +18,7 @@ import org.consensusj.bitcoinj.wallet.BipStandardDeterministicKeyChain
  *
  */
 class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
-    static final addressParser = new DefaultAddressParser()
+    static final addressParser = AddressParser.getDefault()
     static final Sha256Hash input_txid = Sha256Hash.wrap("81b4c832d70cb56ff957589752eb4125a4cab78a25a8fc52d6a09e5bd4404d48")
     static final Utxo utxo = Utxo.of(input_txid, 0, Coin.SATOSHI);
 
@@ -49,7 +48,7 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
 
         then:
         signedTx != null
-        signedTx.verify()
+        Transaction.verify(network, signedTx)
 
         when: "We validate the signature on the input"
         TransactionVerification.correctlySpendsInput(signedTx, 0, fromAddress)
@@ -97,7 +96,7 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
 
         then:
         signedTx != null
-        signedTx.verify()
+        Transaction.verify(network, signedTx)
 
         when: "We validate the signature on the input"
         TransactionVerification.correctlySpendsInput(signedTx, 0, fromAddress)
@@ -136,6 +135,6 @@ class HDKeychainSignerSpec extends DeterministicKeychainBaseSpec {
     }
 
     private Address address(String addressString) {
-        return addressParser.parseAddressAnyNetwork(addressString);
+        return addressParser.parseAddress(addressString);
     }
 }

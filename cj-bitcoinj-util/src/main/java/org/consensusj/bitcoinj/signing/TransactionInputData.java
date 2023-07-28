@@ -27,7 +27,7 @@ public interface TransactionInputData {
      * This probably shouldn't be here but is needed for proper operation with bitcoinj
      * @return A Transaction "outpoint" pointing to the utxo this input will spend.
      */
-    TransactionOutPoint toOutPoint(Network network);
+    TransactionOutPoint toOutPoint();
 
     Utxo toUtxo();
 

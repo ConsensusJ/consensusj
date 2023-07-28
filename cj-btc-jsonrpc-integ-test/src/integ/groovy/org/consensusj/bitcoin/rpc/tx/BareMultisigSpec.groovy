@@ -44,7 +44,7 @@ class BareMultisigSpec extends TxTestBaseSpec {
         def ingredients = createIngredients(10.btc)
 
         when: "we build a transaction"
-        contract = new Transaction(params)
+        contract = new Transaction()
 
         // 2-of-2 multisig
         // Note that at this point it is not necessary to have the private key for either/any of the keys.
@@ -78,7 +78,7 @@ class BareMultisigSpec extends TxTestBaseSpec {
         value == amount
 
         when: "OK, now build a transaction that spends the money back to the client."
-        Transaction spendTx = new Transaction(params);
+        Transaction spendTx = new Transaction();
         spendTx.addOutput(amount2, clientKey)
         spendTx.addInput(multisigOutput)
 
@@ -101,7 +101,7 @@ class BareMultisigSpec extends TxTestBaseSpec {
         TransactionOutput multisigOutput = contract.getOutput(0)
 
         when: "we build a transaction"
-        Transaction spendTx = new Transaction(params)
+        Transaction spendTx = new Transaction()
         spendTx.addOutput(amount2, clientKey)
         TransactionInput input = spendTx.addInput(multisigOutput)
         Sha256Hash sighash = spendTx.hashForSignature(0,

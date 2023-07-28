@@ -10,21 +10,29 @@ import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 
-// TODO: In (planned) bitcoinj 0.17-alpha2 Network/NetworkParameters is no longer needed to construct this class
-// TODO: After bitcoinj 0.17-alpha2 maybe merge RpcClientModule and RpcServerModule (though there are currently conflicting serializers for Transaction)
+import java.util.Objects;
+
+// TODO: Consider merging RpcClientModule and RpcServerModule (though there are currently conflicting serializers for Transaction)
 /**
  * Jackson Module with serializers and deserializers for JSON-RPC clients.
  */
 public class RpcClientModule extends SimpleModule {
     /**
-     * @param network Which network we are going to be a client for
-     * @param strictAddressParsing set to {@code false} to not throw exception on addresses from other networks
+     * Create a client module without strict address parsing.
      */
-    public RpcClientModule(Network network, boolean strictAddressParsing) {
+    public RpcClientModule() {
+        this(null, false);
+    }
+
+    /**
+     * @param network Which network we are going to be a client for (may be null if {@code strictAddressParsing} is false)
+     * @param strictAddressParsing set to {@code true} to throw exceptions when deserializing addresses that don't match {@code network}
+     */
+    protected RpcClientModule(Network network, boolean strictAddressParsing) {
         super("BitcoinJMappingClient", new Version(1, 0, 0, null, null, null));
 
-        this.addDeserializer(Address.class, strictAddressParsing ? new AddressDeserializer(network) : new AddressDeserializer())
-                .addDeserializer(Block.class, new BlockHexDeserializer(network))
+        this.addDeserializer(Address.class, strictAddressParsing ? new AddressDeserializer(Objects.requireNonNull(network)) : new AddressDeserializer())
+                .addDeserializer(Block.class, new BlockHexDeserializer())
                 .addDeserializer(Coin.class, new CoinDeserializer())
                 .addDeserializer(ECKey.class, new ECKeyDeserializer())
                 .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())
@@ -36,7 +44,8 @@ public class RpcClientModule extends SimpleModule {
     }
 
     /**
-     * @param network Which network we are going to be a client for
+     * Create a client module with strict address parsing. Will throw exceptions when deserializing addresses that don't match {@code network}.
+     * @param network Expected Network we are going to validate addresses for
      */
     public RpcClientModule(Network network) {
         this(network, true);

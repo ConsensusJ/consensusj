@@ -24,7 +24,7 @@ class OpReturnSpec extends TxTestBaseSpec {
         Coin amount = 9.999.btc
 
         when: "we build a transaction"
-        Transaction tx = new Transaction(params)
+        Transaction tx = new Transaction()
         Script script = new ScriptBuilder()
                 .op(ScriptOpCodes.OP_RETURN)
                 .data(testData)

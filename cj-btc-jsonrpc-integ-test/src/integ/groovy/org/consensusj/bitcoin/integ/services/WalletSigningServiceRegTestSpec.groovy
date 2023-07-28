@@ -4,7 +4,6 @@ import groovy.util.logging.Slf4j
 import org.bitcoinj.base.Address
 import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.ScriptType
-import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.crypto.ECKey
 import org.consensusj.bitcoin.json.pojo.UnspentOutput
@@ -84,7 +83,7 @@ class WalletSigningServiceRegTestSpec extends BaseRegTestSpec {
 
         when: "we deserialize it"
         var raw = ByteBuffer.wrap(serialized);
-        var dTx = new Transaction(NetworkParameters.of(network), raw)
+        var dTx = Transaction.read(raw)
         var req = RawTransactionSigningRequest.ofTransaction(network, dTx)
 
         then: "it has all the information we need to prepare it for signing"

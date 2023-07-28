@@ -3,7 +3,6 @@ package org.consensusj.bitcoin.json.pojo
 import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.core.Context
-import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.testing.FakeTxBuilder
 import spock.lang.Specification
 
@@ -35,7 +34,7 @@ class RawTransactionInfoSpec extends Specification {
 
     def "Construct from Fake BitcoinJ transaction"() {
         given:
-        def tx = FakeTxBuilder.createFakeTx(NetworkParameters.of(BitcoinNetwork.MAINNET))
+        def tx = FakeTxBuilder.createFakeTx(BitcoinNetwork.MAINNET)
 
         when:
         def raw = new RawTransactionInfo(tx)

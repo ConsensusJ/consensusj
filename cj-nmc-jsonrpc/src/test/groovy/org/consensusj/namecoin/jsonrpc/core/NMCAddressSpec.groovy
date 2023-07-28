@@ -2,13 +2,10 @@ package org.consensusj.namecoin.jsonrpc.core
 
 import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.ScriptType
-import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.crypto.DumpedPrivateKey
 import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.base.LegacyAddress
 import spock.lang.Specification
-
-import java.nio.ByteBuffer
 
 /**
  * Tests of creating Namecoin addresses and conversion between BTC and NMC
@@ -16,7 +13,7 @@ import java.nio.ByteBuffer
  * These tests were ported from some earlier work with Litecoin and the prefixes and logic have not been double-checked.
  */
 class NMCAddressSpec extends Specification {
-    static final mainNetParams = NetworkParameters.of(BitcoinNetwork.MAINNET)
+    static final mainNet = BitcoinNetwork.MAINNET
     static final nmcNetParams = NMCMainNetParams.get()
     static final NotSoPrivatePrivateKey = new BigInteger(1, '180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19'.decodeHex());
     static final nmcPrefixRange = 'M'..'N'
@@ -93,7 +90,7 @@ class NMCAddressSpec extends Specification {
         def nmcAddress = key.toAddress(ScriptType.P2PKH, NameCoinNetwork.MAINNET)
         def btcAddress = key.toAddress(ScriptType.P2PKH, BitcoinNetwork.MAINNET)
         def nmcExportKey = key.getPrivateKeyEncoded(nmcNetParams)
-        def btcExportKey = key.getPrivateKeyEncoded(mainNetParams)
+        def btcExportKey = key.getPrivateKeyEncoded(mainNet)
 
         then:
         nmcAddress.toString() == "NBJC6raC4rfxAA7KTgXwFAgV2PMercURwH"

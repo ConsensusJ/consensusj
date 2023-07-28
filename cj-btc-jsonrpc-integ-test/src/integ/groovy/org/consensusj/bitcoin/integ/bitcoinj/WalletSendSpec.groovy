@@ -48,9 +48,9 @@ class WalletSendSpec extends BaseRegTestSpec {
 
     void setupSpec() {
         BriefLogFormatter.init()
-        wallet = Wallet.createDeterministic(NetworkParameters.of(network), ScriptType.P2PKH)
-        var store = new MemoryBlockStore(NetworkParameters.of(network))
-        var chain = new BlockChain(NetworkParameters.of(network),wallet,store)
+        wallet = Wallet.createDeterministic(network, ScriptType.P2PKH)
+        var store = new MemoryBlockStore(NetworkParameters.of(network).getGenesisBlock())
+        var chain = new BlockChain(network,wallet,store)
         peerGroup = new PeerGroup(network, chain)
     }
 
@@ -149,7 +149,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         when: "we create a transaction using bitcoinj"
         Coin amount = 1.btc
         Address serverWalletAddress = client.getNewAddress()
-        Transaction tx = new Transaction(NetworkParameters.of(network))
+        Transaction tx = new Transaction()
         tx.addOutput(amount, serverWalletAddress)
         SendRequest request = SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
@@ -173,7 +173,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         when: "we create a transaction using the bitcoinj wallet"
         Coin amount = 1.btc
         Address rpcAddress = client.getNewAddress()
-        Transaction tx = new Transaction(NetworkParameters.of(network))
+        Transaction tx = new Transaction()
         tx.addOutput(amount, rpcAddress)
         SendRequest request = SendRequest.forTx(tx)
         wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.

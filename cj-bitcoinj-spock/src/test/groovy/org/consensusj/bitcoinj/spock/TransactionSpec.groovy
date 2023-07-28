@@ -1,11 +1,10 @@
 package org.consensusj.bitcoinj.spock
 
 import org.bitcoinj.base.Address
+import org.bitcoinj.base.AddressParser
 import org.bitcoinj.base.Coin
-import org.bitcoinj.base.DefaultAddressParser
 import org.bitcoinj.base.ScriptType
 import org.bitcoinj.base.Sha256Hash
-import org.bitcoinj.core.NetworkParameters
 import org.bitcoinj.crypto.ECKey
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.core.TransactionInput
@@ -25,24 +24,23 @@ import static org.bitcoinj.base.BitcoinNetwork.MAINNET
  * http://www.righto.com/2014/02/bitcoins-hard-way-using-raw-bitcoin.html
  */
 class TransactionSpec extends Specification {
-    static final addressParser = new DefaultAddressParser()
-    static final mainNetParams = NetworkParameters.of(MAINNET)
+    static final addressParser = AddressParser.getDefault(MAINNET)
 
     // Input Values
     static final ECKey fromKey = ECKey.fromWIF("5HusYj2b2x4nroApgfvaSfKYZhRbKFH41bVyPooymbC6KfgSXdD", false)
-    static final Address toAddr = addressParser.parseAddress("1KKKK6N21XKo48zWKuQKXdvSsCf95ibHFa", MAINNET)
+    static final Address toAddr = addressParser.parseAddress("1KKKK6N21XKo48zWKuQKXdvSsCf95ibHFa")
     static final Sha256Hash utxo_id = Sha256Hash.wrap("81b4c832d70cb56ff957589752eb4125a4cab78a25a8fc52d6a09e5bd4404d48")
     static final Coin txAmount = 0.00091234.btc
 
     // Values used for Verification
-    static final fromAddrVerify = addressParser.parseAddress("1MMMMSUb1piy2ufrSguNUdFmAcvqrQF8M5", MAINNET)
+    static final fromAddrVerify = addressParser.parseAddress("1MMMMSUb1piy2ufrSguNUdFmAcvqrQF8M5")
 
     def "Can create and serialize a transaction"() {
 
         when: "We create a signed transaction"
         Address fromAddress = fromKey.toAddress(ScriptType.P2PKH, MAINNET)
-        Transaction tx = new Transaction(mainNetParams)
-        TransactionOutPoint outPoint = new TransactionOutPoint(mainNetParams, 0, utxo_id)
+        Transaction tx = new Transaction()
+        TransactionOutPoint outPoint = new TransactionOutPoint(0, utxo_id)
         tx.addOutput(txAmount, toAddr)
         tx.addSignedInput(outPoint, ScriptBuilder.createOutputScript(fromAddress), fromKey);
 
@@ -50,7 +48,7 @@ class TransactionSpec extends Specification {
         var rawTx = ByteBuffer.wrap(tx.bitcoinSerialize())
 
         and: "We parse it into a new Transaction object"
-        Transaction parsedTx = new Transaction(mainNetParams, rawTx)
+        Transaction parsedTx = Transaction.read(rawTx)
 
         then: "Parsed transaction is as expected"
         // We can't do a byte-by-byte comparison because there is a random component to the signature

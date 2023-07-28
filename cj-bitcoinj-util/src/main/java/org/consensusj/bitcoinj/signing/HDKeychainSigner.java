@@ -3,7 +3,6 @@ package org.consensusj.bitcoinj.signing;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.crypto.ECKey;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.core.TransactionOutput;
@@ -47,10 +46,9 @@ public class HDKeychainSigner implements BaseTransactionSigner {
         if (addresses.size() != unsignedTx.getInputs().size()) {
             throw new IllegalArgumentException("addresses and inputs must be 1:1 mapped");
         }
-        NetworkParameters netParams = unsignedTx.getParams();
 
         // Create a new, empty bitcoinj transaction
-        Transaction tx = new Transaction(netParams);
+        Transaction tx = new Transaction();
 
         // For each output in the signing request, add an output to the bitcoinj transaction
         // TODO: Transaction validation
@@ -62,7 +60,7 @@ public class HDKeychainSigner implements BaseTransactionSigner {
         for (int index = 0; index < unsignedTx.getInputs().size(); index++) {
             Address address = addresses.get(index);
             TransactionInput input = unsignedTx.getInputs().get(index);
-            TransactionOutPoint outPoint = input.duplicateDetached().getOutpoint();
+            TransactionOutPoint outPoint = input.getOutpoint().disconnectOutput();
             DeterministicKey fromKey = keyChain.findKeyFromPubHash(address.getHash());
             tx.addSignedInput(outPoint, ScriptBuilder.createOutputScript(address), input.getValue(), fromKey);
         }

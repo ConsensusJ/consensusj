@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.AddressParser;
 import org.bitcoinj.base.BitcoinNetwork;
-import org.bitcoinj.base.DefaultAddressParser;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.base.ScriptType;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.core.InsufficientMoneyException;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.ProtocolException;
+import org.bitcoinj.core.ProtocolVersion;
 import org.bitcoinj.core.TransactionBroadcast;
 import org.bitcoinj.core.TransactionOutput;
 import org.bitcoinj.core.VerificationException;
@@ -54,6 +53,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.util.HexFormat;
@@ -115,7 +115,7 @@ signrawtransactionwithwallet hex
     private BigDecimal verificationProgress = new BigDecimal(0);
     private byte[] chainWork = new byte[]{0x00, 0x00};
 
-    private static final AddressParser parser = new DefaultAddressParser();
+    private static final AddressParser parser = AddressParser.getDefault();
     private WalletSigningService signingService;
 
     /**
@@ -304,7 +304,7 @@ signrawtransactionwithwallet hex
         Object[] address = {};
         return result(new NetworkInfo(version,
                 "",
-                NetworkParameters.ProtocolVersion.CURRENT.getBitcoinProtocolVersion(),
+                ProtocolVersion.CURRENT.getBitcoinProtocolVersion(),
                 timeOffset,
                 getconnectioncount().join(),
                 "proxy",
@@ -325,7 +325,7 @@ signrawtransactionwithwallet hex
     }
     record output(Address address, Coin amount) {
         public output(String addString, String amountString) {
-            this(parser.parseAddressAnyNetwork(addString),  Coin.parseCoin(amountString));
+            this(parser.parseAddress(addString),  Coin.parseCoin(amountString));
         }
         Script script() {
             return ScriptBuilder.createP2PKHOutputScript(this.address().getHash());
@@ -348,7 +348,7 @@ signrawtransactionwithwallet hex
             // TODO: Add a change output?
             SigningRequest sr = SigningRequest.of(network, ins, (List<TransactionOutputData>) outs);
             Transaction rawTx = sr.toUnsignedTransaction();
-            return CompletableFuture.completedFuture(rawTx.toHexString());
+            return CompletableFuture.completedFuture(HexFormat.of().formatHex(rawTx.serialize()));
         } catch (Throwable t) {
             return CompletableFuture.failedFuture(t);
         }
@@ -370,7 +370,7 @@ signrawtransactionwithwallet hex
     @Override
     public CompletableFuture<List<UnspentOutput>> listunspent(Integer minConf, Integer maxConf, List<String> addresses, Boolean includeUnsafe) {
         List<Address> addressList = addresses != null
-                ? addresses.stream().map(parser::parseAddressAnyNetwork).toList()
+                ? addresses.stream().map(parser::parseAddress).toList()
                 : List.of();
         List<TransactionOutput> outs = signingService.findUnspentOutputs(
                                             minConf != null ? minConf : DEFAULT_MIN_CONF,
@@ -405,7 +405,7 @@ signrawtransactionwithwallet hex
     @Override
     public CompletableFuture<Sha256Hash> sendtoaddress(String toAddressString, Double amountDouble) {
         log.info("sendtoaddress {}, {}", toAddressString, amountDouble);
-        Address toAddress = parser.parseAddress(toAddressString, network);
+        Address toAddress = parser.parseAddress(toAddressString);
         Coin amount = Coin.ofBtc(BigDecimal.valueOf(amountDouble));
         Transaction signedTx;
         try {
@@ -427,13 +427,13 @@ signrawtransactionwithwallet hex
         ByteBuffer raw = ByteBuffer.wrap(hexFormat.parseHex(hex));
         Transaction signedTx;
         try {
-            signedTx = new Transaction(NetworkParameters.of(network), raw);
+            signedTx = Transaction.read(raw);
         } catch (ProtocolException pe) {
             return CompletableFuture.failedFuture(new RuntimeException("Invalid raw (hex) transaction", pe));
         }
         log.info("received raw tx: {}", signedTx);
         try {
-            signedTx.verify();
+            Transaction.verify(network, signedTx);
         } catch (VerificationException ve) {
             // TODO: More validation?
             return CompletableFuture.failedFuture(ve);
@@ -463,10 +463,10 @@ signrawtransactionwithwallet hex
 
         RawTransactionSigningRequest signingRequest;
         try {
-            Transaction unsignedTx = new Transaction(NetworkParameters.of(network), raw);
+            Transaction unsignedTx = Transaction.read(raw);
             log.info("received tx: {}", unsignedTx);
             signingRequest = RawTransactionSigningRequest.ofTransaction(network, unsignedTx);
-        } catch (ProtocolException e) {
+        } catch (BufferUnderflowException | ProtocolException e) {
             return CompletableFuture.failedFuture(new RuntimeException("Invalid raw (hex) transaction", e));
         }
 

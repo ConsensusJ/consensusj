@@ -9,7 +9,7 @@ ext.javadocSpec = {
             "https://fasterxml.github.io/jackson-databind/javadoc/2.14/"
     ]
 
-    if (!bitcoinjVersion.contains("beta") && !bitcoinjVersion.contains("rc")) {
+    if (!bitcoinjVersion.contains("beta") && !bitcoinjVersion.contains("alpha") && !bitcoinjVersion.contains("rc")) {
         javaDocLinks.add("https://bitcoinj.org/javadoc/${bitcoinjVersion}/".toString())
     }
 
