@@ -1032,7 +1032,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         for (List<List<Object>> rawGrouping : raw) {
             List<AddressGroupingItem> grouping = new ArrayList<>();
             for (List<Object> addressItem : rawGrouping) {
-                AddressGroupingItem item = new AddressGroupingItem(addressItem, getNetwork());
+                AddressGroupingItem item = new AddressGroupingItem(addressItem);
                 grouping.add(item);
             }
             result.add(grouping);

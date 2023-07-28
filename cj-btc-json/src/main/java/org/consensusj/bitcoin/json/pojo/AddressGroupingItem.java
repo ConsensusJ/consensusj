@@ -3,12 +3,11 @@ package org.consensusj.bitcoin.json.pojo;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.AddressParser;
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.base.Network;
 
 import java.util.List;
 
 /**
- * For listaddressgroupings response
+ * For {@code listaddressgroupings} response
  * Note: In the JSON response this is actually an array
  */
 public class AddressGroupingItem {
@@ -23,7 +22,7 @@ public class AddressGroupingItem {
         this.account = account;
     }
 
-    public AddressGroupingItem(List<Object> addressItem, Network network) {
+    public AddressGroupingItem(List<Object> addressItem) {
         String addressStr = (String) addressItem.get(0);
         //TODO: Try to avoid using Double
         Double balanceDouble = (Double) addressItem.get(1);
