@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.AddressParser;
-import org.bitcoinj.base.DefaultAddressParser;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.base.exceptions.AddressFormatException;
 import org.bitcoinj.core.NetworkParameters;
@@ -19,25 +18,25 @@ import java.io.IOException;
  * Deserialize bitcoinj (family) addresses
  */
 public class AddressDeserializer extends JsonDeserializer<Address> {
-    private final AddressParser.Strict addressParser;
+    private final AddressParser addressParser;
 
     /**
      * Construct an address deserializer that will deserialize addresses for any of the default supported networks.
-     * See {@link NetworkParameters} to understand what the supported networks are.
+     * See {@link Network} to understand what the supported networks are.
      */
     public AddressDeserializer() {
-        this((s) -> new DefaultAddressParser().parseAddressAnyNetwork(s));
+        this(AddressParser.getDefault());
     }
 
     /**
-     * Construct an address deserializer that validates addresses for the specified {@link NetworkParameters}.
+     * Construct an address deserializer that validates addresses for the specified {@link Network}.
      * When deserializing addresses, addresses that are not from the specified network will cause a
      * {@link InvalidFormatException} to be thrown during deserialization.
      *
      * @param network Network id to specify the only network we will deserialize addresses for.
      */
     public AddressDeserializer(Network network) {
-        this((s) -> new DefaultAddressParser().parseAddress(s, network));
+        this(AddressParser.getDefault(network));
     }
 
     /**
@@ -51,15 +50,15 @@ public class AddressDeserializer extends JsonDeserializer<Address> {
     @Deprecated
     public AddressDeserializer(NetworkParameters netParams) {
         this((netParams != null)
-                ? (s) -> new DefaultAddressParser().parseAddress(s, netParams.network())
-                : (s) -> new DefaultAddressParser().parseAddressAnyNetwork(s));
+                ? AddressParser.getDefault(netParams.network())
+                : AddressParser.getDefault());
     }
 
     /**
      * Construct an address deserializer with a custom {@link AddressParser}
      * @param addressParser parser to convert a string to an address
      */
-    public AddressDeserializer(AddressParser.Strict addressParser) {
+    public AddressDeserializer(AddressParser addressParser) {
         this.addressParser = addressParser;
     }
 

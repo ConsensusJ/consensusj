@@ -1,6 +1,5 @@
 package org.consensusj.bitcoin.rx.peergroup;
 
-import org.bitcoinj.base.Network;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import io.reactivex.rxjava3.processors.PublishProcessor;
 import org.bitcoinj.core.Block;
@@ -45,11 +44,6 @@ public class RxPeerGroup implements RxBlockchainService {
         this.transactionProcessor = PublishProcessor.create();
         this.blockHeightProcessor = PublishProcessor.create();
         //start();   // TODO: See start()
-    }
-
-    @Override
-    public Network network() {
-        return peerGroup.getVersionMessage().getParams().network();
     }
 
     /**

@@ -56,7 +56,6 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -111,8 +110,6 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     public static final int BITCOIN_CORE_VERSION_MIN = 200000;              // Minimum Bitcoin Core supported (tested) version
     public static final int BITCOIN_CORE_VERSION_DESC_DEFAULT = 230000;     // Bitcoin Core version that DEFAULTS to descriptor wallets
 
-    // TODO: Replace NetworkParameters with Network/BitcoinNetwork once we upgrade to bitcoinj 0.17 (once it is released)
-
     private Network network;
     private final ExecutorService executorService;
 
@@ -128,9 +125,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         // Current pool size of 5 is chosen to minimize simultaneous active RPC
         // calls in `bitcoind` -- which is not designed for serving multiple clients.
         executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
-        if (network != null) {
-            initMapper();
-        }
+        mapper.registerModule(new RpcClientModule());
     }
 
     @Deprecated
@@ -138,25 +133,13 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         super(sslSocketFactory, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
         this.network = network;
         ThreadFactory threadFactory = new BitcoinClientThreadFactory(new Context(), "Bitcoin RPC Client");
-        // TODO: Tune and/or make configurable the thread pool size.
-        // Current pool size of 5 is chosen to minimize simultaneous active RPC
-        // calls in `bitcoind` -- which is not designed for serving multiple clients.
         executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
-        if (network != null) {
-            initMapper();
-        }
+        mapper.registerModule(new RpcClientModule());
     }
 
     @Deprecated
     public BitcoinClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         this(sslSocketFactory, netParams.network(), server, rpcuser, rpcpassword);
-    }
-
-    /**
-     * Initialize the Jackson Mapper (after we are sure we have the {@code Network})
-     */
-    private void initMapper() {
-        mapper.registerModule(new RpcClientModule(network));
     }
 
     // TODO: Reconcile this constructor mode with {@link #waitForServer(int)}
@@ -213,27 +196,32 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
 
     /**
      * Get network parameters
+     * @return network parameters for the server
+     * @deprecated Use {@link #getNetwork()}
+     */
+    @Deprecated
+    public synchronized NetworkParameters getNetParams() {
+        return NetworkParameters.of(getNetwork());
+    }
+
+    /**
+     * Get network.
      * <p>
-     * Traditionally the Bitcoin network has been required as a constructor parameter and required to match
+     * Historically the Bitcoin network has been required as a constructor parameter and required to match
      * the mode of the server. However, to simplify client configuration we have added a constructor
-     * that doesn't require a {@link NetworkParameters}. This changes some assumptions about how {@code BitcoinClient} works.
+     * that doesn't require specification of a network. This changes some assumptions about how {@code BitcoinClient} works.
      * Previously, no JSON-RPC I/O calls would be performed unless something was explicitly requested -- which
      * also gave users of {@code BitcoinClient} the ability to call {@link #waitForServer(int)}
      * before calling any RPCs.
      * <p>
      * Until further improvements/changes are made, if you use one of the constructors that does not specify a
-     * {@code NetworkParameters} you should call {@code getNetParams()} as soon as possible after calling the constructor
+     * {@code Network} you should call {@link #getNetwork()} as soon as possible after calling the constructor
      * (especially before calling any JSON-RPC I/O methods except {@link #waitForServer(int)}).
-     * @return network parameters for the server
+     * @return network for the server
      */
-    public synchronized NetworkParameters getNetParams() {
-        return NetworkParameters.of(getNetwork());
-    }
-
     public synchronized Network getNetwork() {
         if (network == null) {
             network = getNetworkFromServer().join();
-            initMapper();
         }
         return network;
     }
@@ -694,7 +682,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     public Transaction getRawTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {
         String hexEncoded = send("getrawtransaction", txid);
         byte[] raw = HexUtil.hexStringToByteArray(hexEncoded);
-        return new Transaction(NetworkParameters.of(network), ByteBuffer.wrap(raw));
+        return Transaction.read(ByteBuffer.wrap(raw));
     }
 
     /**

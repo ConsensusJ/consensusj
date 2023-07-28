@@ -6,9 +6,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.processors.BehaviorProcessor;
 import io.reactivex.rxjava3.processors.FlowableProcessor;
-import org.bitcoinj.core.BitcoinSerializer;
 import org.bitcoinj.core.Block;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.consensusj.bitcoin.rx.ChainTipService;
@@ -26,7 +24,6 @@ import java.nio.ByteBuffer;
  *  have to wait ~ten minutes for one.
  */
 public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements RxBlockchainService, ChainTipService, Closeable {
-    private final BitcoinSerializer bitcoinSerializer;
 
     private final FlowableProcessor<ChainTip> flowableChainTip = BehaviorProcessor.create();
     private final Disposable blockSubscription;
@@ -37,7 +34,6 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
 
     public RxBitcoinZmqService(RxBitcoinClient client) {
         super(client);
-        bitcoinSerializer = NetworkParameters.of(network).getSerializer();
         blockSubscription = blockPublisher()
                 .flatMapSingle(client::activeChainTipFromBestBlock)
                 .distinctUntilChanged(ChainTip::getHash)
@@ -45,14 +41,9 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
     }
 
     @Override
-    public Network network() {
-        return network;
-    }
-
-    @Override
     public Flowable<Transaction> transactionPublisher() {
         return transactionBinaryPublisher()
-                .map(bytes -> new Transaction(NetworkParameters.of(network), ByteBuffer.wrap(bytes)));   // Deserialize to Transaction
+                .map(bytes -> Transaction.read(ByteBuffer.wrap(bytes)));   // Deserialize to Transaction
     }
 
     @Override
@@ -65,7 +56,7 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
     public Flowable<Block> blockPublisher() {
         return blockBinaryPublisher()
                 .map(ByteBuffer::wrap)
-                .map(bitcoinSerializer::makeBlock)  // Deserialize to bitcoinj Block
+                .map(Block::read)  // Deserialize to bitcoinj Block
                 .startWith(client.getBestBlockViaRpc()); // Use JSON-RPC client to fetch an initial block
     }
     

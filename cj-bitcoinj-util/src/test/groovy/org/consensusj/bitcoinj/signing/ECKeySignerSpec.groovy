@@ -35,7 +35,7 @@ class ECKeySignerSpec extends DeterministicKeychainBaseSpec {
 
         then:
         signedTx != null
-        signedTx.verify()
+        Transaction.verify(network, signedTx)
 
         when: "We validate the signature on the input"
         TransactionVerification.correctlySpendsInput(signedTx, 0, fromAddress)

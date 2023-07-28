@@ -29,7 +29,7 @@ public class AddressUtxoInfo {
         this.address = address;
         this.txid = txid;
         this.outputIndex = outputIndex;
-        this.script = new Script(HexUtil.hexStringToByteArray(script));
+        this.script = Script.parse(HexUtil.hexStringToByteArray(script));
         this.satoshis = Coin.ofSat(satoshis);
         this.height = height;
         this.coinbase = coinbase;

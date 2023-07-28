@@ -111,7 +111,7 @@ class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
         result.getHex() != null
 
         when: "we deserialize the signed tx"
-        var signed = new Transaction(spvWalletAddress.getParameters(), ByteBuffer.wrap(hexFormatter.parseHex(result.getHex())))
+        var signed = Transaction.read(ByteBuffer.wrap(hexFormatter.parseHex(result.getHex())))
 
         then:
         signed != null
@@ -139,7 +139,7 @@ class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
         Map<String, String> toOutput = Map.of(toAddr.toString(), sendAmount.toPlainString())
         Map<String, String> changeOutput = Map.of(spvWalletAddress.toString(), (funds - (sendAmount + 0.1.btc)).toPlainString());
         var hex = appKitService.createrawtransaction(List.of(inp), List.of(toOutput, changeOutput)).join()
-        var utx = new Transaction(spvWalletAddress.getParameters(), ByteBuffer.wrap(hexFormatter.parseHex(hex)));
+        var utx = Transaction.read(ByteBuffer.wrap(hexFormatter.parseHex(hex)));
 
         then:
         utx.getOutputSum() >= 0.9.btc
@@ -153,7 +153,7 @@ class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
         result.getHex() != null
 
         when: "we deserialize the signed tx"
-        var signed = new Transaction(spvWalletAddress.getParameters(), ByteBuffer.wrap(hexFormatter.parseHex(result.getHex())))
+        var signed = Transaction.read(ByteBuffer.wrap(hexFormatter.parseHex(result.getHex())))
 
         then:
         signed != null

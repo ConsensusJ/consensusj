@@ -19,7 +19,7 @@ public class PrevTxOutInfo implements UtxoInfo {
     public PrevTxOutInfo(Sha256Hash txId, int vout, String scriptPubKey, String redeemScript, String witnessScript, Coin amount) {
         this.txId = txId;
         this.vout = vout;
-        this.scriptPubKey = new Script(HexUtil.hexStringToByteArray(scriptPubKey));
+        this.scriptPubKey = Script.parse(HexUtil.hexStringToByteArray(scriptPubKey));
         this.redeemScript = redeemScript;
         this.witnessScript = witnessScript;
         this.amount = amount;

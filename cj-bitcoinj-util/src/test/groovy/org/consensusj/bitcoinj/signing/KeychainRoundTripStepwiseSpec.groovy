@@ -145,7 +145,7 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
 
     def "The signed transaction verifies"() {
         expect: "it verifies"
-        signedTx.verify()
+        Transaction.verify(network, signedTx)
 
         when: "We validate the signature on the input"
         // Extract fromAddress out of the signing request

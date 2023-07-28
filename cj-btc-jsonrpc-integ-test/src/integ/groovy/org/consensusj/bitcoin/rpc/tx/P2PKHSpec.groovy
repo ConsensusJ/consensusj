@@ -23,7 +23,7 @@ class P2PKHSpec extends TxTestBaseSpec {
         def destAddress = client.getNewAddress()
 
         when: "we build a transaction"
-        Transaction tx = new Transaction(params)
+        Transaction tx = new Transaction()
         tx.addOutput(amount, destAddress)
         // Assume only 1 (first) outpoint is needed (assuming utxos made by createIngredients are big enough)
         tx.addSignedInput(ingredients.outPoints.get(0), ScriptBuilder.createOutputScript(ingredients.address), ingredients.privateKey);

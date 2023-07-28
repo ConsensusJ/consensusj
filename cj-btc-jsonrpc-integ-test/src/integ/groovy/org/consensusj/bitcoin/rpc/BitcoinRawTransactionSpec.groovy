@@ -58,7 +58,7 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
     def "Verify bitcoinj can round-trip the raw transaction"() {
         when: "We parse the transaction"
         var buffer = ByteBuffer.wrap(HexUtil.hexStringToByteArray(rawTransactionHex))
-        var transaction = new Transaction(client().getNetParams(), buffer)
+        var transaction = Transaction.read(buffer)
         var roundtrip = HexUtil.bytesToHexString(transaction.bitcoinSerialize())
 
         then:

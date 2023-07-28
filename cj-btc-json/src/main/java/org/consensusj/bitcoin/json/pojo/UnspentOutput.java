@@ -47,7 +47,7 @@ public class UnspentOutput implements UtxoInfo {
         this.vout = vout;
         this.address = address;
         this.label = label;
-        this.scriptPubKey = new Script(HexUtil.hexStringToByteArray(scriptPubKey));
+        this.scriptPubKey = Script.parse(HexUtil.hexStringToByteArray(scriptPubKey));
         this.amount = amount;
         this.confirmations = confirmations;
         this.redeemScript = redeemScript;

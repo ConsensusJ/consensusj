@@ -19,8 +19,6 @@ import static org.consensusj.bitcoin.rx.zeromq.BitcoinZmqMessage.Topic.*;
  * TODO: Support using all topics, notjust `rawblock` and `rawtx`.
  */
 public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Closeable {
-
-    protected final Network network;
     protected final RxBitcoinClient client;
     private final RxBitcoinSinglePortZmqService blockService;
     private final RxBitcoinSinglePortZmqService txService;
@@ -36,7 +34,6 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
 
     public RxBitcoinZmqBinaryService(RxBitcoinClient client) {
         this.client = client;
-        this.network = client.getNetwork();
         threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(), "RxBitcoinZmq Thread");
 
         // TODO: Create background thread to look for the ZMQ Ports

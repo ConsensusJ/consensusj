@@ -1,8 +1,8 @@
 package org.consensusj.bitcoin.jsonrpc;
 
 import com.fasterxml.jackson.databind.JavaType;
+import org.bitcoinj.base.AddressParser;
 import org.bitcoinj.base.BitcoinNetwork;
-import org.bitcoinj.base.DefaultAddressParser;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.base.ScriptType;
 import org.bitcoinj.params.BitcoinNetworkParams;
@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 public class BitcoinExtendedClient extends BitcoinClient {
     private static final Logger log = LoggerFactory.getLogger(BitcoinExtendedClient.class);
 
-    public static final Address DEFAULT_REGTEST_MINING_ADDRESS = new DefaultAddressParser().parseAddressAnyNetwork("mwQA8f4pH23BfHyy4zf8mgAyeNu5uoy6GU");
+    public static final Address DEFAULT_REGTEST_MINING_ADDRESS = AddressParser.getDefault().parseAddress("mwQA8f4pH23BfHyy4zf8mgAyeNu5uoy6GU");
     private static final BigInteger NotSoPrivatePrivateInt = new BigInteger(1, Hex.decode("180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19"));
     private static final String RegTestMiningAddressLabel = "RegTestMiningAddress";
     public static final String REGTEST_WALLET_NAME = "consensusj-regtest-wallet";
@@ -399,7 +399,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
     public Transaction createSignedTransaction(ECKey fromKey, List<TransactionOutput> outputs) throws JsonRpcStatusException, IOException {
         Address fromAddress = fromKey.toAddress(ScriptType.P2PKH, getNetwork());
 
-        Transaction tx = new Transaction(getNetParams());   // Create a new transaction
+        Transaction tx = new Transaction();   // Create a new transaction
         outputs.forEach(tx::addOutput);                     // Add all requested outputs to it
 
         // Fetch all UTXOs for the sending Address
@@ -444,7 +444,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      */
     public Transaction createSignedTransaction(ECKey fromKey, Address toAddress, Coin amount) throws JsonRpcStatusException, IOException {
         List<TransactionOutput> outputs = List.of(
-                new TransactionOutput(getNetParams(), null, amount, toAddress));
+                new TransactionOutput(null, amount, toAddress));
         return createSignedTransaction(fromKey, outputs);
     }
 
@@ -499,7 +499,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @return The *bitcoinj* object  (that's out-POINT)
      */
     private TransactionOutPoint unspentToTransactionOutpoint(UnspentOutput unspentOutput) {
-        return new TransactionOutPoint(getNetParams(), unspentOutput.getVout(), unspentOutput.getTxid());
+        return new TransactionOutPoint(unspentOutput.getVout(), unspentOutput.getTxid());
     }
 
     /**

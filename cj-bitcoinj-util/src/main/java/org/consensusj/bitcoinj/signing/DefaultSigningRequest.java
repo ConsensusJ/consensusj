@@ -87,15 +87,13 @@ public class DefaultSigningRequest implements SigningRequest {
      * @return an unsigned bitcoinj transaction
      */
     public Transaction toUnsignedTransaction() {
-        NetworkParameters params = NetworkParameters.of(network);
-        Transaction utx = new Transaction(params);
+        Transaction utx = new Transaction();
         this.inputs().forEach(in ->
-                utx.addInput(in.toOutPoint(network).getHash(),
-                        in.toOutPoint(network).getIndex(),
+                utx.addInput(in.toOutPoint().getHash(),
+                        in.toOutPoint().getIndex(),
                         ScriptBuilder.createEmpty()));
         this.outputs().forEach(out ->
-                utx.addOutput(new TransactionOutput(params,
-                        utx,
+                utx.addOutput(new TransactionOutput(utx,
                         out.amount(),
                         out.scriptPubKey().getProgram())));
         return utx;
