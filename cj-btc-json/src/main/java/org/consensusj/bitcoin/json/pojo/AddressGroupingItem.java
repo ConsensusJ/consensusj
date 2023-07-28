@@ -1,5 +1,6 @@
 package org.consensusj.bitcoin.json.pojo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.AddressParser;
 import org.bitcoinj.base.Coin;
@@ -22,6 +23,7 @@ public class AddressGroupingItem {
         this.account = account;
     }
 
+    @JsonCreator
     public AddressGroupingItem(List<Object> addressItem) {
         String addressStr = (String) addressItem.get(0);
         //TODO: Try to avoid using Double

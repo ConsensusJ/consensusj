@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.jsonrpc;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.LegacyAddress;
 import org.bitcoinj.base.Network;
@@ -56,7 +57,6 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -1019,25 +1019,17 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     }
 
     /**
-     * Returns list of related addresses
+     * Returns list of related addresses.
      * Also useful for finding all change addresses in the wallet
-     * @return a lost of address groupings
+     * @return a list of address groupings
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
     public List<List<AddressGroupingItem>>  listAddressGroupings() throws JsonRpcStatusException, IOException {
-        // TODO: I'm not sure how to make Jackson mapping work automatically here.
-        List<List<List<Object>>> raw = send("listaddressgroupings");
-        List<List<AddressGroupingItem>> result = new ArrayList<>();
-        for (List<List<Object>> rawGrouping : raw) {
-            List<AddressGroupingItem> grouping = new ArrayList<>();
-            for (List<Object> addressItem : rawGrouping) {
-                AddressGroupingItem item = new AddressGroupingItem(addressItem);
-                grouping.add(item);
-            }
-            result.add(grouping);
-        }
-        return result;
+        TypeFactory tf = mapper.getTypeFactory();
+        JavaType agiListType = tf.constructCollectionType(List.class, AddressGroupingItem.class);
+        JavaType resultType = tf.constructCollectionType(List.class, agiListType);
+        return send("listaddressgroupings", resultType);
     }
 
     /**
