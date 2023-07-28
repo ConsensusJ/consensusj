@@ -64,7 +64,6 @@ public interface JacksonRpcClient extends JsonRpcClient {
 
     /**
      * Send a {@link JsonRpcRequest} for a {@link JsonRpcResponse} asynchronously.
-     * <p>Subclasses must implement this method to actually send the request
      * @param <R> Type of result object
      * @param request The request to send
      * @param responseType The response type expected (used by Jackson for conversion)

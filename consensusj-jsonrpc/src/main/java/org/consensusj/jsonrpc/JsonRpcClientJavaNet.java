@@ -16,10 +16,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.function.Function;
 
-// TODO: Add ability to pass an sslSocketFactory (or equivalent) in the constructor.
 /**
  * Incubating JSON-RPC client using {@link java.net.http.HttpClient}
- * Synchronous API only for now (internal implementation is async), will add async API later.
  */
 public class JsonRpcClientJavaNet extends AbstractRpcClient {
     private static final Logger log = LoggerFactory.getLogger(JsonRpcClientJavaNet.class);
@@ -50,32 +48,22 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         this(JsonRpcMessage.Version.V2, server, rpcUser, rpcPassword);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <R> CompletableFuture<JsonRpcResponse<R>> sendRequestForResponseAsync(JsonRpcRequest request, JavaType responseType) {
-        log.debug("Send aysnc: {}", request);
-        try {
-            HttpRequest httpRequest = buildJsonRpcPostRequest(request);
-            return sendAsyncCommon(httpRequest)
-                    .thenApply(mappingFunc(responseType));
-        } catch (JsonProcessingException e) {
-            return CompletableFuture.failedFuture(e);
-        }
+        return sendCommon(request)
+                .thenApply(mappingFunc(responseType));
     }
 
     // For testing only
-    CompletableFuture<String> sendRequestForResponseStringAsync(JsonRpcRequest request) {
-        log.debug("Send aysnc: {}", request);
-        try {
-            HttpRequest httpRequest = buildJsonRpcPostRequest(request);
-            return sendAsyncCommon(httpRequest);
-        } catch (JsonProcessingException e) {
-            return CompletableFuture.failedFuture(e);
-        }
+    CompletableFuture<String> sendRequestForResponseString(JsonRpcRequest request) {
+        return sendCommon(request);
     }
 
     /**
-     * Get the URI of the server this client connects to
-     * @return Server URI
+     * {@inheritDoc}
      */
     @Override
     public URI getServerURI() {
@@ -86,13 +74,22 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         return mapper.writeValueAsString(request);
     }
 
-    private CompletableFuture<String> sendAsyncCommon(HttpRequest request) {
-        log.debug("Send aysnc: {}", request);
-        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .whenComplete(this::log)
-                .thenComposeAsync(this::handleStatusError)
-                .thenApply(HttpResponse::body)
-                .whenComplete(this::log);
+    /**
+     * @param request A JSON-RPC request
+     * @return A future for a JSON-RPC response in String format
+     */
+    private CompletableFuture<String> sendCommon(JsonRpcRequest request) {
+        log.debug("Send: {}", request);
+        try {
+            HttpRequest httpRequest = buildJsonRpcPostRequest(request);
+            return client.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString())
+                    .whenComplete(this::log)
+                    .thenComposeAsync(this::handleStatusError)
+                    .thenApply(HttpResponse::body)
+                    .whenComplete(this::log);
+        } catch (JsonProcessingException e) {
+            return CompletableFuture.failedFuture(e);
+        }
     }
 
     private CompletableFuture<HttpResponse<String>> handleStatusError(HttpResponse<String> response) {
@@ -111,7 +108,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         return buildJsonRpcPostRequest(requestString);
     }
 
-    private HttpRequest buildJsonRpcPostRequest(String requestString) throws JsonProcessingException {
+    private HttpRequest buildJsonRpcPostRequest(String requestString) {
         log.info("request is: {}", requestString);
 
         String auth = username + ":" + password;
@@ -122,7 +119,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
                 .header("Content-Type", "application/json;charset=" +  UTF8)
                 .header("Accept-Charset", UTF8)
                 .header("Accept", "application/json")
-                .header ("Authorization", basicAuth)
+                .header("Authorization", basicAuth)
                 .POST(HttpRequest.BodyPublishers.ofString(requestString))
                 .build();
     }
@@ -132,32 +129,23 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
     }
 
     /**
-     * Map a response string to Java object
-     * @param <R> Desired type of Java object
-     */
-    @FunctionalInterface
-    protected interface MappingFunction<R> extends ThrowingFunction<String, R> {}
-
-    /**
-     * Utility interface for declaring functions that throw checked exceptions and wrapping
-     * them in a {@link Function} that will throw {@link RuntimeException} if the underlying
-     * {@link #applyThrows(Object)} method throws a checked {@link Exception}.
-     * @param <T> input type
+     * Map a response string to a Java object. Wraps checked {@link JsonProcessingException}
+     * in unchecked {@link CompletionException}.
      * @param <R> result type
      */
     @FunctionalInterface
-    protected interface ThrowingFunction<T,R> extends Function<T, R> {
+    protected interface MappingFunction<R> extends Function<String, R> {
 
         /**
-         * Gets a result. Wraps checked Exceptions with {@link RuntimeException}
-         * @param t input
+         * Gets a result. Wraps checked {@link JsonProcessingException} in {@link CompletionException}
+         * @param s input
          * @return a result
          */
         @Override
-        default R apply(T t) {
+        default R apply(String s) {
             try {
-                return applyThrows(t);
-            } catch (final Exception e) {
+                return applyThrows(s);
+            } catch (JsonProcessingException e) {
                 throw new CompletionException(e);
             }
         }
@@ -165,11 +153,11 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         /**
          * Gets a result and may throw a checked exception.
          *
-         * @param t input
+         * @param s input
          * @return a result
-         * @throws Exception Any checked Exception
+         * @throws JsonProcessingException Checked Exception
          */
-        R applyThrows(T t) throws Exception;
+        R applyThrows(String s) throws JsonProcessingException;
     }
     
     private void log(HttpResponse<String> httpResponse, Throwable t) {

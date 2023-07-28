@@ -29,7 +29,7 @@ class JsonRpcClientJavaNetSpec extends Specification {
         when:
         def client = new JsonRpcClientJavaNet(testServerUri, user, pass)
         JsonRpcRequest req = new JsonRpcRequest("getblockcount");
-        String blockcount = client.sendRequestForResponseStringAsync(req).join()
+        String blockcount = client.sendRequestForResponseString(req).join()
 
         then:
         blockcount instanceof  String
