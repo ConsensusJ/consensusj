@@ -2,7 +2,6 @@ package org.consensusj.bitcoin.services;
 
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.base.Network;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.InsufficientMoneyException;
 import org.bitcoinj.core.Transaction;
@@ -87,12 +86,12 @@ public class WalletSigningService implements SignTransactionService {
     public CompletableFuture<Transaction> signSendToAddress(Address toAddress, Coin amount) throws IOException, InsufficientMoneyException {
         List<TransactionInputData> utxos = getInputs();
         TransactionOutputData outputData = new TransactionOutputAddress(amount, toAddress);
-        SigningRequest bitcoinSendReq = createBitcoinSigningRequest(wallet.network(), utxos, List.of(outputData), wallet.currentChangeAddress());
+        SigningRequest bitcoinSendReq = createBitcoinSigningRequest(utxos, List.of(outputData), wallet.currentChangeAddress());
         return signer.signTransaction(bitcoinSendReq);
     }
     
     @Override
-    public SigningRequest createBitcoinSigningRequest(Network network, List<TransactionInputData> inputUtxos, List<TransactionOutputData> outputs, Address changeAddress) throws InsufficientMoneyException {
+    public SigningRequest createBitcoinSigningRequest(List<TransactionInputData> inputUtxos, List<TransactionOutputData> outputs, Address changeAddress) throws InsufficientMoneyException {
         SigningRequest request = SigningRequest.of(inputUtxos, outputs);
         // TODO: see Wallet.calculateFee
         return SigningUtils.addChange(request, changeAddress, feeCalculator);

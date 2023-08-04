@@ -2,7 +2,6 @@ package org.consensusj.bitcoinj.service;
 
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.base.Network;
 import org.bitcoinj.core.InsufficientMoneyException;
 import org.bitcoinj.core.Transaction;
 import org.consensusj.bitcoinj.signing.SigningRequest;
@@ -31,11 +30,10 @@ public interface SignTransactionService extends TransactionSigner {
     /**
      * Create a signing request, given a list of inputs, a list of outputs and a change address. Calculates
      * the fee, adds a change output, and returns a completed signing request.
-     * @param network network (shouldn't be needed, but is for now)
      * @param inputUtxos list of available UTXOs
      * @param outputs Outputs to send to
      * @param changeAddress address that will receive change
      * @return a completed transaction signing request
      */
-    SigningRequest createBitcoinSigningRequest(Network network, List<TransactionInputData> inputUtxos, List<TransactionOutputData> outputs, Address changeAddress) throws InsufficientMoneyException;
+    SigningRequest createBitcoinSigningRequest(List<TransactionInputData> inputUtxos, List<TransactionOutputData> outputs, Address changeAddress) throws InsufficientMoneyException;
 }
