@@ -304,7 +304,7 @@ signrawtransactionwithwallet hex
         Object[] address = {};
         return result(new NetworkInfo(version,
                 "",
-                ProtocolVersion.CURRENT.getBitcoinProtocolVersion(),
+                ProtocolVersion.CURRENT.intValue(),
                 timeOffset,
                 getconnectioncount().join(),
                 "proxy",
@@ -382,7 +382,7 @@ signrawtransactionwithwallet hex
                         out.getIndex(),
                         null, // Address (get from script?)
                         "", // label
-                        hexFormat.formatHex(out.getScriptPubKey().getProgram()), // scriptPubKey
+                        hexFormat.formatHex(out.getScriptPubKey().program()), // scriptPubKey
                         out.getValue(),     // amount
                         out.getParentTransactionDepthInBlocks(),  // confirmations
                         null,   // redeemScript
@@ -465,7 +465,7 @@ signrawtransactionwithwallet hex
         try {
             Transaction unsignedTx = Transaction.read(raw);
             log.info("received tx: {}", unsignedTx);
-            signingRequest = RawTransactionSigningRequest.ofTransaction(network, unsignedTx);
+            signingRequest = RawTransactionSigningRequest.ofTransaction(unsignedTx);
         } catch (BufferUnderflowException | ProtocolException e) {
             return CompletableFuture.failedFuture(new RuntimeException("Invalid raw (hex) transaction", e));
         }
@@ -493,7 +493,7 @@ signrawtransactionwithwallet hex
         } catch (BlockStoreException e) {
             return exception(e);
         }
-        byte[] data = storedBlock.getHeader().bitcoinSerialize();
+        byte[] data = storedBlock.getHeader().serialize();
         return result(data);
     }
 
@@ -540,7 +540,7 @@ signrawtransactionwithwallet hex
         log.trace("building BlockInfo for hash: {} height: {}", blockHash, blockHeight);
         return new BlockInfo(header.getHash(),
                 confirmations,
-                header.getMessageSize(),
+                header.messageSize(),
                 blockHeight,
                 (int) header.getVersion(),
                 header.getMerkleRoot(),

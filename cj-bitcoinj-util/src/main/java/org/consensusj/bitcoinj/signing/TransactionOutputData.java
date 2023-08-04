@@ -23,6 +23,6 @@ public interface TransactionOutputData {
     }
 
     default TransactionOutput toMutableOutput() {
-        return new TransactionOutput(null, amount(), scriptPubKey().getProgram());
+        return new TransactionOutput(null, amount(), scriptPubKey().program());
     }
 }

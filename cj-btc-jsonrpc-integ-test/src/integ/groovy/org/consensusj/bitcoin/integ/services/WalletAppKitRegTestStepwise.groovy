@@ -85,7 +85,7 @@ class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
         list != null
         list.size() == 1
         list[0].amount == 2.btc
-        list[0].scriptPubKey.getProgram() == ScriptBuilder.createP2PKHOutputScript(spvWalletAddress.hash).getProgram()
+        list[0].scriptPubKey.program() == ScriptBuilder.createP2PKHOutputScript(spvWalletAddress.hash).program()
 
         when: "we build an unsigned tx"
         var unspent = list[0]

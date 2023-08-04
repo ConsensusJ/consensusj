@@ -220,7 +220,7 @@ public class RawTransactionInfo {
 
         public ScriptPubKeyInfo(Script script) {
             this.asm = script.toString();
-            this.hex = HexUtil.bytesToHexString(script.getProgram());
+            this.hex = HexUtil.bytesToHexString(script.program());
             this.reqSigs = -1;
             this.type = "bitcoinj Script (not-fully-supported)";
             this.addresses = List.of();

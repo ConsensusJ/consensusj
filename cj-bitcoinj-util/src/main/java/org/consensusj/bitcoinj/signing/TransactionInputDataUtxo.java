@@ -1,7 +1,6 @@
 package org.consensusj.bitcoinj.signing;
 
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.base.Network;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.TransactionInput;
 import org.bitcoinj.core.TransactionOutPoint;
@@ -48,7 +47,7 @@ public class TransactionInputDataUtxo implements TransactionInputData, Utxo {
         return script;
     }
     
-    public TransactionInput toMutableInput(Network network) {
+    public TransactionInput toMutableInput() {
         return createTransactionInput(toOutPoint(), Coin.ofSat(amount), script);
     }
 
@@ -63,6 +62,6 @@ public class TransactionInputDataUtxo implements TransactionInputData, Utxo {
     }
 
     private static TransactionInput createTransactionInput(TransactionOutPoint outPoint, Coin amount, Script script) {
-        return new TransactionInput( null, script.getProgram(), outPoint, amount);
+        return new TransactionInput( null, script.program(), outPoint, amount);
     }
 }

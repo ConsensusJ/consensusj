@@ -1,6 +1,5 @@
 package org.consensusj.bitcoinj.signing;
 
-import org.bitcoinj.base.Network;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.script.Script;
@@ -13,27 +12,25 @@ import java.util.stream.Collectors;
  * inputs with UTXO hash and index and an empty scriptSig.
  */
 public class RawTransactionSigningRequest {
-    private final Network network;
     private final List<RawInput> inputs;
     private final List<TransactionOutputData> outputs;
 
 
-    public static RawTransactionSigningRequest of(Network network, List<RawInput> inputs, List<TransactionOutputData> outputs) {
-        return new RawTransactionSigningRequest(network, inputs, outputs);
+    public static RawTransactionSigningRequest of(List<RawInput> inputs, List<TransactionOutputData> outputs) {
+        return new RawTransactionSigningRequest(inputs, outputs);
     }
 
-    public static RawTransactionSigningRequest ofTransaction(Network network, Transaction transaction) {
+    public static RawTransactionSigningRequest ofTransaction(Transaction transaction) {
         List<RawInput> inputs = transaction.getInputs().stream()
-                .map(i -> new RawInput(i.getOutpoint().getHash(), (int) i.getOutpoint().getIndex(), i.getScriptSig()))
+                .map(i -> new RawInput(i.getOutpoint().hash(), (int) i.getOutpoint().getIndex(), i.getScriptSig()))
                 .collect(Collectors.toList());
         List<TransactionOutputData> outputs = transaction.getOutputs().stream()
                 .map(TransactionOutputData::fromTxOutput)
                 .collect(Collectors.toList());
-        return RawTransactionSigningRequest.of(network, inputs, outputs);
+        return RawTransactionSigningRequest.of(inputs, outputs);
     }
 
-    public RawTransactionSigningRequest(Network network, List<RawInput> inputs, List<TransactionOutputData> outputs) {
-        this.network = network;
+    public RawTransactionSigningRequest(List<RawInput> inputs, List<TransactionOutputData> outputs) {
         this.inputs = inputs;
         this.outputs = outputs;
     }

@@ -69,7 +69,7 @@ class WalletSigningServiceRegTestSpec extends BaseRegTestSpec {
         uTx.getOutputSum() >= 0.9.btc
 
         when: "we serialize it"
-        byte[] serialized = uTx.bitcoinSerialize()
+        byte[] serialized = uTx.serialize()
         var buf = ByteBuffer.wrap(serialized).order(ByteOrder.LITTLE_ENDIAN)
 
         then: "it is serialized properly"
@@ -84,7 +84,7 @@ class WalletSigningServiceRegTestSpec extends BaseRegTestSpec {
         when: "we deserialize it"
         var raw = ByteBuffer.wrap(serialized);
         var dTx = Transaction.read(raw)
-        var req = RawTransactionSigningRequest.ofTransaction(network, dTx)
+        var req = RawTransactionSigningRequest.ofTransaction(dTx)
 
         then: "it has all the information we need to prepare it for signing"
         req != null

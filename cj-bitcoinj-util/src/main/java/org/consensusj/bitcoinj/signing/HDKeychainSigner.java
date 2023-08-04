@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import static org.bitcoinj.base.BitcoinNetwork.REGTEST;
-
 /**
  * A "signing wallet"  that uses a {@link DeterministicKeyChain} to
  * sign {@link SigningRequest}s.

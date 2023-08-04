@@ -15,6 +15,6 @@ import java.io.IOException;
 public class ScriptSerializer extends JsonSerializer<Script>  {
     @Override
     public void serialize(Script script, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-        gen.writeString(HexUtil.bytesToHexString(script.getProgram()));
+        gen.writeString(HexUtil.bytesToHexString(script.program()));
     }
 }

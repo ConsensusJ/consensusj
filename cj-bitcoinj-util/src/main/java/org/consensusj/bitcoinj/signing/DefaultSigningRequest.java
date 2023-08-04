@@ -37,13 +37,13 @@ public class DefaultSigningRequest implements SigningRequest {
     public Transaction toUnsignedTransaction() {
         Transaction utx = new Transaction();
         this.inputs().forEach(in ->
-                utx.addInput(in.toOutPoint().getHash(),
-                        in.toOutPoint().getIndex(),
+                utx.addInput(in.toOutPoint().hash(),
+                        in.toOutPoint().index(),
                         ScriptBuilder.createEmpty()));
         this.outputs().forEach(out ->
                 utx.addOutput(new TransactionOutput(utx,
                         out.amount(),
-                        out.scriptPubKey().getProgram())));
+                        out.scriptPubKey().program())));
         return utx;
     }
 }

@@ -15,11 +15,6 @@ public class TransactionOutputOpReturn implements TransactionOutputData {
         this.opReturnData = opReturnData;
     }
 
-    @Deprecated
-    public TransactionOutputOpReturn(String networkId, byte[] opReturnData) {
-        this(opReturnData);
-    }
-
     @Override
     public Coin amount() {
         return Coin.ofSat(0);

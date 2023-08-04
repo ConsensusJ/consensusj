@@ -151,6 +151,6 @@ public class WalletSigningService implements SignTransactionService {
     }
 
     private boolean matchesAddress(TransactionOutput out, Address address) {
-        return out.getScriptPubKey().getToAddress(wallet.getParams()).equals(address);
+        return out.getScriptPubKey().getToAddress(wallet.network()).equals(address);
     }
 }
