@@ -43,13 +43,13 @@ public interface AsyncSupport {
         return (Runnable r) -> new Thread(r).start();
     }
 
-    static <T> CompletableFuture<T> supplyCatchingAsync(ThrowingSupplier<T> throwingSupplier, Executor executor) {
+    private static <T> CompletableFuture<T> supplyCatchingAsync(ThrowingSupplier<T> throwingSupplier, Executor executor) {
         CompletableFuture<T> future = new CompletableFuture<>();
         executor.execute(() -> {
             try {
                 T result = throwingSupplier.getThrows();
                 future.complete(result);
-            } catch (Exception e) {
+            } catch (IOException e) {
                 future.completeExceptionally(e);
             }
         });
