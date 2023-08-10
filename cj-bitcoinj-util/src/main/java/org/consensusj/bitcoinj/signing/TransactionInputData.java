@@ -19,7 +19,6 @@ public interface TransactionInputData {
     /**
      * prevOut ScriptPubKey
      */
-
     Script script();
 
     /**
@@ -56,14 +55,14 @@ public interface TransactionInputData {
     }
 
     /**
-     * Create an unsigned transaction input from an bitcoinj (unsigned) TransactionInput.
+     * Create an unsigned transaction input from a bitcoinj (unsigned) TransactionInput.
      * @param input A transaction input (typically/currently unsigned)
      * @return transaction input data
      */
     static TransactionInputData fromTxInput(TransactionInput input) {
         return new TransactionInputDataUtxo(
-                input.getOutpoint().getHash(),
-                (int) input.getOutpoint().getIndex(),
+                input.getOutpoint().hash(),
+                (int) input.getOutpoint().index(),
                 input.getValue(),
                 input.getScriptSig());
     }

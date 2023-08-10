@@ -33,9 +33,9 @@ public interface Utxo {
             throw new IllegalArgumentException("outpoint is not complete enough: no value ");
         }
         if (outPoint.getConnectedOutput().getScriptPubKey() == null) {
-            return new Signable(outPoint.getHash(), (int) outPoint.getIndex(), outPoint.getConnectedOutput().getValue());
+            return new Signable(outPoint.hash(), (int) outPoint.index(), outPoint.getConnectedOutput().getValue());
         } else {
-            return new Signable(outPoint.getHash(), (int) outPoint.getIndex(), outPoint.getConnectedOutput().getValue());
+            return new Signable(outPoint.hash(), (int) outPoint.index(), outPoint.getConnectedOutput().getValue());
         }
     }
 
