@@ -36,7 +36,10 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
     private final String password;
     private static final String UTF8 = StandardCharsets.UTF_8.name();
     private final SSLSocketFactory sslSocketFactory;
-    
+
+    /**
+     * @deprecated Use {@link JsonRpcClientHttpUrlConnection#JsonRpcClientHttpUrlConnection(SSLContext, JsonRpcMessage.Version, URI, String, String)}
+     */
     @Deprecated
     public JsonRpcClientHttpUrlConnection(SSLSocketFactory socketFactory, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
         super(jsonRpcVersion);

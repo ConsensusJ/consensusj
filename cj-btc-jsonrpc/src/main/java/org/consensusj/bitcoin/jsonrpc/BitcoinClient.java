@@ -128,6 +128,9 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         mapper.registerModule(new RpcClientModule());
     }
 
+    /**
+     * @deprecated Use {@link BitcoinClient#BitcoinClient(SSLContext, Network, URI, String, String)}
+     */
     @Deprecated
     public BitcoinClient(SSLSocketFactory sslSocketFactory, Network network, URI server, String rpcuser, String rpcpassword) {
         super(sslSocketFactory, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
@@ -137,6 +140,9 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         mapper.registerModule(new RpcClientModule());
     }
 
+    /**
+     * @deprecated Use {@link BitcoinClient#BitcoinClient(SSLContext, Network, URI, String, String)}
+     */
     @Deprecated
     public BitcoinClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
         this(sslSocketFactory, netParams.network(), server, rpcuser, rpcpassword);
