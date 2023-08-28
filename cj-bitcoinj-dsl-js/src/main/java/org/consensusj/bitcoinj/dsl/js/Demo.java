@@ -17,6 +17,11 @@ public class Demo {
     private static final Logger log = LoggerFactory.getLogger(Demo.class);
 
     public static void main(String[] args) throws ScriptException, FileNotFoundException {
+        if (args.length < 1) {
+            System.err.println("Error: No JavaScript file specified");
+            System.err.println("USAGE: scriptname.js");
+            System.exit(-1);
+        }
         var file = new File(args[0]);
         if (!file.exists()) {
             System.err.println("File not found: " + file);
