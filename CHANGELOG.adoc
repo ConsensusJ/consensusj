@@ -25,6 +25,7 @@ If you are using `consensusj-jsonrpc-javanet`, you need to remove the `.javanet`
 * Micronaut 4.0.1
 * Jackson 2.15.2
 * Groovy 4.0.14
+* RxJava 3.1.7
 
 === Build/Test Updates
 
