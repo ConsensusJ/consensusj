@@ -14,8 +14,8 @@
 <pre><span class="source-line-no">001</span><span id="line-1">package org.consensusj.bitcoinj.signing;</span>
 <span class="source-line-no">002</span><span id="line-2"></span>
 <span class="source-line-no">003</span><span id="line-3">import org.bitcoinj.base.Address;</span>
-<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.base.Coin;</span>
-<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.base.DefaultAddressParser;</span>
+<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.base.AddressParser;</span>
+<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.base.Coin;</span>
 <span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.script.Script;</span>
 <span class="source-line-no">007</span><span id="line-7">import org.bitcoinj.script.ScriptBuilder;</span>
 <span class="source-line-no">008</span><span id="line-8"></span>
@@ -38,7 +38,7 @@
 <span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26">    public TransactionOutputAddress(long amount, String address) {</span>
 <span class="source-line-no">027</span><span id="line-27">        this.amount = amount;</span>
-<span class="source-line-no">028</span><span id="line-28">        this.address = new DefaultAddressParser().parseAddressAnyNetwork(address);</span>
+<span class="source-line-no">028</span><span id="line-28">        this.address = AddressParser.getDefault().parseAddress(address);</span>
 <span class="source-line-no">029</span><span id="line-29">    }</span>
 <span class="source-line-no">030</span><span id="line-30"></span>
 <span class="source-line-no">031</span><span id="line-31">    @Override</span>

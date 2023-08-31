@@ -13,36 +13,36 @@
 <div class="source-container">
 <pre><span class="source-line-no">001</span><span id="line-1">package org.consensusj.bitcoin.json.pojo;</span>
 <span class="source-line-no">002</span><span id="line-2"></span>
-<span class="source-line-no">003</span><span id="line-3">import org.bitcoinj.base.Address;</span>
-<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.base.AddressParser;</span>
-<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.base.Coin;</span>
-<span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.base.DefaultAddressParser;</span>
-<span class="source-line-no">007</span><span id="line-7">import org.bitcoinj.base.Network;</span>
-<span class="source-line-no">008</span><span id="line-8"></span>
-<span class="source-line-no">009</span><span id="line-9">import java.util.List;</span>
-<span class="source-line-no">010</span><span id="line-10"></span>
-<span class="source-line-no">011</span><span id="line-11">/**</span>
-<span class="source-line-no">012</span><span id="line-12"> * For listaddressgroupings response</span>
-<span class="source-line-no">013</span><span id="line-13"> * Note: In the JSON response this is actually an array</span>
-<span class="source-line-no">014</span><span id="line-14"> */</span>
-<span class="source-line-no">015</span><span id="line-15">public class AddressGroupingItem {</span>
-<span class="source-line-no">016</span><span id="line-16">    private static final AddressParser addressParser = new DefaultAddressParser();</span>
-<span class="source-line-no">017</span><span id="line-17">    private final Address address;</span>
-<span class="source-line-no">018</span><span id="line-18">    private final Coin balance;</span>
-<span class="source-line-no">019</span><span id="line-19">    private final String account;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">    public AddressGroupingItem(Address address, Coin balance, String account) {</span>
-<span class="source-line-no">022</span><span id="line-22">        this.address = address;</span>
-<span class="source-line-no">023</span><span id="line-23">        this.balance = balance;</span>
-<span class="source-line-no">024</span><span id="line-24">        this.account = account;</span>
-<span class="source-line-no">025</span><span id="line-25">    }</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">    public AddressGroupingItem(List&lt;Object&gt; addressItem, Network network) {</span>
+<span class="source-line-no">003</span><span id="line-3">import com.fasterxml.jackson.annotation.JsonCreator;</span>
+<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.base.Address;</span>
+<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.base.AddressParser;</span>
+<span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.base.Coin;</span>
+<span class="source-line-no">007</span><span id="line-7"></span>
+<span class="source-line-no">008</span><span id="line-8">import java.util.List;</span>
+<span class="source-line-no">009</span><span id="line-9"></span>
+<span class="source-line-no">010</span><span id="line-10">/**</span>
+<span class="source-line-no">011</span><span id="line-11"> * For {@code listaddressgroupings} response</span>
+<span class="source-line-no">012</span><span id="line-12"> * Note: In the JSON response this is actually an array</span>
+<span class="source-line-no">013</span><span id="line-13"> */</span>
+<span class="source-line-no">014</span><span id="line-14">public class AddressGroupingItem {</span>
+<span class="source-line-no">015</span><span id="line-15">    private static final AddressParser addressParser = AddressParser.getDefault();</span>
+<span class="source-line-no">016</span><span id="line-16">    private final Address address;</span>
+<span class="source-line-no">017</span><span id="line-17">    private final Coin balance;</span>
+<span class="source-line-no">018</span><span id="line-18">    private final String account;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">    public AddressGroupingItem(Address address, Coin balance, String account) {</span>
+<span class="source-line-no">021</span><span id="line-21">        this.address = address;</span>
+<span class="source-line-no">022</span><span id="line-22">        this.balance = balance;</span>
+<span class="source-line-no">023</span><span id="line-23">        this.account = account;</span>
+<span class="source-line-no">024</span><span id="line-24">    }</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">    @JsonCreator</span>
+<span class="source-line-no">027</span><span id="line-27">    public AddressGroupingItem(List&lt;Object&gt; addressItem) {</span>
 <span class="source-line-no">028</span><span id="line-28">        String addressStr = (String) addressItem.get(0);</span>
 <span class="source-line-no">029</span><span id="line-29">        //TODO: Try to avoid using Double</span>
 <span class="source-line-no">030</span><span id="line-30">        Double balanceDouble = (Double) addressItem.get(1);</span>
 <span class="source-line-no">031</span><span id="line-31">        account = (addressItem.size() &gt; 2) ? (String) addressItem.get(2) : null;</span>
-<span class="source-line-no">032</span><span id="line-32">        address = addressParser.parseAddress(addressStr, network);</span>
+<span class="source-line-no">032</span><span id="line-32">        address = addressParser.parseAddress(addressStr);</span>
 <span class="source-line-no">033</span><span id="line-33">        balance = Coin.valueOf(((Double)(balanceDouble * 100000000.0)).longValue());</span>
 <span class="source-line-no">034</span><span id="line-34"></span>
 <span class="source-line-no">035</span><span id="line-35">    }</span>

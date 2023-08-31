@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36">    private static SigningRequest addOutput(SigningRequest req, Address address, Coin amount) {</span>
 <span class="source-line-no">037</span><span id="line-37">        List&lt;TransactionOutputData&gt; outs = append(req.outputs(),</span>
 <span class="source-line-no">038</span><span id="line-38">                new TransactionOutputAddress(amount, address));</span>
-<span class="source-line-no">039</span><span id="line-39">        return SigningRequest.of(req.network(), req.inputs(), outs);</span>
+<span class="source-line-no">039</span><span id="line-39">        return SigningRequest.of(req.inputs(), outs);</span>
 <span class="source-line-no">040</span><span id="line-40">    }</span>
 <span class="source-line-no">041</span><span id="line-41"></span>
 <span class="source-line-no">042</span><span id="line-42">    private static &lt;T&gt; List&lt;T&gt; append(List&lt;T&gt; list, T element) {</span>

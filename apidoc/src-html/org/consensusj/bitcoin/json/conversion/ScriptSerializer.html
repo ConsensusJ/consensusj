@@ -28,7 +28,7 @@
 <span class="source-line-no">015</span><span id="line-15">public class ScriptSerializer extends JsonSerializer&lt;Script&gt;  {</span>
 <span class="source-line-no">016</span><span id="line-16">    @Override</span>
 <span class="source-line-no">017</span><span id="line-17">    public void serialize(Script script, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {</span>
-<span class="source-line-no">018</span><span id="line-18">        gen.writeString(HexUtil.bytesToHexString(script.getProgram()));</span>
+<span class="source-line-no">018</span><span id="line-18">        gen.writeString(HexUtil.bytesToHexString(script.program()));</span>
 <span class="source-line-no">019</span><span id="line-19">    }</span>
 <span class="source-line-no">020</span><span id="line-20">}</span>
 

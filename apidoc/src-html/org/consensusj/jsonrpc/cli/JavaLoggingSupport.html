@@ -19,15 +19,15 @@
 <span class="source-line-no">006</span><span id="line-6">import java.util.logging.LogManager;</span>
 <span class="source-line-no">007</span><span id="line-7">import java.util.logging.Logger;</span>
 <span class="source-line-no">008</span><span id="line-8"></span>
-<span class="source-line-no">009</span><span id="line-9">/**</span>
-<span class="source-line-no">010</span><span id="line-10"> * GraalVM-compatible Support for using Java Logging</span>
-<span class="source-line-no">011</span><span id="line-11"> * See: https://github.com/oracle/graal/blob/master/substratevm/LOGGING.md</span>
-<span class="source-line-no">012</span><span id="line-12"> *</span>
-<span class="source-line-no">013</span><span id="line-13"> * The default log-level for command-line tools configured in logging.properties</span>
-<span class="source-line-no">014</span><span id="line-14"> * should be `WARNING`. The `-v` command-line switch should set the level to `FINE`.</span>
-<span class="source-line-no">015</span><span id="line-15"> * Request-logging in RpcClient is at the `FINE` (slf4j `debug`) level.</span>
-<span class="source-line-no">016</span><span id="line-16"> *</span>
-<span class="source-line-no">017</span><span id="line-17"> * TODO: Create a command-line option to set finer-grained log levels</span>
+<span class="source-line-no">009</span><span id="line-9">// TODO: Create a command-line option to set finer-grained log levels</span>
+<span class="source-line-no">010</span><span id="line-10">/**</span>
+<span class="source-line-no">011</span><span id="line-11"> * GraalVM-compatible support for using Java Logging.</span>
+<span class="source-line-no">012</span><span id="line-12"> * &lt;p&gt;</span>
+<span class="source-line-no">013</span><span id="line-13"> * See: &lt;a href="https://github.com/oracle/graal/blob/master/docs/reference-manual/native-image/guides/add-logging-to-native-executable.md"&gt;add-logging-to-native-executable.md"LOGGING.md&lt;/a&gt;</span>
+<span class="source-line-no">014</span><span id="line-14"> * &lt;p&gt;</span>
+<span class="source-line-no">015</span><span id="line-15"> * The default log-level for command-line tools configured in {@code logging.properties} should be {@link Level#WARNING}.</span>
+<span class="source-line-no">016</span><span id="line-16"> * The {@code -v} command-line switch should set the level to {@link Level#FINE}.</span>
+<span class="source-line-no">017</span><span id="line-17"> * Request-logging in {@link org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection} is at the {@link Level#FINE} (slf4j {@code debug}) level.</span>
 <span class="source-line-no">018</span><span id="line-18"> */</span>
 <span class="source-line-no">019</span><span id="line-19">public class JavaLoggingSupport {</span>
 <span class="source-line-no">020</span><span id="line-20">    private final static String loggingPropertiesResource = "/logging.properties";</span>

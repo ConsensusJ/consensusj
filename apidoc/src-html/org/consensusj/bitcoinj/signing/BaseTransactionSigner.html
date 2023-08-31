@@ -13,102 +13,98 @@
 <div class="source-container">
 <pre><span class="source-line-no">001</span><span id="line-1">package org.consensusj.bitcoinj.signing;</span>
 <span class="source-line-no">002</span><span id="line-2"></span>
-<span class="source-line-no">003</span><span id="line-3">import org.bitcoinj.core.NetworkParameters;</span>
-<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.core.TransactionInput;</span>
-<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.crypto.ECKey;</span>
-<span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.core.Transaction;</span>
-<span class="source-line-no">007</span><span id="line-7">import org.bitcoinj.params.BitcoinNetworkParams;</span>
-<span class="source-line-no">008</span><span id="line-8">import org.bitcoinj.script.ScriptException;</span>
-<span class="source-line-no">009</span><span id="line-9">import org.bitcoinj.wallet.DeterministicKeyChain;</span>
-<span class="source-line-no">010</span><span id="line-10">import org.slf4j.Logger;</span>
-<span class="source-line-no">011</span><span id="line-11">import org.slf4j.LoggerFactory;</span>
-<span class="source-line-no">012</span><span id="line-12"></span>
-<span class="source-line-no">013</span><span id="line-13">import java.util.List;</span>
-<span class="source-line-no">014</span><span id="line-14">import java.util.Optional;</span>
-<span class="source-line-no">015</span><span id="line-15">import java.util.concurrent.CompletableFuture;</span>
-<span class="source-line-no">016</span><span id="line-16">import java.util.function.Supplier;</span>
-<span class="source-line-no">017</span><span id="line-17"></span>
-<span class="source-line-no">018</span><span id="line-18">/**</span>
-<span class="source-line-no">019</span><span id="line-19"> * A template interface, implementations need only implement {@link #keyForInput(TransactionInputData)}.</span>
-<span class="source-line-no">020</span><span id="line-20"> * The {@link HDKeychainSigner} implementation can sign transactions using a &lt;b&gt;bitcoinj&lt;/b&gt; {@link DeterministicKeyChain}.</span>
-<span class="source-line-no">021</span><span id="line-21"> * &lt;p&gt;</span>
-<span class="source-line-no">022</span><span id="line-22"> * Keys and PubKeys can be searched for, but not UTXOs or amounts</span>
-<span class="source-line-no">023</span><span id="line-23"> */</span>
-<span class="source-line-no">024</span><span id="line-24">public interface BaseTransactionSigner extends TransactionSigner {</span>
-<span class="source-line-no">025</span><span id="line-25">    Logger log = LoggerFactory.getLogger(BaseTransactionSigner.class);</span>
-<span class="source-line-no">026</span><span id="line-26">    /**</span>
-<span class="source-line-no">027</span><span id="line-27">     * Create a signed bitcoinj transaction from the signing request</span>
-<span class="source-line-no">028</span><span id="line-28">     * &lt;p&gt;</span>
-<span class="source-line-no">029</span><span id="line-29">     * @param request Signing request with data for all inputs and all outputs</span>
-<span class="source-line-no">030</span><span id="line-30">     * @return A signed transaction (should be treated as immutable)</span>
-<span class="source-line-no">031</span><span id="line-31">     */</span>
-<span class="source-line-no">032</span><span id="line-32">    @Override</span>
-<span class="source-line-no">033</span><span id="line-33">    default CompletableFuture&lt;Transaction&gt; signTransaction(SigningRequest request) {</span>
-<span class="source-line-no">034</span><span id="line-34">        NetworkParameters params = BitcoinNetworkParams.of(request.network());</span>
-<span class="source-line-no">035</span><span id="line-35">        // Create a new, empty (mutable) bitcoinj transaction</span>
-<span class="source-line-no">036</span><span id="line-36">        Transaction transaction = new Transaction(params);</span>
-<span class="source-line-no">037</span><span id="line-37"></span>
-<span class="source-line-no">038</span><span id="line-38">        // For each output in the signing request, add an output to the bitcoinj transaction</span>
-<span class="source-line-no">039</span><span id="line-39">        request.outputs().forEach(</span>
-<span class="source-line-no">040</span><span id="line-40">                output -&gt; transaction.addOutput(output.toMutableOutput(params.network()))</span>
-<span class="source-line-no">041</span><span id="line-41">        );</span>
-<span class="source-line-no">042</span><span id="line-42"></span>
-<span class="source-line-no">043</span><span id="line-43">        // For each address in the input list, add a signed input to the bitcoinj transaction</span>
-<span class="source-line-no">044</span><span id="line-44">        request.inputs().forEach(</span>
-<span class="source-line-no">045</span><span id="line-45">                input -&gt; addSignedInput(transaction, input, () -&gt; new RuntimeException("Unsupported transaction input"))</span>
-<span class="source-line-no">046</span><span id="line-46">        );</span>
-<span class="source-line-no">047</span><span id="line-47"></span>
-<span class="source-line-no">048</span><span id="line-48">        log.info("signed tx: {}", transaction);</span>
-<span class="source-line-no">049</span><span id="line-49"></span>
-<span class="source-line-no">050</span><span id="line-50">        // TODO: Additional Transaction validation?</span>
-<span class="source-line-no">051</span><span id="line-51">        return verify(transaction, request.inputs())</span>
-<span class="source-line-no">052</span><span id="line-52">                .map(CompletableFuture::&lt;Transaction&gt;failedFuture)</span>
-<span class="source-line-no">053</span><span id="line-53">                .orElse(CompletableFuture.completedFuture(transaction));</span>
-<span class="source-line-no">054</span><span id="line-54">    }</span>
-<span class="source-line-no">055</span><span id="line-55"></span>
-<span class="source-line-no">056</span><span id="line-56">    default Optional&lt;Exception&gt; verify(Transaction tx, List&lt;TransactionInputData&gt; reqInputs) {</span>
-<span class="source-line-no">057</span><span id="line-57">        return tx.getInputs().stream().flatMap(i -&gt;</span>
-<span class="source-line-no">058</span><span id="line-58">            verifyInput(tx, i.getIndex(), reqInputs.get(i.getIndex())).stream()</span>
-<span class="source-line-no">059</span><span id="line-59">        ).findFirst();</span>
-<span class="source-line-no">060</span><span id="line-60">    }</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">    default Optional&lt;Exception&gt; verifyInput(Transaction tx, int index, TransactionInputData inputData) {</span>
-<span class="source-line-no">063</span><span id="line-63">        try {</span>
-<span class="source-line-no">064</span><span id="line-64">            log.info("Verifying input {}", tx.getInputs().get(index));</span>
-<span class="source-line-no">065</span><span id="line-65">            TransactionVerification.correctlySpendsInput(tx, index, inputData.script());</span>
-<span class="source-line-no">066</span><span id="line-66">            return Optional.empty();</span>
-<span class="source-line-no">067</span><span id="line-67">        } catch (ScriptException se) {</span>
-<span class="source-line-no">068</span><span id="line-68">            log.error("Invalid input", se);</span>
-<span class="source-line-no">069</span><span id="line-69">            return Optional.of(se);</span>
-<span class="source-line-no">070</span><span id="line-70">        }</span>
-<span class="source-line-no">071</span><span id="line-71">    }</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">    /**</span>
-<span class="source-line-no">074</span><span id="line-74">     *</span>
-<span class="source-line-no">075</span><span id="line-75">     * @param tx Mutable transaction currently being built</span>
-<span class="source-line-no">076</span><span id="line-76">     * @param in The transaction input data</span>
-<span class="source-line-no">077</span><span id="line-77">     * @param exceptionSupplier exception to throw if key is not available.</span>
-<span class="source-line-no">078</span><span id="line-78">     */</span>
-<span class="source-line-no">079</span><span id="line-79">    default void addSignedInput(Transaction tx, TransactionInputData in, Supplier&lt;? extends RuntimeException&gt; exceptionSupplier) {</span>
-<span class="source-line-no">080</span><span id="line-80">        tx.addSignedInput(in.toOutPoint(tx.getParams().network()),</span>
-<span class="source-line-no">081</span><span id="line-81">                in.script(),</span>
-<span class="source-line-no">082</span><span id="line-82">                in.amount(),</span>
-<span class="source-line-no">083</span><span id="line-83">                keyForInput(in).orElseThrow(exceptionSupplier),</span>
-<span class="source-line-no">084</span><span id="line-84">                Transaction.SigHash.ALL,</span>
-<span class="source-line-no">085</span><span id="line-85">                false);</span>
-<span class="source-line-no">086</span><span id="line-86">    }</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">    /**</span>
-<span class="source-line-no">089</span><span id="line-89">     * Return an ECKey, if available for the provided input</span>
-<span class="source-line-no">090</span><span id="line-90">     * @param input A transaction input</span>
-<span class="source-line-no">091</span><span id="line-91">     * @return The ECKey or empty</span>
-<span class="source-line-no">092</span><span id="line-92">     */</span>
-<span class="source-line-no">093</span><span id="line-93">    Optional&lt;ECKey&gt; keyForInput(TransactionInputData input);</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">    default Optional&lt;ECKey&gt; pubKeyForInput(TransactionInputData input) {</span>
-<span class="source-line-no">096</span><span id="line-96">        return keyForInput(input).map(ECKey::fromPublicOnly);</span>
-<span class="source-line-no">097</span><span id="line-97">    }</span>
-<span class="source-line-no">098</span><span id="line-98">}</span>
+<span class="source-line-no">003</span><span id="line-3">import org.bitcoinj.crypto.ECKey;</span>
+<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.core.Transaction;</span>
+<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.script.ScriptException;</span>
+<span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.wallet.DeterministicKeyChain;</span>
+<span class="source-line-no">007</span><span id="line-7">import org.slf4j.Logger;</span>
+<span class="source-line-no">008</span><span id="line-8">import org.slf4j.LoggerFactory;</span>
+<span class="source-line-no">009</span><span id="line-9"></span>
+<span class="source-line-no">010</span><span id="line-10">import java.util.List;</span>
+<span class="source-line-no">011</span><span id="line-11">import java.util.Optional;</span>
+<span class="source-line-no">012</span><span id="line-12">import java.util.concurrent.CompletableFuture;</span>
+<span class="source-line-no">013</span><span id="line-13">import java.util.function.Supplier;</span>
+<span class="source-line-no">014</span><span id="line-14"></span>
+<span class="source-line-no">015</span><span id="line-15">/**</span>
+<span class="source-line-no">016</span><span id="line-16"> * A template interface, implementations need only implement {@link #keyForInput(TransactionInputData)}.</span>
+<span class="source-line-no">017</span><span id="line-17"> * The {@link HDKeychainSigner} implementation can sign transactions using a &lt;b&gt;bitcoinj&lt;/b&gt; {@link DeterministicKeyChain}.</span>
+<span class="source-line-no">018</span><span id="line-18"> * &lt;p&gt;</span>
+<span class="source-line-no">019</span><span id="line-19"> * Keys and PubKeys can be searched for, but not UTXOs or amounts</span>
+<span class="source-line-no">020</span><span id="line-20"> */</span>
+<span class="source-line-no">021</span><span id="line-21">public interface BaseTransactionSigner extends TransactionSigner {</span>
+<span class="source-line-no">022</span><span id="line-22">    Logger log = LoggerFactory.getLogger(BaseTransactionSigner.class);</span>
+<span class="source-line-no">023</span><span id="line-23">    /**</span>
+<span class="source-line-no">024</span><span id="line-24">     * Create a signed bitcoinj transaction from the signing request</span>
+<span class="source-line-no">025</span><span id="line-25">     * &lt;p&gt;</span>
+<span class="source-line-no">026</span><span id="line-26">     * @param request Signing request with data for all inputs and all outputs</span>
+<span class="source-line-no">027</span><span id="line-27">     * @return A signed transaction (should be treated as immutable)</span>
+<span class="source-line-no">028</span><span id="line-28">     */</span>
+<span class="source-line-no">029</span><span id="line-29">    @Override</span>
+<span class="source-line-no">030</span><span id="line-30">    default CompletableFuture&lt;Transaction&gt; signTransaction(SigningRequest request) {</span>
+<span class="source-line-no">031</span><span id="line-31">        // Create a new, empty (mutable) bitcoinj transaction</span>
+<span class="source-line-no">032</span><span id="line-32">        Transaction transaction = new Transaction();</span>
+<span class="source-line-no">033</span><span id="line-33"></span>
+<span class="source-line-no">034</span><span id="line-34">        // For each output in the signing request, add an output to the bitcoinj transaction</span>
+<span class="source-line-no">035</span><span id="line-35">        request.outputs().forEach(</span>
+<span class="source-line-no">036</span><span id="line-36">                output -&gt; transaction.addOutput(output.toMutableOutput())</span>
+<span class="source-line-no">037</span><span id="line-37">        );</span>
+<span class="source-line-no">038</span><span id="line-38"></span>
+<span class="source-line-no">039</span><span id="line-39">        // For each address in the input list, add a signed input to the bitcoinj transaction</span>
+<span class="source-line-no">040</span><span id="line-40">        request.inputs().forEach(</span>
+<span class="source-line-no">041</span><span id="line-41">                input -&gt; addSignedInput(transaction, input, () -&gt; new RuntimeException("Unsupported transaction input"))</span>
+<span class="source-line-no">042</span><span id="line-42">        );</span>
+<span class="source-line-no">043</span><span id="line-43"></span>
+<span class="source-line-no">044</span><span id="line-44">        log.info("signed tx: {}", transaction);</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">        // TODO: Additional Transaction validation?</span>
+<span class="source-line-no">047</span><span id="line-47">        return verify(transaction, request.inputs())</span>
+<span class="source-line-no">048</span><span id="line-48">                .map(CompletableFuture::&lt;Transaction&gt;failedFuture)</span>
+<span class="source-line-no">049</span><span id="line-49">                .orElse(CompletableFuture.completedFuture(transaction));</span>
+<span class="source-line-no">050</span><span id="line-50">    }</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">    default Optional&lt;Exception&gt; verify(Transaction tx, List&lt;TransactionInputData&gt; reqInputs) {</span>
+<span class="source-line-no">053</span><span id="line-53">        return tx.getInputs().stream().flatMap(i -&gt;</span>
+<span class="source-line-no">054</span><span id="line-54">            verifyInput(tx, i.getIndex(), reqInputs.get(i.getIndex())).stream()</span>
+<span class="source-line-no">055</span><span id="line-55">        ).findFirst();</span>
+<span class="source-line-no">056</span><span id="line-56">    }</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
+<span class="source-line-no">058</span><span id="line-58">    default Optional&lt;Exception&gt; verifyInput(Transaction tx, int index, TransactionInputData inputData) {</span>
+<span class="source-line-no">059</span><span id="line-59">        try {</span>
+<span class="source-line-no">060</span><span id="line-60">            log.info("Verifying input {}", tx.getInputs().get(index));</span>
+<span class="source-line-no">061</span><span id="line-61">            TransactionVerification.correctlySpendsInput(tx, index, inputData.script());</span>
+<span class="source-line-no">062</span><span id="line-62">            return Optional.empty();</span>
+<span class="source-line-no">063</span><span id="line-63">        } catch (ScriptException se) {</span>
+<span class="source-line-no">064</span><span id="line-64">            log.error("Invalid input", se);</span>
+<span class="source-line-no">065</span><span id="line-65">            return Optional.of(se);</span>
+<span class="source-line-no">066</span><span id="line-66">        }</span>
+<span class="source-line-no">067</span><span id="line-67">    }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">    /**</span>
+<span class="source-line-no">070</span><span id="line-70">     *</span>
+<span class="source-line-no">071</span><span id="line-71">     * @param tx Mutable transaction currently being built</span>
+<span class="source-line-no">072</span><span id="line-72">     * @param in The transaction input data</span>
+<span class="source-line-no">073</span><span id="line-73">     * @param exceptionSupplier exception to throw if key is not available.</span>
+<span class="source-line-no">074</span><span id="line-74">     */</span>
+<span class="source-line-no">075</span><span id="line-75">    default void addSignedInput(Transaction tx, TransactionInputData in, Supplier&lt;? extends RuntimeException&gt; exceptionSupplier) {</span>
+<span class="source-line-no">076</span><span id="line-76">        tx.addSignedInput(in.toOutPoint(),</span>
+<span class="source-line-no">077</span><span id="line-77">                in.script(),</span>
+<span class="source-line-no">078</span><span id="line-78">                in.amount(),</span>
+<span class="source-line-no">079</span><span id="line-79">                keyForInput(in).orElseThrow(exceptionSupplier),</span>
+<span class="source-line-no">080</span><span id="line-80">                Transaction.SigHash.ALL,</span>
+<span class="source-line-no">081</span><span id="line-81">                false);</span>
+<span class="source-line-no">082</span><span id="line-82">    }</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">    /**</span>
+<span class="source-line-no">085</span><span id="line-85">     * Return an ECKey, if available for the provided input</span>
+<span class="source-line-no">086</span><span id="line-86">     * @param input A transaction input</span>
+<span class="source-line-no">087</span><span id="line-87">     * @return The ECKey or empty</span>
+<span class="source-line-no">088</span><span id="line-88">     */</span>
+<span class="source-line-no">089</span><span id="line-89">    Optional&lt;ECKey&gt; keyForInput(TransactionInputData input);</span>
+<span class="source-line-no">090</span><span id="line-90"></span>
+<span class="source-line-no">091</span><span id="line-91">    default Optional&lt;ECKey&gt; pubKeyForInput(TransactionInputData input) {</span>
+<span class="source-line-no">092</span><span id="line-92">        return keyForInput(input).map(ECKey::fromPublicOnly);</span>
+<span class="source-line-no">093</span><span id="line-93">    }</span>
+<span class="source-line-no">094</span><span id="line-94">}</span>
 
 
 

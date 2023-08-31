@@ -14,72 +14,70 @@
 <pre><span class="source-line-no">001</span><span id="line-1">package org.consensusj.bitcoinj.signing;</span>
 <span class="source-line-no">002</span><span id="line-2"></span>
 <span class="source-line-no">003</span><span id="line-3">import org.bitcoinj.base.Coin;</span>
-<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.base.Network;</span>
-<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.core.NetworkParameters;</span>
-<span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.base.Sha256Hash;</span>
-<span class="source-line-no">007</span><span id="line-7">import org.bitcoinj.core.TransactionInput;</span>
-<span class="source-line-no">008</span><span id="line-8">import org.bitcoinj.core.TransactionOutPoint;</span>
-<span class="source-line-no">009</span><span id="line-9">import org.bitcoinj.script.Script;</span>
+<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.base.Sha256Hash;</span>
+<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.core.TransactionInput;</span>
+<span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.core.TransactionOutPoint;</span>
+<span class="source-line-no">007</span><span id="line-7">import org.bitcoinj.script.Script;</span>
+<span class="source-line-no">008</span><span id="line-8"></span>
+<span class="source-line-no">009</span><span id="line-9">import java.util.Objects;</span>
 <span class="source-line-no">010</span><span id="line-10"></span>
-<span class="source-line-no">011</span><span id="line-11">import java.util.Objects;</span>
-<span class="source-line-no">012</span><span id="line-12"></span>
-<span class="source-line-no">013</span><span id="line-13">/**</span>
-<span class="source-line-no">014</span><span id="line-14"> * Immutable aggregate of data for TransactionInput. This holds the same data as {@link Utxo.Complete} and</span>
-<span class="source-line-no">015</span><span id="line-15"> * the two may be combined in the future.</span>
-<span class="source-line-no">016</span><span id="line-16"> */</span>
-<span class="source-line-no">017</span><span id="line-17">public class TransactionInputDataUtxo implements TransactionInputData, Utxo {</span>
-<span class="source-line-no">018</span><span id="line-18">    private final Sha256Hash txId;</span>
-<span class="source-line-no">019</span><span id="line-19">    private final int index;</span>
-<span class="source-line-no">020</span><span id="line-20">    private final long amount;</span>
-<span class="source-line-no">021</span><span id="line-21">    private final Script script;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">    /**</span>
-<span class="source-line-no">024</span><span id="line-24">     * @param txId parent txId (shouldn't be needed but Transaction.addSignedInput currently needs an Outpoint)</span>
-<span class="source-line-no">025</span><span id="line-25">     * @param index index of unspent output</span>
-<span class="source-line-no">026</span><span id="line-26">     * @param amount amount of unspent output</span>
-<span class="source-line-no">027</span><span id="line-27">     * @param script This is the scriptPubKey of the utxo we want to spend</span>
-<span class="source-line-no">028</span><span id="line-28">     */</span>
-<span class="source-line-no">029</span><span id="line-29">    public TransactionInputDataUtxo(Sha256Hash txId, int index, Coin amount, Script script) {</span>
-<span class="source-line-no">030</span><span id="line-30">        this.txId = Objects.requireNonNull(txId);</span>
-<span class="source-line-no">031</span><span id="line-31">        this.index = index;</span>
-<span class="source-line-no">032</span><span id="line-32">        this.amount = amount != null ? amount.getValue() : 0;        // TODO: Throw when amount is null?</span>
-<span class="source-line-no">033</span><span id="line-33">        this.script = Objects.requireNonNull(script);</span>
-<span class="source-line-no">034</span><span id="line-34">    }</span>
-<span class="source-line-no">035</span><span id="line-35"></span>
-<span class="source-line-no">036</span><span id="line-36">    public Sha256Hash txId() {</span>
-<span class="source-line-no">037</span><span id="line-37">        return txId;</span>
-<span class="source-line-no">038</span><span id="line-38">    }</span>
-<span class="source-line-no">039</span><span id="line-39"></span>
-<span class="source-line-no">040</span><span id="line-40">    public int index() {</span>
-<span class="source-line-no">041</span><span id="line-41">        return index;</span>
-<span class="source-line-no">042</span><span id="line-42">    }</span>
-<span class="source-line-no">043</span><span id="line-43"></span>
-<span class="source-line-no">044</span><span id="line-44">    @Override</span>
-<span class="source-line-no">045</span><span id="line-45">    public Coin amount() { return Coin.ofSat(amount); }</span>
-<span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">    @Override</span>
-<span class="source-line-no">048</span><span id="line-48">    public Script script() {</span>
-<span class="source-line-no">049</span><span id="line-49">        return script;</span>
-<span class="source-line-no">050</span><span id="line-50">    }</span>
-<span class="source-line-no">051</span><span id="line-51">    </span>
-<span class="source-line-no">052</span><span id="line-52">    public TransactionInput toMutableInput(Network network) {</span>
-<span class="source-line-no">053</span><span id="line-53">        return createTransactionInput(toOutPoint(network), Coin.ofSat(amount), script);</span>
-<span class="source-line-no">054</span><span id="line-54">    }</span>
-<span class="source-line-no">055</span><span id="line-55"></span>
-<span class="source-line-no">056</span><span id="line-56">    @Override</span>
-<span class="source-line-no">057</span><span id="line-57">    public Utxo.Complete toUtxo() {</span>
-<span class="source-line-no">058</span><span id="line-58">        return Utxo.of(txId, index, Coin.ofSat(amount), script);</span>
-<span class="source-line-no">059</span><span id="line-59">    }</span>
-<span class="source-line-no">060</span><span id="line-60"></span>
-<span class="source-line-no">061</span><span id="line-61">    @Override</span>
-<span class="source-line-no">062</span><span id="line-62">    public TransactionOutPoint toOutPoint(Network network) {</span>
-<span class="source-line-no">063</span><span id="line-63">        return new TransactionOutPoint(NetworkParameters.of(network), index, txId);</span>
-<span class="source-line-no">064</span><span id="line-64">    }</span>
-<span class="source-line-no">065</span><span id="line-65"></span>
-<span class="source-line-no">066</span><span id="line-66">    private static TransactionInput createTransactionInput(TransactionOutPoint outPoint, Coin amount, Script script) {</span>
-<span class="source-line-no">067</span><span id="line-67">        return new TransactionInput(outPoint.getParams(), null, script.getProgram(), outPoint, amount);</span>
-<span class="source-line-no">068</span><span id="line-68">    }</span>
-<span class="source-line-no">069</span><span id="line-69">}</span>
+<span class="source-line-no">011</span><span id="line-11">/**</span>
+<span class="source-line-no">012</span><span id="line-12"> * Immutable aggregate of data for TransactionInput. This holds the same data as {@link Utxo.Complete} and</span>
+<span class="source-line-no">013</span><span id="line-13"> * the two may be combined in the future.</span>
+<span class="source-line-no">014</span><span id="line-14"> */</span>
+<span class="source-line-no">015</span><span id="line-15">public class TransactionInputDataUtxo implements TransactionInputData, Utxo {</span>
+<span class="source-line-no">016</span><span id="line-16">    private final Sha256Hash txId;</span>
+<span class="source-line-no">017</span><span id="line-17">    private final int index;</span>
+<span class="source-line-no">018</span><span id="line-18">    private final long amount;</span>
+<span class="source-line-no">019</span><span id="line-19">    private final Script script;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">    /**</span>
+<span class="source-line-no">022</span><span id="line-22">     * @param txId parent txId (shouldn't be needed but Transaction.addSignedInput currently needs an Outpoint)</span>
+<span class="source-line-no">023</span><span id="line-23">     * @param index index of unspent output</span>
+<span class="source-line-no">024</span><span id="line-24">     * @param amount amount of unspent output</span>
+<span class="source-line-no">025</span><span id="line-25">     * @param script This is the scriptPubKey of the utxo we want to spend</span>
+<span class="source-line-no">026</span><span id="line-26">     */</span>
+<span class="source-line-no">027</span><span id="line-27">    public TransactionInputDataUtxo(Sha256Hash txId, int index, Coin amount, Script script) {</span>
+<span class="source-line-no">028</span><span id="line-28">        this.txId = Objects.requireNonNull(txId);</span>
+<span class="source-line-no">029</span><span id="line-29">        this.index = index;</span>
+<span class="source-line-no">030</span><span id="line-30">        this.amount = amount != null ? amount.getValue() : 0;        // TODO: Throw when amount is null?</span>
+<span class="source-line-no">031</span><span id="line-31">        this.script = Objects.requireNonNull(script);</span>
+<span class="source-line-no">032</span><span id="line-32">    }</span>
+<span class="source-line-no">033</span><span id="line-33"></span>
+<span class="source-line-no">034</span><span id="line-34">    public Sha256Hash txId() {</span>
+<span class="source-line-no">035</span><span id="line-35">        return txId;</span>
+<span class="source-line-no">036</span><span id="line-36">    }</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">    public int index() {</span>
+<span class="source-line-no">039</span><span id="line-39">        return index;</span>
+<span class="source-line-no">040</span><span id="line-40">    }</span>
+<span class="source-line-no">041</span><span id="line-41"></span>
+<span class="source-line-no">042</span><span id="line-42">    @Override</span>
+<span class="source-line-no">043</span><span id="line-43">    public Coin amount() { return Coin.ofSat(amount); }</span>
+<span class="source-line-no">044</span><span id="line-44"></span>
+<span class="source-line-no">045</span><span id="line-45">    @Override</span>
+<span class="source-line-no">046</span><span id="line-46">    public Script script() {</span>
+<span class="source-line-no">047</span><span id="line-47">        return script;</span>
+<span class="source-line-no">048</span><span id="line-48">    }</span>
+<span class="source-line-no">049</span><span id="line-49">    </span>
+<span class="source-line-no">050</span><span id="line-50">    public TransactionInput toMutableInput() {</span>
+<span class="source-line-no">051</span><span id="line-51">        return createTransactionInput(toOutPoint(), Coin.ofSat(amount), script);</span>
+<span class="source-line-no">052</span><span id="line-52">    }</span>
+<span class="source-line-no">053</span><span id="line-53"></span>
+<span class="source-line-no">054</span><span id="line-54">    @Override</span>
+<span class="source-line-no">055</span><span id="line-55">    public Utxo.Complete toUtxo() {</span>
+<span class="source-line-no">056</span><span id="line-56">        return Utxo.of(txId, index, Coin.ofSat(amount), script);</span>
+<span class="source-line-no">057</span><span id="line-57">    }</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">    @Override</span>
+<span class="source-line-no">060</span><span id="line-60">    public TransactionOutPoint toOutPoint() {</span>
+<span class="source-line-no">061</span><span id="line-61">        return new TransactionOutPoint(index, txId);</span>
+<span class="source-line-no">062</span><span id="line-62">    }</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">    private static TransactionInput createTransactionInput(TransactionOutPoint outPoint, Coin amount, Script script) {</span>
+<span class="source-line-no">065</span><span id="line-65">        return new TransactionInput( null, script.program(), outPoint, amount);</span>
+<span class="source-line-no">066</span><span id="line-66">    }</span>
+<span class="source-line-no">067</span><span id="line-67">}</span>
 
 
 

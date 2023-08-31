@@ -13,85 +13,82 @@
 <div class="source-container">
 <pre><span class="source-line-no">001</span><span id="line-1">package org.consensusj.bitcoinj.signing;</span>
 <span class="source-line-no">002</span><span id="line-2"></span>
-<span class="source-line-no">003</span><span id="line-3">import org.bitcoinj.base.Network;</span>
-<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.base.Sha256Hash;</span>
-<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.core.Transaction;</span>
-<span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.script.Script;</span>
-<span class="source-line-no">007</span><span id="line-7"></span>
-<span class="source-line-no">008</span><span id="line-8">import java.util.List;</span>
-<span class="source-line-no">009</span><span id="line-9">import java.util.stream.Collectors;</span>
-<span class="source-line-no">010</span><span id="line-10"></span>
-<span class="source-line-no">011</span><span id="line-11">/**</span>
-<span class="source-line-no">012</span><span id="line-12"> * This represents the data in {@code signrawtransactionwithwallet}. Specifically</span>
-<span class="source-line-no">013</span><span id="line-13"> * inputs with UTXO hash and index and an empty scriptSig.</span>
-<span class="source-line-no">014</span><span id="line-14"> */</span>
-<span class="source-line-no">015</span><span id="line-15">public class RawTransactionSigningRequest {</span>
-<span class="source-line-no">016</span><span id="line-16">    private final Network network;</span>
-<span class="source-line-no">017</span><span id="line-17">    private final List&lt;RawInput&gt; inputs;</span>
-<span class="source-line-no">018</span><span id="line-18">    private final List&lt;TransactionOutputData&gt; outputs;</span>
-<span class="source-line-no">019</span><span id="line-19"></span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">    public static RawTransactionSigningRequest of(Network network, List&lt;RawInput&gt; inputs, List&lt;TransactionOutputData&gt; outputs) {</span>
-<span class="source-line-no">022</span><span id="line-22">        return new RawTransactionSigningRequest(network, inputs, outputs);</span>
-<span class="source-line-no">023</span><span id="line-23">    }</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">    public static RawTransactionSigningRequest ofTransaction(Network network, Transaction transaction) {</span>
-<span class="source-line-no">026</span><span id="line-26">        List&lt;RawInput&gt; inputs = transaction.getInputs().stream()</span>
-<span class="source-line-no">027</span><span id="line-27">                .map(i -&gt; new RawInput(i.getOutpoint().getHash(), (int) i.getOutpoint().getIndex(), i.getScriptSig()))</span>
-<span class="source-line-no">028</span><span id="line-28">                .collect(Collectors.toList());</span>
-<span class="source-line-no">029</span><span id="line-29">        List&lt;TransactionOutputData&gt; outputs = transaction.getOutputs().stream()</span>
-<span class="source-line-no">030</span><span id="line-30">                .map(TransactionOutputData::fromTxOutput)</span>
-<span class="source-line-no">031</span><span id="line-31">                .collect(Collectors.toList());</span>
-<span class="source-line-no">032</span><span id="line-32">        return RawTransactionSigningRequest.of(network, inputs, outputs);</span>
-<span class="source-line-no">033</span><span id="line-33">    }</span>
-<span class="source-line-no">034</span><span id="line-34"></span>
-<span class="source-line-no">035</span><span id="line-35">    public RawTransactionSigningRequest(Network network, List&lt;RawInput&gt; inputs, List&lt;TransactionOutputData&gt; outputs) {</span>
-<span class="source-line-no">036</span><span id="line-36">        this.network = network;</span>
-<span class="source-line-no">037</span><span id="line-37">        this.inputs = inputs;</span>
-<span class="source-line-no">038</span><span id="line-38">        this.outputs = outputs;</span>
-<span class="source-line-no">039</span><span id="line-39">    }</span>
-<span class="source-line-no">040</span><span id="line-40"></span>
-<span class="source-line-no">041</span><span id="line-41">    public List&lt;RawInput&gt; inputs() {</span>
-<span class="source-line-no">042</span><span id="line-42">        return inputs;</span>
-<span class="source-line-no">043</span><span id="line-43">    }</span>
-<span class="source-line-no">044</span><span id="line-44"></span>
-<span class="source-line-no">045</span><span id="line-45">    public List&lt;TransactionOutputData&gt; outputs() {</span>
-<span class="source-line-no">046</span><span id="line-46">        return outputs;</span>
-<span class="source-line-no">047</span><span id="line-47">    }</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">    public static class RawInput {</span>
-<span class="source-line-no">050</span><span id="line-50">        private final Sha256Hash txId;</span>
-<span class="source-line-no">051</span><span id="line-51">        private final int index;</span>
-<span class="source-line-no">052</span><span id="line-52">        private final Script scriptSig;</span>
-<span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">        /**</span>
-<span class="source-line-no">055</span><span id="line-55">         * @param txId id</span>
-<span class="source-line-no">056</span><span id="line-56">         * @param index index</span>
-<span class="source-line-no">057</span><span id="line-57">         * @param scriptSig typically is empty script (at least in {@code signrawtransactionwithwallet} case</span>
-<span class="source-line-no">058</span><span id="line-58">         */</span>
-<span class="source-line-no">059</span><span id="line-59">        public RawInput(Sha256Hash txId, int index, Script scriptSig) {</span>
-<span class="source-line-no">060</span><span id="line-60">            this.txId = txId;</span>
-<span class="source-line-no">061</span><span id="line-61">            this.index = index;</span>
-<span class="source-line-no">062</span><span id="line-62">            this.scriptSig = scriptSig;</span>
-<span class="source-line-no">063</span><span id="line-63">        }</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">        public Sha256Hash txId() {</span>
-<span class="source-line-no">066</span><span id="line-66">            return txId;</span>
-<span class="source-line-no">067</span><span id="line-67">        }</span>
-<span class="source-line-no">068</span><span id="line-68"></span>
-<span class="source-line-no">069</span><span id="line-69">        public int index() {</span>
-<span class="source-line-no">070</span><span id="line-70">            return index;</span>
-<span class="source-line-no">071</span><span id="line-71">        }</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">        public Script scriptSig() {</span>
-<span class="source-line-no">074</span><span id="line-74">            return scriptSig;</span>
-<span class="source-line-no">075</span><span id="line-75">        }</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">        public Utxo.Basic toUtxo() {</span>
-<span class="source-line-no">078</span><span id="line-78">            return Utxo.of(txId, index);</span>
-<span class="source-line-no">079</span><span id="line-79">        }</span>
-<span class="source-line-no">080</span><span id="line-80">    }</span>
-<span class="source-line-no">081</span><span id="line-81">}</span>
+<span class="source-line-no">003</span><span id="line-3">import org.bitcoinj.base.Sha256Hash;</span>
+<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.core.Transaction;</span>
+<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.script.Script;</span>
+<span class="source-line-no">006</span><span id="line-6"></span>
+<span class="source-line-no">007</span><span id="line-7">import java.util.List;</span>
+<span class="source-line-no">008</span><span id="line-8">import java.util.stream.Collectors;</span>
+<span class="source-line-no">009</span><span id="line-9"></span>
+<span class="source-line-no">010</span><span id="line-10">/**</span>
+<span class="source-line-no">011</span><span id="line-11"> * This represents the data in {@code signrawtransactionwithwallet}. Specifically</span>
+<span class="source-line-no">012</span><span id="line-12"> * inputs with UTXO hash and index and an empty scriptSig.</span>
+<span class="source-line-no">013</span><span id="line-13"> */</span>
+<span class="source-line-no">014</span><span id="line-14">public class RawTransactionSigningRequest {</span>
+<span class="source-line-no">015</span><span id="line-15">    private final List&lt;RawInput&gt; inputs;</span>
+<span class="source-line-no">016</span><span id="line-16">    private final List&lt;TransactionOutputData&gt; outputs;</span>
+<span class="source-line-no">017</span><span id="line-17"></span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">    public static RawTransactionSigningRequest of(List&lt;RawInput&gt; inputs, List&lt;TransactionOutputData&gt; outputs) {</span>
+<span class="source-line-no">020</span><span id="line-20">        return new RawTransactionSigningRequest(inputs, outputs);</span>
+<span class="source-line-no">021</span><span id="line-21">    }</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">    public static RawTransactionSigningRequest ofTransaction(Transaction transaction) {</span>
+<span class="source-line-no">024</span><span id="line-24">        List&lt;RawInput&gt; inputs = transaction.getInputs().stream()</span>
+<span class="source-line-no">025</span><span id="line-25">                .map(i -&gt; new RawInput(i.getOutpoint().hash(), (int) i.getOutpoint().getIndex(), i.getScriptSig()))</span>
+<span class="source-line-no">026</span><span id="line-26">                .collect(Collectors.toList());</span>
+<span class="source-line-no">027</span><span id="line-27">        List&lt;TransactionOutputData&gt; outputs = transaction.getOutputs().stream()</span>
+<span class="source-line-no">028</span><span id="line-28">                .map(TransactionOutputData::fromTxOutput)</span>
+<span class="source-line-no">029</span><span id="line-29">                .collect(Collectors.toList());</span>
+<span class="source-line-no">030</span><span id="line-30">        return RawTransactionSigningRequest.of(inputs, outputs);</span>
+<span class="source-line-no">031</span><span id="line-31">    }</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">    public RawTransactionSigningRequest(List&lt;RawInput&gt; inputs, List&lt;TransactionOutputData&gt; outputs) {</span>
+<span class="source-line-no">034</span><span id="line-34">        this.inputs = inputs;</span>
+<span class="source-line-no">035</span><span id="line-35">        this.outputs = outputs;</span>
+<span class="source-line-no">036</span><span id="line-36">    }</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">    public List&lt;RawInput&gt; inputs() {</span>
+<span class="source-line-no">039</span><span id="line-39">        return inputs;</span>
+<span class="source-line-no">040</span><span id="line-40">    }</span>
+<span class="source-line-no">041</span><span id="line-41"></span>
+<span class="source-line-no">042</span><span id="line-42">    public List&lt;TransactionOutputData&gt; outputs() {</span>
+<span class="source-line-no">043</span><span id="line-43">        return outputs;</span>
+<span class="source-line-no">044</span><span id="line-44">    }</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">    public static class RawInput {</span>
+<span class="source-line-no">047</span><span id="line-47">        private final Sha256Hash txId;</span>
+<span class="source-line-no">048</span><span id="line-48">        private final int index;</span>
+<span class="source-line-no">049</span><span id="line-49">        private final Script scriptSig;</span>
+<span class="source-line-no">050</span><span id="line-50"></span>
+<span class="source-line-no">051</span><span id="line-51">        /**</span>
+<span class="source-line-no">052</span><span id="line-52">         * @param txId id</span>
+<span class="source-line-no">053</span><span id="line-53">         * @param index index</span>
+<span class="source-line-no">054</span><span id="line-54">         * @param scriptSig typically is empty script (at least in {@code signrawtransactionwithwallet} case</span>
+<span class="source-line-no">055</span><span id="line-55">         */</span>
+<span class="source-line-no">056</span><span id="line-56">        public RawInput(Sha256Hash txId, int index, Script scriptSig) {</span>
+<span class="source-line-no">057</span><span id="line-57">            this.txId = txId;</span>
+<span class="source-line-no">058</span><span id="line-58">            this.index = index;</span>
+<span class="source-line-no">059</span><span id="line-59">            this.scriptSig = scriptSig;</span>
+<span class="source-line-no">060</span><span id="line-60">        }</span>
+<span class="source-line-no">061</span><span id="line-61"></span>
+<span class="source-line-no">062</span><span id="line-62">        public Sha256Hash txId() {</span>
+<span class="source-line-no">063</span><span id="line-63">            return txId;</span>
+<span class="source-line-no">064</span><span id="line-64">        }</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">        public int index() {</span>
+<span class="source-line-no">067</span><span id="line-67">            return index;</span>
+<span class="source-line-no">068</span><span id="line-68">        }</span>
+<span class="source-line-no">069</span><span id="line-69"></span>
+<span class="source-line-no">070</span><span id="line-70">        public Script scriptSig() {</span>
+<span class="source-line-no">071</span><span id="line-71">            return scriptSig;</span>
+<span class="source-line-no">072</span><span id="line-72">        }</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">        public Utxo.Basic toUtxo() {</span>
+<span class="source-line-no">075</span><span id="line-75">            return Utxo.of(txId, index);</span>
+<span class="source-line-no">076</span><span id="line-76">        }</span>
+<span class="source-line-no">077</span><span id="line-77">    }</span>
+<span class="source-line-no">078</span><span id="line-78">}</span>
 
 
 

@@ -18,55 +18,55 @@
 <span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.base.Address;</span>
 <span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.base.AddressParser;</span>
 <span class="source-line-no">007</span><span id="line-7">import org.bitcoinj.base.BitcoinNetwork;</span>
-<span class="source-line-no">008</span><span id="line-8">import org.bitcoinj.base.DefaultAddressParser;</span>
-<span class="source-line-no">009</span><span id="line-9">import org.bitcoinj.base.Network;</span>
-<span class="source-line-no">010</span><span id="line-10">import org.bitcoinj.base.ScriptType;</span>
-<span class="source-line-no">011</span><span id="line-11">import org.bitcoinj.core.Context;</span>
-<span class="source-line-no">012</span><span id="line-12">import org.bitcoinj.core.InsufficientMoneyException;</span>
-<span class="source-line-no">013</span><span id="line-13">import org.bitcoinj.core.NetworkParameters;</span>
-<span class="source-line-no">014</span><span id="line-14">import org.bitcoinj.core.ProtocolException;</span>
-<span class="source-line-no">015</span><span id="line-15">import org.bitcoinj.core.TransactionBroadcast;</span>
-<span class="source-line-no">016</span><span id="line-16">import org.bitcoinj.core.TransactionOutput;</span>
-<span class="source-line-no">017</span><span id="line-17">import org.bitcoinj.core.VerificationException;</span>
-<span class="source-line-no">018</span><span id="line-18">import org.bitcoinj.crypto.DeterministicKey;</span>
-<span class="source-line-no">019</span><span id="line-19">import org.bitcoinj.script.Script;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.bitcoinj.script.ScriptBuilder;</span>
-<span class="source-line-no">021</span><span id="line-21">import org.bitcoinj.wallet.KeyChain;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.bitcoinj.wallet.KeyChainGroupStructure;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.consensusj.bitcoin.json.conversion.HexUtil;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.consensusj.bitcoin.json.conversion.RpcServerModule;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.consensusj.bitcoin.json.pojo.BlockChainInfo;</span>
-<span class="source-line-no">026</span><span id="line-26">import org.consensusj.bitcoin.json.pojo.BlockInfo;</span>
-<span class="source-line-no">027</span><span id="line-27">import org.consensusj.bitcoin.json.pojo.NetworkInfo;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.consensusj.bitcoin.json.pojo.SignedRawTransaction;</span>
-<span class="source-line-no">029</span><span id="line-29">import org.consensusj.bitcoin.json.pojo.UnspentOutput;</span>
-<span class="source-line-no">030</span><span id="line-30">import org.consensusj.bitcoin.json.rpc.BitcoinJsonRpc;</span>
-<span class="source-line-no">031</span><span id="line-31">import org.bitcoinj.core.AbstractBlockChain;</span>
-<span class="source-line-no">032</span><span id="line-32">import org.bitcoinj.core.Block;</span>
-<span class="source-line-no">033</span><span id="line-33">import org.bitcoinj.base.Coin;</span>
-<span class="source-line-no">034</span><span id="line-34">import org.bitcoinj.core.PeerGroup;</span>
-<span class="source-line-no">035</span><span id="line-35">import org.bitcoinj.base.Sha256Hash;</span>
-<span class="source-line-no">036</span><span id="line-36">import org.bitcoinj.core.StoredBlock;</span>
-<span class="source-line-no">037</span><span id="line-37">import org.bitcoinj.core.Transaction;</span>
-<span class="source-line-no">038</span><span id="line-38">import org.bitcoinj.kits.WalletAppKit;</span>
-<span class="source-line-no">039</span><span id="line-39">import org.bitcoinj.store.BlockStoreException;</span>
-<span class="source-line-no">040</span><span id="line-40">import org.consensusj.bitcoinj.signing.RawTransactionSigningRequest;</span>
-<span class="source-line-no">041</span><span id="line-41">import org.consensusj.bitcoinj.signing.SigningRequest;</span>
-<span class="source-line-no">042</span><span id="line-42">import org.consensusj.bitcoinj.signing.TransactionInputData;</span>
-<span class="source-line-no">043</span><span id="line-43">import org.consensusj.bitcoinj.signing.TransactionOutputData;</span>
-<span class="source-line-no">044</span><span id="line-44">import org.consensusj.bitcoinj.signing.TransactionOutputDataScript;</span>
-<span class="source-line-no">045</span><span id="line-45">import org.slf4j.Logger;</span>
-<span class="source-line-no">046</span><span id="line-46">import org.slf4j.LoggerFactory;</span>
-<span class="source-line-no">047</span><span id="line-47"></span>
-<span class="source-line-no">048</span><span id="line-48">import jakarta.annotation.PostConstruct;</span>
-<span class="source-line-no">049</span><span id="line-49">import jakarta.annotation.PreDestroy;</span>
-<span class="source-line-no">050</span><span id="line-50">import jakarta.inject.Inject;</span>
-<span class="source-line-no">051</span><span id="line-51">import jakarta.inject.Named;</span>
-<span class="source-line-no">052</span><span id="line-52"></span>
-<span class="source-line-no">053</span><span id="line-53">import java.io.Closeable;</span>
-<span class="source-line-no">054</span><span id="line-54">import java.io.File;</span>
-<span class="source-line-no">055</span><span id="line-55">import java.io.IOException;</span>
-<span class="source-line-no">056</span><span id="line-56">import java.math.BigDecimal;</span>
+<span class="source-line-no">008</span><span id="line-8">import org.bitcoinj.base.Network;</span>
+<span class="source-line-no">009</span><span id="line-9">import org.bitcoinj.base.ScriptType;</span>
+<span class="source-line-no">010</span><span id="line-10">import org.bitcoinj.core.Context;</span>
+<span class="source-line-no">011</span><span id="line-11">import org.bitcoinj.core.InsufficientMoneyException;</span>
+<span class="source-line-no">012</span><span id="line-12">import org.bitcoinj.core.ProtocolException;</span>
+<span class="source-line-no">013</span><span id="line-13">import org.bitcoinj.core.ProtocolVersion;</span>
+<span class="source-line-no">014</span><span id="line-14">import org.bitcoinj.core.TransactionBroadcast;</span>
+<span class="source-line-no">015</span><span id="line-15">import org.bitcoinj.core.TransactionOutput;</span>
+<span class="source-line-no">016</span><span id="line-16">import org.bitcoinj.core.VerificationException;</span>
+<span class="source-line-no">017</span><span id="line-17">import org.bitcoinj.crypto.DeterministicKey;</span>
+<span class="source-line-no">018</span><span id="line-18">import org.bitcoinj.script.Script;</span>
+<span class="source-line-no">019</span><span id="line-19">import org.bitcoinj.script.ScriptBuilder;</span>
+<span class="source-line-no">020</span><span id="line-20">import org.bitcoinj.wallet.KeyChain;</span>
+<span class="source-line-no">021</span><span id="line-21">import org.bitcoinj.wallet.KeyChainGroupStructure;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.consensusj.bitcoin.json.conversion.HexUtil;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.consensusj.bitcoin.json.conversion.RpcServerModule;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.consensusj.bitcoin.json.pojo.BlockChainInfo;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.consensusj.bitcoin.json.pojo.BlockInfo;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.consensusj.bitcoin.json.pojo.NetworkInfo;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.consensusj.bitcoin.json.pojo.SignedRawTransaction;</span>
+<span class="source-line-no">028</span><span id="line-28">import org.consensusj.bitcoin.json.pojo.UnspentOutput;</span>
+<span class="source-line-no">029</span><span id="line-29">import org.consensusj.bitcoin.json.rpc.BitcoinJsonRpc;</span>
+<span class="source-line-no">030</span><span id="line-30">import org.bitcoinj.core.AbstractBlockChain;</span>
+<span class="source-line-no">031</span><span id="line-31">import org.bitcoinj.core.Block;</span>
+<span class="source-line-no">032</span><span id="line-32">import org.bitcoinj.base.Coin;</span>
+<span class="source-line-no">033</span><span id="line-33">import org.bitcoinj.core.PeerGroup;</span>
+<span class="source-line-no">034</span><span id="line-34">import org.bitcoinj.base.Sha256Hash;</span>
+<span class="source-line-no">035</span><span id="line-35">import org.bitcoinj.core.StoredBlock;</span>
+<span class="source-line-no">036</span><span id="line-36">import org.bitcoinj.core.Transaction;</span>
+<span class="source-line-no">037</span><span id="line-37">import org.bitcoinj.kits.WalletAppKit;</span>
+<span class="source-line-no">038</span><span id="line-38">import org.bitcoinj.store.BlockStoreException;</span>
+<span class="source-line-no">039</span><span id="line-39">import org.consensusj.bitcoinj.signing.RawTransactionSigningRequest;</span>
+<span class="source-line-no">040</span><span id="line-40">import org.consensusj.bitcoinj.signing.SigningRequest;</span>
+<span class="source-line-no">041</span><span id="line-41">import org.consensusj.bitcoinj.signing.TransactionInputData;</span>
+<span class="source-line-no">042</span><span id="line-42">import org.consensusj.bitcoinj.signing.TransactionOutputData;</span>
+<span class="source-line-no">043</span><span id="line-43">import org.consensusj.bitcoinj.signing.TransactionOutputDataScript;</span>
+<span class="source-line-no">044</span><span id="line-44">import org.slf4j.Logger;</span>
+<span class="source-line-no">045</span><span id="line-45">import org.slf4j.LoggerFactory;</span>
+<span class="source-line-no">046</span><span id="line-46"></span>
+<span class="source-line-no">047</span><span id="line-47">import jakarta.annotation.PostConstruct;</span>
+<span class="source-line-no">048</span><span id="line-48">import jakarta.annotation.PreDestroy;</span>
+<span class="source-line-no">049</span><span id="line-49">import jakarta.inject.Inject;</span>
+<span class="source-line-no">050</span><span id="line-50">import jakarta.inject.Named;</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">import java.io.Closeable;</span>
+<span class="source-line-no">053</span><span id="line-53">import java.io.File;</span>
+<span class="source-line-no">054</span><span id="line-54">import java.io.IOException;</span>
+<span class="source-line-no">055</span><span id="line-55">import java.math.BigDecimal;</span>
+<span class="source-line-no">056</span><span id="line-56">import java.nio.BufferUnderflowException;</span>
 <span class="source-line-no">057</span><span id="line-57">import java.nio.ByteBuffer;</span>
 <span class="source-line-no">058</span><span id="line-58">import java.nio.file.Files;</span>
 <span class="source-line-no">059</span><span id="line-59">import java.util.HexFormat;</span>
@@ -128,7 +128,7 @@
 <span class="source-line-no">115</span><span id="line-115">    private BigDecimal verificationProgress = new BigDecimal(0);</span>
 <span class="source-line-no">116</span><span id="line-116">    private byte[] chainWork = new byte[]{0x00, 0x00};</span>
 <span class="source-line-no">117</span><span id="line-117"></span>
-<span class="source-line-no">118</span><span id="line-118">    private static final AddressParser parser = new DefaultAddressParser();</span>
+<span class="source-line-no">118</span><span id="line-118">    private static final AddressParser parser = AddressParser.getDefault();</span>
 <span class="source-line-no">119</span><span id="line-119">    private WalletSigningService signingService;</span>
 <span class="source-line-no">120</span><span id="line-120"></span>
 <span class="source-line-no">121</span><span id="line-121">    /**</span>
@@ -317,7 +317,7 @@
 <span class="source-line-no">304</span><span id="line-304">        Object[] address = {};</span>
 <span class="source-line-no">305</span><span id="line-305">        return result(new NetworkInfo(version,</span>
 <span class="source-line-no">306</span><span id="line-306">                "",</span>
-<span class="source-line-no">307</span><span id="line-307">                NetworkParameters.ProtocolVersion.CURRENT.getBitcoinProtocolVersion(),</span>
+<span class="source-line-no">307</span><span id="line-307">                ProtocolVersion.CURRENT.intValue(),</span>
 <span class="source-line-no">308</span><span id="line-308">                timeOffset,</span>
 <span class="source-line-no">309</span><span id="line-309">                getconnectioncount().join(),</span>
 <span class="source-line-no">310</span><span id="line-310">                "proxy",</span>
@@ -338,7 +338,7 @@
 <span class="source-line-no">325</span><span id="line-325">    }</span>
 <span class="source-line-no">326</span><span id="line-326">    record output(Address address, Coin amount) {</span>
 <span class="source-line-no">327</span><span id="line-327">        public output(String addString, String amountString) {</span>
-<span class="source-line-no">328</span><span id="line-328">            this(parser.parseAddressAnyNetwork(addString),  Coin.parseCoin(amountString));</span>
+<span class="source-line-no">328</span><span id="line-328">            this(parser.parseAddress(addString),  Coin.parseCoin(amountString));</span>
 <span class="source-line-no">329</span><span id="line-329">        }</span>
 <span class="source-line-no">330</span><span id="line-330">        Script script() {</span>
 <span class="source-line-no">331</span><span id="line-331">            return ScriptBuilder.createP2PKHOutputScript(this.address().getHash());</span>
@@ -359,9 +359,9 @@
 <span class="source-line-no">346</span><span id="line-346">                    .map(o -&gt; new TransactionOutputDataScript(o.amount(), o.script()))</span>
 <span class="source-line-no">347</span><span id="line-347">                    .toList();</span>
 <span class="source-line-no">348</span><span id="line-348">            // TODO: Add a change output?</span>
-<span class="source-line-no">349</span><span id="line-349">            SigningRequest sr = SigningRequest.of(network, ins, (List&lt;TransactionOutputData&gt;) outs);</span>
+<span class="source-line-no">349</span><span id="line-349">            SigningRequest sr = SigningRequest.of(ins, (List&lt;TransactionOutputData&gt;) outs);</span>
 <span class="source-line-no">350</span><span id="line-350">            Transaction rawTx = sr.toUnsignedTransaction();</span>
-<span class="source-line-no">351</span><span id="line-351">            return CompletableFuture.completedFuture(rawTx.toHexString());</span>
+<span class="source-line-no">351</span><span id="line-351">            return CompletableFuture.completedFuture(HexFormat.of().formatHex(rawTx.serialize()));</span>
 <span class="source-line-no">352</span><span id="line-352">        } catch (Throwable t) {</span>
 <span class="source-line-no">353</span><span id="line-353">            return CompletableFuture.failedFuture(t);</span>
 <span class="source-line-no">354</span><span id="line-354">        }</span>
@@ -383,7 +383,7 @@
 <span class="source-line-no">370</span><span id="line-370">    @Override</span>
 <span class="source-line-no">371</span><span id="line-371">    public CompletableFuture&lt;List&lt;UnspentOutput&gt;&gt; listunspent(Integer minConf, Integer maxConf, List&lt;String&gt; addresses, Boolean includeUnsafe) {</span>
 <span class="source-line-no">372</span><span id="line-372">        List&lt;Address&gt; addressList = addresses != null</span>
-<span class="source-line-no">373</span><span id="line-373">                ? addresses.stream().map(parser::parseAddressAnyNetwork).toList()</span>
+<span class="source-line-no">373</span><span id="line-373">                ? addresses.stream().map(parser::parseAddress).toList()</span>
 <span class="source-line-no">374</span><span id="line-374">                : List.of();</span>
 <span class="source-line-no">375</span><span id="line-375">        List&lt;TransactionOutput&gt; outs = signingService.findUnspentOutputs(</span>
 <span class="source-line-no">376</span><span id="line-376">                                            minConf != null ? minConf : DEFAULT_MIN_CONF,</span>
@@ -395,7 +395,7 @@
 <span class="source-line-no">382</span><span id="line-382">                        out.getIndex(),</span>
 <span class="source-line-no">383</span><span id="line-383">                        null, // Address (get from script?)</span>
 <span class="source-line-no">384</span><span id="line-384">                        "", // label</span>
-<span class="source-line-no">385</span><span id="line-385">                        hexFormat.formatHex(out.getScriptPubKey().getProgram()), // scriptPubKey</span>
+<span class="source-line-no">385</span><span id="line-385">                        hexFormat.formatHex(out.getScriptPubKey().program()), // scriptPubKey</span>
 <span class="source-line-no">386</span><span id="line-386">                        out.getValue(),     // amount</span>
 <span class="source-line-no">387</span><span id="line-387">                        out.getParentTransactionDepthInBlocks(),  // confirmations</span>
 <span class="source-line-no">388</span><span id="line-388">                        null,   // redeemScript</span>
@@ -418,7 +418,7 @@
 <span class="source-line-no">405</span><span id="line-405">    @Override</span>
 <span class="source-line-no">406</span><span id="line-406">    public CompletableFuture&lt;Sha256Hash&gt; sendtoaddress(String toAddressString, Double amountDouble) {</span>
 <span class="source-line-no">407</span><span id="line-407">        log.info("sendtoaddress {}, {}", toAddressString, amountDouble);</span>
-<span class="source-line-no">408</span><span id="line-408">        Address toAddress = parser.parseAddress(toAddressString, network);</span>
+<span class="source-line-no">408</span><span id="line-408">        Address toAddress = parser.parseAddress(toAddressString);</span>
 <span class="source-line-no">409</span><span id="line-409">        Coin amount = Coin.ofBtc(BigDecimal.valueOf(amountDouble));</span>
 <span class="source-line-no">410</span><span id="line-410">        Transaction signedTx;</span>
 <span class="source-line-no">411</span><span id="line-411">        try {</span>
@@ -440,13 +440,13 @@
 <span class="source-line-no">427</span><span id="line-427">        ByteBuffer raw = ByteBuffer.wrap(hexFormat.parseHex(hex));</span>
 <span class="source-line-no">428</span><span id="line-428">        Transaction signedTx;</span>
 <span class="source-line-no">429</span><span id="line-429">        try {</span>
-<span class="source-line-no">430</span><span id="line-430">            signedTx = new Transaction(NetworkParameters.of(network), raw);</span>
+<span class="source-line-no">430</span><span id="line-430">            signedTx = Transaction.read(raw);</span>
 <span class="source-line-no">431</span><span id="line-431">        } catch (ProtocolException pe) {</span>
 <span class="source-line-no">432</span><span id="line-432">            return CompletableFuture.failedFuture(new RuntimeException("Invalid raw (hex) transaction", pe));</span>
 <span class="source-line-no">433</span><span id="line-433">        }</span>
 <span class="source-line-no">434</span><span id="line-434">        log.info("received raw tx: {}", signedTx);</span>
 <span class="source-line-no">435</span><span id="line-435">        try {</span>
-<span class="source-line-no">436</span><span id="line-436">            signedTx.verify();</span>
+<span class="source-line-no">436</span><span id="line-436">            Transaction.verify(network, signedTx);</span>
 <span class="source-line-no">437</span><span id="line-437">        } catch (VerificationException ve) {</span>
 <span class="source-line-no">438</span><span id="line-438">            // TODO: More validation?</span>
 <span class="source-line-no">439</span><span id="line-439">            return CompletableFuture.failedFuture(ve);</span>
@@ -476,10 +476,10 @@
 <span class="source-line-no">463</span><span id="line-463"></span>
 <span class="source-line-no">464</span><span id="line-464">        RawTransactionSigningRequest signingRequest;</span>
 <span class="source-line-no">465</span><span id="line-465">        try {</span>
-<span class="source-line-no">466</span><span id="line-466">            Transaction unsignedTx = new Transaction(NetworkParameters.of(network), raw);</span>
+<span class="source-line-no">466</span><span id="line-466">            Transaction unsignedTx = Transaction.read(raw);</span>
 <span class="source-line-no">467</span><span id="line-467">            log.info("received tx: {}", unsignedTx);</span>
-<span class="source-line-no">468</span><span id="line-468">            signingRequest = RawTransactionSigningRequest.ofTransaction(network, unsignedTx);</span>
-<span class="source-line-no">469</span><span id="line-469">        } catch (ProtocolException e) {</span>
+<span class="source-line-no">468</span><span id="line-468">            signingRequest = RawTransactionSigningRequest.ofTransaction(unsignedTx);</span>
+<span class="source-line-no">469</span><span id="line-469">        } catch (BufferUnderflowException | ProtocolException e) {</span>
 <span class="source-line-no">470</span><span id="line-470">            return CompletableFuture.failedFuture(new RuntimeException("Invalid raw (hex) transaction", e));</span>
 <span class="source-line-no">471</span><span id="line-471">        }</span>
 <span class="source-line-no">472</span><span id="line-472"></span>
@@ -506,7 +506,7 @@
 <span class="source-line-no">493</span><span id="line-493">        } catch (BlockStoreException e) {</span>
 <span class="source-line-no">494</span><span id="line-494">            return exception(e);</span>
 <span class="source-line-no">495</span><span id="line-495">        }</span>
-<span class="source-line-no">496</span><span id="line-496">        byte[] data = storedBlock.getHeader().bitcoinSerialize();</span>
+<span class="source-line-no">496</span><span id="line-496">        byte[] data = storedBlock.getHeader().serialize();</span>
 <span class="source-line-no">497</span><span id="line-497">        return result(data);</span>
 <span class="source-line-no">498</span><span id="line-498">    }</span>
 <span class="source-line-no">499</span><span id="line-499"></span>
@@ -553,7 +553,7 @@
 <span class="source-line-no">540</span><span id="line-540">        log.trace("building BlockInfo for hash: {} height: {}", blockHash, blockHeight);</span>
 <span class="source-line-no">541</span><span id="line-541">        return new BlockInfo(header.getHash(),</span>
 <span class="source-line-no">542</span><span id="line-542">                confirmations,</span>
-<span class="source-line-no">543</span><span id="line-543">                header.getMessageSize(),</span>
+<span class="source-line-no">543</span><span id="line-543">                header.messageSize(),</span>
 <span class="source-line-no">544</span><span id="line-544">                blockHeight,</span>
 <span class="source-line-no">545</span><span id="line-545">                (int) header.getVersion(),</span>
 <span class="source-line-no">546</span><span id="line-546">                header.getMerkleRoot(),</span>

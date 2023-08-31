@@ -36,7 +36,6 @@ org.consensusj.jsonrpc.groovy
 org.consensusj.jsonrpc.internal
 org.consensusj.jsonrpc.introspection
 org.consensusj.jsonrpc.introspection.sample
-org.consensusj.jsonrpc.javanet
 org.consensusj.namecoin.jsonrpc
 org.consensusj.namecoin.jsonrpc.cli
 org.consensusj.namecoin.jsonrpc.core

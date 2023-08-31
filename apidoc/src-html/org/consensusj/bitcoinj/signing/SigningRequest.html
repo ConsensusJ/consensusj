@@ -15,51 +15,42 @@
 <span class="source-line-no">002</span><span id="line-2"></span>
 <span class="source-line-no">003</span><span id="line-3">import org.bitcoinj.base.Address;</span>
 <span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.base.Coin;</span>
-<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.base.Network;</span>
-<span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.core.Transaction;</span>
-<span class="source-line-no">007</span><span id="line-7">import java.util.List;</span>
-<span class="source-line-no">008</span><span id="line-8">import java.util.Map;</span>
-<span class="source-line-no">009</span><span id="line-9">import java.util.stream.Collectors;</span>
-<span class="source-line-no">010</span><span id="line-10"></span>
-<span class="source-line-no">011</span><span id="line-11">// A SigningRequest should be immutable *and* complete/ready-to-sign. There should be some kind of SigningRequestBuilder</span>
-<span class="source-line-no">012</span><span id="line-12">// to build a SigningRequest.</span>
-<span class="source-line-no">013</span><span id="line-13">/**</span>
-<span class="source-line-no">014</span><span id="line-14"> * A transaction signing request with immutable data specifying the transaction.</span>
-<span class="source-line-no">015</span><span id="line-15"> * &lt;p&gt;</span>
-<span class="source-line-no">016</span><span id="line-16"> * This is an experiment as to what immutable transactions might look like in &lt;b&gt;bitcoinj&lt;/b&gt;.</span>
-<span class="source-line-no">017</span><span id="line-17"> * At some point in the future I would like to propose some refactoring in bitcoinj to implement</span>
-<span class="source-line-no">018</span><span id="line-18"> * immutable transactions in a mostly-compatible way with the existing transaction classes.</span>
-<span class="source-line-no">019</span><span id="line-19"> */</span>
-<span class="source-line-no">020</span><span id="line-20">public interface SigningRequest {</span>
-<span class="source-line-no">021</span><span id="line-21">    /**</span>
-<span class="source-line-no">022</span><span id="line-22">     * This property is only here because bitcoinj {@link org.bitcoinj.core.Transaction} currently requires</span>
-<span class="source-line-no">023</span><span id="line-23">     * this information for construction. This will be removed in the future when bitcoinj is updated.</span>
-<span class="source-line-no">024</span><span id="line-24">     * @return the id string for the network</span>
-<span class="source-line-no">025</span><span id="line-25">     */</span>
-<span class="source-line-no">026</span><span id="line-26">    @Deprecated</span>
-<span class="source-line-no">027</span><span id="line-27">    String networkId();</span>
-<span class="source-line-no">028</span><span id="line-28">    Network network();</span>
-<span class="source-line-no">029</span><span id="line-29">    List&lt;TransactionInputData&gt; inputs();</span>
-<span class="source-line-no">030</span><span id="line-30">    List&lt;TransactionOutputData&gt; outputs();</span>
-<span class="source-line-no">031</span><span id="line-31"></span>
-<span class="source-line-no">032</span><span id="line-32">    static SigningRequest of(Network network, List&lt;TransactionInputData&gt; inputs, List&lt;TransactionOutputData&gt; outputs) {</span>
-<span class="source-line-no">033</span><span id="line-33">        return new DefaultSigningRequest(network, inputs, outputs);</span>
-<span class="source-line-no">034</span><span id="line-34">    }</span>
-<span class="source-line-no">035</span><span id="line-35"></span>
-<span class="source-line-no">036</span><span id="line-36">    static SigningRequest of(Network network, List&lt;TransactionInputData&gt; inputs, Map&lt;Address, Coin&gt; outputMap) {</span>
-<span class="source-line-no">037</span><span id="line-37">        List&lt;TransactionOutputData&gt; outs = outputMap.entrySet().stream()</span>
-<span class="source-line-no">038</span><span id="line-38">                .map(e -&gt; new TransactionOutputAddress(e.getValue(), e.getKey()))</span>
-<span class="source-line-no">039</span><span id="line-39">                .collect(Collectors.toList());</span>
-<span class="source-line-no">040</span><span id="line-40">        return SigningRequest.of(network, inputs, outs);</span>
-<span class="source-line-no">041</span><span id="line-41">    }</span>
-<span class="source-line-no">042</span><span id="line-42"></span>
-<span class="source-line-no">043</span><span id="line-43">    /**</span>
-<span class="source-line-no">044</span><span id="line-44">     * bitcoinj signing (currently) uses mutable {@link Transaction} objects, this convenience method will create</span>
-<span class="source-line-no">045</span><span id="line-45">     * a completed, unsigned bitcoinj {@code Transaction} if you want to use bitcoinj to sign this request.</span>
-<span class="source-line-no">046</span><span id="line-46">     * @return an unsigned bitcoinj transaction</span>
-<span class="source-line-no">047</span><span id="line-47">     */</span>
-<span class="source-line-no">048</span><span id="line-48">    Transaction toUnsignedTransaction();</span>
-<span class="source-line-no">049</span><span id="line-49">}</span>
+<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.core.Transaction;</span>
+<span class="source-line-no">006</span><span id="line-6">import java.util.List;</span>
+<span class="source-line-no">007</span><span id="line-7">import java.util.Map;</span>
+<span class="source-line-no">008</span><span id="line-8">import java.util.stream.Collectors;</span>
+<span class="source-line-no">009</span><span id="line-9"></span>
+<span class="source-line-no">010</span><span id="line-10">// A SigningRequest should be immutable *and* complete/ready-to-sign. There should be some kind of SigningRequestBuilder</span>
+<span class="source-line-no">011</span><span id="line-11">// to build a SigningRequest.</span>
+<span class="source-line-no">012</span><span id="line-12">/**</span>
+<span class="source-line-no">013</span><span id="line-13"> * A transaction signing request with immutable data specifying the transaction.</span>
+<span class="source-line-no">014</span><span id="line-14"> * &lt;p&gt;</span>
+<span class="source-line-no">015</span><span id="line-15"> * This is an experiment as to what immutable transactions might look like in &lt;b&gt;bitcoinj&lt;/b&gt;.</span>
+<span class="source-line-no">016</span><span id="line-16"> * At some point in the future I would like to propose some refactoring in bitcoinj to implement</span>
+<span class="source-line-no">017</span><span id="line-17"> * immutable transactions in a mostly-compatible way with the existing transaction classes.</span>
+<span class="source-line-no">018</span><span id="line-18"> */</span>
+<span class="source-line-no">019</span><span id="line-19">public interface SigningRequest {</span>
+<span class="source-line-no">020</span><span id="line-20">    List&lt;TransactionInputData&gt; inputs();</span>
+<span class="source-line-no">021</span><span id="line-21">    List&lt;TransactionOutputData&gt; outputs();</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">    static SigningRequest of(List&lt;TransactionInputData&gt; inputs, List&lt;TransactionOutputData&gt; outputs) {</span>
+<span class="source-line-no">024</span><span id="line-24">        return new DefaultSigningRequest(inputs, outputs);</span>
+<span class="source-line-no">025</span><span id="line-25">    }</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">    static SigningRequest of(List&lt;TransactionInputData&gt; inputs, Map&lt;Address, Coin&gt; outputMap) {</span>
+<span class="source-line-no">028</span><span id="line-28">        List&lt;TransactionOutputData&gt; outs = outputMap.entrySet().stream()</span>
+<span class="source-line-no">029</span><span id="line-29">                .map(e -&gt; new TransactionOutputAddress(e.getValue(), e.getKey()))</span>
+<span class="source-line-no">030</span><span id="line-30">                .collect(Collectors.toList());</span>
+<span class="source-line-no">031</span><span id="line-31">        return SigningRequest.of(inputs, outs);</span>
+<span class="source-line-no">032</span><span id="line-32">    }</span>
+<span class="source-line-no">033</span><span id="line-33"></span>
+<span class="source-line-no">034</span><span id="line-34">    /**</span>
+<span class="source-line-no">035</span><span id="line-35">     * bitcoinj signing (currently) uses mutable {@link Transaction} objects, this convenience method will create</span>
+<span class="source-line-no">036</span><span id="line-36">     * a completed, unsigned bitcoinj {@code Transaction} if you want to use bitcoinj to sign this request.</span>
+<span class="source-line-no">037</span><span id="line-37">     * @return an unsigned bitcoinj transaction</span>
+<span class="source-line-no">038</span><span id="line-38">     */</span>
+<span class="source-line-no">039</span><span id="line-39">    Transaction toUnsignedTransaction();</span>
+<span class="source-line-no">040</span><span id="line-40">}</span>
 
 
 

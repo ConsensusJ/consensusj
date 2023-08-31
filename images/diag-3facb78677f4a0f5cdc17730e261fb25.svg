@@ -1,74 +1,74 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' contentScriptType='application/ecmascript' contentStyleType='text/css' height='338px' preserveAspectRatio='none' style='width:532px;height:338px;' version='1.1' viewBox='0 0 532 338' width='532px' zoomAndPan='magnify'>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' contentScriptType='application/ecmascript' contentStyleType='text/css' height='339px' preserveAspectRatio='none' style='width:532px;height:339px;' version='1.1' viewBox='0 0 532 339' width='532px' zoomAndPan='magnify'>
   <defs/>
   <g>
     <!--MD5=[d6c030b82a1d27386b42aabafd2ac567]
 cluster org.consensusj.jsonrpc-->
-    <rect fill='#FFFFFF' height='303' style='stroke: #000000; stroke-width: 1.5;' width='499' x='22' y='24'/>
-    <text fill='#000000' font-family='sans-serif' font-size='14' font-weight='bold' lengthAdjust='spacingAndGlyphs' textLength='163' x='190' y='39.5352'>
+    <rect fill='#FFFFFF' height='303.53' style='stroke: #000000; stroke-width: 1.5;' width='499' x='22' y='24.47'/>
+    <text fill='#000000' font-family='sans-serif' font-size='14' font-weight='bold' lengthAdjust='spacingAndGlyphs' textLength='163' x='190' y='40.0052'>
       org.consensusj.jsonrpc
     </text>
     <!--MD5=[9ed5e7af55394a2731ac5e85ed4b1bb0]
 cluster org.consensusj.jsonrpc.groovy-->
-    <rect fill='#FFFFFF' height='187' style='stroke: #000000; stroke-width: 1.5;' width='226' x='271' y='116'/>
-    <text fill='#000000' font-family='sans-serif' font-size='14' font-weight='bold' lengthAdjust='spacingAndGlyphs' textLength='49' x='359.5' y='131.5352'>
+    <rect fill='#FFFFFF' height='187.53' style='stroke: #000000; stroke-width: 1.5;' width='226' x='271' y='116.47'/>
+    <text fill='#000000' font-family='sans-serif' font-size='14' font-weight='bold' lengthAdjust='spacingAndGlyphs' textLength='49' x='359.5' y='132.0052'>
       groovy
     </text>
     <!--MD5=[4632ee6f06b8f52f955d08dd3d7e6c1a]
 class org.consensusj.jsonrpc.JsonRpcClient-->
-    <rect fill='#FEFECE' height='32' id='org.consensusj.jsonrpc.JsonRpcClient' style='stroke: #A80036; stroke-width: 1.5;' width='110' x='209' y='59'/>
-    <ellipse cx='224' cy='75' fill='#B4A7E5' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <path d='M220.4277,71.2651 L220.4277,69.1069 L227.8071,69.1069 L227.8071,71.2651 L225.3418,71.2651 L225.3418,79.3418 L227.8071,79.3418 L227.8071,81.5 L220.4277,81.5 L220.4277,79.3418 L222.8931,79.3418 L222.8931,71.2651 Z '/>
-    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='78' x='238' y='79.5352'>
+    <rect fill='#FEFECE' height='32' id='org.consensusj.jsonrpc.JsonRpcClient' style='stroke: #A80036; stroke-width: 1.5;' width='110' x='209' y='59.47'/>
+    <ellipse cx='224' cy='75.47' fill='#B4A7E5' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M220.4277,71.7351 L220.4277,69.5769 L227.8071,69.5769 L227.8071,71.7351 L225.3418,71.7351 L225.3418,79.8118 L227.8071,79.8118 L227.8071,81.97 L220.4277,81.97 L220.4277,79.8118 L222.8931,79.8118 L222.8931,71.7351 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='78' x='238' y='80.0052'>
       JsonRpcClient
     </text>
     <!--MD5=[62da5df15b1f2bef2bdb0c55dd2311aa]
 class org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection-->
-    <rect fill='#FEFECE' height='32' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.5;' width='214' x='38' y='154'/>
-    <ellipse cx='53' cy='170' fill='#ADD1B2' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <path d='M55.4731,176.1431 Q54.8921,176.4419 54.2529,176.5913 Q53.6138,176.7407 52.9082,176.7407 Q50.4014,176.7407 49.0815,175.0889 Q47.7617,173.437 47.7617,170.3159 Q47.7617,167.1865 49.0815,165.5347 Q50.4014,163.8828 52.9082,163.8828 Q53.6138,163.8828 54.2612,164.0322 Q54.9087,164.1816 55.4731,164.4805 L55.4731,167.2031 Q54.8423,166.6221 54.2488,166.3523 Q53.6553,166.0825 53.0244,166.0825 Q51.6797,166.0825 50.9949,167.1492 Q50.3101,168.2158 50.3101,170.3159 Q50.3101,172.4077 50.9949,173.4744 Q51.6797,174.541 53.0244,174.541 Q53.6553,174.541 54.2488,174.2712 Q54.8423,174.0015 55.4731,173.4204 Z '/>
-    <text fill='#000000' font-family='sans-serif' font-size='12' lengthAdjust='spacingAndGlyphs' textLength='182' x='67' y='174.5352'>
+    <rect fill='#FEFECE' height='32' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.5;' width='214' x='38' y='154.6'/>
+    <ellipse cx='53' cy='170.6' fill='#ADD1B2' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M55.4731,176.7431 Q54.8921,177.0419 54.2529,177.1913 Q53.6138,177.3407 52.9082,177.3407 Q50.4014,177.3407 49.0815,175.6889 Q47.7617,174.037 47.7617,170.9159 Q47.7617,167.7865 49.0815,166.1347 Q50.4014,164.4828 52.9082,164.4828 Q53.6138,164.4828 54.2612,164.6322 Q54.9087,164.7816 55.4731,165.0805 L55.4731,167.8031 Q54.8423,167.2221 54.2488,166.9523 Q53.6553,166.6825 53.0244,166.6825 Q51.6797,166.6825 50.9949,167.7492 Q50.3101,168.8158 50.3101,170.9159 Q50.3101,173.0077 50.9949,174.0744 Q51.6797,175.141 53.0244,175.141 Q53.6553,175.141 54.2488,174.8712 Q54.8423,174.6015 55.4731,174.0204 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' lengthAdjust='spacingAndGlyphs' textLength='182' x='67' y='175.1352'>
       JsonRpcClientHttpUrlConnection
     </text>
     <!--MD5=[fd4078fe9bdc5566164caefcd68a7e7e]
 class org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback-->
-    <rect fill='#FEFECE' height='38.2656' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.5;' width='194' x='287' y='151'/>
-    <ellipse cx='302' cy='170.1328' fill='#B4A7E5' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <path d='M298.4277,166.3979 L298.4277,164.2397 L305.8071,164.2397 L305.8071,166.3979 L303.3418,166.3979 L303.3418,174.4746 L305.8071,174.4746 L305.8071,176.6328 L298.4277,176.6328 L298.4277,174.4746 L300.8931,174.4746 L300.8931,166.3979 Z '/>
-    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='83' x='355.5' y='167.6016'>
+    <rect fill='#FEFECE' height='38.2656' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.5;' width='194' x='287' y='151.47'/>
+    <ellipse cx='302' cy='170.6028' fill='#B4A7E5' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M298.4277,166.8679 L298.4277,164.7097 L305.8071,164.7097 L305.8071,166.8679 L303.3418,166.8679 L303.3418,174.9446 L305.8071,174.9446 L305.8071,177.1028 L298.4277,177.1028 L298.4277,174.9446 L300.8931,174.9446 L300.8931,166.8679 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='83' x='355.5' y='168.0716'>
       «Groovy, trait»
     </text>
-    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='162' x='316' y='181.7344'>
+    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='162' x='316' y='182.2044'>
       DynamicRPCMethodFallback
     </text>
     <!--MD5=[b8d854c9242faad3e2549ec1e5e42f04]
 class org.consensusj.jsonrpc.groovy.DynamicRPCClient-->
-    <rect fill='#FEFECE' height='38.2656' id='org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.5;' width='136' x='301' y='249'/>
-    <ellipse cx='316' cy='268.1328' fill='#ADD1B2' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <path d='M318.4731,274.2759 Q317.8921,274.5747 317.2529,274.7241 Q316.6138,274.8735 315.9082,274.8735 Q313.4014,274.8735 312.0815,273.2217 Q310.7617,271.5698 310.7617,268.4487 Q310.7617,265.3193 312.0815,263.6675 Q313.4014,262.0156 315.9082,262.0156 Q316.6138,262.0156 317.2612,262.165 Q317.9087,262.3145 318.4731,262.6133 L318.4731,265.3359 Q317.8423,264.7549 317.2488,264.4851 Q316.6553,264.2153 316.0244,264.2153 Q314.6797,264.2153 313.9949,265.282 Q313.3101,266.3486 313.3101,268.4487 Q313.3101,270.5405 313.9949,271.6072 Q314.6797,272.6738 316.0244,272.6738 Q316.6553,272.6738 317.2488,272.4041 Q317.8423,272.1343 318.4731,271.5532 Z '/>
-    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='52' x='356' y='265.6016'>
+    <rect fill='#FEFECE' height='38.2656' id='org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.5;' width='136' x='301' y='249.73'/>
+    <ellipse cx='316' cy='268.8628' fill='#ADD1B2' rx='11' ry='11' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M318.4731,275.0059 Q317.8921,275.3047 317.2529,275.4541 Q316.6138,275.6035 315.9082,275.6035 Q313.4014,275.6035 312.0815,273.9517 Q310.7617,272.2998 310.7617,269.1787 Q310.7617,266.0493 312.0815,264.3975 Q313.4014,262.7456 315.9082,262.7456 Q316.6138,262.7456 317.2612,262.895 Q317.9087,263.0445 318.4731,263.3433 L318.4731,266.0659 Q317.8423,265.4849 317.2488,265.2151 Q316.6553,264.9453 316.0244,264.9453 Q314.6797,264.9453 313.9949,266.012 Q313.3101,267.0786 313.3101,269.1787 Q313.3101,271.2705 313.9949,272.3372 Q314.6797,273.4038 316.0244,273.4038 Q316.6553,273.4038 317.2488,273.1341 Q317.8423,272.8643 318.4731,272.2832 Z '/>
+    <text fill='#000000' font-family='sans-serif' font-size='12' font-style='italic' lengthAdjust='spacingAndGlyphs' textLength='52' x='356' y='266.3316'>
       «Groovy»
     </text>
-    <text fill='#000000' font-family='sans-serif' font-size='12' lengthAdjust='spacingAndGlyphs' textLength='104' x='330' y='279.7344'>
+    <text fill='#000000' font-family='sans-serif' font-size='12' lengthAdjust='spacingAndGlyphs' textLength='104' x='330' y='280.4644'>
       DynamicRPCClient
     </text>
     <!--MD5=[38007ac204c8ece275af148089ad1d69]
 reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection-->
-    <path d='M227.91,104.2 C207.13,120.44 181.83,140.22 164.68,153.62 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='223.28,98.16,243.35,91.36,231.9,109.19,223.28,98.16' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M227.91,104.71 C207.13,120.97 181.83,140.78 164.68,154.2 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='223.29,98.66,243.35,91.85,231.91,109.69,223.29,98.66' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[ff1f07209556703b9dc20fa62e76f680]
 reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback-->
-    <path d='M300.32,104.15 C319.83,119.27 343.32,137.48 360.44,150.74 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='296.34,109.14,284.82,91.36,304.91,98.08,296.34,109.14' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M300.21,104.57 C319.58,119.6 342.9,137.71 360.02,150.99 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='296.32,109.64,284.82,91.85,304.91,98.58,296.32,109.64' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[136309c1916f5149a10adbefbc8e65b4]
 reverse link org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection to org.consensusj.jsonrpc.groovy.DynamicRPCClient-->
-    <path d='M200.05,194.59 C238.96,211.27 290.36,233.3 326.21,248.66 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <polygon fill='none' points='197.61,200.74,181.99,186.42,203.13,187.87,197.61,200.74' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M200.25,195.35 C238.99,212 290.05,233.94 325.81,249.31 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='197.6,201.4,181.99,187.07,203.13,188.53,197.6,201.4' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[46cc87d9bba02c79c3641f77a6c91460]
 reverse link org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback to org.consensusj.jsonrpc.groovy.DynamicRPCClient-->
-    <path d='M378,209.43 C375.88,222.98 373.6,237.59 371.86,248.7 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='371.17,208.74,381.18,190.06,385.01,210.9,371.17,208.74' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <!--MD5=[defc76a6edbac860da3abce7e26615ca]
+    <path d='M377.95,210.43 C375.85,223.87 373.6,238.32 371.88,249.36 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='371.11,209.85,381.11,191.16,384.95,212,371.11,209.85' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[de05e712e14bc9a8d9f872e22c042c90]
 @startuml
 skinparam packageStyle Rect
 skinparam shadowing false
@@ -97,7 +97,7 @@ PlantUML version 1.2020.06(Sun Apr 05 05:38:32 PDT 2020)
 (APACHE source distribution)
 Java Runtime: OpenJDK Runtime Environment
 JVM: OpenJDK 64-Bit Server VM
-Java Version: 17.0.6+10
+Java Version: 17.0.8+7
 Operating System: Mac OS X
 Default Encoding: UTF-8
 Language: en

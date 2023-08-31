@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29">        this.address = address;</span>
 <span class="source-line-no">030</span><span id="line-30">        this.txid = txid;</span>
 <span class="source-line-no">031</span><span id="line-31">        this.outputIndex = outputIndex;</span>
-<span class="source-line-no">032</span><span id="line-32">        this.script = new Script(HexUtil.hexStringToByteArray(script));</span>
+<span class="source-line-no">032</span><span id="line-32">        this.script = Script.parse(HexUtil.hexStringToByteArray(script));</span>
 <span class="source-line-no">033</span><span id="line-33">        this.satoshis = Coin.ofSat(satoshis);</span>
 <span class="source-line-no">034</span><span id="line-34">        this.height = height;</span>
 <span class="source-line-no">035</span><span id="line-35">        this.coinbase = coinbase;</span>

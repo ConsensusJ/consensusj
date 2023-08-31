@@ -19,97 +19,88 @@
 <span class="source-line-no">006</span><span id="line-6">import io.reactivex.rxjava3.disposables.Disposable;</span>
 <span class="source-line-no">007</span><span id="line-7">import io.reactivex.rxjava3.processors.BehaviorProcessor;</span>
 <span class="source-line-no">008</span><span id="line-8">import io.reactivex.rxjava3.processors.FlowableProcessor;</span>
-<span class="source-line-no">009</span><span id="line-9">import org.bitcoinj.core.BitcoinSerializer;</span>
-<span class="source-line-no">010</span><span id="line-10">import org.bitcoinj.core.Block;</span>
-<span class="source-line-no">011</span><span id="line-11">import org.bitcoinj.core.NetworkParameters;</span>
-<span class="source-line-no">012</span><span id="line-12">import org.bitcoinj.base.Sha256Hash;</span>
-<span class="source-line-no">013</span><span id="line-13">import org.bitcoinj.core.Transaction;</span>
-<span class="source-line-no">014</span><span id="line-14">import org.consensusj.bitcoin.rx.ChainTipService;</span>
-<span class="source-line-no">015</span><span id="line-15">import org.consensusj.bitcoin.rx.jsonrpc.RxBitcoinClient;</span>
-<span class="source-line-no">016</span><span id="line-16">import org.consensusj.bitcoin.rx.RxBlockchainService;</span>
-<span class="source-line-no">017</span><span id="line-17"></span>
-<span class="source-line-no">018</span><span id="line-18">import java.io.Closeable;</span>
-<span class="source-line-no">019</span><span id="line-19">import java.net.URI;</span>
-<span class="source-line-no">020</span><span id="line-20">import java.nio.ByteBuffer;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">/**</span>
-<span class="source-line-no">024</span><span id="line-24"> *  Add conversion to bitcoinj-types to {@code RxBitcoinZmqBinaryService}. Also</span>
-<span class="source-line-no">025</span><span id="line-25"> *  uses the JSON-RPC client to fetch an initial {@link Block} so subscribers don't</span>
-<span class="source-line-no">026</span><span id="line-26"> *  have to wait ~ten minutes for one.</span>
-<span class="source-line-no">027</span><span id="line-27"> */</span>
-<span class="source-line-no">028</span><span id="line-28">public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements RxBlockchainService, ChainTipService, Closeable {</span>
-<span class="source-line-no">029</span><span id="line-29">    private final BitcoinSerializer bitcoinSerializer;</span>
+<span class="source-line-no">009</span><span id="line-9">import org.bitcoinj.core.Block;</span>
+<span class="source-line-no">010</span><span id="line-10">import org.bitcoinj.base.Sha256Hash;</span>
+<span class="source-line-no">011</span><span id="line-11">import org.bitcoinj.core.Transaction;</span>
+<span class="source-line-no">012</span><span id="line-12">import org.consensusj.bitcoin.rx.ChainTipService;</span>
+<span class="source-line-no">013</span><span id="line-13">import org.consensusj.bitcoin.rx.jsonrpc.RxBitcoinClient;</span>
+<span class="source-line-no">014</span><span id="line-14">import org.consensusj.bitcoin.rx.RxBlockchainService;</span>
+<span class="source-line-no">015</span><span id="line-15"></span>
+<span class="source-line-no">016</span><span id="line-16">import java.io.Closeable;</span>
+<span class="source-line-no">017</span><span id="line-17">import java.net.URI;</span>
+<span class="source-line-no">018</span><span id="line-18">import java.nio.ByteBuffer;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">/**</span>
+<span class="source-line-no">022</span><span id="line-22"> *  Add conversion to bitcoinj-types to {@code RxBitcoinZmqBinaryService}. Also</span>
+<span class="source-line-no">023</span><span id="line-23"> *  uses the JSON-RPC client to fetch an initial {@link Block} so subscribers don't</span>
+<span class="source-line-no">024</span><span id="line-24"> *  have to wait ~ten minutes for one.</span>
+<span class="source-line-no">025</span><span id="line-25"> */</span>
+<span class="source-line-no">026</span><span id="line-26">public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements RxBlockchainService, ChainTipService, Closeable {</span>
+<span class="source-line-no">027</span><span id="line-27"></span>
+<span class="source-line-no">028</span><span id="line-28">    private final FlowableProcessor&lt;ChainTip&gt; flowableChainTip = BehaviorProcessor.create();</span>
+<span class="source-line-no">029</span><span id="line-29">    private final Disposable blockSubscription;</span>
 <span class="source-line-no">030</span><span id="line-30"></span>
-<span class="source-line-no">031</span><span id="line-31">    private final FlowableProcessor&lt;ChainTip&gt; flowableChainTip = BehaviorProcessor.create();</span>
-<span class="source-line-no">032</span><span id="line-32">    private final Disposable blockSubscription;</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">    public RxBitcoinZmqService(Network network, URI rpcUri, String rpcUser, String rpcPassword) {</span>
-<span class="source-line-no">035</span><span id="line-35">        this(new RxBitcoinClient(network, rpcUri, rpcUser, rpcPassword));</span>
-<span class="source-line-no">036</span><span id="line-36">    }</span>
-<span class="source-line-no">037</span><span id="line-37"></span>
-<span class="source-line-no">038</span><span id="line-38">    public RxBitcoinZmqService(RxBitcoinClient client) {</span>
-<span class="source-line-no">039</span><span id="line-39">        super(client);</span>
-<span class="source-line-no">040</span><span id="line-40">        bitcoinSerializer = NetworkParameters.of(network).getSerializer();</span>
-<span class="source-line-no">041</span><span id="line-41">        blockSubscription = blockPublisher()</span>
-<span class="source-line-no">042</span><span id="line-42">                .flatMapSingle(client::activeChainTipFromBestBlock)</span>
-<span class="source-line-no">043</span><span id="line-43">                .distinctUntilChanged(ChainTip::getHash)</span>
-<span class="source-line-no">044</span><span id="line-44">                .subscribe(this::onNextChainTip, flowableChainTip::onError, flowableChainTip::onComplete);</span>
-<span class="source-line-no">045</span><span id="line-45">    }</span>
-<span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">    @Override</span>
-<span class="source-line-no">048</span><span id="line-48">    public Network network() {</span>
-<span class="source-line-no">049</span><span id="line-49">        return network;</span>
-<span class="source-line-no">050</span><span id="line-50">    }</span>
-<span class="source-line-no">051</span><span id="line-51"></span>
-<span class="source-line-no">052</span><span id="line-52">    @Override</span>
-<span class="source-line-no">053</span><span id="line-53">    public Flowable&lt;Transaction&gt; transactionPublisher() {</span>
-<span class="source-line-no">054</span><span id="line-54">        return transactionBinaryPublisher()</span>
-<span class="source-line-no">055</span><span id="line-55">                .map(bytes -&gt; new Transaction(NetworkParameters.of(network), ByteBuffer.wrap(bytes)));   // Deserialize to Transaction</span>
-<span class="source-line-no">056</span><span id="line-56">    }</span>
-<span class="source-line-no">057</span><span id="line-57"></span>
-<span class="source-line-no">058</span><span id="line-58">    @Override</span>
-<span class="source-line-no">059</span><span id="line-59">    public Flowable&lt;Sha256Hash&gt; transactionHashPublisher() {</span>
-<span class="source-line-no">060</span><span id="line-60">        return transactionHashBinaryPublisher()</span>
-<span class="source-line-no">061</span><span id="line-61">                .map(Sha256Hash::wrap);            // Deserialize to Sha256Hash</span>
-<span class="source-line-no">062</span><span id="line-62">    }</span>
-<span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">    @Override</span>
-<span class="source-line-no">065</span><span id="line-65">    public Flowable&lt;Block&gt; blockPublisher() {</span>
-<span class="source-line-no">066</span><span id="line-66">        return blockBinaryPublisher()</span>
-<span class="source-line-no">067</span><span id="line-67">                .map(ByteBuffer::wrap)</span>
-<span class="source-line-no">068</span><span id="line-68">                .map(bitcoinSerializer::makeBlock)  // Deserialize to bitcoinj Block</span>
-<span class="source-line-no">069</span><span id="line-69">                .startWith(client.getBestBlockViaRpc()); // Use JSON-RPC client to fetch an initial block</span>
-<span class="source-line-no">070</span><span id="line-70">    }</span>
-<span class="source-line-no">071</span><span id="line-71">    </span>
-<span class="source-line-no">072</span><span id="line-72">    @Override</span>
-<span class="source-line-no">073</span><span id="line-73">    public Flowable&lt;Sha256Hash&gt; blockHashPublisher() {</span>
-<span class="source-line-no">074</span><span id="line-74">        return blockHashBinaryPublisher()</span>
-<span class="source-line-no">075</span><span id="line-75">                .map(Sha256Hash::wrap);             // Deserialize to Sha256Hash</span>
-<span class="source-line-no">076</span><span id="line-76">    }</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">    @Override</span>
-<span class="source-line-no">079</span><span id="line-79">    public Flowable&lt;Integer&gt; blockHeightPublisher() {</span>
-<span class="source-line-no">080</span><span id="line-80">        return chainTipPublisher()</span>
-<span class="source-line-no">081</span><span id="line-81">                .map(ChainTip::getHeight);          // Extract block height</span>
-<span class="source-line-no">082</span><span id="line-82">    }</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">    @Override</span>
-<span class="source-line-no">085</span><span id="line-85">    public Flowable&lt;ChainTip&gt; chainTipPublisher() {</span>
-<span class="source-line-no">086</span><span id="line-86">        return flowableChainTip;</span>
-<span class="source-line-no">087</span><span id="line-87">    }</span>
-<span class="source-line-no">088</span><span id="line-88"></span>
-<span class="source-line-no">089</span><span id="line-89">    @Override</span>
-<span class="source-line-no">090</span><span id="line-90">    public void close()  {</span>
-<span class="source-line-no">091</span><span id="line-91">        super.close();</span>
-<span class="source-line-no">092</span><span id="line-92">        blockSubscription.dispose();</span>
-<span class="source-line-no">093</span><span id="line-93">    }</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">    // For setting breakpoints</span>
-<span class="source-line-no">096</span><span id="line-96">    void onNextChainTip(ChainTip tip) {</span>
-<span class="source-line-no">097</span><span id="line-97">        flowableChainTip.onNext(tip);</span>
-<span class="source-line-no">098</span><span id="line-98">    }</span>
-<span class="source-line-no">099</span><span id="line-99">}</span>
+<span class="source-line-no">031</span><span id="line-31">    public RxBitcoinZmqService(Network network, URI rpcUri, String rpcUser, String rpcPassword) {</span>
+<span class="source-line-no">032</span><span id="line-32">        this(new RxBitcoinClient(network, rpcUri, rpcUser, rpcPassword));</span>
+<span class="source-line-no">033</span><span id="line-33">    }</span>
+<span class="source-line-no">034</span><span id="line-34"></span>
+<span class="source-line-no">035</span><span id="line-35">    public RxBitcoinZmqService(RxBitcoinClient client) {</span>
+<span class="source-line-no">036</span><span id="line-36">        super(client);</span>
+<span class="source-line-no">037</span><span id="line-37">        blockSubscription = blockPublisher()</span>
+<span class="source-line-no">038</span><span id="line-38">                .flatMapSingle(client::activeChainTipFromBestBlock)</span>
+<span class="source-line-no">039</span><span id="line-39">                .distinctUntilChanged(ChainTip::getHash)</span>
+<span class="source-line-no">040</span><span id="line-40">                .subscribe(this::onNextChainTip, flowableChainTip::onError, flowableChainTip::onComplete);</span>
+<span class="source-line-no">041</span><span id="line-41">    }</span>
+<span class="source-line-no">042</span><span id="line-42"></span>
+<span class="source-line-no">043</span><span id="line-43">    @Override</span>
+<span class="source-line-no">044</span><span id="line-44">    public Flowable&lt;Transaction&gt; transactionPublisher() {</span>
+<span class="source-line-no">045</span><span id="line-45">        return transactionBinaryPublisher()</span>
+<span class="source-line-no">046</span><span id="line-46">                .map(bytes -&gt; Transaction.read(ByteBuffer.wrap(bytes)));   // Deserialize to Transaction</span>
+<span class="source-line-no">047</span><span id="line-47">    }</span>
+<span class="source-line-no">048</span><span id="line-48"></span>
+<span class="source-line-no">049</span><span id="line-49">    @Override</span>
+<span class="source-line-no">050</span><span id="line-50">    public Flowable&lt;Sha256Hash&gt; transactionHashPublisher() {</span>
+<span class="source-line-no">051</span><span id="line-51">        return transactionHashBinaryPublisher()</span>
+<span class="source-line-no">052</span><span id="line-52">                .map(Sha256Hash::wrap);            // Deserialize to Sha256Hash</span>
+<span class="source-line-no">053</span><span id="line-53">    }</span>
+<span class="source-line-no">054</span><span id="line-54"></span>
+<span class="source-line-no">055</span><span id="line-55">    @Override</span>
+<span class="source-line-no">056</span><span id="line-56">    public Flowable&lt;Block&gt; blockPublisher() {</span>
+<span class="source-line-no">057</span><span id="line-57">        return blockBinaryPublisher()</span>
+<span class="source-line-no">058</span><span id="line-58">                .map(ByteBuffer::wrap)</span>
+<span class="source-line-no">059</span><span id="line-59">                .map(Block::read)  // Deserialize to bitcoinj Block</span>
+<span class="source-line-no">060</span><span id="line-60">                .startWith(client.getBestBlockViaRpc()); // Use JSON-RPC client to fetch an initial block</span>
+<span class="source-line-no">061</span><span id="line-61">    }</span>
+<span class="source-line-no">062</span><span id="line-62">    </span>
+<span class="source-line-no">063</span><span id="line-63">    @Override</span>
+<span class="source-line-no">064</span><span id="line-64">    public Flowable&lt;Sha256Hash&gt; blockHashPublisher() {</span>
+<span class="source-line-no">065</span><span id="line-65">        return blockHashBinaryPublisher()</span>
+<span class="source-line-no">066</span><span id="line-66">                .map(Sha256Hash::wrap);             // Deserialize to Sha256Hash</span>
+<span class="source-line-no">067</span><span id="line-67">    }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">    @Override</span>
+<span class="source-line-no">070</span><span id="line-70">    public Flowable&lt;Integer&gt; blockHeightPublisher() {</span>
+<span class="source-line-no">071</span><span id="line-71">        return chainTipPublisher()</span>
+<span class="source-line-no">072</span><span id="line-72">                .map(ChainTip::getHeight);          // Extract block height</span>
+<span class="source-line-no">073</span><span id="line-73">    }</span>
+<span class="source-line-no">074</span><span id="line-74"></span>
+<span class="source-line-no">075</span><span id="line-75">    @Override</span>
+<span class="source-line-no">076</span><span id="line-76">    public Flowable&lt;ChainTip&gt; chainTipPublisher() {</span>
+<span class="source-line-no">077</span><span id="line-77">        return flowableChainTip;</span>
+<span class="source-line-no">078</span><span id="line-78">    }</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">    @Override</span>
+<span class="source-line-no">081</span><span id="line-81">    public void close()  {</span>
+<span class="source-line-no">082</span><span id="line-82">        super.close();</span>
+<span class="source-line-no">083</span><span id="line-83">        blockSubscription.dispose();</span>
+<span class="source-line-no">084</span><span id="line-84">    }</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">    // For setting breakpoints</span>
+<span class="source-line-no">087</span><span id="line-87">    void onNextChainTip(ChainTip tip) {</span>
+<span class="source-line-no">088</span><span id="line-88">        flowableChainTip.onNext(tip);</span>
+<span class="source-line-no">089</span><span id="line-89">    }</span>
+<span class="source-line-no">090</span><span id="line-90">}</span>
 
 
 

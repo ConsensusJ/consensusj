@@ -13,107 +13,53 @@
 <div class="source-container">
 <pre><span class="source-line-no">001</span><span id="line-1">package org.consensusj.bitcoinj.signing;</span>
 <span class="source-line-no">002</span><span id="line-2"></span>
-<span class="source-line-no">003</span><span id="line-3">import org.bitcoinj.base.BitcoinNetwork;</span>
-<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.base.Network;</span>
-<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.core.NetworkParameters;</span>
-<span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.core.Transaction;</span>
-<span class="source-line-no">007</span><span id="line-7">import org.bitcoinj.core.TransactionOutput;</span>
-<span class="source-line-no">008</span><span id="line-8">import org.bitcoinj.script.ScriptBuilder;</span>
+<span class="source-line-no">003</span><span id="line-3">import org.bitcoinj.core.Transaction;</span>
+<span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.core.TransactionOutput;</span>
+<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.script.ScriptBuilder;</span>
+<span class="source-line-no">006</span><span id="line-6"></span>
+<span class="source-line-no">007</span><span id="line-7">import java.util.Collections;</span>
+<span class="source-line-no">008</span><span id="line-8">import java.util.List;</span>
 <span class="source-line-no">009</span><span id="line-9"></span>
-<span class="source-line-no">010</span><span id="line-10">import java.util.Collections;</span>
-<span class="source-line-no">011</span><span id="line-11">import java.util.List;</span>
-<span class="source-line-no">012</span><span id="line-12"></span>
-<span class="source-line-no">013</span><span id="line-13">/**</span>
-<span class="source-line-no">014</span><span id="line-14"> * Simple implementation of SigningRequest</span>
-<span class="source-line-no">015</span><span id="line-15"> */</span>
-<span class="source-line-no">016</span><span id="line-16">public class DefaultSigningRequest implements SigningRequest {</span>
-<span class="source-line-no">017</span><span id="line-17">    private final Network network;</span>
-<span class="source-line-no">018</span><span id="line-18">    private final List&lt;TransactionInputData&gt; inputs;</span>
-<span class="source-line-no">019</span><span id="line-19">    private final List&lt;TransactionOutputData&gt; outputs;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">010</span><span id="line-10">/**</span>
+<span class="source-line-no">011</span><span id="line-11"> * Simple implementation of SigningRequest</span>
+<span class="source-line-no">012</span><span id="line-12"> */</span>
+<span class="source-line-no">013</span><span id="line-13">public class DefaultSigningRequest implements SigningRequest {</span>
+<span class="source-line-no">014</span><span id="line-14">    private final List&lt;TransactionInputData&gt; inputs;</span>
+<span class="source-line-no">015</span><span id="line-15">    private final List&lt;TransactionOutputData&gt; outputs;</span>
+<span class="source-line-no">016</span><span id="line-16"></span>
+<span class="source-line-no">017</span><span id="line-17">    public DefaultSigningRequest(List&lt;TransactionInputData&gt; inputs, List&lt;TransactionOutputData&gt; outputs) {</span>
+<span class="source-line-no">018</span><span id="line-18">        this.inputs = Collections.unmodifiableList(inputs);</span>
+<span class="source-line-no">019</span><span id="line-19">        this.outputs = Collections.unmodifiableList(outputs);</span>
+<span class="source-line-no">020</span><span id="line-20">    }</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">    @Deprecated</span>
-<span class="source-line-no">023</span><span id="line-23">    public DefaultSigningRequest(String networkId, List&lt;TransactionInputData&gt; inputs, List&lt;TransactionOutputData&gt; outputs) {</span>
-<span class="source-line-no">024</span><span id="line-24">        this(BitcoinNetwork.fromIdString(networkId).orElseThrow(IllegalArgumentException::new), inputs, outputs);</span>
+<span class="source-line-no">022</span><span id="line-22">    @Override</span>
+<span class="source-line-no">023</span><span id="line-23">    public List&lt;TransactionInputData&gt; inputs() {</span>
+<span class="source-line-no">024</span><span id="line-24">        return inputs;</span>
 <span class="source-line-no">025</span><span id="line-25">    }</span>
 <span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">    public DefaultSigningRequest(Network network, List&lt;TransactionInputData&gt; inputs, List&lt;TransactionOutputData&gt; outputs) {</span>
-<span class="source-line-no">028</span><span id="line-28">        this.network = network;</span>
-<span class="source-line-no">029</span><span id="line-29">        this.inputs = Collections.unmodifiableList(inputs);</span>
-<span class="source-line-no">030</span><span id="line-30">        this.outputs = Collections.unmodifiableList(outputs);</span>
-<span class="source-line-no">031</span><span id="line-31">    }</span>
-<span class="source-line-no">032</span><span id="line-32"></span>
-<span class="source-line-no">033</span><span id="line-33">    @Deprecated</span>
-<span class="source-line-no">034</span><span id="line-34">    public DefaultSigningRequest(Network network, TransactionInputData input) {</span>
-<span class="source-line-no">035</span><span id="line-35">        this(network, Collections.singletonList(input), Collections.emptyList());</span>
-<span class="source-line-no">036</span><span id="line-36">    }</span>
-<span class="source-line-no">037</span><span id="line-37"></span>
-<span class="source-line-no">038</span><span id="line-38">    @Deprecated</span>
-<span class="source-line-no">039</span><span id="line-39">    public DefaultSigningRequest(Network network) {</span>
-<span class="source-line-no">040</span><span id="line-40">        this(network, Collections.emptyList(), Collections.emptyList());</span>
-<span class="source-line-no">041</span><span id="line-41">    }</span>
-<span class="source-line-no">042</span><span id="line-42"></span>
-<span class="source-line-no">043</span><span id="line-43">    @Deprecated</span>
-<span class="source-line-no">044</span><span id="line-44">    public DefaultSigningRequest(NetworkParameters netParams, List&lt;TransactionInputData&gt; inputs, List&lt;TransactionOutputData&gt; outputs) {</span>
-<span class="source-line-no">045</span><span id="line-45">        this(netParams.network(), inputs, outputs);</span>
-<span class="source-line-no">046</span><span id="line-46">    }</span>
-<span class="source-line-no">047</span><span id="line-47"></span>
-<span class="source-line-no">048</span><span id="line-48">    @Deprecated</span>
-<span class="source-line-no">049</span><span id="line-49">    public DefaultSigningRequest(NetworkParameters netParams, TransactionInputData input) {</span>
-<span class="source-line-no">050</span><span id="line-50">        this(netParams, Collections.singletonList(input), Collections.emptyList());</span>
-<span class="source-line-no">051</span><span id="line-51">    }</span>
-<span class="source-line-no">052</span><span id="line-52"></span>
-<span class="source-line-no">053</span><span id="line-53">    @Deprecated</span>
-<span class="source-line-no">054</span><span id="line-54">    public DefaultSigningRequest(NetworkParameters netParams) {</span>
-<span class="source-line-no">055</span><span id="line-55">        this(netParams.network(), Collections.emptyList(), Collections.emptyList());</span>
-<span class="source-line-no">056</span><span id="line-56">    }</span>
-<span class="source-line-no">057</span><span id="line-57"></span>
-<span class="source-line-no">058</span><span id="line-58">    @Deprecated</span>
-<span class="source-line-no">059</span><span id="line-59">    public DefaultSigningRequest(String networkId) {</span>
-<span class="source-line-no">060</span><span id="line-60">        this(BitcoinNetwork.fromIdString(networkId).orElseThrow(IllegalArgumentException::new), Collections.emptyList(), Collections.emptyList());</span>
-<span class="source-line-no">061</span><span id="line-61">    }</span>
-<span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">    @Override</span>
-<span class="source-line-no">064</span><span id="line-64">    public Network network() {</span>
-<span class="source-line-no">065</span><span id="line-65">        return network;</span>
-<span class="source-line-no">066</span><span id="line-66">    }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">    @Override</span>
-<span class="source-line-no">069</span><span id="line-69">    @Deprecated</span>
-<span class="source-line-no">070</span><span id="line-70">    public String networkId() {</span>
-<span class="source-line-no">071</span><span id="line-71">        return network.id();</span>
-<span class="source-line-no">072</span><span id="line-72">    }</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">    @Override</span>
-<span class="source-line-no">075</span><span id="line-75">    public List&lt;TransactionInputData&gt; inputs() {</span>
-<span class="source-line-no">076</span><span id="line-76">        return inputs;</span>
-<span class="source-line-no">077</span><span id="line-77">    }</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">    @Override</span>
-<span class="source-line-no">080</span><span id="line-80">    public List&lt;TransactionOutputData&gt; outputs() {</span>
-<span class="source-line-no">081</span><span id="line-81">        return outputs;</span>
-<span class="source-line-no">082</span><span id="line-82">    }</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">    /**</span>
-<span class="source-line-no">085</span><span id="line-85">     * bitcoinj signing uses (currently) mutable transaction objects, this</span>
-<span class="source-line-no">086</span><span id="line-86">     * convenience method will create one if you want to use bitcoinj to sign this request.</span>
-<span class="source-line-no">087</span><span id="line-87">     * @return an unsigned bitcoinj transaction</span>
-<span class="source-line-no">088</span><span id="line-88">     */</span>
-<span class="source-line-no">089</span><span id="line-89">    public Transaction toUnsignedTransaction() {</span>
-<span class="source-line-no">090</span><span id="line-90">        NetworkParameters params = NetworkParameters.of(network);</span>
-<span class="source-line-no">091</span><span id="line-91">        Transaction utx = new Transaction(params);</span>
-<span class="source-line-no">092</span><span id="line-92">        this.inputs().forEach(in -&gt;</span>
-<span class="source-line-no">093</span><span id="line-93">                utx.addInput(in.toOutPoint(network).getHash(),</span>
-<span class="source-line-no">094</span><span id="line-94">                        in.toOutPoint(network).getIndex(),</span>
-<span class="source-line-no">095</span><span id="line-95">                        ScriptBuilder.createEmpty()));</span>
-<span class="source-line-no">096</span><span id="line-96">        this.outputs().forEach(out -&gt;</span>
-<span class="source-line-no">097</span><span id="line-97">                utx.addOutput(new TransactionOutput(params,</span>
-<span class="source-line-no">098</span><span id="line-98">                        utx,</span>
-<span class="source-line-no">099</span><span id="line-99">                        out.amount(),</span>
-<span class="source-line-no">100</span><span id="line-100">                        out.scriptPubKey().getProgram())));</span>
-<span class="source-line-no">101</span><span id="line-101">        return utx;</span>
-<span class="source-line-no">102</span><span id="line-102">    }</span>
-<span class="source-line-no">103</span><span id="line-103">}</span>
+<span class="source-line-no">027</span><span id="line-27">    @Override</span>
+<span class="source-line-no">028</span><span id="line-28">    public List&lt;TransactionOutputData&gt; outputs() {</span>
+<span class="source-line-no">029</span><span id="line-29">        return outputs;</span>
+<span class="source-line-no">030</span><span id="line-30">    }</span>
+<span class="source-line-no">031</span><span id="line-31"></span>
+<span class="source-line-no">032</span><span id="line-32">    /**</span>
+<span class="source-line-no">033</span><span id="line-33">     * bitcoinj signing uses (currently) mutable transaction objects, this</span>
+<span class="source-line-no">034</span><span id="line-34">     * convenience method will create one if you want to use bitcoinj to sign this request.</span>
+<span class="source-line-no">035</span><span id="line-35">     * @return an unsigned bitcoinj transaction</span>
+<span class="source-line-no">036</span><span id="line-36">     */</span>
+<span class="source-line-no">037</span><span id="line-37">    public Transaction toUnsignedTransaction() {</span>
+<span class="source-line-no">038</span><span id="line-38">        Transaction utx = new Transaction();</span>
+<span class="source-line-no">039</span><span id="line-39">        this.inputs().forEach(in -&gt;</span>
+<span class="source-line-no">040</span><span id="line-40">                utx.addInput(in.toOutPoint().hash(),</span>
+<span class="source-line-no">041</span><span id="line-41">                        in.toOutPoint().index(),</span>
+<span class="source-line-no">042</span><span id="line-42">                        ScriptBuilder.createEmpty()));</span>
+<span class="source-line-no">043</span><span id="line-43">        this.outputs().forEach(out -&gt;</span>
+<span class="source-line-no">044</span><span id="line-44">                utx.addOutput(new TransactionOutput(utx,</span>
+<span class="source-line-no">045</span><span id="line-45">                        out.amount(),</span>
+<span class="source-line-no">046</span><span id="line-46">                        out.scriptPubKey().program())));</span>
+<span class="source-line-no">047</span><span id="line-47">        return utx;</span>
+<span class="source-line-no">048</span><span id="line-48">    }</span>
+<span class="source-line-no">049</span><span id="line-49">}</span>
 
 
 

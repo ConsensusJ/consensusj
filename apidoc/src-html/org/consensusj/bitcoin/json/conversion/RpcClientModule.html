@@ -20,41 +20,50 @@
 <span class="source-line-no">007</span><span id="line-7">import org.bitcoinj.core.Block;</span>
 <span class="source-line-no">008</span><span id="line-8">import org.bitcoinj.base.Coin;</span>
 <span class="source-line-no">009</span><span id="line-9">import org.bitcoinj.crypto.ECKey;</span>
-<span class="source-line-no">010</span><span id="line-10">import org.bitcoinj.core.NetworkParameters;</span>
-<span class="source-line-no">011</span><span id="line-11">import org.bitcoinj.base.Sha256Hash;</span>
-<span class="source-line-no">012</span><span id="line-12">import org.bitcoinj.core.Transaction;</span>
-<span class="source-line-no">013</span><span id="line-13"></span>
-<span class="source-line-no">014</span><span id="line-14">/**</span>
-<span class="source-line-no">015</span><span id="line-15"> *</span>
-<span class="source-line-no">016</span><span id="line-16"> */</span>
-<span class="source-line-no">017</span><span id="line-17">public class RpcClientModule extends SimpleModule {</span>
-<span class="source-line-no">018</span><span id="line-18">    /**</span>
-<span class="source-line-no">019</span><span id="line-19">     * @param network Which network we are going to be a client for</span>
-<span class="source-line-no">020</span><span id="line-20">     * @param strictAddressParsing set to {@code false} to not throw exception on addresses from other networks</span>
-<span class="source-line-no">021</span><span id="line-21">     */</span>
-<span class="source-line-no">022</span><span id="line-22">    public RpcClientModule(Network network, boolean strictAddressParsing) {</span>
-<span class="source-line-no">023</span><span id="line-23">        super("BitcoinJMappingClient", new Version(1, 0, 0, null, null, null));</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">        NetworkParameters netParams = NetworkParameters.of(network);</span>
-<span class="source-line-no">026</span><span id="line-26">        this.addDeserializer(Address.class, new AddressDeserializer(strictAddressParsing ? netParams : null))</span>
-<span class="source-line-no">027</span><span id="line-27">                .addDeserializer(Block.class, new BlockHexDeserializer(netParams))</span>
-<span class="source-line-no">028</span><span id="line-28">                .addDeserializer(Coin.class, new CoinDeserializer())</span>
-<span class="source-line-no">029</span><span id="line-29">                .addDeserializer(ECKey.class, new ECKeyDeserializer())</span>
-<span class="source-line-no">030</span><span id="line-30">                .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())</span>
-<span class="source-line-no">031</span><span id="line-31">                .addSerializer(Address.class, new AddressSerializer())</span>
-<span class="source-line-no">032</span><span id="line-32">                .addSerializer(Coin.class, new CoinSerializer())</span>
-<span class="source-line-no">033</span><span id="line-33">                .addSerializer(ECKey.class, new ECKeySerializer())</span>
-<span class="source-line-no">034</span><span id="line-34">                .addSerializer(Sha256Hash.class, new Sha256HashSerializer())</span>
-<span class="source-line-no">035</span><span id="line-35">                .addSerializer(Transaction.class, new TransactionHexSerializer());</span>
-<span class="source-line-no">036</span><span id="line-36">    }</span>
-<span class="source-line-no">037</span><span id="line-37"></span>
-<span class="source-line-no">038</span><span id="line-38">    /**</span>
-<span class="source-line-no">039</span><span id="line-39">     * @param network Which network we are going to be a client for</span>
-<span class="source-line-no">040</span><span id="line-40">     */</span>
-<span class="source-line-no">041</span><span id="line-41">    public RpcClientModule(Network network) {</span>
-<span class="source-line-no">042</span><span id="line-42">        this(network, true);</span>
-<span class="source-line-no">043</span><span id="line-43">    }</span>
-<span class="source-line-no">044</span><span id="line-44">}</span>
+<span class="source-line-no">010</span><span id="line-10">import org.bitcoinj.base.Sha256Hash;</span>
+<span class="source-line-no">011</span><span id="line-11">import org.bitcoinj.core.Transaction;</span>
+<span class="source-line-no">012</span><span id="line-12"></span>
+<span class="source-line-no">013</span><span id="line-13">import java.util.Objects;</span>
+<span class="source-line-no">014</span><span id="line-14"></span>
+<span class="source-line-no">015</span><span id="line-15">// TODO: Consider merging RpcClientModule and RpcServerModule (though there are currently conflicting serializers for Transaction)</span>
+<span class="source-line-no">016</span><span id="line-16">/**</span>
+<span class="source-line-no">017</span><span id="line-17"> * Jackson Module with serializers and deserializers for JSON-RPC clients.</span>
+<span class="source-line-no">018</span><span id="line-18"> */</span>
+<span class="source-line-no">019</span><span id="line-19">public class RpcClientModule extends SimpleModule {</span>
+<span class="source-line-no">020</span><span id="line-20">    /**</span>
+<span class="source-line-no">021</span><span id="line-21">     * Create a client module without strict address parsing.</span>
+<span class="source-line-no">022</span><span id="line-22">     */</span>
+<span class="source-line-no">023</span><span id="line-23">    public RpcClientModule() {</span>
+<span class="source-line-no">024</span><span id="line-24">        this(null, false);</span>
+<span class="source-line-no">025</span><span id="line-25">    }</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">    /**</span>
+<span class="source-line-no">028</span><span id="line-28">     * @param network Which network we are going to be a client for (may be null if {@code strictAddressParsing} is false)</span>
+<span class="source-line-no">029</span><span id="line-29">     * @param strictAddressParsing set to {@code true} to throw exceptions when deserializing addresses that don't match {@code network}</span>
+<span class="source-line-no">030</span><span id="line-30">     */</span>
+<span class="source-line-no">031</span><span id="line-31">    protected RpcClientModule(Network network, boolean strictAddressParsing) {</span>
+<span class="source-line-no">032</span><span id="line-32">        super("BitcoinJMappingClient", new Version(1, 0, 0, null, null, null));</span>
+<span class="source-line-no">033</span><span id="line-33"></span>
+<span class="source-line-no">034</span><span id="line-34">        this.addDeserializer(Address.class, strictAddressParsing ? new AddressDeserializer(Objects.requireNonNull(network)) : new AddressDeserializer())</span>
+<span class="source-line-no">035</span><span id="line-35">                .addDeserializer(Block.class, new BlockHexDeserializer())</span>
+<span class="source-line-no">036</span><span id="line-36">                .addDeserializer(Coin.class, new CoinDeserializer())</span>
+<span class="source-line-no">037</span><span id="line-37">                .addDeserializer(ECKey.class, new ECKeyDeserializer())</span>
+<span class="source-line-no">038</span><span id="line-38">                .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())</span>
+<span class="source-line-no">039</span><span id="line-39">                .addSerializer(Address.class, new AddressSerializer())</span>
+<span class="source-line-no">040</span><span id="line-40">                .addSerializer(Coin.class, new CoinSerializer())</span>
+<span class="source-line-no">041</span><span id="line-41">                .addSerializer(ECKey.class, new ECKeySerializer())</span>
+<span class="source-line-no">042</span><span id="line-42">                .addSerializer(Sha256Hash.class, new Sha256HashSerializer())</span>
+<span class="source-line-no">043</span><span id="line-43">                .addSerializer(Transaction.class, new TransactionHexSerializer());</span>
+<span class="source-line-no">044</span><span id="line-44">    }</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">    /**</span>
+<span class="source-line-no">047</span><span id="line-47">     * Create a client module with strict address parsing. Will throw exceptions when deserializing addresses that don't match {@code network}.</span>
+<span class="source-line-no">048</span><span id="line-48">     * @param network Expected Network we are going to validate addresses for</span>
+<span class="source-line-no">049</span><span id="line-49">     */</span>
+<span class="source-line-no">050</span><span id="line-50">    public RpcClientModule(Network network) {</span>
+<span class="source-line-no">051</span><span id="line-51">        this(network, true);</span>
+<span class="source-line-no">052</span><span id="line-52">    }</span>
+<span class="source-line-no">053</span><span id="line-53">}</span>
 
 
 

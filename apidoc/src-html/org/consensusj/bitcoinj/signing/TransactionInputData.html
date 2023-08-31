@@ -15,73 +15,71 @@
 <span class="source-line-no">002</span><span id="line-2"></span>
 <span class="source-line-no">003</span><span id="line-3">import org.bitcoinj.base.Address;</span>
 <span class="source-line-no">004</span><span id="line-4">import org.bitcoinj.base.Coin;</span>
-<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.base.Network;</span>
-<span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.core.TransactionInput;</span>
-<span class="source-line-no">007</span><span id="line-7">import org.bitcoinj.core.TransactionOutPoint;</span>
-<span class="source-line-no">008</span><span id="line-8">import org.bitcoinj.core.TransactionOutput;</span>
-<span class="source-line-no">009</span><span id="line-9">import org.bitcoinj.script.Script;</span>
-<span class="source-line-no">010</span><span id="line-10">import org.bitcoinj.script.ScriptBuilder;</span>
-<span class="source-line-no">011</span><span id="line-11"></span>
-<span class="source-line-no">012</span><span id="line-12">/**</span>
-<span class="source-line-no">013</span><span id="line-13"> * Immutable data for a transaction input.</span>
-<span class="source-line-no">014</span><span id="line-14"> * See also {@link RawTransactionSigningRequest.RawInput} which can hold an incomplete transaction input, like</span>
-<span class="source-line-no">015</span><span id="line-15"> * those sent in the {@code signtransactionwithwallet} JSON-RPC request.</span>
-<span class="source-line-no">016</span><span id="line-16"> */</span>
-<span class="source-line-no">017</span><span id="line-17">public interface TransactionInputData {</span>
-<span class="source-line-no">018</span><span id="line-18">    Coin amount();</span>
-<span class="source-line-no">019</span><span id="line-19"></span>
-<span class="source-line-no">020</span><span id="line-20">    /**</span>
-<span class="source-line-no">021</span><span id="line-21">     * prevOut ScriptPubKey</span>
-<span class="source-line-no">022</span><span id="line-22">     */</span>
+<span class="source-line-no">005</span><span id="line-5">import org.bitcoinj.core.TransactionInput;</span>
+<span class="source-line-no">006</span><span id="line-6">import org.bitcoinj.core.TransactionOutPoint;</span>
+<span class="source-line-no">007</span><span id="line-7">import org.bitcoinj.core.TransactionOutput;</span>
+<span class="source-line-no">008</span><span id="line-8">import org.bitcoinj.script.Script;</span>
+<span class="source-line-no">009</span><span id="line-9">import org.bitcoinj.script.ScriptBuilder;</span>
+<span class="source-line-no">010</span><span id="line-10"></span>
+<span class="source-line-no">011</span><span id="line-11">/**</span>
+<span class="source-line-no">012</span><span id="line-12"> * Immutable data for a transaction input.</span>
+<span class="source-line-no">013</span><span id="line-13"> * See also {@link RawTransactionSigningRequest.RawInput} which can hold an incomplete transaction input, like</span>
+<span class="source-line-no">014</span><span id="line-14"> * those sent in the {@code signtransactionwithwallet} JSON-RPC request.</span>
+<span class="source-line-no">015</span><span id="line-15"> */</span>
+<span class="source-line-no">016</span><span id="line-16">public interface TransactionInputData {</span>
+<span class="source-line-no">017</span><span id="line-17">    Coin amount();</span>
+<span class="source-line-no">018</span><span id="line-18"></span>
+<span class="source-line-no">019</span><span id="line-19">    /**</span>
+<span class="source-line-no">020</span><span id="line-20">     * prevOut ScriptPubKey</span>
+<span class="source-line-no">021</span><span id="line-21">     */</span>
+<span class="source-line-no">022</span><span id="line-22">    Script script();</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">    Script script();</span>
-<span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">    /**</span>
-<span class="source-line-no">027</span><span id="line-27">     * This probably shouldn't be here but is needed for proper operation with bitcoinj</span>
-<span class="source-line-no">028</span><span id="line-28">     * @return A Transaction "outpoint" pointing to the utxo this input will spend.</span>
-<span class="source-line-no">029</span><span id="line-29">     */</span>
-<span class="source-line-no">030</span><span id="line-30">    TransactionOutPoint toOutPoint(Network network);</span>
+<span class="source-line-no">024</span><span id="line-24">    /**</span>
+<span class="source-line-no">025</span><span id="line-25">     * This probably shouldn't be here but is needed for proper operation with bitcoinj</span>
+<span class="source-line-no">026</span><span id="line-26">     * @return A Transaction "outpoint" pointing to the utxo this input will spend.</span>
+<span class="source-line-no">027</span><span id="line-27">     */</span>
+<span class="source-line-no">028</span><span id="line-28">    TransactionOutPoint toOutPoint();</span>
+<span class="source-line-no">029</span><span id="line-29"></span>
+<span class="source-line-no">030</span><span id="line-30">    Utxo toUtxo();</span>
 <span class="source-line-no">031</span><span id="line-31"></span>
-<span class="source-line-no">032</span><span id="line-32">    Utxo toUtxo();</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">    /**</span>
-<span class="source-line-no">035</span><span id="line-35">     * Create from a UTXO that paid to an address the intended signer can redeem</span>
-<span class="source-line-no">036</span><span id="line-36">     */</span>
-<span class="source-line-no">037</span><span id="line-37">    static TransactionInputData of(Utxo.Signable utxo, Address address) {</span>
-<span class="source-line-no">038</span><span id="line-38">        return new TransactionInputDataUtxo(utxo.txId(), utxo.index(), utxo.amount(), ScriptBuilder.createOutputScript(address));</span>
-<span class="source-line-no">039</span><span id="line-39">    }</span>
-<span class="source-line-no">040</span><span id="line-40"></span>
-<span class="source-line-no">041</span><span id="line-41">    /**</span>
-<span class="source-line-no">042</span><span id="line-42">     * Create from a UTXO that paid to a script the intended signer can redeem</span>
-<span class="source-line-no">043</span><span id="line-43">     * @param utxo Complete UTXO info</span>
-<span class="source-line-no">044</span><span id="line-44">     * @return input ready for signing</span>
-<span class="source-line-no">045</span><span id="line-45">     */</span>
-<span class="source-line-no">046</span><span id="line-46">    static TransactionInputData of(Utxo.Complete utxo) {</span>
-<span class="source-line-no">047</span><span id="line-47">        return new TransactionInputDataUtxo(utxo.txId(), utxo.index(), utxo.amount(), utxo.scriptPubKey());</span>
-<span class="source-line-no">048</span><span id="line-48">    }</span>
-<span class="source-line-no">049</span><span id="line-49"></span>
-<span class="source-line-no">050</span><span id="line-50">    /**</span>
-<span class="source-line-no">051</span><span id="line-51">     * Create an unsigned transaction input from an unspent transaction output that the signer can redeem</span>
-<span class="source-line-no">052</span><span id="line-52">     * @param out An unspent transaction output</span>
-<span class="source-line-no">053</span><span id="line-53">     * @return transaction input data</span>
-<span class="source-line-no">054</span><span id="line-54">     */</span>
-<span class="source-line-no">055</span><span id="line-55">    static TransactionInputData fromTxOut(TransactionOutput out) {</span>
-<span class="source-line-no">056</span><span id="line-56">        return new TransactionInputDataUtxo(out.getParentTransactionHash(), out.getIndex(), out.getValue(), out.getScriptPubKey());</span>
-<span class="source-line-no">057</span><span id="line-57">    }</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">    /**</span>
-<span class="source-line-no">060</span><span id="line-60">     * Create an unsigned transaction input from an bitcoinj (unsigned) TransactionInput.</span>
-<span class="source-line-no">061</span><span id="line-61">     * @param input A transaction input (typically/currently unsigned)</span>
-<span class="source-line-no">062</span><span id="line-62">     * @return transaction input data</span>
-<span class="source-line-no">063</span><span id="line-63">     */</span>
-<span class="source-line-no">064</span><span id="line-64">    static TransactionInputData fromTxInput(TransactionInput input) {</span>
-<span class="source-line-no">065</span><span id="line-65">        return new TransactionInputDataUtxo(</span>
-<span class="source-line-no">066</span><span id="line-66">                input.getOutpoint().getHash(),</span>
-<span class="source-line-no">067</span><span id="line-67">                (int) input.getOutpoint().getIndex(),</span>
-<span class="source-line-no">068</span><span id="line-68">                input.getValue(),</span>
-<span class="source-line-no">069</span><span id="line-69">                input.getScriptSig());</span>
-<span class="source-line-no">070</span><span id="line-70">    }</span>
-<span class="source-line-no">071</span><span id="line-71">}</span>
+<span class="source-line-no">032</span><span id="line-32">    /**</span>
+<span class="source-line-no">033</span><span id="line-33">     * Create from a UTXO that paid to an address the intended signer can redeem</span>
+<span class="source-line-no">034</span><span id="line-34">     */</span>
+<span class="source-line-no">035</span><span id="line-35">    static TransactionInputData of(Utxo.Signable utxo, Address address) {</span>
+<span class="source-line-no">036</span><span id="line-36">        return new TransactionInputDataUtxo(utxo.txId(), utxo.index(), utxo.amount(), ScriptBuilder.createOutputScript(address));</span>
+<span class="source-line-no">037</span><span id="line-37">    }</span>
+<span class="source-line-no">038</span><span id="line-38"></span>
+<span class="source-line-no">039</span><span id="line-39">    /**</span>
+<span class="source-line-no">040</span><span id="line-40">     * Create from a UTXO that paid to a script the intended signer can redeem</span>
+<span class="source-line-no">041</span><span id="line-41">     * @param utxo Complete UTXO info</span>
+<span class="source-line-no">042</span><span id="line-42">     * @return input ready for signing</span>
+<span class="source-line-no">043</span><span id="line-43">     */</span>
+<span class="source-line-no">044</span><span id="line-44">    static TransactionInputData of(Utxo.Complete utxo) {</span>
+<span class="source-line-no">045</span><span id="line-45">        return new TransactionInputDataUtxo(utxo.txId(), utxo.index(), utxo.amount(), utxo.scriptPubKey());</span>
+<span class="source-line-no">046</span><span id="line-46">    }</span>
+<span class="source-line-no">047</span><span id="line-47"></span>
+<span class="source-line-no">048</span><span id="line-48">    /**</span>
+<span class="source-line-no">049</span><span id="line-49">     * Create an unsigned transaction input from an unspent transaction output that the signer can redeem</span>
+<span class="source-line-no">050</span><span id="line-50">     * @param out An unspent transaction output</span>
+<span class="source-line-no">051</span><span id="line-51">     * @return transaction input data</span>
+<span class="source-line-no">052</span><span id="line-52">     */</span>
+<span class="source-line-no">053</span><span id="line-53">    static TransactionInputData fromTxOut(TransactionOutput out) {</span>
+<span class="source-line-no">054</span><span id="line-54">        return new TransactionInputDataUtxo(out.getParentTransactionHash(), out.getIndex(), out.getValue(), out.getScriptPubKey());</span>
+<span class="source-line-no">055</span><span id="line-55">    }</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">    /**</span>
+<span class="source-line-no">058</span><span id="line-58">     * Create an unsigned transaction input from a bitcoinj (unsigned) TransactionInput.</span>
+<span class="source-line-no">059</span><span id="line-59">     * @param input A transaction input (typically/currently unsigned)</span>
+<span class="source-line-no">060</span><span id="line-60">     * @return transaction input data</span>
+<span class="source-line-no">061</span><span id="line-61">     */</span>
+<span class="source-line-no">062</span><span id="line-62">    static TransactionInputData fromTxInput(TransactionInput input) {</span>
+<span class="source-line-no">063</span><span id="line-63">        return new TransactionInputDataUtxo(</span>
+<span class="source-line-no">064</span><span id="line-64">                input.getOutpoint().hash(),</span>
+<span class="source-line-no">065</span><span id="line-65">                (int) input.getOutpoint().index(),</span>
+<span class="source-line-no">066</span><span id="line-66">                input.getValue(),</span>
+<span class="source-line-no">067</span><span id="line-67">                input.getScriptSig());</span>
+<span class="source-line-no">068</span><span id="line-68">    }</span>
+<span class="source-line-no">069</span><span id="line-69">}</span>
 
 
 
