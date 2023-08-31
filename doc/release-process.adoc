@@ -3,8 +3,8 @@
 == Main Release Process
 
 . Use Java 17 for official builds
-.. `sdk use 17.0.7-tem`
-.. `sdk use 17.0.7-graalce` (for GraalVM build)
+.. `sdk use 17.0.8-tem`
+.. `sdk use 17.0.8-graalce` (for GraalVM build)
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`

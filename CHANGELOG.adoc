@@ -7,10 +7,21 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
+== v0.7.0-alpha2
+
+Released: 2023-08-30
+
 The 0.7.0 release of **ConsensusJ** will require **bitcoinj** v0.17, currently in alpha release. There will likely be multiple alpha releases of ConsensusJ as bitcoinj is updated.
+
+=== bitcoinj-0.17-alpha2 update
+
+* Upgrade to bitcoinj-0.17-alpha2 API
+* More migration away from `NetworkParameters`
 
 === consensusj-jsonrpc
 
+* JSON-RPC clients that need custom SSL behavior should implement the new constructors that take an `SSLContext` and stop using the deprecated constructors that use `SSLSocketFactory`.  (The deprecated constructors will be removed in the next alpha release!)
+* Add (abstract) `sendRequestForResponseAsync` with async becoming the preferred way to implement this interface.
 * Now that this module requires Java 11+, the _incubating_ `java.net.http`-based client `JsonRpcClientJavaNet` has been moved here. The `consensusj-jsonrpc-javanet` module has been removed. Feel free to try out this client instead of `JsonRpcClientHttpUrlConnection` and let us know how it works.
 
 === consensusj-jsonrpc-javanet (removed)
@@ -19,19 +30,25 @@ This _incubating_ module has been removed. Its only class, `org.consensusj.jsonr
 
 If you are using `consensusj-jsonrpc-javanet`, you need to remove the `.javanet` from your `import` statements. You should also remove your Maven/Gradle references to the JAR/Module and replace them with references to `consensusj-jsonrpc`.
 
+=== consensusj-jsonrpc-cli
+
+* `BaseJsonRpcTool` and `jsonrpc` tool use the `java.net.http` implementation (`JsonRpcClientJavaNet`) rather than the old `java.net.HttpURLConnection` implementation.
+
 
 === Dependency Updates
 
-* Micronaut 4.0.5
 * Jackson 2.15.2
 * Groovy 4.0.14
 * RxJava 3.1.7
+* JeroMQ 0.5.3
+* Micronaut 4.0.5
 
 === Build/Test Updates
 
 * Gradle 8.3
 * GitHub JDK Matrix: Java 11, 17, **21-ea**
 * GraalVM 17.0.7 (new release with new versioning scheme)
+* Enable Dependabot
 
 == v0.7.0-alpha1
 
