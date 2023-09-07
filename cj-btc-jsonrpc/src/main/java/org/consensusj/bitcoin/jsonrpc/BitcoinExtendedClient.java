@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
@@ -73,16 +72,6 @@ public class BitcoinExtendedClient extends BitcoinClient {
 
     public BitcoinExtendedClient(SSLContext sslContext, Network network, URI server, String rpcuser, String rpcpassword) {
         super(sslContext, network, server, rpcuser, rpcpassword);
-    }
-
-    @Deprecated
-    public BitcoinExtendedClient(SSLSocketFactory sslSocketFactory, Network network, URI server, String rpcuser, String rpcpassword) {
-        super(sslSocketFactory, network, server, rpcuser, rpcpassword);
-    }
-
-    @Deprecated
-    public BitcoinExtendedClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        super(sslSocketFactory, netParams.network(), server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(Network network, URI server, String rpcuser, String rpcpassword) {

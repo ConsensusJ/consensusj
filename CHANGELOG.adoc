@@ -7,6 +7,10 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: Under development
 
+=== JSON-RPC clients
+
+* Remove deprecated methods that use `SSLSocketFactory` (In favor of `SSLContext`)
+
 == v0.7.0-alpha2
 
 Released: 2023-08-30

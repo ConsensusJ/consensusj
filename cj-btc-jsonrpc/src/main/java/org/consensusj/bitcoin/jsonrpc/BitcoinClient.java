@@ -51,7 +51,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
@@ -126,26 +125,6 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         // calls in `bitcoind` -- which is not designed for serving multiple clients.
         executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
         mapper.registerModule(new RpcClientModule());
-    }
-
-    /**
-     * @deprecated Use {@link BitcoinClient#BitcoinClient(SSLContext, Network, URI, String, String)}
-     */
-    @Deprecated
-    public BitcoinClient(SSLSocketFactory sslSocketFactory, Network network, URI server, String rpcuser, String rpcpassword) {
-        super(sslSocketFactory, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
-        this.network = network;
-        ThreadFactory threadFactory = new BitcoinClientThreadFactory(new Context(), "Bitcoin RPC Client");
-        executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE, threadFactory);
-        mapper.registerModule(new RpcClientModule());
-    }
-
-    /**
-     * @deprecated Use {@link BitcoinClient#BitcoinClient(SSLContext, Network, URI, String, String)}
-     */
-    @Deprecated
-    public BitcoinClient(SSLSocketFactory sslSocketFactory, NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        this(sslSocketFactory, netParams.network(), server, rpcuser, rpcpassword);
     }
 
     // TODO: Reconcile this constructor mode with {@link #waitForServer(int)}

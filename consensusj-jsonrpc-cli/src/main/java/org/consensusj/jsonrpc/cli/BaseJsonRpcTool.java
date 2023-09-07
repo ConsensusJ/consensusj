@@ -124,7 +124,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                 throw new ToolException(1, e.getMessage());
             }
         } else {
-            // Otherwise, use the default SSLSocketFactory
+            // Otherwise, use the default SSLContext
             try {
                 sslContext = SSLContext.getDefault();
             } catch (NoSuchAlgorithmException e) {

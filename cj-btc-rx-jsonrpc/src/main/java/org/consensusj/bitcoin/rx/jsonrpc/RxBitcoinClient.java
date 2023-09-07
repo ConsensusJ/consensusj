@@ -13,7 +13,6 @@ import org.consensusj.bitcoin.rx.zeromq.RxBitcoinZmqService;
 import org.consensusj.bitcoinj.util.BlockUtil;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import java.net.URI;
 
 /**
@@ -43,16 +42,6 @@ public class RxBitcoinClient extends BitcoinExtendedClient implements RxJsonChai
         super(sslContext, network, server, rpcuser, rpcpassword);
         // TODO: Determine if ZMQ is available by querying the server
         // TODO: Determine whether server is up or down -- add a session re-establishment service
-        if (useZmq) {
-            chainTipService = new RxBitcoinZmqService(this);
-        } else {
-            chainTipService = new PollingChainTipServiceImpl(this);
-        }
-    }
-
-    @Deprecated
-    public RxBitcoinClient(SSLSocketFactory sslSocketFactory, Network network, URI server, String rpcuser, String rpcpassword, boolean useZmq) {
-        super(sslSocketFactory, network, server, rpcuser, rpcpassword);
         if (useZmq) {
             chainTipService = new RxBitcoinZmqService(this);
         } else {

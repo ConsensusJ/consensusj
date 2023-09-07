@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
@@ -62,30 +61,6 @@ public class CompositeTrustManager implements X509TrustManager {
         this(new FileInputStream(trustStorePath.toFile()));
     }
 
-    @Deprecated
-    public static SSLSocketFactory getCompositeSSLSocketFactory(Path trustStorePath) throws NoSuchAlgorithmException, KeyManagementException, FileNotFoundException {
-        TrustManager tm = new CompositeTrustManager(trustStorePath);
-        return getSocketFactory(tm);
-    }
-
-
-    @Deprecated
-    public static SSLSocketFactory getCompositeSSLSocketFactory(InputStream trustStoreStream) throws NoSuchAlgorithmException, KeyManagementException {
-        TrustManager tm = new CompositeTrustManager(trustStoreStream);
-        return getSocketFactory(tm);
-    }
-
-    @Deprecated
-    public static SSLSocketFactory getAlternateSSLSocketFactory(Path trustStorePath) throws KeyStoreException, IOException, NoSuchAlgorithmException, KeyManagementException, CertificateException {
-        return getAlternateSSLSocketFactory(new FileInputStream(trustStorePath.toFile()));
-    }
-
-    @Deprecated
-    public static SSLSocketFactory getAlternateSSLSocketFactory(InputStream trustStoreStream) throws KeyStoreException, IOException, NoSuchAlgorithmException, KeyManagementException, CertificateException {
-        X509TrustManager trustManager = getCustomTrustManager(trustStoreStream);
-        return getSocketFactory( trustManager );
-    }
-
     /**
      * Used to create an SSLContext using {@link CompositeTrustManager}
      * See: https://stackoverflow.com/questions/859111/how-can-i-use-different-certificates-on-specific-connections
@@ -119,11 +94,6 @@ public class CompositeTrustManager implements X509TrustManager {
     public static SSLContext getAlternateSSLContext(InputStream trustStoreStream) throws KeyStoreException, IOException, NoSuchAlgorithmException, KeyManagementException, CertificateException {
         X509TrustManager trustManager = getCustomTrustManager(trustStoreStream);
         return getSSLContext( trustManager );
-    }
-
-    @Deprecated
-    private static SSLSocketFactory getSocketFactory(TrustManager trustManager) throws NoSuchAlgorithmException, KeyManagementException {
-        return getSSLContext(trustManager).getSocketFactory();
     }
 
     private static SSLContext getSSLContext(TrustManager trustManager) throws NoSuchAlgorithmException, KeyManagementException {

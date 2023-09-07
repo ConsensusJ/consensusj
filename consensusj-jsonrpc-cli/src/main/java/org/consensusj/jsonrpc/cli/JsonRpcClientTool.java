@@ -3,7 +3,6 @@ package org.consensusj.jsonrpc.cli;
 import org.consensusj.jsonrpc.AbstractRpcClient;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
