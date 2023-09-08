@@ -96,6 +96,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         if (response.statusCode() != 200) {
             String errorResponse = response.body();
             log.error("Bad status code: {}: {}", response.statusCode(), errorResponse);
+            // TODO: If the error Response is JSON (which it is for method not found, at least) it shouldn't be the "message" in the exception
             return CompletableFuture.failedFuture(new JsonRpcStatusException(errorResponse, response.statusCode(), errorResponse, -1, errorResponse, null));
 
         } else {

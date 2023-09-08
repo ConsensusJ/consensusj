@@ -31,6 +31,7 @@ import org.consensusj.bitcoin.json.pojo.bitcore.AddressBalanceInfo;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressRequest;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressUtxoInfo;
 import org.consensusj.bitcoin.jsonrpc.internal.BitcoinClientThreadFactory;
+import org.consensusj.jsonrpc.JsonRpcClientJavaNet;
 import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcErrorException;
 import org.consensusj.jsonrpc.JsonRpcException;
@@ -38,7 +39,6 @@ import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
-import org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.base.Coin;
@@ -97,7 +97,7 @@ import java.util.stream.Stream;
  * <b>This is still a work-in-progress and the API will change.</b>
  *
  */
-public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements ChainTipClient {
+public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClient {
     private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);
 
     private static final int THREAD_POOL_SIZE = 5;
@@ -139,7 +139,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @param rpcpassword Password (if required)
      */
     public BitcoinClient(SSLContext sslContext, URI server, String rpcuser, String rpcpassword) {
-        this(sslContext, (Network) null, server, rpcuser, rpcpassword);
+        this(sslContext, null, server, rpcuser, rpcpassword);
     }
 
     /**
