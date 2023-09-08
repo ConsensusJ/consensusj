@@ -29,6 +29,10 @@ public interface RxJsonRpcClient extends AsyncSupport {
         return Single.defer(() -> Single.fromCompletionStage(supplyAsync(method)));
     }
 
+    default <RSLT> Single<RSLT> callAsync(Supplier<CompletionStage<RSLT>> supplier) {
+        return defer(supplier);
+    }
+
     /**
      * Return a <i>cold</i> {@link Single} for calling a provided <b>asynchronous</b> JSON-RPC method.
      * (Uses a supplier to make sure the async call isn't made until subscription time)
@@ -38,7 +42,7 @@ public interface RxJsonRpcClient extends AsyncSupport {
      * @param <RSLT> The type of the expected result
      * @return A <i>cold</i> {@link Single} for calling the method.
      */
-    default <RSLT> Single<RSLT> defer(Supplier<CompletionStage<RSLT>> supplier) {
+    static <RSLT> Single<RSLT> defer(Supplier<CompletionStage<RSLT>> supplier) {
         return Single.defer(() -> Single.fromCompletionStage(supplier.get()));
     }
 
@@ -54,9 +58,32 @@ public interface RxJsonRpcClient extends AsyncSupport {
      * @param method A supplier (should be an RPC Method) that can throw {@link Exception}.
      * @param <RSLT> The type of the expected result
      * @return A Maybe for the expected result type
+     * @deprecated Use {@link #pollOnceAsync(Supplier)}
      */
+    @Deprecated
     default <RSLT> Maybe<RSLT> pollOnce(AsyncSupport.ThrowingSupplier<RSLT> method) {
         return call(method)
+                .doOnSuccess(this::logSuccess)
+                .doOnError(this::logError)
+                .toMaybe()
+                .onErrorComplete(this::isTransientError);    // Empty completion if IOError
+    }
+
+    /**
+     * Poll a method, ignoring {@link IOError}.
+     * The returned {@link Maybe} will:
+     * <ol>
+     *     <li>Emit a value if successful</li>
+     *     <li>Empty Complete on IOError</li>
+     *     <li>Error out if any other Exception occurs</li>
+     * </ol>
+     *
+     * @param supplier A supplier (should call an async RPC Method and return a {@code CompletableFuture}).
+     * @param <RSLT> The type of the expected result
+     * @return A Maybe for the expected result type
+     */
+    default <RSLT> Maybe<RSLT> pollOnceAsync(Supplier<CompletionStage<RSLT>> supplier) {
+        return callAsync(supplier)
                 .doOnSuccess(this::logSuccess)
                 .doOnError(this::logError)
                 .toMaybe()

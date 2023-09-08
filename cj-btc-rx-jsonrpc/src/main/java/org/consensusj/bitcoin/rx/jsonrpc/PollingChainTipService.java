@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.rx.jsonrpc;
 
 import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.slf4j.Logger;
@@ -35,5 +36,15 @@ public interface PollingChainTipService extends RxJsonChainTipClient {
                 .doOnNext(tip -> log.info("** NEW ** blockheight, blockhash = {}, {}", tip.getHeight(), tip.getHash()))
                 // ERROR backpressure strategy is compatible with BehaviorProcessor since it subscribes to MAX items
                 .toFlowable(BackpressureStrategy.ERROR);
+    }
+
+    /**
+     * Get the active chain tip if there is one (useful for polling clients)
+     *
+     * @return The active ChainTip if available (onSuccess) otherwise onComplete (if not available) or onError (if error occurred)
+     */
+    private Maybe<ChainTip> currentChainTipMaybe() {
+        return pollOnceAsync(this::getChainTipsAsync)
+                .mapOptional(ChainTip::findActiveChainTip);
     }
 }

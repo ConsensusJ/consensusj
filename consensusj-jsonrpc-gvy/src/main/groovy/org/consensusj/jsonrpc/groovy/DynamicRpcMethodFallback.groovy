@@ -2,6 +2,8 @@ package org.consensusj.jsonrpc.groovy
 
 import org.consensusj.jsonrpc.JsonRpcClient
 
+import java.util.concurrent.CompletableFuture
+
 /**
  * Groovy trait that adds dynamic JSON-RPC method fallback to any JSON-RPC client.
  * <p>
@@ -37,7 +39,8 @@ trait DynamicRpcMethodFallback implements JsonRpcClient {
      * @see <a href="https://docs.groovy-lang.org/latest/html/documentation/#_methodmissing">methodMissing</a>
      */
     def methodMissing(String name, def args) {
-        Object result = this.send(name, args as List)
+        CompletableFuture<Object> future = sendAsync(name, args as List)
+        Object result = syncGet(future)
         return result
     }
 }

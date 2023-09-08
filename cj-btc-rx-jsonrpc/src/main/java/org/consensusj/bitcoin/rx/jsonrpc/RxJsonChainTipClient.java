@@ -1,12 +1,13 @@
 package org.consensusj.bitcoin.rx.jsonrpc;
 
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Maybe;
-import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.consensusj.bitcoin.jsonrpc.ChainTipClient;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.jsonrpc.AsyncSupport;
 import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
+
+import java.util.concurrent.CompletionStage;
+import java.util.function.Supplier;
 
 /**
  * A JSON-RPC client interface that provides ChainTipService
@@ -20,17 +21,19 @@ public interface RxJsonChainTipClient extends ChainTipService, ChainTipClient, R
      * @param <RSLT> The type of the expected result
      * @return An Observable for the expected result type, so we can expect one call to {@code onNext} per block.
      */
+    @Deprecated
     default <RSLT> Flowable<RSLT> pollOnNewBlock(AsyncSupport.ThrowingSupplier<RSLT> method) {
         return Flowable.fromPublisher(chainTipPublisher()).flatMapMaybe(tip -> pollOnce(method));
     }
 
     /**
-     * Get the active chain tip if there is one (useful for polling clients)
+     * Repeatedly once-per-new-block poll an async method
      *
-     * @return The active ChainTip if available (onSuccess) otherwise onComplete (if not available) or onError (if error occurred)
+     * @param supplier A supplier (should be an RPC Method) of a CompletionStage
+     * @param <RSLT> The type of the expected result
+     * @return An Observable for the expected result type, so we can expect one call to {@code onNext} per block.
      */
-    default Maybe<ChainTip> currentChainTipMaybe() {
-        return pollOnce(this::getChainTips)
-                .mapOptional(ChainTip::findActiveChainTip);
+    default <RSLT> Flowable<RSLT> pollOnNewBlockAsync(Supplier<CompletionStage<RSLT>> supplier) {
+        return Flowable.fromPublisher(chainTipPublisher()).flatMapMaybe(tip -> pollOnceAsync(supplier));
     }
 }

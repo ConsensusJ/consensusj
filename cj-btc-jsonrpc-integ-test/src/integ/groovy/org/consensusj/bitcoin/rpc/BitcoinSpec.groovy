@@ -111,7 +111,7 @@ class BitcoinSpec extends BaseRegTestSpec {
 
     def "We can get information about chain tips"() {
         when:
-        def tips = getChainTips()
+        def tips = getChainTipsAsync().get()
 
         then:
         tips != null

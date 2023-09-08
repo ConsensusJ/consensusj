@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -69,7 +70,13 @@ public class PollingChainTipServiceImpl implements Closeable, PollingChainTipSer
     }
 
     @Override
+    public CompletableFuture<List<ChainTip>> getChainTipsAsync() {
+        return client.getChainTipsAsync();
+    }
+
+    @Override
+    @Deprecated
     public List<ChainTip> getChainTips() throws JsonRpcStatusException, IOException {
-        return client.getChainTips();
+        return client.syncGet(client.getChainTipsAsync());
     }
 }

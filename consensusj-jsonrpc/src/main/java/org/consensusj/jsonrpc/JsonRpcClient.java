@@ -5,6 +5,8 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  *  JSON-RPC client interface. This interface is independent of the JSON conversion library
@@ -53,10 +55,12 @@ public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
      */
     <R> R send(String method, List<Object> params) throws IOException, JsonRpcStatusException;
 
+    <R> CompletableFuture<R> sendAsync(String method, List<Object> params);
+
     /**
      * Call an RPC method and return default object type.
-     *
-     * Convenience version that takes `params` as array/varargs.
+     * <p>
+     * Convenience version that takes {@code params} as array/varargs.
      *
      * @param <R> Type of result object
      * @param method JSON RPC method call to send
@@ -71,8 +75,41 @@ public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
 
     <R> R send(String method, Class<R> resultType, List<Object> params) throws IOException, JsonRpcStatusException;
 
+    <R> CompletableFuture<R> sendAsync(String method, Class<R> resultType, List<Object> params);
+
     default <R> R send(String method, Class<R> resultType, Object... params) throws IOException, JsonRpcStatusException {
         return send(method, resultType, Arrays.asList(params));
+    }
+
+    default <R> CompletableFuture<R> sendAsync(String method, Class<R> resultType, Object... params) {
+        return sendAsync(method, resultType, Arrays.asList(params));
+    }
+
+    /**
+     * Synchronously complete a JSON-RPC request by calling {@link CompletableFuture#get()}, unwrapping nested
+     * {@link JsonRpcException} or {@link IOException} from {@link ExecutionException}.
+     * @param future The {@code CompletableFuture} (result of JSON-RPC request) to unwrap
+     * @return A JSON-RPC result
+     * @param <R> The expected result type
+     * @throws IOException If {@link CompletableFuture#get} threw  {@code ExecutionException} caused by {@code IOException}
+     * @throws JsonRpcException If {@link CompletableFuture#get} threw  {@code ExecutionException} caused by {@code JsonRpcException}
+     * @throws RuntimeException If {@link CompletableFuture#get} threw {@link InterruptedException} or other {@link ExecutionException}.
+     */
+    default <R> R syncGet(CompletableFuture<R> future) throws IOException, JsonRpcException {
+        try {
+            return future.get();
+        } catch (InterruptedException ie) {
+            throw new RuntimeException(ie);
+        } catch (ExecutionException ee) {
+            Throwable cause = ee.getCause();
+            if (cause instanceof JsonRpcException) {
+                throw (JsonRpcException) cause;
+            } else if (cause instanceof IOException) {
+                throw (IOException) cause;
+            } else {
+                throw new RuntimeException(ee);
+            }
+        }
     }
 
     /**
@@ -91,11 +128,12 @@ public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
     }
 
     /**
-     * Default no-op implementation of close. Classes should override when
+     * Default no-op implementation of {@link AutoCloseable#close()}. Classes should override when
      * they have something they need to close properly.
      *
      * @throws IOException if something happens during close
      */
+    @Override
     default void close() throws Exception {
     }
 }

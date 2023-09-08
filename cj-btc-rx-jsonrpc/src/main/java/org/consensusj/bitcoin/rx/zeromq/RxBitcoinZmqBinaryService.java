@@ -1,6 +1,7 @@
 package org.consensusj.bitcoin.rx.zeromq;
 
 import org.bitcoinj.base.Network;
+import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
 import org.consensusj.bitcoin.jsonrpc.internal.BitcoinClientThreadFactory;
 import io.reactivex.rxjava3.core.Flowable;
 import org.bitcoinj.core.Context;
@@ -19,7 +20,7 @@ import static org.consensusj.bitcoin.rx.zeromq.BitcoinZmqMessage.Topic.*;
  * TODO: Support using all topics, notjust `rawblock` and `rawtx`.
  */
 public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Closeable {
-    protected final RxBitcoinClient client;
+    protected final BitcoinClient client;
     private final RxBitcoinSinglePortZmqService blockService;
     private final RxBitcoinSinglePortZmqService txService;
 
@@ -32,7 +33,7 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
         this(new RxBitcoinClient(network, rpcUri, rpcUser, rpcPassword));
     }
 
-    public RxBitcoinZmqBinaryService(RxBitcoinClient client) {
+    public RxBitcoinZmqBinaryService(BitcoinClient client) {
         this.client = client;
         threadFactory = new BitcoinClientThreadFactory(Context.getOrCreate(), "RxBitcoinZmq Thread");
 
@@ -89,7 +90,4 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
             throw new RuntimeException(e);
         }
     }
-
-
-
 }

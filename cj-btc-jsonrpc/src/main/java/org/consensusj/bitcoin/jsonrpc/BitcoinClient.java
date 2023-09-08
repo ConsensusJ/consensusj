@@ -512,8 +512,24 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @throws IOException network error
      */
     public Block getBlock(Sha256Hash hash) throws JsonRpcStatusException, IOException {
-        // Use "verbose = false"
-        return send("getblock", Block.class, hash, false);
+        return syncGet(getBlockAsync(hash));
+    }
+
+    public CompletableFuture<Block> getBlockAsync(Sha256Hash hash) {
+        // Use "verbosity = 0" for raw block data
+        return sendAsync("getblock", Block.class, hash, 0);
+    }
+
+    /**
+     * Composite query that first calls ChainTips, then gets best block for the active tip
+     * @return The current best block
+     */
+    public CompletableFuture<Block> getBestBlock() {
+        return getChainTipsAsync()
+                .thenCompose(tips -> ChainTip.findActiveChainTip(tips)
+                        .map(tip -> getBlockAsync(tip.getHash()))
+                        .orElseGet(() -> CompletableFuture.failedFuture(new RuntimeException("No active ChainTip")))
+                );
     }
 
     /**
@@ -991,7 +1007,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
     }
 
     /**
-     * The getzmqnotifications RPC returns information about which configured ZMQ notifications are enabled
+     * The {@code getzmqnotifications} RPC returns information about which configured ZMQ notifications are enabled
      * and on which ports.
      * 
      * @return A List of ZMQ Notification info records
@@ -999,8 +1015,12 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @throws IOException network error
      */
     public List<ZmqNotification> getZmqNotifications() throws JsonRpcStatusException, IOException  {
+        return syncGet(getZmqNotificationsAsync());
+    }
+
+    public CompletableFuture<List<ZmqNotification>> getZmqNotificationsAsync() {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ZmqNotification.class);
-        return send("getzmqnotifications", resultType);
+        return sendAsync("getzmqnotifications", resultType);
     }
 
     /**
@@ -1081,7 +1101,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
 
     /**
      * Returns a list of available commands.
-     *
+     * <p>
      * Commands which are unavailable will not be listed, such as wallet RPCs, if wallet support is disabled.
      *
      * @return The list of commands
@@ -1106,7 +1126,7 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
 
     /**
      * Checks whether a command exists.
-     *
+     * <p>
      * This is done indirectly, by using {help(String) help} to get information about the command, and if information
      * about the command is available, then the command exists. The absence of information does not necessarily imply
      * the non-existence of a command.
@@ -1153,11 +1173,17 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
      * @since Bitcoin Core 0.10
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
+     * @deprecated Use {@link #getChainTipsAsync()}
      */
     @Override
     public List<ChainTip> getChainTips() throws JsonRpcStatusException, IOException {
+        return syncGet(getChainTipsAsync());
+    }
+
+    @Override
+    public CompletableFuture<List<ChainTip>> getChainTipsAsync() {
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ChainTip.class);
-        return send("getchaintips",resultType);
+        return sendAsync("getchaintips", resultType);
     }
 
     /**
@@ -1218,5 +1244,4 @@ public class BitcoinClient extends JsonRpcClientHttpUrlConnection implements Cha
         JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, AddressUtxoInfo.class);
         return send("getaddressutxos", resultType, new AddressRequest(addressList));
     }
-
 }
