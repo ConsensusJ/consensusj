@@ -7,7 +7,7 @@ plugins {
 }
 
 tasks.withType(JavaCompile) {
-    options.release = 17
+    options.release = 21
 }
 
 configurations {

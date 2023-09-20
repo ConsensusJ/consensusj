@@ -9,7 +9,7 @@ plugins {
 ext.moduleName = 'org.consensusj.bitcoin.cli'
 
 tasks.withType(JavaCompile) {
-    options.release = 17
+    options.release = 21
 }
 
 configurations {

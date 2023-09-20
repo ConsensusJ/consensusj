@@ -9,8 +9,10 @@ if (!JavaVersion.current().isJava11Compatible()) {
 }
 
 // JDK 8
-    include 'cj-bitcoinj-util'                  // BlockUtil (and future stuff depending on only bitcoinj)
     include 'cj-bitcoinj-dsl-gvy'               // Groovy DSL for bitcoinj
+
+// JDK 9
+    include 'cj-bitcoinj-util'                  // BlockUtil (and future stuff depending on only bitcoinj)
 
 // JDK 11
     include 'consensusj-analytics'              // Reactive analytics libraries
@@ -31,16 +33,21 @@ if (!JavaVersion.current().isJava11Compatible()) {
     include 'cj-nmc-jsonrpc'                    // Namecoin JSON-RPC client (experimental)
 
 if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
-    System.err.println "Including JDK 17 modules because Java ${JavaVersion.current()} is JDK 17+"
+    System.err.println "Including JDK 17 modules because Java is ${JavaVersion.current()}"
     include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
     include 'cj-bitcoinj-spock'                 // Spock tests/demos of basic bitcoinj capabilities
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
     include 'cj-btc-daemon'                     // Prototype Micronaut version of Bitcoin daemon
     include 'cj-btc-jsonrpc-integ-test'         // RPC-based integration tests of/using bitcoind
     include 'cj-btc-services'                   // bitcoinj-based service objects
-    include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
-    include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
 } else {
     System.err.println "Skipping JDK 17 modules, currently running Java ${JavaVersion.current()}"
 }
 
+if (JavaVersion.current().compareTo(JavaVersion.VERSION_21) >= 0) {
+    System.err.println "Including JDK 21 modules because Java is ${JavaVersion.current()}"
+    include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
+    include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
+} else {
+    System.err.println "Skipping JDK 21 modules, currently running Java ${JavaVersion.current()}"
+}
