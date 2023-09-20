@@ -73,7 +73,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
     
     public void run(CommonsCLICall call) {
         List<String> args = call.line.getArgList();
-        if (args.size() == 0) {
+        if (args.isEmpty()) {
             printError(call, "jsonrpc method required");
             printHelp(call, usage);
             throw new ToolException(1, "jsonrpc method required");
