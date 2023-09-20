@@ -20,7 +20,6 @@ jobs:
         with:
           java-version: ${{ matrix.java-version }}
           distribution: ${{ matrix.distribution }}
-          components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Cache Gradle packages
         uses: actions/cache@v3
