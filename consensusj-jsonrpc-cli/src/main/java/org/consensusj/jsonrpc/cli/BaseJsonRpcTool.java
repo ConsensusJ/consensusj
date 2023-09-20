@@ -85,8 +85,8 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         if (call.line.hasOption("V1")) {
             jsonRpcVersion = JsonRpcMessage.Version.V1;
         }
-        SSLContext sslSocketFactory = sslContext(call.line);
-        AbstractRpcClient client = call.rpcClient(sslSocketFactory);
+        SSLContext sslContext = sslContext(call.line);
+        AbstractRpcClient client = call.rpcClient(sslContext);
         CliParameterParser parser = new CliParameterParser(jsonRpcVersion, client.getMapper());
         JsonRpcRequest request = parser.parse(args);
         JsonRpcResponse<JsonNode> response;
