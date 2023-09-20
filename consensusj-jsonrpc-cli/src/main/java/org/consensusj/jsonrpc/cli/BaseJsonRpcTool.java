@@ -135,31 +135,13 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
     }
 
     private String formatResponse(JsonRpcResponse<?> response, ObjectMapper mapper) {
-        String string;
-        if (response.getResult() == null || response.getError() != null || outputObject == OutputObject.RESPONSE) {
-            JsonNode reponseAsNode = mapper.valueToTree(response);
-            string = reponseAsNode.toPrettyString();
-        } else {
-            Object result = response.getResult();
-            if (result == null) {
-                log.info("result is null");
-                string = "null";
-            } else if (result instanceof JsonNode) {
-                log.info("result instanceof JsonNode");
-                if (result instanceof TextNode) {
-                    // This will remove the surrounding quotes and not print `\n` for newlines
-                    string = ((TextNode) result).asText();
-                } else if (outputStyle == OutputStyle.PRETTY) {
-                    string = ((JsonNode) result).toPrettyString();
-                } else {
-                    string = result.toString();
-                }
-            } else {
-                log.info("result class is: {}", result.getClass());
-                string = result.toString();
-            }
-        }
-        return string;
+        return (response.getResult() == null || response.getError() != null || outputObject == OutputObject.RESPONSE)
+            ? mapper.valueToTree(response).toPrettyString() // Pretty print the entire response as JSON
+            : switch (response.getResult()) {
+                case TextNode tn    -> tn.asText();         // Remove the surrounding quotes and don't print `\n` for newlines
+                case JsonNode jn    -> outputStyle == OutputStyle.PRETTY ? jn.toPrettyString() : jn.toString();
+                case Object obj     -> obj.toString();
+            };
     }
 
     public void printHelp(Call call, String usage) {
