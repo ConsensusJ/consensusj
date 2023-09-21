@@ -14,7 +14,7 @@ import java.io.IOException;
  * <p>
  * TODO: Rethink the differences between the two subclasses in light of Bitcoin (and possibly other)
  * implementations returning HTTP status codes along with JsonRpcError responses. Bitcoin even incorrectly
- * returns a 500 for invalid parameters. I think I originally assume that their would be either an
+ * returns a 500 for invalid parameters. I think I originally assumed that there would be either an
  * HTTP status error or a JSON-RPC error, but in reality responses can probably have neither, either, or both.
  * @see <a href="https://github.com/bitcoin/bitcoin/issues/2960">Bitcoin Core Issue #2960</a>
  */
