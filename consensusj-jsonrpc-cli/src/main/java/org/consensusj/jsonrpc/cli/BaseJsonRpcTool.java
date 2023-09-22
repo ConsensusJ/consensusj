@@ -45,7 +45,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
     protected JsonRpcMessage.Version jsonRpcVersion = JsonRpcMessage.Version.V2;
     protected JsonRpcClientTool.OutputObject outputObject = OutputObject.RESULT;
     //protected JsonRpcClientTool.OutputFormat outputFormat = OutputFormat.JSON;
-    protected JsonRpcClientTool.OutputStyle outputStyle = OutputStyle.PRETTY;
+    protected final JsonRpcClientTool.OutputStyle outputStyle = OutputStyle.PRETTY;
 
     public BaseJsonRpcTool() {
         formatter.setLongOptPrefix("-");
