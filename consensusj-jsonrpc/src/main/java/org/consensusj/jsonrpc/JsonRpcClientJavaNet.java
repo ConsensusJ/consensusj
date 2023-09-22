@@ -95,7 +95,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
     private CompletableFuture<HttpResponse<String>> handleStatusError(HttpResponse<String> response) {
         if (response.statusCode() != 200) {
             String errorResponse = response.body();
-            log.error("Bad status code: {}: {}", response.statusCode(), errorResponse);
+            log.warn("Bad status code: {}: {}", response.statusCode(), errorResponse);
             // TODO: If the error Response is JSON (which it is for method not found, at least) it shouldn't be the "message" in the exception
             return CompletableFuture.failedFuture(new JsonRpcStatusException(errorResponse, response.statusCode(), errorResponse, -1, errorResponse, null));
 
@@ -165,7 +165,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         if ((httpResponse != null)) {
             log.info("log data string: {}", httpResponse);
         } else {
-            log.error("exception: ", t);
+            log.warn("exception: ", t);
         }
     }
 
@@ -173,7 +173,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         if ((s != null)) {
             log.info("log data string: {}", s.substring(0 ,Math.min(100, s.length())));
         } else {
-            log.error("exception: ", t);
+            log.warn("exception: ", t);
         }
     }
 }
