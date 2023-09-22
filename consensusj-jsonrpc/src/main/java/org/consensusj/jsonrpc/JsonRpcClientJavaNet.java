@@ -92,6 +92,11 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         }
     }
 
+    /**
+     * Process the HTTP status code. Treats values other than 200 as an error.
+     * @param response A received HTTP response.
+     * @return Completed or failed future as appropriate.
+     */
     private CompletableFuture<HttpResponse<String>> handleStatusError(HttpResponse<String> response) {
         if (response.statusCode() != 200) {
             String errorResponse = response.body();
@@ -153,14 +158,21 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
 
         /**
          * Gets a result and may throw a checked exception.
-         *
          * @param s input
          * @return a result
          * @throws JsonProcessingException Checked Exception
          */
         R applyThrows(String s) throws JsonProcessingException;
     }
-    
+
+    /**
+     * Logging action for a {@code CompletionStage} that returns {@link HttpResponse}
+     * <p>
+     * Note that an error at this layer should be treated as a warning for logging purposes, because network
+     * errors are relatively common and should be handled and/or logged at higher layers of the stack.
+     * @param httpResponse non-null on success
+     * @param t non-null on error
+     */
     private void log(HttpResponse<String> httpResponse, Throwable t) {
         if ((httpResponse != null)) {
             log.info("log data string: {}", httpResponse);
@@ -169,6 +181,15 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         }
     }
 
+    /**
+     * Logging action for a {@code CompletionStage} that returns {@link String}. In the current
+     * implementation of this client, that should be a JSON-formatted string.
+     * <p>
+     * Note that an error at this layer should be treated as a warning for logging purposes, because network
+     * errors are relatively common and should be handled and/or logged at higher layers of the stack.
+     * @param s non-null on success
+     * @param t non-null on error
+     */
     private void log(String s, Throwable t) {
         if ((s != null)) {
             log.info("log data string: {}", s.substring(0 ,Math.min(100, s.length())));
