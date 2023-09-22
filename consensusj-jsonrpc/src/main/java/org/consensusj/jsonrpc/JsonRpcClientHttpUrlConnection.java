@@ -142,8 +142,8 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
         String responseMessage = connection.getResponseMessage();
         String exceptionMessage = responseMessage;
         int jsonRpcCode = 0;
-        JsonRpcResponse bodyJson = null;    // Body as JSON if available
-        String bodyString = null;           // Body as String if not JSON
+        JsonRpcResponse<JsonNode> bodyJson = null;      // Body as JSON, if available
+        String bodyString = null;                       // Body as String, if not JSON
         InputStream errorStream = connection.getErrorStream();
         if (errorStream != null) {
             if (connection.getContentType().equals("application/json")) {
