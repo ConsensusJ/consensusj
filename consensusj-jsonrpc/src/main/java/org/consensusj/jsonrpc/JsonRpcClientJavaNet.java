@@ -84,7 +84,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
             HttpRequest httpRequest = buildJsonRpcPostRequest(request);
             return client.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString())
                     .whenComplete(this::log)
-                    .thenComposeAsync(this::handleStatusError)
+                    .thenCompose(this::handleStatusError)
                     .thenApply(HttpResponse::body)
                     .whenComplete(this::log);
         } catch (JsonProcessingException e) {
