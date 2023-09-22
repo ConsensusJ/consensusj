@@ -146,9 +146,10 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
          * Gets a result. Wraps checked {@link JsonProcessingException} in {@link CompletionException}
          * @param s input
          * @return a result
+         * @throws CompletionException (unchecked) if a JsonProcessingException exception occurs
          */
         @Override
-        default R apply(String s) {
+        default R apply(String s) throws CompletionException {
             try {
                 return applyThrows(s);
             } catch (JsonProcessingException e) {
