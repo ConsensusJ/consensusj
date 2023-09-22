@@ -41,9 +41,19 @@ public class JavaLoggingSupport {
 
     /**
      * Change log level (eg. as a result of `-v` command-line option)
+     * This sets the level to {@link Level#FINE}
      */
     public static void setVerbose() {
-        final Logger app = Logger.getLogger(loggerName);
-        app.setLevel(Level.FINE);
+        setLogLevel(Level.FINE);
     }
+
+    /**
+     * Change log level (eg. as a result of `-log=level` command-line option)
+     * @param level j.u.logging log level
+     */
+    public static void setLogLevel(Level level) {
+        final Logger app = Logger.getLogger(loggerName);
+        app.setLevel(level);
+    }
+
 }

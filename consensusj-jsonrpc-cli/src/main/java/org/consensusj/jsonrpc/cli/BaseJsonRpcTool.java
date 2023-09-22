@@ -31,6 +31,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * An abstract base class for JsonRpcClientTool that uses Apache Commons CLI
@@ -181,6 +182,20 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             verbose = line.hasOption("v");
             if (verbose) {
                 JavaLoggingSupport.setVerbose();
+            }
+            boolean hasLogLevel = line.hasOption("log");
+            if (hasLogLevel ){
+                String intLevel = line.getOptionValue("log");
+                Level level = switch (intLevel) {
+                    case "0" -> Level.OFF;
+                    case "1" -> Level.SEVERE;
+                    case "2" -> Level.WARNING;
+                    case "3" -> Level.INFO;
+                    case "4" -> Level.FINE;
+                    case "5" -> Level.ALL;
+                    default -> throw new IllegalStateException("Unexpected value: " + intLevel);
+                };
+                JavaLoggingSupport.setLogLevel(level);
             }
             // TODO: Add rpcwait option for non-Bitcoin JsonRPC???
         }
