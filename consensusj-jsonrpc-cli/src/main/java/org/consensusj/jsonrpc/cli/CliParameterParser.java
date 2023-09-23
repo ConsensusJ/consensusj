@@ -59,7 +59,7 @@ public class CliParameterParser {
     }
 
     /**
-     * Convert a single param from a command-line option {@code String} to a type more appropriate
+     * Convert a single param from a command-line argument {@code String} to a type more appropriate
      * for serialization by Jackson/JSON-RPC.
      *
      * @param param A string parameter to convert
