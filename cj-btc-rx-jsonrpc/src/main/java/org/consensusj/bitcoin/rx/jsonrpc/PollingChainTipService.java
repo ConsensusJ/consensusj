@@ -11,10 +11,11 @@ import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//TODO: Merge with PollingChainTipServiceImpl
 /**
  * Interface with {@link PollingChainTipService#pollForDistinctChainTip()} method.
+ * @deprecated Use the {@link PollingChainTipServiceImpl} implementation
  */
+@Deprecated
 public interface PollingChainTipService extends ChainTipService, ChainTipClient, RxJsonRpcClient {
     Logger log = LoggerFactory.getLogger(PollingChainTipService.class);
 
