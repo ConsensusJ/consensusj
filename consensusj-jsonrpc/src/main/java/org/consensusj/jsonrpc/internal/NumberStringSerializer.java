@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * If string is an integer (valid long) serialize as Number, else serialize as String
  */
 public class NumberStringSerializer extends JsonSerializer<String> {
-    private static Pattern numberRegEx = Pattern.compile("^-?\\d+$");
+    private static final Pattern numberRegEx = Pattern.compile("^-?\\d+$");
 
     @Override
     public void serialize(String numberOrString, JsonGenerator jsonGenerator,
@@ -21,7 +21,7 @@ public class NumberStringSerializer extends JsonSerializer<String> {
 
         if (numberRegEx.matcher(numberOrString).matches()) {
             try {
-                jsonGenerator.writeNumber(Long.valueOf(numberOrString));
+                jsonGenerator.writeNumber(Long.parseLong(numberOrString));
                 return;
             } catch (NumberFormatException ignored) {}
         }
