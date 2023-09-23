@@ -68,7 +68,16 @@ public interface JacksonRpcClient extends JsonRpcClient {
      * @throws JsonRpcStatusException JSON RPC status error
      */
     default JsonRpcResponse<JsonNode> sendRequestForResponse(JsonRpcRequest request) throws IOException, JsonRpcStatusException {
-        return syncGet(sendRequestForResponseAsync(request, responseTypeFor(JsonNode.class)));
+        return syncGet(sendRequestForResponseAsync(request));
+    }
+
+    /**
+     * Convenience method for requesting an asynchronous response with a {@link JsonNode} for the result.
+     * @param request The request to send
+     * @return A future JSON RPC Response with `result` of type {@code JsonNode}
+     */
+    default CompletableFuture<JsonRpcResponse<JsonNode>> sendRequestForResponseAsync(JsonRpcRequest request) {
+        return sendRequestForResponseAsync(request, responseTypeFor(JsonNode.class));
     }
 
     private <R> CompletableFuture<R> sendRequestForResultAsync(JsonRpcRequest request, JavaType resultType) {

@@ -12,7 +12,6 @@ import org.apache.commons.cli.ParseException;
 import org.consensusj.jsonrpc.AbstractRpcClient;
 import org.consensusj.jsonrpc.CompositeTrustManager;
 import org.consensusj.jsonrpc.JsonRpcClientJavaNet;
-import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
@@ -31,6 +30,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 /**
@@ -92,12 +92,13 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         JsonRpcRequest request = parser.parse(args);
         JsonRpcResponse<JsonNode> response;
         try {
-            response = client.sendRequestForResponse(request);
-        } catch (JsonRpcException e) {
-            log.error("send exception: ", e);
-            throw new ToolException(1, e.getMessage());
-        } catch (IOException e) {
-            log.error("send exception: ", e);
+            response = client.sendRequestForResponseAsync(request).get();
+        } catch (ExecutionException ee) {
+            log.error("send execution exception: ", ee);
+            Throwable t = ee.getCause() != null ? ee.getCause(): ee;
+            throw new ToolException(1, t.getMessage());
+        } catch (InterruptedException e) {
+            log.error("send interrupted exception: ", e);
             throw new ToolException(1, e.getMessage());
         }
         String resultForPrinting = formatResponse(response, client.getMapper());
