@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.consensusj.jsonrpc.internal.NumberStringSerializer;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -43,7 +45,7 @@ public class JsonRpcRequest {
         this.jsonrpc = jsonrpc;
         this.method = method;
         this.id = id;
-        this.params = params;
+        this.params = Collections.unmodifiableList(new ArrayList<>(params));
     }
 
     /**
@@ -60,10 +62,7 @@ public class JsonRpcRequest {
                           long id,
                           String method,
                           List<Object> params) {
-        this.jsonrpc    = jsonRpcVersion.jsonrpc();
-        this.method     = method;
-        this.id         = Long.toString(id);
-        this.params     = params;
+        this(jsonRpcVersion.jsonrpc(), Long.toString(id), method, params);
     }
 
     /**
@@ -75,7 +74,7 @@ public class JsonRpcRequest {
      * @param method Method of remote procedure to call
      * @param params Parameters to serialize
      */
-    public JsonRpcRequest(JsonRpcMessage.Version jsonRpcVersion, String method, List<Object> params) {
+    public JsonRpcRequest(JsonRpcMessage.Version jsonRpcVersion, String method, List<?> params) {
         this(jsonRpcVersion, JsonRpcRequest.nextRequestId.incrementAndGet(), method, removeTrailingNulls(params));
     }
 
@@ -88,7 +87,7 @@ public class JsonRpcRequest {
      * @see JsonRpcClient#buildJsonRequest(String, List)
      * @see JsonRpcClient#buildJsonRequest(String, Object...)
      */
-    public JsonRpcRequest(String method, List<Object> params) {
+    public JsonRpcRequest(String method, List<?> params) {
         this(DEFAULT_JSON_RPC_VERSION, method, params);
     }
 
@@ -118,16 +117,16 @@ public class JsonRpcRequest {
     }
 
     /**
-     * Remove trailing nulls (all nulls *following* the last non-null object)
-     *
-     * This allows convenience methods to use `null` parameters to indicate the
-     * server-determined default should be used. If `null` were actually passed as
-     * JSON, then the server default would be overridden.  `null` can be used before
-     * the last non-null element, but those `null`s will be sent to the server.
+     * Remove trailing {@code null}s (all {@code null}s </i>following</i> the last non-{@code null}  object)
+     * <p>
+     * This allows convenience methods to use {@code null} parameters to indicate the
+     * server-determined default should be used. If {@code null} were actually sent as
+     * JSON, then the server default would be overridden.  {@code null}  can be used before
+     * the last non-null element, but those {@code null} s will be sent to the server.
      */
-    private static List<Object> removeTrailingNulls(List<Object> params) {
+    private static List<Object> removeTrailingNulls(List<?> params) {
         LinkedList<Object> cleaned = new LinkedList<>(params);
-        while ((cleaned.size() > 0) && (cleaned.getLast() == null)) {
+        while (!cleaned.isEmpty() && cleaned.getLast() == null) {
             cleaned.removeLast();
         }
         return cleaned;
