@@ -1,7 +1,6 @@
 package org.consensusj.bitcoin.rx.jsonrpc;
 
 import io.reactivex.rxjava3.core.Flowable;
-import org.consensusj.bitcoin.jsonrpc.ChainTipClient;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.jsonrpc.AsyncSupport;
 import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
@@ -12,7 +11,8 @@ import java.util.function.Supplier;
 /**
  * A JSON-RPC client interface that provides ChainTipService
  */
-public interface RxJsonChainTipClient extends ChainTipService, ChainTipClient, RxJsonRpcClient {
+@Deprecated
+public interface RxJsonChainTipClient extends ChainTipService, RxJsonRpcClient {
 
     /**
      * Repeatedly once-per-new-block poll a method

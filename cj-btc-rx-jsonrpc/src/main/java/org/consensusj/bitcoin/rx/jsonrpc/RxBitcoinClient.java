@@ -7,13 +7,14 @@ import io.reactivex.rxjava3.core.Flowable;
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.bitcoin.rx.zeromq.RxBitcoinZmqService;
+import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
 
 import javax.net.ssl.SSLContext;
 import java.net.URI;
 
 /**
  * A {@link BitcoinClient} enhanced with Reactive features. Can use either ZeroMQ or polling
- * to implement {@link RxJsonChainTipClient}.
+ * to implement {@link ChainTipService}.
  * <p>
  * TODO: answer the below questions
  * <p>
@@ -23,7 +24,7 @@ import java.net.URI;
  * Should this class be renamed to {@code RxBitcoinJsonRpcClient} and the {@code RxBitcoinClient} interface be moved
  * to {@code cj-btc-rx?}
  */
-public class RxBitcoinClient extends BitcoinExtendedClient implements RxJsonChainTipClient {
+public class RxBitcoinClient extends BitcoinExtendedClient implements ChainTipService, RxJsonRpcClient {
     private final ChainTipService chainTipService;
 
     public RxBitcoinClient(Network network, URI server, String rpcuser, String rpcpassword) {

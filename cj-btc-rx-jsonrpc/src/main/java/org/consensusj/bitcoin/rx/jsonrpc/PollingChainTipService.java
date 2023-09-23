@@ -5,13 +5,17 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
+import org.consensusj.bitcoin.jsonrpc.ChainTipClient;
+import org.consensusj.bitcoin.rx.ChainTipService;
+import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//TODO: Merge with PollingChainTipServiceImpl
 /**
  * Interface with {@link PollingChainTipService#pollForDistinctChainTip()} method.
  */
-public interface PollingChainTipService extends RxJsonChainTipClient {
+public interface PollingChainTipService extends ChainTipService, ChainTipClient, RxJsonRpcClient {
     Logger log = LoggerFactory.getLogger(PollingChainTipService.class);
 
     /**

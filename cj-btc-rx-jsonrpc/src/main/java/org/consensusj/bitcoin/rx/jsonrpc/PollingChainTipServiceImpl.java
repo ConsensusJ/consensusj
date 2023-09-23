@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.processors.BehaviorProcessor;
 import io.reactivex.rxjava3.processors.FlowableProcessor;
 import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
+import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
@@ -18,11 +19,12 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+//TODO: Merge with PollingChainTipService
 /**
  * Implementation of {@link PollingChainTipService} using a {@link BitcoinClient} and a polling interval.
  * This can be used as a fallback if ZeroMQ is not available
  */
-public class PollingChainTipServiceImpl implements Closeable, PollingChainTipService {
+public class PollingChainTipServiceImpl implements ChainTipService, PollingChainTipService, Closeable {
     private static final Logger log = LoggerFactory.getLogger(PollingChainTipServiceImpl.class);
     private final BitcoinClient client;
     private final Observable<Long> interval;
