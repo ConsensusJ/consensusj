@@ -1,5 +1,8 @@
 package org.consensusj.jsonrpc.cli;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.util.stream.Stream;
 
 /**
@@ -87,6 +90,6 @@ public sealed interface CliParameter {
      */
     @FunctionalInterface
     interface Parser {
-        Object apply(String s) throws Exception;
+        JsonNode apply(String s) throws JsonProcessingException;
     }
 }
