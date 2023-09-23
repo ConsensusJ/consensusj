@@ -2,11 +2,11 @@ package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.net.ssl.SSLContext;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
+import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 // TODO: Rather than implementing transport (HttpUrlConnection vs. java.net.http) with subclasses use composition
 // In other words, the constructor should take a transport implementation object.
@@ -39,13 +39,17 @@ import java.util.Base64;
 // map from request to string/stream and to map from string/stream to response.  The java.net.http implementation has already defined
 // some functional interfaces for this, so coming up with an interface that both the java.net.http implementation and the HttpUrlConnection
 // implementation can use will lead to this "SECOND STEP"
+//
+// Update: Now that JsonRpcClient is a generic with <T extends Type>, we have loosened the Jackson coupling somewhat. The sendRequestForResponse
+// and sendRequestForResponseAsync methods from JsonRpcClient have been moved to the JsonRpcTransport class which the JavaNet and HttpUrlConnection
+// flavors implement. The AbstractRpcClient constructor should be passed an instance of either transport class and forward methods calls for
+// sendRequestForResponseAsync (and sendRequestForResponse ?) to the transport.
 /**
- * Abstract Base class for a strongly-typed, Jackson-based JSON-RPC client. Most of the work is done
- * in default methods in {@link JacksonRpcClient} This abstract class implements the constructors, static fields, and
+ * Abstract Base class for a strongly-typed, Jackson-based JSON-RPC client. This abstract class implements the constructors, static fields, and
  * getters, but leaves the core {@code sendRequestForResponse} method as {@code abstract} to be implemented by subclasses
  * allowing implementation with alternative HTTP client libraries.
  */
-public abstract class AbstractRpcClient implements JacksonRpcClient {
+public abstract class AbstractRpcClient implements JsonRpcClient<JavaType> {
     /**
      * The default JSON-RPC version in JsonRpcRequest is now '2.0', but since most
      * requests are created inside {@code RpcClient} subclasses, we'll continue to default
@@ -70,37 +74,39 @@ public abstract class AbstractRpcClient implements JacksonRpcClient {
         return jsonRpcVersion;
     }
 
-    @Override
+    /**
+     * Convenience method for requesting an asynchronous response with a {@link JsonNode} for the result.
+     * @param request The request to send
+     * @return A future JSON RPC Response with `result` of type {@code JsonNode}
+     */
+    public CompletableFuture<JsonRpcResponse<JsonNode>> sendRequestForResponseAsync(JsonRpcRequest request) {
+        return sendRequestForResponseAsync(request, responseTypeFor(JsonNode.class));
+    }
+
     public ObjectMapper getMapper() {
         return mapper;
     }
 
     @Override
-    public JavaType getDefaultType() {
+    public JavaType defaultType() {
         return defaultType;
     }
 
-    /**
-     * Return the default {@link SSLContext} without declaring a checked exception
-     * @return The default {@code SSLContext}
-     */
-    protected static SSLContext getDefaultSSLContext() {
-        try {
-            return SSLContext.getDefault();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    public JavaType responseTypeFor(JavaType resultType) {
+        return getMapper().getTypeFactory().
+                constructParametricType(JsonRpcResponse.class, resultType);
     }
 
-    /**
-     * Encode username password as Base64 for basic authentication
-     * <p>
-     * We're using {@link java.util.Base64}, which requires Android 8.0 or later.
-     *
-     * @param authString An authorization string of the form `username:password`
-     * @return A compliant Base64 encoding of `authString`
-     */
-    protected static String base64Encode(String authString) {
-        return Base64.getEncoder().encodeToString(authString.getBytes()).trim();
+    @Override
+    public JavaType responseTypeFor(Class<?> resultType) {
+        return getMapper().getTypeFactory().
+                constructParametricType(JsonRpcResponse.class, resultType);
     }
+
+    @Override
+    public JavaType typeForClass(Class<?> clazz) {
+        return getMapper().constructType(clazz);
+    }
+
 }

@@ -6,7 +6,7 @@ import spock.lang.Unroll
 /**
  * Basic test of our copied Base64 class.
  */
-class AbstractRpcClientSpec extends Specification {
+class JsonRpcTransportSpec extends Specification {
 
     @Unroll
     def "Base64 Basic Auth Test #myInt" (myInt, expectedResult) {
@@ -14,7 +14,7 @@ class AbstractRpcClientSpec extends Specification {
         def auth = "myuser" + ":" + "mypass" + myInt;
 
         when:
-        def basicAuth = "Basic " + AbstractRpcClient.base64Encode(auth);
+        def basicAuth = "Basic " + JsonRpcTransport.base64Encode(auth);
 
         then:
         basicAuth == expectedResult

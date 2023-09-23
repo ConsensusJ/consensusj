@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.bitcoin.rx.zeromq.RxBitcoinZmqService;
+import org.consensusj.jsonrpc.JsonRpcTransport;
 import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
 
 import javax.net.ssl.SSLContext;
@@ -32,7 +33,7 @@ public class RxBitcoinClient extends BitcoinExtendedClient implements ChainTipSe
     }
 
     public RxBitcoinClient(Network network, URI server, String rpcuser, String rpcpassword, boolean useZmq) {
-        this(getDefaultSSLContext(), network, server, rpcuser, rpcpassword, useZmq);
+        this(JsonRpcTransport.getDefaultSSLContext(), network, server, rpcuser, rpcpassword, useZmq);
     }
 
     public RxBitcoinClient(SSLContext sslContext, Network network, URI server, String rpcuser, String rpcpassword, boolean useZmq) {

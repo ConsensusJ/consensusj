@@ -3,6 +3,8 @@ package org.consensusj.jsonrpc.groovy
 import org.consensusj.jsonrpc.JsonRpcMessage
 import org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection
 
+import com.fasterxml.jackson.databind.JavaType;
+
 /**
  * Client that uses Groovy <code>methodMissing</code> to allow <i>any</i> JSON-RPC call to be made as <code>client.rpcMethod(args)</code>.
  * Note that calling a non-existent method will result in an error from the server.
@@ -14,7 +16,7 @@ import org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection
  * This client and the {@link DynamicRpcMethodFallback} trait are provided for those looking for something simple,
  * flexible, dynamic, and Groovy.
  */
-class DynamicRpcClient extends JsonRpcClientHttpUrlConnection implements DynamicRpcMethodFallback {
+class DynamicRpcClient extends JsonRpcClientHttpUrlConnection implements DynamicRpcMethodFallback<JavaType> {
 
     DynamicRpcClient(URI server, String rpcuser, String rpcpassword) {
         this(JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword)

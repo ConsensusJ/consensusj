@@ -12,6 +12,7 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -21,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
  * JSON-RPC Client using {@link HttpURLConnection} formerly named{@code RpcClient}.
  * <p>
  * This is a concrete class with generic JSON-RPC functionality, it implements the abstract
- * method {@link AbstractRpcClient#sendRequestForResponseAsync(JsonRpcRequest, JavaType)} using {@link HttpURLConnection}.
+ * method {@link JsonRpcClient#sendRequestForResponseAsync(JsonRpcRequest, Type)} using {@link HttpURLConnection}.
  * <p>
  * Uses strongly-typed POJOs representing {@link JsonRpcRequest} and {@link JsonRpcResponse}. The
  * response object uses a parameterized type for the object that is the actual JSON-RPC `result`.
@@ -55,7 +56,7 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
      * @param rpcPassword password for the RPC HTTP connection
      */
     public JsonRpcClientHttpUrlConnection(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
-        this(getDefaultSSLContext(), jsonRpcVersion, server, rpcUser, rpcPassword);
+        this(JsonRpcTransport.getDefaultSSLContext(), jsonRpcVersion, server, rpcUser, rpcPassword);
     }
 
     /**
@@ -191,7 +192,7 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
         connection.setRequestProperty("Connection", "close");   // Avoid EOFException: http://stackoverflow.com/questions/19641374/android-eofexception-when-using-httpurlconnection-headers
 
         String auth = username + ":" + password;
-        String basicAuth = "Basic " + base64Encode(auth);
+        String basicAuth = "Basic " + JsonRpcTransport.base64Encode(auth);
         connection.setRequestProperty ("Authorization", basicAuth);
 
         return connection;

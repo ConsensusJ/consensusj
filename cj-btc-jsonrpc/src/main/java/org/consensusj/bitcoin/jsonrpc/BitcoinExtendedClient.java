@@ -23,6 +23,7 @@ import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.core.TransactionOutput;
+import org.consensusj.jsonrpc.JsonRpcTransport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,16 +76,16 @@ public class BitcoinExtendedClient extends BitcoinClient {
     }
 
     public BitcoinExtendedClient(Network network, URI server, String rpcuser, String rpcpassword) {
-        this(getDefaultSSLContext(), network, server, rpcuser, rpcpassword);
+        this(JsonRpcTransport.getDefaultSSLContext(), network, server, rpcuser, rpcpassword);
     }
 
     @Deprecated
     public BitcoinExtendedClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        this(getDefaultSSLContext(), netParams.network(), server, rpcuser, rpcpassword);
+        this(JsonRpcTransport.getDefaultSSLContext(), netParams.network(), server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(URI server, String rpcuser, String rpcpassword) {
-        this(getDefaultSSLContext(), (Network) null, server, rpcuser, rpcpassword);
+        this(JsonRpcTransport.getDefaultSSLContext(), (Network) null, server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(RpcConfig config) {

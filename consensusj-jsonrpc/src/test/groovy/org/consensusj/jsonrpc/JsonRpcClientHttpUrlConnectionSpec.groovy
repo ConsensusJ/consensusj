@@ -22,7 +22,7 @@ class JsonRpcClientHttpUrlConnectionSpec extends Specification {
     @Unroll
     def "Base64 works for #input"(String input, String expectedResult) {
         expect:
-        expectedResult == JsonRpcClientHttpUrlConnection.base64Encode(input)
+        expectedResult == JsonRpcTransport.base64Encode(input)
 
         where:
         input               | expectedResult

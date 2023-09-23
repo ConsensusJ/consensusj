@@ -29,7 +29,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
 
 
     public JsonRpcClientJavaNet(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
-        this(getDefaultSSLContext(), jsonRpcVersion, server, rpcUser, rpcPassword);
+        this(JsonRpcTransport.getDefaultSSLContext(), jsonRpcVersion, server, rpcUser, rpcPassword);
     }
 
     public JsonRpcClientJavaNet(SSLContext sslContext, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
@@ -118,7 +118,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         log.info("request is: {}", requestString);
 
         String auth = username + ":" + password;
-        String basicAuth = "Basic " + base64Encode(auth);
+        String basicAuth = "Basic " + JsonRpcTransport.base64Encode(auth);
 
         return HttpRequest
                 .newBuilder(serverURI)

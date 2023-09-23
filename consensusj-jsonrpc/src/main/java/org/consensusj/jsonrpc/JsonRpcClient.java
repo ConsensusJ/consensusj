@@ -1,17 +1,16 @@
 package org.consensusj.jsonrpc;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 /**
  *  JSON-RPC client interface. This interface is independent of the JSON conversion library
  *  (the default implementation uses Jackson) and HTTP client library (currently {@link HttpURLConnection}).
- *  For historical reasons the interface is synchronous, but {@link AsyncSupport} makes it easier
+ *  For historical reasons the interface is mostly synchronous, but {@link AsyncSupport} makes it easier
  *  to add use of {@link java.util.concurrent.CompletableFuture} for special cases. In the future
  *  this interface may change to natively asynchronous.
  *  <p>
@@ -20,7 +19,7 @@ import java.util.concurrent.ExecutionException;
  * @see <a href="https://www.jsonrpc.org/specification_v1">JSON-RPC 1.0 Specification (2005)</a>
  * @see <a href="https://www.jsonrpc.org/specification">JSON-RPC 2.0 Specification</a>
  */
-public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
+public interface JsonRpcClient<T extends Type> extends JsonRpcTransport<T>, AutoCloseable {
 
     /**
      * Return the JSON-RPC version used by the implementation
@@ -30,32 +29,31 @@ public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
     JsonRpcMessage.Version getJsonRpcVersion();
 
     /**
-     * Get the URI of the remote server
-     * @return URI of remote server
-     */
-    URI getServerURI();
-    
-    /**
-     * Call an RPC method and return "default" object type. Caller should cast returned object to the correct type.
+     * Call an RPC method and return default object type.
      * <p>
-     * The parameter list is "untyped" (declared as {@code List<Object>}) and implementations are responsible
-     * for converting each Java object parameter to a valid and correctly-typed (for {@code method}) JSON object.
+     * Caller should cast returned object to the correct type.
      * <p>
-     * This is used to implement the {@code DynamicRpcMethodFallback} trait in Groovy which is applied
-     * to various Groovy RPC client implementations that typically inherit statically-dispatched
-     * methods from Java classes, but use {@code methodMissing()} to add JSON-RPC methods dynamically.
-     * This may be useful in other Dynamic JVM languages, as well.
+     * Useful for:
+     * <ul>
+     * <li>Dynamically-dispatched JSON-RPC methods calls via Groovy subclasses</li>
+     * <li>Simple (not client-side validated) command line utilities</li>
+     * <li>Functional tests that need to send incorrect types to the server to test error handling</li>
+     * </ul>
      *
-     * @param method JSON RPC method call to send
-     * @param params JSON RPC parameters using types that are convertible to JSON
      * @param <R> Type of result object
-     * @return the `response.result` field of the JSON-RPC response cast to type R
+     * @param method JSON RPC method call to send
+     * @param params JSON RPC parameters as a `List`
+     * @return the 'response.result' field of the JSON RPC response cast to type R
      * @throws IOException network error
      * @throws JsonRpcStatusException JSON RPC status error
      */
-    <R> R send(String method, List<Object> params) throws IOException, JsonRpcStatusException;
+    default <R> R send(String method, List<Object> params) throws IOException, JsonRpcStatusException {
+        return send(method, defaultType(), params);
+    }
 
-    <R> CompletableFuture<R> sendAsync(String method, List<Object> params);
+    default <R> CompletableFuture<R>  sendAsync(String method, List<Object> params) {
+        return sendAsync(method, defaultType(), params);
+    }
 
     /**
      * Call an RPC method and return default object type.
@@ -73,10 +71,6 @@ public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
         return send(method, Arrays.asList(params));
     }
 
-    <R> R send(String method, Class<R> resultType, List<Object> params) throws IOException, JsonRpcStatusException;
-
-    <R> CompletableFuture<R> sendAsync(String method, Class<R> resultType, List<Object> params);
-
     default <R> R send(String method, Class<R> resultType, Object... params) throws IOException, JsonRpcStatusException {
         return send(method, resultType, Arrays.asList(params));
     }
@@ -86,30 +80,70 @@ public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
     }
 
     /**
-     * Synchronously complete a JSON-RPC request by calling {@link CompletableFuture#get()}, unwrapping nested
-     * {@link JsonRpcException} or {@link IOException} from {@link ExecutionException}.
-     * @param future The {@code CompletableFuture} (result of JSON-RPC request) to unwrap
-     * @return A JSON-RPC result
-     * @param <R> The expected result type
-     * @throws IOException If {@link CompletableFuture#get} threw  {@code ExecutionException} caused by {@code IOException}
-     * @throws JsonRpcException If {@link CompletableFuture#get} threw  {@code ExecutionException} caused by {@code JsonRpcException}
-     * @throws RuntimeException If {@link CompletableFuture#get} threw {@link InterruptedException} or other {@link ExecutionException}.
+     * JSON-RPC remote method call that returns 'response.result`
+     *
+     * @param <R> Type of result object
+     * @param method JSON RPC method call to send
+     * @param resultType desired result type as a Java class object
+     * @param params JSON RPC params
+     * @return the 'response.result' field of the JSON RPC response converted to type R
      */
-    default <R> R syncGet(CompletableFuture<R> future) throws IOException, JsonRpcException {
-        try {
-            return future.get();
-        } catch (InterruptedException ie) {
-            throw new RuntimeException(ie);
-        } catch (ExecutionException ee) {
-            Throwable cause = ee.getCause();
-            if (cause instanceof JsonRpcException) {
-                throw (JsonRpcException) cause;
-            } else if (cause instanceof IOException) {
-                throw (IOException) cause;
-            } else {
-                throw new RuntimeException(ee);
-            }
-        }
+    default <R> R send(String method, Class<R> resultType, List<Object> params) throws IOException, JsonRpcStatusException {
+        return syncGet(sendRequestForResultAsync(buildJsonRequest(method, params), typeForClass(resultType)));
+    }
+
+    default <R> CompletableFuture<R> sendAsync(String method, Class<R> resultType, List<Object> params) {
+        return sendRequestForResultAsync(buildJsonRequest(method, params), typeForClass(resultType));
+    }
+
+    default <R> CompletableFuture<R> sendAsync(String method, T resultType, List<Object> params) {
+        return sendRequestForResultAsync(buildJsonRequest(method, params), resultType);
+    }
+
+    /**
+     * JSON-RPC remote method call that returns {@code response.result}
+     *
+     * @param <R> Type of result object
+     * @param method JSON RPC method call to send
+     * @param resultType desired result type as a Jackson JavaType object
+     * @param params JSON RPC params
+     * @return the 'response.result' field of the JSON RPC response converted to type R
+     */
+    default <R> R send(String method, T resultType, List<Object> params) throws IOException, JsonRpcStatusException {
+        return syncGet(sendRequestForResultAsync(buildJsonRequest(method, params), resultType));
+    }
+
+    /**
+     * Varargs version
+     */
+    default <R> R send(String method, T resultType, Object... params) throws IOException, JsonRpcStatusException {
+        return syncGet(sendRequestForResultAsync(buildJsonRequest(method, params), resultType));
+    }
+
+    default <R> CompletableFuture<R> sendAsync(String method, T resultType, Object... params) {
+        return sendRequestForResultAsync(buildJsonRequest(method, params), resultType);
+    }
+
+    private <R> CompletableFuture<R> sendRequestForResultAsync(JsonRpcRequest request, T resultType) {
+        CompletableFuture<JsonRpcResponse<R>> responseFuture = sendRequestForResponseAsync(request, responseTypeFor(resultType));
+
+//        assert response != null;
+//        assert response.getJsonrpc() != null;
+//        assert response.getJsonrpc().equals("2.0");
+//        assert response.getId() != null;
+//        assert response.getId().equals(request.getId());
+
+        // TODO: Error case should probably complete with JsonRpcErrorException (not status exception with code 200)
+        return responseFuture.thenCompose(resp -> (resp.getError() == null || resp.getError().getCode() == 0)
+                ? CompletableFuture.completedFuture(resp.getResult())
+                : CompletableFuture.failedFuture(new JsonRpcStatusException(
+                resp.getError().getMessage(),
+                200,    // If response code wasn't 200 we couldn't be here
+                null,
+                resp.getError().getCode(),
+                null,
+                resp))
+        );
     }
 
     /**
@@ -136,4 +170,11 @@ public interface JsonRpcClient extends AutoCloseable, AsyncSupport {
     @Override
     default void close() throws Exception {
     }
+
+    T defaultType();
+
+    T responseTypeFor(T resultType);
+    T responseTypeFor(Class<?> resultType);
+
+    T typeForClass(Class<?> clazz);
 }

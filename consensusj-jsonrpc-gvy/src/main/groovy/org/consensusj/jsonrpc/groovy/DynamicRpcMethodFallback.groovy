@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture
  * @see <a href="https://docs.groovy-lang.org/latest/html/documentation/#_methodmissing">Groovy Language Documentation: methodMissing</a>
  * @see <a href="https://docs.groovy-lang.org/latest/html/documentation/#_implementing_a_trait_at_runtime">Groovy Language Documentation: Implementing a trait at runtime</a>
  */
-trait DynamicRpcMethodFallback implements JsonRpcClient {
+trait DynamicRpcMethodFallback<T> implements JsonRpcClient {
     /**
      * Dynamically forward missing method calls to the server and return a result.
      *
