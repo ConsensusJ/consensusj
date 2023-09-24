@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -56,7 +57,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
     @Override
     public <R> CompletableFuture<JsonRpcResponse<R>> sendRequestForResponseAsync(JsonRpcRequest request, JavaType responseType) {
         return sendCommon(request)
-                .thenApply(mappingFunc(responseType));
+                .thenApply(mappingFuncFor(responseType));
     }
 
     // For testing only
@@ -150,8 +151,9 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
                 .build();
     }
 
-    private <R> MappingFunction<R> mappingFunc(JavaType responseType) {
-        return s -> mapper.readValue(s, responseType);
+    // return a MappingFunction for a given type
+    private <R, T extends Type> MappingFunction<R> mappingFuncFor(T responseType) {
+        return s -> mapper.readValue(s, (JavaType) responseType);
     }
 
     /**
@@ -172,7 +174,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         default R apply(String s) throws CompletionException {
             try {
                 return applyThrows(s);
-            } catch (JsonProcessingException e) {
+            } catch (Exception e) {
                 throw new CompletionException(e);
             }
         }
@@ -183,7 +185,7 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
          * @return a result
          * @throws JsonProcessingException Checked Exception
          */
-        R applyThrows(String s) throws JsonProcessingException;
+        R applyThrows(String s) throws Exception;
     }
 
     /**
