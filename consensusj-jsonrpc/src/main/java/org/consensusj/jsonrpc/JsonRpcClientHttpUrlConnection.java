@@ -2,7 +2,6 @@ package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +15,7 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -140,39 +140,27 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
      */
     private void handleBadResponseCode(int responseCode, HttpURLConnection connection) throws IOException, JsonRpcStatusException
     {
-        String responseMessage = connection.getResponseMessage();
-        String exceptionMessage = responseMessage;
-        int jsonRpcCode = 0;
-        JsonRpcResponse<JsonNode> bodyJson = null;      // Body as JSON, if available
-        String bodyString = null;                       // Body as String, if not JSON
+        String responseMessage = connection.getResponseMessage();   // HTTP/1 message like "OK" or "Not found"
         InputStream errorStream = connection.getErrorStream();
         if (errorStream != null) {
             if (connection.getContentType().equals("application/json")) {
                 JavaType genericResponseType = mapper.getTypeFactory().
-                        constructParametricType(JsonRpcResponse.class, JsonNode.class);
+                        constructParametricType(JsonRpcResponse.class, Map.class);
                 // We got a JSON error response -- try to parse it as a JsonRpcResponse
-                bodyJson = responseFromStream(errorStream, genericResponseType);
-                JsonRpcError error = bodyJson.getError();
-                if (error != null) {
-                    // If there's a more specific message in the JSON use it instead.
-                    exceptionMessage = error.getMessage();
-                    jsonRpcCode = error.getCode();
-                    // Since this is an error at the JSON level, let's log it with `debug` level and
-                    // let the higher-level software decide whether to log it as `error` or not.
-                    // i.e. The higher-level software can set error level on this module to `warn` and then
-                    // decide whether to log this "error" not based upon the JsonRpcStatusException thrown.
-                    // An example occurs in Bitcoin when a client is waiting for a server to initialize
-                    // and returns 'Still scanning.. at block 530006 of 548850'
-                    log.debug("json error code: {}, message: {}", jsonRpcCode, exceptionMessage);
-                }
+                JsonRpcResponse<Map<String, Object>> bodyJson = responseFromStream(errorStream, genericResponseType);
+                // Since this is an error at the JSON level, let's log it with `debug` level and
+                // let the higher-level software decide whether to log it as `error` or not.
+                log.debug("json error code: {}, message: {}", bodyJson.getError().getCode(), responseMessage);
+                throw new JsonRpcStatusException(responseCode, bodyJson);
             } else {
                 // No JSON, read response body as string
-                bodyString = convertStreamToString(errorStream);
+                String bodyString = convertStreamToString(errorStream);
                 log.error("error string: {}", bodyString);
                 errorStream.close();
+                throw new JsonRpcStatusException(responseCode, bodyString);
             }
         }
-        throw new JsonRpcStatusException(exceptionMessage, responseCode, responseMessage, jsonRpcCode, bodyString, bodyJson);
+        throw new JsonRpcStatusException(responseMessage, responseCode, responseMessage, 0, null, null);
     }
 
     private static String convertStreamToString(java.io.InputStream is) {

@@ -1,6 +1,5 @@
 package org.consensusj.bitcoin.rpc
 
-import com.fasterxml.jackson.databind.node.NullNode
 import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.ScriptType
 import org.consensusj.bitcoin.jsonrpc.RpcURI
@@ -78,10 +77,11 @@ class DynamicRpcClientSpec extends Specification {
         then:
         JsonRpcStatusException e = thrown()
         e.message == "Method not found"
-        e.httpMessage == "Not Found"
+        //e.httpMessage == "Not Found"      // Java.net.http, HTTP/2, and HTTP/3 don't provide error reason text
         e.httpCode == 404
+        e.jsonRpcCode == -32601
         e.response == null
-        e.responseJson.result instanceof NullNode
+        e.responseJson.result == null
         e.responseJson.error.code == -32601
         e.responseJson.error.message == "Method not found"
     }

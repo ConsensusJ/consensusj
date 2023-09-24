@@ -12,6 +12,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.function.Function;
@@ -99,14 +101,32 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
      */
     private CompletableFuture<HttpResponse<String>> handleStatusError(HttpResponse<String> response) {
         if (response.statusCode() != 200) {
-            String errorResponse = response.body();
-            log.warn("Bad status code: {}: {}", response.statusCode(), errorResponse);
-            // TODO: If the error Response is JSON (which it is for method not found, at least) it shouldn't be the "message" in the exception
-            return CompletableFuture.failedFuture(new JsonRpcStatusException(errorResponse, response.statusCode(), errorResponse, -1, errorResponse, null));
-
+            String body = response.body();
+            log.warn("Bad status code: {}: {}", response.statusCode(), body);
+            log.debug("Headers: {}", response.headers());
+            // Return a failed future containing a JsonRpcStatusException. Create the exception
+            // from a JsonRpcResponse if one can be built, otherwise just use the body string.
+            return CompletableFuture.failedFuture(response.headers()
+                    .firstValue("Content-Type")
+                    .map(s -> s.contains("application/json"))
+                    .flatMap(b -> readErrorResponse(body))
+                    .map(r -> new JsonRpcStatusException(response.statusCode(), r))
+                    .orElse(new JsonRpcStatusException(response.statusCode(), body))
+            );
         } else {
             return CompletableFuture.completedFuture(response);
         }
+    }
+
+    // Try to read a JsonRpcResponse from a string (error case)
+    private Optional<JsonRpcResponse<Map<String, Object>>> readErrorResponse(String body) {
+        JsonRpcResponse<Map<String, Object>> response;
+        try {
+            response = mapper.readValue(body, mapper.getTypeFactory().constructParametricType(JsonRpcResponse.class, Map.class));
+        } catch (JsonProcessingException e) {
+            response = null;
+        }
+        return Optional.ofNullable(response);
     }
 
     private HttpRequest buildJsonRpcPostRequest(JsonRpcRequest request) throws JsonProcessingException {

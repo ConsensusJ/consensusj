@@ -136,13 +136,7 @@ public interface JsonRpcClient<T extends Type> extends JsonRpcTransport<T>, Auto
         // TODO: Error case should probably complete with JsonRpcErrorException (not status exception with code 200)
         return responseFuture.thenCompose(resp -> (resp.getError() == null || resp.getError().getCode() == 0)
                 ? CompletableFuture.completedFuture(resp.getResult())
-                : CompletableFuture.failedFuture(new JsonRpcStatusException(
-                resp.getError().getMessage(),
-                200,    // If response code wasn't 200 we couldn't be here
-                null,
-                resp.getError().getCode(),
-                null,
-                resp))
+                : CompletableFuture.failedFuture(new JsonRpcStatusException(200, resp)) // If response code wasn't 200 we couldn't be here
         );
     }
 
