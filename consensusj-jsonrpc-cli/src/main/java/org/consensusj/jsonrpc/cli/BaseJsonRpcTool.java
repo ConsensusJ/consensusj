@@ -9,7 +9,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.consensusj.jsonrpc.AbstractRpcClient;
+import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.jsonrpc.CompositeTrustManager;
 import org.consensusj.jsonrpc.JsonRpcClientJavaNet;
 import org.consensusj.jsonrpc.JsonRpcMessage;
@@ -87,7 +87,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             jsonRpcVersion = JsonRpcMessage.Version.V1;
         }
         SSLContext sslContext = sslContext(call.line);
-        AbstractRpcClient client = call.rpcClient(sslContext);
+        DefaultRpcClient client = call.rpcClient(sslContext);
         CliParameterParser parser = new CliParameterParser(jsonRpcVersion, client.getMapper());
         JsonRpcRequest request = parser.parse(args);
         JsonRpcResponse<JsonNode> response;
@@ -163,7 +163,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         protected final BaseJsonRpcTool rpcTool;
         public final CommandLine line;
         public final boolean verbose;
-        private AbstractRpcClient client;
+        private DefaultRpcClient client;
 
         public CommonsCLICall(BaseJsonRpcTool parentTool, PrintWriter out, PrintWriter err, String[] args) {
             super(out, err, args);
@@ -202,7 +202,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
         }
 
         @Override
-        public AbstractRpcClient rpcClient(SSLContext sslContext) {
+        public DefaultRpcClient rpcClient(SSLContext sslContext) {
             if (client == null) {
                 URI uri;
                 String urlString;
@@ -223,13 +223,13 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
                     rpcUser = split[0];
                     rpcPassword = split[1];
                 }
-                client = new JsonRpcClientJavaNet(sslContext, rpcTool.jsonRpcVersion, uri, rpcUser, rpcPassword);
+                client = new DefaultRpcClient(sslContext, rpcTool.jsonRpcVersion, uri, rpcUser, rpcPassword);
             }
             return client;
         }
 
         @Override
-        public AbstractRpcClient rpcClient() {
+        public DefaultRpcClient rpcClient() {
             SSLContext sslContext;
             try {
                 sslContext = SSLContext.getDefault();

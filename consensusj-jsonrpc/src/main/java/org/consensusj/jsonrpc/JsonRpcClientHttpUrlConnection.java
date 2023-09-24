@@ -2,6 +2,7 @@ package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,33 +30,22 @@ import java.util.concurrent.CompletableFuture;
  * using intermediate `Map` or `JsonNode` types.
  *
  */
-public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
+public class JsonRpcClientHttpUrlConnection implements JsonRpcTransport<JavaType> {
     private static final Logger log = LoggerFactory.getLogger(JsonRpcClientHttpUrlConnection.class);
+    private final ObjectMapper mapper;
     private final URI serverURI;
     private final String username;
     private final String password;
     private static final String UTF8 = StandardCharsets.UTF_8.name();
     private final SSLSocketFactory sslSocketFactory;
 
-    public JsonRpcClientHttpUrlConnection(SSLContext sslContext, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
-        super(jsonRpcVersion);
+    public JsonRpcClientHttpUrlConnection(ObjectMapper mapper, SSLContext sslContext, URI server, final String rpcUser, final String rpcPassword) {
+        this.mapper = mapper;
         this.sslSocketFactory = sslContext.getSocketFactory();
         log.debug("Constructing JSON-RPC client for: {}", server);
         this.serverURI = server;
         this.username = rpcUser;
         this.password = rpcPassword;
-    }
-
-    /**
-     * Construct a JSON-RPC client from URI, username, and password
-     *
-     * @param jsonRpcVersion version for {@code jsonrpc} field in messages
-     * @param server server URI should not contain username/password
-     * @param rpcUser username for the RPC HTTP connection
-     * @param rpcPassword password for the RPC HTTP connection
-     */
-    public JsonRpcClientHttpUrlConnection(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
-        this(JsonRpcTransport.getDefaultSSLContext(), jsonRpcVersion, server, rpcUser, rpcPassword);
     }
 
     /**
@@ -181,5 +171,10 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
         connection.setRequestProperty ("Authorization", basicAuth);
 
         return connection;
+    }
+
+    private JavaType responseTypeFor(Class<?> resultType) {
+        return mapper.getTypeFactory().
+                constructParametricType(JsonRpcResponse.class, resultType);
     }
 }

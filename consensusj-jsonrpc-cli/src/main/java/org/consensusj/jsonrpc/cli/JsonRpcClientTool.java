@@ -1,6 +1,6 @@
 package org.consensusj.jsonrpc.cli;
 
-import org.consensusj.jsonrpc.AbstractRpcClient;
+import org.consensusj.jsonrpc.DefaultRpcClient;
 
 import javax.net.ssl.SSLContext;
 import java.io.OutputStreamWriter;
@@ -51,8 +51,8 @@ interface JsonRpcClientTool extends ToolProvider {
             this.args = args;
         }
         
-        abstract public AbstractRpcClient rpcClient();
-        abstract public AbstractRpcClient rpcClient(SSLContext sslContext);
+        abstract public DefaultRpcClient rpcClient();
+        abstract public DefaultRpcClient rpcClient(SSLContext sslContext);
     }
     
     class ToolException extends RuntimeException {

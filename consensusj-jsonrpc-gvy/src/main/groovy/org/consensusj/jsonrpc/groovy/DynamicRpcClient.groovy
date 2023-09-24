@@ -1,6 +1,6 @@
 package org.consensusj.jsonrpc.groovy
 
-import org.consensusj.jsonrpc.JsonRpcClientJavaNet
+import org.consensusj.jsonrpc.DefaultRpcClient
 import org.consensusj.jsonrpc.JsonRpcMessage
 
 import com.fasterxml.jackson.databind.JavaType;
@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.JavaType;
  * This client and the {@link DynamicRpcMethodFallback} trait are provided for those looking for something simple,
  * flexible, dynamic, and Groovy.
  */
-class DynamicRpcClient extends JsonRpcClientJavaNet implements DynamicRpcMethodFallback<JavaType> {
+class DynamicRpcClient extends DefaultRpcClient implements DynamicRpcMethodFallback<JavaType> {
 
     DynamicRpcClient(URI server, String rpcuser, String rpcpassword) {
         this(JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword)

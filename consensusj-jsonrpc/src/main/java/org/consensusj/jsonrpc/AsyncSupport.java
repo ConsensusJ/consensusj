@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 /**
  * Helper methods for creating asynchronous calls using {@link CompletableFuture}. Since the
- * synchronous methods in {@link AbstractRpcClient} throw checked exceptions this interface
+ * synchronous methods in {@link DefaultRpcClient} throw checked exceptions this interface
  * provides wrapper support to make it easier to convert them to async calls.
  */
 public interface AsyncSupport {

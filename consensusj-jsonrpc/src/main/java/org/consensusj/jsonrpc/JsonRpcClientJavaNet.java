@@ -2,6 +2,7 @@ package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +22,10 @@ import java.util.function.Function;
 /**
  * Incubating JSON-RPC client using {@link java.net.http.HttpClient}
  */
-public class JsonRpcClientJavaNet extends AbstractRpcClient {
+public class JsonRpcClientJavaNet implements JsonRpcTransport<JavaType> {
     private static final Logger log = LoggerFactory.getLogger(JsonRpcClientJavaNet.class);
+
+    private final ObjectMapper mapper;
     private final URI serverURI;
     private final String username;
     private final String password;
@@ -30,13 +33,13 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
     private static final String UTF8 = StandardCharsets.UTF_8.name();
 
 
-    public JsonRpcClientJavaNet(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
-        this(JsonRpcTransport.getDefaultSSLContext(), jsonRpcVersion, server, rpcUser, rpcPassword);
+    public JsonRpcClientJavaNet(ObjectMapper mapper, URI server, final String rpcUser, final String rpcPassword) {
+        this(mapper, JsonRpcTransport.getDefaultSSLContext(), server, rpcUser, rpcPassword);
     }
 
-    public JsonRpcClientJavaNet(SSLContext sslContext, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
-        super(jsonRpcVersion);
+    public JsonRpcClientJavaNet(ObjectMapper mapper, SSLContext sslContext, URI server, final String rpcUser, final String rpcPassword) {
         log.debug("Constructing JSON-RPC client for: {}", server);
+        this.mapper = mapper;
         this.serverURI = server;
         this.username = rpcUser;
         this.password = rpcPassword;
@@ -44,10 +47,6 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
                 .connectTimeout(Duration.ofMinutes(2))
                 .sslContext(sslContext)
                 .build();
-    }
-
-    public JsonRpcClientJavaNet(URI server, final String rpcUser, final String rpcPassword) {
-        this(JsonRpcMessage.Version.V2, server, rpcUser, rpcPassword);
     }
 
     /**
@@ -218,5 +217,10 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
         } else {
             log.warn("exception: ", t);
         }
+    }
+
+    private JavaType responseTypeFor(Class<?> resultType) {
+        return mapper.getTypeFactory().
+                constructParametricType(JsonRpcResponse.class, resultType);
     }
 }

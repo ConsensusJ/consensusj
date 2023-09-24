@@ -3,7 +3,7 @@ package org.consensusj.rx.jsonrpc;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
-import org.consensusj.jsonrpc.AbstractRpcClient;
+import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.jsonrpc.AsyncSupport;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 
 /**
  * RxJava support for calling JSON-RPC clients. Extend/implement this interface to inherit {@code default} methods
- * {@link #call(ThrowingSupplier)}, {@link #defer(Supplier)}, and {@link #pollOnceAsPublisher(Supplier, AbstractRpcClient.TransientErrorFilter)}.
+ * {@link #call(ThrowingSupplier)}, {@link #defer(Supplier)}, and {@link #pollOnceAsPublisher(Supplier, DefaultRpcClient.TransientErrorFilter)}.
  */
 public interface RxJsonRpcClient extends AsyncSupport {
     Logger log = LoggerFactory.getLogger(RxJsonRpcClient.class);
@@ -59,7 +59,7 @@ public interface RxJsonRpcClient extends AsyncSupport {
      * @return A publisher of a "cold" stream of items (temporarily Flowable, but will change to Publisher, then Flow.Publisher)
      * @param <T> result type
      */
-    default <T> Flowable<T> pollOnceAsPublisher(Supplier<CompletionStage<T>> supplier, AbstractRpcClient.TransientErrorFilter filter) {
+    default <T> Flowable<T> pollOnceAsPublisher(Supplier<CompletionStage<T>> supplier, DefaultRpcClient.TransientErrorFilter filter) {
         return Flowable.defer(() -> Flowable.fromCompletionStage(supplier.get()
                         .handle(filter::handle)
                         .thenCompose(Function.identity())))

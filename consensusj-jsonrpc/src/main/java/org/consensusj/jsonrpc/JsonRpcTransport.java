@@ -10,8 +10,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 
-// TODO: Have JsonRpcClientJavaNet and JsonRpcClientHttpUrlConnection directly implement this class
-// and AbstractRpcClient become DefaultRpcClient and take a transport instance in its constructor.
 /**
  * Defines the interface for a network-layer implementation of a JSON-RPC client.
  */
@@ -74,8 +72,6 @@ public interface JsonRpcTransport<T extends Type> extends AsyncSupport {
         }
     }
 
-
-
     /**
      * Encode username password as Base64 for basic authentication
      * <p>
@@ -100,5 +96,4 @@ public interface JsonRpcTransport<T extends Type> extends AsyncSupport {
             throw new RuntimeException(e);
         }
     }
-
 }

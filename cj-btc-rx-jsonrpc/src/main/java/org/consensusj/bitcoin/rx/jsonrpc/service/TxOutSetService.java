@@ -8,8 +8,9 @@ import org.bitcoinj.base.Sha256Hash;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.consensusj.bitcoin.json.pojo.TxOutSetInfo;
 import org.consensusj.bitcoin.rx.jsonrpc.RxBitcoinClient;
-import org.consensusj.jsonrpc.AbstractRpcClient;
+import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.jsonrpc.AsyncSupport;
+import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
@@ -71,7 +72,7 @@ public class TxOutSetService implements Closeable {
     }
 
     // TODO: Ignoring all IOError is too broad
-    AbstractRpcClient.TransientErrorFilter errorFilter = AsyncSupport.TransientErrorFilter.of(
+    DefaultRpcClient.TransientErrorFilter errorFilter = AsyncSupport.TransientErrorFilter.of(
             (t) -> t instanceof IOError,                        // Ignore if IOError
             (t) -> log.warn("Ignoring transient error: ", t)    // Log if ignored
     );

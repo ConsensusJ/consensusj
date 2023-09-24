@@ -31,7 +31,7 @@ import org.consensusj.bitcoin.json.pojo.bitcore.AddressBalanceInfo;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressRequest;
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressUtxoInfo;
 import org.consensusj.bitcoin.jsonrpc.internal.BitcoinClientThreadFactory;
-import org.consensusj.jsonrpc.JsonRpcClientJavaNet;
+import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcErrorException;
 import org.consensusj.jsonrpc.JsonRpcException;
@@ -104,7 +104,7 @@ import java.util.stream.Stream;
  * <b>This is still a work-in-progress and the API will change.</b>
  *
  */
-public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClient {
+public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
     private static final Logger log = LoggerFactory.getLogger(BitcoinClient.class);
 
     private static final int THREAD_POOL_SIZE = 5;
