@@ -57,6 +57,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -103,9 +104,10 @@ public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClien
 
     private static final int THREAD_POOL_SIZE = 5;
 
-    private static final int SECOND_IN_MSEC = 1000;
-    private static final int RETRY_SECONDS = 5;
-    private static final int MESSAGE_SECONDS = 30;
+    // Delay between retries in waitForServer and waitForBlock
+    private static final Duration RETRY_DELAY = Duration.ofSeconds(5);
+    // Delay between log messages in waitForBlock
+    private static final Duration MESSAGE_DELAY = Duration.ofSeconds(30);
 
     public static final int BITCOIN_CORE_VERSION_MIN = 200000;              // Minimum Bitcoin Core supported (tested) version
     public static final int BITCOIN_CORE_VERSION_DESC_DEFAULT = 230000;     // Bitcoin Core version that DEFAULTS to descriptor wallets
@@ -363,7 +365,7 @@ public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClien
 
         String status;          // Status message for logging
         String statusLast = null;
-        int seconds = 0;
+        long seconds = 0;
         while (seconds < timeout) {
             try {
                 Integer block = this.getBlockCount();
@@ -383,10 +385,10 @@ public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClien
                     throw new JsonRpcException("Unexpected exception in waitForServer", se) ;
                 }
 
-            } catch (EOFException ignored) {
+            } catch (EOFException e) {
                 /* Android exception, ignore */
                 // Expected exceptions on Android, RoboVM
-                status = ignored.getMessage();
+                status = e.getMessage();
             } catch (JsonRpcStatusException e) {
                 // If server is in "warm-up" mode, e.g. validating/parsing the blockchain...
                 if (e.jsonRpcCode == -28) {
@@ -400,14 +402,14 @@ public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClien
                 // Ignore all IOExceptions
                 status = e.getMessage();
             }
+            // Log status messages only once, if new or updated
+            if (!status.equals(statusLast)) {
+                log.info("Waiting for server: RPC Status: " + status);
+                statusLast = status;
+            }
             try {
-                // Log status messages only once, if new or updated
-                if (!status.equals(statusLast)) {
-                    log.info("Waiting for server: RPC Status: " + status);
-                    statusLast = status;
-                }
-                Thread.sleep(RETRY_SECONDS * SECOND_IN_MSEC);
-                seconds += RETRY_SECONDS;
+                Thread.sleep(RETRY_DELAY.toMillis());
+                seconds += RETRY_DELAY.toSeconds();
             } catch (InterruptedException e) {
                 log.error(e.toString());
                 Thread.currentThread().interrupt();
@@ -432,7 +434,7 @@ public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClien
 
         log.info("Waiting for server to reach block " + blockHeight);
 
-        int seconds = 0;
+        long seconds = 0;
         while (seconds < timeout) {
             Integer block = this.getBlockCount();
             if (block >= blockHeight) {
@@ -440,11 +442,11 @@ public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClien
                 return true;
             } else {
                 try {
-                    if (seconds % MESSAGE_SECONDS == 0) {
+                    if (seconds % MESSAGE_DELAY.toSeconds() == 0) {
                         log.debug("Server at block " + block);
                     }
-                    Thread.sleep(RETRY_SECONDS * SECOND_IN_MSEC);
-                    seconds += RETRY_SECONDS;
+                    Thread.sleep(RETRY_DELAY.toMillis());
+                    seconds += RETRY_DELAY.toSeconds();
                 } catch (InterruptedException e) {
                     log.error(e.toString());
                     Thread.currentThread().interrupt();
@@ -456,7 +458,6 @@ public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClien
         log.error("Timeout waiting for block " + blockHeight);
         return false;
     }
-
 
     /**
      * Tell the server to stop
