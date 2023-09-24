@@ -1,8 +1,8 @@
 package org.consensusj.ethereum.jsonrpc;
 
+import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
-import org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -16,7 +16,7 @@ import java.net.URI;
  * See also:
  * https://github.com/ethereum/go-ethereum/wiki/Management-APIs
  */
-public class EthereumClient extends JsonRpcClientHttpUrlConnection {
+public class EthereumClient extends DefaultRpcClient {
     public static final URI DEFAULT_LOCALHOST = URI.create("http://localhost:8545");
     
     /**

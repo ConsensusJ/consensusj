@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 /**
  * Helper methods for creating asynchronous calls using {@link CompletableFuture}. Since the
- * synchronous methods in {@link AbstractRpcClient} throw checked exceptions this interface
+ * synchronous methods in {@link DefaultRpcClient} throw checked exceptions this interface
  * provides wrapper support to make it easier to convert them to async calls.
  */
 public interface AsyncSupport {
@@ -129,7 +129,7 @@ public interface AsyncSupport {
 
         /**
          * Handler to transpose to a "future maybe". Use with {@link CompletableFuture#handle(BiFunction)}
-         * followed by {@code .thenCompose(Function.identity())} (or if JDK 12+ {@link CompletableFuture#exceptionallyCompose(Function)})
+         * followed by {@code .thenCompose(Function.identity())} (or if JDK 12+ {@code CompletableFuture#exceptionallyCompose(Function)})
          * to swallow transient errors.
          * @param result T
          * @param t An error, possibly transient
