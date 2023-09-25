@@ -1,6 +1,7 @@
 package org.consensusj.bitcoin.jsonrpc.groovy.test
 
 import org.consensusj.bitcoin.json.pojo.RawTransactionInfo
+import org.consensusj.bitcoin.jsonrpc.test.BTCTestSupport
 import org.consensusj.bitcoin.jsonrpc.test.RegTestFundingSource
 import org.consensusj.bitcoin.jsonrpc.test.TransactionIngredients
 import org.consensusj.jsonrpc.JsonRpcStatusException

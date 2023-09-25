@@ -3,7 +3,7 @@ package org.consensusj.bitcoin.test
 import groovy.util.logging.Slf4j
 import org.bitcoinj.base.BitcoinNetwork
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient
-import org.consensusj.bitcoin.jsonrpc.groovy.test.BTCTestSupport
+import org.consensusj.bitcoin.jsonrpc.test.BTCTestSupport
 import org.consensusj.bitcoin.jsonrpc.test.FundingSource
 import org.consensusj.bitcoin.jsonrpc.test.FundingSourceAccessor
 import org.consensusj.bitcoin.jsonrpc.test.RegTestFundingSource
