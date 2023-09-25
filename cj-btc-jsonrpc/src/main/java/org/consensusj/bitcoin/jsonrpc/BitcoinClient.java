@@ -54,6 +54,7 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLContext;
 import java.io.EOFException;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.SocketException;
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -61,10 +62,14 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -345,80 +350,59 @@ public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClien
         }
     }
 
-    // TODO: Make this an async method that returns CompletableFuture.
-    // TODO: Consider renaming this method "connect"
-    // TODO: Consider having this method automatically get the Bitcoin Network, Server Version, RegTest mining address, etc once connection is made
+    // TODO: This method should be deprecated in favor of the version that takes a Duration
     /**
      * Wait until the server is available.
-     *
+     * <p>
      * Keep trying, ignoring (and logging) a known list of exception conditions that may occur while waiting for
-     * a `bitcoind` server to start up. This is similar to the behavior enabled by the `-rpcwait`
-     * option to the `bitcoin-cli` command-line tool.
+     * a {@code bitcoind} server to start up. This is similar to the behavior enabled by the {@code -rpcwait}
+     * option to the {@code bitcoin-cli} command-line tool.
      *
-     * @param timeout Timeout in seconds
+     * @param timeoutSeconds Timeout in seconds
      * @return true if ready, false if timeout or interrupted
      * @throws JsonRpcException if an "unexpected" exception happens (i.e. an error other than what happens during normal server startup)
      */
-    public Boolean waitForServer(int timeout) throws JsonRpcException {
+    public boolean waitForServer(int timeoutSeconds) throws JsonRpcException {
+        return waitForServer(Duration.ofSeconds(timeoutSeconds));
+    }
 
-        log.debug("Waiting for server RPC ready...");
-
-        String status;          // Status message for logging
-        String statusLast = null;
-        long seconds = 0;
-        while (seconds < timeout) {
-            try {
-                Integer block = this.getBlockCount();
-                if (block != null) {
-                    log.debug("RPC Ready.");
-                    return true;
-                }
-                status = "getBlock returned null";
-            } catch (SocketException se) {
-                // These are expected exceptions while waiting for a server
-                if (se.getMessage().equals("Unexpected end of file from server") ||
-                        se.getMessage().equals("Connection reset") ||
-                        se.getMessage().contains("Connection refused") ||
-                        se.getMessage().equals("recvfrom failed: ECONNRESET (Connection reset by peer)")) {
-                    status = se.getMessage();
-                } else {
-                    throw new JsonRpcException("Unexpected exception in waitForServer", se) ;
-                }
-
-            } catch (EOFException e) {
-                /* Android exception, ignore */
-                // Expected exceptions on Android, RoboVM
-                status = e.getMessage();
-            } catch (JsonRpcStatusException e) {
-                // If server is in "warm-up" mode, e.g. validating/parsing the blockchain...
-                if (e.jsonRpcCode == -28) {
-                    // ...then grab text message for status logging
-                    status = e.getMessage();
-                } else {
-                    log.error("Rethrowing JsonRpcStatusException: ", e);
-                    throw e;
-                }
-            } catch (IOException e) {
-                // Ignore all IOExceptions
-                status = e.getMessage();
-            }
-            // Log status messages only once, if new or updated
-            if (!status.equals(statusLast)) {
-                log.info("Waiting for server: RPC Status: " + status);
-                statusLast = status;
-            }
-            try {
-                Thread.sleep(RETRY_DELAY.toMillis());
-                seconds += RETRY_DELAY.toSeconds();
-            } catch (InterruptedException e) {
-                log.error(e.toString());
-                Thread.currentThread().interrupt();
-                return false;
-            }
+    /**
+     * Poll the server regularly until it responds.
+     * @param timeout how long to wait for server
+     * @return Completes with {@code true} if server responded, {@code false} for timeout
+     * @throws JsonRpcException if an unexpected JsonRpcException occurs
+     */
+    public boolean waitForServer(Duration timeout) throws JsonRpcException {
+        try {
+            return syncGet(waitForServerAsync(timeout, RETRY_DELAY));
+        } catch (JsonRpcException je) {
+            throw je;
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
         }
+    }
 
-        log.error("waitForServer() timed out after {} seconds.", timeout);
-        return false;
+    // TODO: Consider renaming this method "connect"
+    // TODO: Consider having this method automatically get the Bitcoin Network, Server Version, RegTest mining address, etc once connection is made (the generic waitForServer() method is capable of doing that)
+    /**
+     * Wait for a connection to the server. Uses {@code getblockcount} to poll server.
+     * @param timeout how long to wait for server
+     * @param retry time to wait between retries
+     * @return Completes with {@code true} if server responded, {@code false} for timeout, exceptionally for unexpected errors.
+     */
+    public CompletableFuture<Boolean> waitForServerAsync(Duration timeout, Duration retry) {
+        Supplier<JsonRpcRequest> requestSupplier = () -> new JsonRpcRequest("getblockcount");
+        return waitForServer(timeout, retry, requestSupplier, typeForClass(Integer.class), this::mapBitcoinTransientErrors )
+                .handle((i, t) -> {
+                    if (i != null) {
+                        return CompletableFuture.completedFuture(Boolean.TRUE);
+                    } else if (t instanceof TimeoutException) {
+                        return CompletableFuture.completedFuture(Boolean.FALSE);
+                    } else {
+                        return CompletableFuture.<Boolean>failedFuture(t);
+                    }
+                })
+                .thenCompose(Function.identity());
     }
 
     /**
@@ -457,6 +441,59 @@ public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClien
 
         log.error("Timeout waiting for block " + blockHeight);
         return false;
+    }
+
+    /**
+     * TransientErrorMapper suitable for waiting for a temporarily down or restarting Bitcoin JSON-RPC server. This
+     * can be used to implement the {@code -rpcwait} command-line option, for instance.
+     */
+    protected  <T> CompletableFuture<JsonRpcResponse<T>> mapBitcoinTransientErrors(JsonRpcRequest request, JsonRpcResponse<T> response, Throwable t) {
+        if (response != null) {
+            return CompletableFuture.completedFuture(response);
+        } else {
+            if (t instanceof CompletionException) {
+                // Java.net.http driver
+                if (t.getCause() != null) {
+                    if (t.getCause() instanceof ConnectException) {
+                        return CompletableFuture.completedFuture(temporarilyUnavailableResponse(request, t));
+                    } else {
+                        return CompletableFuture.failedFuture(t);
+                    }
+                }
+            }
+            if (t instanceof SocketException) {
+                // Java HttpUrlConnection driver
+                SocketException se = (SocketException) t;
+                // These are expected exceptions while waiting for a server
+                if (se.getMessage().equals("Unexpected end of file from server") ||
+                        se.getMessage().equals("Connection reset") ||
+                        se.getMessage().contains("Connection refused") ||
+                        se.getMessage().equals("recvfrom failed: ECONNRESET (Connection reset by peer)")) {
+                    // Transient error, generate synthetic JSON-RPC error response with appropriate values
+                    return CompletableFuture.completedFuture(temporarilyUnavailableResponse(request, t));
+                } else {
+                    return CompletableFuture.failedFuture(se);
+                }
+            } else if (t instanceof EOFException) {
+                /* Android exception, ignore */
+                // Expected exceptions on Android, RoboVM
+                return CompletableFuture.completedFuture(temporarilyUnavailableResponse(request, t));
+            } else if (t instanceof JsonRpcStatusException) {
+                JsonRpcStatusException e = (JsonRpcStatusException) t;
+                // If server is in "warm-up" mode, e.g. validating/parsing the blockchain...
+                if (e.jsonRpcCode == -28) {
+                    // ...then grab text message for status logging
+                    return CompletableFuture.completedFuture(temporarilyUnavailableResponse(request, t));
+                } else {
+                    return CompletableFuture.failedFuture(e);
+                }
+            } else if (t instanceof IOException) {
+                // Ignore all IOExceptions
+                return CompletableFuture.completedFuture(temporarilyUnavailableResponse(request, t));
+            } else {
+                return CompletableFuture.failedFuture(t);
+            }
+        }
     }
 
     /**

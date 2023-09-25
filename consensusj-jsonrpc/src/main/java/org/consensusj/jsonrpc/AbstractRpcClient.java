@@ -4,9 +4,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.time.Duration;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 // TODO: Rather than implementing transport (HttpUrlConnection vs. java.net.http) with subclasses use composition
 // In other words, the constructor should take a transport implementation object.
@@ -50,6 +57,7 @@ import java.util.concurrent.CompletableFuture;
  * allowing implementation with alternative HTTP client libraries.
  */
 public abstract class AbstractRpcClient implements JsonRpcClient<JavaType> {
+    private static final Logger log = LoggerFactory.getLogger(AbstractRpcClient.class);
     /**
      * The default JSON-RPC version in JsonRpcRequest is now '2.0', but since most
      * requests are created inside {@code RpcClient} subclasses, we'll continue to default
@@ -109,4 +117,127 @@ public abstract class AbstractRpcClient implements JsonRpcClient<JavaType> {
         return getMapper().constructType(clazz);
     }
 
+    public <T> CompletableFuture<JsonRpcResponse<T>> pollOnce(JsonRpcRequest request, JavaType resultType, TransientErrorMapper<T> errorMapper) {
+        CompletableFuture<JsonRpcResponse<T>> f = sendRequestForResponseAsync(request, responseTypeFor(resultType));
+        // In Java 12+ this can be replaced with exceptionallyCompose()
+        return f.handle((r, t) -> errorMapper.map(request, r, t))
+                .thenCompose(Function.identity());
+    }
+
+    /**
+     * A wait-for-server routine that is agnostic about which RPC methods the server supports. In addition to two {@link Duration}
+     * parameters, there are 3 parameters (2 functions and a generic type specifier) to enable this method to work with any JSON-RPC server.
+     * @param timeout how long to wait
+     * @param retry delay between retries
+     * @param requestSupplier supplier of requests (needs to increment request ID at the very least)
+     * @param resultType the result type for the response
+     * @param errorMapper function that maps non-fatal errors (i.e. cases to keep polling)
+     * @return A future that returns a successful
+     * @param <T> The desired result type to be returned when the server is running
+     */
+    public <T> CompletableFuture<T> waitForServer(Duration timeout, Duration retry, Supplier<JsonRpcRequest> requestSupplier, JavaType resultType, TransientErrorMapper<T> errorMapper) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        getDefaultAsyncExecutor().execute(() -> {
+            log.debug("Waiting for server RPC ready...");
+            String status;          // Status message for logging
+            String statusLast = null;
+            long seconds = 0;
+            while (seconds < timeout.toSeconds()) {
+                JsonRpcResponse<T> r = null;
+                try {
+                    // All non-fatal exceptions will be mapped to a JsonRpcError with code -20000
+                    r = this.pollOnce(requestSupplier.get(), resultType, errorMapper).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    // If a fatal error occurred, fail our future and abort this thread
+                    log.error("Fatal exception: ", e);
+                    future.completeExceptionally(e);
+                    return;
+                }
+                if (r.getResult() != null) {
+                    // We received a response with a result, server is ready and has returned a usable result
+                    log.debug("RPC Ready.");
+                    future.complete(r.getResult());
+                    return;
+                }
+                // We received a response with a non-fatal error, log it and wait to retry.
+                status = statusFromErrorResponse(r);
+                // Log status messages only once, if new or updated
+                if (!status.equals(statusLast)) {
+                    log.info("Waiting for server: RPC Status: " + status);
+                    statusLast = status;
+                }
+                try {
+                    // Damnit, IntelliJ we're not busy-waiting we're polling!
+                    Thread.sleep(retry.toMillis());
+                    seconds += retry.toSeconds();
+                } catch (InterruptedException e) {
+                    log.error(e.toString());
+                    Thread.currentThread().interrupt();
+                    future.completeExceptionally(e);
+                    return;
+                }
+            }
+            String timeoutMessage = String.format("waitForServer() timed out after %d seconds", timeout.toSeconds());
+            log.error(timeoutMessage);
+            future.completeExceptionally(new TimeoutException(timeoutMessage));
+        });
+        return future;
+    }
+
+    /**
+     * Functional interface for ignoring what are considered "transient" errors. The definition of what is transient
+     * may vary depending upon the application. Different implementations of this function can be created for
+     * different applications.
+     * <p>
+     * The {@code JsonRpcResponse} returned may be a "synthetic" response, that is generated by the client,
+     * not by the server. The synthetic response will look like this:
+     *     <ul>
+     *         <li>error.code: -20000</li>
+     *         <li>error.message: "Server temporarily unavailable"</li>
+     *         <li>error.data: Detailed string message, e.g. "Connection refused"</li>
+     *     </ul>
+     * @param <T> The expected result type
+     */
+    @FunctionalInterface
+    public interface TransientErrorMapper<T> {
+        /**
+         * @param request The request we're handling completions for
+         * @param response response if one was successfully returned (or null)
+         * @param throwable exception if the call failed (or null)
+         * @return A completed or failed future than can replace the input (response, throwable) pair
+         */
+        CompletableFuture<JsonRpcResponse<T>> map(JsonRpcRequest request, JsonRpcResponse<T> response, Throwable throwable);
+    }
+
+    /**
+     * Transient error mapper that is a no-op, i.e. it passes all errors through unchanged.
+     */
+    protected  <T> CompletableFuture<JsonRpcResponse<T>> identityTransientErrorMapper(JsonRpcRequest request, JsonRpcResponse<T> response, Throwable t) {
+        return response != null
+                ? CompletableFuture.completedFuture(response)
+                : CompletableFuture.failedFuture(t);
+    }
+
+    protected <T> JsonRpcResponse<T> temporarilyUnavailableResponse(JsonRpcRequest request,  Throwable t) {
+        return new JsonRpcResponse<T>(request, new JsonRpcError(-2000, "Server temporarily unavailable", t.getMessage()));
+    }
+
+    /**
+     * @param response A response where {@code getResult() == null}
+     * @return An error status string suitable for log messages
+     */
+    protected String statusFromErrorResponse(JsonRpcResponse<?> response) {
+        Objects.requireNonNull(response);
+        if (response.getResult() != null) {
+            throw new IllegalStateException("This should only be called for responses with null result");
+        }
+        if (response.getError() == null) {
+            return "Invalid response both result and error were null";
+        } else if (response.getError().getData() != null) {
+            // Has option data, possibly the -2000 special case
+            return response.getError().getData().toString();
+        } else {
+            return response.getError().getMessage();
+        }
+    }
 }
