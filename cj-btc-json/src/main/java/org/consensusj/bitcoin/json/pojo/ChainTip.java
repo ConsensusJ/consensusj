@@ -44,6 +44,11 @@ public class ChainTip {
         return status;
     }
 
+    /**
+     * Find the active chain tip if there is one
+     * @param chainTips the list to search
+     * @return non-empty optional if active is found, empty optional if not found
+     */
     public static Optional<ChainTip> findActiveChainTip(List<ChainTip> chainTips) {
         return chainTips.stream().filter(tip -> tip.getStatus().equals("active")).findFirst();
     }
