@@ -126,15 +126,31 @@ public abstract class AbstractRpcClient implements JsonRpcClient<JavaType> {
 
     /**
      * A wait-for-server routine that is agnostic about which RPC methods the server supports. In addition to two {@link Duration}
-     * parameters, there are 3 parameters (2 functions and a generic type specifier) to enable this method to work with any JSON-RPC server.
+     * parameters, there are 2 lambda parameters to enable this method to work with any JSON-RPC server. This version will tell
+     * the JSON-RPC Mapper to return an {@link JsonRpcResponse} with a result of type {@link Object}. If you need more precise
+     * control over the type, use {@link #waitForServer(Duration, Duration, Supplier, JavaType, TransientErrorMapper)}.
      * @param timeout how long to wait
      * @param retry delay between retries
      * @param requestSupplier supplier of requests (needs to increment request ID at the very least)
-     * @param resultType the result type for the response
      * @param errorMapper function that maps non-fatal errors (i.e. cases to keep polling)
      * @return A future that returns a successful
      * @param <T> The desired result type to be returned when the server is running
      */
+    public <T> CompletableFuture<T> waitForServer(Duration timeout, Duration retry, Supplier<JsonRpcRequest> requestSupplier, TransientErrorMapper<T> errorMapper) {
+        return waitForServer(timeout,retry, requestSupplier, typeForClass(Object.class), errorMapper);
+    }
+
+    /**
+    * A wait-for-server routine that is agnostic about which RPC methods the server supports. In addition to two {@link Duration}
+    * parameters, there are 3 parameters (2 functions and a generic type specifier) to enable this method to work with any JSON-RPC server.
+    * @param timeout how long to wait
+    * @param retry delay between retries
+    * @param requestSupplier supplier of requests (needs to increment request ID at the very least)
+    * @param resultType the result type for the response
+    * @param errorMapper function that maps non-fatal errors (i.e. cases to keep polling)
+    * @return A future that returns a successful
+    * @param <T> The desired result type to be returned when the server is running
+    */
     public <T> CompletableFuture<T> waitForServer(Duration timeout, Duration retry, Supplier<JsonRpcRequest> requestSupplier, JavaType resultType, TransientErrorMapper<T> errorMapper) {
         CompletableFuture<T> future = new CompletableFuture<>();
         getDefaultAsyncExecutor().execute(() -> {
