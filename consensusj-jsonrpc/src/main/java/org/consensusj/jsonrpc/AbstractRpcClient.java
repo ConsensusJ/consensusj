@@ -143,7 +143,7 @@ public abstract class AbstractRpcClient implements JsonRpcClient<JavaType> {
             String statusLast = null;
             long seconds = 0;
             while (seconds < timeout.toSeconds()) {
-                JsonRpcResponse<T> r = null;
+                JsonRpcResponse<T> r;
                 try {
                     // All non-fatal exceptions will be mapped to a JsonRpcError with code -20000
                     r = this.pollOnce(requestSupplier.get(), resultType, errorMapper).get();
