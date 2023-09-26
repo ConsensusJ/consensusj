@@ -1,7 +1,7 @@
 package org.consensusj.bitcoin.rx.jsonrpc.service;
 
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.processors.BehaviorProcessor;
 import io.reactivex.rxjava3.processors.FlowableProcessor;
@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
+import java.io.IOError;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -43,7 +44,7 @@ public class TxOutSetService implements Closeable {
             txOutSetSubscription = client
                     .chainTipPublisher()
                     .doOnNext(this::onNewBlock)
-                    .flatMapSingle(this::fetchSingle)
+                    .flatMapMaybe(this::fetchTxOutSetInfoMaybe)
                     .subscribe(txOutSetProcessor::onNext, txOutSetProcessor::onError, txOutSetProcessor::onComplete);
         }
     }
@@ -97,8 +98,9 @@ public class TxOutSetService implements Closeable {
         }
     }
     
-    private Single<TxOutSetInfo> fetchSingle(ChainTip tip) {
-        return Single.defer(() -> Single.fromCompletionStage(fetchCache(tip)));
+    private Maybe<TxOutSetInfo> fetchTxOutSetInfoMaybe(ChainTip tip) {
+        return Maybe.defer(() -> Maybe.fromCompletionStage(fetchCache(tip)))
+                .onErrorComplete(this::isTransientError);    // Empty completion if IOError
     }
     
     @Override
@@ -106,5 +108,17 @@ public class TxOutSetService implements Closeable {
         if (txOutSetSubscription != null) {
             txOutSetSubscription.dispose();
         }
+    }
+
+    /**
+     * Determine if error is transient and should be ignored.
+     * <p>
+     * TODO: Ignoring all IOError is too broad
+     *
+     * @param t Error thrown from calling an RPC method
+     * @return true if the error is transient and can be ignored
+     */
+    private boolean isTransientError(Throwable t) {
+        return t instanceof IOError;
     }
 }
