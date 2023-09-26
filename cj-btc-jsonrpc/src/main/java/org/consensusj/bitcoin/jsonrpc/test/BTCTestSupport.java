@@ -3,6 +3,8 @@ package org.consensusj.bitcoin.jsonrpc.test;
 import org.bitcoinj.base.Network;
 import org.consensusj.jsonrpc.JsonRpcException;
 
+import java.time.Duration;
+
 /**
  * Test support functions intended to be mixed-in to Spock test specs
  */
@@ -13,7 +15,7 @@ public interface BTCTestSupport extends BitcoinClientAccessor {
      * @param expectedNetwork The network the server is expected to be running on
      */
     default void serverReady(Network expectedNetwork) throws JsonRpcException {
-        Boolean ready = client().waitForServer(60);   // Wait up to 1 minute
+        Boolean ready = client().waitForServer(Duration.ofSeconds(60));   // Wait up to 1 minute
         if (!ready) {
             throw new RuntimeException("Timeout waiting for server");
         }

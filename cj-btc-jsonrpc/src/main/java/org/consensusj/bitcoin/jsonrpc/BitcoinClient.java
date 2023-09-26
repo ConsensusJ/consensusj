@@ -204,12 +204,12 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * the mode of the server. However, to simplify client configuration we have added a constructor
      * that doesn't require specification of a network. This changes some assumptions about how {@code BitcoinClient} works.
      * Previously, no JSON-RPC I/O calls would be performed unless something was explicitly requested -- which
-     * also gave users of {@code BitcoinClient} the ability to call {@link #waitForServer(int)}
+     * also gave users of {@code BitcoinClient} the ability to call {@link #waitForServer(Duration)}
      * before calling any RPCs.
      * <p>
      * Until further improvements/changes are made, if you use one of the constructors that does not specify a
      * {@code Network} you should call {@link #getNetwork()} as soon as possible after calling the constructor
-     * (especially before calling any JSON-RPC I/O methods except {@link #waitForServer(int)}).
+     * (especially before calling any JSON-RPC I/O methods except {@link #waitForServer(Duration)}).
      * @return network for the server
      */
     public synchronized Network getNetwork() {
@@ -350,7 +350,6 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
         }
     }
 
-    // TODO: This method should be deprecated in favor of the version that takes a Duration
     /**
      * Wait until the server is available.
      * <p>
@@ -361,7 +360,9 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @param timeoutSeconds Timeout in seconds
      * @return true if ready, false if timeout or interrupted
      * @throws JsonRpcException if an "unexpected" exception happens (i.e. an error other than what happens during normal server startup)
+     * @deprecated Use {@link #waitForServer(Duration)}
      */
+    @Deprecated
     public boolean waitForServer(int timeoutSeconds) throws JsonRpcException {
         return waitForServer(Duration.ofSeconds(timeoutSeconds));
     }

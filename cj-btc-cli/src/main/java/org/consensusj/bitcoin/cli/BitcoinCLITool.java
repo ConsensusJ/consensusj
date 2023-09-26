@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 
 import static org.consensusj.bitcoin.jsonrpc.RpcURI.RPCPORT_REGTEST;
 import static org.consensusj.bitcoin.jsonrpc.RpcURI.RPCPORT_TESTNET;
@@ -81,7 +82,7 @@ public class BitcoinCLITool extends BaseJsonRpcTool {
                     //System.out.println("Connecting to: " + getRPCConfig().getURI() + " with -rpcWait");
                     boolean available = false;   // Wait up to 1 hour
                     try {
-                        available = client.waitForServer(60*60);
+                        available = client.waitForServer(Duration.ofMinutes(60));
                     } catch (JsonRpcException e) {
                         rpcTool.printError(this, "JSON-RPC Exception: " + e.getMessage());
                         throw new ToolException(1, e.getMessage());

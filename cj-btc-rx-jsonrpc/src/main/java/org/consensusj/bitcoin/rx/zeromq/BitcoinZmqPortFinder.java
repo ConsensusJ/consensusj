@@ -6,6 +6,7 @@ import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class BitcoinZmqPortFinder {
         if (notifications == null) {
             try {
                 // TODO: We don't want to hang here for 120 seconds or so waiting for a server
-                client.waitForServer(1);
+                client.waitForServer(Duration.ofSeconds(1));
                 notifications = client.getZmqNotifications();
             } catch (IOException e) {
                 // TODO: Handle this more gracefully, without runtime exception
