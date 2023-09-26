@@ -13,7 +13,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -120,10 +119,10 @@ public class JsonRpcClientJavaNet extends AbstractRpcClient {
     }
 
     // Try to read a JsonRpcResponse from a string (error case)
-    private Optional<JsonRpcResponse<Map<String, Object>>> readErrorResponse(String body) {
-        JsonRpcResponse<Map<String, Object>> response;
+    private Optional<JsonRpcResponse<Object>> readErrorResponse(String body) {
+        JsonRpcResponse<Object> response;
         try {
-            response = mapper.readValue(body, mapper.getTypeFactory().constructParametricType(JsonRpcResponse.class, Map.class));
+            response = mapper.readValue(body, responseTypeFor(Object.class));
         } catch (JsonProcessingException e) {
             response = null;
         }

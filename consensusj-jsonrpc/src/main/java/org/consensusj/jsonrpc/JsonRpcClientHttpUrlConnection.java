@@ -15,7 +15,6 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -144,10 +143,8 @@ public class JsonRpcClientHttpUrlConnection extends AbstractRpcClient {
         InputStream errorStream = connection.getErrorStream();
         if (errorStream != null) {
             if (connection.getContentType().equals("application/json")) {
-                JavaType genericResponseType = mapper.getTypeFactory().
-                        constructParametricType(JsonRpcResponse.class, Map.class);
                 // We got a JSON error response -- try to parse it as a JsonRpcResponse
-                JsonRpcResponse<Map<String, Object>> bodyJson = responseFromStream(errorStream, genericResponseType);
+                JsonRpcResponse<Object> bodyJson = responseFromStream(errorStream, responseTypeFor(Object.class));
                 // Since this is an error at the JSON level, let's log it with `debug` level and
                 // let the higher-level software decide whether to log it as `error` or not.
                 log.debug("json error code: {}, message: {}", bodyJson.getError().getCode(), responseMessage);
