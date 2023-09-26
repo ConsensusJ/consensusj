@@ -1,7 +1,6 @@
 package org.consensusj.bitcoin.rx.jsonrpc;
 
 import io.reactivex.rxjava3.core.BackpressureStrategy;
-import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -18,11 +17,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
+import java.io.IOError;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+// TODO: Rewrite using ScheduledThreadExecutor (instead of an Observable interval) and SubmissionPublisher instead of FlowableProcessor.
+//  Then we can merge it into BitcoinClient (as a default component.)
+//  We may need to use atomic object (or something else?) to replace distinctUntilChanged
 /**
  * Provides {@link ChainTipService} a using a {@link BitcoinClient} and a polling interval.
  * This can be used as a fallback if ZeroMQ is not available.
@@ -79,15 +82,15 @@ public class PollingChainTipServiceImpl implements ChainTipService, ChainTipClie
      *
      * @return A stream of distinct {@code ChainTip}s.
      */
-    public Flowable<ChainTip> pollForDistinctChainTip() {
+    Flowable<ChainTip> pollForDistinctChainTip() {
         return getPollingInterval()
+                // ERROR backpressure strategy is compatible with BehaviorProcessor since it subscribes to MAX items
+                .toFlowable(BackpressureStrategy.ERROR)
                 .doOnNext(t -> log.debug("got interval"))
-                .flatMapMaybe(t -> this.currentChainTipMaybe())
+                .flatMap(t -> this.currentChainTipMaybe())
                 .doOnNext(tip -> log.debug("blockheight, blockhash = {}, {}", tip.getHeight(), tip.getHash()))
                 .distinctUntilChanged(ChainTip::getHash)
-                .doOnNext(tip -> log.info("** NEW ** blockheight, blockhash = {}, {}", tip.getHeight(), tip.getHash()))
-                // ERROR backpressure strategy is compatible with BehaviorProcessor since it subscribes to MAX items
-                .toFlowable(BackpressureStrategy.ERROR);
+                .doOnNext(tip -> log.info("** NEW ** blockheight, blockhash = {}, {}", tip.getHeight(), tip.getHash()));
     }
 
     /**
@@ -95,8 +98,8 @@ public class PollingChainTipServiceImpl implements ChainTipService, ChainTipClie
      *
      * @return The active ChainTip if available (onSuccess) otherwise onComplete (if not available) or onError (if error occurred)
      */
-    private Maybe<ChainTip> currentChainTipMaybe() {
-        return pollOnceAsync(this::getChainTipsAsync)
+    private Publisher<ChainTip> currentChainTipMaybe() {
+        return pollOnceAsPublisher(client::getChainTipsAsync, TransientErrorFilter.of(this::isTransientError, this::logError))
                 .mapOptional(ChainTip::findActiveChainTip);
     }
 
@@ -114,5 +117,12 @@ public class PollingChainTipServiceImpl implements ChainTipService, ChainTipClie
     @Deprecated
     public List<ChainTip> getChainTips() throws JsonRpcStatusException, IOException {
         return client.syncGet(client.getChainTipsAsync());
+    }
+
+    private boolean isTransientError(Throwable t) {
+        return t instanceof IOError;
+    }
+    private void logError(Throwable throwable) {
+        log.error("Exception in RPCCall", throwable);
     }
 }

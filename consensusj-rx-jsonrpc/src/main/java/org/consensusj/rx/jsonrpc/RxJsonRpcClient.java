@@ -1,18 +1,24 @@
 package org.consensusj.rx.jsonrpc;
 
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
+import org.consensusj.jsonrpc.AbstractRpcClient;
 import org.consensusj.jsonrpc.AsyncSupport;
+import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOError;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
  * RxJava support for calling JSON-RPC clients. Extend/implement this interface to inherit {@code default} methods
- * {@link #call(ThrowingSupplier)}, {@link #defer(Supplier)}, and {@link #pollOnce(ThrowingSupplier)}.
+ * {@link #call(ThrowingSupplier)}, {@link #defer(Supplier)}, and {@link #pollOnceAsPublisher(Supplier, AbstractRpcClient.TransientErrorFilter)}.
  */
 public interface RxJsonRpcClient extends AsyncSupport {
     Logger log = LoggerFactory.getLogger(RxJsonRpcClient.class);
@@ -47,6 +53,25 @@ public interface RxJsonRpcClient extends AsyncSupport {
     }
 
     /**
+     * Takes a supplier of computable futures and returns a publisher that when subscribed to returns 0 or 1 items.
+     * @param supplier supplier for delaying invocation of "hot" futures so they can be "cold" publishers.
+     * @param filter Filters and logs transient errors
+     * @return A publisher of a "cold" stream of items (temporarily Flowable, but will change to Publisher, then Flow.Publisher)
+     * @param <T> result type
+     */
+    default <T> Flowable<T> pollOnceAsPublisher(Supplier<CompletionStage<T>> supplier, AbstractRpcClient.TransientErrorFilter filter) {
+        return Flowable.defer(() -> Flowable.fromCompletionStage(supplier.get()
+                        .handle(filter::handle)
+                        .thenCompose(Function.identity())))
+                .flatMapStream(Optional::stream);
+    }
+
+    // This version doesn't filter or log any exceptions
+    default <T> Publisher<T> pollOnceAsPublisher(Supplier<CompletableFuture<T>> supplier) {
+        return Flowable.defer(() -> Flowable.fromCompletionStage(supplier.get()));
+    }
+
+    /**
      * Poll a method, ignoring {@link IOError}.
      * The returned {@link Maybe} will:
      * <ol>
@@ -58,7 +83,7 @@ public interface RxJsonRpcClient extends AsyncSupport {
      * @param method A supplier (should be an RPC Method) that can throw {@link Exception}.
      * @param <RSLT> The type of the expected result
      * @return A Maybe for the expected result type
-     * @deprecated Use {@link #pollOnceAsync(Supplier)}
+     * @deprecated Use {@link #pollOnceAsPublisher(Supplier, TransientErrorFilter)} (Supplier)}
      */
     @Deprecated
     default <RSLT> Maybe<RSLT> pollOnce(AsyncSupport.ThrowingSupplier<RSLT> method) {
@@ -82,13 +107,12 @@ public interface RxJsonRpcClient extends AsyncSupport {
      * @param <RSLT> The type of the expected result
      * @return A Maybe for the expected result type
      */
+    @Deprecated
     default <RSLT> Maybe<RSLT> pollOnceAsync(Supplier<CompletionStage<RSLT>> supplier) {
-        return callAsync(supplier)
-                .doOnSuccess(this::logSuccess)
-                .doOnError(this::logError)
-                .toMaybe()
-                .onErrorComplete(this::isTransientError);    // Empty completion if IOError
+        return pollOnceAsPublisher(supplier, TransientErrorFilter.of(this::isTransientError, this::logError))
+                .firstElement();
     }
+
 
     /**
      * Determine if error is transient and should be ignored.

@@ -76,7 +76,7 @@ public abstract class AbstractRpcClient implements JsonRpcClient<JavaType> {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         defaultType = mapper.getTypeFactory().constructType(Object.class);
     }
-
+    
     @Override
     public JsonRpcMessage.Version getJsonRpcVersion() {
         return jsonRpcVersion;

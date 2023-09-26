@@ -1,5 +1,6 @@
 package org.consensusj.bitcoin.rx.jsonrpc;
 
+import io.reactivex.rxjava3.core.Flowable;
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Network;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
@@ -29,7 +30,7 @@ public class TxOutSetWatcherSample {
                     .subscribe(TxOutSetWatcherSample::onChainTip, TxOutSetWatcherSample::onError);
 
             // Blocking subscribe to TxOutSetInfo
-            txOutSetService.getTxOutSetPublisher()
+            Flowable.fromPublisher(txOutSetService.getTxOutSetPublisher())
                     .blockingSubscribe(TxOutSetWatcherSample::onTxOutSetInfo, TxOutSetWatcherSample::onError);
 
         }

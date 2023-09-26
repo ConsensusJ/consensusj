@@ -1,8 +1,13 @@
 package org.consensusj.jsonrpc;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -94,5 +99,57 @@ public interface AsyncSupport {
          * @throws IOException A (checked) exception
          */
         T getThrows() throws IOException;
+    }
+
+    /**
+     * Error filter for resilient polling. Uses a Predicate to specify what to ignore and a Consumer to log
+     * what is ignored.
+     */
+    interface TransientErrorFilter {
+        static TransientErrorFilter of(Predicate<Throwable> filter, Consumer<Throwable> logger) {
+            return new TransientErrorFilter() {
+                @Override
+                public boolean isTransient(Throwable t) {
+                    return filter.test(t);
+                }
+
+                @Override
+                public void log(Throwable t) {
+                    logger.accept(t);
+                }
+            };
+        }
+
+        static TransientErrorFilter none() {
+            return of(
+                    (t) -> false,   // No errors are consider transient
+                    (t) -> {}       // Nothing to log because we're not swallowing anything.
+            );
+        }
+
+        /**
+         * Handler to transpose to a "future maybe". Use with {@link CompletableFuture#handle(BiFunction)}
+         * followed by {@code .thenCompose(Function.identity())} (or if JDK 12+ {@link CompletableFuture#exceptionallyCompose(Function)})
+         * to swallow transient errors.
+         * @param result T
+         * @param t An error, possibly transient
+         * @return A completable future of future maybe
+         * @param <T> The desired return type
+         */
+        default <T> CompletableFuture<Optional<T>> handle(T result, Throwable t) {
+            if (result != null) {
+                return CompletableFuture.completedFuture(Optional.of(result));
+            } else if (isTransient(t)) {
+                log(t);
+                return CompletableFuture.completedFuture(Optional.empty());
+            } else {
+                return CompletableFuture.failedFuture(t);
+            }
+        }
+
+        // TODO: Should this be flipped to isFatal()?
+        boolean isTransient(Throwable t);
+        void log(Throwable t);
+
     }
 }
