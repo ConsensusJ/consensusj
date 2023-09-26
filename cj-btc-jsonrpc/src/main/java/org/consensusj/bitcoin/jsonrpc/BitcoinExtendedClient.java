@@ -18,7 +18,6 @@ import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.crypto.ECKey;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionOutPoint;
@@ -79,13 +78,8 @@ public class BitcoinExtendedClient extends BitcoinClient {
         this(JsonRpcTransport.getDefaultSSLContext(), network, server, rpcuser, rpcpassword);
     }
 
-    @Deprecated
-    public BitcoinExtendedClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        this(JsonRpcTransport.getDefaultSSLContext(), netParams.network(), server, rpcuser, rpcpassword);
-    }
-
     public BitcoinExtendedClient(URI server, String rpcuser, String rpcpassword) {
-        this(JsonRpcTransport.getDefaultSSLContext(), (Network) null, server, rpcuser, rpcpassword);
+        this(JsonRpcTransport.getDefaultSSLContext(), null, server, rpcuser, rpcpassword);
     }
 
     public BitcoinExtendedClient(RpcConfig config) {
