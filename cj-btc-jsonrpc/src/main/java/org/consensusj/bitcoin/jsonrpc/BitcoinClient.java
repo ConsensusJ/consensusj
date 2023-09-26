@@ -246,9 +246,9 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @return A future for the server-side {@code Network}
      */
     private CompletableFuture<Network> getNetworkFromServer() {
-        return getBlockchainInfoMap().thenApply(map -> {
+        return getBlockChainInfoAsync().thenApply(info -> {
             Network network;
-            switch((String) map.get("chain")) {
+            switch(info.getChain()) {
                 case "main":
                     network = BitcoinNetwork.MAINNET;
                     break;
@@ -267,17 +267,6 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
             }
             return network;
         });
-    }
-
-    // TODO: I believe the circular dependency in RpcClientModule has been fixed, so this can be removed
-    /**
-     * Return {@code BlockchainInfo} as a {@link Map}. This avoids use of {@link RpcClientModule} and a circular dependency on {@link Network}
-     * @return  {@code getblockchaininfo} response JSON as a {@link Map}
-     */
-    private CompletableFuture<Map<String, Object>> getBlockchainInfoMap() {
-        JsonRpcRequest request = buildJsonRequest("getblockchaininfo");
-        CompletableFuture<JsonRpcResponse<Map<String, Object>>> response = sendRequestForResponseAsync(request, responseTypeFor(Map.class));
-        return response.thenApply(JsonRpcResponse::getResult);
     }
 
     /**
@@ -1017,7 +1006,11 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public BlockChainInfo getBlockChainInfo() throws JsonRpcStatusException, IOException {
-        return send("getblockchaininfo", BlockChainInfo.class);
+        return syncGet(getBlockChainInfoAsync());
+    }
+
+    public CompletableFuture<BlockChainInfo> getBlockChainInfoAsync() {
+        return sendAsync("getblockchaininfo", BlockChainInfo.class);
     }
 
     /**
