@@ -391,7 +391,7 @@ public class BitcoinClient extends JsonRpcClientJavaNet implements ChainTipClien
      * @return Completes with {@code true} if server responded, {@code false} for timeout, exceptionally for unexpected errors.
      */
     public CompletableFuture<Boolean> waitForServerAsync(Duration timeout, Duration retry) {
-        Supplier<JsonRpcRequest> requestSupplier = () -> new JsonRpcRequest("getblockcount");
+        Supplier<JsonRpcRequest> requestSupplier = () -> buildJsonRequest("getblockcount");
         return waitForServer(timeout, retry, requestSupplier, typeForClass(Integer.class), this::mapBitcoinTransientErrors )
                 .handle((i, t) -> {
                     if (i != null) {
