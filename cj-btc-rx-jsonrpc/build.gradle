@@ -10,7 +10,7 @@ dependencies {
     implementation project(':cj-bitcoinj-util')
     implementation project(':cj-btc-jsonrpc')
     implementation project(':consensusj-rx-zeromq')
-    implementation "org.zeromq:jeromq:0.5.3"
+    implementation "org.zeromq:jeromq:0.5.4"
 
     testImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 }
