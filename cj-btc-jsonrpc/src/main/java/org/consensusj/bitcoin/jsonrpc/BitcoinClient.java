@@ -44,7 +44,6 @@ import org.bitcoinj.core.Block;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.crypto.ECKey;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.consensusj.jsonrpc.JsonRpcTransport;
@@ -174,27 +173,12 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
         this(JsonRpcTransport.getDefaultSSLContext(), network, server, rpcuser, rpcpassword);
     }
 
-    @Deprecated
-    public BitcoinClient(NetworkParameters netParams, URI server, String rpcuser, String rpcpassword) {
-        this(netParams.network(), server, rpcuser, rpcpassword);
-    }
-
     /**
      * Construct a BitcoinClient from an RPCConfig data object.
      * @param config Contains URI, user name, and password
      */
     public BitcoinClient(RpcConfig config) {
         this(config.network(), config.getURI(), config.getUsername(), config.getPassword());
-    }
-
-    /**
-     * Get network parameters
-     * @return network parameters for the server
-     * @deprecated Use {@link #getNetwork()}
-     */
-    @Deprecated
-    public synchronized NetworkParameters getNetParams() {
-        return NetworkParameters.of(getNetwork());
     }
 
     /**
@@ -285,6 +269,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
         });
     }
 
+    // TODO: I believe the circular dependency in RpcClientModule has been fixed, so this can be removed
     /**
      * Return {@code BlockchainInfo} as a {@link Map}. This avoids use of {@link RpcClientModule} and a circular dependency on {@link Network}
      * @return  {@code getblockchaininfo} response JSON as a {@link Map}
