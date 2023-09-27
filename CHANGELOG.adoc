@@ -15,6 +15,7 @@ Released: Under development
 === Dependency Updates
 
 * Micronaut 4.1.2
+* JeroMQ 0.5.4
 * Groovy 4.0.15
 * SLF4J 2.0.9
 
