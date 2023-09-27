@@ -246,27 +246,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @return A future for the server-side {@code Network}
      */
     private CompletableFuture<Network> getNetworkFromServer() {
-        return getBlockChainInfoAsync().thenApply(info -> {
-            Network network;
-            switch(info.getChain()) {
-                case "main":
-                    network = BitcoinNetwork.MAINNET;
-                    break;
-                case "test":
-                    network = BitcoinNetwork.TESTNET;
-                    break;
-                case "signet":
-                    network = BitcoinNetwork.SIGNET;
-                    break;
-                case "regtest":
-                    network = BitcoinNetwork.REGTEST;
-                    break;
-                default:
-                    throw new RuntimeException("Server returned unrecognized Bitcoin network");
-
-            }
-            return network;
-        });
+        return getBlockChainInfoAsync().thenApply(BlockChainInfo::chainToNetwork);
     }
 
     /**

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.base.BitcoinNetwork;
+import org.bitcoinj.base.Network;
 import org.bitcoinj.base.Sha256Hash;
 
 import java.math.BigDecimal;
@@ -67,5 +68,54 @@ public class BlockChainInfo {
 
     public byte[] getChainWork() {
         return chainWork;
+    }
+
+    /**
+     * Map a BlockChainInfo chain string to a Network. These strings are different from the standard values
+     * in {@link BitcoinNetwork#toString()}.
+     * @param info {@code BlockChainInfo}
+     * @return the matching network.
+     */
+    public static Network chainToNetwork(BlockChainInfo info) {
+        Network network;
+        switch(info.getChain()) {
+            case "main":
+                network = BitcoinNetwork.MAINNET;
+                break;
+            case "test":
+                network = BitcoinNetwork.TESTNET;
+                break;
+            case "signet":
+                network = BitcoinNetwork.SIGNET;
+                break;
+            case "regtest":
+                network = BitcoinNetwork.REGTEST;
+                break;
+            default:
+                throw new RuntimeException("BlockChainInfo contains unrecognized Bitcoin network");
+        }
+        return network;
+    }
+
+    /**
+     * Map {@link BitcoinNetwork} to a chain-id string.
+     * Bitcoin Core returns strings that differ from {@link BitcoinNetwork#toString()}.
+     * @param network bitcoinj enum type
+     * @return Bitcoin Core-compatible <q>chain</q> string
+     */
+    public static String networkToChainName(BitcoinNetwork network) {
+        String name;
+        switch(network) {
+            case MAINNET:
+                name = "main";
+                break;
+            case TESTNET:
+                name = "test";
+                break;
+            default:
+                name = network.toString();
+                break;
+        };
+        return name;
     }
 }
