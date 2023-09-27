@@ -12,6 +12,8 @@ import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
 
 import javax.net.ssl.SSLContext;
 import java.net.URI;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A {@link BitcoinClient} enhanced with Reactive features. Can use either ZeroMQ or polling
@@ -26,7 +28,8 @@ import java.net.URI;
  * to {@code cj-btc-rx?}
  */
 public class RxBitcoinClient extends BitcoinExtendedClient implements ChainTipService, RxJsonRpcClient {
-    private final ChainTipService chainTipService;
+    private final boolean useZmq;
+    private /* Lazy */ ChainTipService chainTipService;
 
     public RxBitcoinClient(Network network, URI server, String rpcuser, String rpcpassword) {
         this(network, server, rpcuser, rpcpassword, true);
@@ -39,16 +42,29 @@ public class RxBitcoinClient extends BitcoinExtendedClient implements ChainTipSe
     public RxBitcoinClient(SSLContext sslContext, Network network, URI server, String rpcuser, String rpcpassword, boolean useZmq) {
         super(sslContext, network, server, rpcuser, rpcpassword);
         // TODO: Determine if ZMQ is available by querying the server
+        this.useZmq = useZmq;
         // TODO: Determine whether server is up or down -- add a session re-establishment service
-        if (useZmq) {
-            chainTipService = new RxBitcoinZmqService(this);
-        } else {
-            chainTipService = new PollingChainTipServiceImpl(this);
+    }
+
+    private void initChainTipService(Duration timeout) {
+        if (chainTipService == null) {
+            this.waitForConnected().orTimeout(timeout.toSeconds(), TimeUnit.SECONDS).join();
+            if (useZmq) {
+                chainTipService = new RxBitcoinZmqService(this);
+            } else {
+                chainTipService = new PollingChainTipServiceImpl(this);
+            }
         }
     }
 
+    /**
+     * The BitcoinClient must have "connected once" before this is called. This means something else
+     * needs to have called something to do that.
+     * @return a publisher of Chain Tips
+     */
     @Override
     public Flowable<ChainTip> chainTipPublisher() {
+        initChainTipService(Duration.ofMinutes(60));
         return Flowable.fromPublisher(chainTipService.chainTipPublisher());
     }
 }

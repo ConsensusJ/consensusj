@@ -8,6 +8,7 @@ import org.consensusj.bitcoin.json.pojo.TxOutSetInfo;
 import org.consensusj.bitcoin.rx.jsonrpc.service.TxOutSetService;
 
 import java.net.URI;
+import java.time.Duration;
 
 import static java.lang.System.out;
 
@@ -25,6 +26,7 @@ public class TxOutSetWatcherSample {
         try (   RxBitcoinClient client = new RxBitcoinClient(network, rpcUri, rpcUser, rpcPassword, useZmq);
                 TxOutSetService txOutSetService = new TxOutSetService(client) ) {
 
+            client.connectToServer(Duration.ofMinutes(5)).join();
             // Subscribe to ChainTips
             client.chainTipPublisher()
                     .subscribe(TxOutSetWatcherSample::onChainTip, TxOutSetWatcherSample::onError);

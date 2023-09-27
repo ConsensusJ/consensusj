@@ -16,6 +16,8 @@ import spock.lang.Specification
 
 import jakarta.inject.Inject
 
+import java.time.Duration
+
 /**
  * Basic tests of an extremely basic Bitcoin server
  */
@@ -32,6 +34,7 @@ class ApplicationSpec extends Specification {
     
     def setup() {
         client = new BitcoinExtendedClient(server.URI, "", "")
+        client.connectToServer(Duration.ofSeconds(90)).join()
         network = client.getNetwork()   // This forces the JSON-Mappers to load  TODO: Make this automatic
     }
 

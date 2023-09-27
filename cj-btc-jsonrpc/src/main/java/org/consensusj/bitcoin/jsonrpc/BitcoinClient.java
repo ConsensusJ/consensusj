@@ -116,7 +116,11 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
     public static final int BITCOIN_CORE_VERSION_MIN = 200000;              // Minimum Bitcoin Core supported (tested) version
     public static final int BITCOIN_CORE_VERSION_DESC_DEFAULT = 230000;     // Bitcoin Core version that DEFAULTS to descriptor wallets
 
-    private Network network;
+    // CompletableFuture<Network> is used to handle optional lazy (from-remote) initialization 
+    private final CompletableFuture<Network> fNetwork = new CompletableFuture<>();
+    // This tells us that we have successfully connected to the server at least once via any of the methods
+    // that eventually call waitForBlockchainInfoAsync()
+    private final CompletableFuture<Void> fConnectedOnce = new CompletableFuture<>();
     private final ExecutorService executorService;
 
     private int serverVersion = 0;    // 0 means unknown serverVersion
@@ -125,7 +129,9 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
 
     public BitcoinClient(SSLContext sslContext, Network network, URI server, String rpcuser, String rpcpassword) {
         super(sslContext, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
-        this.network = network;
+        if (network != null) {
+            this.fNetwork.complete(network); // Non-lazy initialization case
+        }
         ThreadFactory threadFactory = new BitcoinClientThreadFactory(new Context(), "Bitcoin RPC Client");
         // TODO: Tune and/or make configurable the thread pool size.
         // Current pool size of 5 is chosen to minimize simultaneous active RPC
@@ -147,6 +153,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      */
     public BitcoinClient(SSLContext sslContext, URI server, String rpcuser, String rpcpassword) {
         this(sslContext, null, server, rpcuser, rpcpassword);
+        // Lazy initialization of network. Should we send a request from the constructor?
     }
 
     /**
@@ -159,7 +166,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @param rpcpassword Password (if required)
      */
     public BitcoinClient(URI server, String rpcuser, String rpcpassword) {
-        this(JsonRpcTransport.getDefaultSSLContext(), (Network) null, server, rpcuser, rpcpassword);
+        this(JsonRpcTransport.getDefaultSSLContext(), server, rpcuser, rpcpassword);
     }
 
     /**
@@ -192,15 +199,17 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * before calling any RPCs.
      * <p>
      * Until further improvements/changes are made, if you use one of the constructors that does not specify a
-     * {@code Network} you should call {@link #getNetwork()} as soon as possible after calling the constructor
-     * (especially before calling any JSON-RPC I/O methods except {@link #waitForServer(Duration)}).
+     * {@code Network} you should call {@link #connectToServer(Duration)} as soon as possible after calling the constructor
+     * (especially before calling any JSON-RPC I/O methods.
+     * <p>
+     *  Well-behaved users of {@code BitcoinClient} should only call this method <i>after</i> either providing
+     *  a {@link Network} in the constructor or calling one of the methods that makes a connection. Because this
+     *  method is also used internally and indirectly, there is a short timeout specified for extra safety.
      * @return network for the server
      */
     public synchronized Network getNetwork() {
-        if (network == null) {
-            network = getNetworkFromServer().join();
-        }
-        return network;
+        // TODO: Should this auto-connect?
+        return fNetwork.orTimeout(1, TimeUnit.MINUTES).join();
     }
 
     @Override
@@ -337,17 +346,39 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
         }
     }
 
+    /**
+     * Actively connect to server (one time) waiting for it to start if necessary
+     * @param timeout how long to wait
+     * @return completes successfully on connection or exceptionally on fatal error or timeout
+     */
+    public CompletableFuture<Void> connectToServer(Duration timeout) {
+        return waitForBlockchainInfoAsync(timeout, RETRY_DELAY)
+                .thenApply(info -> null);
+    }
+
+    /**
+     * This is like waitForServer but does not initiate a connection. It depends upon
+     * something else having done so.
+     * @return a future (possibly already completed) that indicates we have connected at least once to the server
+     */
+    public CompletableFuture<Void> waitForConnected() {
+        return fConnectedOnce.minimalCompletionStage().toCompletableFuture();
+    }
+
+    public CompletableFuture<Void> waitForConnected(Duration timeout) {
+        return waitForConnected().orTimeout(timeout.toSeconds(), TimeUnit.SECONDS);
+    }
+
     // TODO: Consider renaming this method "connect"
     // TODO: Consider having this method automatically get the Bitcoin Network, Server Version, RegTest mining address, etc once connection is made (the generic waitForServer() method is capable of doing that)
     /**
-     * Wait for a connection to the server. Uses {@code getblockcount} to poll server.
+     * Wait for a connection to the server. Uses {@code getblockchaininfo} to poll server.
      * @param timeout how long to wait for server
      * @param retry time to wait between retries
      * @return Completes with {@code true} if server responded, {@code false} for timeout, exceptionally for unexpected errors.
      */
-    public CompletableFuture<Boolean> waitForServerAsync(Duration timeout, Duration retry) {
-        Supplier<JsonRpcRequest> requestSupplier = () -> buildJsonRequest("getblockcount");
-        return waitForServer(timeout, retry, requestSupplier, typeForClass(Integer.class), this::mapBitcoinTransientErrors )
+    protected CompletableFuture<Boolean> waitForServerAsync(Duration timeout, Duration retry) {
+        return waitForBlockchainInfoAsync(timeout, retry)
                 .handle((i, t) -> {
                     if (i != null) {
                         return CompletableFuture.completedFuture(Boolean.TRUE);
@@ -358,6 +389,17 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
                     }
                 })
                 .thenCompose(Function.identity());
+    }
+
+    protected CompletableFuture<BlockChainInfo> waitForBlockchainInfoAsync(Duration timeout, Duration retry) {
+        Supplier<JsonRpcRequest> requestSupplier = () -> buildJsonRequest("getblockchaininfo");
+        CompletableFuture<BlockChainInfo> cf = waitForServer(timeout, retry, requestSupplier, typeForClass(BlockChainInfo.class), this::mapBitcoinTransientErrors);
+        return cf.whenComplete((info, t) -> {
+            if (info != null) {
+                fConnectedOnce.complete(null);
+                fNetwork.complete(BlockChainInfo.chainToNetwork(info));
+            }
+        });
     }
 
     /**
