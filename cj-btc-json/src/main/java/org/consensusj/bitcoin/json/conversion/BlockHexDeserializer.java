@@ -6,9 +6,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.bitcoinj.base.Network;
 import org.bitcoinj.core.Block;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.ProtocolException;
 
 import java.io.IOException;
@@ -21,15 +19,6 @@ public class BlockHexDeserializer extends JsonDeserializer<Block> {
 
     public BlockHexDeserializer() {
     }
-
-    @Deprecated
-    public BlockHexDeserializer(Network network) {
-    }
-
-    @Deprecated
-    public BlockHexDeserializer(NetworkParameters netParams) {
-    }
-
     @Override
     public Block deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         JsonToken token = p.getCurrentToken();

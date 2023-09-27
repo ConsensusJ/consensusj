@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.crypto.ECKey;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Peer;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
@@ -29,10 +28,5 @@ public class RpcServerModule extends SimpleModule {
                 .addSerializer(Sha256Hash.class, new Sha256HashSerializer())
                 .addSerializer(Transaction.class, new TransactionSerializer())
                 .addSerializer(Script.class, new ScriptSerializer());
-    }
-
-    @Deprecated
-    public RpcServerModule(NetworkParameters netParams) {
-        this();
     }
 }

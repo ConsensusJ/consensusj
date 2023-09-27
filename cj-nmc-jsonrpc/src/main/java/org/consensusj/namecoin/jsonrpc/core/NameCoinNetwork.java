@@ -4,7 +4,6 @@ import org.bitcoinj.base.Coin;
 import org.bitcoinj.base.LegacyAddress;
 import org.bitcoinj.base.Monetary;
 import org.bitcoinj.base.Network;
-import org.bitcoinj.base.SegwitAddress;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +75,7 @@ public enum NameCoinNetwork implements Network {
     }
 
     /**
-     * Return the network ID string (previously specified in {@code NetworkParameters})
+     * Return the network ID string (specified by a {@code Network})
      *
      * @return The network ID string
      */

@@ -10,7 +10,6 @@ import org.bitcoinj.base.Address;
 import org.bitcoinj.base.AddressParser;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.base.exceptions.AddressFormatException;
-import org.bitcoinj.core.NetworkParameters;
 
 import java.io.IOException;
 
@@ -37,21 +36,6 @@ public class AddressDeserializer extends JsonDeserializer<Address> {
      */
     public AddressDeserializer(Network network) {
         this(AddressParser.getDefault(network));
-    }
-
-    /**
-     * Construct an address deserializer that validates addresses for the specified {@link NetworkParameters}.
-     * When deserializing addresses, addresses that are not from the specified network will cause a
-     * {@link InvalidFormatException} to be thrown during deserialization.
-     *
-     * @param netParams Network parameters to specify the only network we will deserialize addresses for.
-     * @deprecated Use {@link AddressDeserializer#AddressDeserializer(Network)}
-     */
-    @Deprecated
-    public AddressDeserializer(NetworkParameters netParams) {
-        this((netParams != null)
-                ? AddressParser.getDefault(netParams.network())
-                : AddressParser.getDefault());
     }
 
     /**

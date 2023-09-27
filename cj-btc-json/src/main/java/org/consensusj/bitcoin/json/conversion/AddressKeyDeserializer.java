@@ -8,7 +8,6 @@ import org.bitcoinj.base.Address;
 import org.bitcoinj.base.AddressParser;
 import org.bitcoinj.base.Network;
 import org.bitcoinj.base.exceptions.AddressFormatException;
-import org.bitcoinj.core.NetworkParameters;
 
 import java.io.IOException;
 
@@ -45,14 +44,6 @@ public class AddressKeyDeserializer extends KeyDeserializer {
         this( (network != null)
                 ? AddressParser.getDefault(network)
                 : AddressParser.getDefault());
-    }
-
-    /**
-     * @deprecated use {@link #AddressKeyDeserializer(Network)}
-     */
-    @Deprecated
-    public AddressKeyDeserializer(NetworkParameters netParams) {
-        this(netParams.network());
     }
 
     @Override

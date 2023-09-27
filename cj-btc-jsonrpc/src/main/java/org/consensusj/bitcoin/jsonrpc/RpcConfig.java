@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Network;
-import org.bitcoinj.core.NetworkParameters;
 
 import java.net.URI;
 
@@ -18,11 +17,6 @@ public class RpcConfig {
     private final URI uri;
     private final String   username;
     private final String   password;
-
-    @Deprecated
-    public RpcConfig(NetworkParameters netParams, URI uri, String username, String password) {
-        this(netParams.network(), uri, username, password);
-    }
 
     public RpcConfig(Network network, URI uri, String username, String password) {
         this.network = network;
@@ -52,15 +46,6 @@ public class RpcConfig {
     @JsonIgnore
     public Network network() {
         return network;
-    }
-
-    /**
-     * @deprecated Use {@link #network()}
-     */
-    @Deprecated
-    @JsonIgnore
-    public NetworkParameters getNetParams() {
-        return NetworkParameters.of(network);
     }
 
     @JsonProperty("netid")

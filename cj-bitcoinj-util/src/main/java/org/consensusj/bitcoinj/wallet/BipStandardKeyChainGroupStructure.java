@@ -1,7 +1,6 @@
 package org.consensusj.bitcoinj.wallet;
 
 import org.bitcoinj.base.BitcoinNetwork;
-import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.HDPath;
 import org.bitcoinj.crypto.ChildNumber;
 
@@ -38,16 +37,6 @@ public interface BipStandardKeyChainGroupStructure {
     static HDPath pathFor(org.bitcoinj.base.ScriptType outputScriptType, String netId) {
         return purpose(outputScriptType)
                 .extend(coinType(netId), account(0));
-    }
-
-    /**
-     * Map desired output script type and account index to an account path
-     * @param outputScriptType output script type (purpose)
-     * @param networkParameters network/coin type
-     * @return The HD Path: purpose / coinType / accountIndex
-     */
-    static HDPath pathFor(org.bitcoinj.base.ScriptType outputScriptType, NetworkParameters networkParameters) {
-        return pathFor(outputScriptType, networkParameters.getId());
     }
 
     /**
