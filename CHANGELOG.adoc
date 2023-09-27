@@ -20,7 +20,7 @@ Released: Under development
 
 === Build/Test Updates
 
-* Gradle 8.4-rc-1
+* Gradle 8.4-rc-2
 * Create GitHub Actions GraalVM CE Matrix: Java 17, **21**
 
 == v0.7.0-alpha2
