@@ -5,6 +5,7 @@ import io.reactivex.rxjava3.processors.FlowableProcessor;
 import io.reactivex.rxjava3.processors.PublishProcessor;
 import org.consensusj.bitcoin.rx.RxBlockchainBinaryService;
 import org.consensusj.rx.zeromq.RxZmqContext;
+import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zeromq.ZMsg;
@@ -55,19 +56,24 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
             // Subscribe to each topic
             switch (topic) {
                 case hashblock:
-                    zmqContext.topicPublisher(topic.toString()).subscribe(this::onNextHashBlock, hashBlockProcessor::onError, hashBlockProcessor::onComplete);
+                    getTopicPublisher(topic)
+                            .subscribe(this::onNextHashBlock, hashBlockProcessor::onError, hashBlockProcessor::onComplete);
                     break;
                 case hashtx:
-                    zmqContext.topicPublisher(topic.toString()).subscribe(this::onNextHashTx, hashTxProcessor::onError, hashTxProcessor::onComplete);
+                    getTopicPublisher(topic)
+                            .subscribe(this::onNextHashTx, hashTxProcessor::onError, hashTxProcessor::onComplete);
                     break;
                 case rawblock:
-                    zmqContext.topicPublisher(topic.toString()).subscribe(this::onNextRawBlock, rawBlockProcessor::onError, rawBlockProcessor::onComplete);
+                    getTopicPublisher(topic)
+                            .subscribe(this::onNextRawBlock, rawBlockProcessor::onError, rawBlockProcessor::onComplete);
                     break;
                 case rawtx:
-                    zmqContext.topicPublisher(topic.toString()).subscribe(this::onNextRawTx, rawTxProcessor::onError, rawTxProcessor::onComplete);
+                    getTopicPublisher(topic)
+                            .subscribe(this::onNextRawTx, rawTxProcessor::onError, rawTxProcessor::onComplete);
                     break;
                 case sequence:
-                    zmqContext.topicPublisher(topic.toString()).subscribe(this::onNextSequence, this::onError, this::onComplete);
+                    getTopicPublisher(topic)
+                            .subscribe(this::onNextSequence, this::onError, this::onComplete);
                     break;
                 default:
                     throw new RuntimeException("Unknown topic");
@@ -76,22 +82,22 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
     }
 
     @Override
-    public Flowable<byte[]> transactionBinaryPublisher() {
+    public Publisher<byte[]> transactionBinaryPublisher() {
         return rawTxProcessor;
     }
 
     @Override
-    public Flowable<byte[]> transactionHashBinaryPublisher() {
+    public Publisher<byte[]> transactionHashBinaryPublisher() {
         return hashTxProcessor;
     }
 
     @Override
-    public Flowable<byte[]> blockBinaryPublisher() {
+    public Publisher<byte[]> blockBinaryPublisher() {
         return rawBlockProcessor;
     }
 
     @Override
-    public Flowable<byte[]> blockHashBinaryPublisher() {
+    public Publisher<byte[]> blockHashBinaryPublisher() {
         return hashBlockProcessor;
     }
 
@@ -99,6 +105,11 @@ public class RxBitcoinSinglePortZmqService implements RxBlockchainBinaryService,
     @Override
     public void close() {
         zmqContext.close();
+    }
+
+    // Get a Publisher for a topic (Flowable is used internally)
+    private Flowable<ZMsg> getTopicPublisher(BitcoinZmqMessage.Topic topic) {
+        return Flowable.fromPublisher(zmqContext.topicPublisher(topic.toString()));
     }
     
     private Optional<ParsedMessage> parseMessage(ZMsg message) {

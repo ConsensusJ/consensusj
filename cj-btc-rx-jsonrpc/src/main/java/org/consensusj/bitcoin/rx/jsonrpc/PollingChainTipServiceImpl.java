@@ -21,6 +21,7 @@ import java.io.IOError;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Flow;
 import java.util.concurrent.TimeUnit;
 
 // TODO: Rewrite using ScheduledThreadExecutor (instead of an Observable interval) and SubmissionPublisher instead of FlowableProcessor.
@@ -48,7 +49,7 @@ public class PollingChainTipServiceImpl implements ChainTipService, ChainTipClie
         client = bitcoinClient;
         this.interval = interval;
         log.info("Constructing polling ChainTipService: {}, {}", client.getNetwork().id(), client.getServerURI());
-        chainTipSource = pollForDistinctChainTip();
+        chainTipSource = Flowable.fromPublisher(pollForDistinctChainTip());
     }
 
     public PollingChainTipServiceImpl(BitcoinClient bitcoinClient) {
@@ -82,7 +83,7 @@ public class PollingChainTipServiceImpl implements ChainTipService, ChainTipClie
      *
      * @return A stream of distinct {@code ChainTip}s.
      */
-    Flowable<ChainTip> pollForDistinctChainTip() {
+    Publisher<ChainTip> pollForDistinctChainTip() {
         return getPollingInterval()
                 // ERROR backpressure strategy is compatible with BehaviorProcessor since it subscribes to MAX items
                 .toFlowable(BackpressureStrategy.ERROR)
@@ -99,7 +100,7 @@ public class PollingChainTipServiceImpl implements ChainTipService, ChainTipClie
      * @return The active ChainTip if available (onSuccess) otherwise onComplete (if not available) or onError (if error occurred)
      */
     private Publisher<ChainTip> currentChainTipMaybe() {
-        return pollOnceAsPublisher(client::getChainTipsAsync, TransientErrorFilter.of(this::isTransientError, this::logError))
+        return Flowable.fromPublisher(pollOnceAsPublisher(client::getChainTipsAsync, TransientErrorFilter.of(this::isTransientError, this::logError)))
                 .mapOptional(ChainTip::findActiveChainTip);
     }
 

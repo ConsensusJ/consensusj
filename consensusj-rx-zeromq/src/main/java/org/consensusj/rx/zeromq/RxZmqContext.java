@@ -5,6 +5,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.processors.FlowableProcessor;
 import io.reactivex.rxjava3.processors.PublishProcessor;
+import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +22,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadFactory;
 
 /**
- * ZMQ Context with a single socket and one {@code FlowableProcessor<ZMsg>} per topic.
+ * ZMQ Context with a single socket and one {@code Processor<ZMsg>} per topic.
  * It subscribes {@code SUB} to one or more topics using ZMQ and receives a multiplexed
  * stream of {@link ZMsg} from the {@link ZMsgSocketFlowable}. In {@link RxZmqContext#onNext} the {@code ZMsg}
  * are de-multiplexed by the {@code topic} {@code String} and placed in a per-topic
- * {@code FlowableProcessor<ZMsg>}.
+ * {@code Processor<ZMsg>}.
  * <p>
  * Topics (at least for now) must be passed to the constructor.
  * It would be nice to be able to subscribe to topics at the ZMQ level when we first get
@@ -36,7 +37,7 @@ public class RxZmqContext implements Closeable {
     private final ZContext zContext;
     private final Disposable disposable;
 
-    // Map of topic names to per-topic FlowableProcessor
+    // Map of topic names to per-topic Processor
     private final ConcurrentHashMap<String, FlowableProcessor<ZMsg>> processors = new ConcurrentHashMap<>();
 
     public RxZmqContext(URI tcpAddress, List<String> topics) {
@@ -46,7 +47,7 @@ public class RxZmqContext implements Closeable {
     /**
      * @param tcpAddress Address of ZMQ server to connect to
      * @param topics a list of topics to subscribe to
-     * @param threadFactory factory to create a thread for the receive loop (see {@link ZMsgSocketFlowable#createFromSocket(ZMQ.Socket, BackpressureStrategy, ThreadFactory)})
+     * @param threadFactory factory to create a thread for the receive loop (see {@link ZMsgSocketFlowable#createFromSocket(ZMQ.Socket, ThreadFactory)})
      */
     public RxZmqContext(URI tcpAddress, List<String> topics, ThreadFactory threadFactory) {
         zContext = new ZContext();
@@ -62,24 +63,24 @@ public class RxZmqContext implements Closeable {
             socket.subscribe(topic);
         });
 
-        disposable = ZMsgSocketFlowable.createFromSocket(socket, BackpressureStrategy.LATEST, threadFactory)
+        disposable = Flowable.fromPublisher(ZMsgSocketFlowable.createFromSocket(socket, threadFactory))
                 .subscribe(this::onNext, this::onError, this::onComplete);
         log.info("Connected.. Waiting for subscribers.");
     }
 
     /**
-     * Get a Publisher (Flowable) for a given topic
+     * Get a Publisher (internally is an RxJava3 Flowable) for a given topic
      *
      * @param topic a valid topic as passed to the constructor
-     * @return A Publisher (Flowable) for the topic
+     * @return A Publisher for the topic
      * @throws IllegalArgumentException if topic wasn't configured in the constructor
      */
-    public Flowable<ZMsg> topicPublisher(String topic) {
-        Flowable<ZMsg> flowable = processors.get(topic);
-        if (flowable == null) {
+    public Publisher<ZMsg> topicPublisher(String topic) {
+        Publisher<ZMsg> publisher = processors.get(topic);
+        if (publisher == null) {
             throw new IllegalArgumentException("topic unavailable -- topics must be passed to constructor");
         }
-        return flowable;
+        return publisher;
     }
 
     @Override
@@ -106,6 +107,6 @@ public class RxZmqContext implements Closeable {
     }
 
     private void addTopic(String topic) {
-        processors.computeIfAbsent(topic, t -> PublishProcessor.create());
+        processors.computeIfAbsent(topic, keyTopic -> PublishProcessor.create());
     }
 }

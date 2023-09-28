@@ -46,8 +46,7 @@ public class TxOutSetService implements Closeable {
 
     private synchronized void start() {
         if (txOutSetSubscription == null) {
-            txOutSetSubscription = client
-                    .chainTipPublisher()
+            txOutSetSubscription = Flowable.fromPublisher(client.chainTipPublisher())
                     .doOnNext(this::onNewBlock)
                     .flatMap(this::fetchCacheMaybe)
                     .subscribe(txOutSetProcessor::onNext, txOutSetProcessor::onError, txOutSetProcessor::onComplete);

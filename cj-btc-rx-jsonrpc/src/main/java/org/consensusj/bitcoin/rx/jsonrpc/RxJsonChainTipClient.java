@@ -4,6 +4,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.jsonrpc.AsyncSupport;
 import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
+import org.reactivestreams.Publisher;
 
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
@@ -22,7 +23,7 @@ public interface RxJsonChainTipClient extends ChainTipService, RxJsonRpcClient {
      * @return An Observable for the expected result type, so we can expect one call to {@code onNext} per block.
      */
     @Deprecated
-    default <RSLT> Flowable<RSLT> pollOnNewBlock(AsyncSupport.ThrowingSupplier<RSLT> method) {
+    default <RSLT> Publisher<RSLT> pollOnNewBlock(AsyncSupport.ThrowingSupplier<RSLT> method) {
         return Flowable.fromPublisher(chainTipPublisher()).flatMapMaybe(tip -> pollOnce(method));
     }
 
@@ -33,7 +34,7 @@ public interface RxJsonChainTipClient extends ChainTipService, RxJsonRpcClient {
      * @param <RSLT> The type of the expected result
      * @return An Observable for the expected result type, so we can expect one call to {@code onNext} per block.
      */
-    default <RSLT> Flowable<RSLT> pollOnNewBlockAsync(Supplier<CompletionStage<RSLT>> supplier) {
+    default <RSLT> Publisher<RSLT> pollOnNewBlockAsync(Supplier<CompletionStage<RSLT>> supplier) {
         return Flowable.fromPublisher(chainTipPublisher()).flatMapMaybe(tip -> pollOnceAsync(supplier));
     }
 }

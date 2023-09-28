@@ -9,6 +9,7 @@ import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.bitcoin.rx.zeromq.RxBitcoinZmqService;
 import org.consensusj.jsonrpc.JsonRpcTransport;
 import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
+import org.reactivestreams.Publisher;
 
 import javax.net.ssl.SSLContext;
 import java.net.URI;
@@ -63,7 +64,7 @@ public class RxBitcoinClient extends BitcoinExtendedClient implements ChainTipSe
      * @return a publisher of Chain Tips
      */
     @Override
-    public Flowable<ChainTip> chainTipPublisher() {
+    public Publisher<ChainTip> chainTipPublisher() {
         initChainTipService(Duration.ofMinutes(60));
         return Flowable.fromPublisher(chainTipService.chainTipPublisher());
     }

@@ -3,6 +3,7 @@ package org.consensusj.rx.zeromq;
 import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.FlowableEmitter;
+import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zeromq.ZMQ;
@@ -12,10 +13,11 @@ import zmq.ZError;
 
 import java.util.concurrent.ThreadFactory;
 
+// TODO: Consider a mechanism to configure backpressure strategy without using RxJava 3. Is there a need?
 /**
- *  Factory class for creating {@code Flowable<ZMsg>} from a {@link ZMQ.Socket}. The created {@link Flowable}
+ *  Factory class for creating {@code Publisher<ZMsg>} from a {@link ZMQ.Socket}. The created {@link Publisher}
  *  will receive a multiplexed stream of {@link ZMsg} (i.e. {@code ZMsg} for all topics.) Typically
- *  these multiplexed {@code Flowable<ZMsg>} are created by a {@link RxZmqContext} which also de-multiplexes them.
+ *  these multiplexed {@code Publisher<ZMsg>} are created by a {@link RxZmqContext} which also de-multiplexes them.
  *  <p>
  *  TODO: Write some tests!!
  */
@@ -23,21 +25,45 @@ public class ZMsgSocketFlowable {
     private static final Logger log = LoggerFactory.getLogger(ZMsgSocketFlowable.class);
     private static final ThreadFactory defaultThreadFactory = runnable -> new Thread(runnable, "ZeroMQ Receiver");
 
-    static Flowable<ZMsg> createFromSocket(ZMQ.Socket socket, BackpressureStrategy backpressureStrategy) {
+    static Publisher<ZMsg> createFromSocket(ZMQ.Socket socket) {
+        return createFromSocket(socket, defaultThreadFactory);
+    }
+
+    /**
+     * @deprecated Use {@link #createFromSocket(ZMQ.Socket)}
+     */
+    @Deprecated
+    static Publisher<ZMsg> createFromSocket(ZMQ.Socket socket, BackpressureStrategy backpressureStrategy) {
         return createFromSocket(socket, backpressureStrategy, defaultThreadFactory);
     }
 
     /**
      * The created {@link Flowable} will create a new receiving loop thread per subscriber, which may
      * not be what you want. To support multiple subscribers use {@link RxZmqContext}, or something
-     * similar, or directly use a {@link io.reactivex.rxjava3.processors.FlowableProcessor}.
+     * similar, or directly use a {@link io.reactivex.rxjava3.processors.FlowableProcessor}
+     * <p>
+     *     Note: {@code BackpressureStrategy.LATEST} is hard-coded internally
      * 
      * @param socket A connected socket, ready to receive messages with {@link ZMsg#recvMsg(ZMQ.Socket)}
-     * @param backpressureStrategy specifies what to do if subscribers aren't able to receive data fast enough
      * @param threadFactory used to create the thread that runs the receive loop
      * @return A "cold" Flowable
      */
-    static Flowable<ZMsg> createFromSocket(ZMQ.Socket socket, BackpressureStrategy backpressureStrategy, ThreadFactory threadFactory) {
+    static Publisher<ZMsg> createFromSocket(ZMQ.Socket socket, ThreadFactory threadFactory) {
+        return Flowable.create(emitter -> {
+            Thread thread = threadFactory.newThread(new ZmqReceiveLoop(socket, emitter));
+            thread.start();
+            emitter.setCancellable(() -> {
+                thread.interrupt();
+                thread.join();
+            });
+        }, BackpressureStrategy.LATEST);
+    }
+
+    /**
+     * @deprecated Use {@link #createFromSocket(ZMQ.Socket, ThreadFactory)}
+     */
+    @Deprecated
+    static Publisher<ZMsg> createFromSocket(ZMQ.Socket socket, BackpressureStrategy backpressureStrategy, ThreadFactory threadFactory) {
         return Flowable.create(emitter -> {
             Thread thread = threadFactory.newThread(new ZmqReceiveLoop(socket, emitter));
             thread.start();
@@ -47,6 +73,7 @@ public class ZMsgSocketFlowable {
             });
         }, backpressureStrategy);
     }
+
 
     /**
      * A runnable {@link ZMQ.Socket} receive loop that can be cancelled with {@link Thread#interrupt}
@@ -95,5 +122,4 @@ public class ZMsgSocketFlowable {
             socket.close();
         }
     }
-
 }

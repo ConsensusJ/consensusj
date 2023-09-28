@@ -16,6 +16,7 @@ import org.consensusj.bitcoin.rx.jsonrpc.RxBitcoinClient;
 import org.consensusj.bitcoin.rx.RxBlockchainService;
 import org.consensusj.bitcoinj.util.BlockUtil;
 import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
+import org.reactivestreams.Publisher;
 
 import java.io.Closeable;
 import java.net.URI;
@@ -37,46 +38,46 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
 
     public RxBitcoinZmqService(BitcoinClient client) {
         super(client);
-        blockSubscription = blockPublisher()
+        blockSubscription = Flowable.fromPublisher(blockPublisher())
                 .flatMapSingle(this::activeChainTipFromBestBlock)
                 .distinctUntilChanged(ChainTip::getHash)
                 .subscribe(this::onNextChainTip, flowableChainTip::onError, flowableChainTip::onComplete);
     }
 
     @Override
-    public Flowable<Transaction> transactionPublisher() {
-        return transactionBinaryPublisher()
+    public Publisher<Transaction> transactionPublisher() {
+        return Flowable.fromPublisher(transactionBinaryPublisher())
                 .map(bytes -> Transaction.read(ByteBuffer.wrap(bytes)));   // Deserialize to Transaction
     }
 
     @Override
-    public Flowable<Sha256Hash> transactionHashPublisher() {
-        return transactionHashBinaryPublisher()
+    public Publisher<Sha256Hash> transactionHashPublisher() {
+        return Flowable.fromPublisher(transactionHashBinaryPublisher())
                 .map(Sha256Hash::wrap);            // Deserialize to Sha256Hash
     }
 
     @Override
-    public Flowable<Block> blockPublisher() {
-        return blockBinaryPublisher()
+    public Publisher<Block> blockPublisher() {
+        return Flowable.fromPublisher(blockBinaryPublisher())
                 .map(ByteBuffer::wrap)
                 .map(Block::read)  // Deserialize to bitcoinj Block
                 .startWith(RxJsonRpcClient.defer(client::getBestBlock)); // Use JSON-RPC client to fetch an initial block
     }
     
     @Override
-    public Flowable<Sha256Hash> blockHashPublisher() {
-        return blockHashBinaryPublisher()
+    public Publisher<Sha256Hash> blockHashPublisher() {
+        return Flowable.fromPublisher(blockHashBinaryPublisher())
                 .map(Sha256Hash::wrap);             // Deserialize to Sha256Hash
     }
 
     @Override
-    public Flowable<Integer> blockHeightPublisher() {
-        return chainTipPublisher()
+    public Publisher<Integer> blockHeightPublisher() {
+        return Flowable.fromPublisher(chainTipPublisher())
                 .map(ChainTip::getHeight);          // Extract block height
     }
 
     @Override
-    public Flowable<ChainTip> chainTipPublisher() {
+    public Publisher<ChainTip> chainTipPublisher() {
         return flowableChainTip;
     }
 
@@ -86,6 +87,7 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
         blockSubscription.dispose();
     }
 
+    // TODO: Convert this to return CompletableFuture
     /**
      * Convert best {@link Block} to active {@link ChainTip}. If BIP34 is activated this
      * is purely computational, otherwise I/O is required to fetch the {@code ChainTip}

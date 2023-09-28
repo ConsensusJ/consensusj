@@ -11,6 +11,7 @@ import org.reactivestreams.Publisher;
  */
 public interface RichListService<N extends Number & Comparable<? super N>, ID> {
 
+    // TODO: Convert Single to CompletableFuture
     /**
      * Return a single rich list
      *

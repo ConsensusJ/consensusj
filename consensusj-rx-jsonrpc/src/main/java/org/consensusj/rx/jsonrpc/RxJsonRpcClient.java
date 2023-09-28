@@ -59,7 +59,7 @@ public interface RxJsonRpcClient extends AsyncSupport {
      * @return A publisher of a "cold" stream of items (temporarily Flowable, but will change to Publisher, then Flow.Publisher)
      * @param <T> result type
      */
-    default <T> Flowable<T> pollOnceAsPublisher(Supplier<CompletionStage<T>> supplier, DefaultRpcClient.TransientErrorFilter filter) {
+    default <T> Publisher<T> pollOnceAsPublisher(Supplier<CompletionStage<T>> supplier, DefaultRpcClient.TransientErrorFilter filter) {
         return Flowable.defer(() -> Flowable.fromCompletionStage(supplier.get()
                         .handle(filter::handle)
                         .thenCompose(Function.identity())))
@@ -109,7 +109,7 @@ public interface RxJsonRpcClient extends AsyncSupport {
      */
     @Deprecated
     default <RSLT> Maybe<RSLT> pollOnceAsync(Supplier<CompletionStage<RSLT>> supplier) {
-        return pollOnceAsPublisher(supplier, TransientErrorFilter.of(this::isTransientError, this::logError))
+        return Flowable.fromPublisher(pollOnceAsPublisher(supplier, TransientErrorFilter.of(this::isTransientError, this::logError)))
                 .firstElement();
     }
 

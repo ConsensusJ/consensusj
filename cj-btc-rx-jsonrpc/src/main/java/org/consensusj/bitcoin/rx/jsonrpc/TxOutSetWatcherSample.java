@@ -28,7 +28,7 @@ public class TxOutSetWatcherSample {
 
             client.connectToServer(Duration.ofMinutes(5)).join();
             // Subscribe to ChainTips
-            client.chainTipPublisher()
+            Flowable.fromPublisher(client.chainTipPublisher())
                     .subscribe(TxOutSetWatcherSample::onChainTip, TxOutSetWatcherSample::onError);
 
             // Blocking subscribe to TxOutSetInfo

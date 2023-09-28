@@ -1,13 +1,13 @@
 package org.consensusj.bitcoin.rx.jsonrpc;
 
 import io.reactivex.rxjava3.core.BackpressureStrategy;
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.consensusj.bitcoin.jsonrpc.ChainTipClient;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
+import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +32,7 @@ public interface PollingChainTipService extends ChainTipService, ChainTipClient,
      *
      * @return A stream of distinct {@code ChainTip}s.
      */
-    default Flowable<ChainTip> pollForDistinctChainTip() {
+    default Publisher<ChainTip> pollForDistinctChainTip() {
         return getPollingInterval()
                 .doOnNext(t -> log.debug("got interval"))
                 .flatMapMaybe(t -> this.currentChainTipMaybe())

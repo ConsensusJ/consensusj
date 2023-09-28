@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import org.bitcoinj.core.Context;
 import org.consensusj.bitcoin.rx.RxBlockchainBinaryService;
 import org.consensusj.bitcoin.rx.jsonrpc.RxBitcoinClient;
+import org.reactivestreams.Publisher;
 
 import java.io.Closeable;
 import java.net.URI;
@@ -56,27 +57,27 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
             txService = new RxBitcoinSinglePortZmqService(txServiceURI.get(), threadFactory, rawtx);
         }
 
-        flowableRawBlock = blockService.blockBinaryPublisher();
-        flowableRawTx = txService.transactionBinaryPublisher();
+        flowableRawBlock = Flowable.fromPublisher(blockService.blockBinaryPublisher());
+        flowableRawTx = Flowable.fromPublisher(txService.transactionBinaryPublisher());
     }
 
     @Override
-    public Flowable<byte[]> transactionBinaryPublisher() {
+    public Publisher<byte[]> transactionBinaryPublisher() {
         return flowableRawTx;
     }
 
     @Override
-    public Flowable<byte[]> transactionHashBinaryPublisher() {
+    public Publisher<byte[]> transactionHashBinaryPublisher() {
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
-    public Flowable<byte[]> blockBinaryPublisher() {
+    public Publisher<byte[]> blockBinaryPublisher() {
         return flowableRawBlock;
     }
 
     @Override
-    public Flowable<byte[]> blockHashBinaryPublisher() {
+    public Publisher<byte[]> blockHashBinaryPublisher() {
         throw new UnsupportedOperationException("Not implemented");
     }
 

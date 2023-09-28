@@ -1,5 +1,6 @@
 package org.consensusj.bitcoin.rx.zeromq;
 
+import io.reactivex.rxjava3.core.Flowable;
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Network;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
@@ -25,16 +26,16 @@ public class SampleBitcoinZmqClient {
 
         try (RxBitcoinZmqService client = new RxBitcoinZmqService(network, rpcUri, rpcUser, rpcPassword)) {
             // Subscribe to Blocks
-            Disposable disposable = client.blockPublisher()
+            Disposable disposable = Flowable.fromPublisher(client.blockPublisher())
                     .subscribe(SampleBitcoinZmqClient::onBlock, SampleBitcoinZmqClient::onError);
 
             // Subscribe to ChainTips
-            Disposable disposable2 = client.chainTipPublisher()
+            Disposable disposable2 = Flowable.fromPublisher(client.chainTipPublisher())
                     .subscribe(SampleBitcoinZmqClient::onChainTip, SampleBitcoinZmqClient::onError);
 
 
             // Blocking subscribe to Transactions (so main() doesn't finish)
-            client.transactionPublisher()
+            Flowable.fromPublisher(client.transactionPublisher())
                     .blockingSubscribe(SampleBitcoinZmqClient::onTx, SampleBitcoinZmqClient::onError);
 
             disposable.dispose();
