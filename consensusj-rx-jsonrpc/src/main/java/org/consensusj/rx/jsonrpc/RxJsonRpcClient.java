@@ -31,10 +31,12 @@ public interface RxJsonRpcClient extends AsyncSupport {
      * @param <RSLT> The type of the expected result
      * @return A <i>cold</i> {@link Single} for calling the method.
      */
+    @Deprecated
     default <RSLT> Single<RSLT> call(AsyncSupport.ThrowingSupplier<RSLT> method) {
         return Single.defer(() -> Single.fromCompletionStage(supplyAsync(method)));
     }
 
+    @Deprecated
     default <RSLT> Single<RSLT> callAsync(Supplier<CompletionStage<RSLT>> supplier) {
         return defer(supplier);
     }
