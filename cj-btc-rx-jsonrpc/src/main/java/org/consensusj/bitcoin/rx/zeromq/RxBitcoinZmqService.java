@@ -95,7 +95,7 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
      * @param block Input best block
      * @return active ChainTip assuming this block is the "best block"
      */
-    public Single<ChainTip> activeChainTipFromBestBlock(Block block) {
+    private Single<ChainTip> activeChainTipFromBestBlock(Block block) {
         int height = BlockUtil.blockHeightFromCoinbase(block);
         if (height != -1) {
             return Single.just(ChainTip.ofActive(height, block.getHash()));
