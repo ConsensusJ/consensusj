@@ -70,7 +70,7 @@ public interface RxJsonRpcClient extends AsyncSupport {
     }
 
     // This version doesn't filter or log any exceptions
-    default <T> Publisher<T> pollOnceAsPublisher(Supplier<CompletableFuture<T>> supplier) {
+    default <T> Publisher<T> pollOnceAsPublisher(Supplier<CompletionStage<T>> supplier) {
         return Flowable.defer(() -> Flowable.fromCompletionStage(supplier.get()));
     }
 

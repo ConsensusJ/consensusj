@@ -14,7 +14,9 @@ import org.reactivestreams.Publisher;
 import javax.net.ssl.SSLContext;
 import java.net.URI;
 import java.time.Duration;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 /**
  * A {@link BitcoinClient} enhanced with Reactive features. Can use either ZeroMQ or polling
@@ -56,6 +58,17 @@ public class RxBitcoinClient extends BitcoinExtendedClient implements ChainTipSe
                 chainTipService = new PollingChainTipServiceImpl(this);
             }
         }
+    }
+
+    /**
+     * Repeatedly once-per-new-block poll an async method
+     *
+     * @param supplier A supplier (should be an RPC Method) of a CompletionStage
+     * @param <RSLT> The type of the expected result
+     * @return An Observable for the expected result type, so we can expect one call to {@code onNext} per block.
+     */
+    public <RSLT> Publisher<RSLT> pollOnNewBlockAsync(Supplier<CompletionStage<RSLT>> supplier) {
+        return Flowable.fromPublisher(chainTipPublisher()).flatMap(tip -> pollOnceAsPublisher(supplier));
     }
 
     /**
