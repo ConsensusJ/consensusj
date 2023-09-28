@@ -6,7 +6,7 @@ plugins {
     id 'java-library'
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.release = 21
 }
 
@@ -41,19 +41,20 @@ jar {
 
 // Compile a native image using GraalVM's native-image tool
 // Graal must be installed at $JAVA_HOME
-task nativeCompile(type:Exec, dependsOn: jar) {
+tasks.register('nativeCompile', Exec) {
+    dependsOn jar
     workingDir = projectDir
     executable = "${System.env.JAVA_HOME}/bin/native-image"
-    args = [ '--verbose',
-             '--no-fallback',
-             '-cp', "${-> configurations.nativeToolImplementation.asPath}", // Lazy configuration resolution
-             '-jar', jar.archiveFile.get(),
-             '-H:Path=build',
-             '-H:Name=jsonrpc',
-             '--initialize-at-build-time=com.fasterxml.jackson.annotation.JsonProperty$Access',
-             '-H:IncludeResources=logging.properties',
-             '-H:EnableURLProtocols=http,https',
-             '-H:+ReportUnsupportedElementsAtRuntime',
-             '-H:+ReportExceptionStackTraces'
+    args = ['--verbose',
+            '--no-fallback',
+            '-cp', "${-> configurations.nativeToolImplementation.asPath}", // Lazy configuration resolution
+            '-jar', jar.archiveFile.get(),
+            '-H:Path=build',
+            '-H:Name=jsonrpc',
+            '--initialize-at-build-time=com.fasterxml.jackson.annotation.JsonProperty$Access',
+            '-H:IncludeResources=logging.properties',
+            '-H:EnableURLProtocols=http,https',
+            '-H:+ReportUnsupportedElementsAtRuntime',
+            '-H:+ReportExceptionStackTraces'
     ]
 }

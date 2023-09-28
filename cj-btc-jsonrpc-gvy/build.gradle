@@ -5,7 +5,7 @@ plugins {
 
 ext.moduleName = 'org.consensusj.bitcoin.jsonrpc.groovy'
 
-tasks.withType(GroovyCompile) {
+tasks.withType(GroovyCompile).configureEach {
     targetCompatibility = 11
 }
 

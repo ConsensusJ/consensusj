@@ -8,7 +8,7 @@ plugins {
 
 ext.moduleName = 'org.consensusj.bitcoin.cli'
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.release = 21
 }
 
@@ -44,17 +44,18 @@ jar {
 
 // Compile a native image using GraalVM's native-image tool
 // Graal must be installed at $JAVA_HOME
-task nativeCompile(type:Exec, dependsOn: jar) {
+tasks.register('nativeCompile', Exec) {
+    dependsOn jar
     workingDir = projectDir
     executable = "${System.env.JAVA_HOME}/bin/native-image"
-    args = [ '--verbose',
-             '--no-fallback',
-             '-cp', "${-> configurations.nativeToolImplementation.asPath}", // Lazy configuration resolution
-             '-jar', jar.archiveFile.get(),
-             '-H:Path=build',
-             '-H:Name=cj-bitcoin-cli',
-             '-H:EnableURLProtocols=http,https',
-             '-H:+ReportUnsupportedElementsAtRuntime'
+    args = ['--verbose',
+            '--no-fallback',
+            '-cp', "${-> configurations.nativeToolImplementation.asPath}", // Lazy configuration resolution
+            '-jar', jar.archiveFile.get(),
+            '-H:Path=build',
+            '-H:Name=cj-bitcoin-cli',
+            '-H:EnableURLProtocols=http,https',
+            '-H:+ReportUnsupportedElementsAtRuntime'
     ]
 }
 
@@ -73,7 +74,7 @@ sourceSets {
     }
 }
 
-task regTest(type: Test) {
+tasks.register('regTest', Test) {
     description = 'Runs integration tests against Bitcoin Core in regtest mode'
     group = 'verification'
     useJUnitPlatform()
@@ -92,8 +93,8 @@ task regTest(type: Test) {
 
     systemProperty 'regtest', true
     systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/integ/logging.properties"
-    systemProperties ([ "omni.test.rpcTestUser": rpcTestUser,
-                        "omni.test.rpcTestPassword": rpcTestPassword,
+    systemProperties(["omni.test.rpcTestUser"    : rpcTestUser,
+                      "omni.test.rpcTestPassword": rpcTestPassword,
     ])
     include 'org/consensusj/bitcoin/cli/**'
 }

@@ -22,9 +22,9 @@ allprojects {
     javadoc javadocSpec
 }
 
-task javadocAll(type: Javadoc) {
-    source subprojects.collect {project -> project.sourceSets.main.allJava }
-    classpath = files(subprojects.collect {project -> project.sourceSets.main.compileClasspath})
+tasks.register('javadocAll', Javadoc) {
+    source subprojects.collect { project -> project.sourceSets.main.allJava }
+    classpath = files(subprojects.collect { project -> project.sourceSets.main.compileClasspath })
 }
 javadocAll javadocSpec << {
     // TODO: Convert this back to HTML

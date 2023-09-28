@@ -49,10 +49,9 @@ test {
     beforeTest { descriptor ->
         logger.lifecycle('    ' + descriptor.getName())
     }
-
 }
 
-task integrationTest(type: Test) {
+tasks.register('integrationTest', Test) {
     useJUnitPlatform()
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
@@ -60,7 +59,7 @@ task integrationTest(type: Test) {
     testLogging.showStandardStreams = true
 }
 
-task regTest(type: Test) {
+tasks.register('regTest', Test) {
     description = 'Runs integration tests against Bitcoin Core in regtest mode'
     group = 'verification'
     useJUnitPlatform()
@@ -79,8 +78,8 @@ task regTest(type: Test) {
 
     systemProperty 'regtest', true
     systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/integ/logging.properties"
-    systemProperties ([ "omni.test.rpcTestUser": rpcTestUser,
-                        "omni.test.rpcTestPassword": rpcTestPassword,
+    systemProperties(["omni.test.rpcTestUser"    : rpcTestUser,
+                      "omni.test.rpcTestPassword": rpcTestPassword,
     ])
     include 'org/consensusj/bitcoin/rpc/**',
             'org/consensusj/bitcoin/integ/bitcoinj/**',

@@ -3,7 +3,7 @@ plugins {
     id("io.micronaut.application") version "${micronautAppGradlePluginVersion}"
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.release = 17
 }
 

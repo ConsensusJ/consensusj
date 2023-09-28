@@ -14,7 +14,7 @@ dependencies {
 
 ext.moduleName = 'org.consensusj.analytics'
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << '-parameters'   // Required for Jackson ParameterNamesModule
 }
 

@@ -1,6 +1,6 @@
 ext.moduleName = 'org.consensusj.bitcoinj.spock'
 
-tasks.withType(GroovyCompile) {
+tasks.withType(GroovyCompile).configureEach {
     targetCompatibility = 17
 }
 

@@ -53,7 +53,7 @@ subprojects {
         testRuntimeOnly  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
     }
 
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy {
             force "org.apache.groovy:groovy:${groovyVersion}"
             force "org.apache.groovy:groovy-json:${groovyVersion}"
@@ -77,11 +77,11 @@ subprojects {
         options.release = 11
     }
 
-    tasks.withType(GroovyCompile) {
+    tasks.withType(GroovyCompile).configureEach {
         options.encoding = 'UTF-8'
     }
 
-    tasks.withType(AbstractArchiveTask) {
+    tasks.withType(AbstractArchiveTask).configureEach {
         // This should result in reproducible JAR builds
         // See: https://docs.gradle.org/current/userguide/working_with_files.html#sec:reproducible_archives
         preserveFileTimestamps = false
@@ -117,4 +117,4 @@ tasks.named('check') {
 
 build.dependsOn subprojects.build
 
-task buildCI(dependsOn: [build, javadocAll, asciidoctor])
+tasks.register('buildCI') { dependsOn build, javadocAll, asciidoctor }
