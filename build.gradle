@@ -43,11 +43,13 @@ subprojects {
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 
+        testImplementation("org.junit.jupiter:junit-jupiter:${junitJupiterVersion}")
         testImplementation "org.apache.groovy:groovy:${groovyVersion}"
         testImplementation("org.spockframework:spock-core:${spockVersion}") {
             exclude module: "groovy-all"
         }
 
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
         testRuntimeOnly "net.bytebuddy:byte-buddy:1.14.8"                 // allows Spock to mock classes (in addition to interfaces)
         testRuntimeOnly "org.objenesis:objenesis:3.3"                     // Allow Spock to mock classes with constructor arguments
         testRuntimeOnly  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
@@ -86,10 +88,6 @@ subprojects {
         // See: https://docs.gradle.org/current/userguide/working_with_files.html#sec:reproducible_archives
         preserveFileTimestamps = false
         reproducibleFileOrder = true
-    }
-
-    tasks.withType(Test).configureEach {
-        useJUnitPlatform()          // We're using Spock 2.0 and JUnit 5
     }
 }
 
