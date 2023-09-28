@@ -11,6 +11,8 @@ import javax.net.ssl.SSLContext;
 import java.lang.reflect.Type;
 import java.time.Duration;
 import java.net.URI;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -128,6 +130,18 @@ public class DefaultRpcClient implements JsonRpcClient<JavaType> {
     @Override
     public JavaType typeForClass(Class<?> clazz) {
         return getMapper().constructType(clazz);
+    }
+
+    @Override
+    public JavaType collectionTypeForClasses(Class<? extends Collection> collection, Class<?> clazz) {
+        return getMapper().getTypeFactory()
+                .constructCollectionType(collection, clazz);
+    }
+
+    @Override
+    public JavaType collectionTypeForClasses(Class<? extends Collection> collection, JavaType type) {
+        return getMapper().getTypeFactory()
+                .constructCollectionType(collection, type);
     }
 
     public <T> CompletableFuture<JsonRpcResponse<T>> pollOnce(JsonRpcRequest request, JavaType resultType, TransientErrorMapper<T> errorMapper) {

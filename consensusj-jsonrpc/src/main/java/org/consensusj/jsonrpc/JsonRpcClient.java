@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -171,4 +172,8 @@ public interface JsonRpcClient<T extends Type> extends JsonRpcTransport<T>, Auto
     T responseTypeFor(Class<?> resultType);
 
     T typeForClass(Class<?> clazz);
+
+    T collectionTypeForClasses(Class<? extends Collection> collectionClazz, Class<?> clazz);
+
+    T collectionTypeForClasses(Class<? extends Collection> collectionClazz, T itemType);
 }

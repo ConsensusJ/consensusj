@@ -580,7 +580,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public List<Sha256Hash> generateToAddress(int numBlocks, Address address, Integer maxtries) throws IOException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
+        JavaType resultType = collectionTypeForClasses(List.class, Sha256Hash.class);
         return send("generatetoaddress", resultType, (long) numBlocks, address, maxtries);
     }
 
@@ -599,7 +599,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
     }
 
     public List<String> listWallets() throws JsonRpcStatusException, IOException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, String.class);
+        JavaType resultType = collectionTypeForClasses(List.class, String.class);
         return send("listwallets", resultType);
     }
 
@@ -811,7 +811,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
 
     public List<ReceivedByAddressInfo> listReceivedByAddress(Integer minConf, Boolean includeEmpty)
             throws JsonRpcStatusException, IOException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ReceivedByAddressInfo.class);
+        JavaType resultType = collectionTypeForClasses(List.class, ReceivedByAddressInfo.class);
         return send("listreceivedbyaddress", resultType, minConf, includeEmpty);
     }
 
@@ -865,7 +865,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      */
     public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, List<Address> filter, Boolean includeUnsafe)
             throws JsonRpcStatusException, IOException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, UnspentOutput.class);
+        JavaType resultType = collectionTypeForClasses(List.class, UnspentOutput.class);
         return send("listunspent", resultType, minConf, maxConf, filter, includeUnsafe);
     }
 
@@ -1016,7 +1016,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public List<BitcoinTransactionInfo> listTransactions(String label, Integer count, Integer skip, Boolean includeWatchOnly) throws JsonRpcStatusException, IOException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, BitcoinTransactionInfo.class);
+        JavaType resultType = collectionTypeForClasses(List.class, BitcoinTransactionInfo.class);
         return send("listtransactions", resultType, label, count, skip, includeWatchOnly);
     }
 
@@ -1059,7 +1059,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
     }
 
     public CompletableFuture<List<ZmqNotification>> getZmqNotificationsAsync() {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ZmqNotification.class);
+        JavaType resultType = collectionTypeForClasses(List.class, ZmqNotification.class);
         return sendAsync("getzmqnotifications", resultType);
     }
 
@@ -1071,9 +1071,8 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public List<List<AddressGroupingItem>>  listAddressGroupings() throws JsonRpcStatusException, IOException {
-        TypeFactory tf = mapper.getTypeFactory();
-        JavaType agiListType = tf.constructCollectionType(List.class, AddressGroupingItem.class);
-        JavaType resultType = tf.constructCollectionType(List.class, agiListType);
+        JavaType agiListType = collectionTypeForClasses(List.class, AddressGroupingItem.class);
+        JavaType resultType = collectionTypeForClasses(List.class, agiListType);
         return send("listaddressgroupings", resultType);
     }
 
@@ -1222,7 +1221,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
 
     @Override
     public CompletableFuture<List<ChainTip>> getChainTipsAsync() {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, ChainTip.class);
+        JavaType resultType = collectionTypeForClasses(List.class, ChainTip.class);
         return sendAsync("getchaintips", resultType);
     }
 
@@ -1275,13 +1274,13 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
 
     // Bitcore/Omni transaction for getting non-wallet address UTXO Info
     public List<AddressUtxoInfo>  getAddressUtxos(Address address) throws JsonRpcException, IOException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, AddressUtxoInfo.class);
+        JavaType resultType = collectionTypeForClasses(List.class, AddressUtxoInfo.class);
         return send("getaddressutxos", resultType, address);
     }
 
     // Bitcore/Omni transaction for getting non-wallet address UTXO Info
     public List<AddressUtxoInfo> getAddressUtxos(List<Address> addressList) throws JsonRpcException, IOException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, AddressUtxoInfo.class);
+        JavaType resultType = collectionTypeForClasses(List.class, AddressUtxoInfo.class);
         return send("getaddressutxos", resultType, new AddressRequest(addressList));
     }
 }

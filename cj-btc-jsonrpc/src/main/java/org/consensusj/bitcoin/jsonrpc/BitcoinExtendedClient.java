@@ -225,7 +225,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      * @throws IOException network error
      */
     public List<Sha256Hash> clearMemPool() throws JsonRpcStatusException, IOException {
-        JavaType resultType = mapper.getTypeFactory().constructCollectionType(List.class, Sha256Hash.class);
+        JavaType resultType = collectionTypeForClasses(List.class, Sha256Hash.class);
         return send("clearmempool", resultType);
     }
 
