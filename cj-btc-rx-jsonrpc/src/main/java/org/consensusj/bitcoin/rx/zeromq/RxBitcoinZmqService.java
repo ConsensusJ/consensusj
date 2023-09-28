@@ -21,6 +21,7 @@ import org.reactivestreams.Publisher;
 import java.io.Closeable;
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.util.concurrent.CompletableFuture;
 
 /**
  *  Add conversion to bitcoinj-types to {@code RxBitcoinZmqBinaryService}. Also
@@ -39,7 +40,7 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
     public RxBitcoinZmqService(BitcoinClient client) {
         super(client);
         blockSubscription = Flowable.fromPublisher(blockPublisher())
-                .flatMapSingle(this::activeChainTipFromBestBlock)
+                .flatMap(this::activeChainTipFromBestBlockPublisher)
                 .distinctUntilChanged(ChainTip::getHash)
                 .subscribe(this::onNextChainTip, flowableChainTip::onError, flowableChainTip::onComplete);
     }
@@ -86,22 +87,24 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
         super.close();
         blockSubscription.dispose();
     }
+    private Publisher<ChainTip> activeChainTipFromBestBlockPublisher(Block block) {
+        return Flowable.defer(() -> Flowable.fromCompletionStage(activeChainTipFromBestBlock(block)));
+    }
 
-    // TODO: Convert this to return CompletableFuture
     /**
      * Convert best {@link Block} to active {@link ChainTip}. If BIP34 is activated this
      * is purely computational, otherwise I/O is required to fetch the {@code ChainTip}
      *
      * @param block Input best block
-     * @return active ChainTip assuming this block is the "best block"
+     * @return active ChainTip assuming parameter block is the "best block"
      */
-    private Single<ChainTip> activeChainTipFromBestBlock(Block block) {
+    private CompletableFuture<ChainTip> activeChainTipFromBestBlock(Block block) {
         int height = BlockUtil.blockHeightFromCoinbase(block);
         if (height != -1) {
-            return Single.just(ChainTip.ofActive(height, block.getHash()));
+            return CompletableFuture.completedFuture(ChainTip.ofActive(height, block.getHash()));
         } else {
-            return RxJsonRpcClient.defer(client::getChainTipsAsync)
-                    .map(ChainTip::findActiveChainTipOrElseThrow);
+            return client.getChainTipsAsync()
+                    .thenApply(ChainTip::findActiveChainTipOrElseThrow);
         }
     }
 
