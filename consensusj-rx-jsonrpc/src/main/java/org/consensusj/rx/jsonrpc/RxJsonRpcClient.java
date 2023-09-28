@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 
 /**
  * RxJava support for calling JSON-RPC clients. Extend/implement this interface to inherit {@code default} methods
- * {@link #call(ThrowingSupplier)}, {@link #defer(Supplier)}, and {@link #pollOnceAsPublisher(Supplier, DefaultRpcClient.TransientErrorFilter)}.
+ * such as {@link #pollOnceAsPublisher(Supplier, DefaultRpcClient.TransientErrorFilter)}.
  */
 public interface RxJsonRpcClient extends AsyncSupport {
     Logger log = LoggerFactory.getLogger(RxJsonRpcClient.class);
@@ -50,6 +50,7 @@ public interface RxJsonRpcClient extends AsyncSupport {
      * @param <RSLT> The type of the expected result
      * @return A <i>cold</i> {@link Single} for calling the method.
      */
+    @Deprecated
     static <RSLT> Single<RSLT> defer(Supplier<CompletionStage<RSLT>> supplier) {
         return Single.defer(() -> Single.fromCompletionStage(supplier.get()));
     }

@@ -22,6 +22,8 @@ import java.io.Closeable;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Supplier;
 
 /**
  *  Add conversion to bitcoinj-types to {@code RxBitcoinZmqBinaryService}. Also
@@ -62,7 +64,7 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
         return Flowable.fromPublisher(blockBinaryPublisher())
                 .map(ByteBuffer::wrap)
                 .map(Block::read)  // Deserialize to bitcoinj Block
-                .startWith(RxJsonRpcClient.defer(client::getBestBlock)); // Use JSON-RPC client to fetch an initial block
+                .startWith(defer(client::getBestBlock)); // Use JSON-RPC client to fetch an initial block
     }
     
     @Override
@@ -87,6 +89,20 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
         super.close();
         blockSubscription.dispose();
     }
+
+    /**
+     * Return a <i>cold</i> {@link Single} for calling a provided <b>asynchronous</b> JSON-RPC method.
+     * (Uses a supplier to make sure the async call isn't made until subscription time)
+     * <p>
+     *  A  <i>cold</i> stream does not begin processing until someone subscribes to it.
+     * @param supplier of completable
+     * @param <RSLT> The type of the expected result
+     * @return A <i>cold</i> {@link Single} for calling the method.
+     */
+    private <RSLT> Single<RSLT> defer(Supplier<CompletionStage<RSLT>> supplier) {
+        return Single.defer(() -> Single.fromCompletionStage(supplier.get()));
+    }
+
     private Publisher<ChainTip> activeChainTipFromBestBlockPublisher(Block block) {
         return Flowable.defer(() -> Flowable.fromCompletionStage(activeChainTipFromBestBlock(block)));
     }
