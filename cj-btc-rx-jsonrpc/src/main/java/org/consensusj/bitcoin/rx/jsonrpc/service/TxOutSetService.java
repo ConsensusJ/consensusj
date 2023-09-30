@@ -71,7 +71,7 @@ public class TxOutSetService implements Closeable {
     }
 
     // TODO: Ignoring all IOError is too broad
-    DefaultRpcClient.TransientErrorFilter errorFilter = AsyncSupport.TransientErrorFilter.of(
+    final DefaultRpcClient.TransientErrorFilter errorFilter = AsyncSupport.TransientErrorFilter.of(
             (t) -> t instanceof IOError,                        // Ignore if IOError
             (t) -> log.warn("Ignoring transient error: ", t)    // Log if ignored
     );
