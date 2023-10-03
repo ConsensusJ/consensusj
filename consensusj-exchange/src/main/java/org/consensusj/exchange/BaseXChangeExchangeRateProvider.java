@@ -130,7 +130,7 @@ public final class BaseXChangeExchangeRateProvider extends KnowmExchangeRateProv
     /**
      * Poll the exchange for updated Tickers
      */
-    protected void poll() {
+    void poll() {
         monitoredCurrencies.forEach((key, monitor) -> {
             try {
                 monitor.setTicker(marketDataService.getTicker(monitor.exchangePair));
