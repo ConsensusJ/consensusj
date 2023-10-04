@@ -1,4 +1,4 @@
-image: debian:bookworm-slim
+image: debian:trixie-slim
 
 # Note: You can test changes to this file locally with:
 # gitlab-runner exec docker --docker-privileged build
@@ -10,7 +10,7 @@ cache:
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-  JDK_PACKAGE: "openjdk-17-jdk-headless"
+  JDK_PACKAGE: "openjdk-21-jdk-headless"
 
 before_script:
   - apt-get update
@@ -21,8 +21,11 @@ before_script:
 
 build:
   script:
-  - ./gradlew buildCI --scan --info --stacktrace
+  - ./gradlew buildCI installDist --scan --info --stacktrace
+  - cd build ; sha256sum artifacts/*/* > SHA256SUMS
   artifacts:
     when: always
     paths:
+    - build/artifacts
+    - build/SHA256SUMS
     - build/site/
