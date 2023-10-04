@@ -9,6 +9,10 @@ plugins {
     id 'org.ajoberstar.git-publish'     version '4.2.0'
 }
 
+gradle.rootProject {
+    apply plugin: 'distribution'
+}
+
 buildScan {
     if (System.getenv('CI')) {
         publishAlways()
@@ -131,3 +135,23 @@ tasks.named('check') {
 build.dependsOn subprojects.build
 
 tasks.register('buildCI') { dependsOn build, javadocAll, asciidoctor }
+
+tasks.named('installDist').configure {
+    destinationDir = layout.buildDirectory.dir('artifacts').get().getAsFile()
+}
+
+distributions {
+    main {
+        contents {
+            project.subprojects.each { sub ->
+                into(sub.name) {
+                    from sub.jar
+                    from sub.sourcesJar
+                    from sub.javadocJar
+                    from sub.generatePomFileForJarPublication
+                    from sub.generateMetadataFileForJarPublication
+                }
+            }
+        }
+    }
+}
