@@ -38,6 +38,18 @@
 .. *Not* `README.adoc` -- it should match release version
 . Commit and push to master
 
+== Verify local build vs. CI build
+
+At present, builds made with Temurin Java 21-ea (or equivalent) should be reproducible on
+either **macOS** or **Linux**. You can verify with the following procedure:
+
+. Build locally with `./gradlew installDist`
+. Generate `SHA256SUMS`
+.. `cd build ; sha256sum artifacts/\*/* > SHA256SUMS`
+. Download `SHA256SUMS` from a compatible CI server build
+. `diff build/SHA256SUMS <path-to-download>/SHA256SUMS`
+
+
 == Publish Snapshot to public Maven Repo on GitLab
 
 . `./gradlew publish`
