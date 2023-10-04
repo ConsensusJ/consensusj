@@ -89,6 +89,18 @@ subprojects {
         preserveFileTimestamps = false
         reproducibleFileOrder = true
     }
+
+    tasks.withType(Jar).configureEach {
+        // Normalize permissions for reproducible builds
+        dirMode = 0755
+        fileMode = 0644
+    }
+
+    tasks.withType(Javadoc).configureEach {
+        // Support reproducible JavaDoc builds
+        options.noTimestamp = true
+    }
+
     tasks.withType(Test).configureEach {
         useJUnitPlatform()              // We're using Spock 2 and JUnit 5
     }
