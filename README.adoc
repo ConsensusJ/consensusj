@@ -107,7 +107,8 @@ We have published {cj-apidoc}/index.html[preliminary JavaDoc] to our GitHub page
 
 * Most modules now require *Java 11* or later.
 * `bitcoinj-util` and `bitcoinj-dsl-gvy` still work with JDK 8
-* The server and command-line tools/libraries require *Java 17* or later.
+* The server libraries and daemons require *Java 17* or later.
+* The command-line tools/libraries require *Java 21* or later.
 
 === ConsensusJ Modules
 
@@ -129,7 +130,7 @@ We have completed refactoring all modules into the new `org.consensusj` package 
 | Groovy JSON-RPC client (dynamic RPC methods)
 
 |<<consensusj-jsonrpc-cli,consensusj-jsonrpc-cli>>
-| *17*
+| *21*
 | `org.consensusj.jsonrpc.cli`
 | JSON-RPC command-line interface (CLI) libraries and tool
 
@@ -171,7 +172,7 @@ We have completed refactoring all modules into the new `org.consensusj` package 
 | Groovy JSON-RPC Bitcoin client  (dynamic RPC methods)
 
 |<<cj-btc-cli,cj-btc-cli>>
-| *17*
+| *21*
 | `org.consensusj.bitcoin.cli`
 | Command-line JSON-RPC client for Bitcoin
 
