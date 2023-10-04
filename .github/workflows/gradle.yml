@@ -27,4 +27,22 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
         restore-keys: ${{ runner.os }}-gradle
     - name: Build with Gradle
-      run: ./gradlew buildCI --scan --info --stacktrace
+      run: ./gradlew buildCI installDist --scan --info --stacktrace
+    - name: Generate SHA256SUMS (Linux)
+      run: sha256sum artifacts/*/* > SHA256SUMS
+      working-directory: ./build
+      if: runner.os == 'Linux'
+    - name: Generate SHA256SUMS (macOS)
+      run: shasum -a 256 artifacts/*/* > SHA256SUMS
+      working-directory: ./build
+      if: runner.os == 'macOS'
+    - name: Upload SHA256SUMS
+      uses: actions/upload-artifact@v3
+      with:
+        name: SHA256SUMS-${{ matrix.os }}-${{ matrix.java }}
+        path: build/SHA256SUMS
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts-${{ matrix.os }}-${{ matrix.java }}
+        path: build/artifacts
