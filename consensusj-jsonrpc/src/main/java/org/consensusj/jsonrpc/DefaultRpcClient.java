@@ -20,9 +20,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-// TODO: the constructor should take a JsonRpcTransport implementation object.
-// We now have DefaultRpcClient which is currently hard-coded to use the JavaNet transport (1-line change + recompile to switch)
-
 // We're overusing inheritance in this hierarchy. We are breaking Effective Java, Item 18: Favor composition over inheritance.
 // We're using inheritance to configure:
 // A. The set of JSON-RPC methods that are supported, e.g. `getblockcount()` (which creates potential conflicts with `send()` etc)
@@ -54,34 +51,45 @@ import java.util.function.Supplier;
  */
 public class DefaultRpcClient implements JsonRpcClient<JavaType> {
     private static final Logger log = LoggerFactory.getLogger(DefaultRpcClient.class);
-    /**
-     * The default JSON-RPC version in JsonRpcRequest is now '2.0', but since most
-     * requests are created inside {@code RpcClient} subclasses, we'll continue to default
-     * to '1.0' in this base class.
-     */
-    private static final JsonRpcMessage.Version DEFAULT_JSON_RPC_VERSION = JsonRpcMessage.Version.V1;
+    private static final JsonRpcMessage.Version DEFAULT_JSON_RPC_VERSION = JsonRpcMessage.Version.V2;
 
+    /**
+     * Functional interface for creating JsonRpcTransport instances. This is used to prevent a circular
+     * dependency on {@link ObjectMapper}.
+     */
+    @FunctionalInterface
+    public interface TransportFactory {
+        /**
+         * @param mapper mapper that is shared between {@code DefaultRpcClient} and the {@link JsonRpcTransport}.
+         * @return a transport instance
+         */
+        JsonRpcTransport<JavaType> create(ObjectMapper mapper);
+    }
     protected final JsonRpcMessage.Version jsonRpcVersion;
     protected final ObjectMapper mapper;
     private final JavaType defaultType;
     private final JsonRpcTransport<JavaType> transport;
 
+    public DefaultRpcClient(URI server, final String rpcUser, final String rpcPassword) {
+        this(JsonRpcTransport.getDefaultSSLContext(), DEFAULT_JSON_RPC_VERSION, server, rpcUser, rpcPassword);
+    }
+
     public DefaultRpcClient(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
         this(JsonRpcTransport.getDefaultSSLContext(), jsonRpcVersion, server, rpcUser, rpcPassword);
     }
     public DefaultRpcClient(SSLContext sslContext, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
+        this((m) -> new JsonRpcClientJavaNet(m, sslContext, server, rpcUser, rpcPassword), jsonRpcVersion);
+    }
+
+    public DefaultRpcClient(TransportFactory transportFactory, JsonRpcMessage.Version jsonRpcVersion) {
         this.jsonRpcVersion = jsonRpcVersion;
         mapper = new ObjectMapper();
         // TODO: Provide external API to configure FAIL_ON_UNKNOWN_PROPERTIES
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         defaultType = mapper.getTypeFactory().constructType(Object.class);
-        // TODO: Right now you can manually switch between JsonRpcClientJavaNet and JsonRpcClientHttpUrlConnection by
-        //  commenting out one line or the other and recompiling. There needs to be a new constructor which will
-        //  allow the default (JsonRpcClientJavaNet) to be overridden.
-        transport = new JsonRpcClientJavaNet(mapper, sslContext, server, rpcUser, rpcPassword);
-        //transport = new JsonRpcClientHttpUrlConnection(mapper, sslContext, server, rpcUser, rpcPassword);
+        transport = transportFactory.create(mapper);
     }
-    
+
     @Override
     public JsonRpcMessage.Version getJsonRpcVersion() {
         return jsonRpcVersion;
