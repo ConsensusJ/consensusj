@@ -11,6 +11,7 @@ import org.bitcoinj.core.Block;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
+import org.consensusj.bitcoin.rx.ChainTipPublisher;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.bitcoin.rx.jsonrpc.RxBitcoinClient;
 import org.consensusj.bitcoin.rx.RxBlockchainService;
@@ -80,8 +81,8 @@ public class RxBitcoinZmqService extends RxBitcoinZmqBinaryService implements Rx
     }
 
     @Override
-    public Publisher<ChainTip> chainTipPublisher() {
-        return flowableChainTip;
+    public ChainTipPublisher chainTipPublisher() {
+        return ChainTipPublisher.of(flowableChainTip);
     }
 
     @Override

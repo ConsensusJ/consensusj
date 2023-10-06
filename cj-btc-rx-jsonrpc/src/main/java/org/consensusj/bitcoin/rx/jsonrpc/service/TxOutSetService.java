@@ -7,11 +7,10 @@ import io.reactivex.rxjava3.processors.FlowableProcessor;
 import org.bitcoinj.base.Sha256Hash;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.consensusj.bitcoin.json.pojo.TxOutSetInfo;
+import org.consensusj.bitcoin.rx.ChainTipPublisher;
 import org.consensusj.bitcoin.rx.jsonrpc.RxBitcoinClient;
 import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.jsonrpc.AsyncSupport;
-import org.consensusj.jsonrpc.DefaultRpcClient;
-import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TxOutSetService implements Closeable {
     private static final Logger log = LoggerFactory.getLogger(TxOutSetService.class);
     private final RxBitcoinClient client;
+    private final ChainTipPublisher chainTipPublisher;
     private final FlowableProcessor<TxOutSetInfo> txOutSetProcessor = BehaviorProcessor.create();
     private final int CACHE_BLOCK_DEPTH = 1;
     private final int MAX_OUTSTANDING_CALLS = 2;
@@ -38,15 +38,21 @@ public class TxOutSetService implements Closeable {
     // TODO: Combine lastCall with cache and with in-memory SPV blockchain
     private CompletableFuture<TxOutSetInfo> lastCall;
     private final ConcurrentHashMap<Sha256Hash, TxOutSetInfo> txOutSetCache = new ConcurrentHashMap<>();
-    private Disposable txOutSetSubscription;
+    private volatile Disposable txOutSetSubscription;
 
-    public TxOutSetService(RxBitcoinClient client) {
+    // TODO: Use BitcoinClient not RxBitcoinClient
+    /**
+     * @param client Client for requesting {@link TxOutSetInfo} objects.
+     * @param chainTipPublisher Publisher telling us when new blocks are available.
+     */
+    public TxOutSetService(RxBitcoinClient client, ChainTipPublisher chainTipPublisher) {
         this.client = client;
+        this.chainTipPublisher = chainTipPublisher;
     }
 
     private synchronized void start() {
         if (txOutSetSubscription == null) {
-            txOutSetSubscription = Flowable.fromPublisher(client.chainTipPublisher())
+            txOutSetSubscription = Flowable.fromPublisher(chainTipPublisher)
                     .doOnNext(this::onNewBlock)
                     .flatMap(this::fetchCacheMaybe)
                     .subscribe(txOutSetProcessor::onNext, txOutSetProcessor::onError, txOutSetProcessor::onComplete);
@@ -76,6 +82,7 @@ public class TxOutSetService implements Closeable {
             (t) -> log.warn("Ignoring transient error: ", t)    // Log if ignored
     );
 
+    // TODO: Convert to using CompletableFuture to drop dependency on RxBitcoinClient and RxJava
     /**
      * Try to fetch a TxOutSetInfo from the cache or from the network. Returning an empty stream if a transient error occurs.
      * To use this you will typically call {@link Flowable#flatMap(io.reactivex.rxjava3.functions.Function)}.

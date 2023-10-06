@@ -24,7 +24,7 @@ public class TxOutSetWatcherSample {
         boolean useZmq = true;
 
         try (   RxBitcoinClient client = new RxBitcoinClient(network, rpcUri, rpcUser, rpcPassword, useZmq);
-                TxOutSetService txOutSetService = new TxOutSetService(client) ) {
+                TxOutSetService txOutSetService = new TxOutSetService(client, client.chainTipPublisher()) ) {
 
             client.connectToServer(Duration.ofMinutes(5)).join();
             // Subscribe to ChainTips

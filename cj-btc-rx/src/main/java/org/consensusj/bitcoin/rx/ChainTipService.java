@@ -12,5 +12,5 @@ public interface ChainTipService {
      *
      * @return A Publisher for the sequence
      */
-    Publisher<ChainTip> chainTipPublisher();
+    ChainTipPublisher chainTipPublisher();
 }

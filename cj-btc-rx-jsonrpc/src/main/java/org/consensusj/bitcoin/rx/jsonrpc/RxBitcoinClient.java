@@ -5,6 +5,7 @@ import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
 import io.reactivex.rxjava3.core.Flowable;
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
+import org.consensusj.bitcoin.rx.ChainTipPublisher;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.bitcoin.rx.zeromq.RxBitcoinZmqService;
 import org.consensusj.jsonrpc.JsonRpcTransport;
@@ -51,8 +52,9 @@ public class RxBitcoinClient extends BitcoinExtendedClient implements ChainTipSe
 
     private void initChainTipService(Duration timeout) {
         if (chainTipService == null) {
-            this.waitForConnected().orTimeout(timeout.toSeconds(), TimeUnit.SECONDS).join();
             if (useZmq) {
+                log.warn("(useZmq enabled) Initiating server connection (with timeout of {} seconds)", timeout.toSeconds());
+                this.connectToServer(timeout).join();
                 chainTipService = new RxBitcoinZmqService(this);
             } else {
                 chainTipService = new PollingChainTipServiceImpl(this);
@@ -77,8 +79,8 @@ public class RxBitcoinClient extends BitcoinExtendedClient implements ChainTipSe
      * @return a publisher of Chain Tips
      */
     @Override
-    public Publisher<ChainTip> chainTipPublisher() {
+    public ChainTipPublisher chainTipPublisher() {
         initChainTipService(Duration.ofMinutes(60));
-        return Flowable.fromPublisher(chainTipService.chainTipPublisher());
+        return chainTipService.chainTipPublisher();
     }
 }

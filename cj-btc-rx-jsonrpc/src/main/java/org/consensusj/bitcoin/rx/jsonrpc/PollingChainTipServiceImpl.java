@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.processors.FlowableProcessor;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.consensusj.bitcoin.jsonrpc.BitcoinClient;
 import org.consensusj.bitcoin.jsonrpc.ChainTipClient;
+import org.consensusj.bitcoin.rx.ChainTipPublisher;
 import org.consensusj.bitcoin.rx.ChainTipService;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.consensusj.rx.jsonrpc.RxJsonRpcClient;
@@ -63,9 +64,9 @@ public class PollingChainTipServiceImpl implements ChainTipService, ChainTipClie
     }
 
     @Override
-    public Publisher<ChainTip> chainTipPublisher() {
+    public ChainTipPublisher chainTipPublisher() {
         start();
-        return chainTipProcessor;
+        return ChainTipPublisher.of(chainTipProcessor);
     }
 
     /**
