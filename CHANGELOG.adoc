@@ -3,14 +3,39 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.7.0-SNAPSHOT
+== v0.7.0-alpha3
 
-Released: Under development
+Released: 2023-10-05
+
+This release includes significant updates the JSON-RPC client(s) and contains what should be relatively minor breaking changes.
 
 === JSON-RPC clients
 
+* Upgraded to use `java.net.http` asynchronous client by default
+* Async operation is now the default at the transport layer
+* Asynchronous connection and "wait for server" logic
+* Migrate "wait for server" logic from `BitcionCient` to `DefaultRpcClient`
+* `DefaultRpcClient` replaces `AbstractRpcClient` and takes a configurable `JsonRpcTransport`
+* Partial decoupling from Jackson JSON processor (see type parameter `T` in `JsonRpcClient<T>`)
 * Remove deprecated methods that use `SSLSocketFactory` (In favor of `SSLContext`)
+* Remove deprecated methods that use/return `NetworkParameters`.
 
+=== consensusj-jsonrpc-cli
+
+* Is now built using Java and GraalVM 21.
+* `--log=n` option to set log-level.
+
+=== Reactive (Rx) Components
+
+* Migrate from `Flowable` to `Publisher` where possible (breaking changes but easy to work around)
+* Migrate from `Single`/`Maybe` to `CompletableFuture` in some (mostly internal) places
+* `ChainTipPublisher` class help solves issues with erasure in generics and allow DI component constructors
+  to take a `ChainTipPublisher` rather than `ChainTipClient`.
+
+=== Reproducible/Deterministic build
+
+* See https://github.com/ConsensusJ/consensusj/issues/17[Issue 17] and `release-process.adoc`.
+* CI builds generate `SHA256SUMS` file for verification.
 
 === Dependency Updates
 
@@ -23,6 +48,7 @@ Released: Under development
 
 * Gradle 8.4
 * Create GitHub Actions GraalVM CE Matrix: Java 17, **21**
+* GitLab CI build uses Debian "Trixie" and OpenJDK 21
 
 == v0.7.0-alpha2
 
