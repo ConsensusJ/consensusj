@@ -12,6 +12,7 @@ org.consensusj.bitcoin.jsonrpc.test
 org.consensusj.bitcoin.rx
 org.consensusj.bitcoin.rx.jsonrpc
 org.consensusj.bitcoin.rx.jsonrpc.service
+org.consensusj.bitcoin.rx.jsonrpc.test
 org.consensusj.bitcoin.rx.peergroup
 org.consensusj.bitcoin.rx.zeromq
 org.consensusj.bitcoin.services

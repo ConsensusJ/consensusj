@@ -54,21 +54,21 @@ class org.consensusj.jsonrpc.groovy.DynamicRPCClient-->
     </text>
     <!--MD5=[38007ac204c8ece275af148089ad1d69]
 reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection-->
-    <path d='M227.91,104.71 C207.13,120.97 181.83,140.78 164.68,154.2 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='223.29,98.66,243.35,91.85,231.91,109.69,223.29,98.66' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M227.6,104.96 C206.88,121.17 181.74,140.85 164.68,154.2 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='223.09,99.59,243.16,92.78,231.72,110.62,223.09,99.59' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[ff1f07209556703b9dc20fa62e76f680]
 reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback-->
-    <path d='M300.21,104.57 C319.58,119.6 342.9,137.71 360.02,150.99 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='296.32,109.64,284.82,91.85,304.91,98.58,296.32,109.64' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M300.8,105.03 C320.05,119.97 343.08,137.84 360.02,150.99 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='296.52,110.57,285.01,92.78,305.1,99.51,296.52,110.57' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[136309c1916f5149a10adbefbc8e65b4]
 reverse link org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection to org.consensusj.jsonrpc.groovy.DynamicRPCClient-->
-    <path d='M200.25,195.35 C238.99,212 290.05,233.94 325.81,249.31 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <polygon fill='none' points='197.6,201.4,181.99,187.07,203.13,188.53,197.6,201.4' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M200.52,195.46 C239.23,212.1 290.13,233.97 325.81,249.31 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClientHttpUrlConnection&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='197.99,201.99,182.38,187.67,203.52,189.13,197.99,201.99' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[46cc87d9bba02c79c3641f77a6c91460]
 reverse link org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback to org.consensusj.jsonrpc.groovy.DynamicRPCClient-->
-    <path d='M377.95,210.43 C375.85,223.87 373.6,238.32 371.88,249.36 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='371.11,209.85,381.11,191.16,384.95,212,371.11,209.85' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <!--MD5=[de05e712e14bc9a8d9f872e22c042c90]
+    <path d='M377.8,211.41 C375.75,224.57 373.56,238.59 371.88,249.36 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='370.88,210.34,380.87,191.66,384.71,212.5,370.88,210.34' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[9e9b9e7923f1670084aafeb7aaf2a548]
 @startuml
 skinparam packageStyle Rect
 skinparam shadowing false
@@ -97,7 +97,7 @@ PlantUML version 1.2020.06(Sun Apr 05 05:38:32 PDT 2020)
 (APACHE source distribution)
 Java Runtime: OpenJDK Runtime Environment
 JVM: OpenJDK 64-Bit Server VM
-Java Version: 17.0.8+7
+Java Version: 21+35-2513
 Operating System: Mac OS X
 Default Encoding: UTF-8
 Language: en

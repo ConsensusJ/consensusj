@@ -440,7 +440,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>ConsensusJ Release Process</h1>
 <div class="details">
-<span id="revnumber">version 0.7.0-alpha2</span>
+<span id="revnumber">version 0.7.0-alpha3</span>
 </div>
 </div>
 <div id="content">
@@ -450,14 +450,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Use Java 17 for official builds</p>
+<p>Use Java 21 for official builds</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p><code>sdk use 17.0.8-tem</code></p>
+<p><code>sdk use 21-tem</code> (not available yet!)</p>
 </li>
 <li>
-<p><code>sdk use 17.0.8-graalce</code> (for GraalVM build)</p>
+<p><code>sdk use 17.0.8-graalce</code> (for GraalVM build, used for 0.7.0-alpha3 official build)</p>
 </li>
 </ol>
 </div>
@@ -583,6 +583,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
+<h2 id="_verify_local_build_vs_ci_build">Verify local build vs. CI build</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>At present, builds made with Temurin Java 21-ea (or equivalent) should be reproducible on
+either <strong>macOS</strong> or <strong>Linux</strong>. You can verify with the following procedure:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Build locally with <code>./gradlew installDist</code></p>
+</li>
+<li>
+<p>Generate <code>SHA256SUMS</code></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><code>cd build ; sha256sum artifacts/*/* &gt; SHA256SUMS</code></p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Download <code>SHA256SUMS</code> from a compatible CI server build</p>
+</li>
+<li>
+<p><code>diff build/SHA256SUMS &lt;path-to-download&gt;/SHA256SUMS</code></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_publish_snapshot_to_public_maven_repo_on_gitlab">Publish Snapshot to public Maven Repo on GitLab</h2>
 <div class="sectionbody">
 <div class="olist arabic">
@@ -636,8 +668,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.7.0-alpha2<br>
-Last updated 2023-08-30 19:33:57 -0700
+Version 0.7.0-alpha3<br>
+Last updated 2023-10-05 21:13:48 -0700
 </div>
 </div>
 </body>

@@ -66,21 +66,21 @@ class org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient-->
     </text>
     <!--MD5=[ff1f07209556703b9dc20fa62e76f680]
 reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback-->
-    <path d='M179.7,111.18 C174.92,124.68 169.63,139.6 165.6,150.99 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='173.27,109.36,186.55,92.85,186.47,114.04,173.27,109.36' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M179.53,111.66 C174.79,125.03 169.58,139.74 165.6,150.99 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='172.77,109.79,186.05,93.27,185.96,114.46,172.77,109.79' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[f9b13b3b4fd44aae865b4aab470b4851]
 reverse link org.consensusj.jsonrpc.JsonRpcClient to org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient-->
-    <path d='M249.89,99.61 C257.33,102.59 264.85,105.6 272,108.47 C310.67,123.98 354.86,141.76 385.59,154.13 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='247.63,105.85,231.66,91.92,252.83,92.85,247.63,105.85' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M250.55,99.87 C257.77,102.77 265.06,105.68 272,108.47 C310.67,123.98 354.86,141.76 385.59,154.13 ' fill='none' id='org.consensusj.jsonrpc.JsonRpcClient&lt;-org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='248.04,106.41,232.07,92.48,253.24,93.41,248.04,106.41' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[62a22a9d8b219e737de4efab4f6cc8bb]
 reverse link org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback to org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient-->
-    <path d='M215.5,199.29 C269.78,225.9 350.28,265.35 397.22,288.35 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
-    <polygon fill='none' points='212.68,205.21,197.8,190.13,218.84,192.64,212.68,205.21' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <path d='M215.86,199.47 C270.14,226.07 350.39,265.4 397.22,288.35 ' fill='none' id='org.consensusj.jsonrpc.groovy.DynamicRPCMethodFallback&lt;-org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;'/>
+    <polygon fill='none' points='213.04,205.88,198.16,190.79,219.2,193.31,213.04,205.88' style='stroke: #A80036; stroke-width: 1.0;'/>
     <!--MD5=[7bd8ebe65fb5e91b0a6ae39edc7da5c7]
 reverse link org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient to org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient-->
-    <path d='M426.92,207.49 C429.04,233.54 431.82,267.71 433.5,288.44 ' fill='none' id='org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient&lt;-org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <polygon fill='none' points='419.88,208.36,425.24,187.86,433.84,207.22,419.88,208.36' style='stroke: #A80036; stroke-width: 1.0;'/>
-    <!--MD5=[e7d9a42f451ceb8c088bc57290bca210]
+    <path d='M426.98,208.29 C429.09,234.23 431.83,267.92 433.5,288.44 ' fill='none' id='org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient&lt;-org.consensusj.bitcoin.jsonrpc.groovy.BitcoinScriptingClient' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <polygon fill='none' points='420.01,208.87,425.36,188.36,433.96,207.73,420.01,208.87' style='stroke: #A80036; stroke-width: 1.0;'/>
+    <!--MD5=[ca5b1445615a51e435171165e9a7a1d6]
 @startuml
 skinparam packageStyle Rect
 skinparam shadowing false
@@ -117,7 +117,7 @@ PlantUML version 1.2020.06(Sun Apr 05 05:38:32 PDT 2020)
 (APACHE source distribution)
 Java Runtime: OpenJDK Runtime Environment
 JVM: OpenJDK 64-Bit Server VM
-Java Version: 17.0.8+7
+Java Version: 21+35-2513
 Operating System: Mac OS X
 Default Encoding: UTF-8
 Language: en
