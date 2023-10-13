@@ -3,8 +3,8 @@
 == Main Release Process
 
 . Use Java 21 for official builds
-.. `sdk use 21-tem` (not available yet!)
-.. `sdk use 17.0.8-graalce` (for GraalVM build, used for 0.7.0-alpha3 official build)
+.. `sdk use 21-tem`
+.. `sdk use 21-graalce`
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`
@@ -23,6 +23,7 @@
 .. `./gradlew publish`
 . Update GitHub-pages site (including JavaDoc)
 .. `./gradlew javadocAll publishSite`
+.. Compare `SHA256SUMS` of multiple builds
 .. Add Release on GitHub
 
 == Announcements

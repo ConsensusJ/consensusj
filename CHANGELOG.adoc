@@ -3,6 +3,11 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
+== v0.7.0-SNAPSHOT
+
+Released: in-progress
+
+
 == v0.7.0-alpha3
 
 Released: 2023-10-05
