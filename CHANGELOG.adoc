@@ -7,6 +7,9 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: in-progress
 
+=== Dependency Updates
+
+* Jackson 2.15.3
 
 == v0.7.0-alpha3
 
