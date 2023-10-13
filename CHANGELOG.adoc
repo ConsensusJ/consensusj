@@ -11,6 +11,10 @@ Released: in-progress
 
 * Jackson 2.15.3
 
+=== Build/Test Updates
+
+* GitHub `gradle.yml` JDK Matrix: Java 11, 17, **21** (was `21-ea`)
+
 == v0.7.0-alpha3
 
 Released: 2023-10-05
