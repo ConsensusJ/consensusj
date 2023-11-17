@@ -14,6 +14,7 @@ Released: in-progress
 
 === Build/Test Updates
 
+* Gradle 8.5-rc-3
 * GitHub `gradle.yml` JDK Matrix: Java 11, 17, **21** (was `21-ea`)
 
 == v0.7.0-alpha3
