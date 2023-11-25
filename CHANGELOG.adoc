@@ -10,7 +10,7 @@ Released: in-progress
 === Dependency Updates
 
 * Jackson 2.16.0
-* Micronaut Platform 4.1.5
+* Micronaut Platform 4.2.0
 
 === Build/Test Updates
 
