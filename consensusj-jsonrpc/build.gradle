@@ -1,11 +1,5 @@
 plugins {
     id 'java-library'
-    // Instead of using 'org.graalvm.buildtools.native' directly we need to include
-    // the micronaut application plugin to avoid a Gradle bug:
-    // See: https://github.com/micronaut-projects/micronaut-gradle-plugin/issues/706
-    // and: https://github.com/gradle/gradle/issues/17559
-    //id 'org.graalvm.buildtools.native' version '0.9.28'
-    id("io.micronaut.application") version "${micronautAppGradlePluginVersion}"
 }
 
 configurations {
@@ -17,7 +11,7 @@ dependencies {
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
     // Add SLF4J runtime adapter for JDK logging for GraalVM native-image build of MathService/Tool
-    nativeImageClasspath "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+    nativeSampleImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 
     testImplementation project(':cj-btc-jsonrpc')
 
@@ -50,18 +44,20 @@ test {
     }
 }
 
-graalvmNative {
-    binaries {
-        main {
-            mainClass = mainClassName
-            imageName = 'MathTool'
-        }
-        test {
-            imageName = 'MathTool-dbg'
-        }
-    }
-    binaries.all {
-        sharedLibrary = false
-        buildArgs.add('--verbose')
-    }
+// Compile a native image of the MathService tool sample using Graal's native-image tool
+// Graal must be installed at $JAVA_HOME
+tasks.register('nativeCompile', Exec) {
+    dependsOn jar
+    workingDir = projectDir
+    executable = "${System.env.JAVA_HOME}/bin/native-image"
+    args = ['--verbose',
+            '--no-fallback',
+            '-cp', "${-> configurations.nativeSampleImplementation.asPath}", // Lazy configuration resolution
+            '-jar', jar.archiveFile.get(),
+            '-H:Path=build',
+            '-H:Name=MathTool',
+            '-H:+AllowIncompleteClasspath',
+            '-H:+ReportUnsupportedElementsAtRuntime',
+            '-H:+ReportExceptionStackTraces'
+    ]
 }
