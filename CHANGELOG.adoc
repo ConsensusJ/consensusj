@@ -11,6 +11,7 @@ Released: in-progress
 
 * Jackson 2.16.0
 * Micronaut Platform 4.2.0
+* Groovy 4.0.16
 
 === Build/Test Updates
 
