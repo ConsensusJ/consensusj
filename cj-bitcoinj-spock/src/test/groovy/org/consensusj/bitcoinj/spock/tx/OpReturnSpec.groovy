@@ -30,7 +30,7 @@ class OpReturnSpec extends BaseTransactionSpec {
                 .data(testData)
                 .build()
         tx.addOutput(utxo_amount, script)
-        tx.addSignedInput(outPoint, ScriptBuilder.createOutputScript(fromAddr), fromKey)
+        tx.addSignedInput(outPoint, ScriptBuilder.createOutputScript(fromAddr), utxo_amount, fromKey)
 
 
         and: "We serialize the transaction"
