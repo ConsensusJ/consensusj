@@ -14,7 +14,7 @@ class ExtendedTxRefSpec extends Specification {
         then:
         txRef != null
         txRef.bech32.hrp == "txtest"
-        txRef.bech32.data == [6, 22, 4, 11, 9, 2, 8, 0, 0, 0] as byte[]
+        txRef.bech32.bytes() == [6, 22, 4, 11, 9, 2, 8, 0, 0, 0] as byte[]
     }
 
 }
