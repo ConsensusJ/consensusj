@@ -6,7 +6,7 @@ ext.moduleName = 'org.consensusj.rx.zeromq'
 
 dependencies {
     api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
-    api "org.zeromq:jeromq:0.5.4"
+    api "org.zeromq:jeromq:0.6.0"
 
     testImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 }
