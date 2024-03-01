@@ -12,7 +12,7 @@ Released: in-progress
 * Jackson 2.16.0
 * JeroMQ 0.6.0
 * Micronaut Platform 4.2.0
-* Groovy 4.0.18
+* Groovy 4.0.19
 
 === Build/Test Updates
 
