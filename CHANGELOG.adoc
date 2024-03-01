@@ -16,7 +16,7 @@ Released: in-progress
 
 === Build/Test Updates
 
-* Gradle 8.5
+* Gradle 8.6
 * GitHub `gradle.yml` JDK Matrix: Java 11, 17, **21** (was `21-ea`)
 * Asciidoctor Gradle Plugin 4.0.1
 
