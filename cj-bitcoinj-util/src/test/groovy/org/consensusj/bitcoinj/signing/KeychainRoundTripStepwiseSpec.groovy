@@ -71,7 +71,7 @@ class KeychainRoundTripStepwiseSpec extends DeterministicKeychainBaseSpec  {
         when:
         DeterministicKey watchingKey = signingKeychain.getWatchingKey()
         xpub = watchingKey.serializePubB58(network)
-        xpubCreationInstant = watchingKey.creationTime().orElseThrow(RuntimeException::new)
+        xpubCreationInstant = watchingKey.getCreationTime().orElseThrow(RuntimeException::new)
 
         then:
         xpub.length() > 0

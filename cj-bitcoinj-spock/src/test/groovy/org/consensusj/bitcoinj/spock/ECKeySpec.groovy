@@ -34,8 +34,8 @@ class ECKeySpec extends Specification {
         // This test is no longer directly testing the header because of changes in bitcoinj 0.15
         key.toAddress(ScriptType.P2PKH, MAINNET).network() == MAINNET
         key.toAddress(ScriptType.P2PKH, TESTNET).network() == TESTNET
-        key.creationTime().isPresent()
-        key.creationTime().ifPresent(t -> t.isAfter(Instant.EPOCH))        // since we created it, we know the creation time
+        key.getCreationTime().isPresent()
+        key.getCreationTime().ifPresent(t -> t.isAfter(Instant.EPOCH))        // since we created it, we know the creation time
     }
 
     def "Import a constant, publicly-known private key "() {
