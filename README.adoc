@@ -435,7 +435,7 @@ The `#consensusj-exchange` module includes an adapter class `BaseXChangeExchange
 
 == Building and Running
 
-Before running `./gradlew` wrapper script you must have JDK 11 installed and your `JAVA_HOME` set correctly. To build native images you'll need a GraalVM JDK 11 with the `native-image` tool installed via `gu install native-image`.
+Before running `./gradlew` wrapper script you must have JDK 17 or later installed and your `JAVA_HOME` set correctly. To build native images you'll need a GraalVM JDK 17 or later with the `native-image` tool installed via `gu install native-image`.
 
 NOTE: The first time you run the build all dependency JARS will be downloaded.
 

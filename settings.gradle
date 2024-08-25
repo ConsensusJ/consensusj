@@ -4,8 +4,8 @@ plugins {
 
 rootProject.name = 'consensusj'
 
-if (!JavaVersion.current().isJava11Compatible()) {
-    throw new RuntimeException("JDK 11 Required to compile ConsensusJ")
+if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) < 0) {
+    throw new RuntimeException("JDK 17 or later is required to compile ConsensusJ")
 }
 
 // JDK 8
@@ -32,17 +32,13 @@ if (!JavaVersion.current().isJava11Compatible()) {
     include 'cj-eth-jsonrpc'                    // Ethereum JSON-RPC client (experimental)
     include 'cj-nmc-jsonrpc'                    // Namecoin JSON-RPC client (experimental)
 
-if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) >= 0) {
-    System.err.println "Including JDK 17 modules because Java is ${JavaVersion.current()}"
+// JDK 17
     include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
     include 'cj-bitcoinj-spock'                 // Spock tests/demos of basic bitcoinj capabilities
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
     include 'cj-btc-daemon'                     // Prototype Micronaut version of Bitcoin daemon
     include 'cj-btc-jsonrpc-integ-test'         // RPC-based integration tests of/using bitcoind
     include 'cj-btc-services'                   // bitcoinj-based service objects
-} else {
-    System.err.println "Skipping JDK 17 modules, currently running Java ${JavaVersion.current()}"
-}
 
 if (JavaVersion.current().compareTo(JavaVersion.VERSION_21) >= 0) {
     System.err.println "Including JDK 21 modules because Java is ${JavaVersion.current()}"
