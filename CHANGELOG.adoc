@@ -9,14 +9,17 @@ Released: in-progress
 
 === Dependency Updates
 
-* Jackson 2.16.0
+* bitcoinj 0.17-beta1
+* Jackson 2.17.2
+* RxJava 3.1.9
 * JeroMQ 0.6.0
-* Micronaut Platform 4.2.0
-* Groovy 4.0.19
+* SLF 2.0.16
+* Micronaut Platform 4.5.1
+* Groovy 4.0.22
 
 === Build/Test Updates
 
-* Gradle 8.6
+* Gradle 8.10
 * GitHub `gradle.yml` JDK Matrix: Java 11, 17, **21** (was `21-ea`)
 * Asciidoctor Gradle Plugin 4.0.1
 
