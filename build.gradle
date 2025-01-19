@@ -13,13 +13,15 @@ gradle.rootProject {
     apply plugin: 'distribution'
 }
 
-buildScan {
-    if (System.getenv('CI')) {
-        publishAlways()
-        tag 'CI'
+develocity {
+    buildScan {
+        if (System.getenv('CI')) {
+            publishAlways()
+            tag 'CI'
+        }
+        termsOfUseUrl = 'https://gradle.com/terms-of-service'
+        termsOfUseAgree = 'yes'
     }
-    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-    termsOfServiceAgree = 'yes'
 }
 
 allprojects {
