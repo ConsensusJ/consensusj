@@ -9,19 +9,25 @@ Released: in-progress
 
 === Dependency Updates
 
-* bitcoinj 0.17-beta1
-* Jackson 2.17.2
-* RxJava 3.1.9
+* bitcoinj 0.17-rc1
+* Jackson 2.18.2
+* RxJava 3.1.10
+* Jakarta Annotation API 3.0.0
+* JavaMoney Moneta 1.4.4
 * JeroMQ 0.6.0
 * SLF 2.0.16
-* Micronaut Platform 4.5.1
-* Groovy 4.0.22
+* Micronaut Platform 4.7.4
+* Groovy 4.0.24
+* commons-cli 1.9.0
 
 === Build/Test Updates
 
 * Require JDK 17 or later to build
-* Gradle 8.10
-* GitHub `gradle.yml` JDK Matrix: Java 17, 21
+* Gradle 8.12
+* Develocity (aka Gradle Enterprise) 3.19
+* JUnit Jupiter 5.11.4
+* Objenesis 3.4
+* GitHub `gradle.yml` JDK Matrix: Java 17, 21, 23
 * Asciidoctor Gradle Plugin 4.0.1
 
 == v0.7.0-alpha3
