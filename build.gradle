@@ -15,10 +15,7 @@ gradle.rootProject {
 
 develocity {
     buildScan {
-        if (System.getenv('CI')) {
-            publishAlways()
-            tag 'CI'
-        }
+        publishing.onlyIf { System.getenv("CI") }
         termsOfUseUrl = 'https://gradle.com/terms-of-service'
         termsOfUseAgree = 'yes'
     }
