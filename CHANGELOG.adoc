@@ -28,7 +28,7 @@ Released: in-progress
 * JUnit Jupiter 5.11.4
 * Objenesis 3.4
 * GitHub `gradle.yml` JDK Matrix: Java 17, 21, 23
-* Asciidoctor Gradle Plugin 4.0.1
+* Asciidoctor Gradle Plugin 4.0.4
 
 == v0.7.0-alpha3
 
