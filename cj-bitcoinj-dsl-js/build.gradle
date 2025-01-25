@@ -10,7 +10,7 @@ tasks.withType(JavaCompile).configureEach {
 
 dependencies {
     api project(':cj-btc-jsonrpc')
-    implementation 'org.openjdk.nashorn:nashorn-core:15.4'
+    implementation 'org.openjdk.nashorn:nashorn-core:15.6'
 
     testImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"       // Runtime implementation of slf4j
 }
