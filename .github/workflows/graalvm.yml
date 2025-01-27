@@ -21,12 +21,7 @@ jobs:
           java-version: ${{ matrix.java-version }}
           distribution: ${{ matrix.distribution }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
+          cache: 'gradle'
       - name: Build with Gradle
         run: ./gradlew nativeCompile --scan --info --stacktrace
       - name: Upload jsonrpc tool as artifact
