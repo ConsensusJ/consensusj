@@ -23,7 +23,7 @@ Released: in-progress
 === Build/Test Updates
 
 * Require JDK 17 or later to build
-* Gradle 8.12
+* Gradle 8.12.1
 * Develocity (aka Gradle Enterprise) 3.19
 * JUnit Jupiter 5.11.4
 * Objenesis 3.4
