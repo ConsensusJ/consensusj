@@ -34,13 +34,6 @@ import java.util.concurrent.CompletableFuture
 @Slf4j
 @Stepwise
 class WalletSendSpec extends BaseRegTestSpec {
-    /**
-     * See bitcoinj Issue #2050 https://github.com/bitcoinj/bitcoinj/issues/2050
-     * Currently in these tests it seems it's ok to just assume the transaction was sent properly
-     * and rely on waitForUnconfirmedTransaction to tell us it was received by the server.
-     */
-    static final workaroundBitcoinJ_015_8_Issue = true
-
     @Shared
     Wallet wallet
     @Shared
@@ -115,14 +108,14 @@ class WalletSendSpec extends BaseRegTestSpec {
         Coin amount = 1.btc
         Address serverWalletAddress = client.getNewAddress()
         log.info("Sending ${amount} coins to ${serverWalletAddress}")
-        Wallet.SendResult sendResult = wallet.sendCoins(peerGroup, serverWalletAddress, amount)
-        TransactionBroadcast broadcast = sendResult.getBroadcast()
+        TransactionBroadcast broadcast = wallet.sendCoins(peerGroup, serverWalletAddress, amount).getBroadcast()
         Transaction sentTx = broadcast.transaction()
         // Wait for broadcast complete
         log.info("Waiting for broadcast of {} to complete", sentTx)
-        if (!workaroundBitcoinJ_015_8_Issue) {
-            broadcast.awaitSent().get()
-        }
+        // Wait for transaction to be marked as sent, since we are in Regtest mode we do not call `awaitRelayed()`
+        // as I'm not sure we'll get an INV message from our single peer. We can use JSON-RPC to ensure
+        // the server has seen the transaction. See https://github.com/bitcoinj/bitcoinj/issues/2050
+        broadcast.awaitSent().get()
         log.warn("Broadcast complete, tx = ${sentTx}")
 
         and: "wait for the unconfirmed transaction to be received by the server"
@@ -164,9 +157,10 @@ class WalletSendSpec extends BaseRegTestSpec {
         TransactionBroadcast broadcast = peerGroup.broadcastTransaction(request.tx)
         log.info("Waiting for completion of broadcast for txid: {}", request.tx.getTxId())
         Transaction sentTx = broadcast.transaction()
-        if (!workaroundBitcoinJ_015_8_Issue) {
-            broadcast.awaitSent().get()
-        }
+        // Wait for transaction to be marked as sent, since we are in Regtest mode we do not call `awaitRelayed()`
+        // as I'm not sure we'll get an INV message from our single peer. We can use JSON-RPC to ensure
+        // the server has seen the transaction. See https://github.com/bitcoinj/bitcoinj/issues/2050
+        broadcast.awaitSent().get()
         waitForUnconfirmedTransaction(sentTx.txId)  // Wait for tx to show up on server as unconfirmed
 
         and: "a block is generated"
