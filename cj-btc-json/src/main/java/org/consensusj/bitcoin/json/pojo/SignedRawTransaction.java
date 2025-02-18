@@ -13,7 +13,7 @@ public class SignedRawTransaction {
     private final boolean complete;
 
     public static SignedRawTransaction of(Transaction transaction) {
-        return new SignedRawTransaction(transaction.bitcoinSerialize(), true);
+        return new SignedRawTransaction(transaction.serialize(), true);
     }
 
     @JsonCreator

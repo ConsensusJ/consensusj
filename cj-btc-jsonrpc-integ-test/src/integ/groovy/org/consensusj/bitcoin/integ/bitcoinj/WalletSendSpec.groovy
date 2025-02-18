@@ -116,9 +116,13 @@ class WalletSendSpec extends BaseRegTestSpec {
         Address serverWalletAddress = client.getNewAddress()
         log.info("Sending ${amount} coins to ${serverWalletAddress}")
         Wallet.SendResult sendResult = wallet.sendCoins(peerGroup, serverWalletAddress, amount)
+        TransactionBroadcast broadcast = sendResult.getBroadcast()
+        Transaction sentTx = broadcast.transaction()
         // Wait for broadcast complete
-        log.info("Waiting for broadcast of {} to complete", sendResult.tx)
-        Transaction sentTx = (workaroundBitcoinJ_015_8_Issue) ? sendResult.tx : sendResult.broadcastComplete.get()
+        log.info("Waiting for broadcast of {} to complete", sentTx)
+        if (!workaroundBitcoinJ_015_8_Issue) {
+            broadcast.awaitSent().get()
+        }
         log.warn("Broadcast complete, tx = ${sentTx}")
 
         and: "wait for the unconfirmed transaction to be received by the server"
@@ -159,8 +163,11 @@ class WalletSendSpec extends BaseRegTestSpec {
         log.info("Sending Tx: {}", tx)
         TransactionBroadcast broadcast = peerGroup.broadcastTransaction(request.tx)
         log.info("Waiting for completion of broadcast for txid: {}", request.tx.getTxId())
-        Transaction sentTx = (workaroundBitcoinJ_015_8_Issue) ? request.tx : broadcast.future().get()
-        waitForUnconfirmedTransaction(tx.txId)  // Wait for tx to show up on server as unconfirmed
+        Transaction sentTx = broadcast.transaction()
+        if (!workaroundBitcoinJ_015_8_Issue) {
+            broadcast.awaitSent().get()
+        }
+        waitForUnconfirmedTransaction(sentTx.txId)  // Wait for tx to show up on server as unconfirmed
 
         and: "a block is generated"
         client.generateBlocks(1)

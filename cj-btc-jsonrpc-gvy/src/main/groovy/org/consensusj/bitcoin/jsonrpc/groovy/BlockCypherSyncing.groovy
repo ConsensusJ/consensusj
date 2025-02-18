@@ -11,7 +11,8 @@ import org.consensusj.bitcoin.jsonrpc.test.BlockchainSyncing
 interface BlockCypherSyncing extends BlockchainSyncing {
 
     default int getReferenceBlockHeight() {
-        int height = new JsonSlurper().parse(new URL("https://api.blockcypher.com/v1/btc/main")).height
+        URL queryUrl = URI.create("https://api.blockcypher.com/v1/btc/main").toURL()
+        int height = new JsonSlurper().parse(queryUrl).height
         return height
     }
 }

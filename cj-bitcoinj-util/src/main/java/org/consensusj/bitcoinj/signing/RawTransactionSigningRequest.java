@@ -22,7 +22,7 @@ public class RawTransactionSigningRequest {
 
     public static RawTransactionSigningRequest ofTransaction(Transaction transaction) {
         List<RawInput> inputs = transaction.getInputs().stream()
-                .map(i -> new RawInput(i.getOutpoint().hash(), (int) i.getOutpoint().getIndex(), i.getScriptSig()))
+                .map(i -> new RawInput(i.getOutpoint().hash(), (int) i.getOutpoint().index(), i.getScriptSig()))
                 .collect(Collectors.toList());
         List<TransactionOutputData> outputs = transaction.getOutputs().stream()
                 .map(TransactionOutputData::fromTxOutput)

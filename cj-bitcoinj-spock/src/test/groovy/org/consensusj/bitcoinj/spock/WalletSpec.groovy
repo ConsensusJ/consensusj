@@ -34,7 +34,7 @@ class WalletSpec  extends Specification {
         ByteArrayOutputStream stream = new ByteArrayOutputStream(4_000_000)
 
         when:
-        wallet.addWatchedAddresses(addresses, 0)
+        wallet.addWatchedAddresses(addresses)
 
         and:
         wallet.saveToFileStream(stream)

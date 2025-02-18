@@ -52,7 +52,7 @@ class BareMultisigSpec extends TxTestBaseSpec {
         Script script = ScriptBuilder.createMultiSigOutputScript(2, [clientKey, serverKey])
         contract.addOutput(amount, script)
         // Assume only 1 (first) outpoint is needed (assuming utxos made by createIngredients are big enough)
-        contract.addSignedInput(ingredients.outPoints.get(0), ScriptBuilder.createOutputScript(ingredients.address), ingredients.privateKey)
+        contract.addSignedInput(ingredients.outPoints.get(0), ScriptBuilder.createOutputScript(ingredients.address), null, ingredients.privateKey)
 
         and: "send via P2P and generate a block"
         Transaction sentTx = submitRPC(contract)
