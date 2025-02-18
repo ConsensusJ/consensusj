@@ -188,16 +188,17 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
                 Arrays.asList(myTxSig, serverSignature))
 //        Script inputScript = ScriptBuilder.createMultiSigInputScriptBytes(
 //                Arrays.asList(mySignature.encodeToDER(), serverSignature.toCanonicalised().encodeToDER()))
-        // Add it to the input.
-        input.setScriptSig(inputScript);
+        // Replace unsigned input with signed input.
+        TransactionInput signedInput = input.withScriptSig(inputScript)
+        spendTx.replaceInput(0, signedInput)
 
         then:
         // We can now check the server provided signature is correct, of course...
         println multisigOutput
-        println input
+        println signedInput
         println multisigScript
         println inputScript
-        input.verify(multisigOutput)  // Throws an exception if the script doesn't run.
+        signedInput.verify(multisigOutput)  // Throws an exception if the script doesn't run.
 
         when: "Broadcast"
         // Broadcast and wait for it to propagate across the network.

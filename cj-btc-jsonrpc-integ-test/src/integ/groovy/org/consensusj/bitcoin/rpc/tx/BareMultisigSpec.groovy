@@ -113,11 +113,13 @@ class BareMultisigSpec extends TxTestBaseSpec {
         and: "a multisig input script"
         // Create the script that spends the multi-sig output.
         Script inputScript = ScriptBuilder.createMultiSigInputScript([mySignature, serverSignature])
-        input.setScriptSig(inputScript) // Add it to the input.
+        // Replace the unsigned input (placeholder) with the signed input
+        TransactionInput signedInput = input.withScriptSig(inputScript)
+        spendTx.replaceInput(0, signedInput)
 
-        and: "it verifies"
+        and: "signed input verifies"
         // We can now check the server provided signature is correct, of course...
-        input.verify(multisigOutput)  // Throws an exception if the script doesn't run.
+        signedInput.verify(multisigOutput)  // Throws an exception if the script doesn't run.
 
         and: "we send it via P2P"
         // It's valid! Let's take back the money.
