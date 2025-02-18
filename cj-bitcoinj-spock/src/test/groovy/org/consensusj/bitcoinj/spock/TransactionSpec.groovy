@@ -42,10 +42,10 @@ class TransactionSpec extends Specification {
         Transaction tx = new Transaction()
         TransactionOutPoint outPoint = new TransactionOutPoint(0, utxo_id)
         tx.addOutput(txAmount, toAddr)
-        tx.addSignedInput(outPoint, ScriptBuilder.createOutputScript(fromAddress), fromKey);
+        tx.addSignedInput(outPoint, ScriptBuilder.createOutputScript(fromAddress), null, fromKey);
 
         and: "We serialize the transaction"
-        var rawTx = ByteBuffer.wrap(tx.bitcoinSerialize())
+        var rawTx = ByteBuffer.wrap(tx.serialize())
 
         and: "We parse it into a new Transaction object"
         Transaction parsedTx = Transaction.read(rawTx)
@@ -58,8 +58,8 @@ class TransactionSpec extends Specification {
         parsedTx.inputs.size() == 1
 
         with (parsedTx.inputs.get(0)) {
-            outpoint.hash == utxo_id
-            outpoint.index == 0
+            outpoint.hash() == utxo_id
+            outpoint.index() == 0
             scriptBytes.length == 0x8a
             scriptSig != null       // script needs to be broken down more and compared here
             sequenceNumber == 0xffffffff
@@ -73,7 +73,7 @@ class TransactionSpec extends Specification {
             scriptPubKey != null    // script needs to be broken down more and compared here
         }
 
-        parsedTx.lockTime == 0
+        parsedTx.lockTime().rawValue() == 0
 
         when: "We validate the signature on each input"
         def inputs = parsedTx.getInputs();
@@ -82,7 +82,7 @@ class TransactionSpec extends Specification {
             TransactionInput input = inputs.get(i);
             Script scriptSig = input.getScriptSig();
             Script scriptPubKey = ScriptBuilder.createOutputScript(fromAddress);
-            scriptSig.correctlySpends(parsedTx, i, scriptPubKey, Script.ALL_VERIFY_FLAGS);
+            scriptSig.correctlySpends(parsedTx, i, null, null, scriptPubKey, Script.ALL_VERIFY_FLAGS);
         }
 
         then: "Signature is valid"

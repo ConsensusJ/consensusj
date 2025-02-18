@@ -60,7 +60,7 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
         wallet.setCoinSelector(new AllowUnconfirmedCoinSelector())
         def store = new MemoryBlockStore(params.getGenesisBlock())
         chain = new BlockChain(params,wallet,store)
-        peerGroup = new PeerGroup(params, chain)
+        peerGroup = new PeerGroup(BitcoinNetwork.REGTEST, chain)
         peerGroup.addWallet(wallet)
         peerGroup.start()
 
@@ -127,7 +127,7 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
         when: "Broadcast"
         // Broadcast and wait for it to propagate across the network.
         // It should take a few seconds unless something went wrong.
-        broadcastTx = peerGroup.broadcastTransaction(req.tx).broadcast().get()
+        broadcastTx = peerGroup.broadcastTransaction(req.tx).broadcastAndAwaitRelay().get().transaction()
 
         then:
         broadcastTx != null
@@ -203,7 +203,7 @@ class WorkingWithContractsSpec extends BaseRegTestSpec {
         when: "Broadcast"
         // Broadcast and wait for it to propagate across the network.
         // It should take a few seconds unless something went wrong.
-        broadcastTx = peerGroup.broadcastTransaction(spendTx).broadcast().get()
+        broadcastTx = peerGroup.broadcastTransaction(spendTx).broadcastAndAwaitRelay().get().transaction()
 
         then:
         broadcastTx != null

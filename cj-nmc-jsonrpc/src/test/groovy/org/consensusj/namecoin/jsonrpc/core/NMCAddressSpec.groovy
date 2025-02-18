@@ -85,11 +85,11 @@ class NMCAddressSpec extends Specification {
         def nmcPrivKeyString = "5JAHPeEsCHHm9xB51LvJW11bbGdu7yVWeaAtLJ8nac3odmqmyTx"
 
         when:
-        def nmcPrivateKey = DumpedPrivateKey.fromBase58(nmcNetParams, nmcPrivKeyString)
+        def nmcPrivateKey = DumpedPrivateKey.fromBase58(nmcNetParams.network(), nmcPrivKeyString)
         def key = nmcPrivateKey.getKey()
         def nmcAddress = key.toAddress(ScriptType.P2PKH, NameCoinNetwork.MAINNET)
         def btcAddress = key.toAddress(ScriptType.P2PKH, BitcoinNetwork.MAINNET)
-        def nmcExportKey = key.getPrivateKeyEncoded(nmcNetParams)
+        def nmcExportKey = key.getPrivateKeyEncoded(nmcNetParams.network())
         def btcExportKey = key.getPrivateKeyEncoded(mainNet)
 
         then:

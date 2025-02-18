@@ -26,7 +26,7 @@ class P2PKHSpec extends TxTestBaseSpec {
         Transaction tx = new Transaction()
         tx.addOutput(amount, destAddress)
         // Assume only 1 (first) outpoint is needed (assuming utxos made by createIngredients are big enough)
-        tx.addSignedInput(ingredients.outPoints.get(0), ScriptBuilder.createOutputScript(ingredients.address), ingredients.privateKey);
+        tx.addSignedInput(ingredients.outPoints.get(0), ScriptBuilder.createOutputScript(ingredients.address), null, ingredients.privateKey);
 
         and: "send via submitMethod [P2P, RPC] and generate a block"
         Transaction sentTx = submitMethod.apply(tx)

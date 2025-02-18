@@ -103,7 +103,7 @@ class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
         utx.getOutputSum() >= 0.9.btc
 
         when: "we send the utx to appKitService for signing"
-        var result = appKitService.signrawtransactionwithwallet(hexFormatter.formatHex(utx.bitcoinSerialize())).join()
+        var result = appKitService.signrawtransactionwithwallet(hexFormatter.formatHex(utx.serialize())).join()
 
         then:
         result != null
@@ -145,7 +145,7 @@ class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
         utx.getOutputSum() >= 0.9.btc
 
         when: "we send the utx to appKitService for signing"
-        var result = appKitService.signrawtransactionwithwallet(hexFormatter.formatHex(utx.bitcoinSerialize())).join()
+        var result = appKitService.signrawtransactionwithwallet(hexFormatter.formatHex(utx.serialize())).join()
 
         then:
         result != null

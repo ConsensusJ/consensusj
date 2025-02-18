@@ -59,7 +59,7 @@ public class RawTransactionInfo {
      * @param transaction A bitcoinj confirmed or unconfirmed transaction
      */
     public RawTransactionInfo(Transaction transaction) {
-        this.hex = HexUtil.bytesToHexString(transaction.bitcoinSerialize());
+        this.hex = HexUtil.bytesToHexString(transaction.serialize());
         this.txid = transaction.getTxId();
         this.version = transaction.getVersion();
         this.lockTime = transaction.lockTime();
@@ -69,7 +69,7 @@ public class RawTransactionInfo {
         this.blocktime = this.time; // same as time (see API doc)
         vin = transaction.getInputs().stream()
                 .map(input -> new Vin(txid,
-                        input.getOutpoint().getIndex(),
+                        input.getOutpoint().index(),
                         input.getScriptSig().toString(),
                         input.getSequenceNumber())
                 )

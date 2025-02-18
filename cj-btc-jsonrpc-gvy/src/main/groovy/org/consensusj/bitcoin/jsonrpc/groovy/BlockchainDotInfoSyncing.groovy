@@ -9,7 +9,8 @@ import org.consensusj.bitcoin.jsonrpc.test.BlockchainSyncing
 interface BlockchainDotInfoSyncing extends BlockchainSyncing {
 
     default int getReferenceBlockHeight() {
-        int height = new JsonSlurper().parse(new URL("https://blockchain.info/latestblock")).height
+        URL latestBlockUrl = URI.create("https://blockchain.info/latestblock").toURL()
+        int height = new JsonSlurper().parse(latestBlockUrl).height
         return height
     }
 }

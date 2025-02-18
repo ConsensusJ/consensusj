@@ -34,16 +34,16 @@ class OpReturnSpec extends BaseTransactionSpec {
 
 
         and: "We serialize the transaction"
-        byte[] rawTx = tx.bitcoinSerialize()
+        byte[] rawTx = tx.serialize()
 
         and: "We parse it into a new Transaction object"
         Transaction parsedTx = Transaction.read(ByteBuffer.wrap(rawTx))
 
         then: "we can retrieve the data"
-        with (parsedTx.getOutput(0).scriptPubKey.chunks.get(0)) {
+        with (parsedTx.getOutput(0).scriptPubKey.chunks().get(0)) {
             opcode == ScriptOpCodes.OP_RETURN
         }
-        with (parsedTx.getOutput(0).scriptPubKey.chunks.get(1)) {
+        with (parsedTx.getOutput(0).scriptPubKey.chunks().get(1)) {
             opcode == opCodeFromLength(testData.length);
             data == testData
         }

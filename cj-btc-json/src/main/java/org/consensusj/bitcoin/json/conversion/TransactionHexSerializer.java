@@ -14,7 +14,7 @@ import java.io.IOException;
 public class TransactionHexSerializer extends JsonSerializer<Transaction> {
     @Override
     public void serialize(Transaction value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-        gen.writeString(HexUtil.bytesToHexString(value.bitcoinSerialize()));
+        gen.writeString(HexUtil.bytesToHexString(value.serialize()));
     }
 
 }

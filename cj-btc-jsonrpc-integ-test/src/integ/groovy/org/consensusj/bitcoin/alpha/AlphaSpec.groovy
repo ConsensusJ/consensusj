@@ -114,12 +114,12 @@ class AlphaSpec extends Specification {
         def result = client.settxfee(0)
         def destinationConfidentialAddress = client.getnewaddress()
         def destinationAddress = client.validateaddress(destinationConfidentialAddress).unconfidential
-        Transaction tx = new Transaction(netParams)
+        Transaction tx = new Transaction()
         tx.addOutput(testAmount.btc, Address.fromBase58(netParams, destinationAddress))
         TransactionOutPoint utxo = new TransactionOutPoint(netParams, 0, Sha256Hash.of(txid.decodeHex()))
 //        tx.addSignedInput(utxo, ScriptBuilder.createOutputScript(Address.fromBase58(netParams, fundedAddress)), key)
-        tx.addInput(utxo.hash, utxo.index, ScriptBuilder.createOutputScript(Address.fromBase58(netParams, fundedAddress)))
-        def signed = client.signrawtransaction(tx.bitcoinSerialize().encodeHex().toString())
+        tx.addInput(utxo.hash(), utxo.index(), ScriptBuilder.createOutputScript(Address.fromBase58(netParams, fundedAddress)))
+        def signed = client.signrawtransaction(tx.serialize().encodeHex().toString())
         def tx2id = client.sendrawtransaction(signed.hex)
 
         then:

@@ -59,7 +59,7 @@ class BitcoinRawTransactionSpec extends BaseRegTestSpec {
         when: "We parse the transaction"
         var buffer = ByteBuffer.wrap(HexUtil.hexStringToByteArray(rawTransactionHex))
         var transaction = Transaction.read(buffer)
-        var roundtrip = HexUtil.bytesToHexString(transaction.bitcoinSerialize())
+        var roundtrip = HexUtil.bytesToHexString(transaction.serialize())
 
         then:
         rawTransactionHex == roundtrip

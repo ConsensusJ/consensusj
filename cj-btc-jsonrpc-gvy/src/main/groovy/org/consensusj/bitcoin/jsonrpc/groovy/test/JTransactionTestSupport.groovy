@@ -56,7 +56,7 @@ trait JTransactionTestSupport implements BTCTestSupport {
         if (peerGroup == null) {
             setupPeerGroup()
         }
-        Transaction sentTx = peerGroup.broadcastTransaction(tx).future().get();
+        Transaction sentTx = peerGroup.broadcastTransaction(tx).awaitRelayed().get().transaction()
         // Wait for it to show up on server as unconfirmed
         waitForUnconfirmedTransaction(sentTx.txId)
         client.generateBlocks(1)
