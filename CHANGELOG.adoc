@@ -9,7 +9,7 @@ Released: in-progress
 
 === Dependency Updates
 
-* bitcoinj 0.17-rc3
+* bitcoinj 0.17
 * Jackson 2.18.2
 * RxJava 3.1.10
 * Jakarta Annotation API 3.0.0
