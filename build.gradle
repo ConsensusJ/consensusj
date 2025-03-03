@@ -137,7 +137,7 @@ tasks.named('check') {
 
 build.dependsOn subprojects.build
 
-tasks.register('buildCI') { dependsOn build, javadocAll, asciidoctor }
+tasks.register('buildCI') { dependsOn build, javadocAll /*, asciidoctor */ }
 
 tasks.named('installDist').configure {
     destinationDir = layout.buildDirectory.dir('artifacts').get().getAsFile()
