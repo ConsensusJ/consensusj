@@ -47,16 +47,7 @@ public class WalletAppKitRegTest {
 
     @BeforeEach
     void setupTest(@TempDir File tempDir) throws UnknownHostException {
-        kit = new WalletAppKit(network,
-                ScriptType.P2WPKH,
-                KeyChainGroupStructure.BIP43,
-                tempDir,
-                "prefix");
-        kit.connectToLocalHost();
-        kit.setBlockingStartup(false);
-        // Start the wallet
-        kit.startAsync();
-        kit.awaitRunning();
+        kit = WalletAppKit.launch(network, tempDir, "prefix");
     }
 
     @AfterEach
