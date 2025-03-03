@@ -60,8 +60,10 @@ public class WalletAppKitRegTest {
     public void sendCoinsToWalletAppKit() throws IOException, InterruptedException, ExecutionException, TimeoutException {
 
         // Listen for the first coins-received transaction
-        var transactionFuture = new CoinsReceivedFuture();
-        kit.wallet().addCoinsReceivedEventListener(transactionFuture);
+        var transactionFuture = new CompletableFuture<Transaction>();
+        kit.wallet().addCoinsReceivedEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
+            transactionFuture.complete(tx);
+        });
 
         // Prepare the amount to send and destination address
         var amount = Coin.CENT;
@@ -83,12 +85,5 @@ public class WalletAppKitRegTest {
         // Verify correct amount received
         var balance = kit.wallet().getBalance();
         assertEquals(amount.value, balance.value);
-    }
-    
-    static class CoinsReceivedFuture extends CompletableFuture<Transaction> implements WalletCoinsReceivedEventListener {
-        @Override
-        public void onCoinsReceived(Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) {
-            this.complete(tx);
-        }
     }
 }
