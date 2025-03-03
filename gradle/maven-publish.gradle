@@ -11,8 +11,8 @@ allprojects {
         repositories {
             def consensusJGitLabProjectId = "8482916"
             maven {
-                url "https://gitlab.com/api/v4/projects/${consensusJGitLabProjectId}/packages/maven"
-                name "GitLab"
+                url = "https://gitlab.com/api/v4/projects/${consensusJGitLabProjectId}/packages/maven"
+                name =  "GitLab"
                 credentials(HttpHeaderCredentials) {
                     name = 'Private-Token'
                     value = project.findProperty("gitLabMavenToken")
