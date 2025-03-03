@@ -21,6 +21,7 @@ The following diagram shows the basic class hierarchy of the core `org.consensus
 
 [plantuml, format="svg", id="class-diagram-java"]
 ....
+!pragma layout smetana
 skinparam packageStyle Rect
 skinparam shadowing false
 hide empty members
@@ -56,6 +57,7 @@ By implementing the `DynamicRPCMethodFallback` `trait` we can layer dynamic JSON
 
 [plantuml, format="svg", id="class-diagram-groovy"]
 ....
+!pragma layout smetana
 skinparam packageStyle Rect
 skinparam shadowing false
 hide empty members
@@ -83,6 +85,7 @@ The following diagram (which also leaves out some details), shows how the `Bitco
 
 [plantuml, format="svg", id="class-diagram-groovy-bitcoin"]
 ....
+!pragma layout smetana
 skinparam packageStyle Rect
 skinparam shadowing false
 hide empty members
