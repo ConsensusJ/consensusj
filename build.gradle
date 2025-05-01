@@ -123,14 +123,6 @@ dependencies {
     testReportAggregation project(':').subprojects
 }
 
-reporting {
-    reports {
-        testAggregateTestReport(AggregateTestReport) {
-            testType = TestSuiteType.UNIT_TEST
-        }
-    }
-}
-
 tasks.named('check') {
     dependsOn tasks.named('testAggregateTestReport', TestReport)
 }
