@@ -1,0 +1,5 @@
+[default]
+bitcoin-network = "regtest"
+uri = "http://localhost:18443"
+username = "bitcoinrpc"
+password = "pass"

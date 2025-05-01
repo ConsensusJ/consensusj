@@ -19,6 +19,8 @@ dependencies {
 
     api 'commons-cli:commons-cli:1.9.0'
 
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${jacksonVersion}"
+
     // Add SLF4J runtime adapter for JDK logging for GraalVM native-image build of jsonrpc tool
     nativeToolImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 

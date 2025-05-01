@@ -14,6 +14,8 @@ import org.consensusj.jsonrpc.CompositeTrustManager;
 import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
+import org.consensusj.jsonrpc.cli.config.JsonRpcConfigFile;
+import org.consensusj.jsonrpc.cli.config.JsonRpcServerConfigEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -241,22 +243,35 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool, ToolProvider
         }
 
         public DefaultRpcClient rpcClient(SSLContext sslContext) {
+            JsonRpcConfigFile configFile = JsonRpcConfigFile.fromDefaultConfigFile();
+            log.info("If no command-line url option, will use config in: {}", configFile.path());
+
             if (client == null) {
                 URI uri;
                 String urlString;
+                String rpcUser = null;
+                String rpcPassword = null;
                 if ((urlString = line.getOptionValue("url")) != null ) {
+                    // URL specified on the command-line
                     try {
                         uri = new URI(urlString);
                     } catch (URISyntaxException e) {
                         throw new RuntimeException(e);
                     }
+                } else if (configFile.exists()) {
+                    // TOML Configuration File exists
+                    log.info("Reading 'default' server from: {}", configFile.path());
+                    JsonRpcServerConfigEntry config = configFile.readDefault();
+                    uri = config.getUri();
+                    rpcUser = config.getUsername();
+                    rpcPassword = config.getPassword();
                 } else {
+                    // Use compiled-in defaultUri
                     uri = defaultUri;
                 }
-                String rpcUser = null;
-                String rpcPassword = null;
+                // If username/password can be extracted from the URI and nothing is set yet, use those
                 String rawUserInfo = uri.getRawUserInfo();
-                if (rawUserInfo != null) {
+                if (rpcUser == null && rawUserInfo != null) {
                     String[] split = rawUserInfo.split(":");
                     rpcUser = split[0];
                     rpcPassword = split[1];
