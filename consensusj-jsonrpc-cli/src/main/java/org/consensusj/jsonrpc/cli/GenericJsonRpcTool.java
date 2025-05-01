@@ -4,9 +4,6 @@ import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * JSON-RPC Command-line tool with logging support.
  */
@@ -16,10 +13,10 @@ public class GenericJsonRpcTool extends BaseJsonRpcTool {
 
     /**
      * main method for jsonrpc tool.
-     *
-     * See {@link JsonRpcToolOptions} for options and https://bitcoin.org/en/developer-reference#bitcoin-core-apis[Bitcoin Core JSON-RPC API]
-     * for the methods and parameters. Users can use `-?` to get general help or {@code help <command>} to get help
-     * on a specific command.
+     * <p>
+     * See {@link JsonRpcToolOptions} for options and your server's documentation or help
+     * for the methods and parameters. Users can use `-?` to get help on the tool or (usually) {@code help <command>} to get help
+     * from the server on a specific JSON-RPC method.
      *
      * @param args options, JSON-RPC method, JSON-RPC parameters
      */
