@@ -40,7 +40,7 @@ public interface Utxo {
     }
 
     /**
-     * Bare minimum UTXO info: txId and index
+     * Bare minimum UTXO info: txId and index (aka TransactionOutPoint)
      */
     class Basic implements Utxo {
         private final Sha256Hash txId;
