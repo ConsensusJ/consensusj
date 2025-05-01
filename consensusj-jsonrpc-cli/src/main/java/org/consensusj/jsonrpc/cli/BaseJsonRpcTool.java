@@ -204,31 +204,40 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool, ToolProvider
                 rpcTool.printHelp(this.err, rpcTool.usage());   // print help to stderr
                 throw new JsonRpcClientTool.ToolException(1, "Parser error");
             }
+            // Logging should be (one of?) the first thing(s) configured from command-line options
+            Level level = parseLogLevel(line);
+            JavaLoggingSupport.setLogLevel(level);
+            verbose = line.hasOption("v");
+
             boolean help = line.hasOption("?");
             if (help) {
                 rpcTool.printHelp(this.out, rpcTool.usage());  // Print help to stdout
                 throw new JsonRpcClientTool.ToolException(0, "Help Option was chosen");
-            } else {
-                verbose = line.hasOption("v");
-                if (verbose) {
-                    JavaLoggingSupport.setVerbose();
-                }
-                boolean hasLogLevel = line.hasOption("log");
-                if (hasLogLevel ){
-                    String intLevel = line.getOptionValue("log");
-                    Level level = switch (intLevel) {
-                        case "0" -> Level.OFF;
-                        case "1" -> Level.SEVERE;
-                        case "2" -> Level.WARNING;
-                        case "3" -> Level.INFO;
-                        case "4" -> Level.FINE;
-                        case "5" -> Level.ALL;
-                        default -> throw new IllegalStateException("Unexpected value: " + intLevel);
-                    };
-                    JavaLoggingSupport.setLogLevel(level);
-                }
-                // TODO: Add rpcwait option for non-Bitcoin JsonRPC???
             }
+            // TODO: Add rpcwait option for non-Bitcoin JsonRPC???
+        }
+
+        Level parseLogLevel(CommandLine line) {
+            Level level = Level.WARNING;    // Default level
+            boolean verbose = line.hasOption("v");
+            if (verbose) {
+                level = Level.INFO;          // Verbose enables "INFO" (for now)
+            }
+            // "-log" overrides "-v"
+            boolean hasLogLevel = line.hasOption("log");
+            if (hasLogLevel) {
+                String intLevel = line.getOptionValue("log");
+                level = switch (intLevel) {
+                    case "0" -> Level.OFF;
+                    case "1" -> Level.SEVERE;
+                    case "2" -> Level.WARNING;
+                    case "3" -> Level.INFO;
+                    case "4" -> Level.FINE;
+                    case "5" -> Level.ALL;
+                    default -> throw new IllegalStateException("Unexpected value: " + intLevel);
+                };
+            }
+            return level;
         }
 
         public DefaultRpcClient rpcClient(SSLContext sslContext) {
