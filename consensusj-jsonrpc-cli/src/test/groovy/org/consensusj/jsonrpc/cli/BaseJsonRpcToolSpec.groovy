@@ -1,12 +1,8 @@
 package org.consensusj.jsonrpc.cli
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.cli.Options
 import spock.lang.Specification
 
-/**
- *
- */
 class BaseJsonRpcToolSpec extends Specification {
     static final expectedURI = URI.create('http://localhost:8080/freebird')
     static final String[] dummyArgs = ['-url', expectedURI].toArray()
@@ -14,7 +10,7 @@ class BaseJsonRpcToolSpec extends Specification {
     def "Can create a Call object properly"() {
         given:
         BaseJsonRpcTool tool = new BaseJsonRpcTool() {
-            public JsonRpcClientTool.Call call;
+            public BaseJsonRpcTool.CommonsCLICall call;
 
             @Override
             Options options() {

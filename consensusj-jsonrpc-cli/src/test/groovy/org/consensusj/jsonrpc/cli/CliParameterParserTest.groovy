@@ -9,9 +9,6 @@ import com.fasterxml.jackson.databind.node.TextNode
 import spock.lang.Shared
 import spock.lang.Specification
 
-/**
- * 
- */
 class CliParameterParserTest extends Specification  {
     @Shared ObjectMapper mapper
     @Shared CliParameterParser parser

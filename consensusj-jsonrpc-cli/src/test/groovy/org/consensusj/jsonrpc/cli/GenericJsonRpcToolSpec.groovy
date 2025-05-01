@@ -1,16 +1,16 @@
 package org.consensusj.jsonrpc.cli
 
+import org.consensusj.jsonrpc.cli.test.CLITestSupport
 import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.util.spi.ToolProvider
 
-/**
- *
- */
 class GenericJsonRpcToolSpec extends Specification {
     static final expectedURI = URI.create('http://bitcoinrpc:pass@localhost:8332/')
     static final String[] dummyArgs = ['-url', expectedURI, 'getblockcount'].toArray()
+    static final String[] helpArgs = ['--help'].toArray()
+    static final String[] emptyArgs = new String[0];
 
     def "Can instantiate via ToolProvider"() {
         when:
@@ -18,6 +18,38 @@ class GenericJsonRpcToolSpec extends Specification {
 
         then:
         tool instanceof GenericJsonRpcTool
+    }
+
+    def "Can Run -help via ToolProvider"() {
+        when:
+        var tool = ToolProvider.findFirst("jsonrpc").get()
+
+        then:
+        tool instanceof GenericJsonRpcTool
+
+        when:
+        var result = CLITestSupport.runTool(tool as BaseJsonRpcTool, helpArgs)
+
+        then:
+        result.status() == 0
+        result.output().contains("usage string")
+        result.error().isEmpty()
+    }
+
+    def "Usage error (no args) via ToolProvider"() {
+        when:
+        var tool = ToolProvider.findFirst("jsonrpc").get()
+
+        then:
+        tool instanceof GenericJsonRpcTool
+
+        when:
+        var result = CLITestSupport.runTool(tool as BaseJsonRpcTool, emptyArgs)
+
+        then:
+        result.status() == 1
+        result.output().isEmpty()
+        result.error().contains("usage string")
     }
 
     def "Can create a Call object properly"() {

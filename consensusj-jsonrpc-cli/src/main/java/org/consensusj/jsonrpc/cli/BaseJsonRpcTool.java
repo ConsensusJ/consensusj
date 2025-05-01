@@ -11,7 +11,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.jsonrpc.CompositeTrustManager;
-import org.consensusj.jsonrpc.JsonRpcClientJavaNet;
 import org.consensusj.jsonrpc.JsonRpcMessage;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
@@ -21,9 +20,12 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLContext;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -32,11 +34,12 @@ import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
+import java.util.spi.ToolProvider;
 
 /**
- * An abstract base class for JsonRpcClientTool that uses Apache Commons CLI
+ * An abstract base class for JsonRpcClientTool that implements ToolProvider and uses Apache Commons CLI
  */
-public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
+public abstract class BaseJsonRpcTool implements JsonRpcClientTool, ToolProvider {
     private static final Logger log = LoggerFactory.getLogger(BaseJsonRpcTool.class);
     private static final String name = "jsonrpc";
     protected static final URI defaultUri = URI.create("http://localhost:8080/");
@@ -62,21 +65,37 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
 
     abstract public Options options();
 
-    @Override
     public CommonsCLICall createCall(PrintWriter out, PrintWriter err, String... args) {
         return new CommonsCLICall(this, out, err, args);
     }
 
-    @Override
-    public void run(Call call) {
-        run((CommonsCLICall) call);
+    public CommonsCLICall createCall(PrintStream out, PrintStream err, String... args) {
+        return createCall(writerFromStream(out), writerFromStream(err), args);
     }
-    
+
+    private PrintWriter writerFromStream(PrintStream stream) {
+        return new PrintWriter(new OutputStreamWriter(stream, StandardCharsets.UTF_8), true);
+
+    }
+
+    @Override
+    public int run(PrintWriter out, PrintWriter err, String... args) {
+        try {
+            CommonsCLICall call = createCall(out, err, args);
+            run(call);
+        } catch (ToolException e) {
+            return e.resultCode;
+        } catch (Exception e) {
+            throw new RuntimeException((e));
+        }
+        return 0;
+    }
+
     public void run(CommonsCLICall call) {
         List<String> args = call.line.getArgList();
         if (args.isEmpty()) {
             printError(call, "jsonrpc method required");
-            printHelp(call, usage);
+            printHelp(call.err, usage);
             throw new ToolException(1, "jsonrpc method required");
         }
         if (call.line.hasOption("response")) {
@@ -146,62 +165,68 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             };
     }
 
-    public void printHelp(Call call, String usage) {
+    public void printHelp(PrintWriter pw, String usage) {
         int leftPad = 4;
         int descPad = 2;
         int helpWidth = 120;
         String header = "";
         String footer = "";
-        formatter.printHelp(call.err, helpWidth, usage, header, options(), leftPad, descPad, footer, false);
+        formatter.printHelp(pw, helpWidth, usage, header, options(), leftPad, descPad, footer, false);
     }
 
-    public void printError(Call call, String str) {
+    public void printError(CommonsCLICall call, String str) {
         call.err.println(str);
     }
 
-    public static class CommonsCLICall extends JsonRpcClientTool.Call {
+    public static class CommonsCLICall  {
+        public final PrintWriter out;
+        public final PrintWriter err;
+        public final String[] args;
         protected final BaseJsonRpcTool rpcTool;
         public final CommandLine line;
         public final boolean verbose;
         private DefaultRpcClient client;
 
         public CommonsCLICall(BaseJsonRpcTool parentTool, PrintWriter out, PrintWriter err, String[] args) {
-            super(out, err, args);
+            this.out = out;
+            this.err = err;
+            this.args = args;
             this.rpcTool = parentTool;
             CommandLineParser parser = new DefaultParser();
             try {
                 this.line = parser.parse(rpcTool.options(), args);
             } catch (ParseException e) {
                 rpcTool.printError(this, e.getMessage());
-                rpcTool.printHelp(this, rpcTool.usage());
+                rpcTool.printHelp(this.err, rpcTool.usage());   // print help to stderr
                 throw new JsonRpcClientTool.ToolException(1, "Parser error");
             }
-            if (line.hasOption("?")) {
-                rpcTool.printHelp(this, rpcTool.usage());
+            boolean help = line.hasOption("?");
+            if (help) {
+                rpcTool.printHelp(this.out, rpcTool.usage());  // Print help to stdout
                 throw new JsonRpcClientTool.ToolException(0, "Help Option was chosen");
+            } else {
+                verbose = line.hasOption("v");
+                if (verbose) {
+                    JavaLoggingSupport.setVerbose();
+                }
+                boolean hasLogLevel = line.hasOption("log");
+                if (hasLogLevel ){
+                    String intLevel = line.getOptionValue("log");
+                    Level level = switch (intLevel) {
+                        case "0" -> Level.OFF;
+                        case "1" -> Level.SEVERE;
+                        case "2" -> Level.WARNING;
+                        case "3" -> Level.INFO;
+                        case "4" -> Level.FINE;
+                        case "5" -> Level.ALL;
+                        default -> throw new IllegalStateException("Unexpected value: " + intLevel);
+                    };
+                    JavaLoggingSupport.setLogLevel(level);
+                }
+                // TODO: Add rpcwait option for non-Bitcoin JsonRPC???
             }
-            verbose = line.hasOption("v");
-            if (verbose) {
-                JavaLoggingSupport.setVerbose();
-            }
-            boolean hasLogLevel = line.hasOption("log");
-            if (hasLogLevel ){
-                String intLevel = line.getOptionValue("log");
-                Level level = switch (intLevel) {
-                    case "0" -> Level.OFF;
-                    case "1" -> Level.SEVERE;
-                    case "2" -> Level.WARNING;
-                    case "3" -> Level.INFO;
-                    case "4" -> Level.FINE;
-                    case "5" -> Level.ALL;
-                    default -> throw new IllegalStateException("Unexpected value: " + intLevel);
-                };
-                JavaLoggingSupport.setLogLevel(level);
-            }
-            // TODO: Add rpcwait option for non-Bitcoin JsonRPC???
         }
 
-        @Override
         public DefaultRpcClient rpcClient(SSLContext sslContext) {
             if (client == null) {
                 URI uri;
@@ -228,7 +253,6 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool {
             return client;
         }
 
-        @Override
         public DefaultRpcClient rpcClient() {
             SSLContext sslContext;
             try {

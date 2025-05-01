@@ -11,7 +11,7 @@ import spock.lang.Specification
  *
  * TODO: We should probably check the command output (eventually)
  */
-class BitcoinCLIToolIntegrationSpec extends Specification implements CLITestSupport {
+class BitcoinCLIToolIntegrationSpec extends Specification {
     static final String rpcUser = TestServers.getInstance().getRpcTestUser();
     static final String rpcPassword = TestServers.getInstance().getRpcTestPassword();
 
@@ -20,9 +20,10 @@ class BitcoinCLIToolIntegrationSpec extends Specification implements CLITestSupp
         def result = command '-?'
 
         then:
-        result.status == 0
-        result.output.length() == 0
-        result.error.length() > 0
+        result.status() == 0
+        result.output().length() > 0
+        result.output().contains("usage string")
+        result.error().length() == 0
     }
 
     def "get block count"() {
@@ -30,10 +31,10 @@ class BitcoinCLIToolIntegrationSpec extends Specification implements CLITestSupp
         def result = command "-regtest -rpcuser=${rpcUser} -rpcpassword=${rpcPassword} -rpcwait getblockcount"
 
         then:
-        result.status == 0
-        result.output.length() > 0
-        result.output[0..-2].toInteger() >= 0    // blockcount is a valid integer 0 or greater (trim '\n')
-        result.error.length() == 0
+        result.status() == 0
+        result.output().length() > 0
+        result.output()[0..-2].toInteger() >= 0    // blockcount is a valid integer 0 or greater (trim '\n')
+        result.error().length() == 0
     }
 
     def "generate a block"() {
@@ -41,9 +42,9 @@ class BitcoinCLIToolIntegrationSpec extends Specification implements CLITestSupp
         def result = command "-regtest -rpcuser=${rpcUser} -rpcpassword=${rpcPassword} -rpcwait generatetoaddress 1 moneyqMan7uh8FqdCA2BV5yZ8qVrc9ikLP"
 
         then:
-        result.status == 0
-        result.output.length() >= 0  // length == 0 on bitcoin core 0.9.x, length  > 0 on 0.10.x
-        result.error.length() == 0
+        result.status() == 0
+        result.output().length() >= 0  // length == 0 on bitcoin core 0.9.x, length  > 0 on 0.10.x
+        result.error().length() == 0
     }
 
     def "get server info"() {
@@ -51,9 +52,9 @@ class BitcoinCLIToolIntegrationSpec extends Specification implements CLITestSupp
         def result = command "-regtest -rpcuser=${rpcUser} -rpcpassword=${rpcPassword} -rpcwait getblockchaininfo"
 
         then:
-        result.status == 0
-        result.output.length() > 0  // Should be a JSON serialized string here, validate?
-        result.error.length() == 0
+        result.status() == 0
+        result.output().length() > 0  // Should be a JSON serialized string here, validate?
+        result.error().length() == 0
     }
 
     /**
@@ -63,11 +64,10 @@ class BitcoinCLIToolIntegrationSpec extends Specification implements CLITestSupp
      * @return  status and output streams in Strings
      */
     protected CLICommandResult command(String line) {
-        String[] args = parseCommandLine(line)     // Parse line into separate args
+        String[] args = line.split(" ")     // Parse line into separate args
 
         // Run the command
         BitcoinCLITool tool = new BitcoinCLITool()
-        return runTool(tool, args)
+        return CLITestSupport.runTool(tool, args)
     }
-
 }

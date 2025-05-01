@@ -1,60 +1,9 @@
 package org.consensusj.jsonrpc.cli;
 
-import org.consensusj.jsonrpc.DefaultRpcClient;
-
-import javax.net.ssl.SSLContext;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.spi.ToolProvider;
-
 /**
- * An implementation of ToolProvider that uses an RpcClient and runs in two steps
- * 1. Parse arguments and initialize RPC Client
- * 2. Run the command
+ * This interface was a mistake. It should be phased out.
  */
-interface JsonRpcClientTool extends ToolProvider {
-    @Override
-    default int run(PrintWriter out, PrintWriter err, String... args) {
-        try {
-            Call call = createCall(out, err, args);
-            run(call);
-        } catch (ToolException e) {
-            return e.resultCode;
-        } catch (Exception e) {
-            throw new RuntimeException((e));
-        }
-        return 0;
-    }
-
-    Call createCall(PrintWriter out, PrintWriter err, String... args);
-    default Call createCall(PrintStream out, PrintStream err, String... args) {
-        return createCall(writerFromStream(out), writerFromStream(err), args);
-    }
-
-    default PrintWriter writerFromStream(PrintStream stream) {
-        return new PrintWriter(new OutputStreamWriter(stream, StandardCharsets.UTF_8), true);
-
-    }
-
-    void run(Call call);
-
-    abstract class Call {
-        public final PrintWriter out;
-        public final PrintWriter err;
-        public final String[] args;
-
-        public Call(PrintWriter out, PrintWriter err, String[] args) {
-            this.out = out;
-            this.err = err;
-            this.args = args;
-        }
-        
-        abstract public DefaultRpcClient rpcClient();
-        abstract public DefaultRpcClient rpcClient(SSLContext sslContext);
-    }
-    
+interface JsonRpcClientTool {
     class ToolException extends RuntimeException {
         public final int resultCode;
 
