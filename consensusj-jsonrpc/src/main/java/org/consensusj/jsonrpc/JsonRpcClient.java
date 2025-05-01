@@ -157,14 +157,11 @@ public interface JsonRpcClient<T extends Type> extends JsonRpcTransport<T>, Auto
     }
 
     /**
-     * Default no-op implementation of {@link AutoCloseable#close()}. Classes should override when
+     * Default no-op implementation of {@link AutoCloseable#close()}. Subclasses can override if
      * they have something they need to close properly.
-     *
-     * @throws IOException if something happens during close
      */
     @Override
-    default void close() throws Exception {
-    }
+    default void close() {}
 
     T defaultType();
 

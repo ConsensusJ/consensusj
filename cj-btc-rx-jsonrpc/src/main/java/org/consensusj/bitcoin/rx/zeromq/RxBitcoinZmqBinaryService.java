@@ -82,13 +82,9 @@ public class RxBitcoinZmqBinaryService implements RxBlockchainBinaryService, Clo
     }
 
     @Override
-    public void close()  {
+    public void close() {
         blockService.close();
         txService.close();
-        try {
-            client.close();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        client.close();
     }
 }

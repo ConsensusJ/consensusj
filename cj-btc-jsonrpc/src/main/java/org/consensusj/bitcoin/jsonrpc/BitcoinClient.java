@@ -219,14 +219,17 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
     
     /**
      * Shutdown our thread pool, etc.
-     *
-     * @throws InterruptedException if one happens
      */
     @Override
-    public void close() throws InterruptedException {
+    public void close() {
         // TODO: See shutdownAndAwaitTermination method in the ExecutorService JavaDoc for how to correctly implement this.
         executorService.shutdown();
-        boolean successfullyTerminated = executorService.awaitTermination(10, TimeUnit.SECONDS);
+        boolean successfullyTerminated;
+        try {
+            successfullyTerminated = executorService.awaitTermination(10, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         if (!successfullyTerminated) {
             log.warn("timeout while closing");
         }
