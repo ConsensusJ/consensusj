@@ -12,10 +12,7 @@ import java.util.List;
  */
 public class GenericJsonRpcTool extends BaseJsonRpcTool {
     public final static String commandName = "jsonrpc";
-
-    // For a GraalVM command-line tool we must configure Java Logging in main
-    // before initializing this Logger object
-    private static Logger log;
+    private final static Logger log = LoggerFactory.getLogger(GenericJsonRpcTool.class);
 
     /**
      * main method for jsonrpc tool.
@@ -28,7 +25,6 @@ public class GenericJsonRpcTool extends BaseJsonRpcTool {
      */
     public static void main(String[] args) {
         JavaLoggingSupport.configure("org.consensusj.jsonrpc");
-        log = LoggerFactory.getLogger(GenericJsonRpcTool.class);
         GenericJsonRpcTool tool = new GenericJsonRpcTool();
         log.trace("About to run command object");
         int status = tool.run(System.out, System.err, args);
