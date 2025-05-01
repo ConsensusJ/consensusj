@@ -32,6 +32,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.spi.ToolProvider;
@@ -92,6 +93,7 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool, ToolProvider
     }
 
     public void run(CommonsCLICall call) {
+        log.info("argv[0]: {}", executableName().orElse("unknown"));
         List<String> args = call.line.getArgList();
         if (args.isEmpty()) {
             printError(call, "jsonrpc method required");
@@ -264,5 +266,11 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool, ToolProvider
             }
             return rpcClient(sslContext);
         }
+    }
+
+    static Optional<String> executableName () {
+        return ProcessHandle.current().info()
+                .command()
+                .map(c -> c.substring(c.lastIndexOf('/') + 1));
     }
 }
