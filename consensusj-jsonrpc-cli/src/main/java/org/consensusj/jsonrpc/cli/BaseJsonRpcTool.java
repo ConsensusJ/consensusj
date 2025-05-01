@@ -106,21 +106,23 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool, ToolProvider
             jsonRpcVersion = JsonRpcMessage.Version.V1;
         }
         SSLContext sslContext = sslContext(call.line);
-        DefaultRpcClient client = call.rpcClient(sslContext);
-        CliParameterParser parser = new CliParameterParser(jsonRpcVersion, client.getMapper());
-        JsonRpcRequest request = parser.parse(args);
-        JsonRpcResponse<JsonNode> response;
-        try {
-            response = client.sendRequestForResponseAsync(request).get();
-        } catch (ExecutionException ee) {
-            log.error("send execution exception: ", ee);
-            Throwable t = ee.getCause() != null ? ee.getCause(): ee;
-            throw new ToolException(1, t.getMessage());
-        } catch (InterruptedException e) {
-            log.error("send interrupted exception: ", e);
-            throw new ToolException(1, e.getMessage());
+        String resultForPrinting;
+        try (DefaultRpcClient client = call.rpcClient(sslContext)) {
+            CliParameterParser parser = new CliParameterParser(jsonRpcVersion, client.getMapper());
+            JsonRpcRequest request = parser.parse(args);
+            JsonRpcResponse<JsonNode> response;
+            try {
+                response = client.sendRequestForResponseAsync(request).get();
+            } catch (ExecutionException ee) {
+                log.error("send execution exception: ", ee);
+                Throwable t = ee.getCause() != null ? ee.getCause() : ee;
+                throw new ToolException(1, t.getMessage());
+            } catch (InterruptedException e) {
+                log.error("send interrupted exception: ", e);
+                throw new ToolException(1, e.getMessage());
+            }
+            resultForPrinting = formatResponse(response, client.getMapper());
         }
-        String resultForPrinting = formatResponse(response, client.getMapper());
         call.out.println(resultForPrinting);
     }
 
