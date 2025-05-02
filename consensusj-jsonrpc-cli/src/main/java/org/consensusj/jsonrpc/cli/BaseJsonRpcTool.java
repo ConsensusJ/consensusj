@@ -260,8 +260,14 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool, ToolProvider
                     }
                 } else if (configFile.exists()) {
                     // TOML Configuration File exists
-                    log.info("Reading 'default' server from: {}", configFile.path());
-                    JsonRpcServerConfigEntry config = configFile.readDefault();
+                    String configId;
+                    if (line.hasOption("c")) {
+                        configId = line.getOptionValue("c");
+                    } else {
+                        configId = "default";
+                    }
+                    log.info("Reading '{}' server from: {}", configId, configFile.path());
+                    JsonRpcServerConfigEntry config = configFile.readOne(configId);
                     uri = config.getUri();
                     rpcUser = config.getUsername();
                     rpcPassword = config.getPassword();
