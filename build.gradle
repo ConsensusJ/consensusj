@@ -46,7 +46,7 @@ subprojects {
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 
-        testImplementation("org.junit.jupiter:junit-jupiter:${junitJupiterVersion}")
+        testImplementation platform("org.junit:junit-bom:${junitJupiterVersion}")
         testImplementation "org.apache.groovy:groovy:${groovyVersion}"
         testImplementation("org.spockframework:spock-core:${spockVersion}") {
             exclude module: "groovy-all"
