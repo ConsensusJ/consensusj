@@ -1,7 +1,7 @@
-configurations {
-    integrationTestImplementation.extendsFrom testImplementation
-    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
-}
+//configurations {
+//    integrationTestImplementation.extendsFrom testImplementation
+//    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+//}
 
 dependencies {
     testImplementation project(':cj-btc-jsonrpc-gvy')
@@ -24,21 +24,21 @@ dependencies {
 }
 
 // Test Structure
-sourceSets {
-    integrationTest {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-        java {
-            srcDir 'src/integ/java'
-        }
-        groovy {
-            srcDir 'src/integ/groovy'
-        }
-        resources {
-            srcDir 'src/integ/resources'
-        }
-    }
-}
+//sourceSets {
+//    integrationTest {
+//        compileClasspath += sourceSets.main.output
+//        runtimeClasspath += sourceSets.main.output
+//        java {
+//            srcDir 'src/integ/java'
+//        }
+//        groovy {
+//            srcDir 'src/integ/groovy'
+//        }
+//        resources {
+//            srcDir 'src/integ/resources'
+//        }
+//    }
+//}
 
 def infuraApiKeyOrEmpty = System.env.INFURA_API_KEY ?: project.findProperty('infuraApiKey') ?: ''
 
@@ -51,12 +51,22 @@ test {
     }
 }
 
-tasks.register('integrationTest', Test) {
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    outputs.upToDateWhen { false }
-    testLogging.showStandardStreams = true
+testing {
+    suites {
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation project()
+            }
+        }
+    }
 }
+
+//tasks.register('integrationTest', Test) {
+//    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+//    classpath = sourceSets.integrationTest.runtimeClasspath
+//    outputs.upToDateWhen { false }
+//    testLogging.showStandardStreams = true
+//}
 
 tasks.register('regTest', Test) {
     description = 'Runs integration tests against Bitcoin Core in regtest mode'
