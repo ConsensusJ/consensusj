@@ -17,15 +17,16 @@ Released: in-progress
 * JeroMQ 0.6.0
 * SLF 2.0.16
 * Micronaut Platform 4.8.2
-* Groovy 4.0.27
-* commons-cli 1.9.0
+* Groovy 4.0.28
+* commons-cli 1.10.0
 
 === Build/Test Updates
 
 * Require JDK 17 or later to build
 * Gradle 8.14.3
-* Develocity (aka Gradle Enterprise) 3.19
+* Develocity (aka Gradle Enterprise) 4.1
 * JUnit Jupiter 5.11.4
+* ByteBuddy 1.17.6
 * Objenesis 3.4
 * GitHub `gradle.yml` JDK Matrix: Java 17, 21, 23
 * Asciidoctor Gradle Plugin 4.0.4
