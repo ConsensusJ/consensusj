@@ -77,8 +77,8 @@ class DynamicRpcClientSpec extends Specification {
         then:
         JsonRpcStatusException e = thrown()
         e.message == "Method not found"
-        //e.httpMessage == "Not Found"      // Java.net.http, HTTP/2, and HTTP/3 don't provide error reason text
-        e.httpCode == 404
+        //e.httpMessage == "Not Found"          // Java.net.http, HTTP/2, and HTTP/3 don't provide error reason text
+        e.httpCode == 200 || e.httpCode == 404  // Newer (e.g. v29.0) bitcoind returns 200, older returns 404
         e.jsonRpcCode == -32601
         e.response == null
         e.responseJson.result == null
