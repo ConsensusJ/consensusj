@@ -167,7 +167,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
                     // Create a (non-descriptor) wallet
                     ? createWallet(name, false, false, null, null, false, null, null)
                     : createWallet(name, false, false, null, null);
-        if (result.getWarning().isEmpty()) {
+        if (result.getWarning() == null || result.getWarning().isEmpty()) {
             log.info("Created REGTEST wallet: \"{}\"", result.getName());
         } else {
             log.warn("Warning creating REGTEST wallet \"{}\": {}", result.getName(), result.getWarning());
