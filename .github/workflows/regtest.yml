@@ -8,21 +8,20 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        java: [ '17', '21', '24' ]
-        distribution: ['temurin']
       fail-fast: false
-    name: ${{ matrix.os }} JDK ${{ matrix.java }}
+    name: RegTest ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
-    - name: Download Omni Core (Bitcoin Core superset)
-      run: ./test-download-omnicore-ubuntu.sh
-    - name: Set up Java
-      uses: actions/setup-java@v4
+    - name: Install Nix
+      uses: cachix/install-nix-action@v31
       with:
-        distribution: ${{ matrix.distribution }}
-        java-version: ${{ matrix.java }}
-        cache: 'gradle'
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      # pre-build the shell separately to avoid skewing the run time of the next
+      # step and have clear point of failure should the shell fail to build
+    - name: Pre-build devShell
+      run: nix build --no-link .#devShells.$(nix eval --impure --raw --expr 'builtins.currentSystem').default
     - name: Run RegTests
+      shell: 'nix develop -c bash -e {0}'
       run: ./test-run-regtest.sh
     - name: Upload RegTest results as artifact
       uses: actions/upload-artifact@v4
