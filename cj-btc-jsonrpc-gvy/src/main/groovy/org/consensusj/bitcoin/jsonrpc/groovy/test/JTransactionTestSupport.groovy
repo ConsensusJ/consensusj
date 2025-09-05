@@ -64,7 +64,7 @@ trait JTransactionTestSupport implements BTCTestSupport {
     }
 
     Transaction submitRPC(Transaction tx) {
-        Sha256Hash txid = client.sendRawTransaction(tx)
+        Sha256Hash txid = client.sendRawTransaction(tx, null, Coin.FIFTY_COINS)
         client.generateBlocks(1)
         Transaction sentTx = client.getRawTransaction(txid)
         RawTransactionInfo txinfo = client.getRawTransactionInfo(txid)

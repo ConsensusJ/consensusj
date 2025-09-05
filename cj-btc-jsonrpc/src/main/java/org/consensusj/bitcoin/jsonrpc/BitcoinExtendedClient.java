@@ -365,7 +365,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
         assert complete;
 
         String signedTxHex = signingResult.getHex();
-        Sha256Hash txid = sendRawTransaction(signedTxHex);
+        Sha256Hash txid = sendRawTransaction(signedTxHex, null, null);
 
         return txid;
     }

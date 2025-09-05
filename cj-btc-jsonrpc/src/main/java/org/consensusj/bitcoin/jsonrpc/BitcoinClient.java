@@ -91,8 +91,7 @@ import java.util.stream.Stream;
  * Coin balance = client.getBalance();
  * }</pre>
  *
- * This version is written to be compatible with Bitcoin Core 0.20 and later. If used with
- * Omni Core (an enhanced version of Bitcoin Core with Omni Protocol support) Omni Core 0.11.0 or later is required.
+ * This version is written to be compatible with Bitcoin Core v26.0 and later.
  * <p>
  * Note that according to <a href="https://github.com/bitcoin/bitcoin/issues/2960">Issue #2960: Support JSON-RPC 2.0</a> Bitcoin Core
  * does not correctly follow the JSON-RPC 2.0 specification.
@@ -743,12 +742,13 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @param tx The raw transaction
      * @param maxFeeRate  Reject transactions whose fee rate is higher than this value, expressed in BTC/kB.
      *                    Set to 0 to accept any fee rate.
+     * @param maxBurnAmount Any transaction containing an unspendable output with a value greater than maxburnamount will not be submitted.
      * @return SHA256 Transaction ID
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Sha256Hash sendRawTransaction(Transaction tx, Coin maxFeeRate) throws JsonRpcStatusException, IOException {
-        return send("sendrawtransaction", Sha256Hash.class, tx, maxFeeRate);
+    public Sha256Hash sendRawTransaction(Transaction tx, Coin maxFeeRate, Coin maxBurnAmount) throws JsonRpcStatusException, IOException {
+        return send("sendrawtransaction", Sha256Hash.class, tx, maxFeeRate, maxBurnAmount);
     }
 
     /**
@@ -758,12 +758,13 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @param hexTx The raw transaction as a hex-encoded string
      * @param maxFeeRate  Reject transactions whose fee rate is higher than this value, expressed in BTC/kB.
      *                    Set to 0 to accept any fee rate.
+     * @param maxBurnAmount Any transaction containing an unspendable output with a value greater than maxburnamount will not be submitted.
      * @return SHA256 Transaction ID
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Sha256Hash sendRawTransaction(String hexTx, Coin maxFeeRate) throws JsonRpcStatusException, IOException {
-        return send("sendrawtransaction", Sha256Hash.class, hexTx, maxFeeRate);
+    public Sha256Hash sendRawTransaction(String hexTx, Coin maxFeeRate, Coin maxBurnAmount) throws JsonRpcStatusException, IOException {
+        return send("sendrawtransaction", Sha256Hash.class, hexTx, maxFeeRate, maxBurnAmount);
     }
 
     /**
@@ -775,7 +776,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public Sha256Hash sendRawTransaction(Transaction tx) throws JsonRpcStatusException, IOException {
-        return sendRawTransaction(tx, (Coin) null);
+        return sendRawTransaction(tx, null, null);
     }
 
     /**
@@ -788,7 +789,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public Sha256Hash sendRawTransaction(String hexTx) throws JsonRpcStatusException, IOException {
-        return sendRawTransaction(hexTx, (Coin) null);
+        return sendRawTransaction(hexTx, null, null);
     }
 
     public AddressInfo getAddressInfo(Address address) throws JsonRpcStatusException, IOException {
