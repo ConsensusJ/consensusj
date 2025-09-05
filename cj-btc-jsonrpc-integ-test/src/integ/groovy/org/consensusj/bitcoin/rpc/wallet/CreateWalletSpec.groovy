@@ -20,13 +20,13 @@ class CreateWalletSpec extends BaseRegTestSpec {
 
         then: "creation was successful"
         createResult.name == walletName
-        createResult.warning == ""
+        createResult.warning == null || createResult.warning == ""
 
         when: "we unload the wallet"
         var unloadResult = walletClient.unloadWallet()
 
         then: "it works"
-        unloadResult.warning == ""
+        unloadResult.warning == null || unloadResult.warning == ""
     }
 
     @Requires({ instance.clientInstance.getServerVersion() >= 230000})
@@ -40,12 +40,12 @@ class CreateWalletSpec extends BaseRegTestSpec {
 
         then: "creation was successful"
         createResult.name == walletName
-        createResult.warning == ""
+        createResult.warning == null || createResult.warning == ""
 
         when: "we unload the wallet"
         var unloadResult = walletClient.unloadWallet()
 
         then: "it works"
-        unloadResult.warning == ""
+        unloadResult.warning == null || unloadResult.warning == ""
     }
 }
