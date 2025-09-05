@@ -13,12 +13,14 @@
         pkgs = import nixpkgs { inherit system; };
 
         # Override bitcoind to include Berkeley DB support
+        # This is currently broken on macOS/Darwin so devshell only works on Linux
         bitcoind = pkgs.bitcoind.override { withWallet = true; };
       in {
         packages.bitcoind = bitcoind;
 
         devShells.default = pkgs.mkShell {
           buildInputs = [
+            pkgs.jdk  # We're still building with ./gradlew, so install JDK not gradle
             bitcoind
           ];
           shellHook = ''
