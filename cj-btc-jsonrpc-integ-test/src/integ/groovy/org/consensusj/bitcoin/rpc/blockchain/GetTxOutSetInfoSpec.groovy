@@ -26,7 +26,7 @@ class GetTxOutSetInfoSpec extends BaseRegTestSpec
         txOutSetInfo.transactions > 0
         txOutSetInfo.txOuts >= txOutSetInfo.transactions
         txOutSetInfo.bogoSize > txOutSetInfo.txOuts * 50
-        txOutSetInfo.hashSerialized2 != null
+        txOutSetInfo.hashSerialized3 != null
         txOutSetInfo.diskSize >= 0
         txOutSetInfo.totalAmount > Coin.ZERO && txOutSetInfo.totalAmount <= Coin.valueOf(startHeight * 50, 0)
     }
