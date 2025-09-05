@@ -241,6 +241,6 @@ public class RegTestFundingSource implements FundingSource {
     }
 
     private Sha256Hash sendRawTransactionUnlimitedFees(String hexTx) throws IOException {
-        return client.sendRawTransaction(hexTx, Coin.ZERO);
+        return client.sendRawTransaction(hexTx, Coin.ZERO, Coin.FIFTY_COINS);
     }
 }
