@@ -748,7 +748,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public Sha256Hash sendRawTransaction(Transaction tx, Coin maxFeeRate) throws JsonRpcStatusException, IOException {
-        return send("sendrawtransaction", Sha256Hash.class, tx, maxFeeRate);
+        return send("sendrawtransaction", Sha256Hash.class, tx, maxFeeRate, Coin.FIFTY_COINS);  // hack: add maxburnamount
     }
 
     /**
@@ -763,7 +763,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public Sha256Hash sendRawTransaction(String hexTx, Coin maxFeeRate) throws JsonRpcStatusException, IOException {
-        return send("sendrawtransaction", Sha256Hash.class, hexTx, maxFeeRate);
+        return send("sendrawtransaction", Sha256Hash.class, hexTx, maxFeeRate, Coin.FIFTY_COINS); // hack: add maxburnamount
     }
 
     /**
