@@ -57,6 +57,7 @@ tasks.register('nativeCompile', Exec) {
             '-H:IncludeResources=logging.properties',
             '-H:EnableURLProtocols=http,https',
             '-H:+ReportUnsupportedElementsAtRuntime',
-            '-H:+ReportExceptionStackTraces'
+            '-H:+ReportExceptionStackTraces',
+            '-H:-CheckToolchain'  // Needed for running inside Nix sandbox
     ]
 }
