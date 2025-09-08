@@ -2,6 +2,7 @@ package org.consensusj.jsonrpc.cli;
 
 
 import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 
 /**
@@ -25,18 +26,19 @@ public class JsonRpcToolOptions extends Options {
                     .longOpt("V1")
                     .desc("Send '1.0' in the request 'jsonrpc' field as the JSON-RPC version")
                     .get())
-            .addOption(Option.builder("c")
-                    .longOpt("config-id")
-                    .desc("ID/nickname in config.toml (TOML header name)")
-                    .hasArg()
-                    .argName("url")
-                    .get())
-            .addOption(Option.builder("u")
-                    .longOpt("url")
-                    .desc("URL for the JSON-RPC endpoint")
-                    .hasArg()
-                    .argName("url")
-                    .get())
+            .addOptionGroup(new OptionGroup()
+                    .addOption(Option.builder("c")
+                            .longOpt("config-id")
+                            .desc("ID/nickname in ~/.config/jsonrpc/config.toml")
+                            .hasArg()
+                            .argName("config-id")
+                            .get())
+                    .addOption(Option.builder("u")
+                            .longOpt("url")
+                            .desc("URL for the JSON-RPC endpoint")
+                            .hasArg()
+                            .argName("url")
+                            .get()))
             .addOption(Option.builder()
                     .longOpt("add-truststore")
                     .desc("Additional truststore")

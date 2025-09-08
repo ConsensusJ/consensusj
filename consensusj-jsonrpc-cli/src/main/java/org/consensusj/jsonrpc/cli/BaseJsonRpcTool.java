@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.node.TextNode;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.help.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.help.OptionFormatter;
+import org.apache.commons.cli.help.TextHelpAppendable;
 import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.jsonrpc.CompositeTrustManager;
 import org.consensusj.jsonrpc.JsonRpcMessage;
@@ -46,16 +48,19 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool, ToolProvider
     private static final Logger log = LoggerFactory.getLogger(BaseJsonRpcTool.class);
     private static final String name = "jsonrpc";
     protected static final URI defaultUri = URI.create("http://localhost:8080/");
-    protected final String usage ="usage string";
-    protected final HelpFormatter formatter = new HelpFormatter();
+    protected final String usage ="jsonrpc [-c config-id | -u url] [option...] method [param...]";
+    protected final StringBuilder helpStringBuilder = new StringBuilder();
+    private final TextHelpAppendable helpSerializer = new TextHelpAppendable(helpStringBuilder);
+
+    protected final HelpFormatter formatter = HelpFormatter.builder()
+                    .setOptionFormatBuilder(OptionFormatter.builder().setLongOptPrefix("--"))
+                    .setShowSince(false)
+                    .setHelpAppendable(helpSerializer)
+                    .get();
     protected JsonRpcMessage.Version jsonRpcVersion = JsonRpcMessage.Version.V2;
     protected JsonRpcClientTool.OutputObject outputObject = OutputObject.RESULT;
     //protected JsonRpcClientTool.OutputFormat outputFormat = OutputFormat.JSON;
     protected final JsonRpcClientTool.OutputStyle outputStyle = OutputStyle.PRETTY;
-
-    public BaseJsonRpcTool() {
-        formatter.setLongOptPrefix("-");
-    }
 
     @Override
     public String name() {
@@ -172,12 +177,29 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool, ToolProvider
     }
 
     public void printHelp(PrintWriter pw, String usage) {
-        int leftPad = 4;
-        int descPad = 2;
-        int helpWidth = 120;
-        String header = "";
+        String header = """
+Examples:
+
+Call to 'default' server in 'config.toml':
+
+    jsonrpc getblockhash 1
+
+Get help for id 'main' in 'config.toml':
+
+    jsonrpc -c main getblockhash 1
+
+Call a server with a URL:
+
+     jsonrpc -u http://user:pass@localhost:18443 getblockhash 1
+""";
         String footer = "";
-        formatter.printHelp(pw, helpWidth, usage, header, options(), leftPad, descPad, footer, false);
+        try {
+            formatter.printHelp(usage, header, options(), footer, false);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String help = helpStringBuilder.toString();
+        pw.println(help);
     }
 
     public void printError(CommonsCLICall call, String str) {

@@ -32,8 +32,14 @@ class GenericJsonRpcToolSpec extends Specification {
 
         then:
         result.status() == 0
-        result.output().contains("usage string")
+        result.output() != null
         result.error().isEmpty()
+
+        when:
+        var output = result.output()
+
+        then:
+        output.contains("usage:")
     }
 
     def "Usage error (no args) via ToolProvider"() {
@@ -49,7 +55,7 @@ class GenericJsonRpcToolSpec extends Specification {
         then:
         result.status() == 1
         result.output().isEmpty()
-        result.error().contains("usage string")
+        result.error().contains("usage:")
     }
 
     def "Can create a Call object properly"() {

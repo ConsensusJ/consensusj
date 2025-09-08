@@ -22,7 +22,7 @@ class BitcoinCLIToolIntegrationSpec extends Specification {
         then:
         result.status() == 0
         result.output().length() > 0
-        result.output().contains("usage string")
+        result.output().contains("usage:")
         result.error().length() == 0
     }
 
