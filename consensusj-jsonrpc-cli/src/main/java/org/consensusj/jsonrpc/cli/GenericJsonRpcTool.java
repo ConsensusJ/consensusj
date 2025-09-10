@@ -8,11 +8,15 @@ import org.slf4j.LoggerFactory;
  * JSON-RPC Command-line tool with logging support.
  */
 public class GenericJsonRpcTool extends BaseJsonRpcTool {
-    public final static String commandName = "jsonrpc";
+    public final static String NAME = "jrpc";
+    /**
+     * @deprecated Use {@link #NAME}
+     */
+    public final static String commandName = NAME;
     private final static Logger log = LoggerFactory.getLogger(GenericJsonRpcTool.class);
 
     /**
-     * main method for jsonrpc tool.
+     * main method for {@code jrpc} tool.
      * <p>
      * See {@link JsonRpcToolOptions} for options and your server's documentation or help
      * for the methods and parameters. Users can use `-?` to get help on the tool or (usually) {@code help <command>} to get help
@@ -34,7 +38,7 @@ public class GenericJsonRpcTool extends BaseJsonRpcTool {
     }
 
     @Override public String name() {
-        return commandName;
+        return NAME;
     }
 
     @Override

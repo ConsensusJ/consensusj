@@ -8,13 +8,14 @@ import java.util.spi.ToolProvider
 
 class GenericJsonRpcToolSpec extends Specification {
     static final expectedURI = URI.create('http://bitcoinrpc:pass@localhost:8332/')
+    static final String TOOL_NAME = "jrpc"
     static final String[] dummyArgs = ['-url', expectedURI, 'getblockcount'].toArray()
     static final String[] helpArgs = ['--help'].toArray()
     static final String[] emptyArgs = new String[0];
 
     def "Can instantiate via ToolProvider"() {
         when:
-        def tool = ToolProvider.findFirst("jsonrpc").get()
+        def tool = ToolProvider.findFirst(TOOL_NAME).get()
 
         then:
         tool instanceof GenericJsonRpcTool
@@ -22,7 +23,7 @@ class GenericJsonRpcToolSpec extends Specification {
 
     def "Can Run -help via ToolProvider"() {
         when:
-        var tool = ToolProvider.findFirst("jsonrpc").get()
+        var tool = ToolProvider.findFirst(TOOL_NAME).get()
 
         then:
         tool instanceof GenericJsonRpcTool
@@ -44,7 +45,7 @@ class GenericJsonRpcToolSpec extends Specification {
 
     def "Usage error (no args) via ToolProvider"() {
         when:
-        var tool = ToolProvider.findFirst("jsonrpc").get()
+        var tool = ToolProvider.findFirst(TOOL_NAME).get()
 
         then:
         tool instanceof GenericJsonRpcTool

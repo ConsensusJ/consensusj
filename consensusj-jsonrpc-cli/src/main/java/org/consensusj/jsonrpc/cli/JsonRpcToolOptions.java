@@ -29,7 +29,7 @@ public class JsonRpcToolOptions extends Options {
             .addOptionGroup(new OptionGroup()
                     .addOption(Option.builder("c")
                             .longOpt("config-id")
-                            .desc("ID/nickname in ~/.config/jsonrpc/config.toml")
+                            .desc("ID/nickname in ~/.config/jrpc/config.toml")
                             .hasArg()
                             .argName("config-id")
                             .get())

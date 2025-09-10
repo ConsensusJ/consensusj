@@ -24,8 +24,8 @@ jobs:
           cache: 'gradle'
       - name: Build with Gradle
         run: ./gradlew nativeCompile --scan --info --stacktrace
-      - name: Upload jsonrpc tool as artifact
+      - name: Upload jrpc tool as artifact
         uses: actions/upload-artifact@v4
         with:
           name: jsonrpc-tool-${{ matrix.os }}-jdk${{ matrix.java-version }}
-          path: consensusj-jsonrpc-cli/build/jsonrpc
+          path: consensusj-jsonrpc-cli/build/jrpc

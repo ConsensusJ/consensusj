@@ -7,6 +7,11 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: in-progress
 
+=== consensusj-jsonrpc-cli
+
+* jsonrpc tool is now "jrpc" tool
+* `jsonrpc` binary has been renamed `jrpc`
+
 === Dependency Updates
 
 * bitcoinj 0.17

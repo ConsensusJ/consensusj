@@ -2,6 +2,8 @@ package org.consensusj.jsonrpc.cli.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.toml.TomlMapper;
+import org.consensusj.jsonrpc.cli.BaseJsonRpcTool;
+import org.consensusj.jsonrpc.cli.GenericJsonRpcTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +13,7 @@ import java.net.URI;
 import java.nio.file.Path;
 
 public class JsonRpcConfigFile {
-    private static final String APP_NAME = "jsonrpc";
+    private static final String APP_NAME = GenericJsonRpcTool.NAME;
     private static final String CONFIG_FILE_NAME = "config.toml";
     private static final Logger log = LoggerFactory.getLogger(JsonRpcConfigFile.class);
     protected final File configFile;
