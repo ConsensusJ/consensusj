@@ -46,9 +46,9 @@ import java.util.spi.ToolProvider;
  */
 public abstract class BaseJsonRpcTool implements JsonRpcClientTool, ToolProvider {
     private static final Logger log = LoggerFactory.getLogger(BaseJsonRpcTool.class);
-    private static final String name = "jsonrpc";
+    private static final String name = "jrpc";
     protected static final URI defaultUri = URI.create("http://localhost:8080/");
-    protected final String usage ="jsonrpc [-c config-id | -u url] [option...] method [param...]";
+    protected final String usage ="jrpc [-c config-id | -u url] [option...] method [param...]";
     protected final StringBuilder helpStringBuilder = new StringBuilder();
     private final TextHelpAppendable helpSerializer = new TextHelpAppendable(helpStringBuilder);
 
@@ -103,9 +103,9 @@ public abstract class BaseJsonRpcTool implements JsonRpcClientTool, ToolProvider
         log.info("argv[0]: {}", executableName().orElse("unknown"));
         List<String> args = call.line.getArgList();
         if (args.isEmpty()) {
-            printError(call, "jsonrpc method required");
+            printError(call, "JSON-RPC method required");
             printHelp(call.err, usage);
-            throw new ToolException(1, "jsonrpc method required");
+            throw new ToolException(1, "JSON-RPC method required");
         }
         if (call.line.hasOption("response")) {
             // Print full JsonRpcResponse as output
@@ -182,15 +182,15 @@ Examples:
 
 Call to 'default' server in 'config.toml':
 
-    jsonrpc getblockhash 1
+    jrpc getblockhash 1
 
 Get help for id 'main' in 'config.toml':
 
-    jsonrpc -c main getblockhash 1
+    jrpc -c main getblockhash 1
 
 Call a server with a URL:
 
-     jsonrpc -u http://user:pass@localhost:18443 getblockhash 1
+    jrpc -u http://user:pass@localhost:18443 getblockhash 1
 """;
         String footer = "";
         try {

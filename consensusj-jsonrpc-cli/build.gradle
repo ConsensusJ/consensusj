@@ -41,7 +41,7 @@ jar {
     }
 }
 
-// Compile a native image using GraalVM's native-image tool
+// Compile a native image named `jrpc` using GraalVM's native-image tool
 // Graal must be installed at $JAVA_HOME
 tasks.register('nativeCompile', Exec) {
     dependsOn jar
@@ -52,7 +52,7 @@ tasks.register('nativeCompile', Exec) {
             '-cp', "${-> configurations.nativeToolImplementation.asPath}", // Lazy configuration resolution
             '-jar', jar.archiveFile.get(),
             '-H:Path=build',
-            '-H:Name=jsonrpc',
+            '-H:Name=jrpc',
             '--initialize-at-build-time=com.fasterxml.jackson.annotation.JsonProperty$Access',
             '-H:IncludeResources=logging.properties',
             '-H:EnableURLProtocols=http,https',
