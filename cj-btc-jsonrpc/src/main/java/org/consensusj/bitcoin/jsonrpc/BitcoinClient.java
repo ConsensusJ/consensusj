@@ -15,6 +15,7 @@ import org.consensusj.bitcoin.json.pojo.BlockInfo;
 import org.consensusj.bitcoin.json.pojo.ChainTip;
 import org.consensusj.bitcoin.json.pojo.LoadWalletResult;
 import org.consensusj.bitcoin.json.pojo.MethodHelpEntry;
+import org.consensusj.bitcoin.json.pojo.MinimalDescriptor;
 import org.consensusj.bitcoin.json.pojo.NetworkInfo;
 import org.consensusj.bitcoin.json.pojo.Outpoint;
 import org.consensusj.bitcoin.json.pojo.RawTransactionInfo;
@@ -58,6 +59,7 @@ import java.net.SocketException;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -678,7 +680,15 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
     public void importPrivKey(ECKey privateKey, String label, boolean rescan) throws JsonRpcStatusException, IOException {
         send("importprivkey", Void.class, privateKey.getPrivateKeyEncoded(this.getNetwork()).toBase58(), label, rescan);
     }
-    
+
+    // Minimal descriptor support for RegTest mining (e.g. a single address, external)
+    public JsonNode importDescriptor(String descriptor, boolean active, Instant timeStamp, String label) throws JsonRpcStatusException, IOException {
+        MinimalDescriptor minimalDescriptor = new MinimalDescriptor(descriptor, false, timeStamp.getEpochSecond(), false);
+        List<MinimalDescriptor> descriptorList = List.of(minimalDescriptor);
+        log.warn("Descriptor list: {}", this.mapper.writeValueAsString(descriptorList));
+        return send("importdescriptors", JsonNode.class, descriptorList);
+    }
+
     /**
      * Creates a raw transaction spending the given inputs to the given destinations.
      *
