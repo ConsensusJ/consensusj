@@ -38,16 +38,9 @@ import java.util.concurrent.TimeUnit
 class WalletSendSpec extends BaseRegTestSpec {
     @Shared
     Wallet wallet
-    @Shared
-    PeerGroup peerGroup
 
     void setupSpec() {
         BriefLogFormatter.init()
-        wallet = Wallet.createDeterministic(network, ScriptType.P2PKH)
-        var store = new MemoryBlockStore(NetworkParameters.of(network).getGenesisBlock())
-        var chain = new BlockChain(network,wallet,store)
-        peerGroup = new PeerGroup(network, chain)
-        peerGroup.addWallet(wallet)
     }
 
     // TODO: Pull request to bitcoinj to make downloadBlockChain() work on 0-block RegTest?
@@ -67,8 +60,13 @@ class WalletSendSpec extends BaseRegTestSpec {
         newHeight >= 1
     }
 
-    def "Have the PeerGroup download the blockchain"() {
+    def "Create a bitcoinj Wallet and download the blockchain"() {
         when:
+        wallet = Wallet.createDeterministic(network, ScriptType.P2PKH)
+        var store = new MemoryBlockStore(NetworkParameters.of(network).getGenesisBlock())
+        var chain = new BlockChain(network,wallet,store)
+        PeerGroup peerGroup = new PeerGroup(network, chain)
+        peerGroup.addWallet(wallet)
         peerGroup.start()
         peerGroup.downloadBlockChain()
 
