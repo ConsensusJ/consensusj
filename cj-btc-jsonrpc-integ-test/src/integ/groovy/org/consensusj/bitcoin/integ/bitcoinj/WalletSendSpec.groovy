@@ -1,6 +1,7 @@
 package org.consensusj.bitcoin.integ.bitcoinj
 
 import groovy.util.logging.Slf4j
+import org.bitcoinj.base.BitcoinNetwork
 import org.bitcoinj.base.ScriptType
 import org.consensusj.bitcoin.json.pojo.WalletTransactionInfo
 import org.bitcoinj.core.TransactionBroadcast
@@ -22,6 +23,7 @@ import spock.lang.Shared
 import spock.lang.Stepwise
 
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 /**
  * Interoperability tests between a bitcoinj {@link Wallet} and a Bitcoin Core RPC server in RegTest mode.
@@ -45,6 +47,7 @@ class WalletSendSpec extends BaseRegTestSpec {
         var store = new MemoryBlockStore(NetworkParameters.of(network).getGenesisBlock())
         var chain = new BlockChain(network,wallet,store)
         peerGroup = new PeerGroup(network, chain)
+        peerGroup.addWallet(wallet)
     }
 
     // TODO: Pull request to bitcoinj to make downloadBlockChain() work on 0-block RegTest?
@@ -103,25 +106,33 @@ class WalletSendSpec extends BaseRegTestSpec {
     }
 
     def "Send from bitcoinj wallet back to the Bitcoin Core wallet using Wallet::sendCoins"() {
-        when: "we send coins from bitcoinj"
+        given: "A starting amount, an amount to send and a newly-created destination address"
         Coin startAmount = 10.btc
         Coin amount = 1.btc
         Address serverWalletAddress = client.getNewAddress()
+
+        when: "we send coins from bitcoinj"
         log.info("Sending ${amount} coins to ${serverWalletAddress}")
-        TransactionBroadcast broadcast = wallet.sendCoins(peerGroup, serverWalletAddress, amount).getBroadcast()
-        Transaction sentTx = broadcast.transaction()
+        SendRequest sendRequest = SendRequest.to(serverWalletAddress, amount)
+        TransactionBroadcast broadcast = wallet.sendCoins(sendRequest).getBroadcast()
+        Transaction tx = broadcast.transaction()    // Get the completed transaction
         // Wait for broadcast complete
-        log.info("Waiting for broadcast of {} to complete", sentTx)
-        // Wait for transaction to be marked as sent, since we are in Regtest mode we do not call `awaitRelayed()`
-        // as I'm not sure we'll get an INV message from our single peer. We can use JSON-RPC to ensure
+        log.info("Waiting for broadcast of {} to complete", tx)
+        // Wait for transaction to be acknowledged as sent, since we are in Regtest mode we do not call `awaitRelayed()`
+        // I don't thinik we'll get an INV message from our single peer. We can use JSON-RPC to ensure
         // the server has seen the transaction. See https://github.com/bitcoinj/bitcoinj/issues/2050
         broadcast.awaitSent().get()
-        log.warn("Broadcast complete, tx = ${sentTx}")
+        log.warn("Broadcast complete, tx = ${tx}")
 
         and: "wait for the unconfirmed transaction to be received by the server"
         log.info("Waiting for unconfirmed transaction to appear on server...")
-        waitForUnconfirmedTransaction(sentTx.getTxId())
+        waitForUnconfirmedTransaction(tx.txId)      // Using JSON-RPC, Wait for tx to show up on server as unconfirmed
         log.info("... unconfirmed transaction found on server.")
+        // This code will never execute since we are always on REGTEST, but is provided for completeness
+        if (wallet.network() != BitcoinNetwork.REGTEST) {
+            log.info("Waiting for indication the transaction was relayed")
+            broadcast.awaitRelayed();
+        }
 
         and: "a block is generated"
         log.info("Generating a block")
@@ -129,7 +140,7 @@ class WalletSendSpec extends BaseRegTestSpec {
 
         and: "Wait for the bitcoinj wallet to get confirmation of the transaction"
         // Wait for wallet to get confirmation of the transaction
-        CompletableFuture<TransactionConfidence> depthFuture = sentTx.getConfidence().getDepthFuture(1)
+        CompletableFuture<TransactionConfidence> depthFuture = tx.getConfidence().getDepthFuture(1)
         do {
             log.warn("Waiting for bitcoinj wallet to get a confirmation of the transaction...")
             sleep(100)
@@ -139,35 +150,51 @@ class WalletSendSpec extends BaseRegTestSpec {
         client.getReceivedByAddress(serverWalletAddress) == amount
 
         and: "the bitcoinj wallet's balance has decreased by amount + fee"
-        wallet.getBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE) == startAmount - amount - sentTx.getFee()
+        wallet.getBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE) == startAmount - amount - tx.getFee()
     }
 
-    def "Send from bitcoinj wallet back to the Bitcoin Core wallet using PeerGroup::broadcastTransaction"() {
-        when: "we create a transaction using bitcoinj"
+    def "Send from bitcoinj wallet back to the Bitcoin Core wallet using Wallet::sendTransaction"() {
+        given: "An amount to send and a newly-created destination address"
         Coin amount = 1.btc
         Address serverWalletAddress = client.getNewAddress()
+
+        when: "we create a transaction using bitcoinj"
+        // This could be done more simply using Wallet.sendCoins(), but this code shows how to build a transaction
+        // manually and then use a SendRequest to have the wallet complete (find UTXOs, create a change output) it.
         Transaction tx = new Transaction()
         tx.addOutput(amount, serverWalletAddress)
         SendRequest request = SendRequest.forTx(tx)
-        wallet.completeTx(request)  // Find an appropriate input, calculate fees, etc.
-        wallet.commitTx(request.tx)
 
-        and: "we send it using the PeerGroup"
+        and: "we complete and send it using the Wallet"
         log.info("Sending Tx: {}", tx)
-        TransactionBroadcast broadcast = peerGroup.broadcastTransaction(request.tx)
-        log.info("Waiting for completion of broadcast for txid: {}", request.tx.getTxId())
-        Transaction sentTx = broadcast.transaction()
-        // Wait for transaction to be marked as sent, since we are in Regtest mode we do not call `awaitRelayed()`
-        // as I'm not sure we'll get an INV message from our single peer. We can use JSON-RPC to ensure
+        // sendTransaction will complete, commit (store in the wallet), and send the transaction.
+        // sendTransaction returns a CompletableFuture that completes when the transaction is sent to
+        // the required number of peers (in this case 1.)
+        // Since we are in Regtest mode we do not call `awaitRelayed()` as we won't get an INV message
+        // from our single peer. Instead, we will use JSON-RPC to ensure
         // the server has seen the transaction. See https://github.com/bitcoinj/bitcoinj/issues/2050
-        broadcast.awaitSent().get()
-        waitForUnconfirmedTransaction(sentTx.txId)  // Wait for tx to show up on server as unconfirmed
+        log.info("Waiting for completion of broadcast for txid: {}", tx.getTxId())
+        TransactionBroadcast broadcast = wallet.sendTransaction(request).get(1, TimeUnit.SECONDS)
+        log.info("Peers were found and transaction was broadcast to them")
+        waitForUnconfirmedTransaction(tx.txId)      // Using JSON-RPC, Wait for tx to show up on server as unconfirmed
+        log.info("Unconfirmed transaction seen by server")
+        // This code will never execute since we are always on REGTEST, but is provided for completeness
+        if (wallet.network() != BitcoinNetwork.REGTEST) {
+            log.info("Waiting for indication the transaction was relayed")
+            broadcast.awaitRelayed();
+        }
+        var confidence = tx.getConfidence()
 
-        and: "a block is generated"
+        then: "we have a tx confidence object, showing depth of 0"
+        confidence.depthInBlocks == 0
+
+        when: "a block is generated"
         client.generateBlocks(1)
 
         then: "the new address has a balance of amount"
+        tx == broadcast.transaction()
         getReceivedByAddress(serverWalletAddress) == amount  // Verify serverWalletAddress balance
+        confidence.depthInBlocks == 1
     }
 
     def "Create a raw transaction using bitcoinj and send with `sendrawtransaction` RPC"() {
