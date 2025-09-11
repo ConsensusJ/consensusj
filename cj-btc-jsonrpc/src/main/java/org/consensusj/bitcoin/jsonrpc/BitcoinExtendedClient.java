@@ -1,6 +1,7 @@
 package org.consensusj.bitcoin.jsonrpc;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.bitcoinj.base.AddressParser;
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Network;
@@ -30,6 +31,7 @@ import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +51,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
     private static final BigInteger NotSoPrivatePrivateInt = new BigInteger(1, Hex.decode("180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19"));
     private static final String RegTestMiningAddressLabel = "RegTestMiningAddress";
     public static final String REGTEST_WALLET_NAME = "consensusj-regtest-wallet";
+    private final boolean useLegacyWallet = true;       // Use legacy wallet even on newer versions
     private boolean regTestWalletInitialized = false;
     private /* lazy */ Address regTestMiningAddress;
 
@@ -121,6 +124,18 @@ public class BitcoinExtendedClient extends BitcoinClient {
                 if (addressInfo.getIsmine() && !addressInfo.getIswatchonly() && addressInfo.getSolvable()) {
                     log.warn("Address with label {} is present in server-side wallet", RegTestMiningAddressLabel);
                     regTestMiningAddress = address;
+                } else if (getServerVersion() >= BITCOIN_CORE_VERSION_DESC_DEFAULT && !useLegacyWallet) {
+                    // Import known private key as descriptor wallet and rescan the blockchain for any transactions from
+                    // previous test runs, rescan shouldn't take too long on a typical RegTest chain
+                    // TODO: This pretty much works, but we have regTests that require LegacyWallet that need to be
+                    // made optional/conditional. There is also an issue with the ` confidence.depthInBlocks == 1` condition
+                    // in WalletSendSpec. We can enable this code when those are fixed.
+                    String wif = notSoPrivatePrivateKey.getPrivateKeyAsWiF(BitcoinNetwork.REGTEST);
+                    String descriptor = String.format("pkh(%s)#uv04hy66", wif);     // TODO: Fix hard-coded checksum
+                    log.warn("Adding private key descriptor {} for {} and rescanning chain", descriptor, RegTestMiningAddressLabel);
+                    JsonNode result = importDescriptor(descriptor, false, Instant.EPOCH, RegTestMiningAddressLabel);
+                    log.warn("importDescriptor result: {}", result);
+                    regTestMiningAddress = address;
                 } else {
                     // Import known private key with label and rescan the blockchain for any transactions from
                     // previous test runs, rescan shouldn't take too long on a typical RegTest chain
@@ -164,9 +179,10 @@ public class BitcoinExtendedClient extends BitcoinClient {
      */
     private void createRegTestWallet(int bitcoinCoreVersion, String name) throws JsonRpcStatusException, IOException {
         LoadWalletResult result = (bitcoinCoreVersion >= BITCOIN_CORE_VERSION_DESC_DEFAULT)
-                    // Create a (non-descriptor) wallet
-                    ? createWallet(name, false, false, null, null, false, null, null)
+                    // Use newer parameters if available, for older Bitcoin Core use older params
+                    ? createWallet(name, false, false, null, null, !useLegacyWallet, null, null)
                     : createWallet(name, false, false, null, null);
+
         if (result.getWarning() == null || result.getWarning().isEmpty()) {
             log.info("Created REGTEST wallet: \"{}\"", result.getName());
         } else {
