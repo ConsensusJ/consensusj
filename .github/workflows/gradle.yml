@@ -64,5 +64,7 @@ jobs:
         uses: cachix/install-nix-action@v31
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build Nix Package
+        run: nix build .#consensusj
       - name: Build in Nix development shell
         run: nix develop -c gradle buildCI installDist nativeCompile
