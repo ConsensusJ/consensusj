@@ -4,11 +4,17 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs = { self, nixpkgs }:
+  let
+      systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
+      forEachSystem = f: builtins.listToAttrs (map (system: {
+        name = system;
+        value = f system;
+      }) systems);
+  in {
+    devShells = forEachSystem(system:
       let
         pkgs = import nixpkgs { inherit system; };
 
@@ -16,9 +22,7 @@
         # This is currently broken on macOS/Darwin so regTest via devshell only works on Linux
         bitcoind = pkgs.bitcoind.override { withWallet = true; };
       in {
-        packages.bitcoind = bitcoind;
-
-        devShells.default = pkgs.mkShell {
+        default = pkgs.mkShell {
           buildInputs = [
             pkgs.jdk  # We're still building with ./gradlew, so install JDK not gradle
             bitcoind
@@ -29,5 +33,7 @@
             bitcoind --version | head -n1
           '';
         };
-      });
+      }
+    );
+  };
 }
