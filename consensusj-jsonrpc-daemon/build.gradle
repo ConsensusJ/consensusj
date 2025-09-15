@@ -21,6 +21,7 @@ graalvmNative {
     binaries {
         main {
             imageName = 'jsonrpc-echod'
+            buildArgs.add('-H:-CheckToolchain')
         }
     }
 }

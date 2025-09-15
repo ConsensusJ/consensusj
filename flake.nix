@@ -18,18 +18,23 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
+        graalvm = pkgs.graalvmPackages.graalvm-ce;
         # Override bitcoind to include Berkeley DB support
         # This is currently broken on macOS/Darwin so regTest via devshell only works on Linux
         bitcoind = pkgs.bitcoind.override { withWallet = true; };
       in {
         default = pkgs.mkShell {
-          buildInputs = [
-            pkgs.jdk  # We're still building with ./gradlew, so install JDK not gradle
+          buildInputs = with pkgs ; [
+            graalvm
+            (gradle_8.override {    # Gradle Nix package uses an internally-linked JDK
+                java = graalvm;        # Run Gradle with this JDK
+            })
             bitcoind
           ];
           shellHook = ''
+            # setup GRAALVM_HOME
+            export GRAALVM_HOME=${graalvm}
             echo "Welcome to ConsensusJ"
-            echo "  $(which bitcoind)"
             bitcoind --version | head -n1
           '';
         };

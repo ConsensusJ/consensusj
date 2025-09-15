@@ -58,6 +58,7 @@ tasks.register('nativeCompile', Exec) {
             '-H:Name=MathTool',
             '-H:+AllowIncompleteClasspath',
             '-H:+ReportUnsupportedElementsAtRuntime',
-            '-H:+ReportExceptionStackTraces'
+            '-H:+ReportExceptionStackTraces',
+            '-H:-CheckToolchain'
     ]
 }
