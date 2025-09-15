@@ -2,6 +2,8 @@
 
 == Main Release Process
 
+NOTE:: Procedure needs steps to update `nix-deps.json`.
+
 . Use Java 21 for official builds
 .. `sdk use 21-tem`
 .. `sdk use 21-graalce`
