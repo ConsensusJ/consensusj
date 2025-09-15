@@ -40,5 +40,50 @@
         };
       }
     );
+    packages = forEachSystem (system: {
+      consensusj =
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+          };
+          mainProgram = "jrpc";
+          graalvm = pkgs.graalvmPackages.graalvm-ce;
+          gradle = pkgs.gradle_8.override {
+            java = graalvm;  # Run Gradle with this JDK
+          };
+          self2 = pkgs.stdenv.mkDerivation (_finalAttrs: {
+            pname = "consensusj";
+            version = "0.7.0-SNAPSHOT";
+            meta = {
+              inherit mainProgram;
+            };
+
+            src = self;  # project root is source
+
+            nativeBuildInputs = [gradle pkgs.makeWrapper graalvm];
+
+            mitmCache = gradle.fetchDeps {
+              pkg = self2;
+              # update or regenerate this by running:
+              #  $(nix build .#consensusj.mitmCache.updateScript --print-out-paths)
+              data = ./nix-deps.json;
+            };
+
+            gradleBuildTask = "consensusj-jsonrpc-cli:nativeCompile";
+
+            gradleFlags = [ "--info --stacktrace" ];
+
+            # will run the gradleCheckTask (defaults to "test")
+            doCheck = false;
+
+            installPhase = ''
+              mkdir -p $out/bin
+              cp consensusj-jsonrpc-cli/build/${mainProgram} $out/bin/${mainProgram}
+              wrapProgram $out/bin/${mainProgram}
+            '';
+          });
+        in
+          self2;
+    });
   };
 }

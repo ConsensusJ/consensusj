@@ -61,6 +61,42 @@ This project is a mono-repo with many submodules/components that are published a
 
 Although the API is changing, binary packages are available on https://gitlab.com/ConsensusJ/consensusj/-/packages[GitLab.com]. You can download JARs or use the provided Maven coordinates to link to them directly from your `pom.xml` or `build.gradle`.
 
+=== Nix Package
+
+An experimental Nix Package which installs the `jrpc` JSON-RPC tool is now available. You can install a native-image of the tool with Nix, via:
+
+----
+nix profile install github:ConsensusJ/consensusj#consensusj
+----
+
+Once installed:
+----
+jrpc --help
+----
+
+Create `~/.config/jrpc/config.toml` with your local Bitcoin (or other JSON-RPC) servers.
+
+For example:
+----
+[default]
+bitcoin-network = "regtest"
+uri = "http://localhost:18443"
+username = "xx"
+password = "yy"
+
+[btcmain]
+bitcoin-network = "main"
+uri = "http://localhost:8332"
+username = "aa"
+password = "bb"
+----
+
+----
+jrpc help              # Get RPC help from default server
+jrpc -c btcmain help   # Get RPC help from 'btcmain' in 'config.toml'
+----
+
+
 ==== Maven
 
 Add the following to your `pom.xml`:
