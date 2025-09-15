@@ -55,7 +55,8 @@ tasks.register('nativeCompile', Exec) {
             '-H:Path=build',
             '-H:Name=cj-bitcoin-cli',
             '-H:EnableURLProtocols=http,https',
-            '-H:+ReportUnsupportedElementsAtRuntime'
+            '-H:+ReportUnsupportedElementsAtRuntime',
+            '-H:-CheckToolchain'
     ]
 }
 

@@ -23,6 +23,7 @@ graalvmNative {
             imageName = 'jbitcoind'
             //verbose = true
             configurationFileDirectories.from(file('src/main/graal'))
+            buildArgs.add('-H:-CheckToolchain')
         }
     }
 }
