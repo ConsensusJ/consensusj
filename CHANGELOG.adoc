@@ -16,7 +16,7 @@ Released: in-progress
 
 * bitcoinj 0.17
 * Jackson 2.18.2
-* RxJava 3.1.10
+* RxJava 3.1.12
 * Jakarta Annotation API 3.0.0
 * JavaMoney Moneta 1.4.4
 * JeroMQ 0.6.0
