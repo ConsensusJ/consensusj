@@ -42,11 +42,11 @@ jar {
 }
 
 // Compile a native image named `jrpc` using GraalVM's native-image tool
-// Graal must be installed at $JAVA_HOME
+// Graal must be installed at GRAALVM_HOME
 tasks.register('nativeCompile', Exec) {
     dependsOn jar
     workingDir = projectDir
-    executable = "${System.env.JAVA_HOME}/bin/native-image"
+    executable = "${System.env.GRAALVM_HOME}/bin/native-image"
     args = ['--verbose',
             '--no-fallback',
             '-cp', "${-> configurations.nativeToolImplementation.asPath}", // Lazy configuration resolution

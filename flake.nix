@@ -69,6 +69,9 @@
               data = ./nix-deps.json;
             };
 
+            preBuild = ''
+              export GRAALVM_HOME=${graalvm}
+            '';
             gradleBuildTask = "consensusj-jsonrpc-cli:nativeCompile";
 
             gradleFlags = [ "--info --stacktrace" ];
