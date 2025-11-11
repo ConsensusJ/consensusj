@@ -1094,10 +1094,10 @@
    "module": "sha256-PXZUQ95ys7+ZcY71Qzi3mPhP706bIFK4Jy9dQxZqWyU=",
    "pom": "sha256-9/N/7my7+Z1dBMeILoCsfjJQ3zZ6IXOLmBMaGH/Dbrs="
   },
-  "repo.maven.apache.org/maven2/io/reactivex/rxjava3#rxjava/3.1.10": {
-   "jar": "sha256-6fJW+egFVy3V/UWxQNs2DX3ERNDDgwSbLT1+vwXYSqs=",
-   "module": "sha256-rwV/vBEyR6Pp/cYOWU+dh2xPW8oZy4sb2myBGP9ixpU=",
-   "pom": "sha256-EeldzI+ywwumAH/f9GxW+HF2/lwwLFGEQThZEk1Tq60="
+  "repo.maven.apache.org/maven2/io/reactivex/rxjava3#rxjava/3.1.12": {
+   "jar": "sha256-GAikM+9V3MKWVSPlEquRSl0NcnIoomg+11WdfMz0Tjc=",
+   "module": "sha256-2jn02k/u133+ELmAnVyysvO0Ra6nG2nhUjKkJpiThzs=",
+   "pom": "sha256-chJrr7gKEse1WFJNCRkj5pYSODxHQay34Aw1ybBUazQ="
   },
   "repo.maven.apache.org/maven2/io/rest-assured#rest-assured-bom/5.5.0": {
    "pom": "sha256-9u3ZIGF2t7fUQFWg8ehpJ7ZUeH1jfVERPO6nOZtFh8w="
