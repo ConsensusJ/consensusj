@@ -1,6 +1,5 @@
 {
-  # This currently just adds a `bitcoind` for regTest testing
-  description = "in-progress devshell support for ConsensusJ";
+  description = "ConsensusJ devShell and package for jrpc";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
