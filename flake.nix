@@ -18,6 +18,7 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
+        jdk = pkgs.jdk21;
         graalvm = pkgs.graalvmPackages.graalvm-ce;
         # Override bitcoind to include Berkeley DB support
         # This is currently broken on macOS/Darwin so regTest via devshell only works on Linux
@@ -25,9 +26,10 @@
       in {
         default = pkgs.mkShell {
           buildInputs = with pkgs ; [
-            graalvm
+            zlib
+            jdk
             (gradle_8.override {    # Gradle Nix package uses an internally-linked JDK
-                java = graalvm;        # Run Gradle with this JDK
+                java = jdk;         # Run Gradle with this JDK
             })
             bitcoind
           ];
