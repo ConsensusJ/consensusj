@@ -48,9 +48,10 @@
             inherit system;
           };
           mainProgram = "jrpc";
+          jdk = pkgs.jdk21;
           graalvm = pkgs.graalvmPackages.graalvm-ce;
           gradle = pkgs.gradle_8.override {
-            java = graalvm;  # Run Gradle with this JDK
+            java = jdk;  # Run Gradle with this JDK
           };
           self2 = pkgs.stdenv.mkDerivation (_finalAttrs: {
             pname = "consensusj";
