@@ -14,6 +14,8 @@ import org.consensusj.bitcoinj.signing.RawTransactionSigningRequest
 import org.consensusj.bitcoinj.signing.SigningRequest
 import org.consensusj.bitcoinj.signing.TransactionInputData
 import org.consensusj.bitcoinj.signing.Utxo
+import spock.lang.Ignore
+import spock.lang.IgnoreIf
 import spock.lang.Shared
 
 import java.nio.ByteBuffer
@@ -23,6 +25,7 @@ import java.nio.ByteOrder
  * RegTest Integration test of WalletSigningService using WalletAppKitService
  */
 @Slf4j
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class WalletSigningServiceRegTestSpec extends BaseRegTestSpec {
     /** The WalletAppKitService that provides UTXOs for testing */
     @Shared WalletAppKitService appKitService

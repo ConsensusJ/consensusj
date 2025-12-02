@@ -5,6 +5,8 @@ import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.consensusj.bitcoin.jsonrpc.test.FundingSource
 import org.consensusj.bitcoin.jsonrpc.test.RegTestEnvironment
 import org.consensusj.bitcoin.jsonrpc.test.RegTestFundingSource
+import spock.lang.Ignore
+import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -12,6 +14,7 @@ import spock.lang.Specification
 /**
  * Basic tests of Extended Client
  */
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class BitcoinExtendedClientSpec extends Specification {
     @Shared
     BitcoinExtendedClient client
@@ -63,6 +66,7 @@ class BitcoinExtendedClientSpec extends Specification {
     def "Can create a funded address and sign a transaction locally using createSignedTransaction()"() {
         given:
         def fundingAddress = funder.createFundedAddress(10.btc)
+        // Not allowed on Descriptor Wallets
         def key = client.dumpPrivKey(fundingAddress)
         def destinationAddress = client.getNewAddress("destinationAddress")
 

@@ -5,6 +5,8 @@ import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.consensusj.bitcoin.json.pojo.AddressInfo
 import org.bitcoinj.base.Address
 import org.bitcoinj.crypto.ECKey
+import spock.lang.Ignore
+import spock.lang.IgnoreIf
 import spock.lang.Stepwise
 
 import static org.bitcoinj.base.BitcoinNetwork.REGTEST
@@ -13,6 +15,7 @@ import static org.bitcoinj.base.BitcoinNetwork.REGTEST
  * Functional test of importPrivKey
  */
 @Stepwise
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class ImportPrivKeySpec extends BaseRegTestSpec  {
     static final ECKey TEST_PRIVATE_KEY = new ECKey().decompress()
     static final Address TEST_ADDRESS = TEST_PRIVATE_KEY.toAddress(ScriptType.P2PKH, REGTEST)

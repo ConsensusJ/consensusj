@@ -12,6 +12,8 @@ import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.consensusj.bitcoinj.signing.SigningRequest
 import org.consensusj.bitcoinj.signing.TransactionInputData
 import org.consensusj.bitcoinj.signing.Utxo
+import spock.lang.Ignore
+import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -22,6 +24,7 @@ import java.nio.ByteBuffer
  */
 @Slf4j
 @Stepwise
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
     private final hexFormatter = HexFormat.of();
     

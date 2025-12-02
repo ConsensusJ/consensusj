@@ -2,6 +2,7 @@ package org.consensusj.bitcoin.rpc.blockchain
 
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.bitcoinj.base.Coin
+import spock.lang.IgnoreIf
 
 /**
  * Functional test of `gettxoutsetinfo` via {@link BitcoinClient#getTxOutSetInfo}
@@ -11,6 +12,7 @@ import org.bitcoinj.base.Coin
  * https://bitcoin.stackexchange.com/a/38998
  * https://bitcoin.stackexchange.com/a/24684
  */
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class GetTxOutSetInfoSpec extends BaseRegTestSpec
 {
     def "response fields are present and pass minimal consistency checks "() {

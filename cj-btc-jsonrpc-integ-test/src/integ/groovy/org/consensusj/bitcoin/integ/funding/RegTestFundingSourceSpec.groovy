@@ -6,11 +6,13 @@ import org.bitcoinj.base.Coin
 import org.bitcoinj.base.Sha256Hash
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.consensusj.bitcoin.jsonrpc.test.RegTestFundingSource
+import spock.lang.IgnoreIf
 import spock.lang.Shared
 
 /**
  * Test the fundingSource created by BaseRegTestSpec
  */
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class RegTestFundingSourceSpec extends BaseRegTestSpec {
     @Shared
     RegTestFundingSource source;

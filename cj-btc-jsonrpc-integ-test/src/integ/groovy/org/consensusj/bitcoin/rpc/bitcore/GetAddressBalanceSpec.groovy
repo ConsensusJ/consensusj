@@ -3,12 +3,14 @@ package org.consensusj.bitcoin.rpc.bitcore
 import org.bitcoinj.base.Coin
 import org.consensusj.bitcoin.json.pojo.bitcore.AddressBalanceInfo
 import org.consensusj.bitcoin.test.BaseRegTestSpec
+import spock.lang.IgnoreIf
 import spock.lang.Requires
 
 /**
  * Test of OmniCore Bitcore address index JSON-RPC method: {@code getaddressbalance}
  * If {@code help} reports address index is not available, these tests are ignored.
  */
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class GetAddressBalanceSpec extends BaseRegTestSpec {
 
     @Requires({ instance.isAddressIndexEnabled()})

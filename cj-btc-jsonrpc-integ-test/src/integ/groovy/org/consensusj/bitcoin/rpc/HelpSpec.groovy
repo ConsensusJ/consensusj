@@ -2,10 +2,12 @@ package org.consensusj.bitcoin.rpc
 
 import org.consensusj.bitcoin.json.pojo.MethodHelpEntry
 import org.consensusj.bitcoin.test.BaseRegTestSpec
+import spock.lang.IgnoreIf
 
 /**
  * Integration test of {@code help} RPC command
  */
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class HelpSpec extends BaseRegTestSpec {
 
     def "can call help"() {

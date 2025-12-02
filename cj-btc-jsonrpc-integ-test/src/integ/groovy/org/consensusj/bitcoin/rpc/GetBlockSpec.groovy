@@ -4,10 +4,12 @@ import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.consensusj.bitcoin.json.pojo.BlockInfo
 import org.bitcoinj.core.Block
 import org.bitcoinj.base.Sha256Hash
+import spock.lang.IgnoreIf
 
 /**
  * Spec for getBlock() and getBlockInfo()
  */
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class GetBlockSpec extends BaseRegTestSpec {
 
     def "Use RegTest mode to generate a block upon request"() {
@@ -22,13 +24,13 @@ class GetBlockSpec extends BaseRegTestSpec {
         blockCount == startHeight + 1
 
         and: "We have a txid if version > 10"
-        !version10 || version10 && result.size() == 1 && result[0] instanceof Sha256Hash
+        !version10 || version10 && result.size() == 1 && (result[0] instanceof Sha256Hash)
 
         when:
         def block = getBlock(blockCount)
 
         then:
-        block instanceof Block
+        (block instanceof Block)
 
         when:
         def blockInfo = getBlockInfo(block.hash)

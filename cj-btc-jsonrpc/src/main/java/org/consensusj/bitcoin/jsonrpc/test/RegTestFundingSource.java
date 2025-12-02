@@ -139,6 +139,7 @@ public class RegTestFundingSource implements FundingSource {
         Address address = client.getNewAddress();
         requestBitcoin(address, amount);
         ingredients.address = address;
+        // Not supported on Descriptor Wallets
         ingredients.privateKey = client.dumpPrivKey(address);
         ingredients.outPoints = client.listUnspentOutPoints(address);
         return ingredients;

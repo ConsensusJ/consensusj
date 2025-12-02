@@ -5,6 +5,8 @@ import org.bitcoinj.core.Transaction
 import org.bitcoinj.script.Script
 import org.bitcoinj.script.ScriptBuilder
 import org.bitcoinj.script.ScriptOpCodes
+import spock.lang.Ignore
+import spock.lang.IgnoreIf
 import spock.lang.Unroll
 
 import java.util.function.UnaryOperator
@@ -12,6 +14,7 @@ import java.util.function.UnaryOperator
 /**
  *  Create, send, record, and retrieve an OP_RETURN transaction
  */
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class OpReturnSpec extends TxTestBaseSpec {
     @Unroll
     def "create and send a bitcoinj OP_RETURN transaction using #methodName"(UnaryOperator<Transaction> submitMethod, String methodName) {
