@@ -22,6 +22,7 @@ graalvmNative {
         main {
             imageName = 'jsonrpc-echod'
             buildArgs.add('-H:-CheckToolchain')
+            buildArgs.add('-H:+SharedArenaSupport')
         }
     }
 }
