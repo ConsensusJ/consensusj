@@ -21,7 +21,7 @@ Released: in-progress
 * JavaMoney Moneta 1.4.4
 * JeroMQ 0.6.0
 * SLF 2.0.16
-* Micronaut Platform 4.10.1
+* Micronaut Platform 4.10.3
 * Groovy 4.0.28
 * commons-cli 1.10.0
 
