@@ -2,10 +2,12 @@ package org.consensusj.bitcoin.rpc.wallet
 
 import org.consensusj.bitcoin.json.pojo.BitcoinTransactionInfo
 import org.consensusj.bitcoin.test.BaseRegTestSpec
+import spock.lang.IgnoreIf
 
 /**
  * Basic tests of list transactions
  */
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class ListTransactionsSpec extends BaseRegTestSpec {
 
     def "list transactions (no args)"() {

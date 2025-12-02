@@ -51,7 +51,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
     private static final BigInteger NotSoPrivatePrivateInt = new BigInteger(1, Hex.decode("180cb41c7c600be951b5d3d0a7334acc7506173875834f7a6c4c786a28fcbb19"));
     private static final String RegTestMiningAddressLabel = "RegTestMiningAddress";
     public static final String REGTEST_WALLET_NAME = "consensusj-regtest-wallet";
-    private final boolean useLegacyWallet = true;       // Use legacy wallet even on newer versions
+    private final boolean useLegacyWallet = false;       // Use legacy wallet even on newer versions
     private boolean regTestWalletInitialized = false;
     private /* lazy */ Address regTestMiningAddress;
 

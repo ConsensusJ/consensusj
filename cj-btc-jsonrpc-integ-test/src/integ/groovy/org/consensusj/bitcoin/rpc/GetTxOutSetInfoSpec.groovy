@@ -4,10 +4,12 @@ import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.consensusj.bitcoin.json.pojo.TxOutSetInfo
 import org.bitcoinj.base.Sha256Hash
 import org.bitcoinj.base.Coin
+import spock.lang.IgnoreIf
 
 /**
  * Test Specification for getTxOutSetInfo
  */
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class GetTxOutSetInfoSpec extends BaseRegTestSpec {
     def "getTxOutSetInfo passes smoke test"() {
         when:

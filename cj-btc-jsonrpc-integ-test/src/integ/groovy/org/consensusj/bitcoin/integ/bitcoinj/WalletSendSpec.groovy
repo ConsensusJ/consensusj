@@ -19,6 +19,7 @@ import org.bitcoinj.wallet.SendRequest
 import org.bitcoinj.store.MemoryBlockStore
 import org.bitcoinj.utils.BriefLogFormatter
 import org.consensusj.bitcoin.test.BaseRegTestSpec
+import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -35,6 +36,7 @@ import java.util.concurrent.TimeUnit
  */
 @Slf4j
 @Stepwise
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class WalletSendSpec extends BaseRegTestSpec {
     @Shared
     Wallet wallet

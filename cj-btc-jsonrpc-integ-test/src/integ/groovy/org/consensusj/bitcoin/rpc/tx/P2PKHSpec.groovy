@@ -3,6 +3,8 @@ package org.consensusj.bitcoin.rpc.tx
 import org.bitcoinj.base.Coin
 import org.bitcoinj.core.Transaction
 import org.bitcoinj.script.ScriptBuilder
+import spock.lang.Ignore
+import spock.lang.IgnoreIf
 import spock.lang.Unroll
 
 import java.util.function.UnaryOperator
@@ -10,6 +12,7 @@ import java.util.function.UnaryOperator
 /**
  * Create, send and verify P2PKH transactions via P2P and RPC
  */
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class P2PKHSpec extends TxTestBaseSpec {
 
     @Unroll

@@ -14,7 +14,9 @@ import org.consensusj.bitcoin.jsonrpc.test.TestServers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,6 +32,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * Java RegTest that mines RegTest coins and sends them to a WalletAppKit
  */
+@EnabledIfSystemProperty(named = "regTestUseLegacyWallet", matches = "true")
 public class WalletAppKitRegTest {
     static final BitcoinNetwork network = BitcoinNetwork.REGTEST;
     static final private TestServers testServers = TestServers.getInstance();

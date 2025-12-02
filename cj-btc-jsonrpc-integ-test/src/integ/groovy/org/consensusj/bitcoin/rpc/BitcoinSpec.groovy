@@ -5,7 +5,10 @@ import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.bitcoinj.base.Coin
 import org.bitcoinj.base.LegacyAddress
 import org.bitcoinj.base.Sha256Hash
+import spock.lang.Ignore
+import spock.lang.IgnoreIf
 
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class BitcoinSpec extends BaseRegTestSpec {
     static final Coin testAmount = 2.btc
 
@@ -99,6 +102,7 @@ class BitcoinSpec extends BaseRegTestSpec {
         unspent.every { output -> output.address == destinationAddress }
     }
 
+    @Ignore("Not supported on Descriptor Wallets")
     def "We can get the correct private key for an address"() {
         when: "we create a new address and dump it's private key"
         def address = getNewAddress()

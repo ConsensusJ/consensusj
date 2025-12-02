@@ -4,6 +4,7 @@ import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.consensusj.bitcoin.jsonrpc.test.RegTestEnvironment
 import org.consensusj.bitcoin.jsonrpc.test.RegTestFundingSource
+import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -11,6 +12,7 @@ import spock.lang.Specification
 /**
  * Component-based test (no base test spec, required)
  */
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class FundingAndBlockChainEnvIntSpec extends Specification {
     @Shared BitcoinExtendedClient client
 

@@ -5,6 +5,8 @@ import org.consensusj.bitcoin.json.conversion.HexUtil
 import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.bitcoinj.base.Address
 import org.bitcoinj.base.Coin
+import spock.lang.Ignore
+import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -14,6 +16,7 @@ import java.nio.ByteBuffer
  * Tests of creating and sending raw transactions via RPC
  */
 @Stepwise
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class BitcoinRawTransactionSpec extends BaseRegTestSpec {
     final static Coin fundingAmount = 10.btc
     final static Coin sendingAmount = 1.btc

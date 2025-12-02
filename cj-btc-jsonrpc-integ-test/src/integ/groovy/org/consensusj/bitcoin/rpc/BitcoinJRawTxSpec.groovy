@@ -4,6 +4,8 @@ import org.consensusj.bitcoin.test.BaseRegTestSpec
 import org.bitcoinj.base.Address
 import org.bitcoinj.base.Coin
 import org.bitcoinj.core.Transaction
+import spock.lang.Ignore
+import spock.lang.IgnoreIf
 import spock.lang.Shared
 import spock.lang.Stepwise
 
@@ -16,6 +18,7 @@ import spock.lang.Stepwise
  *
  */
 @Stepwise
+@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class BitcoinJRawTxSpec extends BaseRegTestSpec {
     final static Coin fundingAmount = 10.btc
     final static Coin sendingAmount = 1.btc
@@ -60,6 +63,7 @@ class BitcoinJRawTxSpec extends BaseRegTestSpec {
         destinationAddress = getNewAddress("destinationAddress")
 
         when: "we get the signing key from the server"
+        // Not supported on Descriptor Wallets
         def key = dumpPrivKey(fundingAddress)
 
         and: "we create an signed bitcoinj transaction, spending from fundingAddress to destinationAddress"
