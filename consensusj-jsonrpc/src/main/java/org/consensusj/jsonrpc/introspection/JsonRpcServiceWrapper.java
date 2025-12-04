@@ -130,10 +130,14 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
     }
 
     // TODO: Create a mechanism to return a map with only the desired remotely-accessible methods in it.
+    // For server-side JSON-RPC we should migrate away from CompletableFuture to Virtual Threads
+    // We should have (or generate) a mapping from lower-case JSON-RPC method names to Java camel-case names,
+    // so this `reflect` method can use a List (or Map) data structure and see if Method::name is present
+    // in the list.
     /**
      * Use reflection/introspection to generate a map of methods.
      * Generally this is called to initialize a {@link Map} stored in a static field, so the reflection can be done
-     * during GraalVM compile-time..
+     * during GraalVM compile-time.
      * @param apiClass The service class to reflect/introspect
      * @return a map of method names to method objects
      */
