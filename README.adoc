@@ -471,7 +471,7 @@ The `#consensusj-exchange` module includes an adapter class `BaseXChangeExchange
 
 == Building and Running
 
-Before running `./gradlew` wrapper script you must have JDK 17 or later installed and your `JAVA_HOME` set correctly. To build native images you'll need a GraalVM JDK 17 or later with the `native-image` tool installed via `gu install native-image`.
+Before running `./gradlew` wrapper script you must have JDK 21 or later installed and your `JAVA_HOME` set correctly. To build native images you'll need a GraalVM JDK 21 or later and `GRAALVM_HOME` set correctly.
 
 NOTE: The first time you run the build all dependency JARS will be downloaded.
 
@@ -481,30 +481,19 @@ NOTE: The first time you run the build all dependency JARS will be downloaded.
 
 === Build JSON-RPC CLI tool
 
-To build the CLI executable jar:
+To build the JSON-RPC CLI tool native image `jrpc`:
 
     ./gradlew :consensusj-jsonrpc-cli:nativeCompile
 
 To run it and display a list of command line options:
 
-    consensusj-jsonrpc-cli/build/jsonrpc -?
-
-[#consensusj-jsonrpc-cli]
-=== Build Bitcoin CLI tool
-
-To build the CLI executable jar:
-
-    ./gradlew :cj-btc-cli:nativeCompile
-
-To run it and display a list of command line options:
-
-    cj-btc-cli/build/cj-btc-cli -?
+    consensusj-jsonrpc-cli/build/jrpc -?
 
 [#consensusj-jsonrpc-daemon]
 === Build and Run JSON-RPC Echo daemon
 
 To build and run from Gradle:
-    
+
     ./gradlew :consensusj-jsonrpc-daemon:run
 
 To build a native image and run:
