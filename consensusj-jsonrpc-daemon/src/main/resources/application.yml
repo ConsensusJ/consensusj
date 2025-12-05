@@ -1,3 +1,13 @@
 micronaut:
     application:
-        name: echod
+        name: jsonrpc-echod
+    server:
+        netty:
+            use-native-transport: true
+            listeners:
+                httpListener:
+                    port: 8080
+                unixListener:
+                    # Micronaut can listen/serve over UNIX domain sockets, but it expects HTTP protocol
+                    family: UNIX
+                    path: ${user.home}/jsonrpc-echod-http.socket
