@@ -22,7 +22,8 @@ graalvmNative {
         main {
             imageName = 'jsonrpc-echod'
             buildArgs.add('-H:-CheckToolchain')
-            buildArgs.add('-H:+SharedArenaSupport')
+            // SharedArenaSupport seems to require GraalVM 25
+            // buildArgs.add('-H:+SharedArenaSupport')
         }
     }
 }
