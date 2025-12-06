@@ -34,6 +34,7 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) < 0) {
 
 // JDK 17
     include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
+    include 'consensusj-jsonrpc-unix'           // UNIX Domain Sockets for JSONRPC
     include 'cj-bitcoinj-spock'                 // Spock tests/demos of basic bitcoinj capabilities
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
     include 'cj-btc-daemon'                     // Prototype Micronaut version of Bitcoin daemon
