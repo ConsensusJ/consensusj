@@ -74,7 +74,7 @@
             preBuild = ''
               export GRAALVM_HOME=${graalvm}
             '';
-            gradleBuildTask = "consensusj-jsonrpc-cli:nativeCompile";
+            gradleBuildTask = "consensusj-jrpc:nativeCompile";
 
             gradleFlags = [ "--info --stacktrace" ];
 
@@ -83,7 +83,7 @@
 
             installPhase = ''
               mkdir -p $out/bin
-              cp consensusj-jsonrpc-cli/build/${mainProgram} $out/bin/${mainProgram}
+              cp consensusj-jrpc/build/${mainProgram} $out/bin/${mainProgram}
               wrapProgram $out/bin/${mainProgram}
             '';
           });

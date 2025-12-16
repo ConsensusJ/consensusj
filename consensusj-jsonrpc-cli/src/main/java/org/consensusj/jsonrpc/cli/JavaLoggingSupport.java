@@ -23,9 +23,11 @@ public class JavaLoggingSupport {
     /**
      * Configure logging.
      * Should be one of the first things called in `main()`
+     * @param loggerName A name for the logger.  This should be a dot-separated name
+     *     and should normally be based on the package name or class name of the subsystem
      */
     public static void configure(String loggerName) {
-        InputStream inputStream = GenericJsonRpcTool.class.getResourceAsStream(loggingPropertiesResource);
+        InputStream inputStream = BaseJsonRpcTool.class.getResourceAsStream(loggingPropertiesResource);
         if (inputStream != null) {
             try {
                 LogManager.getLogManager().readConfiguration(inputStream);
@@ -48,8 +50,8 @@ public class JavaLoggingSupport {
     }
 
     /**
-     * Change log level (eg. as a result of `-log=level` command-line option)
-     * @param level j.u.logging log level
+     * Change log level (e.g. as a result of `-log=level` command-line option)
+     * @param level {@code java.util.logging} log level
      */
     public static void setLogLevel(Level level) {
         final Logger app = Logger.getLogger(loggerName);
