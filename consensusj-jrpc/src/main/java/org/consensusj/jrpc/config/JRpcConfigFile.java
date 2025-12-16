@@ -1,7 +1,10 @@
-package org.consensusj.jsonrpc.cli.config;
+package org.consensusj.jrpc.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.toml.TomlMapper;
+import org.consensusj.jrpc.JRpc;
+import org.consensusj.jsonrpc.cli.config.JsonRpcServerConfigEntry;
+import org.consensusj.jsonrpc.cli.config.XdgDataDir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,20 +13,20 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
 
-public class JsonRpcConfigFile {
-    private static final String APP_NAME = "deprecated";
+public class JRpcConfigFile {
+    private static final String APP_NAME = JRpc.NAME;
     private static final String CONFIG_FILE_NAME = "config.toml";
-    private static final Logger log = LoggerFactory.getLogger(JsonRpcConfigFile.class);
+    private static final Logger log = LoggerFactory.getLogger(JRpcConfigFile.class);
     protected final File configFile;
     protected final TomlMapper mapper;
 
-    public JsonRpcConfigFile(Path filePath) {
+    public JRpcConfigFile(Path filePath) {
         configFile = filePath.toFile();
         mapper = new TomlMapper();
     }
 
-    public static JsonRpcConfigFile fromDefaultConfigFile() {
-        return new JsonRpcConfigFile(XdgDataDir.getPath(APP_NAME).resolve(CONFIG_FILE_NAME));
+    public static JRpcConfigFile fromDefaultConfigFile() {
+        return new JRpcConfigFile(XdgDataDir.getPath(APP_NAME).resolve(CONFIG_FILE_NAME));
     }
 
     public Path path() {

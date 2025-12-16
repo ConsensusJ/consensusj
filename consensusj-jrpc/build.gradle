@@ -1,0 +1,65 @@
+/*
+ * CLI tool support library and `cj-bitcoin-cli` tool.
+ * `jrpc` tool is compiled to a native command-line tool with Graal `native-image`
+ */
+plugins {
+    id 'java'
+    id 'application'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+}
+
+configurations {
+    nativeToolImplementation.extendsFrom implementation
+}
+
+dependencies {
+    implementation project(':consensusj-jsonrpc-cli')
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${jacksonVersion}"
+
+    runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+    nativeToolImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+
+    testImplementation "org.apache.groovy:groovy:${groovyVersion}"
+
+    testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+}
+
+ext.moduleName = 'org.consensusj.jrpc'
+application {
+    mainClass = 'org.consensusj.jrpc.JRpc'
+    applicationName = 'jrpc'
+}
+
+jar {
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ JSON-RPC CLI Tool',
+                    'Automatic-Module-Name': moduleName,
+                    'Main-Class': application.mainClass,
+                    'Implementation-Version': archiveVersion.get()
+    }
+}
+
+// Compile a native image using GraalVM's native-image tool
+// GraalVM must be installed at GRAALVM_HOME
+tasks.register('nativeCompile', Exec) {
+    dependsOn jar
+    workingDir = projectDir
+    executable = "${System.env.GRAALVM_HOME}/bin/native-image"
+    args = [
+        '--verbose',
+        '--no-fallback',
+        '-cp', "${-> configurations.nativeToolImplementation.asPath}", // Lazy configuration resolution
+        '-jar', jar.archiveFile.get(),
+        '-H:Path=build',
+        "-H:Name=$application.applicationName",
+        '--initialize-at-build-time=com.fasterxml.jackson.annotation.JsonProperty$Access',
+        '-H:IncludeResources=logging.properties',
+        '-H:EnableURLProtocols=http,https',
+        '-H:+ReportUnsupportedElementsAtRuntime',
+        '-H:+ReportExceptionStackTraces',
+        '-H:-CheckToolchain'  // Needed for building inside Nix sandbox
+    ]
+}

@@ -42,7 +42,8 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) < 0) {
 
 if (JavaVersion.current().compareTo(JavaVersion.VERSION_21) >= 0) {
     System.err.println "Including JDK 21 modules because Java is ${JavaVersion.current()}"
-    include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library and tool
+    include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library
+    include 'consensusj-jrpc'                   // `jrpc` CLI Tool
     include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
 } else {
     System.err.println "Skipping JDK 21 modules, currently running Java ${JavaVersion.current()}"

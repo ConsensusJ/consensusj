@@ -1,4 +1,4 @@
-package org.consensusj.jsonrpc.cli
+package org.consensusj.jrpc
 
 import org.consensusj.jsonrpc.cli.test.CLITestSupport
 import spock.lang.Ignore
@@ -6,8 +6,8 @@ import spock.lang.Specification
 
 import java.util.spi.ToolProvider
 
-class GenericJsonRpcToolSpec extends Specification {
-    static final expectedURI = URI.create('http://bitcoinrpc:pass@localhost:8332/')
+class JRpcToolSpec extends Specification {
+    static final expectedURI = URI.create('http://bitcoinrpc:pass@localhost:18443/')
     static final String TOOL_NAME = "jrpc"
     static final String[] dummyArgs = ['-url', expectedURI, 'getblockcount'].toArray()
     static final String[] helpArgs = ['--help'].toArray()
@@ -18,7 +18,7 @@ class GenericJsonRpcToolSpec extends Specification {
         def tool = ToolProvider.findFirst(TOOL_NAME).get()
 
         then:
-        tool instanceof GenericJsonRpcTool
+        tool instanceof JRpc
     }
 
     def "Can Run -help via ToolProvider"() {
@@ -26,10 +26,10 @@ class GenericJsonRpcToolSpec extends Specification {
         var tool = ToolProvider.findFirst(TOOL_NAME).get()
 
         then:
-        tool instanceof GenericJsonRpcTool
+        (tool instanceof JRpc)
 
         when:
-        var result = CLITestSupport.runTool(tool as BaseJsonRpcTool, helpArgs)
+        var result = CLITestSupport.runTool(tool as JRpc, helpArgs)
 
         then:
         result.status() == 0
@@ -48,10 +48,10 @@ class GenericJsonRpcToolSpec extends Specification {
         var tool = ToolProvider.findFirst(TOOL_NAME).get()
 
         then:
-        tool instanceof GenericJsonRpcTool
+        (tool instanceof JRpc)
 
         when:
-        var result = CLITestSupport.runTool(tool as BaseJsonRpcTool, emptyArgs)
+        var result = CLITestSupport.runTool(tool as JRpc, emptyArgs)
 
         then:
         result.status() == 1
@@ -61,7 +61,7 @@ class GenericJsonRpcToolSpec extends Specification {
 
     def "Can create a Call object properly"() {
         given:
-        GenericJsonRpcTool tool = new GenericJsonRpcTool()
+        JRpc tool = new JRpc()
 
         when:
         def call = tool.createCall(System.out, System.err, dummyArgs)
@@ -72,14 +72,14 @@ class GenericJsonRpcToolSpec extends Specification {
         call.err instanceof PrintWriter
         call.args == dummyArgs
         client.getServerURI() == expectedURI
-        call instanceof BaseJsonRpcTool.CommonsCLICall
+        call instanceof JRpc.CommonsCLICall
     }
 
     @Ignore("Functional test")
     def "Can call a local Bitcoin server correctly"() {
         given:
-        GenericJsonRpcTool tool = new GenericJsonRpcTool()
-        
+        JRpc tool = new JRpc()
+
         when:
         int result = tool.run(System.out, System.err, dummyArgs)
 
@@ -90,7 +90,7 @@ class GenericJsonRpcToolSpec extends Specification {
     @Ignore("Functional test")
     def "Can call a local Bitcoin and get help correctly"() {
         given:
-        GenericJsonRpcTool tool = new GenericJsonRpcTool()
+        JRpc tool = new JRpc()
         String[] helpArgs = ['-url', expectedURI, 'help']
 
         when:
