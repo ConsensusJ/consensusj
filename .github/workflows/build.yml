@@ -50,6 +50,64 @@ jobs:
         name: artifacts-${{ matrix.os }}-${{ matrix.java }}
         path: build/artifacts
 
+  graalvm:
+    needs: validate_gradle_wrapper
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, macOS-15]
+        java-version: [ '21', '24' ]
+        distribution: [ 'graalvm-community' ]
+      fail-fast: false
+    name: ${{ matrix.os }} JDK ${{ matrix.java-version }}.${{ matrix.distribution }}
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+      - name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: ${{ matrix.distribution }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'gradle'
+      - name: Build with Gradle
+        run: ./gradlew nativeCompile --scan --info --stacktrace
+      - name: Upload jrpc tool as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jsonrpc-tool-${{ matrix.os }}-jdk${{ matrix.java-version }}
+          path: consensusj-jrpc/build/jrpc
+
+  regtest:
+    needs: validate_gradle_wrapper
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+      fail-fast: false
+    name: RegTest ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+        # pre-build the shell separately to avoid skewing the run time of the next
+        # step and have clear point of failure should the shell fail to build
+      - name: Pre-build devShell
+        run: nix build --no-link .#devShells.$(nix eval --impure --raw --expr 'builtins.currentSystem').default
+      - name: Run RegTests
+        shell: 'nix develop -c bash -e {0}'
+        run: ./test-run-regtest.sh
+      - name: Upload RegTest results as artifact
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: regtest-consensusj-jdk${{ matrix.java }}-${{ matrix.os }}-reports
+          path: |
+            cj-btc-jsonrpc-integ-test/build/reports/tests/regTest
+            cj-btc-cli/build/reports/tests/regTest
+
   build_nix:
     runs-on: ${{ matrix.os }}
     strategy:
