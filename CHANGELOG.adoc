@@ -33,7 +33,7 @@ Released: in-progress
 
 === Build/Test Updates
 
-* Require JDK 17 or later to build
+* Require JDK 21 or later to build
 * Gradle 8.14.3
 * Develocity (aka Gradle Enterprise) 4.1
 * JUnit Jupiter 5.11.4

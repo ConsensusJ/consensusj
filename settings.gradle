@@ -4,8 +4,8 @@ plugins {
 
 rootProject.name = 'consensusj'
 
-if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) < 0) {
-    throw new RuntimeException("JDK 17 or later is required to compile ConsensusJ")
+if (JavaVersion.current().compareTo(JavaVersion.VERSION_21) < 0) {
+    throw new RuntimeException("JDK 21 or later is required to compile ConsensusJ")
 }
 
 // JDK 9
@@ -35,11 +35,7 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) < 0) {
     include 'cj-btc-jsonrpc-integ-test'         // RPC-based integration tests of/using bitcoind
     include 'cj-btc-services'                   // bitcoinj-based service objects
 
-if (JavaVersion.current().compareTo(JavaVersion.VERSION_21) >= 0) {
-    System.err.println "Including JDK 21 modules because Java is ${JavaVersion.current()}"
+// JDK 21
     include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library
     include 'consensusj-jrpc'                   // `jrpc` CLI Tool
     include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
-} else {
-    System.err.println "Skipping JDK 21 modules, currently running Java ${JavaVersion.current()}"
-}
