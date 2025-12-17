@@ -126,3 +126,9 @@ jobs:
         run: nix build .#consensusj
       - name: Build in Nix development shell
         run: nix develop -c gradle buildCI installDist nativeCompile
+
+  all_green:
+    runs-on: ubuntu-24.04
+    needs: [validate_gradle_wrapper, build_gradle, graalvm, regtest, build_nix]
+    steps:
+      - run: echo "All upstream jobs passed"
