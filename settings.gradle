@@ -8,10 +8,8 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) < 0) {
     throw new RuntimeException("JDK 17 or later is required to compile ConsensusJ")
 }
 
-// JDK 8
-    include 'cj-bitcoinj-dsl-gvy'               // Groovy DSL for bitcoinj
-
 // JDK 9
+    include 'cj-bitcoinj-dsl-gvy'               // Groovy DSL for bitcoinj
     include 'cj-bitcoinj-util'                  // BlockUtil (and future stuff depending on only bitcoinj)
 
 // JDK 11
@@ -29,8 +27,6 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) < 0) {
     include 'cj-btc-json'                       // JSON <-> Java Object mapping
     include 'cj-btc-jsonrpc'                    // Bitcoin JSON-RPC client using bitcoinj-based types
     include 'cj-btc-jsonrpc-gvy'                // Bitcoin JSON-RPC client with Groovy dynamic method support
-    include 'cj-eth-jsonrpc'                    // Ethereum JSON-RPC client (experimental)
-    include 'cj-nmc-jsonrpc'                    // Namecoin JSON-RPC client (experimental)
 
 // JDK 17
     include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
