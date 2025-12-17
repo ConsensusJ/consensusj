@@ -7,10 +7,16 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: in-progress
 
-=== consensusj-jsonrpc-cli
+=== consensusj-jrpc
 
+* New Gradle submodule using Gradle `application` plugin
 * jsonrpc tool is now "jrpc" tool
 * `jsonrpc` binary has been renamed `jrpc`
+
+=== consensusj-jsonrpc-cli
+
+* `jsonrpc`/`jrpc` tool extracted to the `consensusj-jrpc` submodule
+* This module is now strictly a library of CLI utilities
 
 === Dependency Updates
 
