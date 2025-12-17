@@ -5,11 +5,11 @@ plugins {
 ext.moduleName = 'org.consensusj.bitcoinj.dsl.gvy'
 
 tasks.withType(JavaCompile).configureEach {
-    options.release = 8
+    options.release = 9
 }
 
 tasks.withType(GroovyCompile).configureEach {
-    targetCompatibility = 1.8
+    targetCompatibility = 9
 }
 
 dependencies {

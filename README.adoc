@@ -250,7 +250,7 @@ We have completed refactoring all modules into the new `org.consensusj` package 
 |Name |Min JDK |Java module name |Description
 
 |<<cj-bitcoinj-dsl-gvy,cj-bitcoinj-dsl-gvy>>
-| 8
+| 9
 |`org.consensusj.bitcoinj.dsl.groovy`
 |Groovy DSL support.
 
