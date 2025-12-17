@@ -2,8 +2,6 @@ plugins {
     id 'java-library'
 }
 
-ext.moduleName = 'org.consensusj.rx.zeromq'
-
 dependencies {
     api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
     api "org.zeromq:jeromq:0.6.0"
@@ -12,10 +10,8 @@ dependencies {
 }
 
 jar {
-    inputs.property("moduleName", moduleName)
     manifest {
         attributes  'Implementation-Title': 'ConsensusJ RxJava Wrapper for ZeroMQ ',
-                'Automatic-Module-Name': moduleName,
                 'Implementation-Version': archiveVersion.get()
     }
 }

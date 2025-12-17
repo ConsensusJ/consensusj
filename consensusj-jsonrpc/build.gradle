@@ -23,14 +23,11 @@ dependencies {
     testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 }
 
-ext.moduleName = 'org.consensusj.jsonrpc'
 def mainClassName = "org.consensusj.jsonrpc.introspection.sample.MathService"
 
 jar {
-    inputs.property("moduleName", moduleName)
     manifest {
         attributes  'Implementation-Title': 'ConsensusJ JSON-RPC Client',
-                'Automatic-Module-Name': moduleName,
                 'Main-Class': mainClassName,
                 'Implementation-Version': archiveVersion.get()
     }

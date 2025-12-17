@@ -27,8 +27,8 @@ dependencies {
     testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 }
 
-ext.moduleName = 'org.consensusj.jrpc'
 application {
+    mainModule = "org.consensusj.jrpc"
     mainClass = 'org.consensusj.jrpc.JRpc'
     applicationName = 'jrpc'
 }
@@ -36,7 +36,6 @@ application {
 jar {
     manifest {
         attributes  'Implementation-Title': 'ConsensusJ JSON-RPC CLI Tool',
-                    'Automatic-Module-Name': moduleName,
                     'Main-Class': application.mainClass,
                     'Implementation-Version': archiveVersion.get()
     }
