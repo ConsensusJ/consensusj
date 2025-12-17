@@ -5,7 +5,7 @@ on: [push, pull_request, merge_group]
 jobs:
   validate_gradle_wrapper:
     name: "Validate Gradle Wrapper"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: gradle/actions/wrapper-validation@v4
@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu-24.04, macOS-15, windows-2025]
         java: ['21', '24']
         distribution: ['temurin']
       fail-fast: false
