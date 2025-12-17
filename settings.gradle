@@ -15,7 +15,6 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_17) < 0) {
 // JDK 11
     include 'consensusj-analytics'              // Reactive analytics libraries
     include 'consensusj-currency'               // JavaMoney Currency Provider(s)
-    include 'consensusj-decentralized-id'       // W3C Decentralized ID library (in-process)
     include 'consensusj-exchange'               // JavaMoney Exchange Providers
     include 'consensusj-jsonrpc'                // JSON-RPC Java client
     include 'consensusj-jsonrpc-gvy'            // JSON-RPC Groovy client
