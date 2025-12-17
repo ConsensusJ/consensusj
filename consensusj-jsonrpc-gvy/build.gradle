@@ -2,8 +2,6 @@ plugins {
     id 'java-library'
 }
 
-ext.moduleName = 'org.consensusj.jsonrpc.groovy'
-
 tasks.withType(GroovyCompile).configureEach {
     targetCompatibility = 11
 }
@@ -19,10 +17,8 @@ dependencies {
 }
 
 jar {
-    inputs.property("moduleName", moduleName)
     manifest {
         attributes  'Implementation-Title': 'ConsensusJ JSON-RPC Groovy Support',
-                'Automatic-Module-Name': moduleName,
                 'Implementation-Version': archiveVersion.get()
     }
 }

@@ -19,15 +19,9 @@ dependencies {
     testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 }
 
-ext.moduleName = 'org.consensusj.jsonrpc.cli'
-// mainClassName is deprecated -- this JAR is transitioning to being a library only
-def mainClassName = "org.consensusj.jsonrpc.cli.GenericJsonRpcTool"
-
 jar {
     manifest {
         attributes  'Implementation-Title': 'ConsensusJ JSON-RPC CLI library',
-                    'Automatic-Module-Name': moduleName,
-                    'Main-Class': mainClassName,
                     'Implementation-Version': archiveVersion.get()
     }
 }

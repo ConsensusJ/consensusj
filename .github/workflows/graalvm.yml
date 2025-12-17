@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jsonrpc-tool-${{ matrix.os }}-jdk${{ matrix.java-version }}
-          path: consensusj-jsonrpc-cli/build/jrpc
+          path: consensusj-jrpc/build/jrpc

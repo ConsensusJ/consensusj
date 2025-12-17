@@ -2,6 +2,8 @@ ext.javadocSpec = {
     options.encoding = 'UTF-8'
     options.addBooleanOption 'html5', true
     options.addBooleanOption 'linksource', true             // include link to HTML source file
+    modularity.inferModulePath = false                      // Disable modular JavaDoc for now
+    exclude("module-info.java")
 
     def javaDocLinks = [
             "https://docs.oracle.com/en/java/javase/17/docs/api",

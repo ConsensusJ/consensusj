@@ -2,18 +2,14 @@ plugins {
     id 'java-library'
 }
 
-ext.moduleName = 'org.consensusj.rx.jsonrpc'
-
 dependencies {
     api project(':consensusj-jsonrpc')
     api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
 }
 
 jar {
-    inputs.property("moduleName", moduleName)
     manifest {
         attributes  'Implementation-Title': 'ConsensusJ JSON-RPC RxJava support',
-                'Automatic-Module-Name': moduleName,
                 'Implementation-Version': archiveVersion.get()
     }
 }
