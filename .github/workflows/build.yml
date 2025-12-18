@@ -1,6 +1,6 @@
 name: Build
 
-on: [push, pull_request, merge_group]
+on: [pull_request, merge_group, workflow_dispatch]
 
 jobs:
   validate_gradle_wrapper:
