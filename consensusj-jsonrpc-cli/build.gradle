@@ -11,7 +11,7 @@ tasks.withType(JavaCompile).configureEach {
 
 dependencies {
     api project(':consensusj-jsonrpc')
-    api 'commons-cli:commons-cli:1.10.0'
+    api 'commons-cli:commons-cli:1.11.0'
 
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${jacksonVersion}"
 
