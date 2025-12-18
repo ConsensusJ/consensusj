@@ -12,18 +12,18 @@ v0.7.0-alpha3
 :caution-caption: :fire:
 :warning-caption: :warning:
 
-image:https://github.com/ConsensusJ/consensusj/actions/workflows/gradle.yml/badge.svg?branch=master["GitHub Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions/workflows/gradle.yml"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml/badge.svg?branch=master["'GitHub Actions GraalVM Builds", link="https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/regtest.yml/badge.svg?branch=master["'GitHub Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions/workflows/regtest.yml"] image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
+image:https://github.com/ConsensusJ/consensusj/workflows/Build/badge.svg["GitHub Actions Build", link="https://github.com/ConsensusJ/consensusj/actions/workflows/build.yml"]
+image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
 
-
-Modular Bitcoin component libraries for Java, JVM languages, and Android. (Some of the core libraries, such as the base JSON-RPC client may be useful for other cryptocurrencies and even non-crypto-related applications.)
+Modular Bitcoin component libraries for Java, JVM languages, and Android. (Some of the core libraries, such as the base JSON-RPC client may be useful for other applications.)
 
 == Features
 
 === Core JSON-RPC Features
-* A *Java* JSON-RPC client for  _any_ JSON-RPC server.
-* A *Groovy* JSON-RPC client that can use _dynamic_ methods for scripting, experimentation and functional tests of _any_ JSON-RPC server.
-* `jrpc` - A JSON-RPC *command-line* client for testing and debugging JSON-RPC servers and applications. It can be natively compiled with https://www.graalvm.org[GraalVM]. It can launch, call the server and print output in _under 50 milliseconds_.
-* `jsonrpc-echod` - A *Micronaut*-based JSON-RPC "echo" *server*. It can be natively compiled using https://www.graalvm.org[GraalVM].
+* A *Java* JSON-RPC client for _any_ JSON-RPC server.
+* A *Groovy* JSON-RPC client that can use _dynamic_ methods for scripting, experimentation and functional testing of _any_ JSON-RPC server.
+* `jrpc`: A JSON-RPC *command-line* client for testing and debugging JSON-RPC servers and applications. It can be natively compiled with https://www.graalvm.org[GraalVM]. It can launch, call the server and print output in _under 50 milliseconds_.
+* `jsonrpc-echod`:  A *Micronaut*-based JSON-RPC *echo server*. It can be natively compiled using https://www.graalvm.org[GraalVM].
 
 === Bitcoin Features
 

@@ -26,10 +26,10 @@ Released: in-progress
 * Jakarta Annotation API 3.0.0
 * JavaMoney Moneta 1.4.4
 * JeroMQ 0.6.0
-* SLF 2.0.16
-* Micronaut Platform 4.10.4
+* SLF 2.0.17
+* Micronaut Platform 4.10.5
 * Groovy 4.0.28
-* commons-cli 1.10.0
+* commons-cli 1.11.0
 
 === Build/Test Updates
 
@@ -39,7 +39,8 @@ Released: in-progress
 * JUnit Jupiter 5.11.4
 * ByteBuddy 1.17.6
 * Objenesis 3.4
-* GitHub `gradle.yml` JDK Matrix: Java 17, 21, 23
+* Combine GitHub Actions into single `build.yml` workflow
+* GitHub `gradle.yml` JDK Matrix: Java 17, 21, 24
 * Asciidoctor Gradle Plugin 4.0.4
 
 == v0.7.0-alpha3
