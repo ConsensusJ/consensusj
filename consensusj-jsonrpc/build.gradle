@@ -43,19 +43,22 @@ test {
 
 // Compile a native image of the MathService tool sample using Graal's native-image tool
 // Graal must be installed at GRAALVM_HOME
-tasks.register('nativeCompile', Exec) {
-    dependsOn jar
-    workingDir = projectDir
-    executable = "${System.env.GRAALVM_HOME}/bin/native-image"
-    args = ['--verbose',
-            '--no-fallback',
-            '-cp', "${-> configurations.nativeSampleImplementation.asPath}", // Lazy configuration resolution
-            '-jar', jar.archiveFile.get(),
-            '-H:Path=build',
-            '-H:Name=MathTool',
-            '-H:+AllowIncompleteClasspath',
-            '-H:+ReportUnsupportedElementsAtRuntime',
-            '-H:+ReportExceptionStackTraces',
-            '-H:-CheckToolchain'
-    ]
-}
+
+// Comment-out time-consuming build of native MathTool.
+// TODO: Make a MathTool example? Or is this no longer relevant now that we have `jsonrpc-echod`?
+//tasks.register('nativeCompile', Exec) {
+//    dependsOn jar
+//    workingDir = projectDir
+//    executable = "${System.env.GRAALVM_HOME}/bin/native-image"
+//    args = ['--verbose',
+//            '--no-fallback',
+//            '-cp', "${-> configurations.nativeSampleImplementation.asPath}", // Lazy configuration resolution
+//            '-jar', jar.archiveFile.get(),
+//            '-H:Path=build',
+//            '-H:Name=MathTool',
+//            '-H:+AllowIncompleteClasspath',
+//            '-H:+ReportUnsupportedElementsAtRuntime',
+//            '-H:+ReportExceptionStackTraces',
+//            '-H:-CheckToolchain'
+//    ]
+//}
