@@ -63,8 +63,8 @@ flowchart TD
     consensusj-jsonrpc-gvy --> consensusj-jsonrpc
     consensusj-jsonrpc-cli --> Commons-CLI
     consensusj-jsonrpc-cli --> consensusj-jsonrpc
-    consensusj-jsonrpc-daemon --> consensusj-jsonrpc
-    consensusj-jsonrpc-daemon --> Micronaut
+    consensusj-jrpc-echod --> consensusj-jsonrpc
+    consensusj-jrpc-echod --> Micronaut
     consensusj-rx-jsonrpc --> consensusj-jsonrpc
     consensusj-rx-jsonrpc --> RxJava3
 

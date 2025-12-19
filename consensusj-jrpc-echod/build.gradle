@@ -20,7 +20,7 @@ micronaut {
 graalvmNative {
     binaries {
         main {
-            imageName = 'jsonrpc-echod'
+            imageName = 'jrpc-echod'
             buildArgs.add('-H:-CheckToolchain')
             // SharedArenaSupport seems to require GraalVM 25
             // buildArgs.add('-H:+SharedArenaSupport')

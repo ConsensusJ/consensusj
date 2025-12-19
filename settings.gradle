@@ -28,7 +28,7 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_21) < 0) {
     include 'cj-btc-jsonrpc-gvy'                // Bitcoin JSON-RPC client with Groovy dynamic method support
 
 // JDK 17
-    include 'consensusj-jsonrpc-daemon'         // JSON-RPC sample server
+    include 'consensusj-jrpc-echod'             // JSON-RPC echo server daemon
     include 'cj-bitcoinj-spock'                 // Spock tests/demos of basic bitcoinj capabilities
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
     include 'cj-btc-daemon'                     // Prototype Micronaut version of Bitcoin daemon
