@@ -1,7 +1,7 @@
 FROM oracle/graalvm-ce:1.0.0-rc14 as graalvm
 COPY . /home/app/jsonrpcdaemon
 WORKDIR /home/app/jsonrpcdaemon
-RUN native-image --no-server -cp build/libs/consensusj-jsonrpc-daemon-*-all.jar
+RUN native-image --no-server -cp build/libs/consensusj-jrpc-echod-*-all.jar
 
 FROM frolvlad/alpine-glibc
 EXPOSE 8080

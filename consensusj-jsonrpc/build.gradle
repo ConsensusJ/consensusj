@@ -45,7 +45,7 @@ test {
 // Graal must be installed at GRAALVM_HOME
 
 // Comment-out time-consuming build of native MathTool.
-// TODO: Make a MathTool example? Or is this no longer relevant now that we have `jsonrpc-echod`?
+// TODO: Make a MathTool example? Or is this no longer relevant now that we have `jrpc-echod`?
 //tasks.register('nativeCompile', Exec) {
 //    dependsOn jar
 //    workingDir = projectDir
