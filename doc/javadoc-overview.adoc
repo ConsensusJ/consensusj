@@ -7,8 +7,8 @@ Modules include:
 * Modular https://github.com/FasterXML/jackson[Jackson] JSON serializers and deserializers for *bitcoinj* and Bitcoin JSON-RPC objects
 * Bitcoin server libraries for *server-side JSON-RPC*.
 * A Groovy-language *Domain Specific Language* for scripting and testing with *bitcoinj*
-* **bitcoinj-daemon** - A framework for a Java-based implementation of bitcoind.
+* **walletd** - SPV wallet subset of bitcoind.
 * **bitcoinj-peerserver** - A web application that connects to the P2P network and streams events to a browser using the STOMP protocol over *WebSocket*.
-* Functional tests of bitcoind (and bitcoinj-daemon) JSON-RPC services, that run in https://bitcoinj.org/testing#regression-test-mode[regression test mode].
+* Functional tests of bitcoind (and walletd) JSON-RPC services, that run in https://bitcoinj.org/testing#regression-test-mode[regression test mode].
 
 This is consolidated JavaDoc for multiple JAR modules. See https://github.com/ConsensusJ/consensusj#modules[Modules] in the README for details.

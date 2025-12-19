@@ -74,7 +74,7 @@ WARNING: SSL cert validation temporarily disabled to support self-signed certifi
 $ cj-bitcoin-cli getblockcount
 ------------
 
-* getconnectioncount to `bitcoinj-daemon` running on its default port:
+* getconnectioncount to `walletd` running on its default port:
 +
 ------------
 $ cj-bitcoin-cli -rpcport=8080 getconnectioncount

@@ -15,9 +15,9 @@ import java.nio.file.Path;
  * @param dataDir Path to data directory
  * @param walletBaseName Basename of wallet files (basename-net.wallet and basename-net.spvchain)
  */
-@ConfigurationProperties("cjbitcoind.config")
+@ConfigurationProperties("walletd.config")
 public record BitcoinDaemonConfig(String networkId, int serverPort, @Nullable Path dataDir,
-                                  @Bindable(defaultValue = "CJBitcoinDaemon") String walletBaseName)
+                                  @Bindable(defaultValue = "walletd") String walletBaseName)
 {
     /**
      * @return Defaults to {@link BitcoinNetwork#MAINNET}

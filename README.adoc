@@ -33,10 +33,10 @@ Modular Bitcoin component libraries for Java, JVM languages, and Android. (Some 
 ** *bitcoinj* types <--> JSON (e.g. {bitcoinj-apidoc}/org/bitcoinj/core/Address.html[Address], {bitcoinj-apidoc}/org/bitcoinj/core/Sha256Hash.html[Sha256Hash], {bitcoinj-apidoc}/org/bitcoinj/core/Transaction.html[Transaction])
 ** Strongly-typed {cj-apidoc}/org/consensusj/bitcoin/json/pojo/package-summary.html[Java POJOs] <--> Bitcoin Core standard JSON (e.g. {cj-apidoc}/org/consensusj/bitcoin/json/pojo/BlockChainInfo.html[BlockChainInfo], {cj-apidoc}/org/consensusj/bitcoin/json/pojo/UnspentOutput.html[UnspentOutput], {cj-apidoc}/org/consensusj/bitcoin/json/pojo/ChainTip.html[ChainTip])
 * `jakarta.inject`-compatible Bitcoin server components for *server-side JSON-RPC*.
-* **cj-btc-daemon** - A *Micronaut*-based framework for a Java-based implementation of *bitcoind*. It can be natively compiled using https://www.graalvm.org[GraalVM].
+* `walletd`: A lightweight, SPV-based subset of *bitcoind*. It can be natively compiled using https://www.graalvm.org[GraalVM].
 * *cj-btc-cli* - a command line tool and supporting libraries for accessing the JSON-RPC API.
 * A Groovy-language *Domain Specific Language* for scripting and testing with *bitcoinj*
-* Functional tests of bitcoind (and bitcoinj-daemon) JSON-RPC services, that run in https://bitcoinj.org/testing#regression-test-mode[regression test mode].
+* Functional tests of bitcoind (and `walletd`) JSON-RPC services, that run in https://bitcoinj.org/testing#regression-test-mode[regression test mode].
 
 === JavaMoney and Exchange Support
 
@@ -213,7 +213,7 @@ We have completed refactoring all modules into the new `org.consensusj` package 
 | `org.consensusj.bitcoin.cli`
 | Command-line JSON-RPC client for Bitcoin
 
-|<<cj-btc-daemon,cj-btc-daemon>>
+|<<cj-btc-walletd,cj-btc-walletd>>
 | *17*
 | n/a
 |JSON-RPC Bitcoin server daemon prototype, using Micronaut.
@@ -366,7 +366,7 @@ Service-Layer object(s) that power the Daemon. These objects rely solely on http
 
 Built as a fat, executable jar, so it can be run with `java -jar`.
 
-[#cj-btc-daemon]
+[#cj-btc-walletd]
 ==== bitcoinj and SPV-based Bitcoin daemon
 
 A proof-of-concept, bitcoinj-SPV-based Bitcoin daemon using the https://micronaut.io[Micronaut] framework.
@@ -486,9 +486,9 @@ To build a native image and run:
 
 To build and run from Gradle:
 
-    ./gradlew :cj-btc-daemon:run --args="-cjbitcoind.config.network-id=testnet"
+    ./gradlew :cj-btc-walletd:run --args="-walletd.config.network-id=testnet"
 
 To build a native image and run:
 
-    ./gradlew :cj-btc-daemon:nativeCompile
-    ./cj-btc-daemon/build/native/nativeCompile/jbitcoind -cjbitcoind.config.network-id=testnet
+    ./gradlew :cj-btc-walletd:nativeCompile
+    ./cj-btc-walletd/build/native/nativeCompile/walletd -walletd.config.network-id=testnet

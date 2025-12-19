@@ -29,6 +29,6 @@ class ServerStopSpec extends Specification {
         String message = client.stop()
 
         then:
-        message == "cjbitcoind stopping"
+        message == "walletd stopping"
     }
 }
