@@ -16,7 +16,7 @@ class BitcoinDaemonConfigSpec extends Specification {
         var config = ctx.getBean(BitcoinDaemonConfig)
 
         then:
-        config.walletBaseName() == "CJBitcoinDaemon"
+        config.walletBaseName() == "walletd"
         config.networkId() == "regtest"
         config.network() == BitcoinNetwork.REGTEST
         config.serverPort() == 8080

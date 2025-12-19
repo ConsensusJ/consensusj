@@ -67,9 +67,9 @@ either **macOS** or **Linux**. You can verify with the following procedure:
 This is not working yet. Needs refinement:
 
 . `sdk use java 17.0.7-graalce`
-. `./gradlew -Pagent cj-btc-daemon:run --args="-cjbitcoind.config.network-id=regtest" &`
+. `./gradlew -Pagent cj-btc-walletd:run --args="-walletd.config.network-id=regtest" &`
 . `./run-all-methods.sh`
-. `./gradlew cj-btc-daemon:metadataCopy --task run --dir build/graal-native-image-metadata`
+. `./gradlew cj-btc-walletd:metadataCopy --task run --dir build/graal-native-image-metadata`
 . Commit changes
 
 

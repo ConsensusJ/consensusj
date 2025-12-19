@@ -31,7 +31,7 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_21) < 0) {
     include 'consensusj-jrpc-echod'             // JSON-RPC echo server daemon
     include 'cj-bitcoinj-spock'                 // Spock tests/demos of basic bitcoinj capabilities
     include 'cj-bitcoinj-dsl-js'                // JavaScript DSL for bitcoinj via Nashorn
-    include 'cj-btc-daemon'                     // Prototype Micronaut version of Bitcoin daemon
+    include 'cj-btc-walletd'                    // SPV Wallet Daemon using bitcoinj WalletAppKit
     include 'cj-btc-jsonrpc-integ-test'         // RPC-based integration tests of/using bitcoind
     include 'cj-btc-services'                   // bitcoinj-based service objects
 

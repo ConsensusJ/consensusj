@@ -20,7 +20,7 @@ micronaut {
 graalvmNative {
     binaries {
         main {
-            imageName = 'jbitcoind'
+            imageName = 'walletd'
             //verbose = true
             configurationFileDirectories.from(file('src/main/graal'))
             buildArgs.add('-H:-CheckToolchain')
