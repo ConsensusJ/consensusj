@@ -10,7 +10,7 @@ tasks.withType(JavaCompile).configureEach {
 micronaut {
     version micronautVersion
     runtime("netty")
-    testRuntime("spock2")
+    testRuntime("junit5")
     processing {
         incremental(true)
         annotations("org.consensusj.jsonrpc.daemon.*")
@@ -21,9 +21,14 @@ graalvmNative {
     binaries {
         main {
             imageName = 'jrpc-echod'
+            buildArgs.add('-H:+UnlockExperimentalVMOptions')
             buildArgs.add('-H:-CheckToolchain')
             // SharedArenaSupport seems to require GraalVM 25
             // buildArgs.add('-H:+SharedArenaSupport')
+        }
+        test {
+            buildArgs.add('-H:+UnlockExperimentalVMOptions')
+            buildArgs.add("--initialize-at-build-time=org.junit.platform.commons.logging")
         }
     }
 }
@@ -41,7 +46,7 @@ dependencies {
     runtimeOnly "org.yaml:snakeyaml"
     runtimeOnly "ch.qos.logback:logback-classic"
 
-    testImplementation project(':consensusj-jsonrpc-gvy')
+    // Tests are automatically configured by `micronaut.testRuntime("junit5")` above
 }
 
 application {
