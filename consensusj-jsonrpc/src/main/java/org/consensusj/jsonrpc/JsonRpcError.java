@@ -2,6 +2,7 @@ package org.consensusj.jsonrpc;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jspecify.annotations.Nullable;
 
 /**
  * JSON-RPC Error Object POJO
@@ -9,13 +10,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class JsonRpcError {
     private final int code;
     private final String message;
+    @Nullable
     private final Object data;
 
 
     @JsonCreator
     public JsonRpcError(@JsonProperty("code") int code,
                         @JsonProperty("message") String message,
-                        @JsonProperty("data") Object data) {
+                        @Nullable @JsonProperty("data") Object data) {
         this.code = code;
         this.message = message;
         this.data = data;
@@ -49,6 +51,7 @@ public class JsonRpcError {
         return message;
     }
     
+    @Nullable
     public Object getData() {
         return data;
     }

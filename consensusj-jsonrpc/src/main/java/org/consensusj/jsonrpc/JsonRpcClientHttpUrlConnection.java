@@ -136,8 +136,9 @@ public class JsonRpcClientHttpUrlConnection implements JsonRpcTransport<JavaType
                 // We got a JSON error response -- try to parse it as a JsonRpcResponse
                 JsonRpcResponse<Object> bodyJson = responseFromStream(errorStream, responseTypeFor(Object.class));
                 // Since this is an error at the JSON level, let's log it with `debug` level and
-                // let the higher-level software decide whether to log it as `error` or not.
-                log.debug("json error code: {}, message: {}", bodyJson.getError().getCode(), responseMessage);
+                // let the higher-level software decide whether to log it as `error` or not
+                String code = bodyJson.getError() != null ? Integer.toString(bodyJson.getError().getCode()) : "null";
+                log.debug("json error code: {}, message: {}", code, responseMessage);
                 throw new JsonRpcStatusException(responseCode, bodyJson);
             } else {
                 // No JSON, read response body as string

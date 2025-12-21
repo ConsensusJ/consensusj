@@ -1,5 +1,7 @@
 package org.consensusj.jsonrpc.introspection;
 
+import org.jspecify.annotations.Nullable;
+
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -23,6 +25,7 @@ public abstract class AbstractJsonRpcService implements JsonRpcServiceWrapper {
     }
 
     @Override
+    @Nullable
     public Method getMethod(String methodName) {
         return methods.get(methodName);
     }

@@ -16,4 +16,7 @@
 /**
  * Internal. Do not use. Not exported in {@code module-info}.
  */
+@NullMarked
 package org.consensusj.jsonrpc.internal;
+
+import org.jspecify.annotations.NullMarked;

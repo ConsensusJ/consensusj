@@ -16,4 +16,7 @@
 /**
  * MathService test/sample. This will be moved or removed.
  */
+@NullMarked
 package org.consensusj.jsonrpc.introspection.sample;
+
+import org.jspecify.annotations.NullMarked;
