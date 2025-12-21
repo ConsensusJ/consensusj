@@ -59,10 +59,10 @@ Although the API is changing, binary packages are available on https://gitlab.co
 
 === Nix Package
 
-An experimental Nix Package which installs the `jrpc` JSON-RPC tool is now available. You can install a native-image of the tool with Nix, via:
+An experimental Nix Package which includes the `jrpc` JSON-RPC tool is now available. You can install a native-image of the tool with Nix, via:
 
 ----
-nix profile install github:ConsensusJ/consensusj#consensusj
+nix profile install github:ConsensusJ/consensusj#consensusj-tools
 ----
 
 Once installed:
