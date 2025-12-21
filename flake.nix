@@ -1,5 +1,5 @@
 {
-  description = "ConsensusJ devShell and package for jrpc";
+  description = "ConsensusJ devShell and consensusj-tools (jrpc for now) package";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/release-25.11";
@@ -42,7 +42,7 @@
       }
     );
     packages = forEachSystem (system: {
-      consensusj =
+      consensusj-tools =
         let
           pkgs = import nixpkgs {
             inherit system;
@@ -54,7 +54,7 @@
             java = jdk;  # Run Gradle with this JDK
           };
           self2 = pkgs.stdenv.mkDerivation (_finalAttrs: {
-            pname = "consensusj";
+            pname = "consensusj-tools";
             version = "0.7.0-SNAPSHOT";
             meta = {
               inherit mainProgram;
@@ -67,7 +67,7 @@
             mitmCache = gradle.fetchDeps {
               pkg = self2;
               # update or regenerate this by running:
-              #  $(nix build .#consensusj.mitmCache.updateScript --print-out-paths)
+              #  $(nix build .#consensusj-tools.mitmCache.updateScript --print-out-paths)
               data = ./nix-deps.json;
             };
 

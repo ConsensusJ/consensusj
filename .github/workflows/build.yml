@@ -125,7 +125,7 @@ jobs:
       - name: Build in Nix development shell
         run: nix develop -c gradle buildCI installDist consensusj-jrpc-echod:nativeTest nativeCompile
       - name: Build Nix Package
-        run: nix build .#consensusj
+        run: nix build .#consensusj-tools
 
   all_green:
     runs-on: ubuntu-24.04
