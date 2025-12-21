@@ -5,17 +5,10 @@ plugins {
     id "net.ltgt.errorprone" version "4.3.0"
 }
 
-configurations {
-    nativeSampleImplementation.extendsFrom implementation
-}
-
 dependencies {
     api 'org.jspecify:jspecify:1.0.0'
     api "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-
-    // Add SLF4J runtime adapter for JDK logging for GraalVM native-image build of MathService/Tool
-    nativeSampleImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 
     testImplementation project(':cj-btc-jsonrpc')
 
@@ -31,8 +24,6 @@ dependencies {
     errorprone "com.google.errorprone:error_prone_core:2.42.0"
 }
 
-def mainClassName = "org.consensusj.jsonrpc.introspection.sample.MathService"
-
 tasks.withType(JavaCompile) {
     options.errorprone {
         disable("FunctionalInterfaceMethodChanged")  // TODO: Fix this in JsonRpcClientJavaNet
@@ -44,7 +35,6 @@ tasks.withType(JavaCompile) {
 jar {
     manifest {
         attributes  'Implementation-Title': 'ConsensusJ JSON-RPC Client',
-                'Main-Class': mainClassName,
                 'Implementation-Version': archiveVersion.get()
     }
 }
@@ -56,25 +46,3 @@ test {
         logger.lifecycle('    ' + descriptor.getName())
     }
 }
-
-// Compile a native image of the MathService tool sample using Graal's native-image tool
-// Graal must be installed at GRAALVM_HOME
-
-// Comment-out time-consuming build of native MathTool.
-// TODO: Make a MathTool example? Or is this no longer relevant now that we have `jrpc-echod`?
-//tasks.register('nativeCompile', Exec) {
-//    dependsOn jar
-//    workingDir = projectDir
-//    executable = "${System.env.GRAALVM_HOME}/bin/native-image"
-//    args = ['--verbose',
-//            '--no-fallback',
-//            '-cp', "${-> configurations.nativeSampleImplementation.asPath}", // Lazy configuration resolution
-//            '-jar', jar.archiveFile.get(),
-//            '-H:Path=build',
-//            '-H:Name=MathTool',
-//            '-H:+AllowIncompleteClasspath',
-//            '-H:+ReportUnsupportedElementsAtRuntime',
-//            '-H:+ReportExceptionStackTraces',
-//            '-H:-CheckToolchain'
-//    ]
-//}
