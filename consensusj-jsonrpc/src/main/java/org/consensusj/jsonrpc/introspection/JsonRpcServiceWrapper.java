@@ -6,6 +6,7 @@ import org.consensusj.jsonrpc.JsonRpcException;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcService;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,8 +55,9 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
     /**
      * Get a {@link Method} object for a named JSON-RPC method
      * @param methodName the name of the method to call
-     * @return method handle
+     * @return method handle (or {@code null} if not found)
      */
+    @Nullable
     Method getMethod(String methodName);
 
     /**

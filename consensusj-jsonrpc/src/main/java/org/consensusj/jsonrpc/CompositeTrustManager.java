@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,7 +145,7 @@ public class CompositeTrustManager implements X509TrustManager {
         return createTrustManager(null);
     }
 
-    private static X509TrustManager createTrustManager(InputStream trustStream) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+    private static X509TrustManager createTrustManager(@Nullable InputStream trustStream) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
         // Now get trustStore
         KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
 

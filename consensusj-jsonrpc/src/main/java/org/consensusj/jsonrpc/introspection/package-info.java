@@ -16,4 +16,7 @@
 /**
  * Support classes for GraalVM-compatible build-time introspection.
  */
+@NullMarked
 package org.consensusj.jsonrpc.introspection;
+
+import org.jspecify.annotations.NullMarked;

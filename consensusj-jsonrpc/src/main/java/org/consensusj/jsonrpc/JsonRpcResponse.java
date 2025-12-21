@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.NullNode;
 import org.consensusj.jsonrpc.internal.NumberStringSerializer;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,14 +21,16 @@ public class JsonRpcResponse<RSLT> {
     private static final Logger log = LoggerFactory.getLogger(JsonRpcResponse.class);
     private final String          jsonrpc;   // version
     private final String          id;
+    @Nullable
     private final RSLT            result;
+    @Nullable
     private final JsonRpcError    error;
 
     @JsonCreator
     public JsonRpcResponse(@JsonProperty("jsonrpc")  String jsonrpc,
                             @JsonProperty("id")      String id,
-                            @JsonProperty("result")  RSLT result,
-                            @JsonProperty("error")   JsonRpcError error) {
+                            @Nullable @JsonProperty("result")  RSLT result,
+                            @Nullable @JsonProperty("error")   JsonRpcError error) {
         if ((error == null && result == null) ||
             (error != null && result != null && !(result instanceof NullNode))) {
             log.warn("non-compliant response: (error, result) both null or both set.");
@@ -60,11 +63,13 @@ public class JsonRpcResponse<RSLT> {
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Nullable
     public RSLT getResult() {
         return result;
     }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Nullable
     public JsonRpcError getError() {
         return error;
     }

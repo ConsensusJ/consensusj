@@ -34,23 +34,21 @@ public class MathService extends AbstractJsonRpcService {
         super(methods);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         JsonRpcService service = new MathService();
         JsonRpcRequest req = new JsonRpcRequest("add", Arrays.asList(1, 2));
-        JsonRpcResponse<Object> response = null;
-        try {
-            response = service.call(req).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
+        JsonRpcResponse<Object> response =  service.call(req).get();
+
         Integer sum = (Integer) response.getResult();
-        JsonRpcError error = response.getError();
-        if (sum == null) {
-            System.err.println("Error = " + response.getError().getMessage());
+        if (sum != null) {
+            System.out.println("Sum is: " + sum);
+        } else {
+            String message = response.getError() != null
+                    ? response.getError().getMessage()
+                    : "error was null";
+            System.err.println("Error = " + message);
             System.exit(-1);
         }
-        System.out.println("Sum is: " + sum);
     }
 
     public CompletableFuture<Integer> add(Integer a, Integer b) {

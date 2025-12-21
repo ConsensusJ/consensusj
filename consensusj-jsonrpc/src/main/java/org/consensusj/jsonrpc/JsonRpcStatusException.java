@@ -1,5 +1,7 @@
 package org.consensusj.jsonrpc;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * JSON-RPC returned HTTP status other than 200 (and unfortunately also sometimes when their is response.error)
  * Additional information is usually in JSON-RPC response
@@ -14,6 +16,7 @@ public class JsonRpcStatusException extends JsonRpcException {
     /**
      * Http response body as a string. Null if not-available (check deserialized JSON in this case)
      */
+    @Nullable
     public final String response;
 
     /**
@@ -23,6 +26,7 @@ public class JsonRpcStatusException extends JsonRpcException {
      * or the result type of the failed request depending upon where and how the exception was
      * created.
      */
+    @Nullable
     public final JsonRpcResponse<?> responseJson;
 
     /**
@@ -35,7 +39,7 @@ public class JsonRpcStatusException extends JsonRpcException {
      * @param responseBody responseBody body as string (null if JSON available)
      * @param responseBodyJson responseBody body as Json Map (null if JSON not-available)
      */
-    public JsonRpcStatusException(String message, int httpCode, String httpMessage, int jsonRPCCode, String responseBody, JsonRpcResponse<?> responseBodyJson ) {
+    public JsonRpcStatusException(String message, int httpCode, String httpMessage, int jsonRPCCode, @Nullable String responseBody, @Nullable JsonRpcResponse<?> responseBodyJson ) {
         super(message);
         this.httpCode = httpCode;
         this.httpMessage = httpMessage;
@@ -47,7 +51,7 @@ public class JsonRpcStatusException extends JsonRpcException {
     /**
      * Same as canonical, but without the {@code httpCode} parameter. (which is not present in java.net.http, HTTP/2, etc.)
      */
-    public JsonRpcStatusException(String message, int httpCode, int jsonRPCCode, String responseBody, JsonRpcResponse<?> responseBodyJson ) {
+    public JsonRpcStatusException(String message, int httpCode, int jsonRPCCode, @Nullable String responseBody, @Nullable JsonRpcResponse<?> responseBodyJson ) {
         this(message, httpCode, "", jsonRPCCode, responseBody, responseBodyJson);
     }
 
@@ -57,7 +61,7 @@ public class JsonRpcStatusException extends JsonRpcException {
      * @param responseBodyJson deserialized JSON
      */
     public JsonRpcStatusException(int httpCode, JsonRpcResponse<?> responseBodyJson) {
-        this(responseBodyJson.getError().getMessage(),
+        this(responseBodyJson.getError() != null ? responseBodyJson.getError().getMessage() : "",
                 httpCode,
                 responseBodyJson.getError() != null ? responseBodyJson.getError().getCode() : 0,
                 null,

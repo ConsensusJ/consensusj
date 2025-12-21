@@ -16,4 +16,7 @@
 /**
  * JSON-RPC Java client and supporting classes. See {@link org.consensusj.jsonrpc.DefaultRpcClient}.
  */
+@NullMarked
 package org.consensusj.jsonrpc;
+
+import org.jspecify.annotations.NullMarked;
