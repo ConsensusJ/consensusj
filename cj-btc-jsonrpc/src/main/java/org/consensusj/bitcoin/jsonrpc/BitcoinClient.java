@@ -504,7 +504,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public String stop() throws JsonRpcStatusException, IOException {
-        return send("stop");
+        return (String) send("stop");
     }
 
     /**
@@ -515,7 +515,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public Integer getBlockCount() throws JsonRpcStatusException, IOException {
-        return send("getblockcount");
+        return (Integer) send("getblockcount");
     }
 
     /**
@@ -585,7 +585,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      */
     public List<Sha256Hash> generateToAddress(int numBlocks, Address address, Integer maxtries) throws IOException {
         JavaType resultType = collectionTypeForClasses(List.class, Sha256Hash.class);
-        return send("generatetoaddress", resultType, (long) numBlocks, address, maxtries);
+        return (List<Sha256Hash>) send("generatetoaddress", resultType, (long) numBlocks, address, maxtries);
     }
 
     /**
@@ -604,7 +604,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
 
     public List<String> listWallets() throws JsonRpcStatusException, IOException {
         JavaType resultType = collectionTypeForClasses(List.class, String.class);
-        return send("listwallets", resultType);
+        return (List<String>) send("listwallets", resultType);
     }
 
     public LoadWalletResult createWallet(String name, Boolean disablePrivateKeys, Boolean blank) throws JsonRpcStatusException, IOException {
@@ -703,7 +703,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      */
     public String createRawTransaction(List<Outpoint> inputs, Map<Address, Coin> outputs)
             throws JsonRpcStatusException, IOException {
-        return send("createrawtransaction", inputs, outputs);
+        return (String) send("createrawtransaction", inputs, outputs);
     }
 
     /**
@@ -729,7 +729,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public Transaction getRawTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {
-        String hexEncoded = send("getrawtransaction", txid);
+        String hexEncoded = (String) send("getrawtransaction", txid);
         byte[] raw = HexUtil.hexStringToByteArray(hexEncoded);
         return Transaction.read(ByteBuffer.wrap(raw));
     }
@@ -826,7 +826,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
     public List<ReceivedByAddressInfo> listReceivedByAddress(Integer minConf, Boolean includeEmpty)
             throws JsonRpcStatusException, IOException {
         JavaType resultType = collectionTypeForClasses(List.class, ReceivedByAddressInfo.class);
-        return send("listreceivedbyaddress", resultType, minConf, includeEmpty);
+        return (List<ReceivedByAddressInfo>) send("listreceivedbyaddress", resultType, minConf, includeEmpty);
     }
 
     /**
@@ -880,7 +880,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
     public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, List<Address> filter, Boolean includeUnsafe)
             throws JsonRpcStatusException, IOException {
         JavaType resultType = collectionTypeForClasses(List.class, UnspentOutput.class);
-        return send("listunspent", resultType, minConf, maxConf, filter, includeUnsafe);
+        return (List<UnspentOutput>) send("listunspent", resultType, minConf, maxConf, filter, includeUnsafe);
     }
 
     /**
@@ -987,7 +987,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public Boolean setTxFee(Coin amount) throws JsonRpcStatusException, IOException {
-        return send("settxfee", amount);
+        return (Boolean) send("settxfee", amount);
     }
 
     public WalletTransactionInfo getTransaction(Sha256Hash txid) throws JsonRpcStatusException, IOException {
@@ -1031,7 +1031,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      */
     public List<BitcoinTransactionInfo> listTransactions(String label, Integer count, Integer skip, Boolean includeWatchOnly) throws JsonRpcStatusException, IOException {
         JavaType resultType = collectionTypeForClasses(List.class, BitcoinTransactionInfo.class);
-        return send("listtransactions", resultType, label, count, skip, includeWatchOnly);
+        return (List<BitcoinTransactionInfo>) send("listtransactions", resultType, label, count, skip, includeWatchOnly);
     }
 
     /**
@@ -1087,7 +1087,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
     public List<List<AddressGroupingItem>>  listAddressGroupings() throws JsonRpcStatusException, IOException {
         JavaType agiListType = collectionTypeForClasses(List.class, AddressGroupingItem.class);
         JavaType resultType = collectionTypeForClasses(List.class, agiListType);
-        return send("listaddressgroupings", resultType);
+        return (List<List<AddressGroupingItem>>) send("listaddressgroupings", resultType);
     }
 
     /**
@@ -1149,7 +1149,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws IOException network error
      */
     public String help(String command) throws JsonRpcStatusException, IOException {
-        return send("help", command);
+        return (String) send("help", command);
     }
 
     /**
@@ -1289,12 +1289,12 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
     // Bitcore/Omni transaction for getting non-wallet address UTXO Info
     public List<AddressUtxoInfo>  getAddressUtxos(Address address) throws JsonRpcException, IOException {
         JavaType resultType = collectionTypeForClasses(List.class, AddressUtxoInfo.class);
-        return send("getaddressutxos", resultType, address);
+        return (List<AddressUtxoInfo>) send("getaddressutxos", resultType, address);
     }
 
     // Bitcore/Omni transaction for getting non-wallet address UTXO Info
     public List<AddressUtxoInfo> getAddressUtxos(List<Address> addressList) throws JsonRpcException, IOException {
         JavaType resultType = collectionTypeForClasses(List.class, AddressUtxoInfo.class);
-        return send("getaddressutxos", resultType, new AddressRequest(addressList));
+        return (List<AddressUtxoInfo>) send("getaddressutxos", resultType, new AddressRequest(addressList));
     }
 }

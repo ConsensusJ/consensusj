@@ -35,7 +35,7 @@ public class ApplicationTest {
         var testString  = "Hello jrpc-echod!";
         URI endpoint =  URI.create(server.getURI().toString()+"/");
         try (var client = new DefaultRpcClient(endpoint, "", "")) {
-            String result = client.send("echo", testString);
+            String result = (String) client.send("echo", testString);
             assertEquals(testString, result);
         }
     }
