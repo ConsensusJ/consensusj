@@ -45,7 +45,7 @@ public class JsonRpcRequest {
         this.jsonrpc = jsonrpc;
         this.method = method;
         this.id = id;
-        this.params = Collections.unmodifiableList(new ArrayList<>(params));
+        this.params = List.copyOf(params);
     }
 
     /**

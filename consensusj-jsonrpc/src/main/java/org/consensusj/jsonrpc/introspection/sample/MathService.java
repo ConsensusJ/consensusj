@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutionException;
  * Simple service and command-line tool that contains a "math" JsonRpcService
  * Allows testing method dispatch independent of any server code or framework
  * (including compiling with Graal `native-image` and running as a native tool with SubstrateVM)
+ * This will be moved or removed in a future release.
  */
 public class MathService extends AbstractJsonRpcService {
     private static final Logger log = LoggerFactory.getLogger(MathService.class);

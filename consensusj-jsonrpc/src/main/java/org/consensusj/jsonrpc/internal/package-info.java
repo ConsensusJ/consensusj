@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 /**
- * JSON-RPC Java client and supporting classes. See {@link org.consensusj.jsonrpc.DefaultRpcClient}.
+ * Internal. Do not use. Not exported in {@code module-info}.
  */
-package org.consensusj.jsonrpc;
+package org.consensusj.jsonrpc.internal;

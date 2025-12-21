@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * A Trust Manager that adds a second trust store (key store) to the default trust store.
- * See: https://stackoverflow.com/questions/48790981/load-java-trust-store-at-runtime-after-jvm-have-been-launched/58695061#58695061
+ * See: <a href="https://stackoverflow.com/questions/48790981/load-java-trust-store-at-runtime-after-jvm-have-been-launched/58695061#58695061">...</a>
  */
 public class CompositeTrustManager implements X509TrustManager {
     private static final Logger log = LoggerFactory.getLogger(CompositeTrustManager.class);
@@ -36,21 +36,20 @@ public class CompositeTrustManager implements X509TrustManager {
      * @param trustStoreStream Input stream for Java keystore with additional certificates
      */
     public CompositeTrustManager(InputStream trustStoreStream) {
-        List<X509TrustManager> trustManagers = new ArrayList<>();
-        try {
-            trustManagers.add(getCustomTrustManager(trustStoreStream));
-            trustManagers.add(getDefaultTrustManager());
-        } catch (Exception e) {
+        try (trustStoreStream) {
+            try {
+                trustManagerList = List.of(
+                    getCustomTrustManager(trustStoreStream),
+                    getDefaultTrustManager()
+                );
+            } catch (CertificateException | KeyStoreException | NoSuchAlgorithmException e) {
+                log.error("Exception: ", e);
+                throw new RuntimeException(e);
+            }
+        } catch (IOException e) {
             log.error("Exception: ", e);
             throw new RuntimeException(e);
-        } finally {
-            try {
-                trustStoreStream.close();
-            } catch (IOException e) {
-                log.error("Exception: ", e);
-            }
         }
-        trustManagerList = trustManagers;
     }
 
     /**
@@ -63,7 +62,7 @@ public class CompositeTrustManager implements X509TrustManager {
 
     /**
      * Used to create an SSLContext using {@link CompositeTrustManager}
-     * See: https://stackoverflow.com/questions/859111/how-can-i-use-different-certificates-on-specific-connections
+     * See: <a href="https://stackoverflow.com/questions/859111/how-can-i-use-different-certificates-on-specific-connections">...</a>
      */
     public static SSLContext getCompositeSSLContext(Path trustStorePath) throws NoSuchAlgorithmException, KeyManagementException, FileNotFoundException {
         TrustManager tm = new CompositeTrustManager(trustStorePath);
@@ -73,7 +72,7 @@ public class CompositeTrustManager implements X509TrustManager {
 
     /**
      * Used to create an SSLContext using {@link CompositeTrustManager}
-     * See: https://stackoverflow.com/questions/859111/how-can-i-use-different-certificates-on-specific-connections
+     * See: <a href="https://stackoverflow.com/questions/859111/how-can-i-use-different-certificates-on-specific-connections">...</a>
      */
     public static SSLContext getCompositeSSLContext(InputStream trustStoreStream) throws NoSuchAlgorithmException, KeyManagementException {
         TrustManager tm = new CompositeTrustManager(trustStoreStream);

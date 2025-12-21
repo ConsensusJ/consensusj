@@ -11,15 +11,16 @@ import org.slf4j.LoggerFactory;
 
 /**
  * JSON-RPC Response POJO
- *
+ * <p>
  * Note that {@code result} is a parameterized type and can be used to directly map JSON-RPC results
  * to the correct type for each method.
+ * @param <RSLT> The type of the JSON-RPC {@code result}.
  */
 public class JsonRpcResponse<RSLT> {
     private static final Logger log = LoggerFactory.getLogger(JsonRpcResponse.class);
     private final String          jsonrpc;   // version
     private final String          id;
-    private final RSLT               result;
+    private final RSLT            result;
     private final JsonRpcError    error;
 
     @JsonCreator

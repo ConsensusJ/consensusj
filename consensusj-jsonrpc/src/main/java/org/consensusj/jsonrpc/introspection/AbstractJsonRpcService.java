@@ -1,7 +1,5 @@
 package org.consensusj.jsonrpc.introspection;
 
-import org.consensusj.jsonrpc.AsyncSupport;
-
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;

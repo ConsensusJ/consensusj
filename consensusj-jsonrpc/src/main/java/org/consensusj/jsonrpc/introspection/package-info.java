@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 /**
- * JSON-RPC Java client and supporting classes. See {@link org.consensusj.jsonrpc.DefaultRpcClient}.
+ * Support classes for GraalVM-compatible build-time introspection.
  */
-package org.consensusj.jsonrpc;
+package org.consensusj.jsonrpc.introspection;

@@ -2,15 +2,17 @@ package org.consensusj.jsonrpc;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- *  JSON-RPC client interface. This interface is independent of the JSON conversion library
- *  (the default implementation uses Jackson) and HTTP client library (currently {@link HttpURLConnection}).
+ *  JSON-RPC client interface. Implementations map JSON <i>responses</i> to {@link JsonRpcResponse} and JSON <i>results</i>
+ *  to an <i>expected</i> Java type specified by either a {@link Class} or by type {@link T}. In the default implementation {@link DefaultRpcClient},
+ *  {@link T} is Jackson's {@link com.fasterxml.jackson.databind.JavaType}.
+ *  <p>
+ *  This interface is independent of the JSON conversion library (e.g. Jackson) and is independent of the {@link JsonRpcTransport}.
  *  For historical reasons the interface is mostly synchronous, but {@link AsyncSupport} makes it easier
  *  to add use of {@link java.util.concurrent.CompletableFuture} for special cases. In the future
  *  this interface may change to natively asynchronous.
@@ -19,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
  *  lenient enough to support Bitcoin Core and similar servers that don't follow the JSON-RPC specifications exactly.
  * @see <a href="https://www.jsonrpc.org/specification_v1">JSON-RPC 1.0 Specification (2005)</a>
  * @see <a href="https://www.jsonrpc.org/specification">JSON-RPC 2.0 Specification</a>
+ * @param <T> Type that can be used (in addition to {@link Class}) to declare expected result types for JSON-RPC method calls.
  */
 public interface JsonRpcClient<T extends Type> extends JsonRpcTransport<T>, AutoCloseable {
 

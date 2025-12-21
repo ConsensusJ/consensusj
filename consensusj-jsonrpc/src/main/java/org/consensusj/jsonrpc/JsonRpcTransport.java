@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 
 /**
  * Defines the interface for a network-layer implementation of a JSON-RPC client.
+ * @param <T> Type that can be used (in addition to {@link Class}) to declare expected result types for JSON-RPC method calls.
  */
 public interface JsonRpcTransport<T extends Type> extends AsyncSupport {
     /**
