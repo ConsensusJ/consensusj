@@ -58,7 +58,7 @@ subprojects {
             }
 
             testRuntimeOnly "org.junit.platform:junit-platform-launcher"
-            testRuntimeOnly "net.bytebuddy:byte-buddy:1.17.7"
+            testRuntimeOnly "net.bytebuddy:byte-buddy:1.18.3"
             // allows Spock to mock classes (in addition to interfaces)
             testRuntimeOnly "org.objenesis:objenesis:3.4"
             // Allow Spock to mock classes with constructor arguments
