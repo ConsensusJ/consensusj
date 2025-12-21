@@ -12,7 +12,6 @@ import java.lang.reflect.Type;
 import java.time.Duration;
 import java.net.URI;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -45,9 +44,10 @@ import java.util.function.Supplier;
 //
 /**
  * A strongly-typed, Jackson-based JSON-RPC client. {@link JsonRpcClient} provides many convenience send `default` methods in a
- * JSON-library-independent way. DefaultRpcClient provides the needed implementation support for Jackson. This class implements
+ * JSON-library-independent way. {@code DefaultRpcClient} adds support for Jackson. This class implements
  * the constructors, static fields, and getters, but delegates the core
  * {@link JsonRpcTransport#sendRequestForResponseAsync(JsonRpcRequest, Type)} method to a {@link JsonRpcTransport} implementation component.
+ * In constructors that don't take a {@link TransportFactory}, {@link JsonRpcClientJavaNet} will be used.
  */
 public class DefaultRpcClient implements JsonRpcClient<JavaType> {
     private static final Logger log = LoggerFactory.getLogger(DefaultRpcClient.class);
@@ -263,6 +263,8 @@ public class DefaultRpcClient implements JsonRpcClient<JavaType> {
 
     /**
      * Transient error mapper that is a no-op, i.e. it passes all errors through unchanged.
+     * @param <T> result type
+     * @return an unchanged completable future
      */
     protected  <T> CompletableFuture<JsonRpcResponse<T>> identityTransientErrorMapper(JsonRpcRequest request, JsonRpcResponse<T> response, Throwable t) {
         return response != null
@@ -271,7 +273,7 @@ public class DefaultRpcClient implements JsonRpcClient<JavaType> {
     }
 
     protected <T> JsonRpcResponse<T> temporarilyUnavailableResponse(JsonRpcRequest request,  Throwable t) {
-        return new JsonRpcResponse<T>(request, new JsonRpcError(-2000, "Server temporarily unavailable", t.getMessage()));
+        return new JsonRpcResponse<>(request, new JsonRpcError(-2000, "Server temporarily unavailable", t.getMessage()));
     }
 
     /**

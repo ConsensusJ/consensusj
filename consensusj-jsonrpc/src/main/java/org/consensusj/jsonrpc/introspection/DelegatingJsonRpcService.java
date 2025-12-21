@@ -36,9 +36,4 @@ public class DelegatingJsonRpcService extends AbstractJsonRpcService {
     public Object getServiceObject() {
         return service;
     }
-
-    @Override
-    public Method getMethod(String methodName) {
-        return methods.get(methodName);
-    }
 }

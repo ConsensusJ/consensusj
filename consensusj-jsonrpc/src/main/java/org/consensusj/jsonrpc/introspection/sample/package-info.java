@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 /**
- * JSON-RPC Java client and supporting classes. See {@link org.consensusj.jsonrpc.DefaultRpcClient}.
+ * MathService test/sample. This will be moved or removed.
  */
-package org.consensusj.jsonrpc;
+package org.consensusj.jsonrpc.introspection.sample;

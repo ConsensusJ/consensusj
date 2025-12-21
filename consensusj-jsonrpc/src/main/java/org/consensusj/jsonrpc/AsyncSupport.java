@@ -6,7 +6,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -74,7 +73,7 @@ public interface AsyncSupport {
      * subclasses such as {@link JsonRpcException}, so we have narrowed the allowed exceptions in {@link #getThrows()} to
      * {@link IOException}.
      *
-     * @param <T>
+     * @param <T> the type of results supplied by this supplier
      */
     @FunctionalInterface
     interface ThrowingSupplier<T> extends Supplier<T> {

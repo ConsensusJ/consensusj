@@ -27,6 +27,7 @@ import java.util.concurrent.CompletableFuture
  *
  * @see <a href="https://docs.groovy-lang.org/latest/html/documentation/#_methodmissing">Groovy Language Documentation: methodMissing</a>
  * @see <a href="https://docs.groovy-lang.org/latest/html/documentation/#_implementing_a_trait_at_runtime">Groovy Language Documentation: Implementing a trait at runtime</a>
+ * @param <T> Type that can be used (in addition to {@link Class}) to declare expected result types for JSON-RPC method calls.
  */
 trait DynamicRpcMethodFallback<T> implements JsonRpcClient {
     /**
