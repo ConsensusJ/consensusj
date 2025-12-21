@@ -71,7 +71,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: 'gradle'
       - name: Build with Gradle
-        run: ./gradlew nativeCompile --scan --info --stacktrace
+        run: ./gradlew consensusj-jrpc-echod:nativeTest nativeCompile --scan --info --stacktrace
       - name: Upload jrpc tool as artifact
         uses: actions/upload-artifact@v4
         with:
@@ -125,7 +125,7 @@ jobs:
       - name: Build Nix Package
         run: nix build .#consensusj
       - name: Build in Nix development shell
-        run: nix develop -c gradle buildCI installDist nativeCompile
+        run: nix develop -c gradle buildCI installDist consensusj-jrpc-echod:nativeTest nativeCompile
 
   all_green:
     runs-on: ubuntu-24.04
