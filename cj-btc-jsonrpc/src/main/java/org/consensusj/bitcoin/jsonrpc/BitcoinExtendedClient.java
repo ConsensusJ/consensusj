@@ -242,7 +242,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
      */
     public List<Sha256Hash> clearMemPool() throws JsonRpcStatusException, IOException {
         JavaType resultType = collectionTypeForClasses(List.class, Sha256Hash.class);
-        return send("clearmempool", resultType);
+        return (List<Sha256Hash>) send("clearmempool", resultType);
     }
 
     /**

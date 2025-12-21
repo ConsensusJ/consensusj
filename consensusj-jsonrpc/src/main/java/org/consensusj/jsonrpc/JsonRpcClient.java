@@ -41,14 +41,13 @@ public interface JsonRpcClient<T extends Type> extends JsonRpcTransport<T>, Auto
      * <li>Functional tests that need to send incorrect types to the server to test error handling</li>
      * </ul>
      *
-     * @param <R> Type of result object
      * @param method JSON RPC method call to send
      * @param params JSON RPC parameters as a `List`
      * @return the 'response.result' field of the JSON RPC response cast to type R
      * @throws IOException network error
      * @throws JsonRpcStatusException JSON RPC status error
      */
-    default <R> R send(String method, List<Object> params) throws IOException, JsonRpcStatusException {
+    default Object send(String method, List<Object> params) throws IOException, JsonRpcStatusException {
         return send(method, defaultType(), params);
     }
 
@@ -61,14 +60,13 @@ public interface JsonRpcClient<T extends Type> extends JsonRpcTransport<T>, Auto
      * <p>
      * Convenience version that takes {@code params} as array/varargs.
      *
-     * @param <R> Type of result object
      * @param method JSON RPC method call to send
      * @param params JSON RPC parameters as array or varargs
      * @return the 'response.result' field of the JSON RPC response cast to type R
      * @throws IOException network error
      * @throws JsonRpcStatusException JSON RPC status error
      */
-    default <R> R send(String method, Object... params) throws IOException, JsonRpcStatusException {
+    default Object send(String method, Object... params) throws IOException, JsonRpcStatusException {
         return send(method, Arrays.asList(params));
     }
 
@@ -104,20 +102,19 @@ public interface JsonRpcClient<T extends Type> extends JsonRpcTransport<T>, Auto
     /**
      * JSON-RPC remote method call that returns {@code response.result}
      *
-     * @param <R> Type of result object
      * @param method JSON RPC method call to send
      * @param resultType desired result type as a Jackson JavaType object
      * @param params JSON RPC params
      * @return the 'response.result' field of the JSON RPC response converted to type R
      */
-    default <R> R send(String method, T resultType, List<Object> params) throws IOException, JsonRpcStatusException {
+    default Object send(String method, T resultType, List<Object> params) throws IOException, JsonRpcStatusException {
         return syncGet(sendRequestForResultAsync(buildJsonRequest(method, params), resultType));
     }
 
     /**
      * Varargs version
      */
-    default <R> R send(String method, T resultType, Object... params) throws IOException, JsonRpcStatusException {
+    default Object send(String method, T resultType, Object... params) throws IOException, JsonRpcStatusException {
         return syncGet(sendRequestForResultAsync(buildJsonRequest(method, params), resultType));
     }
 
