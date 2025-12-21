@@ -43,19 +43,27 @@ allprojects {
 }
 
 subprojects {
+    // To support nativeTest, we are migrating away from all subprojects using Spock by default
+    boolean useSpock = it.name != "consensusj-jrpc-echod"
+
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 
         testImplementation platform("org.junit:junit-bom:${junitJupiterVersion}")
-        testImplementation "org.apache.groovy:groovy:${groovyVersion}"
-        testImplementation("org.spockframework:spock-core:${spockVersion}") {
-            exclude module: "groovy-all"
-        }
 
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-        testRuntimeOnly "net.bytebuddy:byte-buddy:1.17.7"                 // allows Spock to mock classes (in addition to interfaces)
-        testRuntimeOnly "org.objenesis:objenesis:3.4"                     // Allow Spock to mock classes with constructor arguments
-        testRuntimeOnly  "org.slf4j:slf4j-jdk14:${slf4jVersion}"          // Runtime implementation of slf4j
+        if (useSpock) {
+            testImplementation "org.apache.groovy:groovy:${groovyVersion}"
+            testImplementation("org.spockframework:spock-core:${spockVersion}") {
+                exclude module: "groovy-all"
+            }
+
+            testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+            testRuntimeOnly "net.bytebuddy:byte-buddy:1.17.7"
+            // allows Spock to mock classes (in addition to interfaces)
+            testRuntimeOnly "org.objenesis:objenesis:3.4"
+            // Allow Spock to mock classes with constructor arguments
+            testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"   // Runtime implementation of slf4j
+        }
     }
 
     configurations.configureEach {

@@ -1,0 +1,42 @@
+package org.consensusj.jsonrpc.daemon;
+
+import io.micronaut.runtime.server.EmbeddedServer;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
+import org.consensusj.jsonrpc.DefaultRpcClient;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.net.URI;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ * Basic Integration test of the JsonRpc echo daemon
+ */
+@MicronautTest
+public class ApplicationTest {
+    @Inject
+    EmbeddedServer server;
+
+    @Test
+    void serverStarts() {
+        assertTrue(server.isRunning());
+        assertEquals("http", server.getURI().getScheme());
+        assertTrue(
+            server.getURI().getHost().equals("localhost") ||
+            server.getURI().getHost().startsWith("runner") // for GitLab
+        );
+    }
+
+    @Test
+    void echoMethod() throws IOException {
+        var testString  = "Hello jrpc-echod!";
+        URI endpoint =  URI.create(server.getURI().toString()+"/");
+        try (var client = new DefaultRpcClient(endpoint, "", "")) {
+            String result = client.send("echo", testString);
+            assertEquals(testString, result);
+        }
+    }
+}
