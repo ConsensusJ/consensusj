@@ -1,6 +1,9 @@
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Java Module Declaration
  */
+@NullMarked
 module org.consensusj.jrpc {
     requires java.logging;
 
@@ -8,4 +11,5 @@ module org.consensusj.jrpc {
     requires com.fasterxml.jackson.dataformat.toml;
 
     requires org.consensusj.jsonrpc.cli;
+    requires org.jspecify;
 }

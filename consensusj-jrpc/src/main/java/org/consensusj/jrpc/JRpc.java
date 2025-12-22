@@ -21,6 +21,7 @@ import org.consensusj.jsonrpc.cli.JavaLoggingSupport;
 import org.consensusj.jsonrpc.cli.JsonRpcToolOptions;
 import org.consensusj.jrpc.config.JRpcConfigFile;
 import org.consensusj.jsonrpc.cli.config.JsonRpcServerConfigEntry;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,6 +82,11 @@ public class JRpc implements ToolProvider {
             super(resultMessage);
             this.resultCode = resultCode;
         }
+
+        public ToolException(int resultCode, Throwable cause) {
+            super(cause);
+            this.resultCode = resultCode;
+        }
     }
 
     /**
@@ -135,7 +141,7 @@ public class JRpc implements ToolProvider {
         } catch (ToolException e) {
             return e.resultCode;
         } catch (Exception e) {
-            throw new RuntimeException((e));
+            throw new RuntimeException(e);
         }
         return 0;
     }
@@ -166,10 +172,10 @@ public class JRpc implements ToolProvider {
             } catch (ExecutionException ee) {
                 log.error("send execution exception: ", ee);
                 Throwable t = ee.getCause() != null ? ee.getCause() : ee;
-                throw new ToolException(1, t.getMessage());
+                throw new ToolException(1, t);
             } catch (InterruptedException e) {
                 log.error("send interrupted exception: ", e);
-                throw new ToolException(1, e.getMessage());
+                throw new ToolException(1, e);
             }
             resultForPrinting = formatResponse(response, client.getMapper());
         }
@@ -185,7 +191,7 @@ public class JRpc implements ToolProvider {
             try {
                 sslContext = CompositeTrustManager.getCompositeSSLContext(trustStorePath);
             } catch (NoSuchAlgorithmException | KeyManagementException | FileNotFoundException e) {
-                throw new ToolException(1, e.getMessage());
+                throw new ToolException(1, e);
             }
         } else if (line.hasOption("alt-truststore")) {
             // Create SSL sockets using alternate truststore
@@ -194,7 +200,7 @@ public class JRpc implements ToolProvider {
             try {
                 sslContext = CompositeTrustManager.getAlternateSSLContext(trustStorePath);
             } catch (NoSuchAlgorithmException | KeyManagementException | CertificateException | KeyStoreException | IOException e) {
-                throw new ToolException(1, e.getMessage());
+                throw new ToolException(1, e);
             }
         } else {
             // Otherwise, use the default SSLContext
@@ -254,6 +260,7 @@ Call a server with a URL:
         protected final JRpc rpcTool;
         public final CommandLine line;
         public final boolean verbose;
+        @Nullable
         private DefaultRpcClient client;
 
         public CommonsCLICall(JRpc parentTool, PrintWriter out, PrintWriter err, String[] args) {
@@ -265,7 +272,8 @@ Call a server with a URL:
             try {
                 this.line = parser.parse(rpcTool.options(), args);
             } catch (ParseException e) {
-                rpcTool.printError(this, e.getMessage());
+                var message = e.getMessage() != null ? e.getMessage() : "Parser error";
+                rpcTool.printError(this, message);
                 rpcTool.printHelp(this.err, rpcTool.usage());   // print help to stderr
                 throw new ToolException(1, "Parser error");
             }
@@ -341,9 +349,15 @@ Call a server with a URL:
                 // If username/password can be extracted from the URI and nothing is set yet, use those
                 String rawUserInfo = uri.getRawUserInfo();
                 if (rpcUser == null && rawUserInfo != null) {
-                    String[] split = rawUserInfo.split(":");
+                    String[] split = rawUserInfo.split(":", -1);
                     rpcUser = split[0];
                     rpcPassword = split[1];
+                }
+                if (rpcUser == null) {
+                    rpcUser = "";
+                }
+                if (rpcPassword == null) {
+                    rpcPassword = "";
                 }
                 client = new DefaultRpcClient(sslContext, rpcTool.jsonRpcVersion, uri, rpcUser, rpcPassword);
             }
