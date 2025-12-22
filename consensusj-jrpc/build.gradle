@@ -30,7 +30,7 @@ dependencies {
 
     annotationProcessor "com.uber.nullaway:nullaway:0.12.14"
     testAnnotationProcessor "com.uber.nullaway:nullaway:0.12.14"
-    errorprone "com.google.errorprone:error_prone_core:2.42.0"
+    errorprone "com.google.errorprone:error_prone_core:2.45.0"
 }
 
 application {
