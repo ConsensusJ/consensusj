@@ -1,10 +1,12 @@
+import net.ltgt.gradle.errorprone.CheckSeverity
+
 /*
- * CLI tool support library and `cj-bitcoin-cli` tool.
- * `jrpc` tool is compiled to a native command-line tool with Graal `native-image`
+ * `jrpc` JSON-RPC tool. Can be compiled to a native command-line tool with Graal `native-image`
  */
 plugins {
     id 'java'
     id 'application'
+    id "net.ltgt.errorprone" version "4.3.0"
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -25,12 +27,23 @@ dependencies {
     testImplementation "org.apache.groovy:groovy:${groovyVersion}"
 
     testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+
+    annotationProcessor "com.uber.nullaway:nullaway:0.12.14"
+    testAnnotationProcessor "com.uber.nullaway:nullaway:0.12.14"
+    errorprone "com.google.errorprone:error_prone_core:2.42.0"
 }
 
 application {
     mainModule = "org.consensusj.jrpc"
     mainClass = 'org.consensusj.jrpc.JRpc'
     applicationName = 'jrpc'
+}
+
+tasks.withType(JavaCompile) {
+    options.errorprone {
+        check("NullAway", CheckSeverity.ERROR)
+        option("NullAway:OnlyNullMarked")
+    }
 }
 
 jar {
