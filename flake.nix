@@ -27,7 +27,7 @@
           buildInputs = with pkgs ; [
             zlib
             jdk
-            (gradle_8.override {    # Gradle Nix package uses an internally-linked JDK
+            (gradle_9.override {    # Gradle Nix package uses an internally-linked JDK
                 java = jdk;         # Run Gradle with this JDK
             })
             bitcoind
@@ -50,7 +50,7 @@
           mainProgram = "jrpc";
           jdk = pkgs.jdk21;
           graalvm = pkgs.graalvmPackages.graalvm-ce;
-          gradle = pkgs.gradle_8.override {
+          gradle = pkgs.gradle_9.override {
             java = jdk;  # Run Gradle with this JDK
           };
           self2 = pkgs.stdenv.mkDerivation (_finalAttrs: {
