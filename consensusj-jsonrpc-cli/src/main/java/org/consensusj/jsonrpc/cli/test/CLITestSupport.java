@@ -15,7 +15,7 @@ public interface CLITestSupport {
      * @param tool Command object instance to run
      * @return Object containing status, stdout, stderr
      */
-    static CLICommandResult runTool(ToolProvider tool, String... args) throws UnsupportedEncodingException {
+    static CLICommandResult runTool(ToolProvider tool, String... args) {
         // Setup to capture output streams
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ByteArrayOutputStream bes = new ByteArrayOutputStream();
