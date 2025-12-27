@@ -17,7 +17,7 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        jdk = pkgs.jdk21;
+        jdk = pkgs.jdk25;
         graalvm = pkgs.graalvmPackages.graalvm-ce;
         # Override bitcoind to include Berkeley DB support
         # This is currently broken on macOS/Darwin so regTest via devshell only works on Linux
@@ -48,7 +48,7 @@
             inherit system;
           };
           mainProgram = "jrpc";
-          jdk = pkgs.jdk21;
+          jdk = pkgs.jdk25;
           graalvm = pkgs.graalvmPackages.graalvm-ce;
           gradle = pkgs.gradle_9.override {
             java = jdk;  # Run Gradle with this JDK
