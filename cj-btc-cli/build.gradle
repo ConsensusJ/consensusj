@@ -14,8 +14,6 @@ tasks.withType(JavaCompile).configureEach {
 
 configurations {
     nativeToolImplementation.extendsFrom implementation
-    integrationTestImplementation.extendsFrom testImplementation
-    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
 }
 
 dependencies {
@@ -30,6 +28,38 @@ dependencies {
     testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 }
 
+testing {
+    suites {
+        test {
+            useJUnitJupiter()
+        }
+        regTest(JvmTestSuite) {
+            dependencies {
+                implementation project()
+                implementation "org.apache.groovy:groovy:${groovyVersion}"
+                implementation("org.spockframework:spock-core:${spockVersion}") {
+                    exclude module: "groovy-all"
+                }
+
+                runtimeOnly "net.bytebuddy:byte-buddy:1.17.7"
+                // allows Spock to mock classes (in addition to interfaces)
+                runtimeOnly "org.objenesis:objenesis:3.4"
+                // Allow Spock to mock classes with constructor arguments
+                runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"   // Runtime implementation of slf4j
+            }
+
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                        outputs.upToDateWhen { false }
+                    }
+                }
+            }
+        }
+    }
+}
+
 def mainClassName = "org.consensusj.bitcoin.cli.BitcoinCLITool"
 
 jar {
@@ -40,7 +70,6 @@ jar {
                     'Implementation-Version': archiveVersion.get()
     }
 }
-
 
 // Compile a native image using GraalVM's native-image tool
 // Graal must be installed at GRAALVM_HOME
@@ -58,44 +87,4 @@ tasks.register('nativeCompile', Exec) {
             '-H:+ReportUnsupportedElementsAtRuntime',
             '-H:-CheckToolchain'
     ]
-}
-
-
-// Test Structure
-sourceSets {
-    integrationTest {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-        groovy {
-            srcDir 'src/integ/groovy'
-        }
-        resources {
-            srcDir 'src/integ/resources'
-        }
-    }
-}
-
-tasks.register('regTest', Test) {
-    description = 'Runs integration tests against Bitcoin Core in regtest mode'
-    group = 'verification'
-
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    outputs.upToDateWhen { false }
-    testLogging.showStandardStreams = true
-    beforeSuite { descriptor ->
-        if (descriptor.getClassName() != null) {
-            logger.lifecycle('\033[1m' + descriptor.getName() + "\033[0m") // bold
-        }
-    }
-    beforeTest { descriptor ->
-        logger.lifecycle('    ' + descriptor.getName())
-    }
-
-    systemProperty 'regtest', true
-    systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/integ/logging.properties"
-    systemProperties(["omni.test.rpcTestUser"    : rpcTestUser,
-                      "omni.test.rpcTestPassword": rpcTestPassword,
-    ])
-    include 'org/consensusj/bitcoin/cli/**'
 }
