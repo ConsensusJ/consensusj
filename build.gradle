@@ -45,7 +45,8 @@ allprojects {
 
 subprojects {
     // To support nativeTest, we are migrating away from all subprojects using Spock by default
-    boolean useSpock = it.name != "consensusj-jrpc-echod"
+    def spockLess = ["consensusj-jrpc", "consensusj-jrpc-echod"]
+    boolean useSpock = !spockLess.contains(it.name)
 
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"

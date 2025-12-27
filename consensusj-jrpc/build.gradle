@@ -24,12 +24,7 @@ dependencies {
     runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
     nativeToolImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 
-    testImplementation "org.apache.groovy:groovy:${groovyVersion}"
-
-    testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
-
     annotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
-    testAnnotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
     errorprone "com.google.errorprone:error_prone_core:${errorProneVersion}"
 }
 
@@ -43,6 +38,37 @@ tasks.withType(JavaCompile) {
     options.errorprone {
         check("NullAway", CheckSeverity.ERROR)
         option("NullAway:OnlyNullMarked")
+    }
+}
+
+testing {
+    suites {
+        configureEach {
+            useJUnitJupiter()
+            dependencies {
+                implementation platform("org.junit:junit-bom:${junitJupiterVersion}")
+
+                implementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
+                runtimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
+
+                runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+
+                annotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
+            }
+        }
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation project()
+            }
+
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                    }
+                }
+            }
+        }
     }
 }
 
