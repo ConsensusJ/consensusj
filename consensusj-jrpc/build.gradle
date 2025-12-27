@@ -6,8 +6,8 @@ import net.ltgt.gradle.errorprone.CheckSeverity
 plugins {
     id 'java'
     id 'application'
-    id "net.ltgt.errorprone" version "4.3.0"
 }
+apply plugin: 'net.ltgt.errorprone'
 
 tasks.withType(JavaCompile).configureEach {
     options.release = 21
@@ -28,9 +28,9 @@ dependencies {
 
     testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 
-    annotationProcessor "com.uber.nullaway:nullaway:0.12.14"
-    testAnnotationProcessor "com.uber.nullaway:nullaway:0.12.14"
-    errorprone "com.google.errorprone:error_prone_core:2.42.0"
+    annotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
+    testAnnotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
+    errorprone "com.google.errorprone:error_prone_core:${errorProneVersion}"
 }
 
 application {
