@@ -646,11 +646,6 @@
    "module": "sha256-akesUDZOZZhFlAH7hvm2z832N7mzowRbHMM8v0xAghg=",
    "pom": "sha256-rrO3CiTBA+0MVFQfNfXFEdJ85gyuN2pZbX1lNpf4zJU="
   },
-  "repo.maven.apache.org/maven2/com/uber/nullaway#nullaway/0.12.14": {
-   "jar": "sha256-KZ8+iHpxa/Xy2swp3ijljV2dfO8JyQGBHIszrXT2JHI=",
-   "module": "sha256-7rFuldXFe0do0uAUuY2LFQh3IGnYvP2JDNrtPsgjl9s=",
-   "pom": "sha256-1AxHXaKiixM/RYzbJxj1YOHFdahyCpgT0o1y1+BBqe0="
-  },
   "repo.maven.apache.org/maven2/com/uber/nullaway#nullaway/0.12.15": {
    "jar": "sha256-7nVMdSISthzjtTzX5xQTpIS0PffCvOyy4ZBLzdOtUHw=",
    "module": "sha256-3Rb5Yzesl9ttXitdEpZmGdPIXR7TlqothrNltvAfRUA=",
@@ -1654,10 +1649,6 @@
    "module": "sha256-etPdstdOanfWWuiaykXUaMl7+ZFba8UvRJ1nXk5vmzU=",
    "pom": "sha256-9apHs2ZIPo0fm+8Q5noMZvZq/A8zHJ+WaxMQutYND28="
   },
-  "repo.maven.apache.org/maven2/org/junit#junit-bom/5.8.2": {
-   "module": "sha256-QM+tmT+nDs3yr3TQxW2hSE7iIJZL6Pkyz+YyvponM/o=",
-   "pom": "sha256-g2Bpyp6O48VuSDdiItopEmPxN70/0W2E/dR+/MPyhuI="
-  },
   "repo.maven.apache.org/maven2/org/junit#junit-bom/5.9.0": {
    "module": "sha256-oFTq9QFrWLvN6GZgREp8DdPiyvhNKhrV/Ey1JZecGbk=",
    "pom": "sha256-2D6H8Wds3kQZHuxc2mkEkjkvJpI7HkmBSMpznf7XUpU="
@@ -1695,10 +1686,6 @@
    "jar": "sha256-OFSzrUNJBrgn/sR0qg2NqLVunlbV/H8uIPw/EuxL6JQ=",
    "module": "sha256-ioIpqKD4Se/BzD/9XPlN4W6sgAYcX5M5eoXAk8nX6nA=",
    "pom": "sha256-ka2OSkvzBCMslByQFKyRNnvroTHx21jVv+SZx5DUbxc="
-  },
-  "repo.maven.apache.org/maven2/org/junit/jupiter#junit-jupiter/5.8.2": {
-   "module": "sha256-2d9Hs8dDGIOrHx8dggwpgOvL11PtxMgrmb9ewsUzrS4=",
-   "pom": "sha256-Q/Vic+es8z4PW10Qecf/pCRTHwHieUqdZHOt/RCkXS4="
   },
   "repo.maven.apache.org/maven2/org/junit/platform#junit-platform-commons/1.12.2": {
    "jar": "sha256-5oOgHoXfq+pSDAVqxgFaYWJ1bmAuxlPA2oXiM/CvvBg=",
