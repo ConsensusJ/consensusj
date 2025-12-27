@@ -1,91 +1,71 @@
-configurations {
-    integrationTestImplementation.extendsFrom testImplementation
-    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
-}
+testing {
+    suites {
+        configureEach {
+            useJUnitJupiter()
+            dependencies {
+                implementation project()
+                implementation project(':cj-btc-jsonrpc-gvy')
+                implementation project(':cj-btc-json')
+                implementation project(':cj-btc-services')      // To test WalletAppKitService
+                implementation project(':cj-bitcoinj-util')     // For BlockUtils
+                implementation project(':cj-bitcoinj-dsl-gvy')  // Use Groovy extensions in tests
 
-dependencies {
-    testImplementation project(':cj-btc-jsonrpc-gvy')
-    testImplementation project(':cj-btc-json')
-    testImplementation project(':cj-btc-services')     // To test WalletAppKitService
-    testImplementation project(':cj-bitcoinj-util')     // For BlockUtils
-    testImplementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    testImplementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+                implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 
-    testImplementation "org.junit.jupiter:junit-jupiter-api"
-    testImplementation "org.junit.jupiter:junit-jupiter-params"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+                implementation("org.spockframework:spock-core:${spockVersion}") {
+                    exclude module: "groovy-all"
+                }
+                implementation "org.apache.groovy:groovy:${groovyVersion}"
+                implementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
+                    transitive = false
+                }
 
-    testImplementation "org.apache.groovy:groovy:${groovyVersion}"
-    testImplementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
-        transitive = false
-    }
-
-    testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy extensions in tests
-}
-
-// Test Structure
-sourceSets {
-    integrationTest {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-        java {
-            srcDir 'src/integ/java'
+                runtimeOnly "net.bytebuddy:byte-buddy:1.17.7"       // Allows Spock to mock classes (in addition to interfaces)
+                runtimeOnly "org.objenesis:objenesis:3.4"           // Allows Spock to mock classes with constructor arguments
+                runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}" // Runtime implementation of slf4j
+            }
         }
-        groovy {
-            srcDir 'src/integ/groovy'
+        test {
+            targets {
+                all {
+                    testTask.configure {
+                        testLogging.showStandardStreams = true
+                        systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/test/logging.properties"
+                        beforeTest { descriptor ->
+                            logger.lifecycle('    ' + descriptor.getName())
+                        }
+                    }
+                }
+            }
         }
-        resources {
-            srcDir 'src/integ/resources'
-        }
-    }
-}
-
-def infuraApiKeyOrEmpty = System.env.INFURA_API_KEY ?: project.findProperty('infuraApiKey') ?: ''
-
-test {
-    testLogging.showStandardStreams = true
-    systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/test/logging.properties"
-    systemProperty 'org.consensusj.ethereum.infuraApiKey', infuraApiKeyOrEmpty
-    beforeTest { descriptor ->
-        logger.lifecycle('    ' + descriptor.getName())
-    }
-}
-
-tasks.register('integrationTest', Test) {
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    outputs.upToDateWhen { false }
-    testLogging.showStandardStreams = true
-}
-
-tasks.register('regTest', Test) {
-    description = 'Runs integration tests against Bitcoin Core in regtest mode'
-    group = 'verification'
-
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    outputs.upToDateWhen { false }
-    testLogging.showStandardStreams = true
-    beforeSuite { descriptor ->
-        if (descriptor.getClassName() != null) {
-            logger.lifecycle('\033[1m' + descriptor.getName() + "\033[0m") // bold
+        regTest(JvmTestSuite) {
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                        outputs.upToDateWhen { false }
+                        testLogging.showStandardStreams = true
+                        beforeSuite { descriptor ->
+                            if (descriptor.getClassName() != null) {
+                                logger.lifecycle('\033[1m' + descriptor.getName() + "\033[0m") // bold
+                            }
+                        }
+                        beforeTest { descriptor ->
+                            logger.lifecycle('    ' + descriptor.getName())
+                        }
+                        systemProperty 'regtest', true
+                        systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/regTest/logging.properties"
+                        if (project.hasProperty("regTestUseLegacyWallet")) {
+                            systemProperty "regTestUseLegacyWallet", project.property("regTestUseLegacyWallet")
+                        }
+                        include 'org/consensusj/bitcoin/rpc/**',
+                                'org/consensusj/bitcoin/integ/bitcoinj/**',
+                                'org/consensusj/bitcoin/integ/funding/**',
+                                'org/consensusj/bitcoin/integ/services/**',
+                                'org/consensusj/bitcoin/integ/java/**'
+                    }
+                }
+            }
         }
     }
-    beforeTest { descriptor ->
-        logger.lifecycle('    ' + descriptor.getName())
-    }
-
-    systemProperty 'regtest', true
-    systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/integ/logging.properties"
-    if (project.hasProperty("regTestUseLegacyWallet")) {
-        systemProperty "regTestUseLegacyWallet", project.property("regTestUseLegacyWallet")
-    }
-    systemProperties(["omni.test.rpcTestUser"    : rpcTestUser,
-                      "omni.test.rpcTestPassword": rpcTestPassword,
-    ])
-    include 'org/consensusj/bitcoin/rpc/**',
-            'org/consensusj/bitcoin/integ/bitcoinj/**',
-            'org/consensusj/bitcoin/integ/funding/**',
-            'org/consensusj/bitcoin/integ/services/**',
-            'org/consensusj/bitcoin/integ/java/**'
 }
