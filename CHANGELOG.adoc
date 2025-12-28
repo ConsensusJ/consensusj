@@ -21,6 +21,7 @@ Released: in-progress
 === Dependency Updates
 
 * bitcoinj 0.17
+* JSpecify 1.0.0
 * Jackson 2.19.4
 * RxJava 3.1.12
 * Jakarta Annotation API 3.0.0
@@ -33,14 +34,14 @@ Released: in-progress
 
 === Build/Test Updates
 
-* Require JDK 21 or later to build
-* Gradle 8.14.3
+* Require JDK 21 or later to build, prefer JDK 25
+* Gradle 9.2.1
 * Develocity (aka Gradle Enterprise) 4.1
-* JUnit Jupiter 5.11.4
-* ByteBuddy 1.17.6
+* JUnit Jupiter 5.12.2
+* ByteBuddy 1.17.7
 * Objenesis 3.4
 * Combine GitHub Actions into single `build.yml` workflow
-* GitHub `gradle.yml` JDK Matrix: Java 17, 21, 24
+* GitHub `gradle.yml` JDK Matrix: Java 17, 21, 25
 * Asciidoctor Gradle Plugin 4.0.4
 
 == v0.7.0-alpha3
