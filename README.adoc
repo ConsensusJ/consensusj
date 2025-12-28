@@ -123,9 +123,10 @@ We have published {cj-apidoc}/index.html[preliminary JavaDoc] to our GitHub page
 
 === Continuous Integration 
 
-* 'GitHub Actions: image:https://github.com/ConsensusJ/consensusj/workflows/Gradle%20Build/badge.svg?branch=master["GitHub Actions Gradle Build", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Gradle+Build%22"] image:https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml/badge.svg?branch=master["'GitHub Actions GraalVM Builds", link="https://github.com/ConsensusJ/consensusj/actions/workflows/graalvm.yml"] image:https://github.com/ConsensusJ/consensusj/workflows/Bitcoin%20Core%20RegTest/badge.svg?branch=master["'GitHub Actions Bitcoin Core RegTest", link="https://github.com/ConsensusJ/consensusj/actions?query=workflow%3A%22Bitcoin+Core+RegTest%22"]
+* GitHub Actions: image:https://github.com/ConsensusJ/consensusj/workflows/Build/badge.svg["GitHub Actions Build", link="https://github.com/ConsensusJ/consensusj/actions/workflows/build.yml"]
 
-* GitLab CI build: image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
+
+* GitLab CI: image:https://gitlab.com/ConsensusJ/consensusj/badges/master/pipeline.svg[link="https://gitlab.com/ConsensusJ/consensusj/pipelines",title="pipeline status"]
 
 
 // Jenkins Widget doesn't display correctly because of ci.omni.foundation self-signed SSL
@@ -453,7 +454,7 @@ The `#consensusj-exchange` module includes an adapter class `BaseXChangeExchange
 
 == Building and Running
 
-Before running `./gradlew` wrapper script you must have JDK 21 or later installed and your `JAVA_HOME` set correctly. To build native images you'll need a GraalVM JDK 21 or later and `GRAALVM_HOME` set correctly.
+Before running `./gradlew` wrapper script you must have JDK 21 or later (JDK 25 is recommended) installed and your `JAVA_HOME` set correctly. To build native images you'll need a GraalVM JDK 25 or later and `GRAALVM_HOME` set correctly.
 
 === Full Build
 
