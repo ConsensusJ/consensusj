@@ -48,6 +48,7 @@
             inherit system;
           };
           mainProgram = "jrpc";
+          echodProgram = "jrpc-echod";
           jdk = pkgs.jdk25;
           graalvm = pkgs.graalvmPackages.graalvm-ce;
           gradle = pkgs.gradle_9.override {
@@ -74,7 +75,7 @@
             preBuild = ''
               export GRAALVM_HOME=${graalvm}
             '';
-            gradleBuildTask = "consensusj-jrpc:nativeCompile";
+            gradleBuildTask = "consensusj-jrpc:nativeCompile consensusj-jrpc-echod:nativeCompile";
 
             gradleFlags = [ "--info --stacktrace" ];
 
@@ -85,6 +86,8 @@
               mkdir -p $out/bin
               cp consensusj-jrpc/build/${mainProgram} $out/bin/${mainProgram}
               wrapProgram $out/bin/${mainProgram}
+              cp consensusj-jrpc-echod/build/${echodProgram} $out/bin/${echodProgram}
+              wrapProgram $out/bin/${echodProgram}
             '';
           });
         in
