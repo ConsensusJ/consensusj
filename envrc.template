@@ -1,0 +1,7 @@
+# This file tells direnv to load our Nix flake environment
+# Documentation: https://direnv.net/
+# For convenience, `envrc.template` is checked in to git and can be copied to `.envrc`
+
+# 'use flake' is a direnv command that activates the Nix flake in this directory
+# It's equivalent to running 'nix develop' but automatic
+use flake

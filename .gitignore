@@ -10,5 +10,5 @@ cj-*/out
 .asciidoctor/
 regtest-data/
 logs/
-
-
+.direnv/
+.envrc
