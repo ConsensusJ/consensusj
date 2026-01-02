@@ -17,10 +17,15 @@ micronaut {
     }
 }
 
+application {
+    mainClass.set("org.consensusj.jsonrpc.daemon.Application")
+    applicationName = 'jrpc-echod'
+}
+
 graalvmNative {
     binaries {
         main {
-            imageName = 'jrpc-echod'
+            imageName = application.applicationName
             buildArgs.add('-H:+UnlockExperimentalVMOptions')
             buildArgs.add('-H:-CheckToolchain')
             // SharedArenaSupport seems to require GraalVM 25
@@ -47,10 +52,6 @@ dependencies {
     runtimeOnly "ch.qos.logback:logback-classic"
 
     // Tests are automatically configured by `micronaut.testRuntime("junit5")` above
-}
-
-application {
-    mainClass.set("org.consensusj.jsonrpc.daemon.Application")
 }
 
 dockerBuild {
