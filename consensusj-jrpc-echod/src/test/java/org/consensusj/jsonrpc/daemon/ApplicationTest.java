@@ -68,4 +68,17 @@ public class ApplicationTest {
         assertEquals(expectedError, exception.getMessage());
     }
 
+    @Test
+    void invalidMethod() throws IOException {
+        var expectedError = "Method not found";
+        URI endpoint =  URI.create(server.getURI().toString()+"/");
+        JsonRpcStatusException exception =
+                assertThrows(JsonRpcStatusException.class, () -> {
+                    try (var client = new DefaultRpcClient(endpoint, "", "")) {
+                        client.send("invalid");
+                    }
+                });
+        assertEquals(expectedError, exception.getMessage());
+    }
+
 }
