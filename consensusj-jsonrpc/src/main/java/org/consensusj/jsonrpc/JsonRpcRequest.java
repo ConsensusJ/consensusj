@@ -4,24 +4,31 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.consensusj.jsonrpc.internal.NumberStringSerializer;
+import org.jspecify.annotations.Nullable;
 
-import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.consensusj.jsonrpc.JsonRpcMessage.Version.*;
 
 /**
- * JSON-RPC Request POJO
+ * JSON-RPC Request.
+ * <p>
+ * Objects in the parameter list {@link #getParams()} are {@link Nullable}. {@code null}s are used to send a JSON {@code null}
+ * to the server for that position in the list. When using the {@link #JsonRpcRequest(JsonRpcMessage.Version, String, List)} constructor,
+ * trailing {@code null}s (i.e. {@code null}s that occur after the last non{@code null} parameter) are removed so that server defaults for
+ * those parameters are used. If you are using {@code null}s in your requests be aware of which constructors you use (directly or indirectly.)
+ * Making this behavior more consistent would be a breaking change, so it won't be considered until a future release.
  */
 public class JsonRpcRequest {
     private static final JsonRpcMessage.Version DEFAULT_JSON_RPC_VERSION = V2;
     private static final AtomicLong nextRequestId =  new AtomicLong(0);
 
     private final String  method;
-    private final List<Object> params;
+    private final List<@Nullable Object> params;
     private final String  jsonrpc;   // version
     private final String  id;
 
@@ -41,7 +48,7 @@ public class JsonRpcRequest {
     public JsonRpcRequest(@JsonProperty("jsonrpc")  String jsonrpc,
                           @JsonProperty("id")       String id,
                           @JsonProperty("method")   String method,
-                          @JsonProperty("params")   List<Object> params) {
+                          @JsonProperty("params")   List<@Nullable Object> params) {
         this.jsonrpc = jsonrpc;
         this.method = method;
         this.id = id;
@@ -61,7 +68,7 @@ public class JsonRpcRequest {
     public JsonRpcRequest(JsonRpcMessage.Version jsonRpcVersion,
                           long id,
                           String method,
-                          List<Object> params) {
+                          List<@Nullable Object> params) {
         this(jsonRpcVersion.jsonrpc(), Long.toString(id), method, params);
     }
 
@@ -69,12 +76,14 @@ public class JsonRpcRequest {
      * Create a JSON RPC request (for serialization.)
      * Can be used to override default JSON RPC version. To create a request on the client side, it
      * is generally recommended to use the methods in the {@link JsonRpcClient} you are using.
-     *
+     * <p>
+     * In this constructor, trailing {@code null}s are removed from {@code params} so that those parameters
+     * are not sent to the server and do not override server defaults.
      * @param jsonRpcVersion JSON-RPC version (enum)
      * @param method Method of remote procedure to call
      * @param params Parameters to serialize
      */
-    public JsonRpcRequest(JsonRpcMessage.Version jsonRpcVersion, String method, List<Object> params) {
+    public JsonRpcRequest(JsonRpcMessage.Version jsonRpcVersion, String method, List<@Nullable Object> params) {
         this(jsonRpcVersion, JsonRpcRequest.nextRequestId.incrementAndGet(), method, removeTrailingNulls(params));
     }
 
@@ -87,7 +96,7 @@ public class JsonRpcRequest {
      * @see JsonRpcClient#buildJsonRequest(String, List)
      * @see JsonRpcClient#buildJsonRequest(String, Object...)
      */
-    public JsonRpcRequest(String method, List<Object> params) {
+    public JsonRpcRequest(String method, List<@Nullable Object> params) {
         this(DEFAULT_JSON_RPC_VERSION, method, params);
     }
 
@@ -112,7 +121,7 @@ public class JsonRpcRequest {
         return id;
     }
 
-    public List<Object> getParams() {
+    public List<@Nullable Object> getParams() {
         return params;
     }
 
@@ -127,8 +136,8 @@ public class JsonRpcRequest {
      * @return A list of parameters with the trailing nulls removed.
      * @param <T> The type of the elements (for JSON-RPC this is usually {@link Object})
      */
-    private static <T> List<T> removeTrailingNulls(List<T> params) {
-        LinkedList<T> cleaned = new LinkedList<>(params);
+    private static <T> List<@Nullable T> removeTrailingNulls(List<@Nullable T> params) {
+        LinkedList<@Nullable T> cleaned = new LinkedList<>(params);
         while (!cleaned.isEmpty() && cleaned.getLast() == null) {
             cleaned.removeLast();
         }
