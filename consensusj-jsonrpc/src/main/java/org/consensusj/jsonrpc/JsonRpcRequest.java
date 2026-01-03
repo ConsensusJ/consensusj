@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.consensusj.jsonrpc.internal.NumberStringSerializer;
 
 import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -43,7 +45,7 @@ public class JsonRpcRequest {
         this.jsonrpc = jsonrpc;
         this.method = method;
         this.id = id;
-        this.params = List.copyOf(params);
+        this.params = Collections.unmodifiableList(new ArrayList<>(params));
     }
 
     /**
