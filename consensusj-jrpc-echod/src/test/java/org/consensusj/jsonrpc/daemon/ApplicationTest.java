@@ -39,4 +39,18 @@ public class ApplicationTest {
             assertEquals(testString, result);
         }
     }
+    @Test
+    void helpMethod() throws IOException {
+        var expectedResult  = """
+            echo message
+            help
+            stop
+    """;
+        URI endpoint =  URI.create(server.getURI().toString()+"/");
+        try (var client = new DefaultRpcClient(endpoint, "", "")) {
+            String result = (String) client.send("help");
+            assertEquals(expectedResult, result);
+        }
+    }
+
 }
