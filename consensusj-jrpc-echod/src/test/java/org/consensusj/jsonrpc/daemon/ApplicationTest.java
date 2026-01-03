@@ -41,6 +41,22 @@ public class ApplicationTest {
             assertEquals(testString, result);
         }
     }
+
+    @Test
+    void echoMethodFail() throws IOException {
+        var expectedError = "Server exception: wrong number of arguments: 2 expected: 1";
+        var testString  = "Hello jrpc-echod!";
+        URI endpoint =  URI.create(server.getURI().toString()+"/");
+        JsonRpcStatusException exception =
+                assertThrows(JsonRpcStatusException.class, () -> {
+                    try (var client = new DefaultRpcClient(endpoint, "", "")) {
+                        client.send("echo", testString, testString);
+                    }
+                });
+        assertEquals(expectedError, exception.getMessage());
+    }
+
+
     @Test
     void helpMethod() throws IOException {
         var expectedResult  = """
