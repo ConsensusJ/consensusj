@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.consensusj.jsonrpc.internal.NumberStringSerializer;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -74,7 +72,7 @@ public class JsonRpcRequest {
      * @param method Method of remote procedure to call
      * @param params Parameters to serialize
      */
-    public JsonRpcRequest(JsonRpcMessage.Version jsonRpcVersion, String method, List<?> params) {
+    public JsonRpcRequest(JsonRpcMessage.Version jsonRpcVersion, String method, List<Object> params) {
         this(jsonRpcVersion, JsonRpcRequest.nextRequestId.incrementAndGet(), method, removeTrailingNulls(params));
     }
 
@@ -87,7 +85,7 @@ public class JsonRpcRequest {
      * @see JsonRpcClient#buildJsonRequest(String, List)
      * @see JsonRpcClient#buildJsonRequest(String, Object...)
      */
-    public JsonRpcRequest(String method, List<?> params) {
+    public JsonRpcRequest(String method, List<Object> params) {
         this(DEFAULT_JSON_RPC_VERSION, method, params);
     }
 
