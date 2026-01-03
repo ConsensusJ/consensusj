@@ -4,12 +4,14 @@ import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.consensusj.jsonrpc.DefaultRpcClient;
+import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -51,6 +53,19 @@ public class ApplicationTest {
             String result = (String) client.send("help");
             assertEquals(expectedResult, result);
         }
+    }
+
+    @Test
+    void helpMethodFail() throws IOException {
+        var expectedError = "Server exception: wrong number of arguments: 1 expected: 0";
+        URI endpoint =  URI.create(server.getURI().toString()+"/");
+        JsonRpcStatusException exception =
+                assertThrows(JsonRpcStatusException.class, () -> {
+                    try (var client = new DefaultRpcClient(endpoint, "", "")) {
+                        client.send("help", "echo");
+                    }
+                });
+        assertEquals(expectedError, exception.getMessage());
     }
 
 }
