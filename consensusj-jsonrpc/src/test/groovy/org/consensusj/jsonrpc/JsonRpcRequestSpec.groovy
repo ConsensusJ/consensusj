@@ -1,18 +1,18 @@
 package org.consensusj.jsonrpc
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.jspecify.annotations.Nullable
 import spock.lang.Specification
 import spock.lang.Unroll
-
 
 /**
  * Test Spec for JsonRpcRequest
  */
 class JsonRpcRequestSpec extends Specification {
     @Unroll
-    def "removeTrailingNulls does the right thing for input: #input"() {
+    def "removeTrailingNulls does the right thing for input: #input"(List<@Nullable Object> input, List<@Nullable Object> expectedOutput) {
         when:
-        def out = JsonRpcRequest.removeTrailingNulls(input)
+        List<@Nullable Object> out = JsonRpcRequest.removeTrailingNulls(input)
 
         then:
         out == expectedOutput
@@ -30,10 +30,31 @@ class JsonRpcRequestSpec extends Specification {
         [1, null, 2, null, 3, null] | [1, null, 2, null, 3]
     }
 
+    @Unroll
+    def "Can construct JsonRpcRequest with params: #inputParams"(List<@Nullable Object> inputParams, List<@Nullable Object> expectedParams) {
+        when:
+        JsonRpcRequest req = new JsonRpcRequest("dummy", inputParams)
+
+        then: "the request was constructed with trailing nulls removed"
+        expectedParams == req.getParams()
+
+        where:
+        inputParams                 | expectedParams
+        []                          | []
+        [1]                         | [1]
+        [null]                      | []
+        [1, null]                   | [1]
+        [null, 1]                   | [null, 1]
+        [null, 1, null]             | [null, 1]
+        [1, null, 2]                | [1, null, 2]
+        [1, null, 2, null]          | [1, null, 2]
+        [1, null, 2, null, 3, null] | [1, null, 2, null, 3]
+    }
+
     def "can create from JSON -- with version"() {
         given:
-        def mapper = new ObjectMapper()
-        def json = """
+        var mapper = new ObjectMapper()
+        var json = """
 {"jsonrpc":"1.0", "id":1, "method":"getblockcount", "params":[]}
 """
 
@@ -46,8 +67,8 @@ class JsonRpcRequestSpec extends Specification {
 
     def "can create from JSON -- without version"() {
         given:
-        def mapper = new ObjectMapper()
-        def json = """
+        var mapper = new ObjectMapper()
+        var json = """
 {"id":1, "method":"getblockcount", "params":[]}
 """
 
@@ -57,5 +78,4 @@ class JsonRpcRequestSpec extends Specification {
         then:
         request != null
     }
-
 }
