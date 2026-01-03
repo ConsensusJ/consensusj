@@ -121,9 +121,12 @@ public class JsonRpcRequest {
      * server-determined default should be used. If {@code null} were actually sent as
      * JSON, then the server default would be overridden.  {@code null}  can be used before
      * the last non-null element, but those {@code null} s will be sent to the server.
+     * @param params A list of parameters possibly containing trailing nulls
+     * @return A list of parameters with the trailing nulls removed.
+     * @param <T> The type of the elements (for JSON-RPC this is usually {@link Object})
      */
-    private static List<Object> removeTrailingNulls(List<?> params) {
-        LinkedList<Object> cleaned = new LinkedList<>(params);
+    private static <T> List<T> removeTrailingNulls(List<T> params) {
+        LinkedList<T> cleaned = new LinkedList<>(params);
         while (!cleaned.isEmpty() && cleaned.getLast() == null) {
             cleaned.removeLast();
         }
