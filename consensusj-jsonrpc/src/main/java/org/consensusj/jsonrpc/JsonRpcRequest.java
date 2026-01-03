@@ -136,7 +136,7 @@ public class JsonRpcRequest {
      * @return A list of parameters with the trailing nulls removed.
      * @param <T> The type of the elements (for JSON-RPC this is usually {@link Object})
      */
-    private static <T> List<@Nullable T> removeTrailingNulls(List<@Nullable T> params) {
+    static <T> List<@Nullable T> removeTrailingNulls(List<@Nullable T> params) {
         LinkedList<@Nullable T> cleaned = new LinkedList<>(params);
         while (!cleaned.isEmpty() && cleaned.getLast() == null) {
             cleaned.removeLast();
