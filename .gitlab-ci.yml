@@ -10,7 +10,7 @@ cache:
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-  JDK_PACKAGE: "openjdk-21-jdk-headless"
+  JDK_PACKAGE: "openjdk-25-jdk-headless"
 
 before_script:
   - apt-get update
