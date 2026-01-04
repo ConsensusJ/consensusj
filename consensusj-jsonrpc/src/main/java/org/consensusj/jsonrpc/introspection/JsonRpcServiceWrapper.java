@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc.introspection;
 
+import com.fasterxml.jackson.databind.node.NullNode;
 import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcErrorException;
 import org.consensusj.jsonrpc.JsonRpcException;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import static org.consensusj.jsonrpc.JsonRpcError.Error.INVALID_PARAMS;
 import static org.consensusj.jsonrpc.JsonRpcError.Error.METHOD_NOT_FOUND;
 import static org.consensusj.jsonrpc.JsonRpcError.Error.SERVER_EXCEPTION;
 
@@ -74,18 +76,24 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
     }
     
     /**
-     * Map a request plus a result or error into a response
-     *
-     * @param req The request being services
+     * Map a request plus a result or exception into a response with result or exception.
+     * Uses {@link #exceptionToError(Throwable)} to map exceptions to {@link JsonRpcError}.
+     * @param req The request being serviced
      * @param result A result object or null
-     * @param ex exception or null
+     * @param ex exception or null (should not be a JsonRpcException)
      * @param <RSLT> type of result
-     * @return A success or error response as appropriate
+     * @return A JsonRpcResponse with result or error appropriate
      */
-    private <RSLT> JsonRpcResponse<RSLT> resultCompletionHandler(JsonRpcRequest req, RSLT result, Throwable ex) {
-        return (result != null) ?
-                wrapResult(req, result) :
-                wrapError(req, exceptionToError(ex));
+    private <RSLT> JsonRpcResponse<RSLT> resultCompletionHandler(JsonRpcRequest req, @Nullable RSLT result, @Nullable Throwable ex) {
+        if (ex != null) {
+            return wrapError(req, exceptionToError(ex));
+        } else if (result != null) {
+            return wrapResult(req, result);
+        } else {
+            // Success case with a Java `void`/`Void` result which is a JavaScript `null` result.
+            //noinspection unchecked
+            return (JsonRpcResponse<RSLT>) wrapNullResult(req);
+        }
     }
 
     /**
@@ -95,10 +103,12 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @return An error POJO for insertion in a JsonRpcResponse
      */
     private JsonRpcError exceptionToError(Throwable ex) {
-        if (ex instanceof JsonRpcErrorException) {
-            return ((JsonRpcErrorException) ex).getError();
-        } else if (ex instanceof JsonRpcException) {
-            return JsonRpcError.of(SERVER_EXCEPTION, ex);
+        if (ex instanceof IllegalArgumentException) {
+            // This assumes the IllegalArgumentException was from mh.invoke
+            return JsonRpcError.of(INVALID_PARAMS, ex);
+        } else if (ex instanceof NoSuchMethodError) {
+            // This assumes the NoSuchMethodError was from callMethod
+            return JsonRpcError.of(METHOD_NOT_FOUND, ex);
         } else {
            return JsonRpcError.of(SERVER_EXCEPTION, ex);
         }
@@ -111,7 +121,7 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * @param params List of JSON-RPC parameters
      * @return A future result POJO
      */
-    private <RSLT> CompletableFuture<RSLT> callMethod(String methodName, List<Object> params) {
+    private <RSLT> CompletableFuture<RSLT> callMethod(String methodName, List<@Nullable Object> params) {
         log.debug("JsonRpcServiceWrapper.callMethod: {}", methodName);
         CompletableFuture<RSLT> future;
         final Method mh = getMethod(methodName);
@@ -121,12 +131,12 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
                 CompletableFuture<RSLT> liveFuture = (CompletableFuture<RSLT>) mh.invoke(getServiceObject(), params.toArray());
                 future = liveFuture;
             } catch (Throwable throwable) {
-                log.error("Exception in invoked service object: ", throwable);
-                JsonRpcErrorException jsonRpcException = new JsonRpcErrorException(SERVER_EXCEPTION, throwable);
-                future = CompletableFuture.failedFuture(jsonRpcException);
+                log.error("Exception invoking service object: ", throwable);
+                future = CompletableFuture.failedFuture(throwable);
             }
         } else {
-            future = CompletableFuture.failedFuture(JsonRpcErrorException.of(METHOD_NOT_FOUND));
+            log.warn("No such method: {}", methodName);
+            future = CompletableFuture.failedFuture(new NoSuchMethodError(methodName));
         }
         return future;
     }
@@ -158,12 +168,30 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
      * Wrap a Result POJO in a JsonRpcResponse
      * @param req The request we are responding to
      * @param result the result to wrap
-     * @return A valid JsonRpcResponse
+     * @return A JsonRpcResponse with a result
      */
     private static <RSLT> JsonRpcResponse<RSLT> wrapResult(JsonRpcRequest req, RSLT result) {
         return new JsonRpcResponse<>(req, result);
     }
 
+    /**
+     * Wrap a {@code null} result in a JsonRpcResponse. Note that in JSON-RPC there is a distinction
+     * between the {@code result} field not being present and the {@code result} field
+     * returning a JavaScript {@code null}. We represent a JavaScript {@code null} with the Jackson
+     * {@code NullNode} type.
+     * @param req The request we are responding to
+     * @return A JsonRpcResponse with a null result (using Jackson {@link NullNode}
+     */
+    private static JsonRpcResponse<NullNode> wrapNullResult(JsonRpcRequest req) {
+        return new JsonRpcResponse<>(req, NullNode.getInstance());
+    }
+
+    /**
+     * Wrap a JsonRpcError in a JsonRpcResponse
+     * @param req The request we are responding to
+     * @param error the error to wrap
+     * @return A JsonRpcResponse with an error
+     */
     private static <RSLT> JsonRpcResponse<RSLT> wrapError(JsonRpcRequest req, JsonRpcError error) {
         return new JsonRpcResponse<>(req, error);
     }
