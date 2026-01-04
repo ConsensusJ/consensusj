@@ -30,7 +30,8 @@
             (gradle_9.override {    # Gradle Nix package uses an internally-linked JDK
                 java = jdk;         # Run Gradle with this JDK
             })
-            bitcoind
+            bitcoind                # For running tests that talk to bitcoind
+            websocat                # For manually testing websocket servers
           ];
           shellHook = ''
             # setup GRAALVM_HOME
