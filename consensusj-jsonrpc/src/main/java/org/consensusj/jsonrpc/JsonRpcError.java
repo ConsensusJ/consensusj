@@ -56,9 +56,16 @@ public class JsonRpcError {
         return data;
     }
 
+    /**
+     * Predefined JSON-RPC Error Codes. The error codes from and including -32768 to -32000 are reserved for pre-defined errors.
+     * @see <a href="https://www.jsonrpc.org/specification#error_object">5.1 Error object</a> in <b>JSON-RPC 2.0 Specification</b>
+     */
     public enum Error {
-        // TODO: Add other reserved error codes from the spec
+        PARSE_ERROR(-32700, "Parse error"),
+        INVALID_REQUEST(-32600, "Invalid Request"),
         METHOD_NOT_FOUND(-32601, "Method not found"),
+        INVALID_PARAMS(-32602, "Invalid params"),
+        INTERNAL_ERROR(-32603, "Internal error"),
         SERVER_ERROR(-32000, "Server error"),
         SERVER_EXCEPTION(-32001, "Server exception");
 
