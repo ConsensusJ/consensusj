@@ -42,6 +42,7 @@ dependencies {
     implementation project(':consensusj-jsonrpc')
 
     implementation "io.micronaut:micronaut-runtime"
+    implementation "io.micronaut:micronaut-websocket"
     implementation "io.netty:netty-transport-native-unix-common"
     implementation "io.micronaut:micronaut-jackson-databind"
     implementation "jakarta.annotation:jakarta.annotation-api"
