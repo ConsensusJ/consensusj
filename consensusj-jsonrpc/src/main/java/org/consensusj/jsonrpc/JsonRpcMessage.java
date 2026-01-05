@@ -4,8 +4,8 @@ package org.consensusj.jsonrpc;
  * In the future this may be a superclass for {@link JsonRpcRequest} and {@link JsonRpcResponse}.
  * For now it just contains the {@code Version enum}.
  */
-public class JsonRpcMessage {
-    public enum Version {
+public interface JsonRpcMessage {
+    enum Version {
         V1("1.0"),
         V2("2.0");
 
