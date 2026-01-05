@@ -1,0 +1,6 @@
+micronaut:
+    server:
+        netty:
+            listeners:
+                httpListener:
+                    port: -1   # Use a random port number for tests
