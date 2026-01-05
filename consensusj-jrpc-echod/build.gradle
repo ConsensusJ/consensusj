@@ -55,6 +55,11 @@ dependencies {
     runtimeOnly "ch.qos.logback:logback-classic"
 
     // Tests are automatically configured by `micronaut.testRuntime("junit5")` above
+    // Extra test libraries:
+    testImplementation "io.micronaut:micronaut-http-client"
+    testImplementation "io.micronaut.reactor:micronaut-reactor"
+    testImplementation "jakarta.validation:jakarta.validation-api"
+    testImplementation "org.awaitility:awaitility:4.2.2"
 }
 
 dockerBuild {
