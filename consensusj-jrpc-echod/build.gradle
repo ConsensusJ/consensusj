@@ -24,15 +24,17 @@ application {
 
 graalvmNative {
     binaries {
-        main {
-            imageName = application.applicationName
+        configureEach {
+            // Options for all binaries
             buildArgs.add('-H:+UnlockExperimentalVMOptions')
             buildArgs.add('-H:-CheckToolchain')
-            // SharedArenaSupport seems to require GraalVM 25
-            // buildArgs.add('-H:+SharedArenaSupport')
+            // SharedArenaSupport requires GraalVM 25
+            buildArgs.add('-H:+SharedArenaSupport')
+        }
+        main {
+            imageName = application.applicationName
         }
         test {
-            buildArgs.add('-H:+UnlockExperimentalVMOptions')
             buildArgs.add("--initialize-at-build-time=org.junit.platform.commons.logging")
         }
     }
