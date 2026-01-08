@@ -43,7 +43,7 @@ public class ApplicationTest {
     }
 
     @Test
-    void echoMethodFail() throws IOException {
+    void echoMethodWrongNumberOfArgs() throws IOException {
         var expectedError = "Server exception: wrong number of arguments: 2 expected: 1";
         var testString  = "Hello jrpc-echod!";
         URI endpoint =  URI.create(server.getURI().toString()+"/");
