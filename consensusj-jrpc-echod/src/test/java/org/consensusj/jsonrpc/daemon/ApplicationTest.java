@@ -5,6 +5,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -22,6 +23,13 @@ public class ApplicationTest {
     @Inject
     EmbeddedServer server;
 
+    URI endpoint;
+
+    @BeforeEach
+    void testSetup() {
+        endpoint = URI.create(server.getURI().toString());
+    }
+
     @Test
     void serverStarts() {
         assertTrue(server.isRunning());
@@ -35,7 +43,6 @@ public class ApplicationTest {
     @Test
     void echoMethod() throws IOException {
         var testString  = "Hello jrpc-echod!";
-        URI endpoint =  URI.create(server.getURI().toString()+"/");
         try (var client = new DefaultRpcClient(endpoint, "", "")) {
             String result = (String) client.send("echo", testString);
             assertEquals(testString, result);
@@ -46,7 +53,6 @@ public class ApplicationTest {
     void echoMethodWrongNumberOfArgs() throws IOException {
         var expectedError = "Server exception: wrong number of arguments: 2 expected: 1";
         var testString  = "Hello jrpc-echod!";
-        URI endpoint =  URI.create(server.getURI().toString()+"/");
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
                     try (var client = new DefaultRpcClient(endpoint, "", "")) {
@@ -64,7 +70,6 @@ public class ApplicationTest {
             help
             stop
     """;
-        URI endpoint =  URI.create(server.getURI().toString()+"/");
         try (var client = new DefaultRpcClient(endpoint, "", "")) {
             String result = (String) client.send("help");
             assertEquals(expectedResult, result);
@@ -74,7 +79,6 @@ public class ApplicationTest {
     @Test
     void helpMethodFail() throws IOException {
         var expectedError = "Server exception: wrong number of arguments: 1 expected: 0";
-        URI endpoint =  URI.create(server.getURI().toString()+"/");
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
                     try (var client = new DefaultRpcClient(endpoint, "", "")) {
@@ -87,7 +91,6 @@ public class ApplicationTest {
     @Test
     void invalidMethod() throws IOException {
         var expectedError = "Method not found";
-        URI endpoint =  URI.create(server.getURI().toString()+"/");
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
                     try (var client = new DefaultRpcClient(endpoint, "", "")) {
