@@ -4,6 +4,7 @@ import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.consensusj.jsonrpc.DefaultRpcClient;
+import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,8 @@ public class ApplicationTest {
 
     @Test
     void echoMethodWrongNumberOfArgs() throws IOException {
-        var expectedError = "Server exception: wrong number of arguments: 2 expected: 1";
+        int expectedErrorCode = JsonRpcError.Error.INVALID_PARAMS.getCode();
+        var expectedErrorMessagePrefix = "Invalid params:";
         var testString  = "Hello jrpc-echod!";
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
@@ -59,7 +61,8 @@ public class ApplicationTest {
                         client.send("echo", testString, testString);
                     }
                 });
-        assertEquals(expectedError, exception.getMessage());
+        assertTrue(exception.getMessage().startsWith(expectedErrorMessagePrefix));
+        assertEquals(expectedErrorCode, exception.jsonRpcCode);
     }
 
 
@@ -84,26 +87,30 @@ public class ApplicationTest {
      */
     @Test
     void helpMethodOneArg() throws IOException {
-        var expectedError = "Server exception: wrong number of arguments: 1 expected: 0";
+        int expectedErrorCode = JsonRpcError.Error.INVALID_PARAMS.getCode();
+        var expectedErrorMessagePrefix = "Invalid params:";
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
                     try (var client = new DefaultRpcClient(endpoint, "", "")) {
                         client.send("help", "echo");
                     }
                 });
-        assertEquals(expectedError, exception.getMessage());
+        assertTrue(exception.getMessage().startsWith(expectedErrorMessagePrefix));
+        assertEquals(expectedErrorCode, exception.jsonRpcCode);
     }
 
     @Test
     void invalidMethod() throws IOException {
-        var expectedError = "Method not found";
+        int expectedErrorCode = JsonRpcError.Error.METHOD_NOT_FOUND.getCode();
+        var expectedErrorMessagePrefix = "Method not found:";
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
                     try (var client = new DefaultRpcClient(endpoint, "", "")) {
                         client.send("invalid");
                     }
                 });
-        assertEquals(expectedError, exception.getMessage());
+        assertTrue(exception.getMessage().startsWith(expectedErrorMessagePrefix));
+        assertEquals(expectedErrorCode, exception.jsonRpcCode);
     }
 
 }
