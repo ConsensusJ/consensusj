@@ -76,8 +76,14 @@ public class ApplicationTest {
         }
     }
 
+    /*
+     * The help method is currently not fully implemented. It SHOULD allow
+     * for an argument, and only fail if the argument doesn't match an existing
+     * command. Once the help method is properly implemented we will need to change
+     * our tests
+     */
     @Test
-    void helpMethodFail() throws IOException {
+    void helpMethodOneArg() throws IOException {
         var expectedError = "Server exception: wrong number of arguments: 1 expected: 0";
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
