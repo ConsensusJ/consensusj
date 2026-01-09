@@ -20,7 +20,7 @@ testing {
                     transitive = false
                 }
 
-                runtimeOnly "net.bytebuddy:byte-buddy:1.17.7"       // Allows Spock to mock classes (in addition to interfaces)
+                runtimeOnly "net.bytebuddy:byte-buddy:1.18.3"       // Allows Spock to mock classes (in addition to interfaces)
                 runtimeOnly "org.objenesis:objenesis:3.4"           // Allows Spock to mock classes with constructor arguments
                 runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}" // Runtime implementation of slf4j
             }
