@@ -54,8 +54,9 @@ public class DefaultRpcClient implements JsonRpcClient<JavaType> {
     private static final JsonRpcMessage.Version DEFAULT_JSON_RPC_VERSION = JsonRpcMessage.Version.V2;
 
     /**
-     * Functional interface for creating JsonRpcTransport instances. This is used to prevent a circular
-     * dependency on {@link ObjectMapper}.
+     * Functional interface for creating JsonRpcTransport instances from an {@link ObjectMapper}.
+     * <p>
+     * This is used to prevent a circular dependency on {@link ObjectMapper}.
      */
     @FunctionalInterface
     public interface TransportFactory {

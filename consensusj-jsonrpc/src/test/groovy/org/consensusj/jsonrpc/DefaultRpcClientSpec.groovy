@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -15,7 +16,7 @@ class DefaultRpcClientSpec extends Specification {
     private final String user = "bitcoinrpc"
     private final String pass = "pass"
     // TODO: Refactor so tests automatically run against both factories.
-    private final DefaultRpcClient.TransportFactory transportFactory = (m) -> new JsonRpcClientJavaNet(m, JsonRpcTransport.getDefaultSSLContext(), testServerUri, user, pass)
+    private final DefaultRpcClient.TransportFactory transportFactory = (ObjectMapper m) -> new JsonRpcClientJavaNet(m, JsonRpcTransport.getDefaultSSLContext(), testServerUri, user, pass)
     //private final DefaultRpcClient.TransportFactory transportFactory = (m) -> new JsonRpcClientHttpUrlConnection(m, JsonRpcTransport.getDefaultSSLContext(), testServerUri, user, pass)
 
     def "constructor works correctly" () {

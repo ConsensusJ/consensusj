@@ -16,7 +16,16 @@ import static org.consensusj.jsonrpc.JsonRpcMessage.Version.*;
 
 /**
  * JSON-RPC Request.
- * <p>
+ * Contains the four standard members of a JSON-RPC request:
+ * <ul>
+ *     <li><b>jsonrpc</b>: the version of the JSON-RPC protocol. The default is {@code "2.0"}.</li>
+ *     <li><b>id</b>: an identifier sent in request that is returned in {@link JsonRpcResponse}. By default, we use
+ *     atomically-incremented {@code long} values, but {@code String} values are also supported as they are allowed
+ *     by the specification and may be sent by clients.</li>
+ *     <li><b>method:</b> the name of the method to be invoked.</li>
+ *     <li><b>params:</b> the parameters for the rpc call. Currently only {@code by-position} parameters are supported, represented
+ *     as a Java {@link List} and serialized as a JSON {@code Array}.</li>
+ * </ul>
  * Objects in the parameter list {@link #getParams()} are {@link Nullable}. {@code null}s are used to send a JSON {@code null}
  * to the server for that position in the list. When using the {@link #JsonRpcRequest(JsonRpcMessage.Version, String, List)} constructor,
  * trailing {@code null}s (i.e. {@code null}s that occur after the last non{@code null} parameter) are removed so that server defaults for
@@ -45,20 +54,22 @@ public class JsonRpcRequest {
      * @see JsonRpcClient#buildJsonRequest(String, Object...)
      */
     @JsonCreator
-    public JsonRpcRequest(@JsonProperty("jsonrpc")  String jsonrpc,
+    public JsonRpcRequest(@JsonProperty("jsonrpc")  @Nullable String jsonrpc,
                           @JsonProperty("id")       String id,
                           @JsonProperty("method")   String method,
-                          @JsonProperty("params")   List<@Nullable Object> params) {
-        this.jsonrpc = jsonrpc;
+                          @JsonProperty("params")   @Nullable List<@Nullable Object> params) {
+        this.jsonrpc = jsonrpc != null ? jsonrpc : V1.jsonrpc();
         this.method = method;
         this.id = id;
-        this.params = Collections.unmodifiableList(new ArrayList<>(params));
+        this.params = params != null ? Collections.unmodifiableList(new ArrayList<>(params)) : List.of();
     }
 
     /**
-     * This constructor is slightly more strict than the deserialization constructor and should be used
-     * where possible. It uses the {@link JsonRpcMessage.Version} {@code enum} and requires that
-     * the {@code id} be a {@code long}.
+     * This constructor is more strongly-typed than the deserialization constructor and should be preferred to that
+     * constructor where possible.
+     * It uses the {@link JsonRpcMessage.Version} {@code enum} and uses a {@code long} to specify
+     * the {@code id} value (which is stored internally as a {@link String}.
+     * a {@code long}.
      *
      * @param jsonRpcVersion JSON-RPC version (enum)
      * @param id message id
@@ -116,6 +127,16 @@ public class JsonRpcRequest {
         return method;
     }
 
+    /**
+     * Get the JSON-RPC {@code id} member.
+     * <p>
+     * According to the JSON-RPC Specification {@code id} can be a {@code String}, {@code Number},
+     * or {@code NULL}. We generally represent {@code id} as a Java {@link String}. However, when serialization with
+     * Jackson, we use {@link NumberStringSerializer} to produce a JavaScript {@code Number} (integer) when possible.
+     * This was necessary for compatibility with certain servers.
+     * {@code JsonRpcRequest#getId()} with
+     * @return The id as a string
+     */
     @JsonSerialize(using=NumberStringSerializer.class)
     public String getId() {
         return id;
