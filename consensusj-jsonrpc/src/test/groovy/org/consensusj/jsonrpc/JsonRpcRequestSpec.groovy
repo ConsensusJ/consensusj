@@ -52,13 +52,10 @@ class JsonRpcRequestSpec extends Specification {
     }
 
     def "can create from JSON -- with version 1.0"() {
-        given:
-        var json = """
+        when:
+        JsonRpcRequest request = parse """
             {"jsonrpc":"1.0", "id":1, "method":"getblockcount", "params":[]}
         """
-
-        when:
-        JsonRpcRequest request = parse(json)
 
         then:
         request.id == "1"
@@ -68,12 +65,10 @@ class JsonRpcRequestSpec extends Specification {
     }
 
     def "can create from JSON -- with version 2.0"() {
-        given:
-        var json = """
+        when:
+        JsonRpcRequest request = parse """
             {"jsonrpc":"2.0", "id":1, "method":"getblockcount", "params":[]}
         """
-        when:
-        JsonRpcRequest request = parse(json)
 
         then:
         request.id == "1"
@@ -83,15 +78,12 @@ class JsonRpcRequestSpec extends Specification {
     }
 
     def "can create from JSON -- without version"() {
-        given:
-        var json = """
+        when:
+        JsonRpcRequest request = parse """
             {"id":1, "method":"getblockcount", "params":[]}
         """
 
-        when:
-        JsonRpcRequest request = parse(json)
-
-        then: "A request is created (I believe this is legal in JSON-RPC 1.0)"
+        then:
         request.id == "1"
         request.jsonrpc == "1.0"
         request.method == "getblockcount"
@@ -99,13 +91,10 @@ class JsonRpcRequestSpec extends Specification {
     }
 
     def "can create from JSON -- without params"() {
-        given:
-        var json = """
+        when:
+        JsonRpcRequest request = parse """
             {"id":1, "method":"getblockcount"}
         """
-
-        when:
-        JsonRpcRequest request = parse(json)
 
         then:
         request.id == "1"
@@ -115,7 +104,7 @@ class JsonRpcRequestSpec extends Specification {
     }
 
     static final ObjectMapper mapper = new ObjectMapper()
-    private JsonRpcRequest parse(String json) {
+    private static JsonRpcRequest parse(String json) {
         return mapper.readValue(json, JsonRpcRequest.class)
     }
 }
