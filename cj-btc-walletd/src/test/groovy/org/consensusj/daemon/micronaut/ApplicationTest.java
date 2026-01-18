@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
 
@@ -88,11 +89,11 @@ public class ApplicationTest {
 
     @Test
     void sendToAddressRequest() {
-//        JsonRpcStatusException exception =
-//                assertThrows(JsonRpcStatusException.class, () -> {
-//                    var txId = client.sendToAddress(randomAddress(), 100.btc);
-//                });
-//        assertTrue(exception.getMessage().startsWith("Server exception: Insufficient money"));
+        JsonRpcStatusException exception =
+                assertThrows(JsonRpcStatusException.class, () -> {
+                    var txId = client.sendToAddress(randomAddress(), Coin.ofBtc(BigDecimal.valueOf(100)));
+                });
+        assertTrue(exception.getMessage().startsWith("Server exception: Insufficient money"));
     }
 
     @Test
