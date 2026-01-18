@@ -10,7 +10,7 @@ tasks.withType(JavaCompile).configureEach {
 micronaut {
     version micronautVersion
     runtime("netty")
-    testRuntime("spock2")
+    testRuntime("junit5")
     processing {
         incremental(true)
         annotations("org.consensusj.daemon.micronaut.*")
@@ -23,7 +23,12 @@ graalvmNative {
             imageName = 'walletd'
             //verbose = true
             configurationFileDirectories.from(file('src/main/graal'))
+            buildArgs.add('-H:+UnlockExperimentalVMOptions')
             buildArgs.add('-H:-CheckToolchain')
+        }
+        test {
+            buildArgs.add('-H:+UnlockExperimentalVMOptions')
+            buildArgs.add("--initialize-at-build-time=org.junit.platform.commons.logging")
         }
     }
 }
@@ -41,7 +46,7 @@ dependencies {
     compileOnly "org.graalvm.nativeimage:svm"
 
     testImplementation project(':cj-btc-jsonrpc')
-    testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy extensions in tests
+    // Tests are automatically configured by `micronaut.testRuntime("junit5")` above
 
     runtimeOnly "ch.qos.logback:logback-classic"
 }
