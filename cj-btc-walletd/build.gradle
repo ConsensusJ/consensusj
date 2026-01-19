@@ -19,15 +19,16 @@ micronaut {
 
 graalvmNative {
     binaries {
+        configureEach {
+            buildArgs.add('-H:+UnlockExperimentalVMOptions')
+        }
         main {
             imageName = 'walletd'
             //verbose = true
             configurationFileDirectories.from(file('src/main/graal'))
-            buildArgs.add('-H:+UnlockExperimentalVMOptions')
             buildArgs.add('-H:-CheckToolchain')
         }
         test {
-            buildArgs.add('-H:+UnlockExperimentalVMOptions')
             buildArgs.add("--initialize-at-build-time=org.junit.platform.commons.logging")
         }
     }
