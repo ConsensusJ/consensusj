@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Closeable;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -22,6 +23,12 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
             "echo message\n" +
             "help\n" +
             "stop\n";
+    private static final Map<String, helpMessages> helpMap = Map.of(
+            "echo", new helpMessages("lorem ipsum", "lorem ipsum"),
+            "help", new helpMessages("lorem ipsum", "lorem ipsum"),
+            "stop", new helpMessages("lorem ipsum", "lorem ipsum")
+    );
+
 
     private final JsonRpcShutdownService shutdownService;
 
@@ -40,7 +47,7 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
         return result(message);
     }
 
-    public CompletableFuture<String> help() {
+    public CompletableFuture<String> help(String method) {
         log.debug("EchoJsonRpcService: help");
         return result(helpString);
     }
@@ -55,4 +62,6 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
         String message = shutdownService.stopServer();
         return result(message);
     }
+
+    private record helpMessages(String shortMessage, String longMessage){}
 }
