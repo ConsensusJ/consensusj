@@ -14,6 +14,7 @@ import jakarta.inject.Singleton;
 import java.io.Closeable;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,6 +30,11 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
             help
             stop
     """;
+    private static final Map<String, helpMessages> helpMap = Map.of(
+            "echo", new helpMessages("lorem ipsum", "lorem ipsum"),
+            "help", new helpMessages("lorem ipsum", "lorem ipsum"),
+            "stop", new helpMessages("lorem ipsum", "lorem ipsum")
+    );
 
     private EmbeddedServer embeddedServer;
 
@@ -58,9 +64,13 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
         return result(message);
     }
 
-    public CompletableFuture<String> help() {
+    public CompletableFuture<String> help(String method) {
         log.debug("EchoJsonRpcService: help");
-        return result(helpString);
+        if (helpMap.containsKey(method)) {
+            return result(helpMap.get(method).longMessage);
+        } else {
+            return result("Method not found.\n" + helpString);
+        }
     }
 
     /**
@@ -74,4 +84,6 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
         var appName = embeddedServer.getApplicationConfiguration().getName().orElse("server");
         return result(appName + " stopping");
     }
+
+    private record helpMessages(String shortMessage, String longMessage){}
 }
