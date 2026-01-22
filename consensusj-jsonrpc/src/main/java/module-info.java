@@ -14,4 +14,5 @@ module org.consensusj.jsonrpc {
     exports org.consensusj.jsonrpc;
     exports org.consensusj.jsonrpc.introspection;
     exports org.consensusj.jsonrpc.internal to com.fasterxml.jackson.databind;
+    opens org.consensusj.jsonrpc to com.fasterxml.jackson.databind;
 }
