@@ -7,6 +7,7 @@ import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -65,34 +66,41 @@ public class ApplicationTest {
         assertEquals(expectedErrorCode, exception.jsonRpcCode);
     }
 
-
     @Test
-    void helpMethod() throws IOException {
-        var expectedResult  = """
-            echo message
-            help
-            stop
-    """;
+    void helpForHelpMethod() throws IOException {
+        var expectedResult  = "lorem ipsum";
         try (var client = new DefaultRpcClient(endpoint, "", "")) {
-            String result = (String) client.send("help");
+            String result = (String) client.send("help", "help");
             assertEquals(expectedResult, result);
         }
     }
 
-    /*
-     * The help method is currently not fully implemented. It SHOULD allow
-     * for an argument, and only fail if the argument doesn't match an existing
-     * command. Once the help method is properly implemented we will need to change
-     * our tests
-     */
     @Test
-    void helpMethodOneArg() throws IOException {
+    void helpForEchoMethod() throws IOException {
+        var expectedResult  = "lorem ipsum";
+        try (var client = new DefaultRpcClient(endpoint, "", "")) {
+            String result = (String) client.send("help", "echo");
+            assertEquals(expectedResult, result);
+        }
+    }
+
+    @Test
+    void helpForStopMethod() throws IOException {
+        var expectedResult  = "lorem ipsum";
+        try (var client = new DefaultRpcClient(endpoint, "", "")) {
+            String result = (String) client.send("help", "echo");
+            assertEquals(expectedResult, result);
+        }
+    }
+
+    @Test
+    void helpMethodNoArg() throws IOException {
         int expectedErrorCode = JsonRpcError.Error.INVALID_PARAMS.getCode();
         var expectedErrorMessagePrefix = "Invalid params:";
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
                     try (var client = new DefaultRpcClient(endpoint, "", "")) {
-                        client.send("help", "echo");
+                        client.send("help");
                     }
                 });
         assertTrue(exception.getMessage().startsWith(expectedErrorMessagePrefix));
