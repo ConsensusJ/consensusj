@@ -30,6 +30,7 @@
             (gradle_9.override {    # Gradle Nix package uses an internally-linked JDK
                 java = jdk;         # Run Gradle with this JDK
             })
+            jreleaser-cli           # (Potentially) for use in publishing builds
             bitcoind                # For running tests that talk to bitcoind
             websocat                # For manually testing websocket servers
           ];
