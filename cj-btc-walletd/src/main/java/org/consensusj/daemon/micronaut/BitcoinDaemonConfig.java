@@ -1,10 +1,10 @@
 package org.consensusj.daemon.micronaut;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
-import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.bind.annotation.Bindable;
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Network;
+import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
 
@@ -16,7 +16,7 @@ import java.nio.file.Path;
  * @param walletBaseName Basename of wallet files (basename-net.wallet and basename-net.spvchain)
  */
 @ConfigurationProperties("walletd.config")
-public record BitcoinDaemonConfig(String networkId, int serverPort, @Nullable Path dataDir,
+public record BitcoinDaemonConfig(@Nullable String networkId, int serverPort, @Nullable Path dataDir,
                                   @Bindable(defaultValue = "walletd") String walletBaseName)
 {
     /**
