@@ -1,4 +1,4 @@
-package org.consensusj.jsonrpc.daemon;
+package org.consensusj.jsonrpc.services;
 
 import org.consensusj.jsonrpc.JsonRpcShutdownService;
 import org.consensusj.jsonrpc.introspection.AbstractJsonRpcService;
@@ -18,11 +18,10 @@ import java.util.concurrent.CompletableFuture;
 public class EchoJsonRpcService extends AbstractJsonRpcService implements Closeable {
     private static final Logger log = LoggerFactory.getLogger(EchoJsonRpcService.class);
     private static final Map<String, Method> methods = JsonRpcServiceWrapper.reflect(MethodHandles.lookup().lookupClass());
-    private static final String helpString = """
-            echo message
-            help
-            stop
-    """;
+    private static final String helpString =
+            "echo message\n" +
+            "help\n" +
+            "stop\n";
 
     private final JsonRpcShutdownService shutdownService;
 

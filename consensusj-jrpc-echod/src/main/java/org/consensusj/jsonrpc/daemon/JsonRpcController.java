@@ -9,6 +9,7 @@ import io.micronaut.http.annotation.Post;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcService;
+import org.consensusj.jsonrpc.services.EchoJsonRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

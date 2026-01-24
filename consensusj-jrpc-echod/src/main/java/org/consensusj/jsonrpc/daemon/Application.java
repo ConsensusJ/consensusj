@@ -5,6 +5,7 @@ import io.micronaut.context.annotation.Factory;
 import io.micronaut.runtime.Micronaut;
 import jakarta.inject.Singleton;
 import org.consensusj.jsonrpc.JsonRpcShutdownService;
+import org.consensusj.jsonrpc.services.EchoJsonRpcService;
 
 @Factory
 public class Application {
