@@ -557,7 +557,6 @@ signrawtransactionwithwallet hex
     public void close() {
         log.info("Closing WalletAppKit...");
         kit.close();
-        kit.awaitTerminated();  // This should be done by WalletAppKit itself, see https://github.com/bitcoinj/bitcoinj/pull/3028
         log.info("WalletAppKit terminated");
     }
 }
