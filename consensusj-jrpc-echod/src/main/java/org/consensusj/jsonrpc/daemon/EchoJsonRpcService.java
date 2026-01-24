@@ -1,13 +1,10 @@
 package org.consensusj.jsonrpc.daemon;
 
-import jakarta.annotation.PreDestroy;
 import org.consensusj.jsonrpc.JsonRpcShutdownService;
 import org.consensusj.jsonrpc.introspection.AbstractJsonRpcService;
 import org.consensusj.jsonrpc.introspection.JsonRpcServiceWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jakarta.inject.Singleton;
 
 import java.io.Closeable;
 import java.lang.invoke.MethodHandles;
@@ -18,7 +15,6 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Simple Echo JSON-RPC Service
  */
-@Singleton
 public class EchoJsonRpcService extends AbstractJsonRpcService implements Closeable {
     private static final Logger log = LoggerFactory.getLogger(EchoJsonRpcService.class);
     private static final Map<String, Method> methods = JsonRpcServiceWrapper.reflect(MethodHandles.lookup().lookupClass());
@@ -35,7 +31,6 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
         this.shutdownService = shutdownService;
     }
 
-    @PreDestroy
     @Override
     public void close() {
         log.info("Closing");
