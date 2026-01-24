@@ -69,9 +69,9 @@ public class ApplicationTest {
     @Test
     void helpMethod() throws IOException {
         var expectedResult  = """
-            echo message
-            help
-            stop
+echo message
+help
+stop
     """;
         try (var client = new DefaultRpcClient(endpoint, "", "")) {
             String result = (String) client.send("help");
