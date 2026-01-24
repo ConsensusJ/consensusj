@@ -6,7 +6,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 /**
- *
+ * Basic start/close test for WalletAppKitService
  */
 class WalletAppKitServiceSpec extends Specification {
     @Shared
@@ -15,6 +15,10 @@ class WalletAppKitServiceSpec extends Specification {
     def setupSpec() {
         appKitService = WalletAppKitService.createTemporary(BitcoinNetwork.REGTEST, ScriptType.P2PKH, "cj-btc-services-unittest")
         appKitService.start()
+    }
+
+    def cleanupSpec() {
+        appKitService.close()
     }
 
     def 'loaded correctly'() {

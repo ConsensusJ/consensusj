@@ -36,4 +36,8 @@ public class DelegatingJsonRpcService extends AbstractJsonRpcService {
     public Object getServiceObject() {
         return service;
     }
+
+    @Override
+    public void close() throws Exception {
+    }
 }

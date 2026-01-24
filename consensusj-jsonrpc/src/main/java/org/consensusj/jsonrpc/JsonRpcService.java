@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
  * Can easily be used in controllers from Java Web frameworks.
  *
  */
-public interface JsonRpcService {
+public interface JsonRpcService extends AutoCloseable {
     /**
      * Handle a JSON-RPC {@link JsonRpcRequest} and return a {@link JsonRpcResponse} POJO
      * @param req A Request object
