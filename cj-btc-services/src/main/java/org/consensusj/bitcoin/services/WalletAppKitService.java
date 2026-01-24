@@ -41,6 +41,9 @@ import org.consensusj.bitcoinj.signing.SigningRequest;
 import org.consensusj.bitcoinj.signing.TransactionInputData;
 import org.consensusj.bitcoinj.signing.TransactionOutputData;
 import org.consensusj.bitcoinj.signing.TransactionOutputDataScript;
+import org.consensusj.jsonrpc.JsonRpcShutdownService;
+import org.consensusj.jsonrpc.introspection.AbstractJsonRpcService;
+import org.consensusj.jsonrpc.introspection.JsonRpcServiceWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +55,7 @@ import jakarta.inject.Named;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -66,8 +70,9 @@ import java.util.stream.Collectors;
  * Implement a subset of Bitcoin JSON RPC using a WalletAppKit
  */
 @Named
-public class WalletAppKitService implements BitcoinJsonRpc, Closeable {
+public class WalletAppKitService extends AbstractJsonRpcService implements BitcoinJsonRpc, Closeable {
     private static final Logger log = LoggerFactory.getLogger(WalletAppKitService.class);
+    private static final Map<String, Method> methods = JsonRpcServiceWrapper.reflect(WalletAppKitService.class);
     // P2P user-agent string
     private static final String userAgentName = "WalletAppKitService";
     // P2P user-agent version
@@ -105,6 +110,7 @@ signrawtransactionwithwallet hex
 
     protected final HexFormat hexFormat = HexFormat.of();
 
+    private final JsonRpcShutdownService jsonRpcShutdownService;
     protected final BitcoinNetwork network;
     protected final WalletAppKit kit;
     protected final ObjectMapper mapper;
@@ -127,7 +133,7 @@ signrawtransactionwithwallet hex
      */
     public static WalletAppKitService createTemporary(BitcoinNetwork network, ScriptType scriptType, String walletBaseName) {
         WalletAppKit walletAppKit = createTemporaryWallet(network, scriptType, walletBaseName);
-        return new WalletAppKitService(walletAppKit);
+        return new WalletAppKitService(walletAppKit, new JsonRpcShutdownService.NoopShutdownService());
     }
 
     public static WalletAppKit createTemporaryWallet(BitcoinNetwork network, ScriptType scriptType, String walletBaseName) {
@@ -148,8 +154,10 @@ signrawtransactionwithwallet hex
      * @param walletAppKit instance
      */
     @Inject
-    public WalletAppKitService(WalletAppKit walletAppKit) {
+    public WalletAppKitService(WalletAppKit walletAppKit, JsonRpcShutdownService jsonRpcShutdownService) {
+        super(methods);
         kit = walletAppKit;
+        this.jsonRpcShutdownService = jsonRpcShutdownService;
         network = kit.network();
         mapper = new ObjectMapper();
         mapper.registerModule(new RpcServerModule());
@@ -179,10 +187,18 @@ signrawtransactionwithwallet hex
         return result(helpString);
     }
 
+    /**
+     * Initiate server shutdown. This is a JSON-RPC method and will initiate but not
+     * complete server-shutdown because it must return a response to the client.
+     * This will call {@link JsonRpcShutdownService#stopServer()} on the {@link JsonRpcShutdownService}
+     * instance that was constructor-injected.
+     * @return A status string indicating the server is stopping
+     */
     @Override
     public CompletableFuture<String> stop() {
-        log.info("stop command received, ignoring...");
-        return result("stop command ignored.");
+        log.info("stop");
+        String message = jsonRpcShutdownService.stopServer();
+        return result(message);
     }
 
     @Override
@@ -492,14 +508,6 @@ signrawtransactionwithwallet hex
             return exception(e);
         }
         return result(blockInfo);
-    }
-
-    protected <T> CompletableFuture<T> result(T result) {
-        return CompletableFuture.completedFuture(result);
-    }
-
-    private <T> CompletableFuture<T> exception(Throwable exception) {
-        return CompletableFuture.failedFuture(exception);
     }
 
     private static StoredBlock getStoredBlockByHash(AbstractBlockChain blockChain, Sha256Hash blockHash) throws BlockStoreException {
