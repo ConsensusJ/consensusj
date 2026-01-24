@@ -1,9 +1,7 @@
 package org.consensusj.jsonrpc.daemon;
 
-import io.micronaut.runtime.event.annotation.EventListener;
-import io.micronaut.runtime.server.EmbeddedServer;
-import io.micronaut.runtime.server.event.ServerShutdownEvent;
-import io.micronaut.runtime.server.event.ServerStartupEvent;
+import jakarta.annotation.PreDestroy;
+import org.consensusj.jsonrpc.JsonRpcShutdownService;
 import org.consensusj.jsonrpc.introspection.AbstractJsonRpcService;
 import org.consensusj.jsonrpc.introspection.JsonRpcServiceWrapper;
 import org.slf4j.Logger;
@@ -30,24 +28,14 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
             stop
     """;
 
-    private EmbeddedServer embeddedServer;
+    private final JsonRpcShutdownService shutdownService;
 
-    public EchoJsonRpcService() {
+    public EchoJsonRpcService(JsonRpcShutdownService shutdownService) {
         super(methods);
+        this.shutdownService = shutdownService;
     }
 
-    @EventListener
-    public void onStartup(ServerStartupEvent event) {
-        log.info("Saving reference to embeddedServer");
-        embeddedServer = event.getSource();
-    }
-
-    @EventListener
-    public void onShutdown(ServerShutdownEvent event) {
-        log.info("Shutting down");
-        this.close();
-    }
-
+    @PreDestroy
     @Override
     public void close() {
         log.info("Closing");
@@ -70,8 +58,7 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
      */
     public CompletableFuture<String> stop() {
         log.info("stop");
-        embeddedServer.stop();
-        var appName = embeddedServer.getApplicationConfiguration().getName().orElse("server");
-        return result(appName + " stopping");
+        String message = shutdownService.stopServer();
+        return result(message);
     }
 }

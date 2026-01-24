@@ -5,6 +5,7 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import org.consensusj.bitcoin.services.WalletAppKitService;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcService;
@@ -24,7 +25,7 @@ public class JsonRpcController {
     private static final Logger log = LoggerFactory.getLogger(JsonRpcController.class);
     private final JsonRpcService jsonRpcService;
 
-    public JsonRpcController(WalletAppKitJsonRpcService walletAppKitService) {
+    public JsonRpcController(WalletAppKitService walletAppKitService) {
         log.info("Constructing JsonRpcController");
         jsonRpcService = walletAppKitService;
     }

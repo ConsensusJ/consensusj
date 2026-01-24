@@ -1,6 +1,7 @@
 package org.consensusj.daemon.micronaut;
 
 import com.fasterxml.jackson.databind.Module;
+import io.micronaut.context.annotation.Bean;
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.ScriptType;
 import org.bitcoinj.core.Context;
@@ -9,6 +10,7 @@ import org.bitcoinj.wallet.KeyChainGroupStructure;
 import org.consensusj.bitcoin.json.conversion.RpcServerModule;
 import io.micronaut.context.annotation.Factory;
 import org.bitcoinj.kits.WalletAppKit;
+import org.consensusj.bitcoin.services.WalletAppKitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +41,14 @@ public class BitcoinFactory {
         log.info("Creating WalletAppKit for {} <============", config.network().id());
         log.info("Returning WalletAppKit bean, wallet directory: {}, prefix: {}", dataDirectory.getAbsolutePath(), filePrefix);
         return new WalletAppKit((BitcoinNetwork) config.network(), ScriptType.P2PKH, KeyChainGroupStructure.BIP43, dataDirectory, filePrefix);
+    }
+
+    @Singleton
+    @Bean(preDestroy = "close")
+    public WalletAppKitService walletAppKitService(WalletAppKit walletAppKit, MicronautJsonRpcShutdownService shutdownService) {
+        WalletAppKitService service = new WalletAppKitService(walletAppKit, shutdownService);
+        service.start();
+        return service;
     }
 
     @Singleton
