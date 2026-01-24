@@ -60,4 +60,8 @@ public class MathService extends AbstractJsonRpcService {
         log.info("MathService: subtract {} - {}",a,b);
         return result(a - b);
     }
+
+    @Override
+    public void close() throws Exception {
+    }
 }
