@@ -51,7 +51,6 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -68,7 +67,7 @@ import java.util.stream.Collectors;
 /**
  * Implement a subset of Bitcoin JSON RPC using a WalletAppKit
  */
-public class WalletAppKitService extends AbstractJsonRpcService implements BitcoinJsonRpc, Closeable {
+public class WalletAppKitService extends AbstractJsonRpcService implements BitcoinJsonRpc {
     private static final Logger log = LoggerFactory.getLogger(WalletAppKitService.class);
     private static final Map<String, Method> methods = JsonRpcServiceWrapper.reflect(WalletAppKitService.class);
     // P2P user-agent string
