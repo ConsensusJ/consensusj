@@ -50,7 +50,6 @@ import org.slf4j.LoggerFactory;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
-import jakarta.inject.Named;
 
 import java.io.Closeable;
 import java.io.File;
@@ -69,7 +68,6 @@ import java.util.stream.Collectors;
 /**
  * Implement a subset of Bitcoin JSON RPC using a WalletAppKit
  */
-@Named
 public class WalletAppKitService extends AbstractJsonRpcService implements BitcoinJsonRpc, Closeable {
     private static final Logger log = LoggerFactory.getLogger(WalletAppKitService.class);
     private static final Map<String, Method> methods = JsonRpcServiceWrapper.reflect(WalletAppKitService.class);
