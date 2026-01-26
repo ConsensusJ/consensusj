@@ -18,16 +18,16 @@ class JsonRpcRequestSpec extends Specification {
         out == expectedOutput
 
         where:
-        input                       | expectedOutput
-        []                          | []
-        [1]                         | [1]
-        [null]                      | []
-        [1, null]                   | [1]
-        [null, 1]                   | [null, 1]
-        [null, 1, null]             | [null, 1]
-        [1, null, 2]                | [1, null, 2]
-        [1, null, 2, null]          | [1, null, 2]
-        [1, null, 2, null, 3, null] | [1, null, 2, null, 3]
+        input                         | expectedOutput
+        pl()                          | pl()
+        pl(1)                         | pl(1)
+        pl([null] as Object[])        | pl()
+        pl(1, null)                   | pl(1)
+        pl(null, 1)                   | pl(null, 1)
+        pl(null, 1, null)             | pl(null, 1)
+        pl(1, null, 2)                | pl(1, null, 2)
+        pl(1, null, 2, null)          | pl(1, null, 2)
+        pl(1, null, 2, null, 3, null) | pl(1, null, 2, null, 3)
     }
 
     @Unroll
@@ -39,16 +39,16 @@ class JsonRpcRequestSpec extends Specification {
         expectedParams == req.getParams()
 
         where:
-        inputParams                 | expectedParams
-        []                          | []
-        [1]                         | [1]
-        [null]                      | []
-        [1, null]                   | [1]
-        [null, 1]                   | [null, 1]
-        [null, 1, null]             | [null, 1]
-        [1, null, 2]                | [1, null, 2]
-        [1, null, 2, null]          | [1, null, 2]
-        [1, null, 2, null, 3, null] | [1, null, 2, null, 3]
+        inputParams                   | expectedParams
+        pl()                          | pl()
+        pl(1)                         | pl(1)
+        pl([null] as Object[])        | pl()
+        pl(1, null)                   | pl(1)
+        pl(null, 1)                   | pl(null, 1)
+        pl(null, 1, null)             | pl(null, 1)
+        pl(1, null, 2)                | pl(1, null, 2)
+        pl(1, null, 2, null)          | pl(1, null, 2)
+        pl(1, null, 2, null, 3, null) | pl(1, null, 2, null, 3)
     }
 
     def "can create from JSON -- with version 1.0"() {
@@ -101,6 +101,15 @@ class JsonRpcRequestSpec extends Specification {
         request.jsonrpc == "1.0"
         request.method == "getblockcount"
         request.params == Collections.emptyList()
+    }
+
+    /**
+     * Create <b>p</b>arameter <b>l</b>ist of unmodifiable ArrayList from varargs (can contain nulls) as need for JSON-RPC {@code params}
+     * @param params
+     * @return
+     */
+    private static pl(Object... params) {
+        return Collections.unmodifiableList(new ArrayList(Arrays.asList(params)))
     }
 
     static final ObjectMapper mapper = new ObjectMapper()
