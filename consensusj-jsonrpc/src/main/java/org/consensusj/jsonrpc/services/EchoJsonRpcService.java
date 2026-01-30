@@ -1,5 +1,6 @@
 package org.consensusj.jsonrpc.services;
 
+import org.consensusj.jsonrpc.JsonRpcService;
 import org.consensusj.jsonrpc.JsonRpcShutdownService;
 import org.consensusj.jsonrpc.introspection.AbstractJsonRpcService;
 import org.consensusj.jsonrpc.introspection.JsonRpcServiceWrapper;
@@ -9,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import java.io.Closeable;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
+import org.consensusj.jsonrpc.help.JsonRpcHelp;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -23,10 +24,10 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
             "echo message\n" +
             "help\n" +
             "stop\n";
-    private static final Map<String, HelpMessages> helpMap = Map.of(
-            "echo", new HelpMessages("lorem ipsum", "lorem ipsum"),
-            "help", new HelpMessages("lorem ipsum", "lorem ipsum"),
-            "stop", new HelpMessages("lorem ipsum", "lorem ipsum")
+    private static final Map<String, JsonRpcHelp> helpMap = Map.of(
+            "echo", new JsonRpcHelp("lorem ipsum", "lorem ipsum"),
+            "help", new JsonRpcHelp("lorem ipsum", "lorem ipsum"),
+            "stop", new JsonRpcHelp("lorem ipsum", "lorem ipsum")
     );
 
 
@@ -50,7 +51,7 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
     public CompletableFuture<String> help(String method) {
         log.debug("EchoJsonRpcService: help");
         if (helpMap.containsKey(method)) {
-            return result(helpMap.get(method).detail);
+            return result(helpMap.get(method).detail());
         } else {
             return result("Method not found.\n" + helpString);
         }    }
@@ -66,21 +67,4 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
         return result(message);
     }
 
-    private static class HelpMessages{
-        private final String summary;
-        private final String detail;
-
-        private HelpMessages(String summary, String detail){
-            this.summary = summary;
-            this.detail = detail;
-        }
-
-        public String summary() {
-            return this.summary;
-        }
-        public String detail() {
-            return this.detail;
-        }
-
-    }
 }
