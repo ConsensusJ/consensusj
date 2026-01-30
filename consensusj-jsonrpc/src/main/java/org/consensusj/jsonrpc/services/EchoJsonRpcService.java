@@ -23,10 +23,10 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
             "echo message\n" +
             "help\n" +
             "stop\n";
-    private static final Map<String, helpMessages> helpMap = Map.of(
-            "echo", new helpMessages("lorem ipsum", "lorem ipsum"),
-            "help", new helpMessages("lorem ipsum", "lorem ipsum"),
-            "stop", new helpMessages("lorem ipsum", "lorem ipsum")
+    private static final Map<String, HelpMessages> helpMap = Map.of(
+            "echo", new HelpMessages("lorem ipsum", "lorem ipsum"),
+            "help", new HelpMessages("lorem ipsum", "lorem ipsum"),
+            "stop", new HelpMessages("lorem ipsum", "lorem ipsum")
     );
 
 
@@ -49,8 +49,11 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
 
     public CompletableFuture<String> help(String method) {
         log.debug("EchoJsonRpcService: help");
-        return result(helpString);
-    }
+        if (helpMap.containsKey(method)) {
+            return result(helpMap.get(method).detail);
+        } else {
+            return result("Method not found.\n" + helpString);
+        }    }
 
     /**
      * Initiate server shutdown. This is a JSON-RPC method and will initiate but not
@@ -63,5 +66,21 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
         return result(message);
     }
 
-    private record helpMessages(String shortMessage, String longMessage){}
+    private static class HelpMessages{
+        private final String summary;
+        private final String detail;
+
+        private HelpMessages(String summary, String detail){
+            this.summary = summary;
+            this.detail = detail;
+        }
+
+        public String summary() {
+            return this.summary;
+        }
+        public String detail() {
+            return this.detail;
+        }
+
+    }
 }
