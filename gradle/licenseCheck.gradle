@@ -1,0 +1,22 @@
+allprojects {
+    apply plugin: 'com.github.hierynomus.license'
+
+    license {
+        header = rootProject.file("config/HEADER.txt")
+        strictCheck = true
+        ignoreFailures = false
+        mapping {
+            java   = 'SLASHSTAR_STYLE'
+            kt     = 'SLASHSTAR_STYLE'
+            groovy = 'SLASHSTAR_STYLE'
+            kts    = 'SLASHSTAR_STYLE'
+            fxml   = 'XML_STYLE'
+        }
+        ext.year = '2014-2026'
+        ext.name = 'ConsensusJ Developers'
+        exclude "**/*.json"
+        exclude "**/build/*"
+        exclude "**/out/*"
+        exclude "**/.gradle/*"
+    }
+}

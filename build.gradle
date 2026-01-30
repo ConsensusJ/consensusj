@@ -8,6 +8,7 @@ plugins {
     id 'net.ltgt.errorprone'            version '4.3.0' apply false
     id 'org.asciidoctor.jvm.convert'    version '4.0.5'
     id 'org.ajoberstar.git-publish'     version '4.2.2'
+    id 'com.github.hierynomus.license'  version '0.16.1' apply false
 }
 
 gradle.rootProject {
@@ -128,6 +129,7 @@ apply from: 'gradle/javadoc.gradle'
 apply from: 'gradle/asciidoctor.gradle'
 apply from: 'gradle/github-pages.gradle'
 apply from: 'gradle/maven-publish.gradle'
+apply from: 'gradle/licenseCheck.gradle'
 
 dependencies {
     testReportAggregation project(':').subprojects
