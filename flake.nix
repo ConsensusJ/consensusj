@@ -50,7 +50,9 @@
             inherit system;
           };
           mainProgram = "jrpc";
-          jdk = pkgs.jdk25;
+          echodProgram = "jrpc-echod";
+          walletdProgram = "walletd";
+          jdk = pkgs.jdk25_headless;
           graalvm = pkgs.graalvmPackages.graalvm-ce;
           gradle = pkgs.gradle_9.override {
             java = jdk;  # Run Gradle with this JDK
@@ -76,7 +78,7 @@
             preBuild = ''
               export GRAALVM_HOME=${graalvm}
             '';
-            gradleBuildTask = "consensusj-jrpc:nativeCompile";
+            gradleBuildTask = "consensusj-jrpc:nativeCompile consensusj-jrpc-echod:installDist cj-btc-walletd:installDist";
 
             gradleFlags = [ "--info --stacktrace" ];
 
@@ -87,6 +89,22 @@
               mkdir -p $out/bin
               cp consensusj-jrpc/build/${mainProgram} $out/bin/${mainProgram}
               wrapProgram $out/bin/${mainProgram}
+
+              # Package `jrpc-echod` as JARs and a JDK
+              mkdir -p $out/{bin,share/${echodProgram}/lib}
+              cp consensusj-jrpc-echod/build/install/${echodProgram}/lib/*.jar $out/share/${echodProgram}/lib
+              # Compute CLASSPATH: all .jar files in $out/share/${echodProgram}/lib
+              export ECHOD_PATH=$(find $out/share/${echodProgram}/lib -name "*.jar" -printf ':%p' | sed 's|^:||')  # Colon-separated, no leading :
+              makeWrapper ${jdk}/bin/java $out/bin/${echodProgram} \
+                    --add-flags "-cp $ECHOD_PATH org.consensusj.jsonrpc.daemon.Application"
+
+              # Package `walletd` as JARs and a JDK
+              mkdir -p $out/{bin,share/${walletdProgram}/lib}
+              cp cj-btc-walletd/build/install/${walletdProgram}/lib/*.jar $out/share/${walletdProgram}/lib
+              # Compute CLASSPATH: all .jar files in $out/share/${walletdProgram}/lib
+              export WALLETD_PATH=$(find $out/share/${walletdProgram}/lib -name "*.jar" -printf ':%p' | sed 's|^:||')  # Colon-separated, no leading :
+              makeWrapper ${jdk}/bin/java $out/bin/${walletdProgram} \
+                    --add-flags "-cp $WALLETD_PATH org.consensusj.daemon.micronaut.Application"
             '';
           });
         in
