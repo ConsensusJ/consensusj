@@ -15,6 +15,7 @@
  */
 package org.consensusj.jsonrpc.services;
 
+import org.consensusj.jsonrpc.JsonRpcService;
 import org.consensusj.jsonrpc.JsonRpcShutdownService;
 import org.consensusj.jsonrpc.introspection.AbstractJsonRpcService;
 import org.consensusj.jsonrpc.introspection.JsonRpcServiceWrapper;
@@ -25,6 +26,7 @@ import java.io.Closeable;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.Map;
+import org.consensusj.jsonrpc.help.JsonRpcHelp;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -37,6 +39,12 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
             "echo message\n" +
             "help\n" +
             "stop\n";
+    private static final Map<String, JsonRpcHelp> helpMap = Map.of(
+            "echo", new JsonRpcHelp("lorem ipsum", "lorem ipsum"),
+            "help", new JsonRpcHelp("lorem ipsum", "lorem ipsum"),
+            "stop", new JsonRpcHelp("lorem ipsum", "lorem ipsum")
+    );
+
 
     private final JsonRpcShutdownService shutdownService;
 
@@ -55,10 +63,13 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
         return result(message);
     }
 
-    public CompletableFuture<String> help() {
+    public CompletableFuture<String> help(String method) {
         log.debug("EchoJsonRpcService: help");
-        return result(helpString);
-    }
+        if (helpMap.containsKey(method)) {
+            return result(helpMap.get(method).detail());
+        } else {
+            return result("Method not found.\n" + helpString);
+        }    }
 
     /**
      * Initiate server shutdown. This is a JSON-RPC method and will initiate but not
@@ -70,4 +81,5 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
         String message = shutdownService.stopServer();
         return result(message);
     }
+
 }
