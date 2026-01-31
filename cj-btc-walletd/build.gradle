@@ -54,6 +54,7 @@ dependencies {
 
 application {
     mainClass.set("org.consensusj.daemon.micronaut.Application")
+    applicationName = 'walletd'
 }
 
 dockerBuild {
