@@ -59,7 +59,13 @@ Although the API is changing, binary packages are available on https://gitlab.co
 
 === Nix Package
 
-An experimental Nix Package which includes the `jrpc` JSON-RPC tool is now available. You can install a native-image of the tool with Nix, via:
+An experimental Nix Package which includes:
+
+1. A natively-compiled binary `jrpc` JSON-RPC tool.
+2. A JVM-based `jrpc-echod` tool.
+3. A JVM-based `walletd` tool.
+
+You can install these tools with Nix, via:
 
 ----
 nix profile install github:ConsensusJ/consensusj#consensusj-tools
@@ -92,6 +98,7 @@ jrpc help              # Get RPC help from default server
 jrpc -c btcmain help   # Get RPC help from 'btcmain' in 'config.toml'
 ----
 
+The `jrpc-echod` and `walletd` tools do not currently have help and are mainly used for integration testing.
 
 ==== Maven
 
