@@ -478,6 +478,11 @@ To build and run from Gradle:
 
     ./gradlew :consensusj-jrpc-echod:run
 
+To build an "installable" JVM application and run:
+
+    ./gradlew :consensusj-jrpc-echod:installDist
+    ./consensusj-jrpc-echod/build/install/jrpc-echod/bin/jrpc-echod
+
 To build a native image and run:
 
     ./gradlew :consensusj-jrpc-echod:nativeCompile
@@ -489,7 +494,9 @@ To build and run from Gradle:
 
     ./gradlew :cj-btc-walletd:run --args="-walletd.config.network-id=testnet"
 
-To build a native image and run:
+To build an "installable" JVM application and run:
 
-    ./gradlew :cj-btc-walletd:nativeCompile
-    ./cj-btc-walletd/build/native/nativeCompile/walletd -walletd.config.network-id=testnet
+    ./gradlew :cj-btc-walletd:installDist
+    ./cj-btc-walletd/build/install/walletd/bin/walletd -walletd.config.network-id=testnet
+
+(The native-image build of `walletd` is still in need of fine-tuning.)
