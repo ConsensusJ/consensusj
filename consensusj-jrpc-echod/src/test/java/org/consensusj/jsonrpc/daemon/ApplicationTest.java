@@ -80,34 +80,41 @@ public class ApplicationTest {
         assertEquals(expectedErrorCode, exception.jsonRpcCode);
     }
 
-
     @Test
-    void helpMethod() throws IOException {
-        var expectedResult  = """
-echo message
-help
-stop
-    """;
+    void helpForHelpMethod() throws IOException {
+        var expectedResult  = "Display help information for a JSON-RPC method.";
         try (var client = new DefaultRpcClient(endpoint, "", "")) {
-            String result = (String) client.send("help");
+            String result = (String) client.send("help", "help");
             assertEquals(expectedResult, result);
         }
     }
 
-    /*
-     * The help method is currently not fully implemented. It SHOULD allow
-     * for an argument, and only fail if the argument doesn't match an existing
-     * command. Once the help method is properly implemented we will need to change
-     * our tests
-     */
     @Test
-    void helpMethodOneArg() throws IOException {
+    void helpForEchoMethod() throws IOException {
+        var expectedResult  = "Echo a message back to the caller.";
+        try (var client = new DefaultRpcClient(endpoint, "", "")) {
+            String result = (String) client.send("help", "echo");
+            assertEquals(expectedResult, result);
+        }
+    }
+
+    @Test
+    void helpForStopMethod() throws IOException {
+        var expectedResult  = "Initiate a graceful shutdown of the server.";
+        try (var client = new DefaultRpcClient(endpoint, "", "")) {
+            String result = (String) client.send("help", "stop");
+            assertEquals(expectedResult, result);
+        }
+    }
+
+    @Test
+    void helpMethodNoArg() throws IOException {
         int expectedErrorCode = JsonRpcError.Error.INVALID_PARAMS.getCode();
         var expectedErrorMessagePrefix = "Invalid params:";
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
                     try (var client = new DefaultRpcClient(endpoint, "", "")) {
-                        client.send("help", "echo");
+                        client.send("help");
                     }
                 });
         assertTrue(exception.getMessage().startsWith(expectedErrorMessagePrefix));
