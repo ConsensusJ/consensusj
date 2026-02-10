@@ -28,9 +28,11 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -141,9 +143,10 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
         CompletableFuture<RSLT> future;
         final Method mh = getMethod(methodName);
         if (mh != null) {
+            List<@Nullable Object> completeParams = addNullParams(mh.getParameterCount(), params);
             try {
                 @SuppressWarnings("unchecked")
-                CompletableFuture<RSLT> liveFuture = (CompletableFuture<RSLT>) mh.invoke(getServiceObject(), params.toArray());
+                CompletableFuture<RSLT> liveFuture = (CompletableFuture<RSLT>) mh.invoke(getServiceObject(), completeParams.toArray());
                 future = liveFuture;
             } catch (Throwable throwable) {
                 log.error("Exception invoking service object: ", throwable);
@@ -155,6 +158,25 @@ public interface JsonRpcServiceWrapper extends JsonRpcService {
         }
         return future;
     }
+
+    /**
+     * Fills in any omitted optional params from a given param list with nulls
+     *
+     * @param numParams Total number of params a method expects
+     * @param paramsFromNet Param list which may omit unused optional params
+     * @return Param list which does not omit unused optional params
+     */
+    private List<@Nullable Object> addNullParams(int numParams, List<@Nullable Object> paramsFromNet) {
+        int nullParamsNeeded = Math.max(0, numParams - paramsFromNet.size());
+        if (nullParamsNeeded > 0) {
+            List<@Nullable Object> combined = new ArrayList<>(paramsFromNet);
+            combined.addAll(Collections.nCopies(nullParamsNeeded, null));
+            return Collections.unmodifiableList(combined);
+        } else {
+            return paramsFromNet;
+        }
+    }
+
 
     // TODO: Create a mechanism to return a map with only the desired remotely-accessible methods in it.
     // For server-side JSON-RPC we should migrate away from CompletableFuture to Virtual Threads
