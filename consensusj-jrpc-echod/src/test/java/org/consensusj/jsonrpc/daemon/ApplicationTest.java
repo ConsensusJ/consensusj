@@ -80,38 +80,42 @@ public class ApplicationTest {
         assertEquals(expectedErrorCode, exception.jsonRpcCode);
     }
 
+    @Test
+    void helpForHelpMethod() throws IOException {
+        var expectedResultSubstring  = "Displays detailed help text for the specified method.";
+        try (var client = new DefaultRpcClient(endpoint, "", "")) {
+            String result = (String) client.send("help", "help");
+            assertTrue(result.contains(expectedResultSubstring));
+        }
+    }
 
     @Test
-    void helpMethod() throws IOException {
-        var expectedResult  = """
-echo message
-help
-stop
-    """;
+    void helpForEchoMethod() throws IOException {
+        var expectedResultSubstring  = "Returns the provided message exactly as it was sent.";
+        try (var client = new DefaultRpcClient(endpoint, "", "")) {
+            String result = (String) client.send("help", "echo");
+            assertTrue(result.contains(expectedResultSubstring));
+        }
+    }
+
+    @Test
+    void helpForStopMethod() throws IOException {
+        var expectedResultSubstring  = "Initiates the shutdown process of the JSON-RPC server.";
+        try (var client = new DefaultRpcClient(endpoint, "", "")) {
+            String result = (String) client.send("help", "stop");
+            assertTrue(result.contains(expectedResultSubstring));
+        }
+    }
+
+    @Test
+    void helpMethodNoArg() throws IOException {
+        var expectedResult  = "echo message\n" +
+                "help (method)\n" +
+                "stop ";
         try (var client = new DefaultRpcClient(endpoint, "", "")) {
             String result = (String) client.send("help");
             assertEquals(expectedResult, result);
         }
-    }
-
-    /*
-     * The help method is currently not fully implemented. It SHOULD allow
-     * for an argument, and only fail if the argument doesn't match an existing
-     * command. Once the help method is properly implemented we will need to change
-     * our tests
-     */
-    @Test
-    void helpMethodOneArg() throws IOException {
-        int expectedErrorCode = JsonRpcError.Error.INVALID_PARAMS.getCode();
-        var expectedErrorMessagePrefix = "Invalid params:";
-        JsonRpcStatusException exception =
-                assertThrows(JsonRpcStatusException.class, () -> {
-                    try (var client = new DefaultRpcClient(endpoint, "", "")) {
-                        client.send("help", "echo");
-                    }
-                });
-        assertTrue(exception.getMessage().startsWith(expectedErrorMessagePrefix));
-        assertEquals(expectedErrorCode, exception.jsonRpcCode);
     }
 
     @Test
