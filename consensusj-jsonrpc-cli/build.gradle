@@ -14,9 +14,6 @@ dependencies {
     api 'commons-cli:commons-cli:1.11.0'
 
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${jacksonVersion}"
-
-    testImplementation "org.apache.groovy:groovy:${groovyVersion}"
-    testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
 }
 
 jar {

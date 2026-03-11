@@ -45,28 +45,9 @@ allprojects {
 }
 
 subprojects {
-    // To support nativeTest, we are migrating away from all subprojects using Spock by default
-    def spockLess = ["consensusj-jrpc", "consensusj-jrpc-echod"]
-    boolean useSpock = !spockLess.contains(it.name)
 
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
-
-        testImplementation platform("org.junit:junit-bom:${junitJupiterVersion}")
-
-        if (useSpock) {
-            testImplementation "org.apache.groovy:groovy:${groovyVersion}"
-            testImplementation("org.spockframework:spock-core:${spockVersion}") {
-                exclude module: "groovy-all"
-            }
-
-            testRuntimeOnly "org.junit.platform:junit-platform-launcher"
-            testRuntimeOnly "net.bytebuddy:byte-buddy:1.17.7"
-            // allows Spock to mock classes (in addition to interfaces)
-            testRuntimeOnly "org.objenesis:objenesis:3.4"
-            // Allow Spock to mock classes with constructor arguments
-            testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"   // Runtime implementation of slf4j
-        }
     }
 
     configurations.configureEach {
@@ -122,8 +103,36 @@ subprojects {
         options.noTimestamp = true
     }
 
-    tasks.withType(Test).configureEach {
-        useJUnitPlatform()              // We're using Spock 2 and JUnit 5
+    // To support nativeTest, we are migrating away from having all subprojects use Spock by default
+    def spockLess = ["consensusj-jrpc", "consensusj-jrpc-echod"]
+    boolean useSpock = !spockLess.contains(it.name)
+
+    testing {
+        suites {
+            configureEach {
+                useJUnitJupiter()
+                dependencies {
+                    implementation platform("org.junit:junit-bom:${junitJupiterVersion}")
+
+                    implementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
+                    runtimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
+
+                    runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+
+                    annotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
+
+                    if (useSpock) {
+                        implementation "org.apache.groovy:groovy:${groovyVersion}"
+                        implementation("org.spockframework:spock-core:${spockVersion}") {
+                            exclude module: "groovy-all"
+                        }
+
+                        runtimeOnly "net.bytebuddy:byte-buddy:1.17.7"   // Lets Spock mock classes (in addition to interfaces)
+                        runtimeOnly "org.objenesis:objenesis:3.4"       // Lets Spock mock classes with constructor arguments
+                    }
+                }
+            }
+        }
     }
 }
 

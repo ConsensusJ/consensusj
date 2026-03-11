@@ -43,19 +43,6 @@ tasks.withType(JavaCompile) {
 
 testing {
     suites {
-        configureEach {
-            useJUnitJupiter()
-            dependencies {
-                implementation platform("org.junit:junit-bom:${junitJupiterVersion}")
-
-                implementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
-                runtimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
-
-                runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
-
-                annotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
-            }
-        }
         integrationTest(JvmTestSuite) {
             dependencies {
                 implementation project()
