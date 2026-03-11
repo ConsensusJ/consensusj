@@ -12,15 +12,7 @@ dependencies {
 
     testImplementation project(':cj-btc-jsonrpc')
 
-    testImplementation "org.apache.groovy:groovy:${groovyVersion}"
-    testImplementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
-        transitive = false
-    }
-
-    testRuntimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
-
     annotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
-    testAnnotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
     errorprone "com.google.errorprone:error_prone_core:${errorProneVersion}"
 }
 
