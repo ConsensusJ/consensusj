@@ -27,7 +27,6 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import org.consensusj.jsonrpc.help.JsonRpcHelp;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -82,6 +81,20 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
 
     private final JsonRpcShutdownService shutdownService;
 
+    /**
+     * Functional interface to generate help summary lines.
+     */
+    @FunctionalInterface
+    public interface HelpSummaryFormatter {
+        /**
+         * Format a summary line
+         * @param methodName the JSON-RPC method name
+         * @param help help data
+         * @return formatted summary line
+         */
+        String format(String methodName, JsonRpcHelp help);
+    }
+
     public EchoJsonRpcService(JsonRpcShutdownService shutdownService) {
         super(methods);
         this.shutdownService = shutdownService;
@@ -131,24 +144,24 @@ public class EchoJsonRpcService extends AbstractJsonRpcService implements Closea
     }
 
     /**
-     * Create a string containing the name of each method and it's parameters in alphabetical order.
-     * @param formatFunction A function determining how to format each line
+     * Create a string containing the name of each method and its parameters in alphabetical order.
+     * @param summaryFormatter A function determining how to format each summary line
      * @return A string containing the name and parameters of each method
      */
-    private static String createHelpString(Function<Map.Entry<String, JsonRpcHelp>, String> formatFunction) {
+    private static String createHelpString(HelpSummaryFormatter summaryFormatter) {
         return helpMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
-                .map(formatFunction)
+                .map(e -> summaryFormatter.format(e.getKey(), e.getValue()))
                 .collect(Collectors.joining("\n"));
     }
 
     /**
      * Default formatter. Appends the method's summary delimited with a space
-     * @param entry Map entry for a given method from `helpMap`
+     * @param methodName method name
+     * @param help help record-like
      * @return Formatted line for `helpString`
      */
-    private static String createHelpStringLine(Map.Entry<String, JsonRpcHelp> entry) {
-        return entry.getKey() + " " + entry.getValue().summary();
+    private static String createHelpStringLine(String methodName, JsonRpcHelp help) {
+        return methodName + " " + help.summary();
     }
-
 }
