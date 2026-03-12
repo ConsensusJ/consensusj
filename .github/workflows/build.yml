@@ -40,12 +40,12 @@ jobs:
       working-directory: ./build
       if: runner.os == 'macOS'
     - name: Upload SHA256SUMS
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: SHA256SUMS-${{ matrix.os }}-${{ matrix.java }}
         path: build/SHA256SUMS
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: artifacts-${{ matrix.os }}-${{ matrix.java }}
         path: build/artifacts
@@ -73,7 +73,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew consensusj-jrpc-echod:nativeTest nativeCompile --scan --info --stacktrace
       - name: Upload jrpc tool as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: jsonrpc-tool-${{ matrix.os }}-jdk${{ matrix.java-version }}
           path: consensusj-jrpc/build/jrpc
@@ -100,7 +100,7 @@ jobs:
         shell: 'nix develop -c bash -e {0}'
         run: ./test-run-regtest.sh
       - name: Upload RegTest results as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: failure()
         with:
           name: regtest-consensusj-jdk${{ matrix.java }}-${{ matrix.os }}-reports
