@@ -27,8 +27,7 @@ graalvmNative {
             // Options for all binaries
             buildArgs.add('-H:+UnlockExperimentalVMOptions')
             buildArgs.add('-H:-CheckToolchain')
-            // SharedArenaSupport requires GraalVM 25
-            buildArgs.add('-H:+SharedArenaSupport')
+            buildArgs.add('-H:+SharedArenaSupport')  // Requires GraalVM JDK 25
         }
         main {
             imageName = application.applicationName
