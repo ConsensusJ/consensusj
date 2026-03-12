@@ -1,5 +1,4 @@
 plugins {
-    id("groovy")
     id("io.micronaut.application") version "${micronautAppGradlePluginVersion}"
 }
 
