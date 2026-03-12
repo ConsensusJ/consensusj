@@ -1,5 +1,4 @@
 plugins {
-    id("groovy")
     id("io.micronaut.application") version "${micronautAppGradlePluginVersion}"
 }
 
@@ -17,16 +16,22 @@ micronaut {
     }
 }
 
+application {
+    mainClass.set("org.consensusj.daemon.micronaut.Application")
+    applicationName = 'walletd'
+}
+
 graalvmNative {
     binaries {
         configureEach {
+            // Options for all binaries
             buildArgs.add('-H:+UnlockExperimentalVMOptions')
+            buildArgs.add('-H:-CheckToolchain')
+            buildArgs.add('-H:+SharedArenaSupport')  // Requires GraalVM JDK 25
         }
         main {
-            imageName = 'walletd'
-            //verbose = true
+            imageName = application.applicationName
             configurationFileDirectories.from(file('src/main/graal'))
-            buildArgs.add('-H:-CheckToolchain')
         }
         test {
             buildArgs.add("--initialize-at-build-time=org.junit.platform.commons.logging")
@@ -35,8 +40,8 @@ graalvmNative {
 }
 
 dependencies {
-    implementation project(':cj-btc-services')
     implementation project(':consensusj-jsonrpc')
+    implementation project(':cj-btc-services')
 
     implementation "io.micronaut:micronaut-runtime"
     implementation("io.micronaut:micronaut-websocket")
@@ -46,15 +51,10 @@ dependencies {
 
     compileOnly "org.graalvm.nativeimage:svm"
 
+    runtimeOnly "ch.qos.logback:logback-classic"
+
     testImplementation project(':cj-btc-jsonrpc')
     // Tests are automatically configured by `micronaut.testRuntime("junit5")` above
-
-    runtimeOnly "ch.qos.logback:logback-classic"
-}
-
-application {
-    mainClass.set("org.consensusj.daemon.micronaut.Application")
-    applicationName = 'walletd'
 }
 
 dockerBuild {
