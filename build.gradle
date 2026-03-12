@@ -48,6 +48,8 @@ subprojects {
 
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+
+        annotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
     }
 
     configurations.configureEach {

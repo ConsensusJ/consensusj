@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -76,7 +77,7 @@ public class ApplicationTest {
                         client.send("echo", testString, testString);
                     }
                 });
-        assertTrue(exception.getMessage().startsWith(expectedErrorMessagePrefix));
+        assertTrue(Objects.requireNonNull(exception.getMessage()).startsWith(expectedErrorMessagePrefix));
         assertEquals(expectedErrorCode, exception.jsonRpcCode);
     }
 
@@ -110,7 +111,7 @@ stop
                         client.send("help", "echo");
                     }
                 });
-        assertTrue(exception.getMessage().startsWith(expectedErrorMessagePrefix));
+        assertTrue(Objects.requireNonNull(Objects.requireNonNull(exception.getMessage())).startsWith(expectedErrorMessagePrefix));
         assertEquals(expectedErrorCode, exception.jsonRpcCode);
     }
 
@@ -124,7 +125,7 @@ stop
                         client.send("invalid");
                     }
                 });
-        assertTrue(exception.getMessage().startsWith(expectedErrorMessagePrefix));
+        assertTrue(Objects.requireNonNull(exception.getMessage()).startsWith(expectedErrorMessagePrefix));
         assertEquals(expectedErrorCode, exception.jsonRpcCode);
     }
 
