@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -74,7 +75,7 @@ public class ApplicationTest {
     void getBlockHashRequest() throws IOException {
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
-                    var txId = client.getBlockHash(0);
+                    var _txId = client.getBlockHash(0);
                 });
         assertEquals("Server exception: Unimplemented RPC method", exception.getMessage());
     }
@@ -100,26 +101,24 @@ public class ApplicationTest {
     void listUnspentRequest() throws IOException {
         var unspentList = client.listUnspent(1, BitcoinJsonRpc.DEFAULT_MAX_CONF, List.of());
         assertNotNull(unspentList);
-        // Size cannot be negative, is this needed?
-        assertTrue(unspentList.size() >= 0);
     }
 
     @Test
     void sendToAddressRequest() {
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
-                    var txId = client.sendToAddress(randomAddress(), Coin.ofBtc(BigDecimal.valueOf(100)));
+                    var _txId = client.sendToAddress(randomAddress(), Coin.ofBtc(BigDecimal.valueOf(100)));
                 });
-        assertTrue(exception.getMessage().startsWith("Server exception: Insufficient money"));
+        assertTrue(Objects.requireNonNull(exception.getMessage()).startsWith("Server exception: Insufficient money"));
     }
 
     @Test
     void signRawTransactionWithWallet() {
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
-                    var txId = client.signRawTransactionWithWallet("0BAD");
+                    var _txId = client.signRawTransactionWithWallet("0BAD");
                 });
-        assertTrue(exception.getMessage().startsWith("Server exception: Invalid raw (hex) transaction"));
+        assertTrue(Objects.requireNonNull(exception.getMessage()).startsWith("Server exception: Invalid raw (hex) transaction"));
     }
 
     private Address randomAddress() {

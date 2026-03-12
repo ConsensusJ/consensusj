@@ -23,11 +23,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BitcoinDaemonConfigTest {
-    private ApplicationContext ctx;
+    private final ApplicationContext ctx = ApplicationContext.run(ApplicationContext.class);
 
     @Test
     void testDefaultBitcoinDaemonConfiguration() {
-        ctx = ApplicationContext.run(ApplicationContext.class);
         var config = ctx.getBean(BitcoinDaemonConfig.class);
 
         assertEquals("walletd", config.walletBaseName());

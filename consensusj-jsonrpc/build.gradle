@@ -12,7 +12,6 @@ dependencies {
 
     testImplementation project(':cj-btc-jsonrpc')
 
-    annotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
     errorprone "com.google.errorprone:error_prone_core:${errorProneVersion}"
 }
 

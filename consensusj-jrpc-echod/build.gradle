@@ -1,10 +1,17 @@
+import net.ltgt.gradle.errorprone.CheckSeverity
+
 plugins {
     id("groovy")
     id("io.micronaut.application") version "${micronautAppGradlePluginVersion}"
 }
+apply plugin: 'net.ltgt.errorprone'
 
 tasks.withType(JavaCompile).configureEach {
     options.release = 17
+    options.errorprone {
+        check("NullAway", CheckSeverity.ERROR)
+        option("NullAway:OnlyNullMarked")
+    }
 }
 
 micronaut {
@@ -41,6 +48,7 @@ graalvmNative {
 }
 
 dependencies {
+    implementation "org.jspecify:jspecify:1.0.0"
     implementation project(':consensusj-jsonrpc')
 
     implementation "io.micronaut:micronaut-runtime"
@@ -60,6 +68,8 @@ dependencies {
     testImplementation "io.micronaut.reactor:micronaut-reactor"
     testImplementation "jakarta.validation:jakarta.validation-api"
     testImplementation "org.awaitility:awaitility:4.3.0"
+
+    errorprone "com.google.errorprone:error_prone_core:${errorProneVersion}"
 }
 
 dockerBuild {
