@@ -129,7 +129,7 @@ subprojects {
                             exclude module: "groovy-all"
                         }
 
-                        runtimeOnly "net.bytebuddy:byte-buddy:1.17.7"   // Lets Spock mock classes (in addition to interfaces)
+                        runtimeOnly "net.bytebuddy:byte-buddy:1.18.8"   // Lets Spock mock classes (in addition to interfaces)
                         runtimeOnly "org.objenesis:objenesis:3.4"       // Lets Spock mock classes with constructor arguments
                     }
                 }
