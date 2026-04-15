@@ -130,7 +130,7 @@ subprojects {
                         }
 
                         runtimeOnly "net.bytebuddy:byte-buddy:1.17.7"   // Lets Spock mock classes (in addition to interfaces)
-                        runtimeOnly "org.objenesis:objenesis:3.4"       // Lets Spock mock classes with constructor arguments
+                        runtimeOnly "org.objenesis:objenesis:3.5"       // Lets Spock mock classes with constructor arguments
                     }
                 }
             }
