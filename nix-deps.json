@@ -1353,12 +1353,12 @@
    "jar": "sha256-GkKViJQWxpcq3c1CXf7u5ubt4RDostyLSQROm0AK1ds=",
    "pom": "sha256-1lGbkAoOO2mQaN290Gq4daVc2uc8zbKSrmf4r4Hu1eQ="
   },
-  "repo.maven.apache.org/maven2/net/bytebuddy#byte-buddy-parent/1.17.7": {
-   "pom": "sha256-ilfiDczgDaccM+8+GdndhY/p0gQsouK8onhxcA1SaYw="
+  "repo.maven.apache.org/maven2/net/bytebuddy#byte-buddy-parent/1.18.8": {
+   "pom": "sha256-ETFe9B64oi9hLmMJew9vrUfi0596nqy3SvXphu3e8r8="
   },
-  "repo.maven.apache.org/maven2/net/bytebuddy#byte-buddy/1.17.7": {
-   "jar": "sha256-NXXcuKmPr5Q9PBWVxHoWBHxPzoqD67smJi8aL2dUY1c=",
-   "pom": "sha256-7n+6hWnDu1wekeWBL9n0oPMb4n5WjVNU4a39GRGfl7M="
+  "repo.maven.apache.org/maven2/net/bytebuddy#byte-buddy/1.18.8": {
+   "jar": "sha256-In0+CtUZFYCRQ/anRKwPTLIfAyFNqyjlLucAfFrX6dk=",
+   "pom": "sha256-KNSDF8boOXZoN7Ruew7Ub9hmB05LzPrJ03QbZ3hzJ8U="
   },
   "repo.maven.apache.org/maven2/net/java#jvnet-parent/3": {
    "pom": "sha256-MPV4nvo53b+WCVqto/wSYMRWH68vcUaGcXyy3FBJR1o="
