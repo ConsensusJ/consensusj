@@ -3,46 +3,56 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.7.0-SNAPSHOT
+== v0.7.0-beta1
 
-Released: in-progress
+Released: coming soon
 
 === consensusj-jrpc
 
 * New Gradle submodule using Gradle `application` plugin
-* jsonrpc tool is now "jrpc" tool
+* jsonrpc tool is now `jrpc` tool
 * `jsonrpc` binary has been renamed `jrpc`
+
+=== consensusj-jrpc-echod
+
+* Renamed from `consensusj-jsonrpc-echod`
+* Application binary renamed to `jrpc-echod`
 
 === consensusj-jsonrpc-cli
 
 * `jsonrpc`/`jrpc` tool extracted to the `consensusj-jrpc` submodule
 * This module is now strictly a library of CLI utilities
 
+=== cj-btc-walletd
+
+* Renamed from `cj-btc-daemon`
+* Application binary renamed to `walletd`
+
 === Dependency Updates
 
-* bitcoinj 0.17
+* bitcoinj 0.17.1
 * JSpecify 1.0.0
-* Jackson 2.19.4
+* Jackson 2.21.2
 * RxJava 3.1.12
 * Jakarta Annotation API 3.0.0
 * JavaMoney Moneta 1.4.4
 * JeroMQ 0.6.0
 * SLF 2.0.17
-* Micronaut Platform 4.10.5
-* Groovy 4.0.28
+* Micronaut Platform 4.10.11
+* Groovy 4.0.30
 * commons-cli 1.11.0
 
 === Build/Test Updates
 
 * Require JDK 21 or later to build, prefer JDK 25
-* Gradle 9.2.1
-* Develocity (aka Gradle Enterprise) 4.1
-* JUnit Jupiter 5.12.2
-* ByteBuddy 1.17.7
+* Gradle 9.4.1
+* Develocity (aka Gradle Enterprise) 4.1.1
+* JUnit Jupiter 5.14.3
+* ByteBuddy 1.18.8
 * Objenesis 3.4
 * Combine GitHub Actions into single `build.yml` workflow
-* GitHub `gradle.yml` JDK Matrix: Java 17, 21, 25
-* Asciidoctor Gradle Plugin 4.0.4
+* GitHub `gradle.yml` JDK Matrix: Java 21, 25
+* Asciidoctor Gradle Plugin 4.0.5
 
 == v0.7.0-alpha3
 

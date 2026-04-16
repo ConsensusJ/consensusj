@@ -476,7 +476,7 @@ To build the JSON-RPC CLI tool native image `jrpc`:
 
 To run it and display a list of command line options:
 
-    ./consensusj-jrpc/build/jrpc -?
+    ./consensusj-jrpc/build/jrpc --help
 
 [#consensusj-jrpc-echod]
 === Build and Run JSON-RPC Echo Daemon
