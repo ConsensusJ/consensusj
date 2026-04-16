@@ -627,25 +627,25 @@
   "repo.maven.apache.org/maven2/com/google/protobuf#protobuf-bom/3.25.8": {
    "pom": "sha256-/IgVoVEXaDxkJ6Yjcb1wzwBF2imeXHjudf+HUrRibes="
   },
-  "repo.maven.apache.org/maven2/com/google/protobuf#protobuf-bom/4.29.3": {
-   "pom": "sha256-CvOd/8uywGTtHXDH3yzwV5uHsLeJ1CHTaFfmNnawDaE="
-  },
   "repo.maven.apache.org/maven2/com/google/protobuf#protobuf-bom/4.33.2": {
    "pom": "sha256-bKXx5DgMUyPLEDsDTt8RYMn7tnau3l2ZifTe8XLHxNg="
+  },
+  "repo.maven.apache.org/maven2/com/google/protobuf#protobuf-bom/4.33.4": {
+   "pom": "sha256-+Sj1XCWsOOH/UjG2r6SxUzEpvvSrXL4MdopDLZ+ZjYA="
   },
   "repo.maven.apache.org/maven2/com/google/protobuf#protobuf-java/4.33.2": {
    "jar": "sha256-xbWCqhJ/tixfwwdzKdUi37eTC06aYlwIdgtoGyulqrc=",
    "pom": "sha256-GnLGjsB6XAN3R0sZl6NjrYNHpfIGuHHbQLOIt/LngZY="
   },
-  "repo.maven.apache.org/maven2/com/google/protobuf#protobuf-javalite/4.29.3": {
-   "jar": "sha256-rOQP00PRgqfDcZss3zt2Krj4bEkaIbWX996QbnmcgP8=",
-   "pom": "sha256-WXKI4OI6ZdsA1vPSvBKvqoA1Ig23e2J2Ok8p0gKXXg8="
-  },
-  "repo.maven.apache.org/maven2/com/google/protobuf#protobuf-parent/4.29.3": {
-   "pom": "sha256-cARv8H2GVvsNCVTm3URbrYs46h/1lk98wh9vhC/tx1c="
+  "repo.maven.apache.org/maven2/com/google/protobuf#protobuf-javalite/4.33.4": {
+   "jar": "sha256-RXqfUtwTeRC59hgfENnLk/noJ0Wtbj+qOULhVcJI8us=",
+   "pom": "sha256-FIYjFd0RAKM38PT9+xINWnuN4nr5swUX6VpSWsADOcM="
   },
   "repo.maven.apache.org/maven2/com/google/protobuf#protobuf-parent/4.33.2": {
    "pom": "sha256-yMIhEseGDm7dx+ywHOkXb8u0BJ7aWwomvj1LufvYAhE="
+  },
+  "repo.maven.apache.org/maven2/com/google/protobuf#protobuf-parent/4.33.4": {
+   "pom": "sha256-aO0Cc35BphpTIhfIWJslM0E6A6FgKakh5YbkSFK/YvQ="
   },
   "repo.maven.apache.org/maven2/com/googlecode/javaewah#JavaEWAH/1.2.3": {
    "jar": "sha256-1lImlJcTxMYaeE9BxRFn57Axb5N2Q5jrup5DNrPZVMI=",
@@ -1530,17 +1530,17 @@
    "jar": "sha256-7lhWjqWUXc+YhVFQFlUYPcGE4j5FqOAT/f2QNhlOb3s=",
    "pom": "sha256-7IF1FsgxQaM/aV/49Nc8pt868mjDqzd+XO5+/8zKgUA="
   },
-  "repo.maven.apache.org/maven2/org/bitcoinj#bitcoinj-core/0.17": {
-   "jar": "sha256-wTsf8CutzxCL1LzWSzgtpkuugYvLrJFdB1HjF+hCaQk=",
-   "pom": "sha256-nkUOG1Dr9WpewiMRWQ+6Kw9b5Rrs8KQzu1jyrgqevf4="
+  "repo.maven.apache.org/maven2/org/bitcoinj#bitcoinj-core/0.17.1": {
+   "jar": "sha256-3x2wJJlJ1X861o97vDnrpB4fFuQm9bcuvcADfK6gBtw=",
+   "pom": "sha256-knoeEvHf+yLmeiqYd64CB4S4h0s9/LvNmOFPJfQSUcE="
   },
   "repo.maven.apache.org/maven2/org/bouncycastle#bc-jdk18on-bom/1.83": {
    "module": "sha256-f9LoflQtKLgyIIewgLg60pWZssGzUAOuDgrmKiAgIe8=",
    "pom": "sha256-aKi4X0QK23JLJ+ZXJphw4QlcVgJ/+oh6C1J3ZW+2ZqQ="
   },
-  "repo.maven.apache.org/maven2/org/bouncycastle#bcprov-jdk15to18/1.80": {
-   "jar": "sha256-OA4X7XSMB0h+Z2TpVhirtDzwzzm/NkzV36/3VyTn2hE=",
-   "pom": "sha256-m1X+x0/NsxF65zY6mYGK2SssAbUeeD9+N2wW4osNDEQ="
+  "repo.maven.apache.org/maven2/org/bouncycastle#bcprov-jdk15to18/1.83": {
+   "jar": "sha256-BI8Z5RVX18CK6d5oPPXOKzL9pJMEr6lo7Dc3hQ4ijFQ=",
+   "pom": "sha256-/xZVS8/y/s2EbCLJO8XRI6kALhh6zf72m+LaTra166w="
   },
   "repo.maven.apache.org/maven2/org/checkerframework#checker-qual/2.10.0": {
    "jar": "sha256-0mH94l1ZD2tp23ch1GmsGwoZoXzKqqdRwx8Ni4JguJQ=",
