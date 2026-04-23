@@ -5,19 +5,17 @@ ext.javadocSpec = {
     modularity.inferModulePath = false                      // Disable modular JavaDoc for now
     exclude("module-info.java")
 
-    def javaDocLinks = [
+    List<CharSequence> javaDocLinks = [
             "https://docs.oracle.com/en/java/javase/17/docs/api",
-            "https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-core/${jacksonVersion}".toString(),
-            "https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/${jacksonVersion}".toString()
+            "https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-core/${jacksonVersion}",
+            "https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/${jacksonVersion}"
     ]
 
     if (!bitcoinjVersion.contains("beta") && !bitcoinjVersion.contains("alpha") && !bitcoinjVersion.contains("rc") && !bitcoinjVersion.contains("SNAPSHOT") && !bitcoinjVersion.contains("0.17.1")) {
-        javaDocLinks.add("https://bitcoinj.org/javadoc/${bitcoinjVersion}/".toString())
+        javaDocLinks << "https://bitcoinj.org/javadoc/${bitcoinjVersion}/"
     }
 
-    String[] linksArray = javaDocLinks.toArray(new String[]{})
-
-    options.links(linksArray)
+    options.links(javaDocLinks as String[])
 }
 
 allprojects {
