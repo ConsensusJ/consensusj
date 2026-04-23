@@ -50,6 +50,33 @@ jobs:
         name: artifacts-${{ matrix.os }}-${{ matrix.java }}
         path: build/artifacts
 
+  javadoc_all:
+    needs: build_gradle
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+        java: ['25']
+        distribution: ['temurin']
+      fail-fast: false
+    name: JavadocAll ${{ matrix.os }} JDK ${{ matrix.java }}
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v6
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: ${{ matrix.distribution }}
+          java-version: ${{ matrix.java }}
+          cache: 'gradle'
+      - name: Build with Gradle
+        run: ./gradlew javadocAll --scan --info --stacktrace
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: artifacts-${{ matrix.os }}-${{ matrix.java }}
+          path: build/docs/javadoc
+
   graalvm:
     needs: validate_gradle_wrapper
     runs-on: ${{ matrix.os }}
@@ -129,6 +156,6 @@ jobs:
 
   all_green:
     runs-on: ubuntu-24.04
-    needs: [validate_gradle_wrapper, build_gradle, graalvm, regtest, build_nix]
+    needs: [validate_gradle_wrapper, build_gradle, graalvm, regtest, build_nix, javadoc_all]
     steps:
       - run: echo "All upstream jobs passed"
