@@ -4,8 +4,6 @@ ext.javadocSpec = {
     options.addBooleanOption 'linksource', true             // include link to HTML source file
     modularity.inferModulePath = false                      // Disable modular JavaDoc for now
     exclude("module-info.java")
-
-    options.links(javaDocLinks() as String[])
 }
 
 allprojects {
@@ -17,6 +15,7 @@ tasks.register('javadocAll', Javadoc) {
     classpath = files(subprojects.collect { project -> project.sourceSets.main.compileClasspath })
 }
 javadocAll javadocSpec << {
+    options.links(javaDocLinks() as String[])
     // TODO: Convert this back to HTML
     // options.overview = "doc/javadoc-overview.adoc"
     // inputs.file(options.overview)
