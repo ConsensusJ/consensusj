@@ -1713,10 +1713,6 @@
    "module": "sha256-0wfKd6VOGKwe8artTlu+AUvS9J8p4dL4E+R8J4KDGVs=",
    "pom": "sha256-zauSmjuVIR9D0gkMXi0N/oRllg43i8MrNYQdqzJEM6Y="
   },
-  "org/junit#junit-bom/5.10.2": {
-   "module": "sha256-3iOxFLPkEZqP5usXvtWjhSgWaYus5nBxV51tkn67CAo=",
-   "pom": "sha256-Fp3ZBKSw9lIM/+ZYzGIpK/6fPBSpifqSEgckzeQ6mWg="
-  },
   "org/junit#junit-bom/5.12.2": {
    "module": "sha256-3nCsXZGlJlbYiQptI7ngTZm5mxoEAlMN7K1xvzGyc14=",
    "pom": "sha256-zvgP7IZFT2gGv7DfJGabXG8y4styhTnqhZ9H39ybvBc="
@@ -1821,12 +1817,12 @@
   "org/knowm/xchange#xchange-parent/4.4.2": {
    "pom": "sha256-0eT0MtgaPok9YHlxjbaF4tDb4ZlWwoyO6sTDdDM30Rg="
   },
-  "org/objenesis#objenesis-parent/3.4": {
-   "pom": "sha256-yx9D0pjMhUu1W5k9MwAX20qUxmCZgtqBDwOTc/xiVKY="
+  "org/objenesis#objenesis-parent/3.5": {
+   "pom": "sha256-up+Z3fcpbWwF5EKdhEN52gFxrVboJ2RNdtVHu3PBz0o="
   },
-  "org/objenesis#objenesis/3.4": {
-   "jar": "sha256-lUiBAv6vLihYrfaymTU2d9rGwVKUAG+O0cVVb4480lE=",
-   "pom": "sha256-YBfsDB6B9z2aEuv8CcMoI80HXocJWTcU60AOLwE9ilg="
+  "org/objenesis#objenesis/3.5": {
+   "jar": "sha256-b1q9Qs8+vA8r2uc9vFeCD8Shy4kwSShB4p6an53MhuA=",
+   "pom": "sha256-BSjmTxaXywaZOnlRcXd8bSSkJcmuDdKY7GQBhO30Zag="
   },
   "org/openjdk/nashorn#nashorn-core/15.7": {
    "jar": "sha256-Pyti5VtUWLouigzEWZqjq+gbFCLjHDi7gpSnCWzu5vI=",
