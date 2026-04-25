@@ -7,6 +7,19 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 Released: coming soon
 
+=== Overall
+
+* Start using JSpecify with ErrorProne/NullAway checking in `jsonrpc`, `jpc`, `echod`, and `walletd` modules
+* Improvements to `help` JSON-RPC method in multiple modules
+* Remove `consensusj-decentralized-id`, `cj-eth-jsonrpc`,  `cj-nmc-jsonrpc` modules
+* Add module-info to jsonrpc, jsonrpc-cli, jrpc, and related submodules
+
+=== consensusj-jsonrpc
+
+* `JsonRpcError`: add remaining predefined error codes
+* add `JsonRpcNotification` class
+* move `EchoJsonRpcWebService` from `echod` to `jsonrpc` (it's a web-framework independent service)
+
 === consensusj-jrpc
 
 * New Gradle submodule using Gradle `application` plugin
@@ -45,14 +58,21 @@ Released: coming soon
 === Build/Test Updates
 
 * Require JDK 21 or later to build, prefer JDK 25
+* Only provide external Javadoc links in aggregated Javadoc (`javadocAll` Gradle task)
+* Remove `javadocAll` Gradle task from `buildCI` task
+* Migrate unit tests in `jrpc` and `jrpc-echod` to JUnit from Spock
+* Implement `nativeTest` in `jrpc-echod` and run it on GitHub Actions
 * Gradle 9.4.1
+* Use Gradle Test Suite Plugin
 * Develocity (aka Gradle Enterprise) 4.1.1
 * JUnit Jupiter 5.14.3
 * ByteBuddy 1.18.8
 * Objenesis 3.4
 * Combine GitHub Actions into single `build.yml` workflow
+* GitHub Actions: run `javadocAll` in a separate job.
 * GitHub `gradle.yml` JDK Matrix: Java 21, 25
 * Asciidoctor Gradle Plugin 4.0.5
+* Enable Dependabot weekly Nix flake updates
 
 == v0.7.0-alpha3
 
