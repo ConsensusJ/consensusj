@@ -39,7 +39,7 @@ testing {
 
                 runtimeOnly "net.bytebuddy:byte-buddy:1.18.8"
                 // allows Spock to mock classes (in addition to interfaces)
-                runtimeOnly "org.objenesis:objenesis:3.4"
+                runtimeOnly "org.objenesis:objenesis:3.5"
                 // Allow Spock to mock classes with constructor arguments
                 runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"   // Runtime implementation of slf4j
             }
