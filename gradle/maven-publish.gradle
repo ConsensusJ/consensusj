@@ -15,7 +15,7 @@ allprojects {
                 name =  "GitLab"
                 credentials(HttpHeaderCredentials) {
                     name = 'Private-Token'
-                    value = project.findProperty("gitLabMavenToken")
+                    value = project.findProperty("gitLabConsensusJPublishing")
                 }
                 authentication {
                     header(HttpHeaderAuthentication)
