@@ -5,7 +5,7 @@ A high-level view of the changes in each ConsensusJ binary release.
 
 == v0.7.0-beta1
 
-Released: coming soon
+Released: 2026-04-24
 
 === Overall
 
