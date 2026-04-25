@@ -106,7 +106,7 @@ subprojects {
     }
 
     // To support nativeTest, we are migrating away from having all subprojects use Spock by default
-    def spockLess = ["consensusj-jrpc", "consensusj-jrpc-echod"]
+    def spockLess = ["consensusj-jrpc", "consensusj-jrpc-echod", "cj-btc-walletd"]
     boolean useSpock = !spockLess.contains(it.name)
 
     testing {
