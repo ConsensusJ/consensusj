@@ -64,7 +64,6 @@ Released: coming soon
 * Implement `nativeTest` in `jrpc-echod` and run it on GitHub Actions
 * Gradle 9.4.1
 * Use Gradle Test Suite Plugin
-* Develocity (aka Gradle Enterprise) 4.1.1
 * JUnit Jupiter 5.14.3
 * ByteBuddy 1.18.8
 * Objenesis 3.4
@@ -73,6 +72,7 @@ Released: coming soon
 * GitHub `gradle.yml` JDK Matrix: Java 21, 25
 * git-publish Gradle Plugin 6.0.0
 * Asciidoctor Gradle Plugin 4.0.5
+* Develocity (aka Gradle Enterprise) 4.4.1
 * Enable Dependabot weekly Nix flake updates
 
 == v0.7.0-alpha3
