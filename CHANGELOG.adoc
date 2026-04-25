@@ -54,6 +54,7 @@ Released: coming soon
 * Micronaut Platform 4.10.11
 * Groovy 4.0.30
 * commons-cli 1.11.0
+* xChange 5.2.2
 
 === Build/Test Updates
 
