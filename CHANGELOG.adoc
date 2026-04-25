@@ -71,6 +71,7 @@ Released: coming soon
 * Combine GitHub Actions into single `build.yml` workflow
 * GitHub Actions: run `javadocAll` in a separate job.
 * GitHub `gradle.yml` JDK Matrix: Java 21, 25
+* git-publish Gradle Plugin 6.0.0
 * Asciidoctor Gradle Plugin 4.0.5
 * Enable Dependabot weekly Nix flake updates
 
