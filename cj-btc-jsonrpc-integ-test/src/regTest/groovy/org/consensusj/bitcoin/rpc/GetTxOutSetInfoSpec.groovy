@@ -37,7 +37,8 @@ class GetTxOutSetInfoSpec extends BaseRegTestSpec {
         info.transactions > 0
         info.txOuts > 0
         info.bestBlock instanceof Sha256Hash
-        info.hashSerialized3 instanceof Sha256Hash
+        info.hashSerialized2 == null || info.hashSerialized2 instanceof Sha256Hash
+        info.hashSerialized3 == null || info.hashSerialized3 instanceof Sha256Hash
         info.totalAmount >= Coin.ZERO
         info.totalAmount <= Coin.COIN * 21_000_000
     }

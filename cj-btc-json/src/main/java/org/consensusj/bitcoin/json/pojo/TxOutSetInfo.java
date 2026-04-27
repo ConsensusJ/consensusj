@@ -28,6 +28,7 @@ public class TxOutSetInfo {
     private final long transactions;
     private final long txOuts;
     private final long bogoSize;
+    private final Sha256Hash hashSerialized2;
     private final Sha256Hash hashSerialized3;
     private final long diskSize;
     private final Coin totalAmount;
@@ -38,6 +39,7 @@ public class TxOutSetInfo {
                         @JsonProperty("transactions")       long        transactions,
                         @JsonProperty("txouts")             long        txOuts,
                         @JsonProperty("bogosize")           long        bogoSize,
+                        @JsonProperty("hash_serialized_2")  Sha256Hash  hashSerialized2,
                         @JsonProperty("hash_serialized_3")  Sha256Hash  hashSerialized3,
                         @JsonProperty("disk_size")          long        diskSize,
                         @JsonProperty("total_amount")       Coin        totalAmount) {
@@ -46,6 +48,7 @@ public class TxOutSetInfo {
         this.transactions = transactions;
         this.txOuts = txOuts;
         this.bogoSize = bogoSize;
+        this.hashSerialized2 = hashSerialized2;
         this.hashSerialized3 = hashSerialized3;
         this.diskSize = diskSize;
         this.totalAmount = totalAmount;
@@ -69,6 +72,10 @@ public class TxOutSetInfo {
 
     public long getBogoSize() {
         return bogoSize;
+    }
+
+    public Sha256Hash getHashSerialized2() {
+        return hashSerialized2;
     }
 
     public Sha256Hash getHashSerialized3() {
