@@ -17,21 +17,16 @@ package org.consensusj.bitcoin.integ.java;
 
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Coin;
-import org.bitcoinj.base.ScriptType;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.kits.WalletAppKit;
-import org.bitcoinj.wallet.KeyChainGroupStructure;
 import org.bitcoinj.wallet.Wallet;
-import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
 import org.consensusj.bitcoin.jsonrpc.BitcoinExtendedClient;
 import org.consensusj.bitcoin.jsonrpc.RpcURI;
 import org.consensusj.bitcoin.jsonrpc.test.TestServers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,9 +73,9 @@ public class WalletAppKitRegTest {
 
         // Listen for the first coins-received transaction
         var transactionFuture = new CompletableFuture<Transaction>();
-        kit.wallet().addCoinsReceivedEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
-            transactionFuture.complete(tx);
-        });
+        kit.wallet().addCoinsReceivedEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) ->
+            transactionFuture.complete(tx)
+        );
 
         // Prepare the amount to send and destination address
         var amount = Coin.CENT;
