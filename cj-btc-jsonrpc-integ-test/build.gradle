@@ -55,6 +55,7 @@ testing {
                         }
                         systemProperty 'regtest', true
                         systemProperty 'java.util.logging.config.file', "${project.projectDir}/src/regTest/logging.properties"
+                        systemProperty 'dumpPrivKeyAvailable', findProperty('dumpPrivKeyAvailable') ?: 'true'
                         if (project.hasProperty("regTestUseLegacyWallet")) {
                             systemProperty "regTestUseLegacyWallet", project.property("regTestUseLegacyWallet")
                         }
