@@ -27,7 +27,6 @@ import spock.lang.Shared
 /**
  * Test the fundingSource created by BaseRegTestSpec
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class RegTestFundingSourceSpec extends BaseRegTestSpec {
     @Shared
     RegTestFundingSource source;

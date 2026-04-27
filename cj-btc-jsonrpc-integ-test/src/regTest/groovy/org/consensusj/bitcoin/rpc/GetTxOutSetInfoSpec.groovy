@@ -24,7 +24,6 @@ import spock.lang.IgnoreIf
 /**
  * Test Specification for getTxOutSetInfo
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class GetTxOutSetInfoSpec extends BaseRegTestSpec {
     def "getTxOutSetInfo passes smoke test"() {
         when:

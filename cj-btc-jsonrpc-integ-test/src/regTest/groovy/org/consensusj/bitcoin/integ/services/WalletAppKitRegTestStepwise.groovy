@@ -39,7 +39,6 @@ import java.nio.ByteBuffer
  */
 @Slf4j
 @Stepwise
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class WalletAppKitRegTestStepwise extends BaseRegTestSpec {
     private final hexFormatter = HexFormat.of();
     

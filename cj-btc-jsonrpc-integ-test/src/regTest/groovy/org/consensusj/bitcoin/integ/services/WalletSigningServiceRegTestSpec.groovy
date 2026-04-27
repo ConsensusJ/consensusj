@@ -40,7 +40,6 @@ import java.nio.ByteOrder
  * RegTest Integration test of WalletSigningService using WalletAppKitService
  */
 @Slf4j
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class WalletSigningServiceRegTestSpec extends BaseRegTestSpec {
     /** The WalletAppKitService that provides UTXOs for testing */
     @Shared WalletAppKitService appKitService

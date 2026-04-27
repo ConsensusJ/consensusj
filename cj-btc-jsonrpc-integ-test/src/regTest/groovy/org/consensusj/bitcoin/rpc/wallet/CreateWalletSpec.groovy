@@ -23,7 +23,6 @@ import spock.lang.Requires
 /**
  * Test Spec for {@code createwallet}
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class CreateWalletSpec extends BaseRegTestSpec {
 
     @Requires({ instance.clientInstance.getServerVersion() >= 210000})

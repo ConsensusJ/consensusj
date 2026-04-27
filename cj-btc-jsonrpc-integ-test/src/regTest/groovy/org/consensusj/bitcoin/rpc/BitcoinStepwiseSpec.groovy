@@ -23,7 +23,6 @@ import spock.lang.Shared
 import spock.lang.Stepwise
 
 @Stepwise
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class BitcoinStepwiseSpec extends BaseRegTestSpec {
     final static Coin sendAmount = 10.btc
     final static Coin extraAmount = 0.1.btc

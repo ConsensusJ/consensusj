@@ -24,7 +24,6 @@ import spock.lang.IgnoreIf
 /**
  * Spec for getBlock() and getBlockInfo()
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class GetBlockSpec extends BaseRegTestSpec {
 
     def "Use RegTest mode to generate a block upon request"() {

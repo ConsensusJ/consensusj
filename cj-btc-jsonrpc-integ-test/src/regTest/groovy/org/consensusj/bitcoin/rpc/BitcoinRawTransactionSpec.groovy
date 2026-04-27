@@ -31,7 +31,6 @@ import java.nio.ByteBuffer
  * Tests of creating and sending raw transactions via RPC
  */
 @Stepwise
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class BitcoinRawTransactionSpec extends BaseRegTestSpec {
     final static Coin fundingAmount = 10.btc
     final static Coin sendingAmount = 1.btc

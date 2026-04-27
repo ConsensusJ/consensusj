@@ -51,7 +51,6 @@ import java.util.concurrent.TimeUnit
  */
 @Slf4j
 @Stepwise
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class WalletSendSpec extends BaseRegTestSpec {
     @Shared
     Wallet wallet

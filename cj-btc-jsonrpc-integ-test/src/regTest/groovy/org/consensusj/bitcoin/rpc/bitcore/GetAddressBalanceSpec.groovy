@@ -25,7 +25,6 @@ import spock.lang.Requires
  * Test of OmniCore Bitcore address index JSON-RPC method: {@code getaddressbalance}
  * If {@code help} reports address index is not available, these tests are ignored.
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class GetAddressBalanceSpec extends BaseRegTestSpec {
 
     @Requires({ instance.isAddressIndexEnabled()})

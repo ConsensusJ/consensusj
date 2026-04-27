@@ -30,7 +30,7 @@ import static org.bitcoinj.base.BitcoinNetwork.REGTEST
  * Functional test of importPrivKey
  */
 @Stepwise
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
+@IgnoreIf({ System.getProperty("dumpPrivKeyAvailable") != "true" })
 class ImportPrivKeySpec extends BaseRegTestSpec  {
     static final ECKey TEST_PRIVATE_KEY = new ECKey().decompress()
     static final Address TEST_ADDRESS = TEST_PRIVATE_KEY.toAddress(ScriptType.P2PKH, REGTEST)

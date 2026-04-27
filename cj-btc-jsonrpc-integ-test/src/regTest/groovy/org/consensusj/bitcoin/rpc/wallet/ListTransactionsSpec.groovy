@@ -22,7 +22,6 @@ import spock.lang.IgnoreIf
 /**
  * Basic tests of list transactions
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class ListTransactionsSpec extends BaseRegTestSpec {
 
     def "list transactions (no args)"() {
