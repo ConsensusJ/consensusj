@@ -5,8 +5,7 @@
 NOTE:: Procedure needs steps to update `nix-deps.json`.
 
 . Use Java 25 for official builds
-.. `sdk use 25-tem`
-.. `sdk use 25-graalce`
+.. `sdk use 25.0.2-tem`
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`
@@ -16,14 +15,14 @@ NOTE:: Procedure needs steps to update `nix-deps.json`.
 . Commit version bump and changelog.
 . Make sure project directory is a clean checkout.
 . Full build, test
-.. `./gradlew clean buildCI`
+.. `./gradlew clean buildCI consensusj-jrpc-echod:nativeTest nativeCompile installDist`
 .. `./test-run-regtest.sh`
 .. Recommended: test with *OmniJ* regTests.
 . Tag: `git tag -a v0.x.y -m "Release 0.x.y"`
 . Push: `git push --tags origin master`
 . Publish to Maven Repo (currently on Gitlab):
 .. `./gradlew publish`
-. Update GitHub-pages site (including JavaDoc)
+. Update GitHub-pages site (including Javadoc)
 .. `./gradlew javadocAll publishSite`
 .. Compare `SHA256SUMS` of multiple builds
 .. Add Release on GitHub
@@ -43,7 +42,7 @@ NOTE:: Procedure needs steps to update `nix-deps.json`.
 
 == Verify local build vs. CI build
 
-At present, builds made with Temurin Java 21-ea (or equivalent) should be reproducible on
+At present, builds made with Temurin Java 25 (or equivalent) should be reproducible on
 either **macOS** or **Linux**. You can verify with the following procedure:
 
 . Build locally with `./gradlew installDist`
