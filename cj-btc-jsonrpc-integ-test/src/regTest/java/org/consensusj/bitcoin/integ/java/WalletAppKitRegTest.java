@@ -47,7 +47,6 @@ import java.util.concurrent.TimeoutException;
 /**
  * Java RegTest that mines RegTest coins and sends them to a WalletAppKit
  */
-@EnabledIfSystemProperty(named = "regTestUseLegacyWallet", matches = "true")
 public class WalletAppKitRegTest {
     static final BitcoinNetwork network = BitcoinNetwork.REGTEST;
     static final private TestServers testServers = TestServers.getInstance();
