@@ -41,7 +41,7 @@ import spock.lang.Stepwise
  * communicate between the "client" and the "server"
  */
 @Stepwise
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
+@IgnoreIf({ System.getProperty("dumpPrivKeyAvailable") != "true" })
 class BareMultisigSpec extends TxTestBaseSpec {
 
     private static final ECKey clientKey = new ECKey();

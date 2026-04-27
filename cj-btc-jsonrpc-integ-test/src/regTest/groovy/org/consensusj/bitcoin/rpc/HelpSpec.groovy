@@ -22,7 +22,6 @@ import spock.lang.IgnoreIf
 /**
  * Integration test of {@code help} RPC command
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class HelpSpec extends BaseRegTestSpec {
 
     def "can call help"() {

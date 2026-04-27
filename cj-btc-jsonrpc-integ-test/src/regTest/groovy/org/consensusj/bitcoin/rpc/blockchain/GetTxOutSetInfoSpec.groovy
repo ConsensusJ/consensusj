@@ -27,7 +27,6 @@ import spock.lang.IgnoreIf
  * https://bitcoin.stackexchange.com/a/38998
  * https://bitcoin.stackexchange.com/a/24684
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class GetTxOutSetInfoSpec extends BaseRegTestSpec
 {
     def "response fields are present and pass minimal consistency checks "() {

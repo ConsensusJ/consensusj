@@ -27,7 +27,7 @@ import java.util.function.UnaryOperator
 /**
  * Create, send and verify P2PKH transactions via P2P and RPC
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
+@IgnoreIf({ System.getProperty("dumpPrivKeyAvailable") != "true" })
 class P2PKHSpec extends TxTestBaseSpec {
 
     @Unroll

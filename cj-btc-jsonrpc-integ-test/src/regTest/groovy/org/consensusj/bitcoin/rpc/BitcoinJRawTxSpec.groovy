@@ -33,7 +33,7 @@ import spock.lang.Stepwise
  *
  */
 @Stepwise
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
+@IgnoreIf({ System.getProperty("dumpPrivKeyAvailable") != "true" })
 class BitcoinJRawTxSpec extends BaseRegTestSpec {
     final static Coin fundingAmount = 10.btc
     final static Coin sendingAmount = 1.btc

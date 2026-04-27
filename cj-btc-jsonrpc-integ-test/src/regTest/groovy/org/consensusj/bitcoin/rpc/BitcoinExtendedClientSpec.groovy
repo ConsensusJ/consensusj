@@ -29,7 +29,6 @@ import spock.lang.Specification
 /**
  * Basic tests of Extended Client
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class BitcoinExtendedClientSpec extends Specification {
     @Shared
     BitcoinExtendedClient client
@@ -78,6 +77,7 @@ class BitcoinExtendedClientSpec extends Specification {
         destBalance == 0.5.btc
     }
 
+    @IgnoreIf({ System.getProperty("dumpPrivKeyAvailable") != "true" })
     def "Can create a funded address and sign a transaction locally using createSignedTransaction()"() {
         given:
         def fundingAddress = funder.createFundedAddress(10.btc)

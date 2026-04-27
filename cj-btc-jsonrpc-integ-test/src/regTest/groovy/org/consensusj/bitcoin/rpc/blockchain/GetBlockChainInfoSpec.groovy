@@ -23,7 +23,6 @@ import spock.lang.IgnoreIf
 /**
  * Functional test of `gettxoutsetinfo` via {@link BitcoinClient#getBlockChainInfo}
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class GetBlockChainInfoSpec extends BaseRegTestSpec {
     def "response fields are present and pass minimal consistency checks "() {
         when: "we call the RPC"

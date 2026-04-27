@@ -27,7 +27,6 @@ import spock.lang.Specification
 /**
  * Component-based test (no base test spec, required)
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class FundingAndBlockChainEnvIntSpec extends Specification {
     @Shared BitcoinExtendedClient client
 

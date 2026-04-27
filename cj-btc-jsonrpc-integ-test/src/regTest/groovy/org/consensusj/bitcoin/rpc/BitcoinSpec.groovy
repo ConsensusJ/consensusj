@@ -23,7 +23,6 @@ import org.bitcoinj.base.Sha256Hash
 import spock.lang.Ignore
 import spock.lang.IgnoreIf
 
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
 class BitcoinSpec extends BaseRegTestSpec {
     static final Coin testAmount = 2.btc
 

@@ -29,7 +29,7 @@ import java.util.function.UnaryOperator
 /**
  *  Create, send, record, and retrieve an OP_RETURN transaction
  */
-@IgnoreIf({ System.getProperty("regTestUseLegacyWallet") != "true" })
+@IgnoreIf({ System.getProperty("dumpPrivKeyAvailable") != "true" })
 class OpReturnSpec extends TxTestBaseSpec {
     @Unroll
     def "create and send a bitcoinj OP_RETURN transaction using #methodName"(UnaryOperator<Transaction> submitMethod, String methodName) {
@@ -73,6 +73,4 @@ class OpReturnSpec extends TxTestBaseSpec {
     private static int opCodeFromLength(int length) {
         return (length >= ScriptOpCodes.OP_PUSHDATA1) ? ScriptOpCodes.OP_PUSHDATA1 : length
     }
-
-
 }
