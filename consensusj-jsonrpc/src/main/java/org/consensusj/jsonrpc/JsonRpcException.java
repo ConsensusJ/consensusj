@@ -31,7 +31,13 @@ import java.io.IOException;
  * implementations returning HTTP status codes along with JsonRpcError responses. Bitcoin even incorrectly
  * returns a 500 for invalid parameters. I think I originally assumed that there would be either an
  * HTTP status error or a JSON-RPC error, but in reality responses can probably have neither, either, or both.
- * @see <a href="https://github.com/bitcoin/bitcoin/issues/2960">Bitcoin Core Issue #2960</a>
+ * TODO: See Issue #352
+ * <p>
+ * Update: Bitcoin Core v28.0 added strict adherence to JSON-RPC 2.0, so we should probably move forward on
+ * the rethink/refactor and make sure that we handle JSON-RPC 2.0/Bitcoin Core v28+ very well with some level
+ * of support for earlier versions, too.
+ * @see <a href="https://github.com/bitcoin/bitcoin/issues/2960">Bitcoin Core Issue: Support JSON-RPC 2.0</a>
+ * @see <a href="https://github.com/bitcoin/bitcoin/pull/27101">Bitcoin Core PR: Support JSON-RPC 2.0 when requested by client</a>
  */
 public class JsonRpcException extends IOException {
 

@@ -124,12 +124,31 @@ public class JsonRpcClientJavaNet implements JsonRpcTransport<JavaType> {
                     .firstValue("Content-Type")
                     .map(s -> s.contains("application/json"))
                     .flatMap(b -> readErrorResponse(body))
-                    .map(r -> new JsonRpcStatusException(response.statusCode(), r))
-                    .orElse(new JsonRpcStatusException(response.statusCode(), body))
+                    .map(r -> exceptionFrom(response, r))
+                    .orElse(exceptionFrom(response, body))
             );
         } else {
             return CompletableFuture.completedFuture(response);
         }
+    }
+
+    // Return a JsonRpcException from a non-200 HttpResponse and a successfully read JsonRpcResponse (from the body)
+    // Note that some servers return non-200 status codes when they shouldn't (i.e. when there is an error at the JSON-RPC
+    // protocol level), so we should probably map those cases to return JsonRpcErrorException which is what clients will
+    // want (as it contains useful details about the error.)
+    // TODO: This should probably return a JsonRpcErrorException in most/all cases, since the jsonRpcResponse should
+    // contain more specific and helpful error information.
+    // TODO: Or MAYBE we should even IGNORE the HTTP error in some cases (???) and just return a JsonRpcResponse with the error.
+    // It might be hard to figure out which cases to ignore as it may depend upon the exact protocol and server being used.
+    // Maybe there could be some kind of configuration (perhaps a mapping lambda?) that can be passed to this client
+    // that can be used to map various error combinations of HTTP response codes and JsonRpcResponses to success or error results.
+    private JsonRpcException exceptionFrom(HttpResponse<?> httpResponse, JsonRpcResponse<?> jsonRpcResponse) {
+        return new JsonRpcStatusException(httpResponse.statusCode(), jsonRpcResponse);
+    }
+
+    // Return a JsonRpcException from a non-200 HttpResponse and a body that can't be parsed to a JsonRpcResponse.
+    private JsonRpcException exceptionFrom(HttpResponse<?> httpResponse, String body) {
+        return new JsonRpcStatusException(httpResponse.statusCode(), body);
     }
 
     // Try to read a JsonRpcResponse from a string (error case)
@@ -227,7 +246,7 @@ public class JsonRpcClientJavaNet implements JsonRpcTransport<JavaType> {
      * @param t non-null on error
      */
     private void log(String s, Throwable t) {
-        if ((s != null)) {
+        if (s != null) {
             log.info("log data string: {}", s.substring(0 ,Math.min(100, s.length())));
         } else {
             log.warn("exception: ", t);
