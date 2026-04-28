@@ -116,7 +116,7 @@ class BitcoinSpec extends BaseRegTestSpec {
         unspent.every { output -> output.address == destinationAddress }
     }
 
-    @Ignore("Not supported on Descriptor Wallets")
+    @IgnoreIf({ System.getProperty("dumpPrivKeyAvailable") != "true" })
     def "We can get the correct private key for an address"() {
         when: "we create a new address and dump it's private key"
         def address = getNewAddress()
