@@ -3,9 +3,23 @@
 
 A high-level view of the changes in each ConsensusJ binary release.
 
-== v0.7.0
+== v0.7.0-beta2
 
-Released: In progress
+Released: 2026-04-28
+
+=== cj-btc-json
+
+* `TxOutSetInfo`: support both `hash_serialized_2` and `hash_serialized_3` (restores compatibility with earlier versions of Bitcoin Core) - https://github.com/ConsensusJ/consensusj/commit/d66f9f52f1b57ab6f1e8aca31e32b759aa58a14a[d66f9f5]
+
+=== cj-btc-jsonrpc
+
+* `RegTestFundingSource`: make `sendRawTransactionUnlimitedFees` compatible with both recent and older Bitcoin Core by setting `maxFeeRate` and `maxBurnAmount` to `null` - https://github.com/ConsensusJ/consensusj/commit/13b6e336f53f68d0ab3b122096dcead3e1557fd8[13b6e33]
+
+=== Build/Test Updates
+
+* Re-enable many regTest integration tests that had been disabled by https://github.com/ConsensusJ/consensusj/pull/228[PR 228] -- PRs https://github.com/ConsensusJ/consensusj/pull/350[350], https://github.com/ConsensusJ/consensusj/pull/351[351]
+* Add `dumpPrivKeyAvailable = false` property in `gradle.properties` to more clearly mark which tests are disabled and why. If using older Bitcoin Core (or Omni Core) it can be set to `true` and more tests will be run.
+* All regTests are verified working with Bitcoin Core v30.2 and Omni Core v0.12.0.1 (Bitcoin Core v20.1). Omni Core tests were run with `dumpPrivKeyAvailable` both `true` and `false`.
 
 == v0.7.0-beta1
 

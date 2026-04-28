@@ -5,7 +5,7 @@
 NOTE:: Procedure needs steps to update `nix-deps.json`.
 
 . Use Java 25 for official builds
-.. `sdk use 25.0.2-tem`
+.. `sdk use 25.0.3-tem`
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`
