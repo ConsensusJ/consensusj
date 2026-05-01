@@ -26,7 +26,7 @@ $BITCOIND -regtest -datadir=$DATADIR \
   -addresstype=legacy \
   -peerbloomfilters \
   -deprecatedrpc=create_bdb \
-  -paytxfee=0.0001 -minrelaytxfee=0.00001 \
+  -fallbackfee=0.0001 -minrelaytxfee=0.00001 \
   -limitancestorcount=750 -limitdescendantcount=750 > $LOGDIR/bitcoin.log &
 BTCSTATUS=$?
 BTCPID=$!
