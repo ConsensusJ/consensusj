@@ -146,7 +146,7 @@ apply from: 'gradle/maven-publish.gradle'
 apply from: 'gradle/licenseCheck.gradle'
 
 dependencies {
-    testReportAggregation project(':').subprojects
+    testReportAggregation subprojects
 }
 
 tasks.named('check') {
