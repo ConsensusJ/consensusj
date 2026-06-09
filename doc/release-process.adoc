@@ -9,6 +9,7 @@ NOTE:: Procedure needs steps to update `nix-deps.json`.
 . Update `CHANGELOG.adoc`
 . Set versions
 .. `gradle.properties`
+.. `flake.nix`
 .. `cj-bitcoinj-dsl-gvy` `ExtensionModule`
 .. `README.adoc` (check/set bitcoinj version variable, too)
 . Update `README.adoc` and other documentation as necessary
@@ -33,7 +34,7 @@ NOTE:: Procedure needs steps to update `nix-deps.json`.
 
 == After release
 
-. Set versions back to -SNAPSHOT
+. Set versions back to -DEV
 .. `gradle.properties`
 .. cj-bitcoinj-dsl-gvy `ExtensionModule`
 .. `CHANGELOG.adoc`
