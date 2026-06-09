@@ -59,7 +59,7 @@
           };
           self2 = pkgs.stdenv.mkDerivation (_finalAttrs: {
             pname = "consensusj-tools";
-            version = "0.7.0-SNAPSHOT";
+            version = "0.7.0-DEV";
             meta = {
               inherit mainProgram;
             };
