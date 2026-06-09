@@ -37,7 +37,7 @@ testing {
                     exclude module: "groovy-all"
                 }
 
-                runtimeOnly "net.bytebuddy:byte-buddy:1.18.8"
+                runtimeOnly "net.bytebuddy:byte-buddy:1.18.10"
                 // allows Spock to mock classes (in addition to interfaces)
                 runtimeOnly "org.objenesis:objenesis:3.5"
                 // Allow Spock to mock classes with constructor arguments
