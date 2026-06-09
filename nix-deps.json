@@ -1373,12 +1373,12 @@
    "jar": "sha256-PtpqE3m1e9zZLx7dOaR7lF/qSByzh0QzW+4q3yGOSxc=",
    "pom": "sha256-kdeJ4O7Yp/2KirQ+dUhX4+6xXDOykOV4ZIOUooQLbRQ="
   },
-  "net/bytebuddy#byte-buddy-parent/1.18.8": {
-   "pom": "sha256-ETFe9B64oi9hLmMJew9vrUfi0596nqy3SvXphu3e8r8="
+  "net/bytebuddy#byte-buddy-parent/1.18.10": {
+   "pom": "sha256-jAWWPJOikMbWVmmUOGVE1cfR9FZ6tAcOqQVSDh/ed7w="
   },
-  "net/bytebuddy#byte-buddy/1.18.8": {
-   "jar": "sha256-In0+CtUZFYCRQ/anRKwPTLIfAyFNqyjlLucAfFrX6dk=",
-   "pom": "sha256-KNSDF8boOXZoN7Ruew7Ub9hmB05LzPrJ03QbZ3hzJ8U="
+  "net/bytebuddy#byte-buddy/1.18.10": {
+   "jar": "sha256-izH06oBq+qkAtnv/2EmHYNH2VGT0wup4zb2i8+YziYs=",
+   "pom": "sha256-IxyDtIjJZb5WWnT6D43SvHDP98uEfMl93VaypwCgz2I="
   },
   "net/java#jvnet-parent/3": {
    "pom": "sha256-MPV4nvo53b+WCVqto/wSYMRWH68vcUaGcXyy3FBJR1o="
