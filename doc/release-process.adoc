@@ -19,10 +19,12 @@ NOTE:: Procedure needs steps to update `nix-deps.json`.
 .. `./gradlew clean buildCI consensusj-jrpc-echod:nativeTest nativeCompile installDist`
 .. `./test-run-regtest.sh`
 .. Recommended: test with *OmniJ* regTests.
+.. `./scripts/build-release.sh`
 . Tag: `git tag -a v0.x.y -m "Release 0.x.y"`
 . Push: `git push --tags origin master`
-. Publish to Maven Repo (currently on Gitlab):
-.. `./gradlew publish`
+. Set a GitLab token with Maven publishing permission: `export JRELEASER_GITLAB_CONSENSUSJ_TOKEN=xxx`
+. Publish to Maven Repo (currently on GitLab):
+.. `./scripts/maven-publish-release.sh`
 . Update GitHub-pages site (including Javadoc)
 .. `./gradlew javadocAll publishSite`
 .. Compare `SHA256SUMS` of multiple builds

@@ -1,0 +1,20 @@
+[project]
+name = "consensusj"
+
+[project.languages.java]
+groupId = "com.msgilligan"
+version = "9"       # Only 2 minor modules support Java 9, but that is tecnically our "minimum"
+
+[release.github]
+owner = "consensusj"
+name = "consensusj"
+enabled = false
+
+[deploy.maven.gitlab.consensusj]
+active = "ALWAYS"
+projectIdentifier = 8482916
+url = "https://gitlab.com/api/v4/projects/8482916/packages/maven"
+applyMavenCentralRules = true
+sign = false
+snapshotSupported = false
+stagingRepositories = ["build/repo-signed"]

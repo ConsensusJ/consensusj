@@ -5,21 +5,35 @@ allprojects {
         publications {
             jar(MavenPublication) {
                 from components.java
+                pom {
+                    name = project.name
+                    // guarantee a non-empty description — fall back to name, never null
+                    description = project.description ?: "${project.name} module of ConsensusJ"
+                    url = 'https://github.com/ConsensusJ/consensusj'
+                    licenses {
+                        license {
+                            name = 'Apache-2.0'
+                            url  = 'https://spdx.org/licenses/Apache-2.0.html'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id   = 'msgilligan'
+                            name = 'Sean Gilligan'
+                        }
+                    }
+                    scm {
+                        connection          = 'scm:git:https://github.com/ConsensusJ/consensusj.git'
+                        developerConnection = 'scm:git:ssh://github.com/ConsensusJ/consensusj.git'
+                        url                 = 'https://github.com/ConsensusJ/consensusj'
+                    }
+                }
             }
-
         }
         repositories {
-            def consensusJGitLabProjectId = "8482916"
             maven {
-                url = "https://gitlab.com/api/v4/projects/${consensusJGitLabProjectId}/packages/maven"
-                name =  "GitLab"
-                credentials(HttpHeaderCredentials) {
-                    name = 'Private-Token'
-                    value = project.findProperty("gitLabConsensusJPublishing")
-                }
-                authentication {
-                    header(HttpHeaderAuthentication)
-                }
+                name =  "local-staging"
+                url = rootProject.layout.buildDirectory.dir('repo')
             }
         }
     }
