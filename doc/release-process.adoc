@@ -38,6 +38,7 @@ NOTE:: Procedure needs steps to update `nix-deps.json`.
 
 . Set versions back to -DEV
 .. `gradle.properties`
+.. `flake.nix`
 .. cj-bitcoinj-dsl-gvy `ExtensionModule`
 .. `CHANGELOG.adoc`
 .. *Not* `README.adoc` -- it should match release version
