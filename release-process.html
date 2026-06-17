@@ -440,7 +440,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>ConsensusJ Release Process</h1>
 <div class="details">
-<span id="revnumber">version 0.7.0-beta2</span>
+<span id="revnumber">version 0.7.0-beta3</span>
 </div>
 </div>
 <div id="content">
@@ -475,6 +475,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><code>gradle.properties</code></p>
 </li>
 <li>
+<p><code>flake.nix</code></p>
+</li>
+<li>
 <p><code>cj-bitcoinj-dsl-gvy</code> <code>ExtensionModule</code></p>
 </li>
 <li>
@@ -505,6 +508,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>Recommended: test with <strong>OmniJ</strong> regTests.</p>
 </li>
+<li>
+<p><code>./scripts/build-release.sh</code></p>
+</li>
 </ol>
 </div>
 </li>
@@ -515,11 +521,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Push: <code>git push --tags origin master</code></p>
 </li>
 <li>
-<p>Publish to Maven Repo (currently on Gitlab):</p>
+<p>Set a GitLab token with Maven publishing permission: <code>export JRELEASER_GITLAB_CONSENSUSJ_TOKEN=xxx</code></p>
+</li>
+<li>
+<p>Publish to Maven Repo (currently on GitLab):</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p><code>./gradlew publish</code></p>
+<p><code>./scripts/maven-publish-release.sh</code></p>
 </li>
 </ol>
 </div>
@@ -565,7 +574,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Set versions back to -SNAPSHOT</p>
+<p>Set versions back to -DEV</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -676,8 +685,8 @@ either <strong>macOS</strong> or <strong>Linux</strong>. You can verify with the
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.7.0-beta2<br>
-Last updated 2026-04-28 11:24:59 -0700
+Version 0.7.0-beta3<br>
+Last updated 1980-01-01 00:00:00 UTC
 </div>
 </div>
 </body>
