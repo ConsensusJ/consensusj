@@ -16,6 +16,7 @@ Released: 2026-06-17
 
 === Build/Test Updates
 
+* Use JReleaser to publish Maven Artifacts to GitLab
 * Begin using `-DEV` for `consensusjVersion` instead of `-SNAPSHOT`
 * Add `SECURITY.md` file
 * Devshell used for testing now contains Bitcoin Core v31
