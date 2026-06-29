@@ -39,3 +39,4 @@ if (JavaVersion.current().compareTo(JavaVersion.VERSION_21) < 0) {
     include 'consensusj-jsonrpc-cli'            // JSON-RPC CLI library
     include 'consensusj-jrpc'                   // `jrpc` CLI Tool
     include 'cj-btc-cli'                        // Bitcoin JSON-RPC CLI
+    include 'cj-btc-rocksdb'                    // RocksDB-based blockchain database
