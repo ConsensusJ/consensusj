@@ -1,0 +1,13 @@
+plugins {
+    id 'java-library'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 17
+}
+
+dependencies {
+    api project(':consensusj-jsonrpc')
+
+    testImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"       // Runtime implementation of slf4j
+}
