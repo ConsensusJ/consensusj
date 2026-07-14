@@ -1,0 +1,36 @@
+/*
+ * RocksDB-based Bitcoin blockchain database (reader and writer).
+ */
+plugins {
+    id 'java-library'
+}
+
+ext.moduleName = 'org.consensusj.bitcoin.rocksdb'
+
+tasks.withType(JavaCompile).configureEach {
+    // This module uses records, so it requires a release level >= 16.
+    // (slf4j, JUnit Jupiter and Spock test dependencies are supplied by the root build.gradle.)
+    options.release = 21
+}
+
+dependencies {
+    // BitcoinJ for Bitcoin types (Address, Sha256Hash, Block, etc.)
+    api "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
+
+    // RocksDB for the database backend
+    api "org.rocksdb:rocksdbjni:${rocksdbVersion}"
+}
+
+jar {
+    inputs.property("moduleName", moduleName)
+    manifest {
+        attributes  'Implementation-Title': 'ConsensusJ Bitcoin RocksDB Database',
+                'Automatic-Module-Name': moduleName,
+                'Implementation-Version': archiveVersion.get()
+    }
+}
+
+test {
+    // RocksDB loads a native library; grant native access to silence JDK warnings.
+    jvmArgs '--enable-native-access=ALL-UNNAMED'
+}
