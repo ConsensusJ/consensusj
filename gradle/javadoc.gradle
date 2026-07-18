@@ -32,7 +32,7 @@ List<CharSequence> javaDocLinks() {
             "https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/${jacksonVersion}"
     ]
 
-    if (!bitcoinjVersion.contains("beta") && !bitcoinjVersion.contains("alpha") && !bitcoinjVersion.contains("rc") && !bitcoinjVersion.contains("SNAPSHOT") && !bitcoinjVersion.contains("0.17.1")) {
+    if (!bitcoinjVersion.contains("beta") && !bitcoinjVersion.contains("alpha") && !bitcoinjVersion.contains("rc") && !bitcoinjVersion.contains("SNAPSHOT")) {
         javaDocLinks << "https://bitcoinj.org/javadoc/${bitcoinjVersion}/"
     }
     return Collections.unmodifiableList(javaDocLinks)
