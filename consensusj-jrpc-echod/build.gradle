@@ -1,7 +1,7 @@
 import net.ltgt.gradle.errorprone.CheckSeverity
 
 plugins {
-    id("io.micronaut.application") version "${micronautAppGradlePluginVersion}"
+    alias(libs.plugins.micronaut.application)
 }
 apply plugin: 'net.ltgt.errorprone'
 
@@ -14,7 +14,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 micronaut {
-    version micronautVersion
+    version libs.versions.micronaut.get()
     runtime("netty")
     testRuntime("junit5")
     processing {
@@ -47,7 +47,7 @@ graalvmNative {
 }
 
 dependencies {
-    implementation "org.jspecify:jspecify:1.0.0"
+    implementation libs.jspecify
     implementation project(':consensusj-jsonrpc')
 
     implementation "io.micronaut:micronaut-runtime"
@@ -66,9 +66,9 @@ dependencies {
     testImplementation "io.micronaut:micronaut-http-client"
     testImplementation "io.micronaut.reactor:micronaut-reactor"
     testImplementation "jakarta.validation:jakarta.validation-api"
-    testImplementation "org.awaitility:awaitility:4.3.0"
+    testImplementation libs.awaitility
 
-    errorprone "com.google.errorprone:error_prone_core:${errorProneVersion}"
+    errorprone libs.errorprone.core
 }
 
 dockerBuild {

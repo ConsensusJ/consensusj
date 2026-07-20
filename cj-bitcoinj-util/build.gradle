@@ -9,7 +9,7 @@ tasks.withType(JavaCompile).configureEach {
 ext.moduleName = 'org.consensusj.bitcoinj.util'
 
 dependencies {
-    api "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
+    api libs.bitcoinj.core
 
     testImplementation project(':cj-bitcoinj-dsl-gvy')                // Use Groovy DSL in tests
 }

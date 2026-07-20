@@ -6,7 +6,7 @@ ext.moduleName = 'org.consensusj.bitcoin.rx.peergroup'
 
 dependencies {
     api project(':cj-btc-rx')
-    implementation "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
+    implementation libs.rxjava
 }
 
 jar {

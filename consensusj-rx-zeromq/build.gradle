@@ -3,10 +3,10 @@ plugins {
 }
 
 dependencies {
-    api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
-    api "org.zeromq:jeromq:0.6.0"
+    api libs.rxjava
+    api libs.jeromq
 
-    testImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+    testImplementation libs.slf4j.jdk14
 }
 
 jar {

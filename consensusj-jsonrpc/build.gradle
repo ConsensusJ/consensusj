@@ -6,13 +6,13 @@ plugins {
 apply plugin: 'net.ltgt.errorprone'
 
 dependencies {
-    api "org.jspecify:jspecify:1.0.0"
-    api "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    api libs.jspecify
+    api libs.jackson.core
+    api libs.jackson.databind
 
     testImplementation project(':cj-btc-jsonrpc')
 
-    errorprone "com.google.errorprone:error_prone_core:${errorProneVersion}"
+    errorprone libs.errorprone.core
 }
 
 tasks.withType(JavaCompile) {

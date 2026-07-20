@@ -13,8 +13,8 @@ tasks.withType(GroovyCompile).configureEach {
 }
 
 dependencies {
-    api "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
-    implementation "org.apache.groovy:groovy:${groovyVersion}"
+    api libs.bitcoinj.core
+    implementation libs.groovy.core
 }
 
 jar {

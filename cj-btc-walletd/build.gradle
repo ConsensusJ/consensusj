@@ -1,7 +1,7 @@
 import net.ltgt.gradle.errorprone.CheckSeverity
 
 plugins {
-    id("io.micronaut.application") version "${micronautAppGradlePluginVersion}"
+    alias(libs.plugins.micronaut.application)
 }
 apply plugin: 'net.ltgt.errorprone'
 
@@ -14,7 +14,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 micronaut {
-    version micronautVersion
+    version libs.versions.micronaut.get()
     runtime("netty")
     testRuntime("junit5")
     processing {
@@ -41,7 +41,7 @@ graalvmNative {
 }
 
 dependencies {
-    implementation "org.jspecify:jspecify:1.0.0"
+    implementation libs.jspecify
     implementation project(':cj-btc-services')
     implementation project(':consensusj-jsonrpc')
 
@@ -58,7 +58,7 @@ dependencies {
 
     runtimeOnly "ch.qos.logback:logback-classic"
 
-    errorprone "com.google.errorprone:error_prone_core:${errorProneVersion}"
+    errorprone libs.errorprone.core
 }
 
 application {

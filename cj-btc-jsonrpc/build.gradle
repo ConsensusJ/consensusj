@@ -8,8 +8,8 @@ dependencies {
     api project(':consensusj-jsonrpc')
     api project(':cj-btc-json')
 
-    testImplementation "org.apache.groovy:groovy:${groovyVersion}"
-    testImplementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
+    testImplementation libs.groovy.core
+    testImplementation (libs.groovy.json) {
         transitive = false
     }
 

@@ -5,10 +5,10 @@ buildscript {
 }
 
 plugins {
-    id 'net.ltgt.errorprone'            version '5.1.0' apply false
-    id 'org.asciidoctor.jvm.convert'    version '4.0.5'
-    id 'org.ajoberstar.git-publish'     version '6.0.0'
-    id 'com.github.hierynomus.license'  version '0.16.1' apply false
+    alias(libs.plugins.errorprone)      apply false
+    alias(libs.plugins.asciidoctor)
+    alias(libs.plugins.git.publish)
+    alias(libs.plugins.license)         apply false
 }
 
 gradle.rootProject {
@@ -47,15 +47,15 @@ allprojects {
 subprojects {
 
     dependencies {
-        implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+        implementation libs.slf4j.api
 
-        annotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
+        annotationProcessor libs.nullaway
     }
 
     configurations.configureEach {
         resolutionStrategy {
-            force "org.apache.groovy:groovy:${groovyVersion}"
-            force "org.apache.groovy:groovy-json:${groovyVersion}"
+            force "org.apache.groovy:groovy:${libs.versions.groovy.get()}"
+            force "org.apache.groovy:groovy-json:${libs.versions.groovy.get()}"
         }
         // Ensure usage of Groovy 4.0 which has new Maven co-ordinates
         resolutionStrategy.capabilitiesResolution.all {
@@ -114,23 +114,23 @@ subprojects {
             configureEach {
                 useJUnitJupiter()
                 dependencies {
-                    implementation platform("org.junit:junit-bom:${junitJupiterVersion}")
+                    implementation platform(libs.junit.bom)
 
-                    implementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
-                    runtimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
+                    implementation libs.junit.jupiter.api
+                    runtimeOnly libs.junit.jupiter.engine
 
-                    runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+                    runtimeOnly libs.slf4j.jdk14
 
-                    annotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
+                    annotationProcessor libs.nullaway
 
                     if (useSpock) {
-                        implementation "org.apache.groovy:groovy:${groovyVersion}"
-                        implementation("org.spockframework:spock-core:${spockVersion}") {
+                        implementation libs.groovy.core
+                        implementation(libs.spock.core) {
                             exclude module: "groovy-all"
                         }
 
-                        runtimeOnly "net.bytebuddy:byte-buddy:1.18.10"  // Lets Spock mock classes (in addition to interfaces)
-                        runtimeOnly "org.objenesis:objenesis:3.5"       // Lets Spock mock classes with constructor arguments
+                        runtimeOnly libs.bytebuddy   // Lets Spock mock classes (in addition to interfaces)
+                        runtimeOnly libs.objenesis   // Lets Spock mock classes with constructor arguments
                     }
                 }
             }

@@ -9,9 +9,9 @@ tasks.withType(GroovyCompile).configureEach {
 dependencies {
     api project(':consensusj-jsonrpc')
 
-    implementation "org.apache.groovy:groovy:${groovyVersion}"
+    implementation libs.groovy.core
 
-    testImplementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
+    testImplementation (libs.groovy.json) {
         transitive = false
     }
 }

@@ -10,19 +10,19 @@ testing {
                 implementation project(':cj-bitcoinj-util')     // For BlockUtils
                 implementation project(':cj-bitcoinj-dsl-gvy')  // Use Groovy extensions in tests
 
-                implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+                implementation libs.slf4j.api
 
-                implementation("org.spockframework:spock-core:${spockVersion}") {
+                implementation(libs.spock.core) {
                     exclude module: "groovy-all"
                 }
-                implementation "org.apache.groovy:groovy:${groovyVersion}"
-                implementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
+                implementation libs.groovy.core
+                implementation (libs.groovy.json) {
                     transitive = false
                 }
 
-                runtimeOnly "net.bytebuddy:byte-buddy:1.18.10"       // Allows Spock to mock classes (in addition to interfaces)
-                runtimeOnly "org.objenesis:objenesis:3.5"           // Allows Spock to mock classes with constructor arguments
-                runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}" // Runtime implementation of slf4j
+                runtimeOnly libs.bytebuddy       // Allows Spock to mock classes (in addition to interfaces)
+                runtimeOnly libs.objenesis           // Allows Spock to mock classes with constructor arguments
+                runtimeOnly libs.slf4j.jdk14 // Runtime implementation of slf4j
             }
         }
         test {
