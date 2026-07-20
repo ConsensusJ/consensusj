@@ -72,7 +72,7 @@ jar {
 tasks.register('nativeCompile', Exec) {
     dependsOn jar
     workingDir = projectDir
-    executable = "${System.env.GRAALVM_HOME}/bin/native-image"
+    executable = "${System.env.GRAALVM_HOME ?: System.env.JAVA_HOME}/bin/native-image"
     args = ['--verbose',
             '--no-fallback',
             '-cp', "${-> configurations.nativeToolImplementation.asPath}", // Lazy configuration resolution
