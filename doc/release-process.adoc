@@ -30,6 +30,12 @@ NOTE:: Procedure needs steps to update `nix-deps.json`.
 .. Compare `SHA256SUMS` of multiple builds
 .. Add Release on GitHub
 
+== Updating nix-deps.json
+
+`nix-deps.json` holds SHA-256 hashes of Maven Central dependencies and is used by the `.#consensusj-tools` Nix flake. It currently must be manually updated whenever any Maven Central dependencies are updated.
+
+. `$(nix build .#consensusj-tools.mitmCache.updateScript --print-out-paths)`
+
 == Announcements
 
 . Not yet.

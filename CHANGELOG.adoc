@@ -13,6 +13,12 @@ Released: 2026-06-17
 * ByteBuddy 1.18.10
 * Use Nixpkgs release-26.05
 * Develocity 4.4.2
+* Groovy 4.0.32
+* JUnit Jupiter 5.14.4
+* SLF4J 2.0.18
+* Jackson 2.21.5
+* Micronaut 4.10.17
+
 
 === Build/Test Updates
 
