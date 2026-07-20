@@ -5,8 +5,8 @@ plugins {
 ext.moduleName = 'org.consensusj.bitcoin.rx'
 
 dependencies {
-    api "org.reactivestreams:reactive-streams:1.0.4"
-    api "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
+    api libs.reactive.streams
+    api libs.bitcoinj.core
     api project(':cj-btc-json')
 }
 

@@ -5,9 +5,9 @@ plugins {
 ext.moduleName = 'org.consensusj.bitcoin.json'
 
 dependencies {
-    api "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
-    api "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    api libs.bitcoinj.core
+    api libs.jackson.core
+    api libs.jackson.databind
 }
 
 jar {

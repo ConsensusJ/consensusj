@@ -6,9 +6,29 @@
 version: 2
 updates:
   - package-ecosystem: "gradle"
-    directory: "/" # Location of package manifests
+    directory: "/" # Dependabot auto-detects gradle/libs.versions.toml here
     schedule:
       interval: "daily"
+    # Group multi-artifact families that share a version so each bump is one PR.
+    groups:
+      jackson:
+        patterns:
+          - "com.fasterxml.jackson*"
+      junit:
+        patterns:
+          - "org.junit*"
+      micronaut:
+        patterns:
+          - "io.micronaut*"
+      groovy:
+        patterns:
+          - "org.apache.groovy*"
+      xchange:
+        patterns:
+          - "org.knowm.xchange*"
+      slf4j:
+        patterns:
+          - "org.slf4j*"
   - package-ecosystem: "nix"
     directory: "/" # Location of package manifests
     schedule:

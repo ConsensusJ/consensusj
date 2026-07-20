@@ -2,22 +2,21 @@ plugins {
     id 'java-library'
 }
 
-def xChangeVersion = '5.2.2'
 
 dependencies {
-    api "javax.money:money-api:${javaMoneyApiVersion}"
-    api "io.reactivex.rxjava3:rxjava:${rxJavaVersion}"
-    api "org.knowm.xchange:xchange-core:${xChangeVersion}"
+    api libs.javamoney.api
+    api libs.rxjava
+    api libs.xchange.core
 
-    implementation "org.javamoney.moneta:moneta-core:${javaMoneyMonetaVersion}"
-    implementation "org.javamoney.moneta:moneta-convert:${javaMoneyMonetaVersion}"
+    implementation libs.moneta.core
+    implementation libs.moneta.convert
 
     testImplementation project(':consensusj-currency')  // For BTC Currency Code
-    testRuntimeOnly "org.knowm.xchange:xchange-bitfinex:${xChangeVersion}"
-    testRuntimeOnly "org.knowm.xchange:xchange-itbit:${xChangeVersion}"
-    testRuntimeOnly "org.knowm.xchange:xchange-coinbase:${xChangeVersion}"
-    testRuntimeOnly "org.knowm.xchange:xchange-coinbasepro:${xChangeVersion}"
-    testRuntimeOnly "org.knowm.xchange:xchange-bittrex:${xChangeVersion}"
+    testRuntimeOnly libs.xchange.bitfinex
+    testRuntimeOnly libs.xchange.itbit
+    testRuntimeOnly libs.xchange.coinbase
+    testRuntimeOnly libs.xchange.coinbasepro
+    testRuntimeOnly libs.xchange.bittrex
 }
 
 ext.moduleName = 'org.consensusj.exchange'

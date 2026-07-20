@@ -13,8 +13,8 @@ dependencies {
     api project(':cj-btc-jsonrpc')
     api project(':consensusj-jsonrpc-gvy')
 
-    implementation "org.apache.groovy:groovy:${groovyVersion}"
-    implementation ("org.apache.groovy:groovy-json:${groovyVersion}") {
+    implementation libs.groovy.core
+    implementation (libs.groovy.json) {
         transitive = false
     }
 

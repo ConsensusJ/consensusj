@@ -21,7 +21,7 @@ dependencies {
     api project(':cj-btc-jsonrpc')
 
     // Add SLF4J runtime adapter for JDK logging for GraalVM native-image build of bitcoin CLI tool
-    nativeToolImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+    nativeToolImplementation libs.slf4j.jdk14
 }
 
 testing {
@@ -32,16 +32,16 @@ testing {
         regTest(JvmTestSuite) {
             dependencies {
                 implementation project()
-                implementation "org.apache.groovy:groovy:${groovyVersion}"
-                implementation("org.spockframework:spock-core:${spockVersion}") {
+                implementation libs.groovy.core
+                implementation(libs.spock.core) {
                     exclude module: "groovy-all"
                 }
 
-                runtimeOnly "net.bytebuddy:byte-buddy:1.18.10"
+                runtimeOnly libs.bytebuddy
                 // allows Spock to mock classes (in addition to interfaces)
-                runtimeOnly "org.objenesis:objenesis:3.5"
+                runtimeOnly libs.objenesis
                 // Allow Spock to mock classes with constructor arguments
-                runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"   // Runtime implementation of slf4j
+                runtimeOnly libs.slf4j.jdk14   // Runtime implementation of slf4j
             }
 
             targets {

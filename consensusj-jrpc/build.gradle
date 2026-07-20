@@ -19,13 +19,13 @@ configurations {
 
 dependencies {
     implementation project(':consensusj-jsonrpc-cli')
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-toml:${jacksonVersion}"
+    implementation libs.jackson.dataformat.toml
 
-    runtimeOnly "org.slf4j:slf4j-jdk14:${slf4jVersion}"
-    nativeToolImplementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+    runtimeOnly libs.slf4j.jdk14
+    nativeToolImplementation libs.slf4j.jdk14
 
-    annotationProcessor "com.uber.nullaway:nullaway:${nullAwayVersion}"
-    errorprone "com.google.errorprone:error_prone_core:${errorProneVersion}"
+    annotationProcessor libs.nullaway
+    errorprone libs.errorprone.core
 }
 
 application {

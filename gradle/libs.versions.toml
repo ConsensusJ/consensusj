@@ -1,0 +1,72 @@
+# Gradle Version Catalog
+
+[versions]
+bitcoinj = "0.17.1"
+rxjava = "3.1.12"
+groovy = "4.0.32"
+nullaway = "0.13.1"
+junit = "5.14.4"
+spock = "2.4-groovy-4.0"
+slf4j = "2.0.18"
+jackson = "2.21.5"
+micronaut = "4.10.17"
+javamoneyApi = "1.1"
+moneta = "1.4.4"
+bytebuddy = "1.18.10"
+objenesis = "3.5"
+nashorn = "15.7"
+jeromq = "0.6.0"
+jakartaInject = "2.0.1"
+jakartaAnnotation = "3.0.0"
+reactiveStreams = "1.0.4"
+jspecify = "1.0.0"
+xchange = "5.2.2"
+commonsCli = "1.11.0"
+awaitility = "4.3.0"
+errorproneCore = "2.48.0"
+
+[libraries]
+bitcoinj-core            = { module = "org.bitcoinj:bitcoinj-core",                         version.ref = "bitcoinj" }
+rxjava                   = { module = "io.reactivex.rxjava3:rxjava",                        version.ref = "rxjava" }
+groovy-core              = { module = "org.apache.groovy:groovy",                           version.ref = "groovy" }
+groovy-json              = { module = "org.apache.groovy:groovy-json",                      version.ref = "groovy" }
+nullaway                 = { module = "com.uber.nullaway:nullaway",                         version.ref = "nullaway" }
+junit-bom                = { module = "org.junit:junit-bom",                                version.ref = "junit" }
+junit-jupiter-api        = { module = "org.junit.jupiter:junit-jupiter-api",                version.ref = "junit" }
+junit-jupiter-engine     = { module = "org.junit.jupiter:junit-jupiter-engine",             version.ref = "junit" }
+spock-core               = { module = "org.spockframework:spock-core",                      version.ref = "spock" }
+slf4j-api                = { module = "org.slf4j:slf4j-api",                                version.ref = "slf4j" }
+slf4j-jdk14              = { module = "org.slf4j:slf4j-jdk14",                              version.ref = "slf4j" }
+jackson-core             = { module = "com.fasterxml.jackson.core:jackson-core",            version.ref = "jackson" }
+jackson-databind         = { module = "com.fasterxml.jackson.core:jackson-databind",        version.ref = "jackson" }
+jackson-dataformat-toml  = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-toml", version.ref = "jackson" }
+# Consumed via the Micronaut Gradle plugin's `micronaut { version = ... }` DSL
+# (libs.versions.micronaut). Declared as a library so Dependabot has coordinates to bump.
+micronaut-platform       = { module = "io.micronaut.platform:micronaut-platform",          version.ref = "micronaut" }
+javamoney-api            = { module = "javax.money:money-api",                              version.ref = "javamoneyApi" }
+moneta-core              = { module = "org.javamoney.moneta:moneta-core",                   version.ref = "moneta" }
+moneta-convert           = { module = "org.javamoney.moneta:moneta-convert",               version.ref = "moneta" }
+bytebuddy                = { module = "net.bytebuddy:byte-buddy",                           version.ref = "bytebuddy" }
+objenesis                = { module = "org.objenesis:objenesis",                            version.ref = "objenesis" }
+nashorn-core             = { module = "org.openjdk.nashorn:nashorn-core",                   version.ref = "nashorn" }
+jeromq                   = { module = "org.zeromq:jeromq",                                  version.ref = "jeromq" }
+jakarta-inject-api       = { module = "jakarta.inject:jakarta.inject-api",                  version.ref = "jakartaInject" }
+jakarta-annotation-api   = { module = "jakarta.annotation:jakarta.annotation-api",          version.ref = "jakartaAnnotation" }
+reactive-streams         = { module = "org.reactivestreams:reactive-streams",              version.ref = "reactiveStreams" }
+jspecify                 = { module = "org.jspecify:jspecify",                              version.ref = "jspecify" }
+xchange-core             = { module = "org.knowm.xchange:xchange-core",                     version.ref = "xchange" }
+xchange-bitfinex         = { module = "org.knowm.xchange:xchange-bitfinex",                 version.ref = "xchange" }
+xchange-itbit            = { module = "org.knowm.xchange:xchange-itbit",                    version.ref = "xchange" }
+xchange-coinbase         = { module = "org.knowm.xchange:xchange-coinbase",                 version.ref = "xchange" }
+xchange-coinbasepro      = { module = "org.knowm.xchange:xchange-coinbasepro",              version.ref = "xchange" }
+xchange-bittrex          = { module = "org.knowm.xchange:xchange-bittrex",                  version.ref = "xchange" }
+commons-cli              = { module = "commons-cli:commons-cli",                            version.ref = "commonsCli" }
+awaitility               = { module = "org.awaitility:awaitility",                          version.ref = "awaitility" }
+errorprone-core          = { module = "com.google.errorprone:error_prone_core",            version.ref = "errorproneCore" }
+
+[plugins]
+errorprone           = { id = "net.ltgt.errorprone",           version = "5.1.0" }
+asciidoctor          = { id = "org.asciidoctor.jvm.convert",   version = "4.0.5" }
+git-publish          = { id = "org.ajoberstar.git-publish",    version = "6.0.0" }
+license              = { id = "com.github.hierynomus.license", version = "0.16.1" }
+micronaut-application = { id = "io.micronaut.application",      version = "4.6.2" }
