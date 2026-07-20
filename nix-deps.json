@@ -58,13 +58,13 @@
    "jar": "sha256-fUGEz4kfNZ7nIJWkzhy5zY88Z2Z23+cW6on6tNDm6VM=",
    "pom": "sha256-bH6VO09at9+Uppnum6jk7NneKghLcombV2R6I3WJhqg="
   },
-  "com/gradle#develocity-gradle-plugin/4.4.2": {
-   "jar": "sha256-ZdtHJmYjzWsvQUQi+GZ5693eS1VU4jW3/jMvXobDt70=",
-   "module": "sha256-/ByE1DuGUaPpDQE/obrtUrAAPaDM9bH56jtsQubfGYQ=",
-   "pom": "sha256-bP/JoWhZoJ+vVJAIZjEaL9+tkDPsOdaJpZVtCHBEg18="
+  "com/gradle#develocity-gradle-plugin/4.5.0": {
+   "jar": "sha256-vTuHi6vv1QiGGBvI7a7CCkJupAnorGP5JP+vHIaT3OU=",
+   "module": "sha256-huapibY+RE//TjvjdnB6pu7txmr448ygev4coxDUaI4=",
+   "pom": "sha256-crcL8N2XWgqNyQOURc9UsDN+undH3ShrQ0DIxiOlMYA="
   },
-  "com/gradle/develocity#com.gradle.develocity.gradle.plugin/4.4.2": {
-   "pom": "sha256-8205wXsalhNspnI3ObltVbnDp7ObcGx1ySwjhAEVVDM="
+  "com/gradle/develocity#com.gradle.develocity.gradle.plugin/4.5.0": {
+   "pom": "sha256-SCp9QVoVqvu6ezcyhsrRhyl0x5k2+Nx5daXymXBwbUY="
   },
   "com/squareup#javapoet/1.13.0": {
    "jar": "sha256-THUX6EinGzbQadErs79Gpw/UzaMQXYIrDtLhnAC2kpE=",
