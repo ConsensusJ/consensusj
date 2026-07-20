@@ -9,6 +9,14 @@ updates:
     directory: "/" # Dependabot auto-detects gradle/libs.versions.toml here
     schedule:
       interval: "daily"
+    ignore:
+      # Limit these families to patch updates within the current major.minor
+      - dependency-name: "io.micronaut*"
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
+      - dependency-name: "com.fasterxml.jackson*"
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
+      - dependency-name: "org.junit*"
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
     # Group multi-artifact families that share a version so each bump is one PR.
     groups:
       jackson:
