@@ -24,6 +24,7 @@ import org.consensusj.bitcoin.json.conversion.HexUtil;
 import org.bitcoinj.base.Coin;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -33,7 +34,6 @@ import java.util.stream.Collectors;
 /**
  * RawTransaction POJO
  */
-// "hash" property added (present in Bitcoin 0.13)
 public class RawTransactionInfo {
     private final String hex;
     private final Sha256Hash txid;
@@ -41,6 +41,7 @@ public class RawTransactionInfo {
     private final LockTime lockTime;
     private final List<Vin> vin;
     private final List<Vout> vout;
+    @Nullable
     private final Sha256Hash blockhash;
     private final int confirmations;
     private final Instant time;
@@ -130,6 +131,7 @@ public class RawTransactionInfo {
         return vout;
     }
 
+    @Nullable
     public Sha256Hash getBlockhash() {
         return blockhash;
     }

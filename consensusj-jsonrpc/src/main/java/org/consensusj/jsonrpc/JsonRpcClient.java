@@ -15,6 +15,8 @@
  */
 package org.consensusj.jsonrpc;
 
+import org.jspecify.annotations.Nullable;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -84,15 +86,15 @@ public interface JsonRpcClient<T extends Type> extends JsonRpcTransport<T>, Auto
      * @throws IOException network error
      * @throws JsonRpcStatusException JSON RPC status error
      */
-    default Object send(String method, Object... params) throws IOException, JsonRpcStatusException {
+    default Object send(String method, @Nullable Object... params) throws IOException, JsonRpcStatusException {
         return send(method, Arrays.asList(params));
     }
 
-    default <R> R send(String method, Class<R> resultType, Object... params) throws IOException, JsonRpcStatusException {
+    default <R> R send(String method, Class<R> resultType, @Nullable Object... params) throws IOException, JsonRpcStatusException {
         return send(method, resultType, Arrays.asList(params));
     }
 
-    default <R> CompletableFuture<R> sendAsync(String method, Class<R> resultType, Object... params) {
+    default <R> CompletableFuture<R> sendAsync(String method, Class<R> resultType, @Nullable Object... params) {
         return sendAsync(method, resultType, Arrays.asList(params));
     }
 
@@ -132,11 +134,11 @@ public interface JsonRpcClient<T extends Type> extends JsonRpcTransport<T>, Auto
     /**
      * Varargs version
      */
-    default Object send(String method, T resultType, Object... params) throws IOException, JsonRpcStatusException {
+    default Object send(String method, T resultType, @Nullable Object... params) throws IOException, JsonRpcStatusException {
         return syncGet(sendRequestForResultAsync(buildJsonRequest(method, params), resultType));
     }
 
-    default <R> CompletableFuture<R> sendAsync(String method, T resultType, Object... params) {
+    default <R> CompletableFuture<R> sendAsync(String method, T resultType, @Nullable Object... params) {
         return sendRequestForResultAsync(buildJsonRequest(method, params), resultType);
     }
 
@@ -167,7 +169,7 @@ public interface JsonRpcClient<T extends Type> extends JsonRpcTransport<T>, Auto
         return new JsonRpcRequest(getJsonRpcVersion(), method, params);
     }
 
-    default JsonRpcRequest buildJsonRequest(String method, Object... params) {
+    default JsonRpcRequest buildJsonRequest(String method, @Nullable Object... params) {
         return new JsonRpcRequest(getJsonRpcVersion(), method, Arrays.asList(params));
     }
 

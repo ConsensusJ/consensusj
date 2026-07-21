@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.base.AddressParser;
 import org.bitcoinj.base.Coin;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class AddressGroupingItem {
     private static final AddressParser addressParser = AddressParser.getDefault();
     private final Address address;
     private final Coin balance;
-    private final String account;
+    @Nullable private final String account;
 
     public AddressGroupingItem(Address address, Coin balance, String account) {
         this.address = address;
@@ -57,6 +58,7 @@ public class AddressGroupingItem {
         return balance;
     }
 
+    @Nullable
     public String getAccount() {
         return account;
     }

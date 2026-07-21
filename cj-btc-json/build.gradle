@@ -1,13 +1,26 @@
+import net.ltgt.gradle.errorprone.CheckSeverity
+
 plugins {
     id 'java-library'
 }
+apply plugin: 'net.ltgt.errorprone'
 
 ext.moduleName = 'org.consensusj.bitcoin.json'
 
 dependencies {
+    api libs.jspecify
     api libs.bitcoinj.core
     api libs.jackson.core
     api libs.jackson.databind
+
+    errorprone libs.errorprone.core
+}
+
+tasks.withType(JavaCompile) {
+    options.errorprone {
+        check("NullAway", CheckSeverity.ERROR)
+        option("NullAway:OnlyNullMarked")
+    }
 }
 
 jar {
