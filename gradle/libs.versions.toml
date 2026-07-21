@@ -12,8 +12,6 @@ jackson = "2.21.5"
 micronaut = "4.10.17"
 javamoneyApi = "1.1"
 moneta = "1.4.4"
-bytebuddy = "1.18.10"
-objenesis = "3.5"
 nashorn = "15.7"
 jeromq = "0.6.0"
 jakartaInject = "2.0.1"
@@ -46,8 +44,6 @@ micronaut-platform       = { module = "io.micronaut.platform:micronaut-platform"
 javamoney-api            = { module = "javax.money:money-api",                              version.ref = "javamoneyApi" }
 moneta-core              = { module = "org.javamoney.moneta:moneta-core",                   version.ref = "moneta" }
 moneta-convert           = { module = "org.javamoney.moneta:moneta-convert",               version.ref = "moneta" }
-bytebuddy                = { module = "net.bytebuddy:byte-buddy",                           version.ref = "bytebuddy" }
-objenesis                = { module = "org.objenesis:objenesis",                            version.ref = "objenesis" }
 nashorn-core             = { module = "org.openjdk.nashorn:nashorn-core",                   version.ref = "nashorn" }
 jeromq                   = { module = "org.zeromq:jeromq",                                  version.ref = "jeromq" }
 jakarta-inject-api       = { module = "jakarta.inject:jakarta.inject-api",                  version.ref = "jakartaInject" }

@@ -19,9 +19,6 @@ testing {
                 implementation (libs.groovy.json) {
                     transitive = false
                 }
-
-                runtimeOnly libs.bytebuddy       // Allows Spock to mock classes (in addition to interfaces)
-                runtimeOnly libs.objenesis           // Allows Spock to mock classes with constructor arguments
                 runtimeOnly libs.slf4j.jdk14 // Runtime implementation of slf4j
             }
         }
