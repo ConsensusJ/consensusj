@@ -21,7 +21,7 @@ jspecify = "1.0.0"
 xchange = "5.2.2"
 commonsCli = "1.11.0"
 awaitility = "4.3.0"
-errorproneCore = "2.48.0"
+errorproneCore = "2.50.0"
 
 [libraries]
 bitcoinj-core            = { module = "org.bitcoinj:bitcoinj-core",                         version.ref = "bitcoinj" }
