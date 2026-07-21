@@ -18,6 +18,7 @@ package org.consensusj.bitcoin.jsonrpc.test;
 import org.bitcoinj.base.Address;
 import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.core.TransactionOutPoint;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ import java.util.List;
  * TODO: Make this an immutable bean
  */
 public class TransactionIngredients {
-    public Address address;
-    public ECKey   privateKey;
-    public List<TransactionOutPoint> outPoints;
+    @Nullable public Address address;
+    @Nullable public ECKey   privateKey;
+    @Nullable public List<TransactionOutPoint> outPoints;
 }

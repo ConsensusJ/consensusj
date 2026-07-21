@@ -39,6 +39,7 @@ import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionOutPoint;
 import org.bitcoinj.core.TransactionOutput;
 import org.consensusj.jsonrpc.JsonRpcTransport;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +68,7 @@ public class BitcoinExtendedClient extends BitcoinClient {
     private static final String RegTestMiningAddressLabel = "RegTestMiningAddress";
     public static final String REGTEST_WALLET_NAME = "consensusj-regtest-wallet";
     private boolean regTestWalletInitialized = false;
+    @Nullable
     private /* lazy */ Address regTestMiningAddress;
 
     public final Coin stdTxFee = Coin.valueOf(10000);
@@ -87,11 +89,11 @@ public class BitcoinExtendedClient extends BitcoinClient {
     }
 
 
-    public BitcoinExtendedClient(SSLContext sslContext, Network network, URI server, String rpcuser, String rpcpassword) {
+    public BitcoinExtendedClient(SSLContext sslContext, @Nullable Network network, URI server, @Nullable String rpcuser, @Nullable String rpcpassword) {
         super(sslContext, network, server, rpcuser, rpcpassword);
     }
 
-    public BitcoinExtendedClient(Network network, URI server, String rpcuser, String rpcpassword) {
+    public BitcoinExtendedClient(Network network, URI server, @Nullable String rpcuser, @Nullable String rpcpassword) {
         this(JsonRpcTransport.getDefaultSSLContext(), network, server, rpcuser, rpcpassword);
     }
 
