@@ -17,6 +17,8 @@ updates:
         update-types: ["version-update:semver-minor", "version-update:semver-major"]
       - dependency-name: "org.junit*"
         update-types: ["version-update:semver-minor", "version-update:semver-major"]
+      - dependency-name: "org.apache.groovy*"
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
     # Group multi-artifact families that share a version so each bump is one PR.
     groups:
       jackson:
