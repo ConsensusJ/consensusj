@@ -508,9 +508,9 @@
    "jar": "sha256-dmrSoHg/JoeWLIrXTO7MOKKLn3Ki0IXuQ4t4E+ko0Mc=",
    "pom": "sha256-GYidvfGyVLJgGl7mRbgUepdGRIgil2hMeYr+XWPXjf4="
   },
-  "com/google/errorprone#error_prone_annotation/2.48.0": {
-   "jar": "sha256-l5FXCz0c5gF1dmyuXYUEZIkpLqhWy57a1s01VxoeFkY=",
-   "pom": "sha256-sR03Xfc3hn5ie5pNCNHRO/iYSYtXclSau7VHtbPHqnI="
+  "com/google/errorprone#error_prone_annotation/2.50.0": {
+   "jar": "sha256-qptno6o0GLNm4mWU4a410QCtM2nNEBCufUeC2YTqmq8=",
+   "pom": "sha256-J7eLAjbfhT3FBsRw9vYKjQ9c8lxq4is0fzNpMHgj5Ao="
   },
   "com/google/errorprone#error_prone_annotations/2.11.0": {
    "jar": "sha256-chy5GEK0b6BWhH0QTVIlyLjh6LYiY7mTBR4eWgE3t+w=",
@@ -524,17 +524,17 @@
    "jar": "sha256-d0QOJwsLyaJJkDxaB2w2pyLEiGyk9CZ18pA6HFPtYaU=",
    "pom": "sha256-15z9N8hfdta3VMdQHuHchEe3smQsI4LXeCUhZr0zHpw="
   },
-  "com/google/errorprone#error_prone_annotations/2.48.0": {
-   "jar": "sha256-tJxclYMW7WegnGmd2pqnScr0NNUdhj3qWZ7zakm5yFU=",
-   "pom": "sha256-GJ4JrQSJwyXpDaqp1cj0BjMGAvo2Zgm8oHy82tA6udo="
+  "com/google/errorprone#error_prone_annotations/2.50.0": {
+   "jar": "sha256-RmdySHfx03pokgLaGR4j76dlfGLu+TzNrEBuzP5c3Qo=",
+   "pom": "sha256-caBoDSdzJLq0a+xLAPbxEcG3lKkx0NjNp5vLkkaYL5I="
   },
-  "com/google/errorprone#error_prone_check_api/2.48.0": {
-   "jar": "sha256-hhKf3fIYkuwEbRUvdyFTpCrVLhupqGg8s1sKpeeo5QA=",
-   "pom": "sha256-BsZMAmEJljqIWyWFpClO73/gCAQLCLbYMYQgjSsrdBk="
+  "com/google/errorprone#error_prone_check_api/2.50.0": {
+   "jar": "sha256-7pNaT0KsQJ+wpHGv/qk4wwUMaIfbqtsQaGiTbYPYyPE=",
+   "pom": "sha256-pJPS7DOP341iL2kvT5V7Ujkl4jSq0Rf8HkhyukOr6Fs="
   },
-  "com/google/errorprone#error_prone_core/2.48.0": {
-   "jar": "sha256-lEXoUsWFEjFg2fTrCCaH0s8OKMUL4F51wqvwd7fBBnE=",
-   "pom": "sha256-xJrMyVREp5850u3zv/0L2me0EOn4eutrT8WEaS2zjns="
+  "com/google/errorprone#error_prone_core/2.50.0": {
+   "jar": "sha256-QKiNPqcy+sOleuDisn8XKc52zEGFe81j1YReeerl9y4=",
+   "pom": "sha256-iCMGeNynNcwtwQ1jMbyvdCjSvRCNYh1NxpF4IkKX4fY="
   },
   "com/google/errorprone#error_prone_parent/2.11.0": {
    "pom": "sha256-goPwy0TGJKedMwtv2AuLinFaaLNoXJqVHD3oN9RUBVE="
@@ -545,15 +545,15 @@
   "com/google/errorprone#error_prone_parent/2.36.0": {
    "pom": "sha256-Okz8imvtYetI6Wl5b8MeoNJwtj5nBZmUamGIOttwlNw="
   },
-  "com/google/errorprone#error_prone_parent/2.48.0": {
-   "pom": "sha256-sz+opFyfF5SlAIwLLYOoTrKLXQEXptFW8AP58JvnQQ8="
+  "com/google/errorprone#error_prone_parent/2.50.0": {
+   "pom": "sha256-q/RaAZ2xJbUP9VE07Cr5SuNRl2EDit8KYLm9e0uLYlQ="
   },
-  "com/google/googlejavaformat#google-java-format-parent/1.34.1": {
-   "pom": "sha256-dtb8fHsn8sQ1w5qwBxYJe3CMLRezWnWvWZMFbpDL9n4="
+  "com/google/googlejavaformat#google-java-format-parent/1.35.0": {
+   "pom": "sha256-mqMpxgZZv0KcsdmTQUAdb5IIivxpvl9LwJxu+MFU9eM="
   },
-  "com/google/googlejavaformat#google-java-format/1.34.1": {
-   "jar": "sha256-KuJC/ZlLCYLB5GInOz51HXA/erfJoU+e7dHznzprVRY=",
-   "pom": "sha256-v+g6CLJqbrLbFAJR1TS5NKVqlqlW4g3CSAvvR57+VOA="
+  "com/google/googlejavaformat#google-java-format/1.35.0": {
+   "jar": "sha256-sqUuNj1R3Yazs40ajdUVOFQbQv8QSHaWhGgcZ2VQ8EM=",
+   "pom": "sha256-LXw5Gv+5MNYmPTsYoTmlMLubuvNnIRATrrL4BtEG1hw="
   },
   "com/google/guava#failureaccess/1.0.1": {
    "jar": "sha256-oXHuTHNN0tqDfksWvp30Zhr6typBra8x64Tf2vk2yiY=",
