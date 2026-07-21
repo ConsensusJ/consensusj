@@ -36,11 +36,6 @@ testing {
                 implementation(libs.spock.core) {
                     exclude module: "groovy-all"
                 }
-
-                runtimeOnly libs.bytebuddy
-                // allows Spock to mock classes (in addition to interfaces)
-                runtimeOnly libs.objenesis
-                // Allow Spock to mock classes with constructor arguments
                 runtimeOnly libs.slf4j.jdk14   // Runtime implementation of slf4j
             }
 

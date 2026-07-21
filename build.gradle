@@ -128,9 +128,6 @@ subprojects {
                         implementation(libs.spock.core) {
                             exclude module: "groovy-all"
                         }
-
-                        runtimeOnly libs.bytebuddy   // Lets Spock mock classes (in addition to interfaces)
-                        runtimeOnly libs.objenesis   // Lets Spock mock classes with constructor arguments
                     }
                 }
             }

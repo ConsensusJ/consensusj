@@ -1373,13 +1373,6 @@
    "jar": "sha256-PtpqE3m1e9zZLx7dOaR7lF/qSByzh0QzW+4q3yGOSxc=",
    "pom": "sha256-kdeJ4O7Yp/2KirQ+dUhX4+6xXDOykOV4ZIOUooQLbRQ="
   },
-  "net/bytebuddy#byte-buddy-parent/1.18.10": {
-   "pom": "sha256-jAWWPJOikMbWVmmUOGVE1cfR9FZ6tAcOqQVSDh/ed7w="
-  },
-  "net/bytebuddy#byte-buddy/1.18.10": {
-   "jar": "sha256-izH06oBq+qkAtnv/2EmHYNH2VGT0wup4zb2i8+YziYs=",
-   "pom": "sha256-IxyDtIjJZb5WWnT6D43SvHDP98uEfMl93VaypwCgz2I="
-  },
   "net/java#jvnet-parent/3": {
    "pom": "sha256-MPV4nvo53b+WCVqto/wSYMRWH68vcUaGcXyy3FBJR1o="
   },
@@ -1844,13 +1837,6 @@
   },
   "org/knowm/xchange#xchange-parent/5.2.2": {
    "pom": "sha256-9IlDTNYSVQrCvCxruci/9GXlxdiRvU9boXJ0s0mNU6w="
-  },
-  "org/objenesis#objenesis-parent/3.5": {
-   "pom": "sha256-up+Z3fcpbWwF5EKdhEN52gFxrVboJ2RNdtVHu3PBz0o="
-  },
-  "org/objenesis#objenesis/3.5": {
-   "jar": "sha256-b1q9Qs8+vA8r2uc9vFeCD8Shy4kwSShB4p6an53MhuA=",
-   "pom": "sha256-BSjmTxaXywaZOnlRcXd8bSSkJcmuDdKY7GQBhO30Zag="
   },
   "org/openjdk/nashorn#nashorn-core/15.7": {
    "jar": "sha256-Pyti5VtUWLouigzEWZqjq+gbFCLjHDi7gpSnCWzu5vI=",
