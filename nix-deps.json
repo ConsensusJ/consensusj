@@ -1646,19 +1646,19 @@
   "org/javamoney#javamoney-parent/1.4": {
    "pom": "sha256-aYSsd7WX0CCJZwLHep2mrlmRuJvEYuiGPzn2IMWJEEI="
   },
-  "org/javamoney#moneta-parent/1.4.4": {
-   "pom": "sha256-Ht7w56PXjnVmoz6ynnBF7C3YEzUTkyMb4ykTcDN937w="
+  "org/javamoney#moneta-parent/1.4.5": {
+   "pom": "sha256-BsT28x5c4Q687rNXdc9O6JekoHUdJR4IBuerU8BKJl8="
   },
-  "org/javamoney/moneta#moneta-convert-parent/1.4.4": {
-   "pom": "sha256-zkV30313y08AsYvmpj3t2zGbrLb4eWu9Hicyz59IPQY="
+  "org/javamoney/moneta#moneta-convert-parent/1.4.5": {
+   "pom": "sha256-iCL5YfANnXJsbyRa2JzwvJwXJGk256tclcw9Ha6BjKs="
   },
-  "org/javamoney/moneta#moneta-convert/1.4.4": {
-   "jar": "sha256-jtoq5fc8FI1WIjMu1rWLLkAHDWTHxbT/T9xdHdUAWZk=",
-   "pom": "sha256-kyWlvJBDtpLLEK5OMczlBG/NlV6WjzcuQoC8mqFpPlI="
+  "org/javamoney/moneta#moneta-convert/1.4.5": {
+   "jar": "sha256-XPOekCa2JB18CihrLtaGUknAnsltdi0uRfiBOFeuT5s=",
+   "pom": "sha256-AQ0JLE8wZ53ZnREOUCYAO0U8cHeWc8G4Yv0Cb5N8y/c="
   },
-  "org/javamoney/moneta#moneta-core/1.4.4": {
-   "jar": "sha256-xPBlvh6IJwBwdYEQeC5PzwImKLcFS3LSKX1b5ToeY+4=",
-   "pom": "sha256-A6vw1TpHfbthOopRmELTvFYtm/PobweYGUhAspquvX0="
+  "org/javamoney/moneta#moneta-core/1.4.5": {
+   "jar": "sha256-lZ7+RBHyu93JPtg+rVmeSe4WlksyaHlRdFwN2oz5n6c=",
+   "pom": "sha256-LcPihXeCLzpwq60PxwUlj+nEsiBeiDyuhsG+zq+ciKo="
   },
   "org/jdbi#jdbi3-bom/3.49.6": {
    "pom": "sha256-dABGEs7FFgvT+a4bLDidUHxNqIOQ2wzkGSGKlRYMKx8="
