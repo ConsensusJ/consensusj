@@ -16,4 +16,7 @@
 /**
  * Bitcoin JSON-RPC Java client and supporting classes.
  */
+@NullMarked
 package org.consensusj.bitcoin.jsonrpc;
+
+import org.jspecify.annotations.NullMarked;

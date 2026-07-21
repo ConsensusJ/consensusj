@@ -63,6 +63,7 @@ import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
 import org.consensusj.jsonrpc.JsonRpcTransport;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,7 +144,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
     private boolean isAddressIndexSuccessfullyTested = false;
     private boolean isAddressIndexEnabled;
 
-    public BitcoinClient(SSLContext sslContext, Network network, URI server, String rpcuser, String rpcpassword) {
+    public BitcoinClient(SSLContext sslContext, @Nullable Network network, URI server, @Nullable String rpcuser, @Nullable String rpcpassword) {
         super(sslContext, JsonRpcMessage.Version.V2, server, rpcuser, rpcpassword);
         if (network != null) {
             this.fNetwork.complete(network); // Non-lazy initialization case
@@ -192,7 +193,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @param rpcuser Username (if required)
      * @param rpcpassword Password (if required)
      */
-    public BitcoinClient(Network network, URI server, String rpcuser, String rpcpassword) {
+    public BitcoinClient(Network network, URI server, @Nullable String rpcuser, @Nullable String rpcpassword) {
         this(JsonRpcTransport.getDefaultSSLContext(), network, server, rpcuser, rpcpassword);
     }
 
@@ -303,7 +304,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
             } catch (JsonRpcStatusException se) {
                 // If the method is there and it returns an error of "Address index not enabled" then we also
                 // know that no address index support is available
-                if (se.getMessage().equals("Address index not enabled")) {
+                if (se.getMessage() != null && se.getMessage().equals("Address index not enabled")) {
                     isAddressIndexSuccessfullyTested = true;
                     isAddressIndexEnabled = false;
                 } else if ( se.jsonRpcCode == JsonRpcError.Error.METHOD_NOT_FOUND.getCode()) {
@@ -481,10 +482,10 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
                 // Java HttpUrlConnection driver
                 SocketException se = (SocketException) t;
                 // These are expected exceptions while waiting for a server
-                if (se.getMessage().equals("Unexpected end of file from server") ||
+                if (se.getMessage() != null && (se.getMessage().equals("Unexpected end of file from server") ||
                         se.getMessage().equals("Connection reset") ||
                         se.getMessage().contains("Connection refused") ||
-                        se.getMessage().equals("recvfrom failed: ECONNRESET (Connection reset by peer)")) {
+                        se.getMessage().equals("recvfrom failed: ECONNRESET (Connection reset by peer)"))) {
                     // Transient error, generate synthetic JSON-RPC error response with appropriate values
                     return CompletableFuture.completedFuture(temporarilyUnavailableResponse(request, t));
                 } else {
@@ -598,7 +599,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public List<Sha256Hash> generateToAddress(int numBlocks, Address address, Integer maxtries) throws IOException {
+    public List<Sha256Hash> generateToAddress(int numBlocks, Address address, @Nullable Integer maxtries) throws IOException {
         JavaType resultType = collectionTypeForClasses(List.class, Sha256Hash.class);
         return (List<Sha256Hash>) send("generatetoaddress", resultType, (long) numBlocks, address, maxtries);
     }
@@ -626,15 +627,15 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
         return createWallet(name, disablePrivateKeys, blank, null, null, null, null, null);
     }
 
-    public LoadWalletResult createWallet(String name, Boolean disablePrivateKeys, Boolean blank, String passPhrase,
-                                         Boolean avoidReuse) throws JsonRpcStatusException, IOException {
+    public LoadWalletResult createWallet(String name, Boolean disablePrivateKeys, Boolean blank, @Nullable String passPhrase,
+                                         @Nullable Boolean avoidReuse) throws JsonRpcStatusException, IOException {
         return send("createwallet", LoadWalletResult.class, name, disablePrivateKeys, blank, passPhrase, avoidReuse);
     }
 
     // To use all these params server must be "recent"
-    public LoadWalletResult createWallet(String name, Boolean disablePrivateKeys, Boolean blank, String passPhrase,
-                                         Boolean avoidReuse, Boolean descriptors, Boolean loadOnStartup,
-                                         Boolean externalSigner) throws JsonRpcStatusException, IOException {
+    public LoadWalletResult createWallet(String name, Boolean disablePrivateKeys, Boolean blank, @Nullable String passPhrase,
+                                         @Nullable Boolean avoidReuse, @Nullable Boolean descriptors, @Nullable Boolean loadOnStartup,
+                                         @Nullable Boolean externalSigner) throws JsonRpcStatusException, IOException {
         return send("createwallet", LoadWalletResult.class, name, disablePrivateKeys, blank, passPhrase, avoidReuse, descriptors, loadOnStartup, externalSigner);
     }
 
@@ -642,7 +643,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
         return unloadWallet(null, null);
     }
 
-    public UnloadWalletResult unloadWallet(String name, Boolean loadOnStartup) throws JsonRpcStatusException, IOException {
+    public UnloadWalletResult unloadWallet(@Nullable String name, @Nullable Boolean loadOnStartup) throws JsonRpcStatusException, IOException {
         return send("unloadwallet", UnloadWalletResult.class, name, loadOnStartup);
     }
 
@@ -665,7 +666,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Address getNewAddress(String label) throws JsonRpcStatusException, IOException {
+    public Address getNewAddress(@Nullable String label) throws JsonRpcStatusException, IOException {
         return send("getnewaddress", Address.class, label);
     }
     
@@ -772,7 +773,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Sha256Hash sendRawTransaction(Transaction tx, Coin maxFeeRate, Coin maxBurnAmount) throws JsonRpcStatusException, IOException {
+    public Sha256Hash sendRawTransaction(Transaction tx, @Nullable Coin maxFeeRate, @Nullable Coin maxBurnAmount) throws JsonRpcStatusException, IOException {
         return send("sendrawtransaction", Sha256Hash.class, tx, maxFeeRate, maxBurnAmount);
     }
 
@@ -788,7 +789,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Sha256Hash sendRawTransaction(String hexTx, Coin maxFeeRate, Coin maxBurnAmount) throws JsonRpcStatusException, IOException {
+    public Sha256Hash sendRawTransaction(String hexTx, @Nullable Coin maxFeeRate, @Nullable Coin maxBurnAmount) throws JsonRpcStatusException, IOException {
         return send("sendrawtransaction", Sha256Hash.class, hexTx, maxFeeRate, maxBurnAmount);
     }
 
@@ -892,7 +893,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public List<UnspentOutput> listUnspent(Integer minConf, Integer maxConf, List<Address> filter, Boolean includeUnsafe)
+    public List<UnspentOutput> listUnspent(@Nullable Integer minConf, @Nullable Integer maxConf, @Nullable List<Address> filter, @Nullable Boolean includeUnsafe)
             throws JsonRpcStatusException, IOException {
         JavaType resultType = collectionTypeForClasses(List.class, UnspentOutput.class);
         return (List<UnspentOutput>) send("listunspent", resultType, minConf, maxConf, filter, includeUnsafe);
@@ -922,7 +923,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public TxOutInfo getTxOut(Sha256Hash txid, Integer vout, Boolean includeMemoryPool)
+    public TxOutInfo getTxOut(Sha256Hash txid, Integer vout, @Nullable Boolean includeMemoryPool)
             throws JsonRpcStatusException, IOException {
         return send("gettxout", TxOutInfo.class, txid, vout, includeMemoryPool);
     }
@@ -971,7 +972,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public Coin getBalance(String account, Integer minConf) throws JsonRpcStatusException, IOException {
+    public Coin getBalance(@Nullable String account, @Nullable Integer minConf) throws JsonRpcStatusException, IOException {
         return send("getbalance", Coin.class, account, minConf);
     }
 
@@ -979,7 +980,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
         return sendToAddress(address, amount, null, null);
     }
 
-    public Sha256Hash sendToAddress(Address address, Coin amount, String comment, String commentTo)
+    public Sha256Hash sendToAddress(Address address, Coin amount, @Nullable String comment, @Nullable String commentTo)
             throws JsonRpcStatusException, IOException {
         return send("sendtoaddress", Sha256Hash.class, address, amount, comment, commentTo);
     }
@@ -1009,7 +1010,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
         return getTransaction(txid, null, null);
     }
 
-    public WalletTransactionInfo getTransaction(Sha256Hash txid, Boolean includeWatchOnly, Boolean verbose) throws JsonRpcStatusException, IOException {
+    public WalletTransactionInfo getTransaction(Sha256Hash txid, @Nullable Boolean includeWatchOnly, @Nullable Boolean verbose) throws JsonRpcStatusException, IOException {
         return send("gettransaction", WalletTransactionInfo.class, txid, includeWatchOnly, verbose);
     }
 
@@ -1044,7 +1045,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public List<BitcoinTransactionInfo> listTransactions(String label, Integer count, Integer skip, Boolean includeWatchOnly) throws JsonRpcStatusException, IOException {
+    public List<BitcoinTransactionInfo> listTransactions(@Nullable String label, @Nullable Integer count, @Nullable Integer skip, @Nullable Boolean includeWatchOnly) throws JsonRpcStatusException, IOException {
         JavaType resultType = collectionTypeForClasses(List.class, BitcoinTransactionInfo.class);
         return (List<BitcoinTransactionInfo>) send("listtransactions", resultType, label, count, skip, includeWatchOnly);
     }
@@ -1163,7 +1164,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public String help(String command) throws JsonRpcStatusException, IOException {
+    public String help(@Nullable String command) throws JsonRpcStatusException, IOException {
         return (String) send("help", command);
     }
 
@@ -1275,7 +1276,7 @@ public class BitcoinClient extends DefaultRpcClient implements ChainTipClient {
      * @throws JsonRpcStatusException JSON RPC status exception
      * @throws IOException network error
      */
-    public JsonNode getAddedNodeInfo(boolean details, String node) throws JsonRpcStatusException, IOException  {
+    public JsonNode getAddedNodeInfo(boolean details, @Nullable String node) throws JsonRpcStatusException, IOException  {
         return send("getaddednodeinfo", JsonNode.class, details, node);
     }
 

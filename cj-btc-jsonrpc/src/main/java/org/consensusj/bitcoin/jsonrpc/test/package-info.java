@@ -16,4 +16,7 @@
 /**
  * Bitcoin JSON-RPC functional test support classes
  */
+@NullMarked
 package org.consensusj.bitcoin.jsonrpc.test;
+
+import org.jspecify.annotations.NullMarked;

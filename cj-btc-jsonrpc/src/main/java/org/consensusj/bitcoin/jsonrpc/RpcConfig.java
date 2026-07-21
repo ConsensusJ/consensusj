@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.base.BitcoinNetwork;
 import org.bitcoinj.base.Network;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 
@@ -30,17 +31,19 @@ public class RpcConfig {
 
     private final Network network;
     private final URI uri;
+    @Nullable
     private final String   username;
+    @Nullable
     private final String   password;
 
-    public RpcConfig(Network network, URI uri, String username, String password) {
+    public RpcConfig(Network network, URI uri, @Nullable String username, @Nullable String password) {
         this.network = network;
         this.uri = uri;
         this.username = username;
         this.password = password;
     }
 
-    public RpcConfig(String netIdString,  URI uri, String username, String password) {
+    public RpcConfig(String netIdString, URI uri, @Nullable String username, @Nullable String password) {
         this(BitcoinNetwork.fromIdString(netIdString).orElseThrow(() -> new IllegalArgumentException("invalid network string")),
                 uri,
                 username,
@@ -72,10 +75,12 @@ public class RpcConfig {
         return uri;
     }
 
+    @Nullable
     public String getUsername() {
         return username;
     }
 
+    @Nullable
     public String getPassword() {
         return password;
     }

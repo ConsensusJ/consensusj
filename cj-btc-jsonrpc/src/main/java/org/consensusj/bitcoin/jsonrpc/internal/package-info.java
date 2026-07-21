@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 /**
- * Support for reading RPC client connection info from `bitcoin.conf` file
+ * Internal classes.
  */
 @NullMarked
-package org.consensusj.bitcoin.jsonrpc.bitcoind;
+package org.consensusj.bitcoin.jsonrpc.internal;
 
 import org.jspecify.annotations.NullMarked;
