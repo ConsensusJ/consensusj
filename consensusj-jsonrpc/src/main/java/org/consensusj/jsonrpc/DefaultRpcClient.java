@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,14 +87,14 @@ public class DefaultRpcClient implements JsonRpcClient<JavaType> {
     private final JavaType defaultType;
     private final JsonRpcTransport<JavaType> transport;
 
-    public DefaultRpcClient(URI server, final String rpcUser, final String rpcPassword) {
+    public DefaultRpcClient(URI server, @Nullable String rpcUser, @Nullable String rpcPassword) {
         this(JsonRpcTransport.getDefaultSSLContext(), DEFAULT_JSON_RPC_VERSION, server, rpcUser, rpcPassword);
     }
 
-    public DefaultRpcClient(JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
+    public DefaultRpcClient(JsonRpcMessage.Version jsonRpcVersion, URI server, @Nullable String rpcUser, @Nullable String rpcPassword) {
         this(JsonRpcTransport.getDefaultSSLContext(), jsonRpcVersion, server, rpcUser, rpcPassword);
     }
-    public DefaultRpcClient(SSLContext sslContext, JsonRpcMessage.Version jsonRpcVersion, URI server, final String rpcUser, final String rpcPassword) {
+    public DefaultRpcClient(SSLContext sslContext, JsonRpcMessage.Version jsonRpcVersion, URI server, @Nullable String rpcUser, @Nullable String rpcPassword) {
         this((m) -> new JsonRpcClientJavaNet(m, sslContext, server, rpcUser, rpcPassword), jsonRpcVersion);
     }
 

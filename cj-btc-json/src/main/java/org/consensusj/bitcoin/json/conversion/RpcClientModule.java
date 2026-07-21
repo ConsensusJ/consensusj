@@ -24,6 +24,7 @@ import org.bitcoinj.base.Coin;
 import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.core.Transaction;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -43,7 +44,7 @@ public class RpcClientModule extends SimpleModule {
      * @param network Which network we are going to be a client for (may be null if {@code strictAddressParsing} is false)
      * @param strictAddressParsing set to {@code true} to throw exceptions when deserializing addresses that don't match {@code network}
      */
-    protected RpcClientModule(Network network, boolean strictAddressParsing) {
+    protected RpcClientModule(@Nullable Network network, boolean strictAddressParsing) {
         super("BitcoinJMappingClient", new Version(1, 0, 0, null, null, null));
 
         this.addDeserializer(Address.class, strictAddressParsing ? new AddressDeserializer(Objects.requireNonNull(network)) : new AddressDeserializer())

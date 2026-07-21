@@ -18,6 +18,7 @@ package org.consensusj.jsonrpc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +43,9 @@ public class JsonRpcClientJavaNet implements JsonRpcTransport<JavaType> {
 
     private final ObjectMapper mapper;
     private final URI serverURI;
+    @Nullable
     private final String username;
+    @Nullable
     private final String password;
     private final HttpClient client;
     private static final String UTF8 = StandardCharsets.UTF_8.name();
@@ -52,7 +55,7 @@ public class JsonRpcClientJavaNet implements JsonRpcTransport<JavaType> {
         this(mapper, JsonRpcTransport.getDefaultSSLContext(), server, rpcUser, rpcPassword);
     }
 
-    public JsonRpcClientJavaNet(ObjectMapper mapper, SSLContext sslContext, URI server, final String rpcUser, final String rpcPassword) {
+    public JsonRpcClientJavaNet(ObjectMapper mapper, SSLContext sslContext, URI server, @Nullable String rpcUser, @Nullable String rpcPassword) {
         log.debug("Constructing JSON-RPC client for: {}", server);
         this.mapper = mapper;
         this.serverURI = server;

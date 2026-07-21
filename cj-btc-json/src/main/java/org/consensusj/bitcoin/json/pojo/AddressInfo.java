@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bitcoinj.base.Address;
+import org.jspecify.annotations.Nullable;
 
 public class AddressInfo {
     private final Address address;
@@ -35,6 +36,7 @@ public class AddressInfo {
     private final boolean iscompressed;
     private final String label;
     private final boolean ischange;
+    @Nullable
     private final Instant timestamp;
     private final List<Object> labels;
 

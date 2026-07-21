@@ -16,4 +16,7 @@
 /**
  * Jackson JSON serializers, deserializers, modules, and utilities.
  */
+@NullMarked
 package org.consensusj.bitcoin.json.conversion;
+
+import org.jspecify.annotations.NullMarked;
