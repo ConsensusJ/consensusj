@@ -1456,19 +1456,19 @@
    "module": "sha256-gw04aMOee7MP9lNeilum3ufZuBujtEuq8Q8VBqcgdFo=",
    "pom": "sha256-8wUszlm1mdU2nk/B2fsun6OVqo53K+3C3NeQfNGKPQY="
   },
-  "org/apache/groovy#groovy-bom/4.0.32": {
-   "module": "sha256-08QLLNkYwSdv4jQJTUUSMXJhpfC/yA9nnkPHYaAE4B4=",
-   "pom": "sha256-5jGcOGI/f/qMCyMa/hS9N4Zhjs2x3HwQ+QD11xBvhf4="
+  "org/apache/groovy#groovy-bom/4.0.33": {
+   "module": "sha256-qH5EEM5pdk9T4Q/zmbpO2IdbxZhFt2YYHpyC6d38X3U=",
+   "pom": "sha256-wwzDuRhCUb4EPouY7J9vF8ObCSUYPpHHhW6oKxjZ9c4="
   },
-  "org/apache/groovy#groovy-json/4.0.32": {
-   "jar": "sha256-Tlejso5A5kZ0YGPo3riGOnZy8H0+P8u3tAjglikFAAw=",
-   "module": "sha256-J6VQrTUcKImubmKoNR2xw48ydaEPISEP0AiOX5SEtLE=",
-   "pom": "sha256-vWkIKvFKYUR6UHJ/V/YdnP7wDQEH8Se80EqHKFoZv8M="
+  "org/apache/groovy#groovy-json/4.0.33": {
+   "jar": "sha256-jOLVB06TDKFsouCvlu/4fkBsydGg/jEH8Bk+1OemlYI=",
+   "module": "sha256-WR3EU2UbCGpDAZhLZMGGebX4+3D8bdTyqyUmPUEZ37Q=",
+   "pom": "sha256-2SqPohD2+3d3ofDxI/6W8min0l0ABmbxiE01IFNbKQA="
   },
-  "org/apache/groovy#groovy/4.0.32": {
-   "jar": "sha256-13gVyPMdUDvFASnyiJLmC2TjObSQ97q/nfcISM5GVpg=",
-   "module": "sha256-waauIHZFLdtgFoCN9z2+0+XJ2yGLrfHdBCE3Yr+dS+Y=",
-   "pom": "sha256-v5fnTHO8PVNbwFntPh6yUFPXXVmPYrThC2+uzIffLLM="
+  "org/apache/groovy#groovy/4.0.33": {
+   "jar": "sha256-UkCpFRKJEV5NRH1rbUy5rIqfxjdOB5cU3+7/2kIyO+g=",
+   "module": "sha256-tR8KW47PulNNR2EqSapRsnns2scuf3kKjtMTAHDYDcU=",
+   "pom": "sha256-Sgd8yFnLD6urVfhjfneIn+A7JIlpLJ0dolPkNxXCjPg="
   },
   "org/apache/logging/log4j#log4j-bom/2.25.3": {
    "pom": "sha256-ZleICHEo/mw6+dAlJEhTKvl4cRdmSB20k5a/AyWibK0="

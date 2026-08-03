@@ -3,7 +3,7 @@
 [versions]
 bitcoinj = "0.17.1"
 rxjava = "3.1.12"
-groovy = "4.0.32"
+groovy = "4.0.33"
 nullaway = "0.13.8"
 junit = "5.14.4"
 spock = "2.4-groovy-4.0"
