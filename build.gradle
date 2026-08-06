@@ -30,7 +30,7 @@ allprojects {
     //apply plugin: 'findbugs'
 
     version = consensusjVersion     // set in gradle.properties
-    group = 'com.msgilligan'
+    group = 'org.consensusj'
 
     repositories {
         mavenCentral()

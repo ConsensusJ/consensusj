@@ -2,7 +2,7 @@
 name = "consensusj"
 
 [project.languages.java]
-groupId = "com.msgilligan"
+groupId = "org.consensusj"
 version = "9"       # Only 2 minor modules support Java 9, but that is tecnically our "minimum"
 
 [release.github]
