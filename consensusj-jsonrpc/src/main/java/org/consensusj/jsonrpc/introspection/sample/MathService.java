@@ -16,11 +16,15 @@
 package org.consensusj.jsonrpc.introspection.sample;
 
 import org.consensusj.jsonrpc.JsonRpcError;
+import org.consensusj.jsonrpc.JsonRpcErrorException;
 import org.consensusj.jsonrpc.JsonRpcRequest;
 import org.consensusj.jsonrpc.JsonRpcResponse;
 import org.consensusj.jsonrpc.JsonRpcService;
+import org.consensusj.jsonrpc.help.JsonRpcHelp;
+import org.consensusj.jsonrpc.help.JsonRpcHelpText;
 import org.consensusj.jsonrpc.introspection.AbstractJsonRpcService;
 import org.consensusj.jsonrpc.introspection.JsonRpcServiceWrapper;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +44,8 @@ import java.util.concurrent.ExecutionException;
 public class MathService extends AbstractJsonRpcService {
     private static final Logger log = LoggerFactory.getLogger(MathService.class);
     private static final Map<String, Method> methods = JsonRpcServiceWrapper.reflect(MethodHandles.lookup().lookupClass());
+    private static final Map<String, JsonRpcHelp> help = JsonRpcHelp.mapOf(MethodHandles.lookup().lookupClass());
+    private final String allHelp;
 
     /**
      * Constructor that calls {@link AbstractJsonRpcService#AbstractJsonRpcService(Map)} with a private, statically-initialized
@@ -47,6 +53,7 @@ public class MathService extends AbstractJsonRpcService {
      */
     public MathService() {
         super(methods);
+        allHelp = JsonRpcHelp.allMethodsHelp(help);
     }
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
@@ -66,14 +73,31 @@ public class MathService extends AbstractJsonRpcService {
         }
     }
 
+    @JsonRpcHelpText(summary = "adds two numbers", details ="This method takes two numeric parameters and returns their sum")
     public CompletableFuture<Integer> add(Integer a, Integer b) {
         log.info("MathService: add {} + {}",a,b);
         return result(a + b);
     }
 
+    @JsonRpcHelpText(summary = "subtracts two numbers", details ="This method takes two numeric parameters and returns their difference")
     public CompletableFuture<Integer> subtract(Integer a, Integer b) {
         log.info("MathService: subtract {} - {}",a,b);
         return result(a - b);
+    }
+
+    @JsonRpcHelpText(summary = "help | help <method>", details ="help | help <method>")
+    public CompletableFuture<String> help(@Nullable String method) {
+        log.info("MathService: help {}", method);
+        if (method == null) {
+            // Summary help for all methods
+            return result(allHelp);
+        } else {
+            // Detail help for one method (if it exists)
+            var methodHelp = help.get(method);
+            return (methodHelp != null)
+                    ? result(methodHelp.detail())
+                    : exception(JsonRpcErrorException.of(JsonRpcError.Error.METHOD_NOT_FOUND));
+        }
     }
 
     @Override
