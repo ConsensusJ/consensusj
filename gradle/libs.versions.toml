@@ -61,7 +61,7 @@ awaitility               = { module = "org.awaitility:awaitility",              
 errorprone-core          = { module = "com.google.errorprone:error_prone_core",            version.ref = "errorproneCore" }
 
 [plugins]
-errorprone           = { id = "net.ltgt.errorprone",           version = "5.1.0" }
+errorprone           = { id = "net.ltgt.errorprone",           version = "5.1.1" }
 asciidoctor          = { id = "org.asciidoctor.jvm.convert",   version = "4.0.5" }
 git-publish          = { id = "org.ajoberstar.git-publish",    version = "6.0.0" }
 license              = { id = "com.github.hierynomus.license", version = "0.16.1" }
