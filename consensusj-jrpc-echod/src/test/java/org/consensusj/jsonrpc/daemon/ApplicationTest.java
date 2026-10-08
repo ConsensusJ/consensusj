@@ -21,6 +21,7 @@ import jakarta.inject.Inject;
 import org.consensusj.jsonrpc.DefaultRpcClient;
 import org.consensusj.jsonrpc.JsonRpcError;
 import org.consensusj.jsonrpc.JsonRpcStatusException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,9 +43,17 @@ public class ApplicationTest {
 
     URI endpoint;
 
+    DefaultRpcClient client;
+
     @BeforeEach
     void testSetup() {
         endpoint = URI.create(server.getURI().toString());
+        client = new DefaultRpcClient(endpoint, "", "");
+    }
+
+    @AfterEach
+    void testTeardown() {
+        client.close();
     }
 
     @Test
@@ -60,10 +69,8 @@ public class ApplicationTest {
     @Test
     void echoMethod() throws IOException {
         var testString  = "Hello jrpc-echod!";
-        try (var client = new DefaultRpcClient(endpoint, "", "")) {
-            String result = (String) client.send("echo", testString);
-            assertEquals(testString, result);
-        }
+        String result = (String) client.send("echo", testString);
+        assertEquals(testString, result);
     }
 
     @Test
@@ -73,9 +80,7 @@ public class ApplicationTest {
         var testString  = "Hello jrpc-echod!";
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
-                    try (var client = new DefaultRpcClient(endpoint, "", "")) {
-                        client.send("echo", testString, testString);
-                    }
+                    client.send("echo", testString, testString);
                 });
         assertTrue(Objects.requireNonNull(exception.getMessage()).startsWith(expectedErrorMessagePrefix));
         assertEquals(expectedErrorCode, exception.jsonRpcCode);
@@ -83,36 +88,47 @@ public class ApplicationTest {
 
 
     @Test
-    void helpMethod() throws IOException {
-        var expectedResult  = """
-echo message
-help
-stop
-    """;
-        try (var client = new DefaultRpcClient(endpoint, "", "")) {
-            String result = (String) client.send("help");
-            assertEquals(expectedResult, result);
-        }
+    void helpForHelpMethod() throws IOException {
+        var expectedMethodNameSubstring  = "help <method>";
+        var expectedParamNameSubstring  = "method (string, optional)";
+        var expectedDescriptiveTextSubstring = "Displays detailed help text for the specified method.";
+        String result = (String) client.send("help", "help");
+        assertTrue(result.contains(expectedMethodNameSubstring));
+        assertTrue(result.contains(expectedParamNameSubstring));
+        assertTrue(result.contains(expectedDescriptiveTextSubstring));
+
     }
 
-    /*
-     * The help method is currently not fully implemented. It SHOULD allow
-     * for an argument, and only fail if the argument doesn't match an existing
-     * command. Once the help method is properly implemented we will need to change
-     * our tests
-     */
     @Test
-    void helpMethodOneArg() throws IOException {
-        int expectedErrorCode = JsonRpcError.Error.INVALID_PARAMS.getCode();
-        var expectedErrorMessagePrefix = "Invalid params:";
-        JsonRpcStatusException exception =
-                assertThrows(JsonRpcStatusException.class, () -> {
-                    try (var client = new DefaultRpcClient(endpoint, "", "")) {
-                        client.send("help", "echo");
-                    }
-                });
-        assertTrue(Objects.requireNonNull(Objects.requireNonNull(exception.getMessage())).startsWith(expectedErrorMessagePrefix));
-        assertEquals(expectedErrorCode, exception.jsonRpcCode);
+    void helpForEchoMethod() throws IOException {
+        var expectedMethodNameSubstring  = "echo <message>";
+        var expectedParamNameSubstring  = "message (string, required)";
+        var expectedDescriptiveTextSubstring = "Returns the provided message exactly as it was sent.";
+        String result = (String) client.send("help", "echo");
+        assertTrue(result.contains(expectedMethodNameSubstring));
+        assertTrue(result.contains(expectedParamNameSubstring));
+        assertTrue(result.contains(expectedDescriptiveTextSubstring));
+
+    }
+
+    @Test
+    void helpForStopMethod() throws IOException {
+        var expectedMethodNameSubstring  = "stop";
+        var expectedParamNameSubstring  = "None.";
+        var expectedDescriptiveTextSubstring = "Initiates the shutdown process of the JSON-RPC server.";
+        String result = (String) client.send("help", "stop");
+        assertTrue(result.contains(expectedMethodNameSubstring));
+        assertTrue(result.contains(expectedParamNameSubstring));
+        assertTrue(result.contains(expectedDescriptiveTextSubstring));
+    }
+
+    @Test
+    void helpMethodNoArg() throws IOException {
+        var expectedResult  = "echo message\n" +
+                "help (method)\n" +
+                "stop ";
+        String result = (String) client.send("help");
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -121,9 +137,7 @@ stop
         var expectedErrorMessagePrefix = "Method not found:";
         JsonRpcStatusException exception =
                 assertThrows(JsonRpcStatusException.class, () -> {
-                    try (var client = new DefaultRpcClient(endpoint, "", "")) {
-                        client.send("invalid");
-                    }
+                    client.send("invalid");
                 });
         assertTrue(Objects.requireNonNull(exception.getMessage()).startsWith(expectedErrorMessagePrefix));
         assertEquals(expectedErrorCode, exception.jsonRpcCode);
