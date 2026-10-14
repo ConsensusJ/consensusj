@@ -68,7 +68,7 @@ An experimental Nix Package which includes:
 You can install these tools with Nix, via:
 
 ----
-nix profile install github:ConsensusJ/consensusj#consensusj-tools
+nix profile add github:ConsensusJ/consensusj#consensusj-tools
 ----
 
 Once installed:
