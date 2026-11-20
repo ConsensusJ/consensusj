@@ -101,7 +101,7 @@ jobs:
       - name: Set GRAALVM_HOME
         run: echo "GRAALVM_HOME=$JAVA_HOME" >> "$GITHUB_ENV"
       - name: Build with Gradle
-        run: ./gradlew consensusj-jrpc-echod:nativeTest nativeCompile --scan --info --stacktrace
+        run: ./gradlew nativeTest nativeCompile --scan --info --stacktrace
       - name: Upload jrpc tool as artifact
         uses: actions/upload-artifact@v6
         with:
@@ -153,7 +153,7 @@ jobs:
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Build in Nix development shell
-        run: nix develop -c gradle buildCI installDist consensusj-jrpc-echod:nativeTest nativeCompile
+        run: nix develop -c gradle buildCI installDist nativeTest nativeCompile
 
   build_nix_package:
     runs-on: ${{ matrix.os }}
