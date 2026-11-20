@@ -42,14 +42,14 @@ public class EchoJsonRpcServiceTest {
 
     @Test
     void testHelpSummary() {
-        String help = service.help(/* null */).join();
-        assertEquals("echo message\nhelp\nstop\n", help);
+        String help = service.help(null).join();
+        assertEquals("echo message\nhelp (method)\nstop ", help);
     }
 
     @Test
     @Disabled
     void testHelpDetail() {
-        String help = service.help(/* "help" */).join();
+        String help = service.help("help").join();
         assertEquals("help help", help);
     }
 }
