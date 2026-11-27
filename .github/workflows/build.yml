@@ -1,6 +1,12 @@
 name: Build
 
-on: [pull_request, merge_group, workflow_dispatch]
+on:
+  # Runs on master are the only ones that can write a cache that every PR workflow can restore.
+  push:
+    branches: [master]
+  pull_request:
+  merge_group:
+  workflow_dispatch:
 
 jobs:
   validate_gradle_wrapper:
