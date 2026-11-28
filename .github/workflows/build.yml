@@ -34,7 +34,10 @@ jobs:
       with:
         distribution: ${{ matrix.distribution }}
         java-version: ${{ matrix.java }}
-        cache: 'gradle'
+    - name: Set up Gradle (caches dependencies and wrapper in ~/.gradle)
+      uses: gradle/actions/setup-gradle@v6
+      with:
+        cache-provider: basic
     - name: Build with Gradle
       run: ./gradlew buildCI installDist --scan --info --stacktrace
     - name: Generate SHA256SUMS (Linux)
@@ -74,7 +77,10 @@ jobs:
         with:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
-          cache: 'gradle'
+      - name: Set up Gradle (caches dependencies and wrapper in ~/.gradle)
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
       - name: Build with Gradle
         run: ./gradlew javadocAll --scan --info --stacktrace
       - name: Upload artifacts
@@ -101,7 +107,10 @@ jobs:
         with:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java-version }}
-          cache: 'gradle'
+      - name: Set up Gradle (caches dependencies and wrapper in ~/.gradle)
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
       # Unlike `graalvm/setup-graalvm`, `actions/setup-java` doesn't set `GRAALVM_HOME` so we'll do it explicitly.
       # The cj-btc-cli and consensusj-jrpc modules require `GRAALVM_HOME` to be set.
       - name: Set GRAALVM_HOME
@@ -128,8 +137,13 @@ jobs:
         uses: cachix/install-nix-action@v31
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
-        # pre-build the shell separately to avoid skewing the run time of the next
-        # step and have clear point of failure should the shell fail to build
+      # Gradle comes from the Nix devShell; setup-gradle only caches ~/.gradle here
+      - name: Set up Gradle (caches dependencies in ~/.gradle)
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
+      # pre-build the shell separately to avoid skewing the run time of the next
+      # step and have clear point of failure should the shell fail to build
       - name: Pre-build devShell
         run: nix build --no-link .#devShells.$(nix eval --impure --raw --expr 'builtins.currentSystem').default
       - name: Run RegTests
@@ -158,6 +172,11 @@ jobs:
         uses: cachix/install-nix-action@v31
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      # Gradle comes from the Nix devShell; setup-gradle only caches ~/.gradle here
+      - name: Set up Gradle (caches dependencies in ~/.gradle)
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
       - name: Build in Nix development shell
         run: nix develop -c gradle buildCI installDist consensusj-jrpc-echod:nativeTest nativeCompile
 
